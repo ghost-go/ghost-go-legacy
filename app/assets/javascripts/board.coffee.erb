@@ -1,13 +1,30 @@
-drawBoard = (ctx, grid, size) ->
-  ctx.beginPath
+drawStarPoint = (x, y, canvas, size) ->
+  canvas.beginPath();
+  canvas.arc(x, y, size, 0, 2 * Math.PI, true);
+  canvas.fill();
+  return
+
+drawBoard = (canvas, grid, size, dot_size) ->
+  canvas.beginPath
   for i in [1..grid]
-    ctx.moveTo(i * size, size)
-    ctx.lineTo(i * size, grid * size)
-    ctx.moveTo(size, i * size)
-    ctx.lineTo(grid * size, i * size)
-  ctx.stroke()
+    canvas.moveTo(i * size, size)
+    canvas.lineTo(i * size, grid * size)
+    canvas.moveTo(size, i * size)
+    canvas.lineTo(grid * size, i * size)
+  canvas.stroke()
+  drawStarPoint(size * 4, size * 4, canvas, dot_size)
+  drawStarPoint(size * 10, size * 4, canvas, dot_size)
+  drawStarPoint(size * 10, size * 16, canvas, dot_size)
+  drawStarPoint(size * 10, size * 10, canvas, dot_size)
+  drawStarPoint(size * 16, size * 10, canvas, dot_size)
+  drawStarPoint(size * 4, size * 10, canvas, dot_size)
+  drawStarPoint(size * 4, size * 16, canvas, dot_size)
+  drawStarPoint(size * 16, size * 4, canvas, dot_size)
+  drawStarPoint(size * 16, size * 16, canvas, dot_size)
+  return
+
 
 canvas = document.getElementById("board")
 ctx = canvas.getContext('2d')
 
-drawBoard(ctx, 19, 50)
+drawBoard(ctx, 19, 25, 3)
