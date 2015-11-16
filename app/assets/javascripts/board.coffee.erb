@@ -1,5 +1,13 @@
+drawBoard = (ctx, grid, size) ->
+  ctx.beginPath
+  for i in [1..grid]
+    ctx.moveTo(i * size, size)
+    ctx.lineTo(i * size, grid * size)
+    ctx.moveTo(size, i * size)
+    ctx.lineTo(grid * size, i * size)
+  ctx.stroke()
+
 canvas = document.getElementById("board")
 ctx = canvas.getContext('2d')
-ctx = beginPath()
-ctx.moveTo(0, 0)
-ctx.lineTo(0, 100)
+
+drawBoard(ctx, 19, 50)
