@@ -1,9 +1,5 @@
 canvas = document.getElementById("board")
-context = canvas.getContext('2d')
-imageObj = new Image()
-
-imageObj.onload = () ->
-  context.drawImage(imageObj, 0, 0);
-  return
-
-imageObj.src = "<%= asset_path('board/board-1.jpg') %>"
+ctx = canvas.getContext('2d')
+ctx = beginPath()
+ctx.moveTo(0, 0)
+ctx.lineTo(0, 100)
