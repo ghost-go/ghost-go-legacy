@@ -1,3 +1,14 @@
+Point = (x, y, w, h, fill) ->
+  this.x = x || 0
+  this.y = y || 0
+  this.w = w || 1
+  this.h = h || 1
+  this.fill = fill || '#AAAAAA'
+
+Point.prototype.draw = (ctx) ->
+  ctx.fillStyle = this.fill
+  ctx.fillRect this.x, this.y, this.w, this.h
+
 drawStarPoint = (x, y, canvas, size) ->
   canvas.beginPath();
   canvas.arc(x, y, size, 0, 2 * Math.PI, true);
@@ -14,17 +25,35 @@ drawBoard = (canvas, grid, size, dot_size) ->
   canvas.stroke()
   drawStarPoint(size * 4, size * 4, canvas, dot_size)
   drawStarPoint(size * 10, size * 4, canvas, dot_size)
-  drawStarPoint(size * 10, size * 16, canvas, dot_size)
-  drawStarPoint(size * 10, size * 10, canvas, dot_size)
-  drawStarPoint(size * 16, size * 10, canvas, dot_size)
-  drawStarPoint(size * 4, size * 10, canvas, dot_size)
-  drawStarPoint(size * 4, size * 16, canvas, dot_size)
   drawStarPoint(size * 16, size * 4, canvas, dot_size)
   drawStarPoint(size * 16, size * 16, canvas, dot_size)
+  if grid == 19
+    drawStarPoint(size * 10, size * 16, canvas, dot_size)
+    drawStarPoint(size * 10, size * 10, canvas, dot_size)
+    drawStarPoint(size * 16, size * 10, canvas, dot_size)
+    drawStarPoint(size * 4, size * 10, canvas, dot_size)
+    drawStarPoint(size * 4, size * 16, canvas, dot_size)
+  for i in [1..grid]
+    for j in [1..grid]
+      Point point = new Point()
+      point.x = i * size - size / 2
+      point.y = j * size - size / 2
+      point.w = size
+      point.h = size
+      point.fill = 'rgba(255, 255, 255, 0.5)'
+      point.draw(ctx)
   return
-
 
 canvas = document.getElementById("board")
 ctx = canvas.getContext('2d')
+
+line = 19
+size = 25
+letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S']
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+$('#board').click (e) ->
+  x = e.offsetX
+  y = e.offsetY
+  alert("#{x}, #{y}, #{letters}, #{numbers}")
 
 drawBoard(ctx, 19, 25, 3)
