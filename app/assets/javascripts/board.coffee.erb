@@ -1,3 +1,8 @@
+letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
+line = 19
+size = 50
+
 Piece = (x, y, size, type) ->
   this.x = x || 0
   this.y = y || 0
@@ -15,6 +20,19 @@ Piece.prototype.draw = (ctx) ->
   ctx.fill()
   ctx.stroke()
   return
+
+move = (ctx, pos, type) ->
+  letter = pos.charAt(0)
+  number = pos.slice(1)
+  i = letters.indexOf(letter) + 1
+  j = numbers.indexOf(parseInt(number)) + 1
+  Piece piece = new Piece()
+  piece.x = i * size
+  piece.y = j * size
+  piece.size = size / 2 - 3
+  piece.type = type
+  piece.draw(ctx)
+
 
 drawStarPoint = (x, y, ctx, size) ->
   ctx.beginPath()
@@ -40,31 +58,21 @@ drawBoard = (ctx, grid, size, dot_size) ->
     drawStarPoint(size * 16, size * 10, ctx, dot_size)
     drawStarPoint(size * 4, size * 10, ctx, dot_size)
     drawStarPoint(size * 4, size * 16, ctx, dot_size)
-  for i in [1..grid]
-    for j in [1..grid]
-      Piece piece = new Piece()
-      piece.x = i * size
-      piece.y = j * size
-      piece.size = size / 2 - 3
-      if (i + j) % 2 == 0
-        piece.type = 'B'
-      else
-        piece.type = 'W'
-      piece.draw(ctx)
   return
 
 canvas = document.getElementById("board")
 ctx = canvas.getContext('2d')
 
-line = 19
-size = 50
-letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
-numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
+i = 0
 $('#board').click (e) ->
   x = e.offsetX
   y = e.offsetY
   letter = letters[Math.round((x - size) / size)]
   number = numbers[Math.round((y - size) / size)]
-  alert("#{x}, #{y}, #{letter}, #{number}")
+  i = i + 1
+  if i % 2 == 0
+    move(ctx, "#{letter}#{number}", 'W')
+  else
+    move(ctx, "#{letter}#{number}", 'B')
 
 drawBoard(ctx, line, size, 3)
