@@ -2,6 +2,7 @@ letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O',
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
 line = 19
 size = 50
+step = 0
 
 Piece = (x, y, size, type) ->
   this.x = x || 0
@@ -21,6 +22,11 @@ Piece.prototype.draw = (ctx) ->
   ctx.stroke()
   return
 
+convert_coordinate = (x, y, size) ->
+  letter = letters[Math.round((x - size) / size)]
+  number = numbers[Math.round((y - size) / size)]
+  return "#{letter}#{number}"
+
 move = (ctx, pos, type) ->
   letter = pos.charAt(0)
   number = pos.slice(1)
@@ -32,7 +38,6 @@ move = (ctx, pos, type) ->
   piece.size = size / 2 - 3
   piece.type = type
   piece.draw(ctx)
-
 
 drawStarPoint = (x, y, ctx, size) ->
   ctx.beginPath()
@@ -63,16 +68,16 @@ drawBoard = (ctx, grid, size, dot_size) ->
 canvas = document.getElementById("board")
 ctx = canvas.getContext('2d')
 
-i = 0
 $('#board').click (e) ->
-  x = e.offsetX
-  y = e.offsetY
-  letter = letters[Math.round((x - size) / size)]
-  number = numbers[Math.round((y - size) / size)]
-  i = i + 1
-  if i % 2 == 0
-    move(ctx, "#{letter}#{number}", 'W')
+  coordinate = convert_coordinate(e.offsetX, e.offsetY, size)
+  step++
+  if step % 2 == 0
+    move(ctx, coordinate, 'W')
   else
-    move(ctx, "#{letter}#{number}", 'B')
+    move(ctx, coordinate, 'B')
+
+$('#board').mouseover (e) ->
+  coordinate = convert_coordinate(e.offsetX, e.offsetY, size)
+  alert(coordinate)
 
 drawBoard(ctx, line, size, 3)
