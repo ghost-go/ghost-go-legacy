@@ -22,6 +22,19 @@ Piece.prototype.draw = (ctx) ->
   ctx.stroke()
   return
 
+Board = (grid, size)
+  this.grid = grid || 19
+  this.size = size || 25
+
+Board.prototype.draw = (ctx) ->
+  ctx.beginPath
+  for i in [1..this.grid]
+    ctx.moveTo(i * this.size, this.size)
+    ctx.lineTo(i * this.size, this.grid * this.size)
+    ctx.moveTo(this.size, i * this.size)
+    ctx.lineTo(this.grid * this.size, i * this.size)
+  ctx.stroke()
+
 convert_coordinate = (x, y, size) ->
   letter = letters[Math.round((x - size) / size)]
   number = numbers[Math.round((y - size) / size)]
