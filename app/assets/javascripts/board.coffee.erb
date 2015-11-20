@@ -62,26 +62,30 @@ convert_pos_to_coord = (x, y, size) ->
   number = numbers[Math.round((y - size) / size)]
   return "#{letter}#{number}"
 
-move = (ctx, pos, type) ->
-  letter = pos.charAt(0)
-  number = pos.slice(1)
+convert_coord_to_pos = (coord, size) ->
+  letter = coord.charAt(0)
+  number = coord.slice(1)
   i = letters.indexOf(letter) + 1
   j = numbers.indexOf(parseInt(number)) + 1
+  results = []
+  results[0] = i * size
+  results[1] = j * size
+  return results
+
+move = (ctx, coord, type) ->
+  results = convert_coord_to_pos(coord, size)
   Piece piece = new Piece()
-  piece.x = i * size
-  piece.y = j * size
+  piece.x = results[0]
+  piece.y = results[1]
   piece.size = size / 2 - 3
   piece.type = type
   piece.draw(ctx)
 
-show_cross = (ctx, pos, color) ->
-  letter = pos.charAt(0)
-  number = pos.slice(1)
-  i = letters.indexOf(letter) + 1
-  j = numbers.indexOf(parseInt(number)) + 1
+show_cross = (ctx, coord, color) ->
+  results = convert_coord_to_pos(coord, size)
   Cross cross = new Cross()
-  cross.x = i * size
-  cross.y = j * size
+  cross.x = results[0]
+  cross.y = results[1]
   cross.size = 5
   cross.color = color
   cross.draw(ctx)
@@ -100,18 +104,30 @@ piece_layer.width = size * 20
 piece_layer.height = size * 20
 piece_ctx = piece_layer.getContext('2d')
 
-$('#piece').click (e) ->
+cross_layer = document.getElementById('cross')
+cross_layer.width = size * 20
+cross_layer.height = size * 20
+cross_ctx = cross_layer.getContext('2d')
+
+top_layer = document.getElementById('top')
+top_layer.width = size * 20
+top_layer.height = size * 20
+
+$('#top').click (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   step++
   if step % 2 == 0
+    $('#turn').html('黑')
     move(piece_ctx , coord, 'W')
   else
+    $('#turn').html('白')
     move(piece_ctx , coord, 'B')
 
-$('#cross').mousemove (e) ->
+$('#top').mousemove (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   $('#coord').html(coord)
-  show_cross(ctx, coord, '#ff0000')
+  cross_ctx.clearRect(0, 0, cross_layer.width, cross_layer.height)
+  show_cross(cross_ctx, coord, '#ff0000')
 
 
 
