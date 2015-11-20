@@ -86,26 +86,32 @@ show_cross = (ctx, pos, color) ->
   cross.color = color
   cross.draw(ctx)
 
-canvas = document.getElementById("board")
-canvas.width = size * 20
-canvas.height = size * 20
-ctx = canvas.getContext('2d')
+board_layer = document.getElementById("board")
+board_layer.width = size * 20
+board_layer.height = size * 20
+board_ctx = board_layer.getContext('2d')
 
-$('#board').click (e) ->
+Board board = new Board()
+board.size = size
+board.draw(board_ctx)
+
+piece_layer = document.getElementById('piece')
+piece_layer.width = size * 20
+piece_layer.height = size * 20
+piece_ctx = piece_layer.getContext('2d')
+
+$('#piece').click (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   step++
   if step % 2 == 0
-    move(ctx, coord, 'W')
+    move(piece_ctx , coord, 'W')
   else
-    move(ctx, coord, 'B')
+    move(piece_ctx , coord, 'B')
 
-$('#board').mousemove (e) ->
+$('#cross').mousemove (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   $('#coord').html(coord)
   show_cross(ctx, coord, '#ff0000')
 
-Board board = new Board()
-board.size = size
-board.draw(ctx)
 
 
