@@ -42,11 +42,19 @@ Board.prototype.draw = (ctx) ->
         ctx.fill()
   return
 
-Cross = (size) ->
+Cross = (x, y, size, color) ->
+  this.x = x || 0
+  this.y = y || 0
   this.size = size || 5
+  this.color = color || "#000000"
 
-Cross.prototype.draw = (ctx, coord) ->
+Cross.prototype.draw = (ctx) ->
   ctx.beginPath()
+  ctx.lineWidth = 2
+  ctx.moveTo(this.x - this.size, this.y - this.size)
+  ctx.lineTo(this.x + this.size, this.y + this.size)
+  ctx.moveTo(this.x - this.size, this.y + this.size)
+  ctx.lineTo(this.x + this.size, this.y - this.size)
   ctx.stroke()
 
 convert_pos_to_coord = (x, y, size) ->
@@ -66,6 +74,18 @@ move = (ctx, pos, type) ->
   piece.type = type
   piece.draw(ctx)
 
+show_cross = (ctx, pos, color) ->
+  letter = pos.charAt(0)
+  number = pos.slice(1)
+  i = letters.indexOf(letter) + 1
+  j = numbers.indexOf(parseInt(number)) + 1
+  Cross cross = new Cross()
+  cross.x = i * size
+  cross.y = j * size
+  cross.size = 5
+  cross.color = color
+  cross.draw(ctx)
+
 canvas = document.getElementById("board")
 canvas.width = size * 20
 canvas.height = size * 20
@@ -82,6 +102,7 @@ $('#board').click (e) ->
 $('#board').mousemove (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   $('#coord').html(coord)
+  show_cross(ctx, coord, '#ff0000')
 
 Board board = new Board()
 board.size = size
