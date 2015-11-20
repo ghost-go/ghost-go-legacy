@@ -1,6 +1,5 @@
 letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
-line = 19
 size = 30
 step = 0
 
@@ -34,6 +33,14 @@ Board.prototype.draw = (ctx) ->
     ctx.moveTo(this.size, i * this.size)
     ctx.lineTo(this.grid * this.size, i * this.size)
   ctx.stroke()
+  dot_size = 3
+  if this.grid == 19
+    for i in [4, 16, 10]
+      for j in [4, 16, 10]
+        ctx.beginPath()
+        ctx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true)
+        ctx.fill()
+  return
 
 Cross = (size) ->
   this.size = size || 5
@@ -59,31 +66,9 @@ move = (ctx, pos, type) ->
   piece.type = type
   piece.draw(ctx)
 
-drawStarPoint = (x, y, ctx, size) ->
-  ctx.beginPath()
-  ctx.arc(x, y, size, 0, 2 * Math.PI, true)
-  ctx.fill()
-  return
-
-drawBoard = (ctx, grid, size, dot_size) ->
-  Board board = new Board()
-  board.size = size
-  board.draw(ctx)
-  drawStarPoint(size * 4, size * 4, ctx, dot_size)
-  drawStarPoint(size * 10, size * 4, ctx, dot_size)
-  drawStarPoint(size * 16, size * 4, ctx, dot_size)
-  drawStarPoint(size * 16, size * 16, ctx, dot_size)
-  if grid == 19
-    drawStarPoint(size * 10, size * 16, ctx, dot_size)
-    drawStarPoint(size * 10, size * 10, ctx, dot_size)
-    drawStarPoint(size * 16, size * 10, ctx, dot_size)
-    drawStarPoint(size * 4, size * 10, ctx, dot_size)
-    drawStarPoint(size * 4, size * 16, ctx, dot_size)
-  return
-
 canvas = document.getElementById("board")
-canvas.width = size * 19
-canvas.height = size * 19
+canvas.width = size * 20
+canvas.height = size * 20
 ctx = canvas.getContext('2d')
 
 $('#board').click (e) ->
@@ -98,4 +83,8 @@ $('#board').mousemove (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   $('#coord').html(coord)
 
-drawBoard(ctx, line, size, 3)
+Board board = new Board()
+board.size = size
+board.draw(ctx)
+
+
