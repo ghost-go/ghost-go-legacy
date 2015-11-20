@@ -1,7 +1,7 @@
 letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
 line = 19
-size = 50
+size = 30
 step = 0
 
 Piece = (x, y, size, type) ->
@@ -13,7 +13,7 @@ Piece = (x, y, size, type) ->
 Piece.prototype.draw = (ctx) ->
   ctx.beginPath()
   ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true)
-  ctx.lineWidth = 2
+  ctx.lineWidth = 1
   if this.type == 'B'
     ctx.fillStyle = '#000000'
   else
@@ -22,12 +22,12 @@ Piece.prototype.draw = (ctx) ->
   ctx.stroke()
   return
 
-Board = (grid, size)
+Board = (grid, size) ->
   this.grid = grid || 19
   this.size = size || 25
 
 Board.prototype.draw = (ctx) ->
-  ctx.beginPath
+  ctx.beginPath()
   for i in [1..this.grid]
     ctx.moveTo(i * this.size, this.size)
     ctx.lineTo(i * this.size, this.grid * this.size)
@@ -35,7 +35,14 @@ Board.prototype.draw = (ctx) ->
     ctx.lineTo(this.grid * this.size, i * this.size)
   ctx.stroke()
 
-convert_coordinate = (x, y, size) ->
+Cross = (size) ->
+  this.size = size || 5
+
+Cross.prototype.draw = (ctx, coord) ->
+  ctx.beginPath()
+  ctx.stroke()
+
+convert_pos_to_coord = (x, y, size) ->
   letter = letters[Math.round((x - size) / size)]
   number = numbers[Math.round((y - size) / size)]
   return "#{letter}#{number}"
@@ -75,18 +82,20 @@ drawBoard = (ctx, grid, size, dot_size) ->
   return
 
 canvas = document.getElementById("board")
+canvas.width = size * 19
+canvas.height = size * 19
 ctx = canvas.getContext('2d')
 
 $('#board').click (e) ->
-  coordinate = convert_coordinate(e.offsetX, e.offsetY, size)
+  coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   step++
   if step % 2 == 0
-    move(ctx, coordinate, 'W')
+    move(ctx, coord, 'W')
   else
-    move(ctx, coordinate, 'B')
+    move(ctx, coord, 'B')
 
-$('#board').mouseover (e) ->
-  coordinate = convert_coordinate(e.offsetX, e.offsetY, size)
-  alert(coordinate)
+$('#board').mousemove (e) ->
+  coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
+  $('#coord').html(coord)
 
 drawBoard(ctx, line, size, 3)
