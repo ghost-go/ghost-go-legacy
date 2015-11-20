@@ -2,6 +2,7 @@ letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O',
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
 size = 30
 step = 0
+manual = []
 
 Piece = (x, y, size, type) ->
   this.x = x || 0
@@ -116,12 +117,14 @@ top_layer.height = size * 20
 $('#top').click (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   step++
+  manual.push coord
   if step % 2 == 0
     $('#turn').html('黑')
     move(piece_ctx , coord, 'W')
   else
     $('#turn').html('白')
     move(piece_ctx , coord, 'B')
+  alert(manual)
 
 $('#top').mousemove (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
