@@ -13,7 +13,7 @@ Piece = (x, y, size, type) ->
 Piece.prototype.draw = (ctx) ->
   ctx.beginPath()
   ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true)
-  ctx.lindWidth = 2
+  ctx.lineWidth = 2
   if this.type == 'B'
     ctx.fillStyle = '#000000'
   else
@@ -59,13 +59,9 @@ drawStarPoint = (x, y, ctx, size) ->
   return
 
 drawBoard = (ctx, grid, size, dot_size) ->
-  ctx.beginPath
-  for i in [1..grid]
-    ctx.moveTo(i * size, size)
-    ctx.lineTo(i * size, grid * size)
-    ctx.moveTo(size, i * size)
-    ctx.lineTo(grid * size, i * size)
-  ctx.stroke()
+  Board board = new Board()
+  board.size = size
+  board.draw(ctx)
   drawStarPoint(size * 4, size * 4, ctx, dot_size)
   drawStarPoint(size * 10, size * 4, ctx, dot_size)
   drawStarPoint(size * 16, size * 4, ctx, dot_size)
