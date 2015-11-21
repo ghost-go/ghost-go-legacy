@@ -4,6 +4,18 @@ numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].re
 size = 30
 step = 0
 manual = []
+$(window).resize ->
+  if $(window).height() > 500
+    size = $(window).height() / 20
+    board_ctx.clearRect(0, 0, board_layer.width, board_layer.height)
+    board.size = size
+    board.draw(board_ctx)
+    piece_ctx.clearRect(0, 0, piece_layer.width, board_layer.height)
+    for coord, i in manual
+      if i % 2 == 1
+        move(piece_ctx, coord, 'W')
+      else
+        move(piece_ctx, coord, 'B')
 
 Date.prototype.formattedDate = (pattern) ->
   formattedDate = pattern.replace('yyyy', this.getFullYear().toString())
