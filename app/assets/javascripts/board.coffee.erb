@@ -5,6 +5,16 @@ size = 30
 step = 0
 manual = []
 
+Date.prototype.formattedDate = (pattern) ->
+  formattedDate = pattern.replace('yyyy', this.getFullYear().toString())
+  mm = (this.getMonth() + 1).toString()
+  mm = '0' + mm if mm.length == 1
+  formattedDate = formattedDate.replace('mm', mm)
+  dd = this.getDate().toString()
+  dd = '0' + dd if dd.length == 1
+  formattedDate = formattedDate.replace('dd', dd)
+  return formattedDate
+
 class Sgf
   constructor: (options = {}) ->
     @datetime = options.datetime ? new Date()
@@ -35,7 +45,16 @@ class Sgf
     @content.push "#{txt}\n"
 
   output: ->
-    alert(@content.join(''))
+    d = new Date()
+    pattern = 'yyyy-mm-dd'
+    filename = "#{d.formattedDate(pattern)}-#{@bname}-vs-#{@wname}.sgf"
+    element = document.createElement('a')
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(@content.join('')))
+    element.setAttribute('download', filename)
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
 
 Piece = (x, y, size, type) ->
   this.x = x || 0
@@ -171,7 +190,6 @@ $('#top').click (e) ->
     sgf.add ";B[#{coord_sgf}]"
     $('#turn').html('黑')
     move(piece_ctx , coord, 'B')
-  sgf.output()
 
 $('#top').mousemove (e) ->
   coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
