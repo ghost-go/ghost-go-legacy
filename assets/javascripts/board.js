@@ -178,6 +178,7 @@ function convert_coord_to_pos (coord, size) {
 }
 
 function move(ctx, coord, type) {
+
   let results = convert_coord_to_pos(coord, size);
   let piece = new Piece()
   piece.x = results[0]
@@ -230,17 +231,22 @@ let top = document.getElementById('top');
 top.onclick = (e) => {
   let coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   let coord_sgf = convert_pos_to_sgf_coord(e.offsetX, e.offsetY, size)
-  step++
-  manual.push(coord)
-  if (step % 2 === 0) {
-    document.getElementById('turn').innerHTML = '白'
-    sgf.add(`;W[${coord_sgf}]`)
-    move(piece_ctx , coord, 'W')
+  if (manual.includes(coord)) {
+    alert('该位置已有棋子')
   }
   else {
-    document.getElementById('turn').innerHTML = '黑'
-    sgf.add(`;B[${coord_sgf}]`)
-    move(piece_ctx , coord, 'B')
+    step++
+    manual.push(coord)
+    if (step % 2 === 0) {
+      document.getElementById('turn').innerHTML = '白'
+      sgf.add(`;W[${coord_sgf}]`)
+      move(piece_ctx , coord, 'W')
+    }
+    else {
+      document.getElementById('turn').innerHTML = '黑'
+      sgf.add(`;B[${coord_sgf}]`)
+      move(piece_ctx , coord, 'B')
+    }
   }
 }
 
