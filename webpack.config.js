@@ -13,9 +13,7 @@ module.exports = {
       {
         test: /\.scss$/,
         loaders: ["style", "css", "sass"]
-      },
-      { test: /\.coffee$/, loader: "coffee-loader" },
-      { test: /\.(coffee\.md|litcoffee)$/, loader: "coffee-loader?literate" }
+      }
     ]
   },
   externals: {

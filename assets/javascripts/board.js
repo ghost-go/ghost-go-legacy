@@ -18,26 +18,26 @@ class Sgf {
     this.content = []
     this.content.push `(;FF[4]\n`
     this.content.push `GM[1]\n`
-    this.content.push `DT[#{this.datetime}]\n`
-    this.content.push `PB[#{this.bname}]\n`
-    this.content.push `PW[#{this.wname}]\n`
-    this.content.push `BR[#{this.brank}]\n`
-    this.content.push `WR[#{this.wrank}]\n`
+    this.content.push `DT[${this.datetime}]\n`
+    this.content.push `PB[${this.bname}]\n`
+    this.content.push `PW[${this.wname}]\n`
+    this.content.push `BR[${this.brank}]\n`
+    this.content.push `WR[${this.wrank}]\n`
     this.content.push `CP[ghost-go.com]\n`
-    this.content.push `RE[#{this.result}]\n`
-    this.content.push `SZ[#{this.size}]\n`
-    this.content.push `KM[#{this.komi}]\n`
-    this.content.push `RU[#{this.rule}]\n`
+    this.content.push `RE[${this.result}]\n`
+    this.content.push `SZ[${this.size}]\n`
+    this.content.push `KM[${this.komi}]\n`
+    this.content.push `RU[${this.rule}]\n`
   }
 
   add(txt) {
-    this.content.push `#{txt}\n`
+    this.content.push `${txt}\n`
   }
 
   output() {
     let d = new Date()
     let pattern = 'yyyy-mm-dd'
-    let filename = `#{d.formattedDate(pattern)}-#{this.bname}-vs-#{this.wname}.sgf`
+    let filename = `${d.formattedDate(pattern)}-${this.bname}-vs-${this.wname}.sgf`
     let element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.content.join('')))
     element.setAttribute('download', filename)
@@ -78,7 +78,7 @@ class Board {
 
   draw(ctx) {
     ctx.beginPath()
-    for(let i = 0;i < this.grid; i++) {
+    for(let i = 1;i <= this.grid; i++) {
       ctx.moveTo(i * this.size, this.size)
       ctx.lineTo(i * this.size, this.grid * this.size)
       ctx.moveTo(this.size, i * this.size)
@@ -103,7 +103,7 @@ class Cross {
     this.x = x || 0
     this.y = y || 0
     this.size = size || 5
-    this.color = color || "#000000"
+    this.color = color || '$000000'
   }
 
   draw(ctx) {
@@ -121,23 +121,23 @@ const size = 30
 let step = 0
 let manual = []
 
-window.onresize = (event) => {
-  if (window.innerHeight > 500) {
-    let size = window.innerHeight / 20
-    board_ctx.clearRect(0, 0, board_layer.width, board_layer.height)
-    board.size = size
-    board.draw(board_ctx)
-    piece_ctx.clearRect(0, 0, piece_layer.width, board_layer.height)
-    manual.forEach((value, i) => {
-      if (i % 2 == 1) {
-        move(piece_ctx, coord, 'W')
-      }
-      else {
-        move(piece_ctx, coord, 'B')
-      }
-    });
-  }
-}
+//window.onresize = (event) => {
+  //if (window.innerHeight > 500) {
+    //let size = window.innerHeight / 20
+    //board_ctx.clearRect(0, 0, board_layer.width, board_layer.height)
+    //board.size = size
+    //board.draw(board_ctx)
+    //piece_ctx.clearRect(0, 0, piece_layer.width, board_layer.height)
+    //manual.forEach((value, i) => {
+      //if (i % 2 == 1) {
+        //move(piece_ctx, coord, 'W')
+      //}
+      //else {
+        //move(piece_ctx, coord, 'B')
+      //}
+    //});
+  //}
+//}
 
 Date.prototype.formattedDate = (pattern) => {
   let formattedDate = pattern.replace('yyyy', this.getFullYear().toString())
@@ -157,13 +157,13 @@ Date.prototype.formattedDate = (pattern) => {
 function convert_pos_to_coord(x, y, size) {
   let letter = letters[Math.round((x - size) / size)]
   let number = numbers[Math.round((y - size) / size)]
-  return "#{letter}#{number}"
+  return `${letter}${number}`
 }
 
 function convert_pos_to_sgf_coord(x, y, size) {
   let letter = letters_sgf[Math.round((x - size) / size)]
   let number = letters_sgf[Math.round((y - size) / size)]
-  return "#{letter}#{number}"
+  return `${letter}${number}`
 }
 
 function convert_coord_to_pos (coord, size) {
@@ -198,7 +198,7 @@ function show_cross(ctx, coord, color) {
 }
 
 
-let board_layer = document.getElementById("board")
+let board_layer = document.getElementById('board')
 board_layer.width = size * 20
 board_layer.height = size * 20
 let board_ctx = board_layer.getContext('2d')
@@ -222,8 +222,8 @@ top_layer.width = size * 20
 top_layer.height = size * 20
 
 let sgf = new Sgf({
-  bname: "我是天才",
-  wname: "我不是天才"
+  bname: '我是天才',
+  wname: '我不是天才'
 })
 
 let top = document.getElementById('top');
@@ -232,14 +232,14 @@ top.onclick = (e) => {
   let coord_sgf = convert_pos_to_sgf_coord(e.offsetX, e.offsetY, size)
   step++
   manual.push(coord)
-  if (step % 2 == 0) {
+  if (step % 2 === 0) {
     document.getElementById('turn').innerHTML = '白'
-    sgf.add(";W[#{coord_sgf}]")
+    sgf.add(`;W[${coord_sgf}]`)
     move(piece_ctx , coord, 'W')
   }
   else {
     document.getElementById('turn').innerHTML = '黑'
-    sgf.add(";B[#{coord_sgf}]")
+    sgf.add(`;B[${coord_sgf}]`)
     move(piece_ctx , coord, 'B')
   }
 }
@@ -248,7 +248,7 @@ top.onmousemove = (e) => {
   let coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   document.getElementById('coord').innerHTML = coord
   cross_ctx.clearRect(0, 0, cross_layer.width, cross_layer.height)
-  show_cross(cross_ctx, coord, '#ff0000')
+  show_cross(cross_ctx, coord, '$ff0000')
 }
 
 
