@@ -71,27 +71,28 @@ class Piece {
 
 
 class Board {
-  constructor(grid, size) {
+  constructor(ctx, grid, size) {
     this.grid = grid || 19
     this.size = size || 25
+    this.ctx = ctx
   }
 
-  draw(ctx) {
-    ctx.beginPath()
+  draw() {
+    this.ctx.beginPath()
     for(let i = 1;i <= this.grid; i++) {
-      ctx.moveTo(i * this.size, this.size)
-      ctx.lineTo(i * this.size, this.grid * this.size)
-      ctx.moveTo(this.size, i * this.size)
-      ctx.lineTo(this.grid * this.size, i * this.size)
+      this.ctx.moveTo(i * this.size, this.size)
+      this.ctx.lineTo(i * this.size, this.grid * this.size)
+      this.ctx.moveTo(this.size, i * this.size)
+      this.ctx.lineTo(this.grid * this.size, i * this.size)
     }
-    ctx.stroke()
+    this.ctx.stroke()
     let dot_size = 3
     if (this.grid == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
-          ctx.beginPath()
-          ctx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true)
-          ctx.fill()
+          this.ctx.beginPath()
+          this.ctx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true)
+          this.ctx.fill()
         })
       });
     }
@@ -204,9 +205,9 @@ board_layer.width = size * 20
 board_layer.height = size * 20
 let board_ctx = board_layer.getContext('2d')
 
-let board = new Board()
+let board = new Board(board_ctx)
 board.size = size
-board.draw(board_ctx)
+board.draw()
 
 let piece_layer = document.getElementById('piece')
 piece_layer.width = size * 20
@@ -232,7 +233,7 @@ top.onclick = (e) => {
   let coord = convert_pos_to_coord(e.offsetX, e.offsetY, size)
   let coord_sgf = convert_pos_to_sgf_coord(e.offsetX, e.offsetY, size)
   if (manual.includes(coord)) {
-    alert('该位置已有棋子')
+    console.log('该位置已有棋子')
   }
   else {
     step++
