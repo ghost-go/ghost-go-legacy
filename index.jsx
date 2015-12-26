@@ -1,10 +1,8 @@
-'use strict'
-
-require("!style!css!sass!./assets/stylesheets/home.scss");
+import React from 'react';
+import ReactDOM from 'react-dom'
+require("./assets/stylesheets/home.scss");
 
 require('./assets/javascripts/board.js');
-
-let React = require('react');
-let ReactDOM = require('react-dom');
+require('./assets/javascripts/sgf.js');
 
 ReactDOM.render(<div>Hello World</div>, document.getElementById('content'))

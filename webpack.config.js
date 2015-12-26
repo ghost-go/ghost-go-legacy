@@ -8,11 +8,20 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx$/,
-        loader: 'jsx-loader?insertPragma=React.DOM&harmony'
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel?presets[]=react,presets[]=es2015'
       },
       {
         test: /\.scss$/,
         loaders: ["style", "css", "sass"]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader",
+        query: {
+          presets: ['react', 'es2015']
+        }
       }
     ]
   },
