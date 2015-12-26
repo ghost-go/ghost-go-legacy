@@ -1,7 +1,6 @@
-$default: 12px;
 canvas.layer {
   position: absolute;
-  left: $default;
-  top: $default;
+  left: 0;
+  top: 0;
   cursor: pointer;
 }

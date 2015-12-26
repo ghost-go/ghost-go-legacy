@@ -1,3 +1,18 @@
+Date.prototype.formattedDate = (pattern) => {
+  let formattedDate = pattern.replace('yyyy', this.getFullYear().toString())
+  let mm = (this.getMonth() + 1).toString()
+  if (mm.length == 1) {
+    mm = '0' + mm
+  }
+  formattedDate = formattedDate.replace('mm', mm)
+  dd = this.getDate().toString()
+  if (dd.length == 1) {
+    dd = '0' + dd
+  }
+  formattedDate = formattedDate.replace('dd', dd)
+  return formattedDate
+}
+
 export default class Sgf {
   constructor(options) {
     this.datetime = options.datetime || new Date()
