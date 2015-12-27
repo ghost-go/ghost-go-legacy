@@ -14,13 +14,23 @@ export default class Board {
     let currentTurn = 'None'
     let step = 0;
     let sgf = new Sgf({});
-    let manualArray = [];
-    while(manualArray.push(new Array(19).fill(0)) < 19);
-
     let boardLayer = this.createLayer('board_layer', layerWidth, layerHeight);
     let crossLayer = this.createLayer('cross_layer', layerWidth, layerHeight);
     let pieceLayer = this.createLayer('piece_layer', layerWidth, layerHeight);
     let topLayer = this.createLayer('top_layer', layerWidth, layerHeight);;
+
+    this.grid = grid || 19;
+    this.size = size || 25;
+    this.boardCtx = boardLayer.getContext('2d');
+    this.pieceCtx = pieceLayer.getContext('2d');
+    this.crossCtx = crossLayer.getContext('2d');
+    this.topCtx = topLayer.getContext('2d');
+    this.currentCoord = coord;
+    this.currentTurn = currentTurn;
+    this._kifuArray = [];
+    this._liberty = 0;
+    this._recursionPath = [];
+    while(this._kifuArray.push(new Array(19).fill(0)) < 19);
 
     el.appendChild(boardLayer, layerWidth, layerHeight);
     el.appendChild(crossLayer, layerWidth, layerHeight);
@@ -35,21 +45,28 @@ export default class Board {
       let coord_sgf = this.convertPosToSgfCoord(e.offsetX, e.offsetY, size);
       let {i, j} = this.convertCoordToIndex(coord);
 
-      if (manualArray[i][j] != 0) {
-        alert(manualArray[i][j])
+      if (this._kifuArray[i][j] != 0) {
         console.log('该位置已有棋子');
       }
       else {
+        this._liberty = 0;
+        this._recursionPath = [];
         step++;
         if (step % 2 === 0) {
-          currentTurn = '白';
-          manualArray[i][j] = -1;
+          this._kifuArray[i][j] = -1;
+          this.calcLiberty(i, j, -1);
+          console.log(this._recursionPath[0]);
+          alert(this._liberty);
+          currentTurn = '1';
           sgf.add(`;W[${coord_sgf}]`);
           this.move(coord, 'W');
         }
         else {
-          currentTurn = '黑';
-          manualArray[i][j] = 1;
+          this._kifuArray[i][j] = 1;
+          this.calcLiberty(i, j, 1);
+          console.log(this._recursionPath[0]);
+          alert(this._liberty);
+          currentTurn = '-1';
           sgf.add(`;B[${coord_sgf}]`);
           this.move(coord, 'B');
         }
@@ -57,15 +74,6 @@ export default class Board {
     }
     el.appendChild(topLayer);
 
-    this.grid = grid || 19;
-    this.size = size || 25;
-    this.boardCtx = boardLayer.getContext('2d');
-    this.pieceCtx = pieceLayer.getContext('2d');
-    this.crossCtx = crossLayer.getContext('2d');
-    this.topCtx = topLayer.getContext('2d');
-    this.currentCoord = coord;
-    this.currentTurn = currentTurn;
-    this.manualArray = [];
   }
 
   createLayer(layerName, layerWidth, layerHeight) {;
@@ -122,11 +130,7 @@ export default class Board {
     return `${letter}${number}`
   }
 
-  convertCoordToPos (coord, size) {
-    //let letter = coord.charAt(0);
-    //let number = coord.slice(1);
-    //let i = letters.indexOf(letter) + 1;
-    //let j = numbers.indexOf(parseInt(number)) + 1;
+  convertCoordToPos(coord, size) {
     let results = [];
     let {i, j} = this.convertCoordToIndex(coord);
     results[0] = (i + 1) * size;
@@ -140,6 +144,25 @@ export default class Board {
     let i = letters.indexOf(letter);
     let j = numbers.indexOf(parseInt(number));
     return {i, j};
+  }
+
+  calcBlackOrWhite(x, y) {
+    return this._kifuArray[x][y];
+  }
+
+  calcLiberty (x, y, ki) {
+    if (x >= 0 && x < this.grid && y >= 0 && y < this.grid) {
+      if (this._kifuArray[x][y] == ki && !this._recursionPath.includes(`${letters[x]}${numbers[y]}`)) {
+        this._recursionPath.push(`${letters[x]}${numbers[y]}`);
+        this.calcLiberty(x - 1, y, ki);
+        this.calcLiberty(x + 1, y, ki);
+        this.calcLiberty(x, y - 1, ki);
+        this.calcLiberty(x, y + 1, ki);
+      }
+      else if(this._kifuArray[x][y] == 0) {
+        this._liberty++;
+      }
+    }
   }
 
   //convert_pos_to_nearest_pos() {;
@@ -169,7 +192,7 @@ export default class Board {
 //board.size = size;
 //board.draw(boardCtx);
 //pieceCtx.clearRect(0, 0, piece_layer.width, board_layer.height);
-//manual.forEach((value, i) => {;
+//kifu.forEach((value, i) => {;
 //if (i % 2 == 1) {;
 //move(pieceCtx, coord, 'W');
 //};
