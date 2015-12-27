@@ -28,8 +28,6 @@ export default class Board {
     this.currentCoord = coord;
     this.currentTurn = currentTurn;
     this._kifuArray = [];
-    this._liberty = 0;
-    this._recursionPath = [];
     while(this._kifuArray.push(new Array(19).fill(0)) < 19);
 
     el.appendChild(boardLayer, layerWidth, layerHeight);
@@ -55,8 +53,6 @@ export default class Board {
         if (step % 2 === 0) {
           this._kifuArray[i][j] = -1;
           this.calcLiberty(i, j, -1);
-          console.log(this._recursionPath[0]);
-          alert(this._liberty);
           currentTurn = '1';
           sgf.add(`;W[${coord_sgf}]`);
           this.move(coord, 'W');
@@ -64,8 +60,6 @@ export default class Board {
         else {
           this._kifuArray[i][j] = 1;
           this.calcLiberty(i, j, 1);
-          console.log(this._recursionPath[0]);
-          alert(this._liberty);
           currentTurn = '-1';
           sgf.add(`;B[${coord_sgf}]`);
           this.move(coord, 'B');
@@ -150,19 +144,32 @@ export default class Board {
     return this._kifuArray[x][y];
   }
 
-  calcLiberty (x, y, ki) {
+  _calcLibertyCore(x, y, ki) {
     if (x >= 0 && x < this.grid && y >= 0 && y < this.grid) {
       if (this._kifuArray[x][y] == ki && !this._recursionPath.includes(`${letters[x]}${numbers[y]}`)) {
         this._recursionPath.push(`${letters[x]}${numbers[y]}`);
-        this.calcLiberty(x - 1, y, ki);
-        this.calcLiberty(x + 1, y, ki);
-        this.calcLiberty(x, y - 1, ki);
-        this.calcLiberty(x, y + 1, ki);
+        this._calcLibertyCore(x - 1, y, ki);
+        this._calcLibertyCore(x + 1, y, ki);
+        this._calcLibertyCore(x, y - 1, ki);
+        this._calcLibertyCore(x, y + 1, ki);
       }
       else if(this._kifuArray[x][y] == 0) {
         this._liberty++;
       }
     }
+  }
+
+  calcLiberty(x, y, ki) {
+    this._liberty = 0;
+    this._recursionPath = [];
+    this._calcLibertyCore(x, y, ki);
+    console.log(this._liberty);
+    console.log(this._recursionPath);
+    return {
+      liberty: this._liberty,
+      recursionPath: this._recursionPath
+    }
+    //return {this._liberty, this._recursionPath};
   }
 
   //convert_pos_to_nearest_pos() {;
