@@ -10,10 +10,12 @@ export default class Board {
   constructor(el, grid, size) {
     let layerWidth = size * 20;
     let layerHeight = size * 20;
-    let currentCoord = 'None';
-    let manual = [];
+    let currentCoord = 'None'
+    let currentTurn = 'None'
     let step = 0;
-    let sgf = new Sgf({})
+    let sgf = new Sgf({});
+    let manualArray = [];
+    while(manualArray.push(new Array(19).fill(0)) < 19);
 
     let boardLayer = this.createLayer('board_layer', layerWidth, layerHeight);
     let crossLayer = this.createLayer('cross_layer', layerWidth, layerHeight);
@@ -31,19 +33,23 @@ export default class Board {
     topLayer.onclick = (e) => {;
       let coord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
       let coord_sgf = this.convertPosToSgfCoord(e.offsetX, e.offsetY, size);
-      if (manual.includes(coord)) {;
+      let {i, j} = this.convertCoordToIndex(coord);
+
+      if (manualArray[i][j] != 0) {
+        alert(manualArray[i][j])
         console.log('该位置已有棋子');
       }
       else {
         step++;
-        manual.push(coord);
         if (step % 2 === 0) {
-          document.getElementById('turn').innerHTML = '白';
+          currentTurn = '白';
+          manualArray[i][j] = -1;
           sgf.add(`;W[${coord_sgf}]`);
           this.move(coord, 'W');
         }
         else {
-          document.getElementById('turn').innerHTML = '黑';
+          currentTurn = '黑';
+          manualArray[i][j] = 1;
           sgf.add(`;B[${coord_sgf}]`);
           this.move(coord, 'B');
         }
@@ -58,6 +64,8 @@ export default class Board {
     this.crossCtx = crossLayer.getContext('2d');
     this.topCtx = topLayer.getContext('2d');
     this.currentCoord = coord;
+    this.currentTurn = currentTurn;
+    this.manualArray = [];
   }
 
   createLayer(layerName, layerWidth, layerHeight) {;
@@ -115,15 +123,25 @@ export default class Board {
   }
 
   convertCoordToPos (coord, size) {
-    let letter = coord.charAt(0);
-    let number = coord.slice(1);
-    let i = letters.indexOf(letter) + 1;
-    let j = numbers.indexOf(parseInt(number)) + 1;
+    //let letter = coord.charAt(0);
+    //let number = coord.slice(1);
+    //let i = letters.indexOf(letter) + 1;
+    //let j = numbers.indexOf(parseInt(number)) + 1;
     let results = [];
-    results[0] = i * size;
-    results[1] = j * size;
+    let {i, j} = this.convertCoordToIndex(coord);
+    results[0] = (i + 1) * size;
+    results[1] = (j + 1) * size;
     return results;
   }
+
+  convertCoordToIndex (coord) {
+    let letter = coord.charAt(0);
+    let number = coord.slice(1);
+    let i = letters.indexOf(letter);
+    let j = numbers.indexOf(parseInt(number));
+    return {i, j};
+  }
+
   //convert_pos_to_nearest_pos() {;
   //let letter = letters[Math.round((x - this.size) / size)];
   //let number = numbers[Math.round((y - this.size) / size)];
