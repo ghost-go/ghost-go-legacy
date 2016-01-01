@@ -38,7 +38,7 @@ export default class Board {
       this.crossCtx.clearRect(0, 0, layerWidth, layerHeight);
       this.showCross(currentCoord, '$ff0000');
     }
-    topLayer.onclick = (e) => {;
+    topLayer.onclick = (e) => {
       let coord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
       let coord_sgf = this.convertPosToSgfCoord(e.offsetX, e.offsetY, size);
       let {i, j} = this.convertCoordToIndex(coord);
@@ -49,20 +49,31 @@ export default class Board {
       else {
         this._liberty = 0;
         this._recursionPath = [];
-        step++;
         if (step % 2 === 0) {
           this._kifuArray[i][j] = -1;
-          this.calcLiberty(i, j, -1);
-          currentTurn = '1';
-          sgf.add(`;W[${coord_sgf}]`);
-          this.move(coord, 'W');
+          let {liberty, recursionPath} = this.calcLiberty(i, j, -1);
+          if (liberty === 0) {
+            console.log('此位置不能放棋子');
+          }
+          else {
+            currentTurn = '1';
+            sgf.add(`;W[${coord_sgf}]`);
+            this.move(coord, 'W');
+            step++;
+          }
         }
         else {
           this._kifuArray[i][j] = 1;
-          this.calcLiberty(i, j, 1);
-          currentTurn = '-1';
-          sgf.add(`;B[${coord_sgf}]`);
-          this.move(coord, 'B');
+          let {liberty, recursionPath} = this.calcLiberty(i, j, 1);
+          if (liberty === 0) {
+            console.log('此位置不能放棋子');
+          }
+          else {
+            currentTurn = '-1';
+            sgf.add(`;B[${coord_sgf}]`);
+            this.move(coord, 'B');
+            step++;
+          }
         }
       }
     }
@@ -78,7 +89,7 @@ export default class Board {
     layer.style.position = 'absolute';
     layer.style.left = 0;
     layer.style.top = 0;
-    return layer
+    return layer;
   }
 
   draw() {
@@ -169,7 +180,6 @@ export default class Board {
       liberty: this._liberty,
       recursionPath: this._recursionPath
     }
-    //return {this._liberty, this._recursionPath};
   }
 
   //convert_pos_to_nearest_pos() {;
