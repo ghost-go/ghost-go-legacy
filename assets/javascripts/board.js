@@ -55,6 +55,7 @@ export default class Board {
           this._kifuArray[i][j] = -1;
           let {liberty, recursionPath} = this.calcLiberty(i, j, -1);
           if (liberty === 0) {
+            this._kifuArray[i][j] = 0;
             console.log('此位置不能放棋子');
           }
           else {
@@ -62,6 +63,31 @@ export default class Board {
             sgf.addKi(`;W[${coord_sgf}]`);
             this.move(e.offsetX, e.offsetY, 'W');
             step++;
+            let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, 1);
+            let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, 1);
+            let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, 1);
+            let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, 1);
+            console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`);
+            if (libertyUp === 0) {
+              recursionPathUp.forEach((i) => {
+                this.remove(i);
+              });
+            }
+            if (libertyDown === 0) {
+              recursionPathDown.forEach((i) => {
+                this.remove(i);
+              });
+            }
+            if (libertyLeft === 0) {
+              recursionPathLeft.forEach((i) => {
+                this.remove(i);
+              });
+            }
+            if (libertyRight === 0) {
+              recursionPathRight.forEach((i) => {
+                this.remove(i);
+              });
+            }
           }
         }
         else {
@@ -75,6 +101,31 @@ export default class Board {
             sgf.addKi(`;B[${coord_sgf}]`);
             this.move(e.offsetX, e.offsetY, 'B');
             step++;
+            let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, -1);
+            let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, -1);
+            let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, -1);
+            let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, -1);
+            console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`);
+            if (libertyUp === 0) {
+              recursionPathUp.forEach((i) => {
+                this.remove(i);
+              });
+            }
+            if (libertyDown === 0) {
+              recursionPathDown.forEach((i) => {
+                this.remove(i);
+              });
+            }
+            if (libertyLeft === 0) {
+              recursionPathLeft.forEach((i) => {
+                this.remove(i);
+              });
+            }
+            if (libertyRight === 0) {
+              recursionPathRight.forEach((i) => {
+                this.remove(i);
+              });
+            }
           }
         }
       }
@@ -126,18 +177,13 @@ export default class Board {
   }
 
   remove(coord) {
-    let realPos = this.convertPosToRealPos(x, y);
+    alert(coord);
+    let realPos = this.convertCoordToRealPos(coord);
     let piece = new Piece();
     piece.x = realPos.x;
     piece.y = realPos.y;
-    piece.remove(this._pieceCtx);
+    piece.remove(this._pieceCtx, this.size);
   }
-
-  redraw(kiArray) {
-    kiArray.forEach((i) => {
-    });
-  }
-
 
   convertPosToCoord(x, y) {;
     let letter = letters[Math.round((x - this.size) / this.size)];
@@ -156,7 +202,10 @@ export default class Board {
     let {i, j} = this.convertCoordToIndex(coord);
     results[0] = (i + 1) * this.size;
     results[1] = (j + 1) * this.size;
-    return results;
+    return {
+      x: results[0],
+      y: results[1]
+    };
   }
 
   convertPosToRealPos(x, y) {
@@ -172,7 +221,9 @@ export default class Board {
   }
 
   convertCoordToRealPos(coord) {
-    
+    let pos = this.convertCoordToPos(coord);
+    let realPos = this.convertPosToRealPos(pos.x, pos.y);
+    return realPos;
   }
 
   convertCoordToIndex (coord) {
@@ -205,6 +256,18 @@ export default class Board {
   calcLiberty(x, y, ki) {
     this._liberty = 0;
     this._recursionPath = [];
+    if (x < 0 || y < 0) {
+      return {
+        liberty: 4,
+        recursionPath: []
+      }
+    }
+    if (this._kifuArray[x][y] == 0) {
+      return {
+        liberty: 4,
+        recursionPath: []
+      }
+    }
     this._calcLibertyCore(x, y, ki);
     console.log(this._liberty);
     console.log(this._recursionPath);
