@@ -8,34 +8,36 @@ const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
 
 export default class Board {
   constructor(el, grid, size) {
-    let layerWidth = size * 20;
-    let layerHeight = size * 20;
+    this.grid = grid || 19;
+    this.size = size || 25;
+    this._layerWidth = this.size * 20;
+    this._layerHeight = this.size * 20;
+    this._kifuArray = [];
+
     let currentCoord = 'None'
     let currentTurn = 'None'
     let step = 0;
     let sgf = new Sgf({});
-    let boardLayer = this.createLayer('board_layer', layerWidth, layerHeight);
-    let crossLayer = this.createLayer('cross_layer', layerWidth, layerHeight);
-    let pieceLayer = this.createLayer('piece_layer', layerWidth, layerHeight);
-    let topLayer = this.createLayer('top_layer', layerWidth, layerHeight);;
+    let boardLayer = this.createLayer('board_layer', this._layerWidth, this._layerHeight);
+    let crossLayer = this.createLayer('cross_layer', this._layerWidth, this._layerHeight);
+    let pieceLayer = this.createLayer('piece_layer', this._layerWidth, this._layerHeight);
+    let topLayer = this.createLayer('top_layer', this._layerWidth, this._layerHeight);;
 
-    this.grid = grid || 19;
-    this.size = size || 25;
-    this.boardCtx = boardLayer.getContext('2d');
-    this.pieceCtx = pieceLayer.getContext('2d');
-    this.crossCtx = crossLayer.getContext('2d');
-    this.topCtx = topLayer.getContext('2d');
+    this._boardCtx = boardLayer.getContext('2d');
+    this._pieceCtx = pieceLayer.getContext('2d');
+    this._crossCtx = crossLayer.getContext('2d');
+    this._topCtx = topLayer.getContext('2d');
     this.currentCoord = coord;
     this.currentTurn = currentTurn;
-    this._kifuArray = [];
+
     while(this._kifuArray.push(new Array(19).fill(0)) < 19);
 
-    el.appendChild(boardLayer, layerWidth, layerHeight);
-    el.appendChild(crossLayer, layerWidth, layerHeight);
-    el.appendChild(pieceLayer, layerWidth, layerHeight);
+    el.appendChild(boardLayer, this._layerWidth, this._layerHeight);
+    el.appendChild(crossLayer, this._layerWidth, this._layerHeight);
+    el.appendChild(pieceLayer, this._layerWidth, this._layerHeight);
     topLayer.onmousemove = (e) => {;
       currentCoord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
-      this.crossCtx.clearRect(0, 0, layerWidth, layerHeight);
+      this._crossCtx.clearRect(0, 0, this._layerWidth, this._layerHeight);
       this.showCross(currentCoord, '$ff0000');
     }
     topLayer.onclick = (e) => {
@@ -57,8 +59,8 @@ export default class Board {
           }
           else {
             currentTurn = '1';
-            sgf.add(`;W[${coord_sgf}]`);
-            this.move(coord, 'W');
+            sgf.addKi(`;W[${coord_sgf}]`);
+            this.move(e.offsetX, e.offsetY, 'W');
             step++;
           }
         }
@@ -70,8 +72,8 @@ export default class Board {
           }
           else {
             currentTurn = '-1';
-            sgf.add(`;B[${coord_sgf}]`);
-            this.move(coord, 'B');
+            sgf.addKi(`;B[${coord_sgf}]`);
+            this.move(e.offsetX, e.offsetY, 'B');
             step++;
           }
         }
@@ -93,39 +95,53 @@ export default class Board {
   }
 
   draw() {
-    this.boardCtx.beginPath();
+    this._boardCtx.beginPath();
     for(let i = 1;i <= this.grid; i++) {;
-      this.boardCtx.moveTo(i * this.size, this.size);
-      this.boardCtx.lineTo(i * this.size, this.grid * this.size);
-      this.boardCtx.moveTo(this.size, i * this.size);
-      this.boardCtx.lineTo(this.grid * this.size, i * this.size);
+      this._boardCtx.moveTo(i * this.size, this.size);
+      this._boardCtx.lineTo(i * this.size, this.grid * this.size);
+      this._boardCtx.moveTo(this.size, i * this.size);
+      this._boardCtx.lineTo(this.grid * this.size, i * this.size);
     };
-    this.boardCtx.stroke()
+    this._boardCtx.stroke()
     let dot_size = 3;
     if (this.grid == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
-          this.boardCtx.beginPath()
-          this.boardCtx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true);
-          this.boardCtx.fill();
+          this._boardCtx.beginPath()
+          this._boardCtx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true);
+          this._boardCtx.fill();
         })
       })
     }
   }
 
-  move(coord, type) {;
-    let results = this.convertCoordToPos(coord, this.size);;
+  move(x, y, type) {
+    let realPos = this.convertPosToRealPos(x, y);
     let piece = new Piece();
-    piece.x = results[0];
-    piece.y = results[1];
-    piece.size = this.size / 2 - 3;
+    piece.x = realPos.x;
+    piece.y = realPos.y;
+    piece.pieceSize = this.size / 2 - 3;
     piece.type = type;
-    piece.draw(this.pieceCtx);
+    piece.draw(this._pieceCtx);
   }
 
-  convertPosToCoord(x, y, size) {;
-    let letter = letters[Math.round((x - this.size) / size)];
-    let number = numbers[Math.round((y - this.size) / size)];
+  remove(coord) {
+    let realPos = this.convertPosToRealPos(x, y);
+    let piece = new Piece();
+    piece.x = realPos.x;
+    piece.y = realPos.y;
+    piece.remove(this._pieceCtx);
+  }
+
+  redraw(kiArray) {
+    kiArray.forEach((i) => {
+    });
+  }
+
+
+  convertPosToCoord(x, y) {;
+    let letter = letters[Math.round((x - this.size) / this.size)];
+    let number = numbers[Math.round((y - this.size) / this.size)];
     return `${letter}${number}`;
   }
 
@@ -135,12 +151,28 @@ export default class Board {
     return `${letter}${number}`
   }
 
-  convertCoordToPos(coord, size) {
+  convertCoordToPos(coord) {
     let results = [];
     let {i, j} = this.convertCoordToIndex(coord);
-    results[0] = (i + 1) * size;
-    results[1] = (j + 1) * size;
+    results[0] = (i + 1) * this.size;
+    results[1] = (j + 1) * this.size;
     return results;
+  }
+
+  convertPosToRealPos(x, y) {
+    let letter = letters[Math.round((x - this.size) / this.size)];
+    let number = numbers[Math.round((y - this.size) / this.size)];
+
+    let results = [];
+    let {i, j} = this.convertCoordToIndex(`${letter}${number}`);
+    return {
+      x: (i + 1) * this.size,
+      y: (j + 1) * this.size
+    }
+  }
+
+  convertCoordToRealPos(coord) {
+    
   }
 
   convertCoordToIndex (coord) {
@@ -182,16 +214,6 @@ export default class Board {
     }
   }
 
-  //convert_pos_to_nearest_pos() {;
-  //let letter = letters[Math.round((x - this.size) / size)];
-  //let number = numbers[Math.round((y - this.size) / size)];
-  //let i = letters.indexOf(letter) + 1;
-  //let j = numbers.indexOf(parseInt(number)) + 1;
-  //let results = [];
-  //results[0] = i * size;
-  //results[1] = j * size;
-  //return results;
-  //};
   showCross(coord, color) {
     let results = this.convertCoordToPos(coord, this.size);
     let cross = new Cross();
@@ -199,23 +221,6 @@ export default class Board {
     cross.y = results[1];
     cross.size = 5;
     cross.color = color;
-    cross.draw(this.crossCtx);
+    cross.draw(this._crossCtx);
   }
 }
-//window.onresize = (event) => {;
-//if (window.innerHeight > 500) {;
-//let size = window.innerHeight / 20;
-//boardCtx.clearRect(0, 0, board_layer.width, board_layer.height);
-//board.size = size;
-//board.draw(boardCtx);
-//pieceCtx.clearRect(0, 0, piece_layer.width, board_layer.height);
-//kifu.forEach((value, i) => {;
-//if (i % 2 == 1) {;
-//move(pieceCtx, coord, 'W');
-//};
-//else {;
-//move(pieceCtx, coord, 'B');
-//};
-//});;
-//};
-//};

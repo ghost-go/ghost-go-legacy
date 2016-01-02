@@ -15,32 +15,38 @@ Date.prototype.formattedDate = (pattern) => {
 
 export default class Sgf {
   constructor(options) {
-    this.datetime = options.datetime || new Date()
-    this.bname = options.bname || 'Black'
-    this.wname = options.wname || 'White'
-    this.brank = options.brank || '18k'
-    this.wrank = options.wrank || '18k'
-    this.size = options.size || 19
-    this.komi = options.komi || 6.5
-    this.rule = options.rule || 'japanese'
-    this.result = options.result || ''
-    this.content = []
-    this.content.push `(;FF[4]\n`
-    this.content.push `GM[1]\n`
-    this.content.push `DT[${this.datetime}]\n`
-    this.content.push `PB[${this.bname}]\n`
-    this.content.push `PW[${this.wname}]\n`
-    this.content.push `BR[${this.brank}]\n`
-    this.content.push `WR[${this.wrank}]\n`
-    this.content.push `CP[ghost-go.com]\n`
-    this.content.push `RE[${this.result}]\n`
-    this.content.push `SZ[${this.size}]\n`
-    this.content.push `KM[${this.komi}]\n`
-    this.content.push `RU[${this.rule}]\n`
+    this.datetime = options.datetime || new Date();
+    this.bname = options.bname || 'Black';
+    this.wname = options.wname || 'White';
+    this.brank = options.brank || '18k';
+    this.wrank = options.wrank || '18k';
+    this.size = options.size || 19;
+    this.komi = options.komi || 6.5;
+    this.rule = options.rule || 'japanese';
+    this.result = options.result || '';
+    this.header = [];
+    this.header.push `(;FF[4]\n`;
+    this.header.push `GM[1]\n`;
+    this.header.push `DT[${this.datetime}]\n`;
+    this.header.push `PB[${this.bname}]\n`;
+    this.header.push `PW[${this.wname}]\n`;
+    this.header.push `BR[${this.brank}]\n`;
+    this.header.push `WR[${this.wrank}]\n`;
+    this.header.push `CP[ghost-go.com]\n`;
+    this.header.push `RE[${this.result}]\n`;
+    this.header.push `SZ[${this.size}]\n`;
+    this.header.push `KM[${this.komi}]\n`;
+    this.header.push `RU[${this.rule}]\n`;
+
+    this.kifu = [];
   }
 
-  add(txt) {
-    this.content.push `${txt}\n`
+  addHeader(txt) {
+    this.header.push `${txt}\n`;
+  }
+
+  addKi(txt) {
+    this.kifu.push `${txt}\n`;
   }
 
   output() {

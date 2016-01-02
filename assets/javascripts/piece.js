@@ -1,14 +1,14 @@
 export default class Piece {
-  constructor(x, y, size, type) {
-    this.x = x || 0
-    this.y = y || 0
-    this.size = size || 1
-    this.type = type || 'B'
+  constructor(x, y, pieceSize, type) {
+    this.x || 0;
+    this.y || 0;
+    this.pieceSize = pieceSize || 1;
+    this.type = type || 'B';
   }
 
   draw(ctx) {
     ctx.beginPath()
-    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true)
+    ctx.arc(this.x, this.y, this.pieceSize, 0, 2 * Math.PI, true)
     ctx.lineWidth = 1
     if (this.type == 'B')
       ctx.fillStyle = '#000000'
@@ -17,4 +17,9 @@ export default class Piece {
     ctx.fill()
     ctx.stroke()
   }
+
+  remove(ctx) {
+    this._ctx.clearRect(x - size, y - size, x + size, y + size);
+  }
+
 }
