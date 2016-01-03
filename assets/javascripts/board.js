@@ -177,8 +177,9 @@ export default class Board {
   }
 
   remove(coord) {
-    alert(coord);
     let realPos = this.convertCoordToRealPos(coord);
+    let {i, j} = this.convertCoordToIndex(coord);
+    this._kifuArray[i][j] = 0;
     let piece = new Piece();
     piece.x = realPos.x;
     piece.y = realPos.y;
@@ -209,11 +210,13 @@ export default class Board {
   }
 
   convertPosToRealPos(x, y) {
+    console.log(`x: ${x}, y: ${y}`);
     let letter = letters[Math.round((x - this.size) / this.size)];
     let number = numbers[Math.round((y - this.size) / this.size)];
 
     let results = [];
     let {i, j} = this.convertCoordToIndex(`${letter}${number}`);
+    console.log(`rx: ${(i+1) * this.size}, ry: ${(j+1) * this.size}`);
     return {
       x: (i + 1) * this.size,
       y: (j + 1) * this.size

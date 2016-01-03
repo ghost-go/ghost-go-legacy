@@ -19,8 +19,7 @@ export default class Piece {
   }
 
   remove(ctx, size) {
-    console.log(`吃子: ${this.x}, ${this.y}, ${size}`);
-    ctx.clearRect(this.x - size / 2, this.y - size / 2, this.x + size / 2, this.y + size / 2);
+    ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size);
   }
 
 }
