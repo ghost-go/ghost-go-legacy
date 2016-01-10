@@ -31,6 +31,7 @@
     "http-server": "^0.8.5",
     "jsx-loader": "^0.13.2",
     "karma-babel-preprocessor": "^6.0.1",
+    "karma-source-map-support": "^1.1.0",
     "karma-webpack": "^1.7.0",
     "node-sass": "^3.4.2",
     "react-dom": "^0.14.3",
