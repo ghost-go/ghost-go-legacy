@@ -23,10 +23,21 @@ module.exports = function (config) {
     },
     webpack: {
       module: {
-        loaders: [{
-          test: /\.(js|jsx)$/, exclude: /(bower_components|node_modules)/,
-          loader: 'babel-loader'
-        }],
+        loaders: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: "babel-loader",
+            query: {
+              presets: ['react', 'es2015']
+            }
+          },
+          {
+            test: /\.jsx$/,
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel?presets[]=react,presets[]=es2015'
+          },
+        ],
         postLoaders: [{
           test: /\.(js|jsx)$/, exclude: /(node_modules|bower_components|tests)/,
           loader: 'istanbul-instrumenter'
