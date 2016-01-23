@@ -10,7 +10,7 @@ module.exports = function (config) {
     browsers: [ 'Chrome' ],
     preprocessors: {
       'tests/**/*_spec.js': ['webpack'],
-      'src/**/*.js': ['webpack']
+      'assets/javascripts/**/*.js': ['webpack']
     },
     reporters: [ 'spec', 'coverage' ],
     coverageReporter: {

@@ -27,7 +27,7 @@ export default class Board {
     this._pieceCtx = pieceLayer.getContext('2d');
     this._crossCtx = crossLayer.getContext('2d');
     this._topCtx = topLayer.getContext('2d');
-    this.currentCoord = coord;
+    this.currentCoord = currentCoord;
     this.currentTurn = currentTurn;
 
     while(this._kifuArray.push(new Array(19).fill(0)) < 19);
