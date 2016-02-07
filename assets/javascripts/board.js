@@ -40,7 +40,7 @@ export default class Board {
     topLayer.onmousemove = (e) => {;
       currentCoord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
       this._crossCtx.clearRect(0, 0, this._layerWidth, this._layerHeight);
-      this.showCross(currentCoord, '$ff0000');
+      this.showCross(currentCoord, '#ff0000');
     }
 
     topLayer.onclick = (e) => {
@@ -302,8 +302,8 @@ export default class Board {
   showCross(coord, color) {
     let results = this.convertCoordToPos(coord, this.size);
     let cross = new Cross();
-    cross.x = results[0];
-    cross.y = results[1];
+    cross.x = results.x;
+    cross.y = results.y;
     cross.size = 5;
     cross.color = color;
     cross.draw(this._crossCtx);
