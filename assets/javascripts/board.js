@@ -15,8 +15,8 @@ export default class Board {
     this._kifuArray = [];
 
     let currentCoord = 'None'
-    let currentTurn = 'None'
-    let step = 0;
+    let currentTurn = 1
+    let step = 1;
     let sgf = new Sgf({});
     let boardLayer = this.createLayer('board_layer', this._layerWidth, this._layerHeight);
     let crossLayer = this.createLayer('cross_layer', this._layerWidth, this._layerHeight);
@@ -27,6 +27,7 @@ export default class Board {
     this._pieceCtx = pieceLayer.getContext('2d');
     this._crossCtx = crossLayer.getContext('2d');
     this._topCtx = topLayer.getContext('2d');
+    this.sgf = sgf;
     this.currentCoord = currentCoord;
     this.currentTurn = currentTurn;
 
@@ -35,103 +36,30 @@ export default class Board {
     el.appendChild(boardLayer, this._layerWidth, this._layerHeight);
     el.appendChild(crossLayer, this._layerWidth, this._layerHeight);
     el.appendChild(pieceLayer, this._layerWidth, this._layerHeight);
+
     topLayer.onmousemove = (e) => {;
       currentCoord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
       this._crossCtx.clearRect(0, 0, this._layerWidth, this._layerHeight);
       this.showCross(currentCoord, '$ff0000');
     }
+
     topLayer.onclick = (e) => {
       let coord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
-      let coord_sgf = this.convertPosToSgfCoord(e.offsetX, e.offsetY, size);
       let {i, j} = this.convertCoordToIndex(coord);
 
       if (this._kifuArray[i][j] != 0) {
         console.log('该位置已有棋子');
+        return;
       }
-      else {
-        this._liberty = 0;
-        this._recursionPath = [];
-        if (step % 2 === 0) {
-          this._kifuArray[i][j] = -1;
-          let {liberty, recursionPath} = this.calcLiberty(i, j, -1);
-          if (liberty === 0) {
-            this._kifuArray[i][j] = 0;
-            console.log('此位置不能放棋子');
-          }
-          else {
-            currentTurn = '1';
-            sgf.addKi(`;W[${coord_sgf}]`);
-            this.move(e.offsetX, e.offsetY, 'W');
-            step++;
-            let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, 1);
-            let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, 1);
-            let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, 1);
-            let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, 1);
-            console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`);
-            if (libertyUp === 0) {
-              recursionPathUp.forEach((i) => {
-                this.remove(i);
-              });
-            }
-            if (libertyDown === 0) {
-              recursionPathDown.forEach((i) => {
-                this.remove(i);
-              });
-            }
-            if (libertyLeft === 0) {
-              recursionPathLeft.forEach((i) => {
-                this.remove(i);
-              });
-            }
-            if (libertyRight === 0) {
-              recursionPathRight.forEach((i) => {
-                this.remove(i);
-              });
-            }
-          }
-        }
-        else {
-          this._kifuArray[i][j] = 1;
-          let {liberty, recursionPath} = this.calcLiberty(i, j, 1);
-          if (liberty === 0) {
-            console.log('此位置不能放棋子');
-          }
-          else {
-            currentTurn = '-1';
-            sgf.addKi(`;B[${coord_sgf}]`);
-            this.move(e.offsetX, e.offsetY, 'B');
-            step++;
-            let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, -1);
-            let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, -1);
-            let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, -1);
-            let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, -1);
-            console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`);
-            if (libertyUp === 0) {
-              recursionPathUp.forEach((i) => {
-                this.remove(i);
-              });
-            }
-            if (libertyDown === 0) {
-              recursionPathDown.forEach((i) => {
-                this.remove(i);
-              });
-            }
-            if (libertyLeft === 0) {
-              recursionPathLeft.forEach((i) => {
-                this.remove(i);
-              });
-            }
-            if (libertyRight === 0) {
-              recursionPathRight.forEach((i) => {
-                this.remove(i);
-              });
-            }
-          }
-        }
+
+      this._liberty = 0;
+      this._recursionPath = [];
+      if (this.canMove(i, j, this.currentTurn)) {
+        this.move(e.offsetX, e.offsetY, this.currentTurn);
+        this.execPonnuki(i, j, this.currentTurn);
       }
     }
     el.appendChild(topLayer);
-
   }
 
   createLayer(layerName, layerWidth, layerHeight) {;
@@ -166,17 +94,46 @@ export default class Board {
     }
   }
 
+  canMove(i, j, ki) {
+    this._kifuArray[i][j] = ki;
+    let {liberty, recursionPath} = this.calcLiberty(i, j, ki);
+    if (this.canPonnuki(i, j, ki)) {
+      return true;
+    }
+    if (liberty === 0) {
+      this._kifuArray[i][j] = 0;
+      console.log('此位置不能放棋子');
+      return false;
+    }
+    return true;
+  }
+
   move(x, y, type) {
     let realPos = this.convertPosToRealPos(x, y);
+    let coord_sgf = this.convertPosToSgfCoord(x, y, this.size);
+
     let piece = new Piece();
+
+    let typeStr = '';
+    if (type === 1) {
+      typeStr = 'B';
+    }
+    else {
+      typeStr = 'W';
+    }
+
     piece.x = realPos.x;
     piece.y = realPos.y;
     piece.pieceSize = this.size / 2 - 3;
-    piece.type = type;
+    piece.type = typeStr;
     piece.draw(this._pieceCtx);
+
+    this.sgf.addKi(`;${typeStr}[${coord_sgf}]`);
+    this.step++;
+    this.currentTurn = -this.currentTurn;
   }
 
-  remove(coord) {
+  removePiece(coord) {
     let realPos = this.convertCoordToRealPos(coord);
     let {i, j} = this.convertCoordToIndex(coord);
     this._kifuArray[i][j] = 0;
@@ -259,12 +216,15 @@ export default class Board {
   calcLiberty(x, y, ki) {
     this._liberty = 0;
     this._recursionPath = [];
-    if (x < 0 || y < 0) {
+    console.log(`x: ${x}, y: ${y}`);
+
+    if (x < 0 || y < 0 || x > this.grid - 1 || y > this.grid - 1) {
       return {
         liberty: 4,
         recursionPath: []
       }
     }
+
     if (this._kifuArray[x][y] == 0) {
       return {
         liberty: 4,
@@ -278,6 +238,47 @@ export default class Board {
       liberty: this._liberty,
       recursionPath: this._recursionPath
     }
+  }
+
+  execPonnuki(i, j, ki) {
+    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki);
+    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki);
+    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki);
+    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki);
+    console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`);
+    if (libertyUp === 0) {
+      recursionPathUp.forEach((i) => {
+        this.removePiece(i);
+      });
+    }
+    if (libertyDown === 0) {
+      recursionPathDown.forEach((i) => {
+        this.removePiece(i);
+      });
+    }
+    if (libertyLeft === 0) {
+      recursionPathLeft.forEach((i) => {
+        this.removePiece(i);
+      });
+    }
+    if (libertyRight === 0) {
+      recursionPathRight.forEach((i) => {
+        this.removePiece(i);
+      });
+    }
+  }
+
+  canPonnuki(i, j, ki) {
+    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki);
+    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki);
+    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki);
+    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki);
+
+    if (libertyUp === 0 || libertyDown || libertyLeft === 0 || libertyRight === 0) {
+      return true;
+    }
+    return false;
+
   }
 
   showCross(coord, color) {
