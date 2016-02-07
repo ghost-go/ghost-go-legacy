@@ -86,7 +86,7 @@ export default class Board {
     if (this.grid == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
-          this._boardCtx.beginPath()
+          this._boardCtx.beginPath();
           this._boardCtx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true);
           this._boardCtx.fill();
         })
@@ -97,7 +97,7 @@ export default class Board {
   canMove(i, j, ki) {
     this._kifuArray[i][j] = ki;
     let {liberty, recursionPath} = this.calcLiberty(i, j, ki);
-    if (this.canPonnuki(i, j, ki)) {
+    if (this.canPonnuki(i, j, -ki) && !this.canPonnuki(i, j, ki)) {
       return true;
     }
     if (liberty === 0) {
@@ -194,6 +194,10 @@ export default class Board {
     return {i, j};
   }
 
+  convertIndexToCoord(i, j) {
+    return `${letters[i]}${numbers[j]}`;
+  }
+
   calcBlackOrWhite(x, y) {
     return this._kifuArray[x][y];
   }
@@ -216,7 +220,6 @@ export default class Board {
   calcLiberty(x, y, ki) {
     this._liberty = 0;
     this._recursionPath = [];
-    console.log(`x: ${x}, y: ${y}`);
 
     if (x < 0 || y < 0 || x > this.grid - 1 || y > this.grid - 1) {
       return {
@@ -273,8 +276,11 @@ export default class Board {
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki);
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki);
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki);
-
-    if (libertyUp === 0 || libertyDown || libertyLeft === 0 || libertyRight === 0) {
+    console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`);
+    if (libertyUp === 0 || libertyDown === 0 || libertyLeft === 0 || libertyRight === 0) {
+      //let coord = this.convertIndexToCoord(i, j);
+      //console.log(`coord: ${coord}`);
+      //console.log(`recursionPathUp: ${recursionPathUp}, recursionPathDown: ${recursionPathDown}, recursionPathLeft: ${recursionPathLeft}, recursionPathDown: ${recursionPathDown}`);
       return true;
     }
     return false;
