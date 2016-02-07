@@ -97,8 +97,12 @@ export default class Board {
   canMove(i, j, ki) {
     this._kifuArray[i][j] = ki;
     let {liberty, recursionPath} = this.calcLiberty(i, j, ki);
-    if (this.canPonnuki(i, j, -ki) && !this.canPonnuki(i, j, ki)) {
+    if (this.canPonnuki(i, j, -ki)) {
       return true;
+    }
+    if (this.canPonnuki(i, j, ki)) {
+      this._kifuArray[i][j] = 0;
+      return false;
     }
     if (liberty === 0) {
       this._kifuArray[i][j] = 0;
@@ -277,14 +281,22 @@ export default class Board {
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki);
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki);
     console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`);
-    if (libertyUp === 0 || libertyDown === 0 || libertyLeft === 0 || libertyRight === 0) {
-      //let coord = this.convertIndexToCoord(i, j);
-      //console.log(`coord: ${coord}`);
-      //console.log(`recursionPathUp: ${recursionPathUp}, recursionPathDown: ${recursionPathDown}, recursionPathLeft: ${recursionPathLeft}, recursionPathDown: ${recursionPathDown}`);
+    if (libertyUp === 0 && recursionPathUp.length > 0) {
       return true;
     }
+    if (libertyDown === 0 && recursionPathDown.length > 0) {
+      return true;
+    }
+    if (libertyLeft === 0 && recursionPathLeft.length > 0) {
+      return true;
+    }
+    if (libertyRight === 0 && recursionPathRight.length > 0) {
+      return true;
+    }
+    //let coord = this.convertIndexToCoord(i, j);
+    //console.log(`coord: ${coord}`);
+    //console.log(`recursionPathUp: ${recursionPathUp}, recursionPathDown: ${recursionPathDown}, recursionPathLeft: ${recursionPathLeft}, recursionPathDown: ${recursionPathDown}`);
     return false;
-
   }
 
   showCross(coord, color) {
