@@ -14,10 +14,9 @@ export default class Board {
     this._layerHeight = this.size * 20;
     this._kifuArray = [];
 
-    let currentCoord = 'None'
-    let currentTurn = 1
+    let currentCoord = 'None';
+    let currentTurn = 1;
     let step = 1;
-    let sgf = new Sgf({});
     let boardLayer = this.createLayer('board_layer', this._layerWidth, this._layerHeight);
     let crossLayer = this.createLayer('cross_layer', this._layerWidth, this._layerHeight);
     let pieceLayer = this.createLayer('piece_layer', this._layerWidth, this._layerHeight);
@@ -27,11 +26,12 @@ export default class Board {
     this._pieceCtx = pieceLayer.getContext('2d');
     this._crossCtx = crossLayer.getContext('2d');
     this._topCtx = topLayer.getContext('2d');
-    this.sgf = sgf;
+    this.sgf = new Sgf({});
     this.currentCoord = currentCoord;
     this.currentTurn = currentTurn;
+    this.step = step;
 
-    while(this._kifuArray.push(new Array(19).fill(0)) < 19);
+    this.clearKifuArray();
 
     el.appendChild(boardLayer, this._layerWidth, this._layerHeight);
     el.appendChild(crossLayer, this._layerWidth, this._layerHeight);
@@ -47,19 +47,20 @@ export default class Board {
       let coord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
       let {i, j} = this.convertCoordToIndex(coord);
 
-      if (this._kifuArray[i][j] != 0) {
-        console.log('该位置已有棋子');
-        return;
-      }
-
       this._liberty = 0;
       this._recursionPath = [];
       if (this.canMove(i, j, this.currentTurn)) {
+        this._kifuArray[i][j] = this.currentTurn;
         this.move(e.offsetX, e.offsetY, this.currentTurn);
         this.execPonnuki(i, j, this.currentTurn);
       }
     }
     el.appendChild(topLayer);
+  }
+
+  clearKifuArray() {
+    this._kifuArray = [];
+    while(this._kifuArray.push(new Array(19).fill(0)) < 19);
   }
 
   createLayer(layerName, layerWidth, layerHeight) {;
@@ -95,9 +96,14 @@ export default class Board {
   }
 
   canMove(i, j, ki) {
+    if (this._kifuArray[i][j] != 0) {
+      return false;
+    }
+
     this._kifuArray[i][j] = ki;
     let {liberty, recursionPath} = this.calcLiberty(i, j, ki);
     if (this.canPonnuki(i, j, -ki)) {
+      this._kifuArray[i][j] = 0;
       return true;
     }
     if (this.canPonnuki(i, j, ki)) {
@@ -109,6 +115,7 @@ export default class Board {
       console.log('此位置不能放棋子');
       return false;
     }
+    this._kifuArray[i][j] = 0;
     return true;
   }
 
