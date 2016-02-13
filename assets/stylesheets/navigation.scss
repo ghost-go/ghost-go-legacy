@@ -1,0 +1,17 @@
+.navigation-view {
+  .nav-container {
+    width: 100%;
+    min-height: 50px;
+    background-color: rgba(255,255,255,.97);
+    box-shadow: 0 0 2px 0 rgba(0,0,0,.5);
+    .logo {
+      display: block;
+      background-image: url('../images/logo.png');
+      background-repeat: no-repeat;
+      background-size: 137px 36px;
+      background-position: 0 7px;
+      margin: 0px 15px;
+      height: 50px;
+    }
+  }
+}

@@ -43,6 +43,8 @@
 /* eslint-disable no-var */
 var webpack = require('webpack');
 var path = require('path');
+var autoprefixer = require('autoprefixer');
+var precss = require('precss');
 
 module.exports = {
   entry: [
@@ -80,8 +82,15 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loaders: ["style", "css", "postcss"]
       },
+      {
+        test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
+        loader: 'url-loader?limit=100000'
+      }
     ]
+  },
+  postcss: function () {
+    return [autoprefixer, precss];
   }
 };
