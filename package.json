@@ -29,11 +29,11 @@
   },
   "homepage": "https://github.com/happybai/ghost-go#readme",
   "dependencies": {
-    "babel-runtime": "^5.1.10",
+    "babel-runtime": "^5.8.35",
     "react": "^0.14.6"
   },
   "devDependencies": {
-    "babel-core": "^6.3.26",
+    "babel-core": "^6.5.2",
     "babel-eslint": "^3.1.6",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
