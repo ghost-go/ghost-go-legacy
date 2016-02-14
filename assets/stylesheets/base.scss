@@ -28,3 +28,11 @@ a {
   color: gray;
   text-decoration: none;
 }
+
+body, h4, h5, li {
+  line-height: 20px;
+}
+
+a:hover {
+  color: #03a9f4;
+}
