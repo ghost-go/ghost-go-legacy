@@ -31,7 +31,7 @@
   "dependencies": {
     "babel-eslint": "^4.0.10",
     "babel-loader": "^6.2.2",
-    "babel-runtime": "~5.8.35",
+    "babel-runtime": "^5.8.35",
     "css-loader": "^0.23.1",
     "karma": "^0.13.21",
     "karma-jasmine": "^0.3.7",
