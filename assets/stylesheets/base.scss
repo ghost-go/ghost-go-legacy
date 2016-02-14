@@ -14,3 +14,17 @@ body.mac {
   font-family: Helvetica Neue,Hiragino Sans GB,Microsoft Yahei,WenQuanYi Micro Hei,sans-serif;
 }
 
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+a:focus, a:hover {
+  text-decoration: none;
+}
+
+a {
+  color: gray;
+  text-decoration: none;
+}
