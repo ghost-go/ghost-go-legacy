@@ -6,7 +6,7 @@ require("./assets/stylesheets/base.scss");
 require("./assets/stylesheets/home.scss");
 require('./assets/javascripts/main.js');
 require('./assets/javascripts/routes.js');
-require('./assets/javascripts/components/navigation.js');
+require('./assets/javascripts/components/Navigation.js');
 //require('./assets/javascripts/components/board.jsx');
 
 //ReactDOM.render(<div>Hello World</div>, document.body)

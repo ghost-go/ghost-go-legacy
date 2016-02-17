@@ -15,25 +15,25 @@ export default class Navigation extends Component {
 
         <section className="nav-body">
           <div className="nav-body-wrap clearfix">
-            <Link to="/games">
+            <Link to="/games" activeClassName="active">
               <FormattedMessage
                 id="app.nav.menu.games"
                 defaultMessage="Games"
               />
             </Link>
-            <Link to="/puzzles">
+            <Link to="/puzzles" activeClassName="active">
               <FormattedMessage
                 id='app.nav.menu.puzzles'
                 defaultMessage="Puzzles"
               />
             </Link>
-            <Link to="/me">
+            <Link to="/me" activeClassName="active">
               <FormattedMessage
                 id='app.nav.menu.me'
                 defaultMessage="Me"
               />
             </Link>
-            <Link to="/help">
+            <Link to="/help" activeClassName="active">
               <FormattedMessage
                 id='app.nav.menu.help'
                 defaultMessage="Help"
@@ -58,11 +58,4 @@ export default class Navigation extends Component {
     )
   }
 }
-
-//const zhcnMessages = {
-  //"app.nav.menu.games": "棋谱",
-  //"app.nav.menu.puzzles": "死活题",
-  //"app.nav.menu.me": "我的",
-  //"app.nav.menu.help": "帮助",
-//}
 

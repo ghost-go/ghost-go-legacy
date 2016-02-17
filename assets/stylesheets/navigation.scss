@@ -42,6 +42,9 @@
       text-align: center;
       transition: all ease-in 350ms 128ms;
     }
+    .active {
+      color: #03a9f4;
+    }
     a:hover {
       color: #03a9f4;
     }
@@ -69,4 +72,5 @@
       }
     }
   }
+  
 }

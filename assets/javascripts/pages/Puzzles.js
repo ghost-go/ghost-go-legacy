@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigation from '../components/navigation.js';
+import Navigation from '../components/Navigation.js';
 import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
 
 export default React.createClass({
