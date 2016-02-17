@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
+import { Link } from 'react-router';
 
 require("../../stylesheets/navigation.scss");
 
-//if ('ReactIntlLocaleData' in window) {
-    //Object.keys(ReactIntlLocaleData).forEach((lang) => {
-        //addLocaleData(ReactIntlLocaleData[lang]);
-    //});
-//}
+if ('ReactIntlLocaleData' in window) {
+    Object.keys(ReactIntlLocaleData).forEach((lang) => {
+        addLocaleData(ReactIntlLocaleData[lang]);
+    });
+}
 
 class Navigation extends Component {
 
@@ -21,30 +22,30 @@ class Navigation extends Component {
 
         <section className="nav-body">
           <div className="nav-body-wrap clearfix">
-            <a href="#">
+            <Link to="/games">
               <FormattedMessage
                 id="app.nav.menu.games"
                 defaultMessage="Games"
               />
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="/puzzles">
               <FormattedMessage
                 id='app.nav.menu.puzzles'
                 defaultMessage="Puzzles"
               />
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="/me">
               <FormattedMessage
                 id='app.nav.menu.me'
                 defaultMessage="Me"
               />
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="/Help">
               <FormattedMessage
                 id='app.nav.menu.help'
                 defaultMessage="Help"
               />
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -65,15 +66,16 @@ class Navigation extends Component {
   }
 }
 
-const zhcnMessages = {
-  "app.nav.menu.games": "棋谱",
-  "app.nav.menu.puzzles": "死活题",
-  "app.nav.menu.me": "我的",
-  "app.nav.menu.help": "帮助",
-}
+//const zhcnMessages = {
+  //"app.nav.menu.games": "棋谱",
+  //"app.nav.menu.puzzles": "死活题",
+  //"app.nav.menu.me": "我的",
+  //"app.nav.menu.help": "帮助",
+//}
 
 ReactDOM.render(
-  <IntlProvider locale='zh-CN' messages={zhcnMessages}>
+  <IntlProvider>
+  {/* <IntlProvider locale='zh-CN' messages={zhcnMessages}> */}
     <Navigation />
   </IntlProvider>
 , document.querySelector('.navigation-view'));
