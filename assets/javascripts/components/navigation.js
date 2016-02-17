@@ -1,17 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import { Link } from 'react-router';
 
 require("../../stylesheets/navigation.scss");
 
-if ('ReactIntlLocaleData' in window) {
-    Object.keys(ReactIntlLocaleData).forEach((lang) => {
-        addLocaleData(ReactIntlLocaleData[lang]);
-    });
-}
-
-class Navigation extends Component {
+export default class Navigation extends Component {
 
   render() {
     return (
@@ -73,9 +67,3 @@ class Navigation extends Component {
   //"app.nav.menu.help": "帮助",
 //}
 
-ReactDOM.render(
-  <IntlProvider>
-  {/* <IntlProvider locale='zh-CN' messages={zhcnMessages}> */}
-    <Navigation />
-  </IntlProvider>
-, document.querySelector('.navigation-view'));

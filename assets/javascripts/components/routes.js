@@ -9,4 +9,4 @@ ReactDOM.render((
     <Route path="/games" component={Games}/>
     <Route path="/puzzles" component={Puzzles}/>
   </Router>
-), document.querySelector('.content'))
+), document.querySelector('.app'))
