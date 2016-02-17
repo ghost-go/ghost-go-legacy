@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {FormattedMessage} from 'react-intl';
 import { Link } from 'react-router';
 
@@ -34,7 +33,7 @@ export default class Navigation extends Component {
                 defaultMessage="Me"
               />
             </Link>
-            <Link to="/Help">
+            <Link to="/help">
               <FormattedMessage
                 id='app.nav.menu.help'
                 defaultMessage="Help"
