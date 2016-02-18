@@ -1,6 +1,7 @@
 import React from 'react';
 import Navigation from '../components/Navigation.js';
 import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
+import Board from '../components/Board.js';
 
 export default React.createClass({
   render() {
@@ -16,7 +17,8 @@ export default React.createClass({
       {/* <IntlProvider locale='zh-CN' messages={zhcnMessages}> */}
         <div>
           <Navigation />
-          <div>Game</div>
+          <h1>Games</h1>
+          <Board />
         </div>
       </IntlProvider>
     )

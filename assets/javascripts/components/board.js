@@ -1,22 +1,19 @@
-import Board from '../board.js'
-import React from 'react';
+import BoardComponent from '../board.js'
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
-//class Board extends Component {
-  //constructor(props) {
-    //super(props);
-    //this.state = {
+export default class Board extends Component {
 
-    //}
-  //}
-//}
+  render() {
+    return (
+      <div className="board" ref="board">
+      </div>
+    )
+  }
 
-let b = document.querySelector('.board-view')
-ReactDOM.render(
- <div className="board">
- </div>
-, b);
+  componentDidMount() {
+    let board = new BoardComponent(this.refs.board, 19, 30)
+    board.draw()
+  }
 
-let boardContainer = document.querySelector('.board');
-let board = new Board(boardContainer, 19, 30)
-board.draw()
+}

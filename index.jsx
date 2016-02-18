@@ -4,10 +4,10 @@ import { Router, Route, hashHistory } from 'react-router'
 
 require("./assets/stylesheets/base.scss");
 require("./assets/stylesheets/home.scss");
+require("./assets/stylesheets/navigation.scss");
 require('./assets/javascripts/main.js');
 require('./assets/javascripts/routes.js');
-require('./assets/javascripts/components/Navigation.js');
-//require('./assets/javascripts/components/board.jsx');
+//require('./assets/javascripts/components/board.js');
 
 //ReactDOM.render(<div>Hello World</div>, document.body)
 if ('ReactIntlLocaleData' in window) {

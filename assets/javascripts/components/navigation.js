@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 import { Link } from 'react-router';
 
-require("../../stylesheets/navigation.scss");
-
 export default class Navigation extends Component {
 
   render() {
