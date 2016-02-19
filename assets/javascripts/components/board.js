@@ -12,7 +12,7 @@ export default class Board extends Component {
   }
 
   componentDidMount() {
-    let board = new BoardComponent(this.refs.board, 19, 30)
+    let board = new BoardComponent(this.refs.board, this.props.grid, this.props.size)
     board.draw()
   }
 

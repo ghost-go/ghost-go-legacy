@@ -18,7 +18,7 @@ export default React.createClass({
         <div>
           <Navigation />
           <h1>Games</h1>
-          <Board />
+          <Board className="board" grid="19" size="28" />
         </div>
       </IntlProvider>
     )
