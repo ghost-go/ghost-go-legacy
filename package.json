@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/happybai/ghost-go#readme",
   "dependencies": {
+    "babel-core": "^6.5.2",
     "babel-eslint": "^4.0.10",
     "babel-loader": "^6.2.2",
     "babel-runtime": "^5.8.35",
@@ -43,8 +44,7 @@
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^3.0.0",
-    "redux": "^3.3.1",
-    "webpack-dev-server": "^1.14.1"
+    "redux": "^3.3.1"
   },
   "devDependencies": {
     "babel-core": "^6.5.2",
