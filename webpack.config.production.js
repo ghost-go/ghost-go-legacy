@@ -41,6 +41,8 @@
 /* eslint-disable no-var */
 var webpack = require('webpack');
 var path = require('path');
+var autoprefixer = require('autoprefixer');
+var precss = require('precss');
 
 module.exports = {
   entry: './index.jsx',
