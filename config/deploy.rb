@@ -96,6 +96,7 @@ task :deploy => :environment do
     invoke :'deploy:cleanup'
     queue "nvm use node 5.7.0"
     queue "npm install"
+    queue "webpack --config webpack.config.production.js"
 
     to :launch do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
