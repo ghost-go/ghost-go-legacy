@@ -78,7 +78,7 @@ task :start => :environment do
   queue "nvm use node 5.7.0"
   start do
     to :launch do
-      queue "pm2 start server.js"
+      queue "pm2 start production.js"
     end
   end
 end
