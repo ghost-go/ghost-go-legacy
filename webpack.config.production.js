@@ -11,7 +11,7 @@ module.exports = {
     publicPath: '/static/'
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['', '.js', '.jsx']
   },
   devtool: 'source-map',
   plugins: [
