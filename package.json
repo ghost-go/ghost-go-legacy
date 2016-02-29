@@ -45,6 +45,7 @@
     "precss": "^1.4.0",
     "react-router-redux": "^3.0.0",
     "redux": "^3.3.1",
+    "style-loader": "^0.13.0",
     "webpack": "^1.12.14"
   },
   "devDependencies": {
