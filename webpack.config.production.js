@@ -54,11 +54,4 @@ module.exports = {
   postcss: function () {
     return [autoprefixer, precss];
   }
-  //loaders: [
-    //{
-      //test: /\.jsx?$/,
-      //loaders: ['react-hot', 'babel'],
-      //include: path.join(__dirname, 'src')
-    //}
-  //]
 };
