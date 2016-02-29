@@ -95,7 +95,7 @@ task :deploy => :environment do
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
     queue "nvm use node 5.7.0"
-    queue "npm install"
+    queue "npm install --production"
     queue "./node_modules/.bin/webpack --config webpack.config.production.js"
 
     to :launch do
