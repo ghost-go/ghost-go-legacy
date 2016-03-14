@@ -9,13 +9,14 @@ function lang() {
   let lang = {
     'ghost-go': {locale: 'en', messages: defaultMessages},
     www: {locale: 'en', messages: defaultMessages},
-    jp: {locale: 'jp', messages: jaMessages},
+    jp: {locale: 'ja', messages: jaMessages},
     tw: {locale: 'zh-tw', messages: zhtwMessages},
-    cn: {locale: 'zh-cn', messages: zhcnMessages},
+    cn: {locale: 'zh', messages: zhcnMessages},
     ko: {locale: 'ko', messages: koMessages},
   };
-  let domain = window.location.hostname;
-  let result = lang[domain.split('.')[0]];
+  //let domain = window.location.hostname;
+  let domain = 'jp';
+  let result = eval(`lang.${domain.split('.')[0]}`);
   if (result == null) {
     return {locale: 'en', messages: defaultMessages};
   }
