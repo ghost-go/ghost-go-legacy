@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { Router, Route, hashHistory } from 'react-router'
-import Games from './pages/Games.js'
-import Puzzles from './pages/Puzzles.js'
+import Games from './pages/games.js'
+import Puzzles from './pages/puzzles.js'
 
 ReactDOM.render((
   <Router history={hashHistory}>
