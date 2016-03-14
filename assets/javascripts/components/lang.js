@@ -14,8 +14,7 @@ function lang() {
     cn: {locale: 'zh', messages: zhcnMessages},
     ko: {locale: 'ko', messages: koMessages},
   };
-  //let domain = window.location.hostname;
-  let domain = 'jp';
+  let domain = window.location.hostname;
   let result = eval(`lang.${domain.split('.')[0]}`);
   if (result == null) {
     return {locale: 'en', messages: defaultMessages};
