@@ -69,8 +69,6 @@ export default class Board {
     layer.width = layerWidth;
     layer.height = layerHeight;
     layer.style.position = 'absolute';
-    layer.style.left = 0;
-    layer.style.top = 0;
     return layer;
   }
 
