@@ -6,7 +6,13 @@ module.exports = function (config) {
     files: [
       'tests/**/*_spec.js'
     ],
-    plugins: [webpack, 'karma-jasmine', 'karma-chrome-launcher', 'karma-coverage', 'karma-spec-reporter'],
+    plugins: [
+      webpack,
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      'karma-coverage',
+      'karma-spec-reporter'
+    ],
     browsers: [ 'Chrome' ],
     preprocessors: {
       'tests/**/*_spec.js': ['webpack'],

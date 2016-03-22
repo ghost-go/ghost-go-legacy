@@ -62,6 +62,10 @@ module.exports = {
   },
   devtool: 'eval-source-map',
   plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+      __PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'false'))
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],

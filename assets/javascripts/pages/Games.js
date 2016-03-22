@@ -1,13 +1,20 @@
-import React from 'react';
-import Navigation from '../components/navigation';
-import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
-import Board from '../components/board';
-import lang from '../components/lang';
-import KifuTable from '../presentations/KifuTable';
+import React, { Component, PropTypes } from 'react'
+import Navigation from '../presentations/Navigation'
+import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
+import Board from '../presentations/Board'
+import lang from '../components/lang'
+import KifuTable from '../presentations/KifuTable'
+import { connect } from 'react-redux'
+import { fetchKifus } from '../actions/KifuActions'
 
-export default React.createClass({
+class Games extends Component {
+  constructor(props) {
+    super(props)
+    this.props.dispatch(fetchKifus(1, 30))
+  }
+
   render() {
-
+    const { kifus } = this.props
     return (
       <IntlProvider locale={lang.locale} messages={lang.messages}>
         <div>
@@ -18,23 +25,19 @@ export default React.createClass({
                 defaultMessage="Games"
               />
           </h1>
-          <KifuTable kifus={[{
-            date: '2016-4-7',
-            title: 'title',
-            black: 'black',
-            white: 'white',
-            result: 'result',
-          }, {
-            date: '2016-4-8',
-            title: 'title2',
-            black: 'black2',
-            white: 'white2',
-            result: 'result2',
-          }
-          ]} />
+          <KifuTable kifus={ kifus.data } />
           <Board className="board" grid="19" size="30" />
         </div>
       </IntlProvider>
     )
   }
-});
+
+}
+
+function select(state) {
+  return {
+    kifus: state.kifus
+  }
+}
+
+export default connect(select)(Games)

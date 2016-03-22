@@ -15,6 +15,14 @@ addLocaleData(koLocaleData);
         //addLocaleData(ReactIntlLocaleData[lang]);
     //});
 //}
+//
+//if (__DEV__) {
+  //require('./assets/javascripts/constants/dev.js');
+//}
+
+//if (__PRO__) {
+  //require('./assets/javascripts/constants/pro.js');
+//}
 
 require("./assets/stylesheets/base.scss");
 require("./assets/stylesheets/home.scss");

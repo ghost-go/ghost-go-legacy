@@ -43,7 +43,7 @@ export default class KifuTable extends Component {
         </thead>
         <tbody>
           {this.props.kifus.map((kifu, index) => 
-            <Kifu {...kifu} />
+            <Kifu {...kifu} key={index}/>
           )}
         </tbody>
       </table>
