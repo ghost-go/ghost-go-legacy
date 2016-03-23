@@ -10,7 +10,10 @@ import { fetchKifus } from '../actions/KifuActions'
 class Games extends Component {
   constructor(props) {
     super(props)
-    this.props.dispatch(fetchKifus(1, 30))
+    this.props.dispatch(fetchKifus({
+      page: 1,
+      per_page: 30
+    }))
   }
 
   render() {

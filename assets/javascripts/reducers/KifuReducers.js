@@ -15,7 +15,7 @@ export default function kifus(state = {
       return Object.assign({}, state, {
         isFetching: false,
         isFailure: false,
-        data: action.data
+        data: action.payload.data
       });
     case types.FETCH_KIFUS_FAILURE:
       return Object.assign({}, state, {
