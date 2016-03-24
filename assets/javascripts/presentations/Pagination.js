@@ -68,7 +68,6 @@ export default class Pagination extends Component {
   }
 
   handlePageChanged(el) {
-    console.log(el)
     let handler = this.props.onPageChanged
     if ( handler ) handler( el )
   }
