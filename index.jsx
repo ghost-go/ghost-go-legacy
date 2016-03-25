@@ -23,12 +23,11 @@ addLocaleData(koLocaleData);
 //if (__PRO__) {
   //require('./assets/javascripts/constants/pro.js');
 //}
-
-require("./assets/stylesheets/base.scss");
-require("./assets/stylesheets/home.scss");
-require("./assets/stylesheets/navigation.scss");
-require('./assets/javascripts/main.js');
-require('./assets/javascripts/routes.js');
+require("./assets/stylesheets/base.scss")
+require("./assets/stylesheets/home.scss")
+require("./assets/stylesheets/navigation.scss")
+require('./assets/javascripts/main.js')
+require('./assets/javascripts/routes.js')
 //require('./assets/javascripts/components/board.js');
 
 //ReactDOM.render(<div>Hello World</div>, document.body)
