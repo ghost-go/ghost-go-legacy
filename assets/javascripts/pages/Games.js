@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Navigation from '../presentations/Navigation'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
-import Board from '../presentations/Board'
+//import Board from '../presentations/Board'
 import lang from '../components/lang'
 import KifuTable from '../presentations/KifuTable'
 import Pagination from '../presentations/Pagination'
@@ -31,6 +31,7 @@ class Games extends Component {
   }
 
   render() {
+    //<Board className="board" grid="19" size="30" />
     const { kifus } = this.props
     return (
       <IntlProvider locale={lang.locale} messages={lang.messages}>
@@ -56,7 +57,6 @@ class Games extends Component {
                         last: "Last",
                       }}
           />
-          <Board className="board" grid="19" size="30" />
         </div>
       </IntlProvider>
     )
