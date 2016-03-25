@@ -6,7 +6,7 @@ import lang from '../components/lang';
 export default class KifuTable extends Component {
   render() {
     return(
-      <table>
+      <table className="table table-striped table-hover">
         <thead>
           <tr>
             <th>
