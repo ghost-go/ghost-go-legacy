@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes'
 
-export default function kifus(state = {
+export function kifus(state = {
   isFetching: false,
   isFailure: false,
   data: []
@@ -10,8 +10,7 @@ export default function kifus(state = {
       return Object.assign({}, state, {
         isFetching: true,
         isFailure: false
-      });
-    case types.FETCH_KIFUS_SUCCESS:
+      }); case types.FETCH_KIFUS_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
         isFailure: false,
@@ -26,3 +25,31 @@ export default function kifus(state = {
       return state;
   }
 }
+
+export function kifu(state = {
+  isFetching: false,
+  isFailure: false,
+  data: []
+}, action) {
+  switch (action.type) {
+    case types.FETCH_KIFU_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true,
+        isFailure: false
+      });
+    case types.FETCH_KIFU_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isFailure: false,
+        data: action.payload.data
+      });
+    case types.FETCH_KIFU_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isFailure: true
+      });
+    default:
+      return state;
+  }
+}
+

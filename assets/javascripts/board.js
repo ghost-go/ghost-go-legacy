@@ -9,7 +9,9 @@ const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
 export default class Board {
   constructor(el, grid, size) {
     this.grid = grid || 19;
-    this.size = size || 25;
+
+    this.size =  el.offsetWidth / 20
+    el.style.height = el.offsetWidth + 'px'
     this._layerWidth = this.size * 20;
     this._layerHeight = this.size * 20;
     this._kifuArray = [];

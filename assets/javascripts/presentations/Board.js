@@ -6,7 +6,7 @@ export default class Board extends Component {
 
   render() {
     return (
-      <div className="board" ref="board">
+      <div className="board" width="100%" ref="board">
       </div>
     )
   }

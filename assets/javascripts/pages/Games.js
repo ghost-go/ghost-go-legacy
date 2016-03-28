@@ -19,14 +19,14 @@ class Games extends Component {
       visablePage: 6
     }
     let { query } = this.props.location
-    this.props.dispatch(fetchKifus(query.page, query.per_page))
+    this.props.dispatch(fetchKifus(query.page))
 
     this.handlePageChanged = this.handlePageChanged.bind(this)
   }
 
   handlePageChanged(newPage) {
     this.setState({ current: newPage }, () => {
-      this.props.dispatch(fetchKifus(this.state.current + 1, 30))
+      this.props.dispatch(fetchKifus(this.state.current + 1))
     })
   }
 

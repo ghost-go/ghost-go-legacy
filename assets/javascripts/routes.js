@@ -8,11 +8,13 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 import Puzzles from './pages/Puzzles'
 import Games from './pages/Games'
+import Kifus from './pages/Kifus'
 
-import kifus from './reducers/KifuReducers'
+import { kifus, kifu } from './reducers/KifuReducers'
 
 const reducer = combineReducers({
   kifus,
+  kifu,
   routing: routerReducer
 })
 
@@ -29,6 +31,7 @@ ReactDOM.render((
     <Router history={history}>
       <Route path="/" component={Games}/>
       <Route path="/games" component={Games}/>
+      <Route path="/kifus/:id" component={Kifus}/>
       <Route path="/puzzles" component={Puzzles}/>
     </Router>
   </Provider>
