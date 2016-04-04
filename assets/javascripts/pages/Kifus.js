@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Navigation from '../presentations/Navigation'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import Board from '../presentations/Board'
+import ControlBar from '../presentations/ControlBar'
 import lang from '../components/lang'
 import { connect } from 'react-redux'
 import { fetchKifu } from '../actions/KifuActions'
@@ -16,20 +17,20 @@ class Kifus extends Component {
     }
     let { id } = this.props.params
     this.props.dispatch(fetchKifu(id))
-    console.log(this.props)
   }
 
   render() {
     const { kifu } = this.props
-    console.log(kifu);
     return (
       <IntlProvider locale={lang.locale} messages={lang.messages}>
         <div>
           <Navigation />
-
           <div className="row">
             <div className="col-md-8">
-              <Board className="board" grid="19" size="30" />
+              <Board className="board"
+                     editable="false"
+                     kifu={kifu} />
+              <ControlBar onNextStep={console.log('aaa')}/>
             </div>
             <div className="col-md-4">
               <table className="table kifu-info">

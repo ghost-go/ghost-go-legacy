@@ -7,9 +7,9 @@ const letters_sgf = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse();
 
 export default class Board {
-  constructor(el, grid, size) {
+  constructor(el, grid, size, editable) {
     this.grid = grid || 19;
-
+    this.editable = editable || "false";
     this.size =  el.offsetWidth / 20
     el.style.height = el.offsetWidth + 'px'
     this._layerWidth = this.size * 20;
@@ -39,25 +39,28 @@ export default class Board {
     el.appendChild(crossLayer, this._layerWidth, this._layerHeight);
     el.appendChild(pieceLayer, this._layerWidth, this._layerHeight);
 
-    topLayer.onmousemove = (e) => {;
-      currentCoord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
-      this._crossCtx.clearRect(0, 0, this._layerWidth, this._layerHeight);
-      this.showCross(currentCoord, '#ff0000');
-    }
-
-    topLayer.onclick = (e) => {
-      let coord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
-      let {i, j} = this.convertCoordToIndex(coord);
-
-      this._liberty = 0;
-      this._recursionPath = [];
-      if (this.canMove(i, j, this.currentTurn)) {
-        this._kifuArray[i][j] = this.currentTurn;
-        this.move(e.offsetX, e.offsetY, this.currentTurn);
-        this.execPonnuki(i, j, this.currentTurn);
+    if (this.editable == "true") {
+      topLayer.onmousemove = (e) => {;
+        currentCoord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
+        this._crossCtx.clearRect(0, 0, this._layerWidth, this._layerHeight);
+        this.showCross(currentCoord, '#ff0000');
       }
+
+      topLayer.onclick = (e) => {
+        let coord = this.convertPosToCoord(e.offsetX, e.offsetY, size);
+        let {i, j} = this.convertCoordToIndex(coord);
+
+        this._liberty = 0;
+        this._recursionPath = [];
+        if (this.canMove(i, j, this.currentTurn)) {
+          this._kifuArray[i][j] = this.currentTurn;
+          this.move(e.offsetX, e.offsetY, this.currentTurn);
+          this.execPonnuki(i, j, this.currentTurn);
+        }
+      }
+      el.appendChild(topLayer);
     }
-    el.appendChild(topLayer);
+
   }
 
   clearKifuArray() {
