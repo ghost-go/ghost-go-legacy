@@ -1,10 +1,10 @@
-import reducer from '../assets/javascripts/reducers/KifuReducers.js'
+import {kifus, kifu} from '../assets/javascripts/reducers/KifuReducers.js'
 import * as types from '../assets/javascripts/constants/ActionTypes'
 
 describe('kifus reducer', () => {
   it('should return the initial state', () => {
     expect(
-      reducer(undefined, {})
+      kifus(undefined, {})
     ).toEqual(
       {
         isFetching: false,
@@ -16,7 +16,7 @@ describe('kifus reducer', () => {
 
   it('should handle SELECT_KIFUS', () => {
     expect(
-      reducer([], {
+      kifus([], {
         type: types.FETCH_KIFUS_REQUEST,
         payload: {
           page: 1,
@@ -31,7 +31,7 @@ describe('kifus reducer', () => {
     )
 
     expect(
-      reducer(
+      kifus(
         {
           isFetching: true,
           isFailure: false,

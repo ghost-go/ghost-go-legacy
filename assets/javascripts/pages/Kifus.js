@@ -30,7 +30,7 @@ class Kifus extends Component {
               <Board className="board"
                      editable="false"
                      kifu={kifu} />
-              <ControlBar onNextStep={console.log('aaa')}/>
+              <ControlBar onNextStep={console.log('')}/>
             </div>
             <div className="col-md-4">
               <table className="table kifu-info">

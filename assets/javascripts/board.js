@@ -1,6 +1,6 @@
-import Cross from './cross.js';
-import Piece from './piece.js';
-import Sgf from './sgf.js';
+import Cross from './cross.js'
+import Piece from './piece.js'
+import Sgf from './sgf.js'
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
 const letters_sgf = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
