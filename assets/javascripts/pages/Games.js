@@ -20,7 +20,6 @@ class Games extends Component {
     }
     let { query } = this.props.location
     this.props.dispatch(fetchKifus(query.page))
-
     this.handlePageChanged = this.handlePageChanged.bind(this)
   }
 

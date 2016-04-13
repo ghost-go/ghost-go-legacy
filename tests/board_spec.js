@@ -48,16 +48,15 @@ describe('create a board instance and initial', () => {
 
     ReactTestUtils.Simulate.click(component.topLayer)
     expect(component.state.step).toEqual(2)
-    //expect(component.state.kifuArray[15][3]).toEqual(1)
+    expect(component.state.kifuArray[15][3]).toEqual(1)
 
     ReactTestUtils.Simulate.click(component.topLayer)
     expect(component.state.step).toEqual(3)
-    //expect(component.state.kifuArray[3][2]).toEqual(-1)
+    expect(component.state.kifuArray[3][2]).toEqual(-1)
 
     ReactTestUtils.Simulate.click(component.topLayer)
     expect(component.state.step).toEqual(4)
-    //expect(component.state.kifuArray[3][15]).toEqual(1)
-
+    expect(component.state.kifuArray[3][15]).toEqual(1)
   })
 
 })

@@ -6,7 +6,7 @@ import ControlBar from '../presentations/ControlBar'
 import lang from '../components/lang'
 import { connect } from 'react-redux'
 import { fetchKifu } from '../actions/KifuActions'
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
 class Kifus extends Component {
@@ -29,7 +29,8 @@ class Kifus extends Component {
             <div className="col-md-8">
               <Board className="board"
                      editable="false"
-                     kifu={kifu} />
+                     kifu={kifu.data.steps}
+                     ref="board" />
               <ControlBar onNextStep={console.log('')}/>
             </div>
             <div className="col-md-4">
@@ -101,7 +102,8 @@ class Kifus extends Component {
       </IntlProvider>
     )
   }
-
+  componentDidMount() {
+  }
 }
 
 function select(state) {

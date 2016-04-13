@@ -13,19 +13,27 @@ export default class Board extends Component {
       sgf: new Sgf({}),
       currentCoord: 'None',
       currentTurn: 1,
-      step: 1,
+      step: 0,
       kifu: this.props.kifu,
+      size: this.props.size
     }
     this.grid = 19
     this.sgf = new Sgf({})
     this.currentCoord = 'None'
     this.currentTurn = 1
     this.step = 1
+
   }
 
-  nextStep() {
+  nextStep(e) {
     this.state.step ++
-    console.log(this.state.step)
+    let steps = this.props.kifu.split(';')
+    let str = steps[this.state.step - 1]
+    let ki = str[0] === 'B' ? 1 : -1
+    let pos = /\[(.*)\]/.exec(str)[1]
+    let posX = LETTERS_SGF.indexOf(pos[0]) + 1
+    let posY = LETTERS_SGF.indexOf(pos[1]) + 1
+    this.move(posX * this.size, posY * this.size, ki)
   }
 
   prevStep() {
@@ -76,7 +84,7 @@ export default class Board extends Component {
     }
     if (liberty === 0) {
       this._kifuArray[i][j] = 0
-      console.log('此位置不能放棋子');
+      console.log('此位置不能放棋子')
       return false
     }
     this._kifuArray[i][j] = 0
@@ -84,6 +92,7 @@ export default class Board extends Component {
   }
 
   move(x, y, type) {
+    this.size = this.refs.board.getBoundingClientRect().width / 20
     let realPos = this.convertPosToRealPos(x, y)
     let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
 
@@ -146,6 +155,8 @@ export default class Board extends Component {
     let letter = LETTERS[Math.round((x - this.size) / this.size)]
     let number = NUMBERS[Math.round((y - this.size) / this.size)]
 
+    console.log(letter)
+    console.log(number)
     let results = []
     let {i, j} = this.convertCoordToIndex(`${letter}${number}`)
     console.log(`rx: ${(i+1) * this.size}, ry: ${(j+1) * this.size}`)
@@ -281,18 +292,17 @@ export default class Board extends Component {
   }
 
   render() {
-    console.log(this.props.kifu)
     //<canvas id="top_layer" ref="top_layer" ref={(ref) => this.topLayer = ref}></canvas>
     return (
       <div className="board" width="100%" ref="board">
-        <canvas id="board_layer" ref={(ref) => this.boardLayer = ref}></canvas>
+        <canvas id="board_layer" ref={(ref) => this.boardLayer = ref }></canvas>
         {(() => {
           if (this.props.editable === 'true') {
             return <canvas id= "cross_layer" ref={(ref) => this.crossLayer = ref}></canvas>
           }
         })()}
         <canvas id="piece_layer" ref="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
-        <canvas id="top_layer" onclick={this.nextStep} ref="top_layer" ref={(ref) => this.topLayer = ref}></canvas>
+        <canvas id="top_layer" onClick={this.nextStep.bind(this)} ref="top_layer" ref={(ref) => this.topLayer = ref }></canvas>
       </div>
     )
   }
@@ -316,10 +326,6 @@ export default class Board extends Component {
     = boardWidth
     this.topLayer.style.position
     = 'absolute'
-    //this.topLayer.onclick = (e) => {
-      //this.state.step ++
-      //console.log(this.state.step)
-    //}
     //if (this.props.editable === 'true') {
       //this._crossCtx = this.crossLayer.getContext('2d')
       //this.crossLayer.width
