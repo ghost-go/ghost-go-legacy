@@ -21,7 +21,9 @@ export default class Board extends Component {
     this.sgf = new Sgf({})
     this.currentCoord = 'None'
     this.currentTurn = 1
+    this._kifuArray = []
     this.step = 1
+    this.clearKifuArray()
 
   }
 
@@ -31,9 +33,17 @@ export default class Board extends Component {
     let str = steps[this.state.step - 1]
     let ki = str[0] === 'B' ? 1 : -1
     let pos = /\[(.*)\]/.exec(str)[1]
-    let posX = LETTERS_SGF.indexOf(pos[0]) + 1
-    let posY = LETTERS_SGF.indexOf(pos[1]) + 1
-    this.move(posX * this.size, posY * this.size, ki)
+    let x = LETTERS_SGF.indexOf(pos[0])
+    let y = LETTERS_SGF.indexOf(pos[1])
+    let posX = (x + 1) * this.size
+    let posY = (y + 1) * this.size
+    this._liberty = 0
+    this._recursionPath = []
+    if (this.canMove(x, y, ki)) {
+      this._kifuArray[x][y] = ki
+      this.move(posX, posY, ki)
+      this.execPonnuki(x, y, -ki)
+    }
   }
 
   prevStep() {
@@ -92,12 +102,9 @@ export default class Board extends Component {
   }
 
   move(x, y, type) {
-    this.size = this.refs.board.getBoundingClientRect().width / 20
     let realPos = this.convertPosToRealPos(x, y)
     let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
-
     let piece = new Piece()
-
     let typeStr = ''
     if (type === 1) {
       typeStr = 'B'
@@ -155,8 +162,6 @@ export default class Board extends Component {
     let letter = LETTERS[Math.round((x - this.size) / this.size)]
     let number = NUMBERS[Math.round((y - this.size) / this.size)]
 
-    console.log(letter)
-    console.log(number)
     let results = []
     let {i, j} = this.convertCoordToIndex(`${letter}${number}`)
     console.log(`rx: ${(i+1) * this.size}, ry: ${(j+1) * this.size}`)
@@ -258,11 +263,11 @@ export default class Board extends Component {
   }
 
   canPonnuki(i, j, ki) {
-    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki);
-    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki);
-    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki);
-    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki);
-    console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`);
+    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki)
+    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
+    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
+    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
+    console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`)
     if (libertyUp === 0 && recursionPathUp.length > 0) {
       return true
     }
@@ -354,7 +359,6 @@ export default class Board extends Component {
         //}
       //}
     //}
-    this.clearKifuArray()
     this.draw()
   }
 }

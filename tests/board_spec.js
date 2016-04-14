@@ -35,7 +35,7 @@ describe('create a board instance and initial', () => {
     expect(div.querySelector('canvas#cross_layer')).not.toBeNull()
   })
 
-  it ('board component should be initial with editable equal false and kifu not null', () => {
+  it ('board component click event should exec next step', () => {
     let component = ReactTestUtils.renderIntoDocument(
       <Board editable="false" kifu="B[pd];W[dc];B[dp];W[pp];B[ce];W[ed];B[ci];W[nc];B[lc];W[ne];B[qf];W[kd];B[ld];W[le];B[kc];W[jd];B[jc];W[id];B[hc];W[df];B[cf];W[dg];B[cg];W[md];B[hd];W[he];B[ge];W[gf];B[ie];W[hf];B[fc];W[qc];B[pc];W[qd];B[pe];W[pb];B[ob];W[qb];B[nb];W[kf];B[ic];W[rf];B[rg];W[re];B[ph];W[jg];B[fe];W[ff];B[qn];W[nq];B[rp];W[qq];B[pl];W[fq];B[dn];W[cq];B[dq];W[dr];B[cp];W[br];B[bq];W[cr];B[ee];W[cd];B[de];W[bc];B[eb];W[db];B[be];W[bb];B[mf];W[nf];B[nh];W[fo];B[mg];W[me];B[hq];W[kq];B[jq];W[jp];B[kr];W[iq];B[jr];W[ip];B[lq];W[ir];B[kp];W[mr];B[fn];W[mp];B[go];W[ko];B[gq];W[jn];B[fr];W[bp];B[bo];W[aq];B[hr];W[hs];B[gs];W[is];B[fi];W[oj];B[ok];W[rh];B[qh];W[sg];B[ri];W[qg];B[pg];W[rj];B[rg];W[si];B[sh];W[qm];B[pm];W[rh];B[qi];W[qg];B[ql];W[gh];B[fh];W[gi];B[gj];W[fg];B[dh];W[hj];B[hk];W[gk];B[fj];W[gn];B[ho];W[hn];B[hi];W[ij];B[hh];W[ji];B[io];W[jo];B[fm];W[ao];B[bn];W[an];B[am];W[ap];B[bm];W[gg];B[hl];W[rq];B[rg];W[sh];B[lo];W[in];B[fp];W[ln];B[mo];W[mn];B[no];W[on];B[nn];W[nm];B[oo];W[po];B[pn];W[om];B[mm];W[nl]"/>
     )
@@ -44,19 +44,56 @@ describe('create a board instance and initial', () => {
       component, 'div'
     )
 
+    component.size = 40.5
+
     expect(div.querySelector('canvas#top_layer')).not.toBeNull()
 
     ReactTestUtils.Simulate.click(component.topLayer)
+    expect(component.state.step).toEqual(1)
+    expect(component._kifuArray[15][3]).toEqual(1)
+
+    ReactTestUtils.Simulate.click(component.topLayer)
     expect(component.state.step).toEqual(2)
-    expect(component.state.kifuArray[15][3]).toEqual(1)
+    expect(component._kifuArray[3][2]).toEqual(-1)
 
     ReactTestUtils.Simulate.click(component.topLayer)
     expect(component.state.step).toEqual(3)
-    expect(component.state.kifuArray[3][2]).toEqual(-1)
+    expect(component._kifuArray[3][15]).toEqual(1)
+  })
+
+  it ('board component click event should exec ponnoki', () => {
+    let component = ReactTestUtils.renderIntoDocument(
+      <Board editable="false" kifu="W[qe];B[pe];B[re];B[qd];B[qf]"/>
+    )
+
+    let div = ReactTestUtils.findRenderedDOMComponentWithTag(
+      component, 'div'
+    )
+
+    component.size = 40.5
+
+    expect(div.querySelector('canvas#top_layer')).not.toBeNull()
+
+    ReactTestUtils.Simulate.click(component.topLayer)
+    expect(component.state.step).toEqual(1)
+    expect(component._kifuArray[16][4]).toEqual(-1)
+
+    ReactTestUtils.Simulate.click(component.topLayer)
+    expect(component.state.step).toEqual(2)
+    expect(component._kifuArray[15][4]).toEqual(1)
+
+    ReactTestUtils.Simulate.click(component.topLayer)
+    expect(component.state.step).toEqual(3)
+    expect(component._kifuArray[17][4]).toEqual(1)
 
     ReactTestUtils.Simulate.click(component.topLayer)
     expect(component.state.step).toEqual(4)
-    expect(component.state.kifuArray[3][15]).toEqual(1)
+    expect(component._kifuArray[16][3]).toEqual(1)
+
+    ReactTestUtils.Simulate.click(component.topLayer)
+    expect(component.state.step).toEqual(5)
+    expect(component._kifuArray[16][5]).toEqual(1)
+    expect(component._kifuArray[16][4]).toEqual(0)
   })
 
 })
