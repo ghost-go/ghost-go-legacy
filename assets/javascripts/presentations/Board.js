@@ -309,7 +309,7 @@ export default class Board extends Component {
   render() {
     //<canvas id="top_layer" ref="top_layer" ref={(ref) => this.topLayer = ref}></canvas>
     return (
-      <div className="board" width="100%" ref="board">
+      <div className="board" ref="board">
         <canvas id="board_layer" ref={(ref) => this.boardLayer = ref }></canvas>
         {(() => {
           if (this.props.editable === 'true') {
@@ -323,8 +323,9 @@ export default class Board extends Component {
   }
 
   componentDidMount() {
-    let boardWidth = this.refs.board.offsetWidth
-    this.size =  this.refs.board.offsetWidth / 20
+    console.log(this.refs.board)
+    let boardWidth = this.refs.board.parentElement.offsetHeight / 20 * 18
+    this.size =  boardWidth / 20
     this._boardCtx = this.boardLayer.getContext('2d')
     this._pieceCtx = this.pieceLayer.getContext('2d')
     this.refs.board.style.height = boardWidth + 'px'

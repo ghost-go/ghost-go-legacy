@@ -23,18 +23,18 @@ class Kifus extends Component {
     const { kifu } = this.props
     return (
       <IntlProvider locale={lang.locale} messages={lang.messages}>
-        <div>
+        <div className="kifu-page">
           <Navigation />
-          <div className="row">
-            <div className="col-md-8">
+          <div className="kifu-container">
+            <div className="kifu-board">
               <Board className="board"
                      editable="false"
                      kifu={kifu.data.steps}
                      ref="board" />
               <ControlBar onNextStep={console.log('')}/>
             </div>
-            <div className="col-md-4">
-              <table className="table kifu-info">
+            <div className="kifu-info">
+              <table className="table">
                 <tbody>
                   <tr>
                     <td>
@@ -101,8 +101,6 @@ class Kifus extends Component {
         </div>
       </IntlProvider>
     )
-  }
-  componentDidMount() {
   }
 }
 

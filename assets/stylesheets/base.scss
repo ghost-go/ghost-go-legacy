@@ -7,7 +7,10 @@ body {
   color: #383838;
   background-color: #eeeeee;
   box-sizing: border-box;
-  min-height: 100%
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 body.mac {
