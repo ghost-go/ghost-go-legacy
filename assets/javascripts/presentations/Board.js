@@ -24,7 +24,6 @@ export default class Board extends Component {
     this._kifuArray = []
     this.step = 1
     this.clearKifuArray()
-
   }
 
   nextStep(e) {
@@ -322,8 +321,7 @@ export default class Board extends Component {
     )
   }
 
-  componentDidMount() {
-    console.log(this.refs.board)
+  drawBoard() {
     let boardWidth = this.refs.board.parentElement.offsetHeight / 20 * 18
     this.size =  boardWidth / 20
     this._boardCtx = this.boardLayer.getContext('2d')
@@ -342,34 +340,15 @@ export default class Board extends Component {
     = boardWidth
     this.topLayer.style.position
     = 'absolute'
-    //if (this.props.editable === 'true') {
-      //this._crossCtx = this.crossLayer.getContext('2d')
-      //this.crossLayer.width
-      //= this.crossLayer.height
-      //= boardWidth
-      //this.crossLayer.style.position
-      //= 'absolute'
-
-
-      //this.topLayer.onmousemove = (e) => {
-        //this.currentCoord = this.convertPosToCoord(e.offsetX, e.offsetY, this.size)
-        //this._crossCtx.clearRect(0, 0, this.crossLayer.width, this.crossLayer.height)
-        //this.showCross(this.currentCoord, '#ff0000')
-      //}
-
-      //this.topLayer.onclick = (e) => {
-        //let coord = this.convertPosToCoord(e.offsetX, e.offsetY, this.size)
-        //let {i, j} = this.convertCoordToIndex(coord)
-
-        //this._liberty = 0
-        //this._recursionPath = []
-        //if (this.canMove(i, j, this.currentTurn)) {
-          //this._kifuArray[i][j] = this.currentTurn
-          //this.move(e.offsetX, e.offsetY, this.currentTurn)
-          //this.execPonnuki(i, j, this.currentTurn)
-        //}
-      //}
-    //}
     this.draw()
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.drawBoard.bind(this));
+    this.drawBoard()
+  }
+
+  componentUnmount() {
+    window.removeEventListener('resize', this.drawBoard.bind(this));
   }
 }
