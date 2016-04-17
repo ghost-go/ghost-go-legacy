@@ -341,6 +341,13 @@ export default class Board extends Component {
     this.topLayer.style.position
     = 'absolute'
     this.draw()
+    for (let i = 1; i <= this.state.step; i++) {
+      let {posX, posY, ki} = this.getCoordByStep(i)
+      this.move(posX, posY, ki, false)
+      if (i == this.state.step) {
+        this.move(posX, posY, ki, true)
+      }
+    }
   }
 
   componentDidMount() {
