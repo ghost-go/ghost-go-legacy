@@ -29,21 +29,30 @@ export default class Board extends Component {
 
   nextStep(e) {
     this.state.step ++
+    let {x, y, posX, posY, ki} = this.getCoordByStep(this.state.step)
+    if (this.state.step > 1) {
+      let {posX, posY, ki} = this.getCoordByStep(this.state.step - 1)
+      this.move(posX, posY, ki, false)
+    }
+    this._liberty = 0
+    this._recursionPath = []
+    if (this.canMove(x, y, ki)) {
+      this._kifuArray[x][y] = ki
+      this.move(posX, posY, ki, true)
+      this.execPonnuki(x, y, -ki)
+    }
+  }
+
+  getCoordByStep(step) {
     let steps = this.props.kifu.split(';')
-    let str = steps[this.state.step - 1]
+    let str = steps[step - 1]
     let ki = str[0] === 'B' ? 1 : -1
     let pos = /\[(.*)\]/.exec(str)[1]
     let x = LETTERS_SGF.indexOf(pos[0])
     let y = LETTERS_SGF.indexOf(pos[1])
     let posX = (x + 1) * this.size
     let posY = (y + 1) * this.size
-    this._liberty = 0
-    this._recursionPath = []
-    if (this.canMove(x, y, ki)) {
-      this._kifuArray[x][y] = ki
-      this.move(posX, posY, ki)
-      this.execPonnuki(x, y, -ki)
-    }
+    return {x, y, posX, posY, ki}
   }
 
   prevStep() {
@@ -101,7 +110,7 @@ export default class Board extends Component {
     return true
   }
 
-  move(x, y, type) {
+  move(x, y, type, isCurrent) {
     let realPos = this.convertPosToRealPos(x, y)
     let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
     let piece = new Piece()
@@ -117,6 +126,7 @@ export default class Board extends Component {
     piece.y = realPos.y
     piece.pieceSize = this.size / 2 - 3
     piece.type = typeStr
+    piece.isCurrent = isCurrent
     piece.draw(this._pieceCtx)
 
     this.sgf.addKi(`;${typeStr}[${coord_sgf}]`)
