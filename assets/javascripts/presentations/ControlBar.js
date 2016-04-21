@@ -37,7 +37,7 @@ export default class ControlBar extends Component {
   }
 
   lastStep() {
-    let last = this.props.kifu.length
+    let last = this.props.board.props.kifu.split(';').length
     this.props.board.state.step = last
     this.props.board.moveTo(last)
   }

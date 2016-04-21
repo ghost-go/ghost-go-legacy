@@ -3,7 +3,7 @@ export default class Piece {
     this.x || 0
     this.y || 0
     this.pieceSize = pieceSize || 1
-    this.type = type || 'B'
+    this.type = type || 1
     this.isCurrent = false
   }
 
@@ -12,7 +12,7 @@ export default class Piece {
     ctx.arc(this.x, this.y, this.pieceSize, 0, 2 * Math.PI, true)
     ctx.lineWidth = 1
     ctx.strokeStyle = '#000'
-    if (this.type == 'B')
+    if (this.type == 1)
       ctx.fillStyle = '#000'
     else
       ctx.fillStyle = '#fff'
@@ -23,7 +23,7 @@ export default class Piece {
       ctx.beginPath()
       ctx.arc(this.x, this.y, this.pieceSize * 0.6, 0, 2 * Math.PI, true)
       ctx.lineWidth = 2
-      if (this.type == 'B') {
+      if (this.type == 1) {
         ctx.strokeStyle = '#fff'
       }
       else {
@@ -34,7 +34,7 @@ export default class Piece {
   }
 
   remove(ctx, size) {
-    ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size);
+    ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size)
   }
 
 }

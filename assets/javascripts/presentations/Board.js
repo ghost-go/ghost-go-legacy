@@ -35,20 +35,28 @@ export default class Board extends Component {
     }
     this._liberty = 0
     this._recursionPath = []
-    this.move(x, y, posX, posY, ki)
+    this.move(x, y, posX, posY, ki, true)
   }
 
   moveTo(step) {
     this.state.step = step
     this.clearKifuArray()
     this.drawBoard()
+    this.markCurrentPiece()
   }
 
-  move(x, y, posX, posY, ki) {
+  move(x, y, posX, posY, ki, isCurrent) {
     if (this.canMove(x, y, ki)) {
       this._kifuArray[x][y] = ki
-      this.drawPiece(posX, posY, ki, true)
+      this.drawPiece(posX, posY, ki, isCurrent)
       this.execPonnuki(x, y, -ki)
+    }
+  }
+
+  markCurrentPiece() {
+    if (this.state.step > 0) {
+      let {x, y, posX, posY, ki} = this.getCoordByStep(this.state.step)
+      this.drawPiece(posX, posY, ki, true)
     }
   }
 
@@ -123,22 +131,14 @@ export default class Board extends Component {
     let realPos = this.convertPosToRealPos(x, y)
     let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
     let piece = new Piece()
-    let typeStr = ''
-    if (type === 1) {
-      typeStr = 'B'
-    }
-    else {
-      typeStr = 'W'
-    }
 
     piece.x = realPos.x
     piece.y = realPos.y
     piece.pieceSize = this.size / 2 - 3
-    piece.type = typeStr
+    piece.type = type
     piece.isCurrent = isCurrent
     piece.draw(this._pieceCtx)
 
-    this.sgf.addKi(`;${typeStr}[${coord_sgf}]`)
     this.step++
     this.currentTurn = -this.currentTurn
   }
@@ -331,7 +331,9 @@ export default class Board extends Component {
     )
   }
 
-  drawBoard() {
+
+  drawBoardWithResize() {
+    this.clearKifuArray()
     let boardWidth = this.refs.board.parentElement.offsetHeight / 20 * 18
     this.size =  boardWidth / 20
     this._boardCtx = this.boardLayer.getContext('2d')
@@ -350,22 +352,27 @@ export default class Board extends Component {
     = boardWidth
     this.topLayer.style.position
     = 'absolute'
+    this.drawBoard()
+    this.markCurrentPiece()
+  }
+
+  drawBoard() {
+    this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
+    this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
     this.draw()
     for (let i = 1; i <= this.state.step; i++) {
-      let {posX, posY, ki} = this.getCoordByStep(i)
-      this.drawPiece(posX, posY, ki, false)
-      if (i == this.state.step) {
-        this.drawPiece(posX, posY, ki, true)
-      }
+      let {x, y, posX, posY, ki} = this.getCoordByStep(i)
+      this.move(x, y, posX, posY, ki)
     }
   }
 
+
   componentDidMount() {
-    window.addEventListener('resize', this.drawBoard.bind(this));
-    this.drawBoard()
+    window.addEventListener('resize', this.drawBoardWithResize.bind(this))
+    this.drawBoardWithResize()
   }
 
   componentUnmount() {
-    window.removeEventListener('resize', this.drawBoard.bind(this));
+    window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
   }
 }
