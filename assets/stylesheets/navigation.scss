@@ -1,6 +1,6 @@
 .nav-container {
   width: 100%;
-  min-height: 50px;
+  min-height: 40px;
   background-color: rgba(255,255,255,.97);
   box-shadow: 0 0 2px 0 rgba(0,0,0,.5);
   display: flex;
@@ -18,7 +18,7 @@
       background-size: 98.4px 26px;
       background-position: 0 12px;
       margin: 0px 15px;
-      height: 50px;
+      height: 40px;
     }
   }
 
@@ -30,11 +30,11 @@
     display: flex;
     flex: 1;
     justify-content: center;
-    height: 50px;
+    height: 40px;
     a {
       display: inline-block;
       position: relative;
-      padding: 15px 20px;
+      padding: 10px 20px;
       margin: 0;
       display: inline-block;
       float: left;
@@ -53,7 +53,7 @@
   .nav-footer {
     position: relative;
     min-width: 220px;
-    height: 50px;
+    height: 40px;
     float: right;
     flex: 0 0 auto;
     .nav-footer-wrap {
@@ -63,7 +63,7 @@
       border-left: 1px solid rgba(0,0,0,.05);
       a {
         font-size: 20px;
-        padding: 15px 10px;
+        padding: 10px 10px;
         float: left;
         transition: all ease-in 150ms 128ms;
       }

@@ -5,63 +5,65 @@ export default class ControlBar extends Component {
 
   constructor(props) {
     super(props)
-
-    this.nextStep = this.nextStep.bind(this)
-    this.prevStep = this.prevStep.bind(this)
-    this.next10Step = this.next10Step.bind(this)
-    this.prev10Step = this.prev10Step.bind(this)
-    this.firstStep = this.firstStep.bind(this)
-    this.lastStep = this.lastStep.bind(this)
   }
 
   nextStep() {
-    console.log('next1')
-    let handler = this.props.onNextStep
-    if ( handler ) handler()
+    let step = this.props.board.state.step
+    this.props.board.state.step = step + 1
+    this.props.board.moveTo(step + 1)
   }
 
   prevStep() {
-    console.log('prev1')
+    let step = this.props.board.state.step
+    this.props.board.state.step = step - 1
+    this.props.board.moveTo(step - 1)
   }
 
   next10Step() {
-    console.log('next10')
+    let step = this.props.board.state.step
+    this.props.board.state.step = step + 10
+    this.props.board.moveTo(step + 10)
   }
 
   prev10Step() {
-    console.log('prev10')
+    let step = this.props.board.state.step
+    this.props.board.state.step = step - 10
+    this.props.board.moveTo(step - 10)
   }
 
   firstStep() {
-    console.log('first')
+    this.props.board.state.step = 1
+    this.props.board.moveTo(1)
   }
 
   lastStep() {
-    console.log('last')
+    let last = this.props.kifu.length
+    this.props.board.state.step = last
+    this.props.board.moveTo(last)
   }
 
   render() {
     return(
       <div className="control-bar">
-        <span className="move-control" onClick={this.firstStep}>
+        <span className="move-control" ref="firstStep" onClick={this.firstStep.bind(this)}>
           <i className="fa fa-fast-backward"></i>
         </span>
-        <span className="move-control" onClick={this.prev10Step}>
+        <span className="move-control" ref="prev10Step" onClick={this.prev10Step.bind(this)}>
           <i className="fa fa-backward"></i>
         </span>
-        <span className="move-control" onClick={this.prevStep}>
+        <span className="move-control" ref="prevStep" onClick={this.prevStep.bind(this)}>
           <i className="fa fa-step-backward"></i>
         </span>
-        <span className="move-control" onClick={this.nextStep}>
+        <span className="move-control" ref="nextStep" onClick={this.nextStep.bind(this)}>
           <i className="fa fa-play"></i>
         </span>
-        <span className="move-control" onClick={this.nextStep}>
+        <span className="move-control" onClick={this.nextStep.bind(this)}>
           <i className="fa fa-step-forward"></i>
         </span>
-        <span className="move-control" onClick={this.next10Step}>
+        <span className="move-control" ref="next10Step" onClick={this.next10Step.bind(this)}>
           <i className="fa fa-forward"></i>
         </span>
-        <span className="move-control" onClick={this.lastStep}>
+        <span className="move-control" ref="lastStep" onClick={this.lastStep.bind(this)}>
           <i className="fa fa-fast-forward"></i>
         </span>
       </div>

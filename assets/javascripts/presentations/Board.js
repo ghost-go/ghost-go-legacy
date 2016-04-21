@@ -31,13 +31,23 @@ export default class Board extends Component {
     let {x, y, posX, posY, ki} = this.getCoordByStep(this.state.step)
     if (this.state.step > 1) {
       let {posX, posY, ki} = this.getCoordByStep(this.state.step - 1)
-      this.move(posX, posY, ki, false)
+      this.drawPiece(posX, posY, ki, false)
     }
     this._liberty = 0
     this._recursionPath = []
+    this.move(x, y, posX, posY, ki)
+  }
+
+  moveTo(step) {
+    this.state.step = step
+    this.clearKifuArray()
+    this.drawBoard()
+  }
+
+  move(x, y, posX, posY, ki) {
     if (this.canMove(x, y, ki)) {
       this._kifuArray[x][y] = ki
-      this.move(posX, posY, ki, true)
+      this.drawPiece(posX, posY, ki, true)
       this.execPonnuki(x, y, -ki)
     }
   }
@@ -109,7 +119,7 @@ export default class Board extends Component {
     return true
   }
 
-  move(x, y, type, isCurrent) {
+  drawPiece(x, y, type, isCurrent) {
     let realPos = this.convertPosToRealPos(x, y)
     let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
     let piece = new Piece()
@@ -343,9 +353,9 @@ export default class Board extends Component {
     this.draw()
     for (let i = 1; i <= this.state.step; i++) {
       let {posX, posY, ki} = this.getCoordByStep(i)
-      this.move(posX, posY, ki, false)
+      this.drawPiece(posX, posY, ki, false)
       if (i == this.state.step) {
-        this.move(posX, posY, ki, true)
+        this.drawPiece(posX, posY, ki, true)
       }
     }
   }

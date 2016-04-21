@@ -31,7 +31,7 @@ class Kifus extends Component {
                      editable="false"
                      kifu={kifu.data.steps}
                      ref="board" />
-              <ControlBar onNextStep={console.log('')}/>
+              <ControlBar board={this.refs.board} kifu={kifu.data.steps}/>
             </div>
             <div className="kifu-info">
               <table className="table">
