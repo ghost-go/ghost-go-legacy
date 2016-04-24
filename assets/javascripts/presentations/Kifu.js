@@ -19,7 +19,7 @@ export default class Kifu extends Component {
       <tr>
         <td>
           <Link to={`/kifus/${this.props.id}`}>
-            {this.props.date}
+            {this.props.created_at}
           </Link>
         </td>
         <td>
