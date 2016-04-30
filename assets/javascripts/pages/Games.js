@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Navigation from '../presentations/Navigation'
+import Layout from './Layout'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 //import Board from '../presentations/Board'
 import lang from '../components/lang'
@@ -7,7 +8,7 @@ import KifuTable from '../presentations/KifuTable'
 import Pagination from '../presentations/Pagination'
 import { connect } from 'react-redux'
 import { fetchKifus } from '../actions/KifuActions'
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
 class Games extends Component {
@@ -33,31 +34,22 @@ class Games extends Component {
     //<Board className="board" grid="19" size="30" />
     const { kifus } = this.props
     return (
-      <IntlProvider locale={lang.locale} messages={lang.messages}>
-        <div>
-          <Navigation />
-          <h1>
-              <FormattedMessage
-                id='app.nav.menu.games'
-                defaultMessage="Games"
-              />
-          </h1>
-          <KifuTable kifus={ kifus.data } />
-          <Pagination current={this.state.current}
-                      total={this.state.total}
-                      visiblePages={this.state.visablePage}
-                      onPageChanged={this.handlePageChanged}
-                      titles = {{
-                        first: "First",
-                        prev: "Prev",
-                        prevSet: "<<<",
-                        nextSet: ">>>",
-                        next: "Next",
-                        last: "Last",
-                      }}
-          />
-        </div>
-      </IntlProvider>
+      <Layout>
+        <KifuTable kifus={ kifus.data } />
+        <Pagination current={this.state.current}
+                    total={this.state.total}
+                    visiblePages={this.state.visablePage}
+                    onPageChanged={this.handlePageChanged}
+                    titles = {{
+                      first: 'First',
+                      prev: 'Prev',
+                      prevSet: '<<<',
+                      nextSet: '>>>',
+                      next: 'Next',
+                      last: 'Last',
+                    }}
+        />
+      </Layout>
     )
   }
 
