@@ -9,10 +9,13 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import Puzzles from './pages/Puzzles'
 import Games from './pages/Games'
 import Kifus from './pages/Kifus'
+import Sign from './pages/Sign'
 
 import { kifus, kifu } from './reducers/KifuReducers'
+import {authStateReducer} from 'redux-auth'
 
 const reducer = combineReducers({
+  authStateReducer,
   kifus,
   kifu,
   routing: routerReducer
@@ -33,6 +36,7 @@ ReactDOM.render((
       <Route path="/games" component={Games}/>
       <Route path="/kifus/:id" component={Kifus}/>
       <Route path="/puzzles" component={Puzzles}/>
+      <Route path="/signup" component={Sign}/>
     </Router>
   </Provider>
 ), document.querySelector('.app'))

@@ -41,10 +41,10 @@
  */
 
 /* eslint-disable no-var */
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
+var webpack = require('webpack')
+var path = require('path')
+var autoprefixer = require('autoprefixer')
+var precss = require('precss')
 
 module.exports = {
   entry: [
@@ -74,7 +74,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015']
         }
@@ -86,15 +86,16 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "postcss"]
+        loaders: ['style', 'css', 'postcss']
       },
       {
         test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
         loader: 'url-loader?limit=100000'
-      }
+      },
+      { test: /\.json$/, loader: 'json-loader' }
     ]
   },
   postcss: function () {
-    return [autoprefixer, precss];
+    return [autoprefixer, precss]
   }
-};
+}

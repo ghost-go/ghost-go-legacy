@@ -22,84 +22,81 @@ class Kifus extends Component {
   render() {
     const { kifu } = this.props
     return (
-      <IntlProvider locale={lang.locale} messages={lang.messages}>
-        <div className="kifu-page">
-          <Navigation />
-          <div className="kifu-container">
-            <div className="kifu-board">
-              <Board className="board"
-                     editable="false"
-                     kifu={kifu.data.steps}
-                     ref="board" />
-              <ControlBar board={this.refs.board} />
-            </div>
-            <div className="kifu-info">
-              <table className="table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.black' defaultMessage="Black" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.b_name }&nbsp;&nbsp;&nbsp;
-                      { this.props.kifu.data.b_rank }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.white' defaultMessage="White" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.w_name }&nbsp;&nbsp;&nbsp;
-                      { this.props.kifu.data.w_rank }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.result' defaultMessage="Result" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.result }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.title' defaultMessage="Title" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.title }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.place' defaultMessage="Place" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.place }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.komi' defaultMessage="Komi" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.komi }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <FormattedMessage id='app.kifu.date' defaultMessage="Date" />
-                    </td>
-                    <td>
-                      { this.props.kifu.data.date }
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <Layout>
+        <div className="kifu-container">
+          <div className="kifu-board">
+            <Board className="board"
+                   editable="false"
+                   kifu={kifu.data.steps}
+                   ref="board" />
+            <ControlBar board={this.refs.board} />
+          </div>
+          <div className="kifu-info">
+            <table className="table">
+              <tbody>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.black' defaultMessage="Black" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.b_name }&nbsp;&nbsp;&nbsp;
+                    { this.props.kifu.data.b_rank }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.white' defaultMessage="White" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.w_name }&nbsp;&nbsp;&nbsp;
+                    { this.props.kifu.data.w_rank }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.result' defaultMessage="Result" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.result }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.title' defaultMessage="Title" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.title }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.place' defaultMessage="Place" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.place }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.komi' defaultMessage="Komi" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.komi }
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <FormattedMessage id='app.kifu.date' defaultMessage="Date" />
+                  </td>
+                  <td>
+                    { this.props.kifu.data.date }
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </IntlProvider>
+      </Layout>
     )
   }
 }

@@ -26,7 +26,6 @@ addLocaleData(koLocaleData);
 require('./assets/stylesheets/base.scss')
 require('./assets/stylesheets/home.scss')
 require('./assets/stylesheets/navigation.scss')
-require('./assets/stylesheets/layout.scss')
 require('./assets/javascripts/main.js')
 require('./assets/javascripts/routes.js')
 //require('./assets/javascripts/components/board.js');
