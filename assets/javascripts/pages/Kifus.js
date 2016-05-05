@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { fetchKifu } from '../actions/KifuActions'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
+import Layout from './Layout'
 
 class Kifus extends Component {
   constructor(props) {

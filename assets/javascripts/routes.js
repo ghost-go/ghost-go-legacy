@@ -12,7 +12,8 @@ import Kifus from './pages/Kifus'
 import Sign from './pages/Sign'
 
 import { kifus, kifu } from './reducers/KifuReducers'
-import {authStateReducer} from 'redux-auth'
+import { authStateReducer } from 'redux-auth'
+import { AuthGlobals } from 'redux-auth'
 
 const reducer = combineReducers({
   authStateReducer,
