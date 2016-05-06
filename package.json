@@ -61,7 +61,7 @@
     "react-tap-event-plugin": "^0.2.2",
     "redux": "^3.5.2",
     "redux-actions": "^0.9.1",
-    "redux-auth": "0.0.2",
+    "redux-auth": "git+ssh://git@github.com:happybai/redux-auth.git",
     "redux-thunk": "^2.0.1",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
