@@ -13,15 +13,16 @@ import { EmailSignUpForm,
 
 export default React.createClass({
   render() {
+    let signWrapperStyle = {
+      width: '400px',
+      margin: '0 auto',
+      marginTop: '30px'
+    }
     return (
       <Layout>
-        <EmailSignUpForm />
-        <EmailSignInForm />
-        <OAuthSignInButton />
-        <SignOutButton />
-        <DestroyAccountButton />
-        <RequestPasswordResetForm />
-        <UpdatePasswordForm />
+        <div style={signWrapperStyle} className="sign-wrapper">
+          <EmailSignUpForm />
+        </div>
       </Layout>
     )
   }
