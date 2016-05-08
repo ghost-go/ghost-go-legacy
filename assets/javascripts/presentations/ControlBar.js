@@ -27,8 +27,14 @@ export default class ControlBar extends Component {
 
   prev10Step() {
     let step = this.props.board.state.step
-    this.props.board.state.step = step - 10
-    this.props.board.moveTo(step - 10)
+    if (this.props.board.state.step <= 10) {
+      this.props.board.state.step = 1
+      this.props.board.moveTo(1)
+    }
+    else {
+      this.props.board.state.step = step - 10
+      this.props.board.moveTo(step - 10)
+    }
   }
 
   firstStep() {
