@@ -78,8 +78,7 @@ export default class Board extends Component {
 
   clearKifuArray() {
     this._kifuArray = []
-    while(this._kifuArray.push(new Array(19).fill(0)) < 19) {
-    }
+    while(this._kifuArray.push(new Array(19).fill(0)) < 19) { }
   }
 
   draw() {
