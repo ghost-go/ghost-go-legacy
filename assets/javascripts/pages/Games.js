@@ -11,9 +11,6 @@ import { fetchKifus } from '../actions/KifuActions'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 class Games extends Component {
   constructor(props) {
     super(props)
@@ -37,24 +34,22 @@ class Games extends Component {
     //<Board className="board" grid="19" size="30" />
     const { kifus } = this.props
     return (
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Layout>
-          <KifuTable kifus={ kifus.data } />
-          <Pagination current={this.state.current}
-                      total={this.state.total}
-                      visiblePages={this.state.visablePage}
-                      onPageChanged={this.handlePageChanged}
-                      titles = {{
-                        first: 'First',
-                        prev: 'Prev',
-                        prevSet: '<<<',
-                        nextSet: '>>>',
-                        next: 'Next',
-                        last: 'Last',
-                      }}
-          />
-        </Layout>
-      </MuiThemeProvider>
+      <Layout>
+        <KifuTable kifus={ kifus.data } />
+        <Pagination current={this.state.current}
+                    total={this.state.total}
+                    visiblePages={this.state.visablePage}
+                    onPageChanged={this.handlePageChanged}
+                    titles = {{
+                      first: 'First',
+                      prev: 'Prev',
+                      prevSet: '<<<',
+                      nextSet: '>>>',
+                      next: 'Next',
+                      last: 'Last',
+                    }}
+        />
+      </Layout>
     )
   }
 

@@ -10,6 +10,9 @@ import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import Layout from './Layout'
 
+import Paper from 'material-ui/Paper';
+import {Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
+
 class Kifus extends Component {
   constructor(props) {
     super(props)
@@ -21,6 +24,9 @@ class Kifus extends Component {
   }
 
   render() {
+    const colWidth = {
+      width: 100
+    }
     const { kifu } = this.props
     return (
       <Layout>
@@ -30,71 +36,77 @@ class Kifus extends Component {
                    editable="false"
                    kifu={kifu.data.steps}
                    ref="board" />
-            <ControlBar board={this.refs.board} />
           </div>
           <div className="kifu-info">
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.black' defaultMessage="Black" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.b_name }&nbsp;&nbsp;&nbsp;
-                    { this.props.kifu.data.b_rank }
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.white' defaultMessage="White" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.w_name }&nbsp;&nbsp;&nbsp;
-                    { this.props.kifu.data.w_rank }
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.result' defaultMessage="Result" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.result }
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.title' defaultMessage="Title" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.title }
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.place' defaultMessage="Place" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.place }
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.komi' defaultMessage="Komi" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.komi }
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <FormattedMessage id='app.kifu.date' defaultMessage="Date" />
-                  </td>
-                  <td>
-                    { this.props.kifu.data.date }
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <Paper>
+              <Table style={{width: 400}} selectable={false}>
+                <TableBody displayRowCheckbox={false}>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.black' defaultMessage="Black" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.b_name }&nbsp;&nbsp;&nbsp;
+                      { this.props.kifu.data.b_rank }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.white' defaultMessage="White" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.w_name }&nbsp;&nbsp;&nbsp;
+                      { this.props.kifu.data.w_rank }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.result' defaultMessage="Result" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.result }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.title' defaultMessage="Title" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.title }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.place' defaultMessage="Place" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.place }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.komi' defaultMessage="Komi" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.komi }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn style={colWidth}>
+                      <FormattedMessage id='app.kifu.date' defaultMessage="Date" />
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.date }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn colSpan={2}>
+                      <ControlBar board={this.refs.board} />
+                    </TableRowColumn>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Paper>
           </div>
         </div>
       </Layout>
