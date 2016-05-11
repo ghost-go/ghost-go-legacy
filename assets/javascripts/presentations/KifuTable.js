@@ -9,7 +9,7 @@ export default class KifuTable extends Component {
   render() {
     return(
       <Table>
-        <TableHeader>
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
               <FormattedMessage
