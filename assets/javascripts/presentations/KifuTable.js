@@ -3,50 +3,52 @@ import Kifu from './Kifu'
 import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
 import lang from '../components/lang';
 
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow} from 'material-ui/Table'
+
 export default class KifuTable extends Component {
   render() {
     return(
-      <table className="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHeaderColumn>
               <FormattedMessage
                 id='app.games.table.date'
                 defaultMessage="Date"
               />
-            </th>
-            <th>
+            </TableHeaderColumn>
+            <TableHeaderColumn>
               <FormattedMessage
                 id='app.games.table.title'
                 defaultMessage="Title"
               />
-            </th>
-            <th>
+            </TableHeaderColumn>
+            <TableHeaderColumn>
               <FormattedMessage
                 id='app.games.table.black'
                 defaultMessage="Black"
               />
-            </th>
-            <th>
+            </TableHeaderColumn>
+            <TableHeaderColumn>
               <FormattedMessage
                 id='app.games.table.white'
                 defaultMessage="White"
               />
-            </th>
-            <th>
+            </TableHeaderColumn>
+            <TableHeaderColumn>
               <FormattedMessage
                 id='app.games.table.result'
                 defaultMessage="Result"
               />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {this.props.kifus.map((kifu, index) => 
             <Kifu {...kifu} key={index}/>
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     )
   }
 }

@@ -1,8 +1,6 @@
 import React from 'react'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-import { configure, authStateReducer } from 'redux-auth'
-import { AuthGlobals } from 'redux-auth/material-ui-theme'
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
@@ -13,6 +11,10 @@ import Puzzles from './pages/Puzzles'
 import Games from './pages/Games'
 import Kifus from './pages/Kifus'
 import Sign from './pages/Sign'
+
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 
 class App extends React.Component {
   render() {
@@ -60,4 +62,5 @@ export function initialize({cookies, isServer, currentLocation} = {}) {
       </div>
     </Provider>
   )
+
 }

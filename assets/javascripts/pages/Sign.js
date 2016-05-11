@@ -4,6 +4,10 @@ import lang from '../components/lang'
 
 import Layout from './Layout'
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+
 export default React.createClass({
   render() {
     let signWrapperStyle = {
@@ -12,10 +16,13 @@ export default React.createClass({
       marginTop: '30px'
     }
     return (
-      <Layout>
-        <div style={signWrapperStyle} className="sign-wrapper">
-        </div>
-      </Layout>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Layout>
+          <div style={signWrapperStyle} className="sign-wrapper">
+            <RaisedButton label="Default" />
+          </div>
+        </Layout>
+      </MuiThemeProvider>
     )
   }
 })

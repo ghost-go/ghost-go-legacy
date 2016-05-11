@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router';
 
+import { TableRow, TableRowColumn } from 'material-ui/Table';
+
 export default class Kifu extends Component {
 
   constructor(props) {
@@ -16,21 +18,21 @@ export default class Kifu extends Component {
 
   render() {
     return(
-      <tr>
-        <td>
+      <TableRow>
+        <TableRowColumn>
           <Link to={`/kifus/${this.props.id}`}>
             {this.props.created_at}
           </Link>
-        </td>
-        <td>
+        </TableRowColumn>
+        <TableRowColumn>
           <Link to={`/kifus/${this.props.id}`}>
             {this.props.title}
           </Link>
-        </td>
-        <td>{this.props.b_name}</td>
-        <td>{this.props.w_name}</td>
-        <td>{this.props.result}</td>
-      </tr>
+        </TableRowColumn>
+        <TableRowColumn>{this.props.b_name}</TableRowColumn>
+        <TableRowColumn>{this.props.w_name}</TableRowColumn>
+        <TableRowColumn>{this.props.result}</TableRowColumn>
+      </TableRow>
     )
   }
 }
