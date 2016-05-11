@@ -29,9 +29,5 @@ require('./assets/stylesheets/base.scss')
 require('./assets/stylesheets/home.scss')
 require('./assets/stylesheets/navigation.scss')
 require('./assets/javascripts/main.js')
-//require('./assets/javascripts/routes.js')
 
-console.log(initialize())
-initialize().then((result) => {
-  ReactDOM.render(result, document.querySelector('.app'))
-})
+ReactDOM.render(initialize(), document.querySelector('.app'))

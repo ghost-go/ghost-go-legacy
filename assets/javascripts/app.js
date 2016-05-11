@@ -18,7 +18,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <AuthGlobals />
         {this.props.children}
       </div>
     )
@@ -27,7 +26,6 @@ class App extends React.Component {
 
 // create your main reducer
 const reducer = combineReducers({
-  auth: authStateReducer,
   kifus,
   kifu,
   routing: routerReducer
@@ -47,48 +45,19 @@ const history = syncHistoryWithStore(browserHistory, store)
 // url of the current request. also be sure to set `isServer` to true.
 export function initialize({cookies, isServer, currentLocation} = {}) {
   // configure redux-auth BEFORE rendering the page
-  return store.dispatch(configure(
-    // use the FULL PATH to your API
-    {
-      apiUrl: 'http://api.ghost-go.com',
-      signOutPath: '',
-      emailSignInPath:         '/evil_user_auth/sign_in',
-      emailRegistrationPath:   '/evil_user_auth',
-      accountUpdatePath:       '/evil_user_auth',
-      accountDeletePath:       '/evil_user_auth',
-      passwordResetPath:       '/evil_user_auth/password',
-      passwordUpdatePath:      '/evil_user_auth/password',
-      tokenValidationPath:     '/evil_user_auth/validate_token',
-      authProviderPaths: {
-        github:    '/evil_user_auth/github',
-        facebook:  '/evil_user_auth/facebook',
-        google:    '/evil_user_auth/google_oauth2'
-      }
-    },
-    {isServer, cookies, currentLocation}
-
-  )).then(({redirectPath, blank} = {}) => {
-
-    if (blank) {
-      // if `blank` is true, this is an OAuth redirect and should not
-      // be rendered
-      return <noscript />
-    } else {
-      return (
-        <Provider store={store} key="provider">
-          <div>
-            <Router history={history}>
-              <Route path="/" component={Games}/>
-              <Route path="/games" component={Games}/>
-              <Route path="/kifus/:id" component={Kifus}/>
-              <Route path="/puzzles" component={Puzzles}/>
-              <Route path="/signup" component={Sign}/>
-            </Router>
-            <App>
-            </App>
-          </div>
-        </Provider>
-      )
-    }
-  })
+  return (
+    <Provider store={store} key="provider">
+      <div>
+        <Router history={history}>
+          <Route path="/" component={Games}/>
+          <Route path="/games" component={Games}/>
+          <Route path="/kifus/:id" component={Kifus}/>
+          <Route path="/puzzles" component={Puzzles}/>
+          <Route path="/signup" component={Sign}/>
+        </Router>
+        <App>
+        </App>
+      </div>
+    </Provider>
+  )
 }
