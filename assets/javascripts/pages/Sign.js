@@ -8,9 +8,12 @@ import {
   Step,
   Stepper,
   StepLabel,
-} from 'material-ui/Stepper';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+} from 'material-ui/Stepper'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+
+injectTapEventPlugin()
 
 
 export default class Sign extends Component {
@@ -94,7 +97,7 @@ export default class Sign extends Component {
                   <RaisedButton
                     label={stepIndex === 2 ? 'Finish' : 'Next'}
                     primary={true}
-                    onTouchTap={this.handleNext}
+                    onTouchTap={this.handleNext.bind(this)}
                   />
                 </div>
               </div>
