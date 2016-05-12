@@ -41,14 +41,16 @@
  */
 
 /* eslint-disable no-var */
-var webpack = require('webpack');
-var path = require('path');
+var webpack = require('webpack')
+var path = require('path')
+var autoprefixer = require('autoprefixer')
+var precss = require('precss')
 
 module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:5000',
     'webpack/hot/dev-server',
-    './index.jsx',
+    './index.js',
   ],
   output: {
     path: __dirname,
@@ -60,6 +62,10 @@ module.exports = {
   },
   devtool: 'eval-source-map',
   plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
+      __PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'false'))
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
@@ -68,7 +74,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015']
         }
@@ -80,8 +86,16 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loaders: ['style', 'css', 'postcss']
       },
+      {
+        test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
+        loader: 'url-loader?limit=100000'
+      },
+      { test: /\.json$/, loader: 'json-loader' }
     ]
+  },
+  postcss: function () {
+    return [autoprefixer, precss]
   }
-};
+}
