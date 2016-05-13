@@ -7,53 +7,73 @@ import Layout from './Layout'
 import {
   Step,
   Stepper,
-  StepLabel,
+  StepButton,
+  StepContent,
 } from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
-
-
+import Paper from 'material-ui/Paper'
 
 export default class Sign extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      finished: false,
       stepIndex: 0,
     }
   }
 
   handleNext() {
     const {stepIndex} = this.state
-    this.setState({
-      stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
-    })
+    if (stepIndex < 2) {
+      this.setState({stepIndex: stepIndex + 1})
+    }
+  }
+
+  handlePrev() {
+    const {stepIndex} = this.state
+    if (stepIndex > 0) {
+      this.setState({stepIndex: stepIndex - 1})
+    }
+  }
+
+  renderStepActions(step) {
+    return (
+      <div style={{margin: '12px 0'}}>
+        <RaisedButton
+          label="Next"
+          disableTouchRipple={true}
+          disableFocusRipple={true}
+          primary={true}
+          onTouchTap={this.handleNext.bind(this)}
+          style={{marginRight: 12}}
+        />
+        {step > 0 && (
+          <FlatButton
+            label="Back"
+            disableTouchRipple={true}
+            disableFocusRipple={true}
+            onTouchTap={this.handlePrev.bind(this)}
+          />
+        )}
+      </div>
+    )
   }
 
   getStepContent(stepIndex) {
+    const signStyle = {
+      width: 400,
+      margin: '0 auto'
+    }
     switch (stepIndex) {
     case 0:
       return (
-        <div>
-          <TextField hintText="Email" floatingLabelText="Email" />
-          <br />
-          <TextField hintText="Username" floatingLabelText="Username" />
-          <br />
-          <TextField hintText="Password" floatingLabelText="Password" type="password" />
+        <div style={signStyle}>
         </div>
       )
     case 1:
       return (
         <div>
-          <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
-          <br />
-          <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
-          <br />
-          <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
-          <br />
-          <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
         </div>
       )
     case 2:
@@ -69,64 +89,67 @@ export default class Sign extends Component {
     }
   }
 
-  handlePrev() {
-    const {stepIndex} = this.state
-    if (stepIndex > 0) {
-      this.setState({stepIndex: stepIndex - 1})
-    }
-  }
-
   render() {
-    const {finished, stepIndex} = this.state
-    const contentStyle = {margin: '0 16px'}
+    const {stepIndex} = this.state
+    const paperStyle = {
+      width: '40%',
+      margin: '0 auto',
+      marginTop: 20,
+      padding: 30
+    }
 
     return (
       <Layout>
-        <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
-          <Stepper activeStep={stepIndex}>
+        <Paper style={paperStyle}>
+          <Stepper
+            activeStep={stepIndex}
+            linear={false}
+            orientation="vertical"
+          >
             <Step>
-              <StepLabel>Select campaign settings</StepLabel>
+              <StepButton onClick={() => this.setState({stepIndex: 0})}>
+                Basic Information
+              </StepButton>
+              <StepContent>
+                <TextField hintText='Email'
+                           floatingLabelText='Email'
+                           errorText='This field is required'/>
+                <TextField hintText="Username"
+                           floatingLabelText="Username" />
+                <TextField hintText="Password"
+                           floatingLabelText="Password"
+                           type="password" />
+                {this.renderStepActions(0)}
+              </StepContent>
             </Step>
             <Step>
-              <StepLabel>Create an ad group</StepLabel>
+              <StepButton onClick={() => this.setState({stepIndex: 1})}>
+                Optional Information
+              </StepButton>
+              <StepContent>
+                <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
+                <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
+                <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
+                <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
+                {this.renderStepActions(1)}
+              </StepContent>
             </Step>
             <Step>
-              <StepLabel>Create an ad</StepLabel>
+              <StepButton onClick={() => this.setState({stepIndex: 2})}>
+                Finished
+              </StepButton>
+              <StepContent>
+                <p>
+                  Try out different ad text to see what brings in the most customers,
+                  and learn how to enhance your ads using features like ad extensions.
+                  If you run into any problems with your ads, find out how to tell if
+                  they're running and how to resolve approval issues.
+                </p>
+                {this.renderStepActions(2)}
+              </StepContent>
             </Step>
           </Stepper>
-          <div style={contentStyle}>
-            {finished ? (
-              <p>
-                <a
-                  href="#"
-                  onClick={(event) => {
-                    event.preventDefault()
-                    this.setState({stepIndex: 0, finished: false})
-                  }}
-                >
-                  Click here
-                </a> to reset the example.
-              </p>
-            ) : (
-              <div>
-                {this.getStepContent(stepIndex)}
-                <div style={{marginTop: 12}}>
-                  <FlatButton
-                    label="Back"
-                    disabled={stepIndex === 0}
-                    onTouchTap={this.handlePrev.bind(this)}
-                    style={{marginRight: 12}}
-                  />
-                  <RaisedButton
-                    label={stepIndex === 2 ? 'Finish' : 'Next'}
-                    primary={true}
-                    onTouchTap={this.handleNext.bind(this)}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        </Paper>
       </Layout>
     )
   }
