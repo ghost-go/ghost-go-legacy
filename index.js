@@ -8,6 +8,9 @@ import koLocaleData from 'react-intl/locale-data/ko'
 
 import { initialize } from './assets/javascripts/app'
 
+import injectTapEventPlugin from 'react-tap-event-plugin'
+injectTapEventPlugin()
+
 addLocaleData(zhLocaleData)
 addLocaleData(jaLocaleData)
 addLocaleData(koLocaleData)

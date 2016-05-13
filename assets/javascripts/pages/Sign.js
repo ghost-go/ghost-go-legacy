@@ -11,9 +11,8 @@ import {
 } from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import injectTapEventPlugin from 'react-tap-event-plugin'
+import TextField from 'material-ui/TextField';
 
-injectTapEventPlugin()
 
 
 export default class Sign extends Component {
@@ -36,13 +35,37 @@ export default class Sign extends Component {
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return 'Select campaign settings...';
+        return (
+          <div>
+            <TextField hintText="Email" floatingLabelText="Email" />
+            <br />
+            <TextField hintText="Username" floatingLabelText="Username" />
+            <br />
+            <TextField hintText="Password" floatingLabelText="Password" type="password" />
+          </div>
+        )
       case 1:
-        return 'What is an ad group anyways?';
+        return (
+          <div>
+            <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
+            <br />
+            <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
+            <br />
+            <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
+            <br />
+            <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
+          </div>
+        )
       case 2:
-        return 'This is the bit I really care about!';
+        return (
+          <div>
+            <p>
+              Congratulation!
+            </p>
+          </div>
+        )
       default:
-        return 'You\'re a long way from home sonny jim!';
+        return 'OK';
     }
   }
 
@@ -86,12 +109,12 @@ export default class Sign extends Component {
               </p>
             ) : (
               <div>
-                <p>{this.getStepContent(stepIndex)}</p>
+                {this.getStepContent(stepIndex)}
                 <div style={{marginTop: 12}}>
                   <FlatButton
                     label="Back"
                     disabled={stepIndex === 0}
-                    onTouchTap={this.handlePrev}
+                    onTouchTap={this.handlePrev.bind(this)}
                     style={{marginRight: 12}}
                   />
                   <RaisedButton
