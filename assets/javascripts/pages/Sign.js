@@ -11,7 +11,7 @@ import {
 } from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import TextField from 'material-ui/TextField';
+import TextField from 'material-ui/TextField'
 
 
 
@@ -34,45 +34,45 @@ export default class Sign extends Component {
 
   getStepContent(stepIndex) {
     switch (stepIndex) {
-      case 0:
-        return (
-          <div>
-            <TextField hintText="Email" floatingLabelText="Email" />
-            <br />
-            <TextField hintText="Username" floatingLabelText="Username" />
-            <br />
-            <TextField hintText="Password" floatingLabelText="Password" type="password" />
-          </div>
-        )
-      case 1:
-        return (
-          <div>
-            <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
-            <br />
-            <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
-            <br />
-            <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
-            <br />
-            <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
-          </div>
-        )
-      case 2:
-        return (
-          <div>
-            <p>
-              Congratulation!
-            </p>
-          </div>
-        )
-      default:
-        return 'OK';
+    case 0:
+      return (
+        <div>
+          <TextField hintText="Email" floatingLabelText="Email" />
+          <br />
+          <TextField hintText="Username" floatingLabelText="Username" />
+          <br />
+          <TextField hintText="Password" floatingLabelText="Password" type="password" />
+        </div>
+      )
+    case 1:
+      return (
+        <div>
+          <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
+          <br />
+          <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
+          <br />
+          <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
+          <br />
+          <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
+        </div>
+      )
+    case 2:
+      return (
+        <div>
+          <p>
+            Congratulation!
+          </p>
+        </div>
+      )
+    default:
+      return 'OK'
     }
   }
 
   handlePrev() {
-    const {stepIndex} = this.state;
+    const {stepIndex} = this.state
     if (stepIndex > 0) {
-      this.setState({stepIndex: stepIndex - 1});
+      this.setState({stepIndex: stepIndex - 1})
     }
   }
 
@@ -100,8 +100,8 @@ export default class Sign extends Component {
                 <a
                   href="#"
                   onClick={(event) => {
-                    event.preventDefault();
-                    this.setState({stepIndex: 0, finished: false});
+                    event.preventDefault()
+                    this.setState({stepIndex: 0, finished: false})
                   }}
                 >
                   Click here
