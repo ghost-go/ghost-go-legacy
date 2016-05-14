@@ -60,39 +60,10 @@ export default class Sign extends Component {
     )
   }
 
-  getStepContent(stepIndex) {
-    const signStyle = {
-      width: 400,
-      margin: '0 auto'
-    }
-    switch (stepIndex) {
-    case 0:
-      return (
-        <div style={signStyle}>
-        </div>
-      )
-    case 1:
-      return (
-        <div>
-        </div>
-      )
-    case 2:
-      return (
-        <div>
-          <p>
-            Congratulation!
-          </p>
-        </div>
-      )
-    default:
-      return 'OK'
-    }
-  }
-
   render() {
     const {stepIndex} = this.state
     const paperStyle = {
-      width: '40%',
+      width: '60%',
       margin: '0 auto',
       marginTop: 20,
       padding: 30
@@ -112,10 +83,11 @@ export default class Sign extends Component {
               </StepButton>
               <StepContent>
                 <TextField hintText='Email'
-                           floatingLabelText='Email'
-                           errorText='This field is required'/>
+                           floatingLabelText='Email' />
+                <div className="clearfix"></div>
                 <TextField hintText="Username"
                            floatingLabelText="Username" />
+                <div className="clearfix"></div>
                 <TextField hintText="Password"
                            floatingLabelText="Password"
                            type="password" />
@@ -128,8 +100,11 @@ export default class Sign extends Component {
               </StepButton>
               <StepContent>
                 <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
+                <div className="clearfix"></div>
                 <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
+                <div className="clearfix"></div>
                 <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
+                <div className="clearfix"></div>
                 <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
                 {this.renderStepActions(1)}
               </StepContent>
