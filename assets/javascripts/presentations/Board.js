@@ -5,6 +5,8 @@ import Piece from '../components/piece'
 import Sgf from '../components/sgf'
 import Cross from '../components/cross'
 
+import Paper from 'material-ui/Paper'
+
 export default class Board extends Component {
   constructor(props) {
     super(props)
@@ -317,27 +319,33 @@ export default class Board extends Component {
   render() {
     //<canvas id="top_layer" ref="top_layer" ref={(ref) => this.topLayer = ref}></canvas>
     return (
-      <div className="board" ref="board">
-        <canvas id="board_layer" ref={(ref) => this.boardLayer = ref }></canvas>
-        {(() => {
-          if (this.props.editable === 'true') {
-            return <canvas id= "cross_layer" ref={(ref) => this.crossLayer = ref}></canvas>
-          }
-        })()}
-        <canvas id="piece_layer" ref="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
-        <canvas id="top_layer" onClick={this.nextStep.bind(this)} ref="top_layer" ref={(ref) => this.topLayer = ref }></canvas>
-      </div>
+      <Paper>
+        <div className="board" ref="board">
+          <canvas id="board_layer" ref={(ref) => this.boardLayer = ref }></canvas>
+          {(() => {
+            if (this.props.editable === 'true') {
+              return <canvas id= "cross_layer" ref={(ref) => this.crossLayer = ref}></canvas>
+            }
+          })()}
+          <canvas id="piece_layer" ref="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
+          <canvas id="top_layer" onClick={this.nextStep.bind(this)} ref="top_layer" ref={(ref) => this.topLayer = ref }></canvas>
+        </div>
+      </Paper>
     )
   }
 
 
   drawBoardWithResize() {
+    //TODO: This is need to refactor
     this.clearKifuArray()
-    let boardWidth = this.refs.board.parentElement.offsetHeight / 20 * 18
+    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight / 20 * 18
     this.size =  boardWidth / 20
     this._boardCtx = this.boardLayer.getContext('2d')
     this._pieceCtx = this.pieceLayer.getContext('2d')
     this.refs.board.style.height = boardWidth + 'px'
+    this.refs.board.style.width = boardWidth + 'px'
+    this.refs.board.parentElement.style.height = boardWidth + 'px'
+    this.refs.board.parentElement.style.width = boardWidth + 'px'
     this.boardLayer.width
     = this.boardLayer.height
     = this.pieceLayer.width

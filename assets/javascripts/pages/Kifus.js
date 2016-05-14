@@ -10,7 +10,7 @@ import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import Layout from './Layout'
 
-import Paper from 'material-ui/Paper';
+import Paper from 'material-ui/Paper'
 import {Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 
 class Kifus extends Component {
@@ -28,6 +28,10 @@ class Kifus extends Component {
       width: 100
     }
     const { kifu } = this.props
+    //const kifuPaperStyle = {
+      //width: this.refs.board.style.width,
+      //height: this.refs.board.style.height
+    //}
     return (
       <Layout>
         <div className="kifu-container">
