@@ -63,7 +63,7 @@ export default class Navigation extends Component {
               <i className="fa fa-question-circle"></i>
             </a>
           </div>
-          {
+          {/*
             !this.state.isSigned ?
             <div className='nav-sign'>
               <div className="nav-footer-wrap nav-signup">
@@ -76,7 +76,7 @@ export default class Navigation extends Component {
               </div>
             </div>
             : null
-          }
+          */}
         </footer>
       </div>
     )

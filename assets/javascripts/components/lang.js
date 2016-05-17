@@ -1,11 +1,11 @@
-import {zhcnMessages} from '../lang/zh-cn.js';
-import {zhtwMessages} from '../lang/zh-tw.js';
-import {jaMessages} from '../lang/ja.js';
-import {koMessages} from '../lang/ko.js';
+import {zhcnMessages} from '../lang/zh-cn.js'
+import {zhtwMessages} from '../lang/zh-tw.js'
+import {jaMessages} from '../lang/ja.js'
+import {koMessages} from '../lang/ko.js'
 
 function lang() {
   //let defaultMessages = zhcnMessages;
-  let defaultMessages = null;
+  let defaultMessages = null
   let lang = {
     'ghost-go': {locale: 'en', messages: defaultMessages},
     www: {locale: 'en', messages: defaultMessages},
@@ -13,15 +13,15 @@ function lang() {
     tw: {locale: 'zh-tw', messages: zhtwMessages},
     cn: {locale: 'zh', messages: zhcnMessages},
     ko: {locale: 'ko', messages: koMessages},
-  };
-  let domain = window.location.hostname;
-  let result = eval(`lang.${domain.split('.')[0]}`);
+  }
+  let domain = window.location.hostname
+  let result = eval(`lang.${domain.split('.')[0]}`)
   if (result == null) {
-    return {locale: 'en', messages: defaultMessages};
+    return {locale: 'en', messages: defaultMessages}
   }
   else {
-    return result;
+    return result
   }
 }
 
-export default lang();
+export default lang()
