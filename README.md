@@ -1,1 +1,1 @@
-This is a website for leaning Go(a board game)
+![Alt text](https://circleci.com/gh/happybai/ghost-go.png)
