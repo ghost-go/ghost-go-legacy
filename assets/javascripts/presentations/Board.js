@@ -7,6 +7,8 @@ import Cross from '../components/cross'
 
 import Paper from 'material-ui/Paper'
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
 export default class Board extends Component {
   constructor(props) {
     super(props)
@@ -26,6 +28,12 @@ export default class Board extends Component {
     this._kifuArray = []
     this.step = 1
     this.clearKifuArray()
+
+  }
+
+  //Set default theme to pass the test
+  getChildContext() {
+    return { muiTheme: getMuiTheme() }
   }
 
   nextStep(e) {
@@ -382,4 +390,8 @@ export default class Board extends Component {
   componentUnmount() {
     window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
   }
+}
+
+Board.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
 }
