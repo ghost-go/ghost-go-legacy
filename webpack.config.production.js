@@ -1,10 +1,13 @@
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
+var webpack = require('webpack')
+var path = require('path')
+var autoprefixer = require('autoprefixer')
+var precss = require('precss')
 
 module.exports = {
-  entry: './index.js',
+  entry: [
+    'whatwg-fetch',
+    './index.js'
+  ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -35,7 +38,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015']
         }
@@ -47,7 +50,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "postcss"]
+        loaders: ['style', 'css', 'postcss']
       },
       {
         test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
@@ -56,6 +59,6 @@ module.exports = {
     ]
   },
   postcss: function () {
-    return [autoprefixer, precss];
+    return [autoprefixer, precss]
   }
-};
+}

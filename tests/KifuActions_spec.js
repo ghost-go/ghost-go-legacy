@@ -55,28 +55,6 @@ function mockStore(getState, expectedActions, done) {
   return mockStoreWithMiddleware()
 }
 
-
-describe('actions', () => {
-  it('should create an action to select kifus', () => {
-    const page = 1;
-    const expectedAction = {
-      type: types.SELECT_KIFUS,
-      payload: page
-    };
-    expect(actions.selectKifus(page)).toEqual(expectedAction);
-  });
-
-  it('should create an action to invalidate kifus', () => {
-    const page = 1;
-    const expectedAction = {
-      type: types.INVALIDATE_KIFUS,
-      payload: page
-    };
-    expect(actions.invalidateKifus(page)).toEqual(expectedAction);
-  });
-
-});
-
 describe('async actions', () => {
   afterEach(() => {
     nock.cleanAll()

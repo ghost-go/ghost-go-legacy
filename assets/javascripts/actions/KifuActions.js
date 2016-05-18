@@ -1,9 +1,6 @@
 import * as types from '../constants/ActionTypes'
 import { createAction, handleAction, handleActions } from 'redux-actions'
-//import fetch from 'isomorphic-fetch'
 
-export const selectKifus = createAction(types.SELECT_KIFUS)
-export const invalidateKifus = createAction(types.INVALIDATE_KIFUS)
 export const fetchKifusRequest = createAction(types.FETCH_KIFUS_REQUEST)
 export const fetchKifusSuccess = createAction(types.FETCH_KIFUS_SUCCESS)
 export const fetchKifusFailure = createAction(types.FETCH_KIFUS_FAILURE)
@@ -11,6 +8,7 @@ export const fetchKifusFailure = createAction(types.FETCH_KIFUS_FAILURE)
 export const fetchKifuRequest = createAction(types.FETCH_KIFU_REQUEST)
 export const fetchKifuSuccess = createAction(types.FETCH_KIFU_SUCCESS)
 export const fetchKifuFailure = createAction(types.FETCH_KIFU_FAILURE)
+
 
 export function fetchKifus(page, per_page) {
   return dispatch => {

@@ -50,6 +50,7 @@ module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:5000',
     'webpack/hot/dev-server',
+    'whatwg-fetch',
     './index.js',
   ],
   output: {
