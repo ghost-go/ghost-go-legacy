@@ -1,3 +1,3 @@
-![Alt text](https://circleci.com/gh/happybai/ghost-go.png?style=shield)
+![circleci](https://circleci.com/gh/happybai/ghost-go.png?style=shield)
 [![codecov](https://codecov.io/gh/happybai/ghost-go/branch/develop/graph/badge.svg)](https://codecov.io/gh/happybai/ghost-go)
-![Alt text](https://david-dm.org/happybai/ghost-go.svg)
+[![david-dm](https://david-dm.org/happybai/ghost-go.svg)](https://david-dm.org/happybai/ghost-go)
