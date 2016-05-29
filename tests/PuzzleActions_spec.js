@@ -1,5 +1,9 @@
 import * as actions from '../assets/javascripts/actions/PuzzleActions'
 import * as types from '../assets/javascripts/constants/ActionTypes'
+import { applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import nock from 'nock'
+import fetchMock from 'fetch-mock'
 
 const middlewares = [ thunk ]
 
@@ -47,58 +51,118 @@ describe('async actions', () => {
     nock.cleanAll()
   })
 
-  it('creates FETCH_KIFUS_SUCCESS when fetching kifus has been done', (done) => {
-    fetchMock.mock('http://api.ghost-go.com/v1/puzzles?page=1&per_page=1', [])
+  it('creates FETCH_PUZZLES_SUCCESS when fetching puzzles has been done', (done) => {
+    fetchMock.mock('http://api.ghost-go.com/v1/puzzles?page=1&per_page=1', [{
+      total_page: 10,
+      total: 95,
+      data: [{
+          id: 1,
+          number: 'Q-38948',
+          name: '一点忠告',
+          steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
+          description: '',
+          ranking: '7K',
+          user_id: 1,
+          created_at: '2016-05-21 16:40:00',
+          updated_at: '2016-05-21 16:40:00',
+          type: null,
+          answer_type: null,
+          puzzle_type: null
+        }, {
+          id: 2,
+          number: 'Q-38948',
+          name: '一点忠告',
+          steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
+          description: '',
+          ranking: '7K',
+          user_id: 1,
+          created_at: '2016-05-21 16:40:00',
+          updated_at: '2016-05-21 16:40:00',
+          type: null,
+          answer_type: null,
+          puzzle_type: null
+        }]
+    }])
 
     const expectedActions = [
       {
-        type: types.FETCH_KIFUS_REQUEST,
+        type: types.FETCH_PUZZLES_REQUEST,
         payload: {
           page: 1,
           per_page: 1
         }
       },
       {
-        type: types.FETCH_KIFUS_SUCCESS,
+        type: types.FETCH_PUZZLES_SUCCESS,
         payload: {
           page: 1,
           per_page: 1,
-          data: []
+          data: [{
+            total_page: 10,
+            total: 95,
+            data: [{
+              id: 1,
+              number: 'Q-38948',
+              name: '一点忠告',
+              steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
+              description: '',
+              ranking: '7K',
+              user_id: 1,
+              created_at: '2016-05-21 16:40:00',
+              updated_at: '2016-05-21 16:40:00',
+              type: null,
+              answer_type: null,
+              puzzle_type: null
+            }, {
+              id: 2,
+              number: 'Q-38948',
+              name: '一点忠告',
+              steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
+              description: '',
+              ranking: '7K',
+              user_id: 1,
+              created_at: '2016-05-21 16:40:00',
+              updated_at: '2016-05-21 16:40:00',
+              type: null,
+              answer_type: null,
+              puzzle_type: null
+            }]
+          }]
         }
       }
     ]
 
-    const store = mockStore({ kifus:[] }, expectedActions, done)
-    store.dispatch(actions.fetchKifus(1, 1))
+    const store = mockStore({ puzzles:[] }, expectedActions, done)
+    store.dispatch(actions.fetchPuzzles(1, 1))
 
   })
 
-  it('creates FETCH_KIFUS_FAILURE when fetching kifus has been failure', (done) => {
+  it('creates FETCH_PUZZLES_FAILURE when fetching puzzles has been failure', (done) => {
     fetchMock.reMock('http://api.ghost-go.com/v1/puzzles?page=1&per_page=1', 500)
 
     const expectedActions = [
-      { type: types.FETCH_KIFUS_REQUEST, payload: {page: 1, per_page: 1}},
-      { type: types.FETCH_KIFUS_FAILURE, payload: new SyntaxError('Unexpected end of input'), error: true }
+      { type: types.FETCH_PUZZLES_REQUEST, payload: {page: 1, per_page: 1}},
+      { type: types.FETCH_PUZZLES_FAILURE, payload: new SyntaxError('Unexpected end of input'), error: true }
     ]
 
-    const store = mockStore({ kifus:[] }, expectedActions, done)
-    store.dispatch(actions.fetchKifus(1, 1))
+    const store = mockStore({ puzzles:[] }, expectedActions, done)
+    store.dispatch(actions.fetchPuzzles(1, 1))
   })
 
-  it('creates FETCH_KIFU_FAILURE when fetching kifu has been done by id', (done) => {
+  it('creates FETCH_PUZZLE_FAILURE when fetching puzzle has been done by id', (done) => {
     fetchMock.reMock('http://api.ghost-go.com/v1/puzzles/1', { })
 
     const expectedActions = [
-      { type: types.FETCH_KIFU_REQUEST, payload: {id: 1} },
+      { type: types.FETCH_PUZZLE_REQUEST, payload: {id: 1} },
       {
-        type: types.FETCH_KIFU_SUCCESS, payload: {
+        type: types.FETCH_PUZZLE_SUCCESS, payload: {
           data: { }
         }
       }
     ]
 
-    const store = mockStore({ kifus:[] }, expectedActions, done)
-    store.dispatch(actions.fetchKifu(1))
+    const store = mockStore({ puzzles:[] }, expectedActions, done)
+    store.dispatch(actions.fetchPuzzle(1))
   })
 
 })

@@ -8,6 +8,7 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import { kifus, kifu } from './reducers/KifuReducers'
 
 import Puzzles from './pages/Puzzles'
+import Puzzle from './pages/Puzzle'
 import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
 import Sign from './pages/Sign'
@@ -51,7 +52,7 @@ export function initialize({cookies, isServer, currentLocation} = {}) {
           <Route path="/games" component={Kifus}/>
           <Route path="/kifus/:id" component={Kifu}/>
           <Route path="/puzzles" component={Puzzles}/>
-          <Ebhgr cngu="/chmmyrf/:vq" pbzcbarag={Chmmyr}/>
+          <Route path="/puzzles/:id" component={Puzzle}/>
           <Route path="/signup" component={Sign}/>
         </Router>
         <App>
