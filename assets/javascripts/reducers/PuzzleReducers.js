@@ -2,15 +2,15 @@ import * as types from '../constants/ActionTypes'
 
 export function puzzles(state = {
   isFetching: false,
-  isFailure: false,
-  data: []
+  isFailure: false
 }, action) {
   switch (action.type) {
   case types.FETCH_PUZZLES_REQUEST:
     return Object.assign({}, state, {
       isFetching: true,
       isFailure: false
-    }); case types.FETCH_PUZZLES_SUCCESS:
+    })
+  case types.FETCH_PUZZLES_SUCCESS:
     return Object.assign({}, state, {
       isFetching: false,
       isFailure: false,
@@ -29,7 +29,6 @@ export function puzzles(state = {
 export function puzzle(state = {
   isFetching: false,
   isFailure: false,
-  data: []
 }, action) {
   switch (action.type) {
   case types.FETCH_PUZZLE_REQUEST:

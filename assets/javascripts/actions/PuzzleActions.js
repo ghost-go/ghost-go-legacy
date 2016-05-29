@@ -12,7 +12,7 @@ export const fetchPuzzleFailure = createAction(types.FETCH_PUZZLE_FAILURE)
 export function fetchPuzzles(page, per_page) {
   return dispatch => {
     dispatch(fetchPuzzlesRequest({page, per_page}))
-    let url = `http://api.ghost-go.com/v1/kifus?page=${page}`
+    let url = `http://api.ghost-go.com/v1/puzzles?page=${page}`
     if (per_page != null) {
       url = `${url}&per_page=${per_page}`
     }
@@ -27,7 +27,7 @@ export function fetchPuzzles(page, per_page) {
 export function fetchPuzzle(id) {
   return dispatch => {
     dispatch(fetchPuzzleRequest({id}))
-    let url = `http://api.ghost-go.com/v1/kifus/${id}`
+    let url = `http://api.ghost-go.com/v1/puzzles/${id}`
     return fetch(url)
       .then(res => res.json())
       .then(data => dispatch(fetchPuzzleSuccess({data})))
