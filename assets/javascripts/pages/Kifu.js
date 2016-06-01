@@ -1,17 +1,18 @@
 import React, { Component, PropTypes } from 'react'
-import Navigation from '../presentations/Navigation'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
-import Board from '../presentations/Board'
-import ControlBar from '../presentations/ControlBar'
-import lang from '../components/lang'
 import { connect } from 'react-redux'
-import { fetchKifu } from '../actions/KifuActions'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
+import lang from '../components/lang'
+
+import Board from '../presentations/Board'
+import ControlBar from '../presentations/ControlBar'
 import Layout from './Layout'
 
+import { fetchKifu } from '../actions/KifuActions'
+
 import Paper from 'material-ui/Paper'
-import {Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
+import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 
 class Kifu extends Component {
   constructor(props) {

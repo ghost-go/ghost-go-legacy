@@ -31,7 +31,6 @@ class Kifus extends Component {
   }
 
   render() {
-    //<Board className="board" grid="19" size="30" />
     const { kifus } = this.props
     return (
       <Layout>
