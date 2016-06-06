@@ -19,8 +19,13 @@ export default class PuzzleBoard extends Component {
       currentTurn: 1,
       step: 0,
       kifu: this.props.kifu,
-      size: this.props.size
+      size: this.props.size,
+      horizontal: 12,
+      verital: 15,
+      direction: 1
     }
+    this.state.minhv = this.state.verital > this.state.horizontal ? this.state.horizontal : this.state.verital
+    this.state.maxhv = this.state.verital > this.state.horizontal ? this.state.verital : this.state.horizontal
   }
 
   //Set default theme to pass the test
@@ -84,20 +89,24 @@ export default class PuzzleBoard extends Component {
   }
 
   draw() {
+    let size = this.state.size
+    let grid = this.state.grid
     this._boardCtx.beginPath()
-    for(let i = 1;i <= this.grid; i++) {
-      this._boardCtx.moveTo(i * this.size, this.size)
-      this._boardCtx.lineTo(i * this.size, this.grid * this.size)
-      this._boardCtx.moveTo(this.size, i * this.size)
-      this._boardCtx.lineTo(this.grid * this.size, i * this.size)
-    };
+    for (let i = 1;i <= this.state.horizontal; i++) {
+      this._boardCtx.moveTo(i * size, size)
+      this._boardCtx.lineTo(i * size, this.state.verital * size)
+    }
+    for (let i = 1;i <= this.state.verital; i++) {
+      this._boardCtx.moveTo(size, i * size)
+      this._boardCtx.lineTo(this.state.horizontal * size, i * size)
+    }
     this._boardCtx.stroke()
     let dot_size = 3
-    if (this.grid == 19) {
+    if (grid == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
           this._boardCtx.beginPath()
-          this._boardCtx.arc(this.size * i, this.size * j, dot_size, 0, 2 * Math.PI, true)
+          this._boardCtx.arc(size * i, size * j, dot_size, 0, 2 * Math.PI, true)
           this._boardCtx.fill()
         })
       })
@@ -338,8 +347,11 @@ export default class PuzzleBoard extends Component {
   drawBoardWithResize() {
     //TODO: This is need to refactor
     this.clearKifuArray()
-    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight / 20 * 18
-    this.size =  boardWidth / 20
+    let maxHorizontalOrVerital = this.state.horizontal > this.state.verital ? this.state.horizontal : this.state.verital
+
+    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 50 - 10
+    this.state.size =  boardWidth / (this.state.maxhv + 1)
+
     this._boardCtx = this.boardLayer.getContext('2d')
     this._pieceCtx = this.pieceLayer.getContext('2d')
     this.refs.board.style.height = boardWidth + 'px'

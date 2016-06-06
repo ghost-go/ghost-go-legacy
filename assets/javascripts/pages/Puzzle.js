@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import lang from '../components/lang'
 
-import Board from '../presentations/Board'
+import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
 import Layout from './Layout'
 
@@ -33,81 +33,10 @@ class Puzzle extends Component {
       <Layout>
         <div className="kifu-container">
           <div className="kifu-board">
-            <Board className="board"
+            <PuzzleBoard className="board"
                    editable="false"
                    puzzle={this.puzzle}
                    ref="board" />
-          </div>
-          <div className="kifu-info">
-            <Paper>
-              <Table style={{width: 400}} selectable={false}>
-                <TableBody displayRowCheckbox={false}>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.black' defaultMessage="Black" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }&nbsp;&nbsp;&nbsp;
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.white' defaultMessage="White" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }&nbsp;&nbsp;&nbsp;
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.result' defaultMessage="Result" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.title' defaultMessage="Title" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.place' defaultMessage="Place" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.komi' defaultMessage="Komi" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn style={colWidth}>
-                      <FormattedMessage id='app.kifu.date' defaultMessage="Date" />
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.puzzle.number }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn colSpan={2}>
-                      <ControlBar board={this.refs.board} />
-                    </TableRowColumn>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
           </div>
         </div>
       </Layout>
