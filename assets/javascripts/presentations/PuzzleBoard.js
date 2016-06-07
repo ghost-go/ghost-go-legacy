@@ -20,9 +20,9 @@ export default class PuzzleBoard extends Component {
       step: 0,
       kifu: this.props.kifu,
       size: this.props.size,
-      horizontal: 12,
+      horizontal: 11,
       verital: 15,
-      direction: 1
+      direction: 2
     }
     this.state.minhv = this.state.verital > this.state.horizontal ? this.state.horizontal : this.state.verital
     this.state.maxhv = this.state.verital > this.state.horizontal ? this.state.verital : this.state.horizontal
@@ -92,15 +92,38 @@ export default class PuzzleBoard extends Component {
     let size = this.state.size
     let grid = this.state.grid
     this._boardCtx.beginPath()
-    for (let i = 1;i <= this.state.horizontal; i++) {
-      this._boardCtx.moveTo(i * size, size)
-      this._boardCtx.lineTo(i * size, this.state.verital * size)
-    }
-    for (let i = 1;i <= this.state.verital; i++) {
-      this._boardCtx.moveTo(size, i * size)
-      this._boardCtx.lineTo(this.state.horizontal * size, i * size)
+    switch (this.state.direction) {
+    case 1:
+      console.log(`${this.state.direction}`)
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo(i * size, size)
+        this._boardCtx.lineTo(i * size, this.state.verital * size)
+      }
+      for (let i = 1;i <= this.state.verital; i++) {
+        this._boardCtx.moveTo(size, i * size)
+        this._boardCtx.lineTo(this.state.horizontal * size, i * size)
+      }
+      break
+    case 2:
+      console.log(`minhv: ${this.state.minhv}`)
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
+        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verital * size)
+      }
+      for (let i = 1;i <= this.state.verital; i++) {
+        this._boardCtx.moveTo(this.state.maxhv * size, i * size)
+        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
+        //this._boardCtx.moveTo(i * size, (this.state.maxhv - i + 1) * size)
+        //this._boardCtx.lineTo(size, i * size)
+      }
+      break
+    case 3:
+      break
+    case 4:
+      break
     }
     this._boardCtx.stroke()
+
     let dot_size = 3
     if (grid == 19) {
       [4, 16, 10].forEach((i) => {
@@ -347,9 +370,8 @@ export default class PuzzleBoard extends Component {
   drawBoardWithResize() {
     //TODO: This is need to refactor
     this.clearKifuArray()
-    let maxHorizontalOrVerital = this.state.horizontal > this.state.verital ? this.state.horizontal : this.state.verital
-
     let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 50 - 10
+    console.log(this.state.maxhv)
     this.state.size =  boardWidth / (this.state.maxhv + 1)
 
     this._boardCtx = this.boardLayer.getContext('2d')
