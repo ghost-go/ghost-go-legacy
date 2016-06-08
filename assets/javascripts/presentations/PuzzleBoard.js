@@ -20,9 +20,9 @@ export default class PuzzleBoard extends Component {
       step: 0,
       kifu: this.props.kifu,
       size: this.props.size,
-      verital: 15,
       horizontal: 11,
-      direction: 2,
+      verital: 15,
+      direction: 4,
       dotSize: 3
     }
     this.state.minhv = this.state.verital > this.state.horizontal ? this.state.horizontal : this.state.verital
@@ -150,21 +150,21 @@ export default class PuzzleBoard extends Component {
         case 2:
           if (i < this.state.horizontal && j < this.state.verital) {
             this._boardCtx.beginPath()
-            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * j, this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
           }
           break
         case 3:
-          if (i > this.state.horizontal && j > this.state.verital) {
+          if (i < this.state.horizontal && j < this.state.verital) {
             this._boardCtx.beginPath()
-            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
           }
           break
         case 4:
-          if (i < this.state.horizontal && j > this.state.verital) {
+          if (i < this.state.horizontal && j < this.state.verital) {
             this._boardCtx.beginPath()
-            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.arc(size * i, size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
           }
           break
