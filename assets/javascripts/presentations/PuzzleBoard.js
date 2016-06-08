@@ -20,9 +20,10 @@ export default class PuzzleBoard extends Component {
       step: 0,
       kifu: this.props.kifu,
       size: this.props.size,
-      horizontal: 11,
       verital: 15,
-      direction: 2
+      horizontal: 11,
+      direction: 2,
+      dotSize: 3
     }
     this.state.minhv = this.state.verital > this.state.horizontal ? this.state.horizontal : this.state.verital
     this.state.maxhv = this.state.verital > this.state.horizontal ? this.state.verital : this.state.horizontal
@@ -94,7 +95,6 @@ export default class PuzzleBoard extends Component {
     this._boardCtx.beginPath()
     switch (this.state.direction) {
     case 1:
-      console.log(`${this.state.direction}`)
       for (let i = 1;i <= this.state.horizontal; i++) {
         this._boardCtx.moveTo(i * size, size)
         this._boardCtx.lineTo(i * size, this.state.verital * size)
@@ -105,7 +105,6 @@ export default class PuzzleBoard extends Component {
       }
       break
     case 2:
-      console.log(`minhv: ${this.state.minhv}`)
       for (let i = 1;i <= this.state.horizontal; i++) {
         this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
         this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verital * size)
@@ -113,27 +112,65 @@ export default class PuzzleBoard extends Component {
       for (let i = 1;i <= this.state.verital; i++) {
         this._boardCtx.moveTo(this.state.maxhv * size, i * size)
         this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
-        //this._boardCtx.moveTo(i * size, (this.state.maxhv - i + 1) * size)
-        //this._boardCtx.lineTo(size, i * size)
       }
       break
     case 3:
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verital + 1) * size)
+        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.maxhv * size)
+      }
+      for (let i = 1;i <= this.state.verital; i++) {
+        this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verital + i) * size)
+        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verital + i) * size)
+      }
       break
     case 4:
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verital + 1) * size)
+        this._boardCtx.lineTo(i * size, this.state.maxhv * size)
+      }
+      for (let i = 1;i <= this.state.verital; i++) {
+        this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verital + i) * size)
+        this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verital + i) * size)
+      }
       break
     }
     this._boardCtx.stroke()
 
-    let dot_size = 3
-    if (grid == 19) {
-      [4, 16, 10].forEach((i) => {
-        [4, 16, 10].forEach((j) => {
-          this._boardCtx.beginPath()
-          this._boardCtx.arc(size * i, size * j, dot_size, 0, 2 * Math.PI, true)
-          this._boardCtx.fill()
-        })
+    ;[4, 16, 10].forEach((i) => {
+      [4, 16, 10].forEach((j) => {
+        switch (this.state.direction) {
+        case 1:
+          if (i < this.state.horizontal && j < this.state.verital) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        case 2:
+          if (i < this.state.horizontal && j < this.state.verital) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        case 3:
+          if (i > this.state.horizontal && j > this.state.verital) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        case 4:
+          if (i < this.state.horizontal && j > this.state.verital) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        }
       })
-    }
+    })
   }
 
   canMove(i, j, ki) {
