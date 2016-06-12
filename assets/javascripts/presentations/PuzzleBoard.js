@@ -19,16 +19,18 @@ export default class PuzzleBoard extends Component {
       currentTurn: 1,
       step: 0,
       size: this.props.size,
+      puzzle: this.props.puzzle,
       horizontal: 10,
-      verital: 15,
+      verical: 15,
       direction: 2,
+      revert: false,
       dotSize: 3,
       _puzzleArray: [],
       sgf: new Sgf({})
     }
     this.clearKifuArray()
-    this.state.minhv = this.state.verital > this.state.horizontal ? this.state.horizontal : this.state.verital
-    this.state.maxhv = this.state.verital > this.state.horizontal ? this.state.verital : this.state.horizontal
+    this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
+    this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
   }
 
   //Set default theme to pass the test
@@ -70,7 +72,7 @@ export default class PuzzleBoard extends Component {
   }
 
   getCoordByStep(step) {
-    let steps = this.props.puzzle.split(';')
+    let steps = this.state.puzzle.split(';')
     let str = steps[step - 1]
     let ki = str[0] === 'B' ? 1 : -1
     let pos = /\[(.*)\]/.exec(str)[1]
@@ -111,13 +113,21 @@ export default class PuzzleBoard extends Component {
     let size = this.state.size
     let grid = this.state.grid
     this._boardCtx.beginPath()
+    this.state.puzzle = this.props.puzzle
+
+    if (this.state.revert && this.props.puzzle != null) {
+      this.state.puzzle = this.state.puzzle.replace(/B/g, 'X')
+      this.state.puzzle = this.state.puzzle.replace(/W/g, 'B')
+      this.state.puzzle = this.state.puzzle.replace(/X/g, 'W')
+    }
+
     switch (this.state.direction) {
     case 1:
       for (let i = 1;i <= this.state.horizontal; i++) {
         this._boardCtx.moveTo(i * size, size)
-        this._boardCtx.lineTo(i * size, this.state.verital * size)
+        this._boardCtx.lineTo(i * size, this.state.verical * size)
       }
-      for (let i = 1;i <= this.state.verital; i++) {
+      for (let i = 1;i <= this.state.verical; i++) {
         this._boardCtx.moveTo(size, i * size)
         this._boardCtx.lineTo(this.state.horizontal * size, i * size)
       }
@@ -125,31 +135,31 @@ export default class PuzzleBoard extends Component {
     case 2:
       for (let i = 1;i <= this.state.horizontal; i++) {
         this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
-        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verital * size)
+        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verical * size)
       }
-      for (let i = 1;i <= this.state.verital; i++) {
+      for (let i = 1;i <= this.state.verical; i++) {
         this._boardCtx.moveTo(this.state.maxhv * size, i * size)
         this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
       }
       break
     case 3:
       for (let i = 1;i <= this.state.horizontal; i++) {
-        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verital + 1) * size)
+        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verical + 1) * size)
         this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.maxhv * size)
       }
-      for (let i = 1;i <= this.state.verital; i++) {
-        this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verital + i) * size)
-        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verital + i) * size)
+      for (let i = 1;i <= this.state.verical; i++) {
+        this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verical + i) * size)
+        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verical + i) * size)
       }
       break
     case 4:
       for (let i = 1;i <= this.state.horizontal; i++) {
-        this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verital + 1) * size)
+        this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verical + 1) * size)
         this._boardCtx.lineTo(i * size, this.state.maxhv * size)
       }
-      for (let i = 1;i <= this.state.verital; i++) {
-        this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verital + i) * size)
-        this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verital + i) * size)
+      for (let i = 1;i <= this.state.verical; i++) {
+        this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verical + i) * size)
+        this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verical + i) * size)
       }
       break
     }
@@ -159,28 +169,28 @@ export default class PuzzleBoard extends Component {
       [4, 16, 10].forEach((j) => {
         switch (this.state.direction) {
         case 1:
-          if (i < this.state.horizontal && j < this.state.verital) {
+          if (i < this.state.horizontal && j < this.state.verical) {
             this._boardCtx.beginPath()
             this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
           }
           break
         case 2:
-          if (i < this.state.horizontal && j < this.state.verital) {
+          if (i < this.state.horizontal && j < this.state.verical) {
             this._boardCtx.beginPath()
             this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * j, this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
           }
           break
         case 3:
-          if (i < this.state.horizontal && j < this.state.verital) {
+          if (i < this.state.horizontal && j < this.state.verical) {
             this._boardCtx.beginPath()
             this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
           }
           break
         case 4:
-          if (i < this.state.horizontal && j < this.state.verital) {
+          if (i < this.state.horizontal && j < this.state.verical) {
             this._boardCtx.beginPath()
             this._boardCtx.arc(size * i, size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
             this._boardCtx.fill()
@@ -208,7 +218,7 @@ export default class PuzzleBoard extends Component {
     }
     if (liberty === 0) {
       this.state._puzzleArray[i][j] = 0
-      console.log('此位置不能放棋子')
+      console.log('This place has been used')
       return false
     }
     this.state._puzzleArray[i][j] = 0
@@ -226,9 +236,6 @@ export default class PuzzleBoard extends Component {
     piece.type = type
     piece.isCurrent = isCurrent
     piece.draw(this._pieceCtx)
-
-    this.state.step++
-    this.currentTurn = -this.currentTurn
   }
 
   removePiece(coord) {
@@ -265,13 +272,11 @@ export default class PuzzleBoard extends Component {
   }
 
   convertPosToRealPos(x, y) {
-    console.log(`x: ${x}, y: ${y}`)
     let letter = LETTERS[Math.round((x - this.state.size) / this.state.size)]
     let number = NUMBERS[Math.round((y - this.state.size) / this.state.size)]
 
     let results = []
     let {i, j} = this.convertCoordToIndex(`${letter}${number}`)
-    console.log(`rx: ${(i+1) * this.state.size}, ry: ${(j+1) * this.state.size}`)
     return {
       x: (i + 1) * this.state.size,
       y: (j + 1) * this.state.size
@@ -333,8 +338,6 @@ export default class PuzzleBoard extends Component {
       }
     }
     this._calcLibertyCore(x, y, ki)
-    console.log(this._liberty)
-    console.log(this._recursionPath)
     return {
       liberty: this._liberty,
       recursionPath: this._recursionPath
@@ -346,7 +349,6 @@ export default class PuzzleBoard extends Component {
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
-    console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`)
     if (libertyUp === 0) {
       recursionPathUp.forEach((i) => {
         this.removePiece(i)
@@ -374,7 +376,6 @@ export default class PuzzleBoard extends Component {
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
-    console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`)
     if (libertyUp === 0 && recursionPathUp.length > 0) {
       return true
     }
@@ -387,9 +388,6 @@ export default class PuzzleBoard extends Component {
     if (libertyRight === 0 && recursionPathRight.length > 0) {
       return true
     }
-    //let coord = this.convertIndexToCoord(i, j);
-    //console.log(`coord: ${coord}`);
-    //console.log(`recursionPathUp: ${recursionPathUp}, recursionPathDown: ${recursionPathDown}, recursionPathLeft: ${recursionPathLeft}, recursionPathDown: ${recursionPathDown}`);
     return false
   }
 
@@ -405,8 +403,8 @@ export default class PuzzleBoard extends Component {
 
   render() {
     if (this.props.puzzle != null) {
-      //let lastStep = this.props.puzzle.split(';').length - 2
-      this.moveTo(1)
+      let lastStep = this.props.puzzle.split(';').length
+      this.moveTo(lastStep)
     }
     return (
       <Paper>
@@ -458,8 +456,10 @@ export default class PuzzleBoard extends Component {
     this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
     this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
     this.draw()
+    console.log(`step: ${this.state.step}`)
     for (let i = 1; i <= this.state.step; i++) {
       let {x, y, posX, posY, ki} = this.getCoordByStep(i)
+      console.log({x, y, posX, posY, ki})
       this.move(x, y, posX, posY, ki)
     }
   }
