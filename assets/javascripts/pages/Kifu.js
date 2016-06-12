@@ -17,9 +17,6 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 class Kifu extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      kifu: null
-    }
     let { id } = this.props.params
     this.props.dispatch(fetchKifu(id))
   }
@@ -29,10 +26,6 @@ class Kifu extends Component {
       width: 100
     }
     const { kifu } = this.props
-    //const kifuPaperStyle = {
-      //width: this.refs.board.style.width,
-      //height: this.refs.board.style.height
-    //}
     return (
       <Layout>
         <div className="kifu-container">

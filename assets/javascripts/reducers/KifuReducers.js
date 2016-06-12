@@ -10,7 +10,8 @@ export function kifus(state = {
     return Object.assign({}, state, {
       isFetching: true,
       isFailure: false
-    }); case types.FETCH_KIFUS_SUCCESS:
+    })
+  case types.FETCH_KIFUS_SUCCESS:
     return Object.assign({}, state, {
       isFetching: false,
       isFailure: false,
@@ -52,4 +53,3 @@ export function kifu(state = {
     return state
   }
 }
-

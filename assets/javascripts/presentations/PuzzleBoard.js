@@ -18,13 +18,15 @@ export default class PuzzleBoard extends Component {
       currentCoord: 'None',
       currentTurn: 1,
       step: 0,
-      kifu: this.props.kifu,
       size: this.props.size,
       horizontal: 11,
-      verital: 15,
-      direction: 4,
-      dotSize: 3
+      verital: 10,
+      direction: 2,
+      dotSize: 3,
+      _puzzleArray: [],
+      sgf: new Sgf({})
     }
+    this.clearKifuArray()
     this.state.minhv = this.state.verital > this.state.horizontal ? this.state.horizontal : this.state.verital
     this.state.maxhv = this.state.verital > this.state.horizontal ? this.state.verital : this.state.horizontal
   }
@@ -50,12 +52,11 @@ export default class PuzzleBoard extends Component {
     this.state.step = step
     this.clearKifuArray()
     this.drawBoard()
-    this.markCurrentPiece()
   }
 
   move(x, y, posX, posY, ki, isCurrent) {
     if (this.canMove(x, y, ki)) {
-      this._kifuArray[x][y] = ki
+      this.state._puzzleArray[x][y] = ki
       this.drawPiece(posX, posY, ki, isCurrent)
       this.execPonnuki(x, y, -ki)
     }
@@ -69,14 +70,31 @@ export default class PuzzleBoard extends Component {
   }
 
   getCoordByStep(step) {
-    let steps = this.props.kifu.split(';')
+    let steps = this.props.puzzle.split(';')
     let str = steps[step - 1]
     let ki = str[0] === 'B' ? 1 : -1
     let pos = /\[(.*)\]/.exec(str)[1]
     let x = LETTERS_SGF.indexOf(pos[0])
     let y = LETTERS_SGF.indexOf(pos[1])
-    let posX = (x + 1) * this.size
-    let posY = (y + 1) * this.size
+
+    let offsetH = 0
+    let offsetV = 0
+    switch(this.state.direction) {
+    case 1:
+      break
+    case 2:
+      offsetH = this.state.grid - this.state.horizontal
+      break
+    case 3:
+      offsetH = this.state.grid - this.state.horizontal
+      offsetV = this.state.grid - this.state.verital
+      break
+    case 4:
+      offsetV = this.state.grid - this.state.verital
+      break
+    }
+    let posX = (x + 1 - offsetH) * this.state.size
+    let posY = (y + 1 - offsetV) * this.state.size
     return {x, y, posX, posY, ki}
   }
 
@@ -85,8 +103,8 @@ export default class PuzzleBoard extends Component {
   }
 
   clearKifuArray() {
-    this._kifuArray = []
-    while(this._kifuArray.push(new Array(19).fill(0)) < 19) { }
+    this.state._puzzleArray = []
+    while(this.state._puzzleArray.push(new Array(19).fill(0)) < 19) { }
   }
 
   draw() {
@@ -174,58 +192,58 @@ export default class PuzzleBoard extends Component {
   }
 
   canMove(i, j, ki) {
-    if (this._kifuArray[i][j] != 0) {
+    if (this.state._puzzleArray[i][j] != 0) {
       return false
     }
 
-    this._kifuArray[i][j] = ki
+    this.state._puzzleArray[i][j] = ki
     let {liberty, recursionPath} = this.calcLiberty(i, j, ki)
     if (this.canPonnuki(i, j, -ki)) {
-      this._kifuArray[i][j] = 0
+      this.state._puzzleArray[i][j] = 0
       return true
     }
     if (this.canPonnuki(i, j, ki)) {
-      this._kifuArray[i][j] = 0
+      this.state._puzzleArray[i][j] = 0
       return false
     }
     if (liberty === 0) {
-      this._kifuArray[i][j] = 0
+      this.state._puzzleArray[i][j] = 0
       console.log('此位置不能放棋子')
       return false
     }
-    this._kifuArray[i][j] = 0
+    this.state._puzzleArray[i][j] = 0
     return true
   }
 
   drawPiece(x, y, type, isCurrent) {
     let realPos = this.convertPosToRealPos(x, y)
-    let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
+    let coord_sgf = this.convertPosToSgfCoord(x, y, this.state.size)
     let piece = new Piece()
 
     piece.x = realPos.x
     piece.y = realPos.y
-    piece.pieceSize = this.size / 2 - 3
+    piece.pieceSize = this.state.size / 2 - 3
     piece.type = type
     piece.isCurrent = isCurrent
     piece.draw(this._pieceCtx)
 
-    this.step++
+    this.state.step++
     this.currentTurn = -this.currentTurn
   }
 
   removePiece(coord) {
     let realPos = this.convertCoordToRealPos(coord)
     let {i, j} = this.convertCoordToIndex(coord)
-    this._kifuArray[i][j] = 0
+    this.state._puzzleArray[i][j] = 0
     let piece = new Piece()
     piece.x = realPos.x
     piece.y = realPos.y
-    piece.remove(this._pieceCtx, this.size)
+    piece.remove(this._pieceCtx, this.state.size)
   }
 
   convertPosToCoord(x, y) {
-    let letter = LETTERS[Math.round((x - this.size) / this.size)]
-    let number = NUMBERS[Math.round((y - this.size) / this.size)]
+    let letter = LETTERS[Math.round((x - this.state.size) / this.state.size)]
+    let number = NUMBERS[Math.round((y - this.state.size) / this.state.size)]
     return `${letter}${number}`
   }
 
@@ -238,8 +256,8 @@ export default class PuzzleBoard extends Component {
   convertCoordToPos(coord) {
     let results = []
     let {i, j} = this.convertCoordToIndex(coord)
-    results[0] = (i + 1) * this.size
-    results[1] = (j + 1) * this.size
+    results[0] = (i + 1) * this.state.size
+    results[1] = (j + 1) * this.state.size
     return {
       x: results[0],
       y: results[1]
@@ -248,15 +266,15 @@ export default class PuzzleBoard extends Component {
 
   convertPosToRealPos(x, y) {
     console.log(`x: ${x}, y: ${y}`)
-    let letter = LETTERS[Math.round((x - this.size) / this.size)]
-    let number = NUMBERS[Math.round((y - this.size) / this.size)]
+    let letter = LETTERS[Math.round((x - this.state.size) / this.state.size)]
+    let number = NUMBERS[Math.round((y - this.state.size) / this.state.size)]
 
     let results = []
     let {i, j} = this.convertCoordToIndex(`${letter}${number}`)
-    console.log(`rx: ${(i+1) * this.size}, ry: ${(j+1) * this.size}`)
+    console.log(`rx: ${(i+1) * this.state.size}, ry: ${(j+1) * this.state.size}`)
     return {
-      x: (i + 1) * this.size,
-      y: (j + 1) * this.size
+      x: (i + 1) * this.state.size,
+      y: (j + 1) * this.state.size
     }
   }
 
@@ -279,19 +297,19 @@ export default class PuzzleBoard extends Component {
   }
 
   calcBlackOrWhite(x, y) {
-    return this._kifuArray[x][y]
+    return this.state._puzzleArray[x][y]
   }
 
   _calcLibertyCore(x, y, ki) {
-    if (x >= 0 && x < this.grid && y >= 0 && y < this.grid) {
-      if (this._kifuArray[x][y] == ki && !this._recursionPath.includes(`${LETTERS[x]}${NUMBERS[y]}`)) {
+    if (x >= 0 && x < this.state.grid && y >= 0 && y < this.state.grid) {
+      if (this.state._puzzleArray[x][y] == ki && !this._recursionPath.includes(`${LETTERS[x]}${NUMBERS[y]}`)) {
         this._recursionPath.push(`${LETTERS[x]}${NUMBERS[y]}`)
         this._calcLibertyCore(x - 1, y, ki)
         this._calcLibertyCore(x + 1, y, ki)
         this._calcLibertyCore(x, y - 1, ki)
         this._calcLibertyCore(x, y + 1, ki)
       }
-      else if(this._kifuArray[x][y] == 0) {
+      else if(this.state._puzzleArray[x][y] == 0) {
         this._liberty++
       }
     }
@@ -301,14 +319,14 @@ export default class PuzzleBoard extends Component {
     this._liberty = 0
     this._recursionPath = []
 
-    if (x < 0 || y < 0 || x > this.grid - 1 || y > this.grid - 1) {
+    if (x < 0 || y < 0 || x > this.state.grid - 1 || y > this.state.grid - 1) {
       return {
         liberty: 4,
         recursionPath: []
       }
     }
 
-    if (this._kifuArray[x][y] == 0) {
+    if (this.state._puzzleArray[x][y] == 0) {
       return {
         liberty: 4,
         recursionPath: []
@@ -376,7 +394,7 @@ export default class PuzzleBoard extends Component {
   }
 
   showCross(coord, color) {
-    let results = this.convertCoordToPos(coord, this.size)
+    let results = this.convertCoordToPos(coord, this.state.size)
     let cross = new Cross()
     cross.x = results.x
     cross.y = results.y
@@ -386,7 +404,10 @@ export default class PuzzleBoard extends Component {
   }
 
   render() {
-    //<canvas id="top_layer" ref="top_layer" ref={(ref) => this.topLayer = ref}></canvas>
+    if (this.props.puzzle != null) {
+      //let lastStep = this.props.puzzle.split(';').length - 2
+      this.moveTo(1)
+    }
     return (
       <Paper>
         <div className="board" ref="board">
@@ -408,7 +429,6 @@ export default class PuzzleBoard extends Component {
     //TODO: This is need to refactor
     this.clearKifuArray()
     let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 50 - 10
-    console.log(this.state.maxhv)
     this.state.size =  boardWidth / (this.state.maxhv + 1)
 
     this._boardCtx = this.boardLayer.getContext('2d')

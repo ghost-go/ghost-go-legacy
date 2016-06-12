@@ -8,14 +8,13 @@ describe('puzzles reducers', () => {
     .toEqual({
       isFetching: false,
       isFailure: false,
+      data: []
     })
   })
 
   it('isFetching should be true when request has been send request', () => {
-    expect( puzzles([
-
-    ], {
-      type: types.FETCH_KIFUS_REQUEST,
+    expect( puzzles([], {
+      type: types.FETCH_PUZZLES_REQUEST,
       payload: {
         page: 1,
         per_page: 1
@@ -31,7 +30,7 @@ describe('puzzles reducers', () => {
       isFetching: false,
       isFailure: false,
     }, {
-      type: types.FETCH_KIFUS_SUCCESS,
+      type: types.FETCH_PUZZLES_SUCCESS,
       payload: {
         page: 1,
         per_page: 1,
@@ -110,7 +109,7 @@ describe('puzzles reducers', () => {
       isFetching: false,
       isFailure: false,
     }, {
-      type: types.FETCH_KIFUS_FAILURE,
+      type: types.FETCH_PUZZLES_FAILURE,
     }) )
     .toEqual({
       isFetching: false,

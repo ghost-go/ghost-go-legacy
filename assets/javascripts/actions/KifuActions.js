@@ -34,4 +34,3 @@ export function fetchKifu(id) {
       .catch(ex => dispatch(fetchKifuFailure(ex)))
   }
 }
-

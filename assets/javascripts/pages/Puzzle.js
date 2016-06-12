@@ -17,9 +17,6 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 class Puzzle extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      puzzle: null
-    }
     let { id } = this.props.params
     this.props.dispatch(fetchPuzzle(id))
   }
@@ -35,7 +32,7 @@ class Puzzle extends Component {
           <div className="kifu-board">
             <PuzzleBoard className="board"
                    editable="false"
-                   puzzle={this.puzzle}
+                   puzzle={puzzle.data.steps}
                    ref="board" />
           </div>
         </div>

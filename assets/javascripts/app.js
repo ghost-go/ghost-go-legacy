@@ -6,6 +6,7 @@ import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 import { kifus, kifu } from './reducers/KifuReducers'
+import { puzzles, puzzle } from './reducers/PuzzleReducers'
 
 import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
@@ -27,6 +28,8 @@ class App extends React.Component {
 const reducer = combineReducers({
   kifus,
   kifu,
+  puzzles,
+  puzzle,
   routing: routerReducer
   // ... add your own reducers here
 })
