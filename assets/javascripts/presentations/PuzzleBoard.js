@@ -20,8 +20,9 @@ export default class PuzzleBoard extends Component {
       step: 0,
       size: this.props.size,
       puzzle: this.props.puzzle,
-      horizontal: 10,
-      verical: 15,
+      horizontal: 19,
+      verical: 19,
+      autofit: true,
       direction: 2,
       revert: false,
       dotSize: 3,
@@ -31,6 +32,73 @@ export default class PuzzleBoard extends Component {
     this.clearKifuArray()
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+  }
+
+  autofit(expandH = 2, expandV = 2) {
+    const steps = this.state.puzzle.split(';')
+
+    let leftmost = 26
+    let rightmost = 0
+    let topmost = 26
+    let bottommost = 0
+    steps.forEach((i) => {
+      const x = LETTERS_SGF.indexOf(i[2])
+      const y = LETTERS_SGF.indexOf(i[3])
+      if (x < leftmost)
+        leftmost = x
+
+      if (x > rightmost)
+        rightmost = x
+
+      if (y < topmost)
+        topmost = y
+
+      if (y > bottommost)
+        bottommost = y
+    })
+    leftmost++
+    rightmost++
+    topmost++
+    bottommost++
+
+    const medianH = (leftmost + rightmost) / 2
+    const medianV = (topmost + bottommost) / 2
+
+    if (medianH <= 10 && medianV <= 10) {
+      this.state.direction = 1
+      this.state.horizontal = rightmost + expandH
+      this.state.verical = bottommost + expandV
+    }
+    else if(medianH > 10 && medianV <= 10) {
+      this.state.direction = 2
+      this.state.horizontal = this.state.grid - leftmost + 1 + expandH
+      this.state.verical = bottommost + expandV
+    }
+    else if(medianH > 10 && medianV > 10) {
+      this.state.direction = 3
+      this.state.horizontal = this.state.grid - leftmost + 1 + expandH
+      this.state.verical = this.state.grid - bottommost + 1 + expandV
+    }
+    else {
+      this.state.direction = 4
+      this.state.horizontal = rightmost + expandH
+      this.state.verical = this.state.grid - bottommost + 1 + expandV
+    }
+
+    this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
+    this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+
+    console.log({leftmost, rightmost, topmost, bottommost})
+
+    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 50 - 10
+    this.state.size =  boardWidth / (this.state.maxhv + 1)
+    //this.drawBoardWithResize()
+
+    //if (this.props.puzzle != null) {
+      //this.direction = 2
+      //this.state.horizontal = 0
+      //this.state.verical = 0
+    //}
   }
 
   //Set default theme to pass the test
@@ -72,12 +140,12 @@ export default class PuzzleBoard extends Component {
   }
 
   getCoordByStep(step) {
-    let steps = this.state.puzzle.split(';')
-    let str = steps[step - 1]
-    let ki = str[0] === 'B' ? 1 : -1
-    let pos = /\[(.*)\]/.exec(str)[1]
-    let x = LETTERS_SGF.indexOf(pos[0])
-    let y = LETTERS_SGF.indexOf(pos[1])
+    const steps = this.state.puzzle.split(';')
+    const str = steps[step - 1]
+    const ki = str[0] === 'B' ? 1 : -1
+    const pos = /\[(.*)\]/.exec(str)[1]
+    const x = LETTERS_SGF.indexOf(pos[0])
+    const y = LETTERS_SGF.indexOf(pos[1])
 
     let offsetH = 0
     let offsetV = 0
@@ -95,8 +163,8 @@ export default class PuzzleBoard extends Component {
       offsetV = this.state.grid - this.state.maxhv
       break
     }
-    let posX = (x + 1 - offsetH) * this.state.size
-    let posY = (y + 1 - offsetV) * this.state.size
+    const posX = (x + 1 - offsetH) * this.state.size
+    const posY = (y + 1 - offsetV) * this.state.size
     return {x, y, posX, posY, ki}
   }
 
@@ -110,16 +178,21 @@ export default class PuzzleBoard extends Component {
   }
 
   draw() {
-    let size = this.state.size
-    let grid = this.state.grid
     this._boardCtx.beginPath()
     this.state.puzzle = this.props.puzzle
 
-    if (this.state.revert && this.props.puzzle != null) {
+    if (this.state.autofit && this.state.puzzle != null) {
+      this.autofit(5, 5)
+    }
+
+    if (this.state.revert && this.state.puzzle != null) {
       this.state.puzzle = this.state.puzzle.replace(/B/g, 'X')
       this.state.puzzle = this.state.puzzle.replace(/W/g, 'B')
       this.state.puzzle = this.state.puzzle.replace(/X/g, 'W')
     }
+
+    let size = this.state.size
+    let grid = this.state.grid
 
     switch (this.state.direction) {
     case 1:
