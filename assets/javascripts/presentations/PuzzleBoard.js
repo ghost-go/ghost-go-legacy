@@ -19,8 +19,8 @@ export default class PuzzleBoard extends Component {
       currentTurn: 1,
       step: 0,
       size: this.props.size,
-      horizontal: 11,
-      verital: 10,
+      horizontal: 10,
+      verital: 15,
       direction: 2,
       dotSize: 3,
       _puzzleArray: [],
@@ -83,14 +83,14 @@ export default class PuzzleBoard extends Component {
     case 1:
       break
     case 2:
-      offsetH = this.state.grid - this.state.horizontal
+      offsetH = this.state.grid - this.state.maxhv
       break
     case 3:
-      offsetH = this.state.grid - this.state.horizontal
-      offsetV = this.state.grid - this.state.verital
+      offsetH = this.state.grid - this.state.maxhv
+      offsetV = this.state.grid - this.state.maxhv
       break
     case 4:
-      offsetV = this.state.grid - this.state.verital
+      offsetV = this.state.grid - this.state.maxhv
       break
     }
     let posX = (x + 1 - offsetH) * this.state.size
