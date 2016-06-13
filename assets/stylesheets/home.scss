@@ -14,19 +14,16 @@
   }
 }
 
-.board {
-  height: calc(100% - 60px);
+@media (max-width: 768px) {
+  .kifu-container {
+    flex-direction: column;
+    flex: 1;
+  }
+  .kifu-info,
+  .kifu-board {
+    flex: auto;
+  }
 }
-/*@media (max-width: 768px) {*/
-  /*.kifu-container {*/
-    /*flex-direction: column;*/
-    /*flex: 1;*/
-  /*}*/
-  /*.kifu-info,*/
-  /*.kifu-board {*/
-    /*flex: auto;*/
-  /*}*/
-/*}*/
 
 .kifu-info {
   margin-top: 30px;
