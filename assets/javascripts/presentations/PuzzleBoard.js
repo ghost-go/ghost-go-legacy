@@ -6,8 +6,9 @@ import Sgf from '../components/sgf'
 import Cross from '../components/cross'
 
 import Paper from 'material-ui/Paper'
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
+import { StyleSheet, css } from 'aphrodite'
 
 export default class PuzzleBoard extends Component {
   constructor(props) {
@@ -88,17 +89,8 @@ export default class PuzzleBoard extends Component {
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
 
-    console.log({leftmost, rightmost, topmost, bottommost})
-
-    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 50 - 10
+    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 15
     this.state.size =  boardWidth / (this.state.maxhv + 1)
-    //this.drawBoardWithResize()
-
-    //if (this.props.puzzle != null) {
-      //this.direction = 2
-      //this.state.horizontal = 0
-      //this.state.verical = 0
-    //}
   }
 
   //Set default theme to pass the test
@@ -481,15 +473,15 @@ export default class PuzzleBoard extends Component {
     }
     return (
       <Paper>
-        <div className="board" ref="board">
-          <canvas id="board_layer" ref={(ref) => this.boardLayer = ref }></canvas>
+        <div className={css(styles.board)} ref="board">
+          <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
           {(() => {
             if (this.props.editable === 'true') {
               return <canvas id= "cross_layer" ref={(ref) => this.crossLayer = ref}></canvas>
             }
           })()}
-          <canvas id="piece_layer" ref="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
-          <canvas id="top_layer" onClick={this.nextStep.bind(this)} ref="top_layer" ref={(ref) => this.topLayer = ref }></canvas>
+          <canvas id="piece_layer" className={css(styles.boardCanvas)} ref="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
+          <canvas id="top_layer" className={css(styles.boardCanvas)} onClick={this.nextStep.bind(this)} ref="top_layer" ref={(ref) => this.topLayer = ref }></canvas>
         </div>
       </Paper>
     )
@@ -497,42 +489,42 @@ export default class PuzzleBoard extends Component {
 
 
   drawBoardWithResize() {
-    //TODO: This is need to refactor
+    //TODO: This need be refactored
+    //The reason using setTimeout
+    //https://github.com/Khan/aphrodite/blame/master/README.md#L128
     this.clearKifuArray()
-    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 50 - 10
-    this.state.size =  boardWidth / (this.state.maxhv + 1)
+    setTimeout(() => {
+      this.refs.board.offsetHeight
+      let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 15
+      this.state.size =  boardWidth / (this.state.maxhv + 1)
+      this._boardCtx = this.boardLayer.getContext('2d')
+      this._pieceCtx = this.pieceLayer.getContext('2d')
+      this.refs.board.style.height = '100%'
+      this.refs.board.style.width = '100%'
+      this.refs.board.parentElement.style.height = boardWidth + 'px'
+      this.refs.board.parentElement.style.width = boardWidth + 'px'
 
-    this._boardCtx = this.boardLayer.getContext('2d')
-    this._pieceCtx = this.pieceLayer.getContext('2d')
-    this.refs.board.style.height = boardWidth + 'px'
-    this.refs.board.style.width = boardWidth + 'px'
-    this.refs.board.parentElement.style.height = boardWidth + 'px'
-    this.refs.board.parentElement.style.width = boardWidth + 'px'
-    this.boardLayer.width
-    = this.boardLayer.height
-    = this.pieceLayer.width
-    = this.pieceLayer.height
-    = boardWidth
-    this.boardLayer.style.position
-    = this.pieceLayer.style.position
-    = 'absolute'
-    this.topLayer.width
-    = this.topLayer.height
-    = boardWidth
-    this.topLayer.style.position
-    = 'absolute'
-    this.drawBoard()
-    this.markCurrentPiece()
+      this.boardLayer.width
+      = this.boardLayer.height
+      = this.pieceLayer.width
+      = this.pieceLayer.height
+      = this.topLayer.width
+      = this.topLayer.height
+      = boardWidth
+      this.boardLayer.style.position
+      = this.pieceLayer.style.position
+      = this.topLayer.style.position
+      = 'absolute'
+      this.drawBoard()
+    }, 0)
   }
 
   drawBoard() {
     this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
     this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
     this.draw()
-    console.log(`step: ${this.state.step}`)
     for (let i = 1; i <= this.state.step; i++) {
       let {x, y, posX, posY, ki} = this.getCoordByStep(i)
-      console.log({x, y, posX, posY, ki})
       this.move(x, y, posX, posY, ki)
     }
   }
@@ -551,3 +543,14 @@ export default class PuzzleBoard extends Component {
 PuzzleBoard.childContextTypes = {
   muiTheme: React.PropTypes.object.isRequired
 }
+
+const styles = StyleSheet.create({
+  boardCanvas: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
+  board: {
+    position: 'relative',
+  }
+})

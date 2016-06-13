@@ -27,8 +27,8 @@ export function fetchPuzzles(page, per_page) {
 export function fetchPuzzle(id) {
   return dispatch => {
     dispatch(fetchPuzzleRequest({id}))
-    let url = `http://api.ghost-go.com/v1/puzzles/${id}`
-    //let url = `http://localhost:3000/v1/puzzles/${id}`
+    //let url = `http://api.ghost-go.com/v1/puzzles/${id}`
+    let url = `http://localhost:3000/v1/puzzles/${id}`
     return fetch(url)
       .then(res => res.json())
       .then(data => dispatch(fetchPuzzleSuccess({data})))
