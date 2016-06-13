@@ -10,6 +10,8 @@ import ControlBar from '../presentations/ControlBar'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Layout from './Layout'
+import AnswerBar from '../presentations/AnswerBar'
+import Drawer from 'material-ui/Drawer'
 
 import { fetchPuzzle } from '../actions/PuzzleActions'
 
@@ -25,19 +27,20 @@ class Puzzle extends Component {
     super(props)
     let { id } = this.props.params
     this.state = {
-      answersExpanded: false
+      answersExpanded: false,
+      commentsOpen: false
     }
     this.props.dispatch(fetchPuzzle(id))
-    this.handleToggle = this.handleToggle.bind(this)
-    this.handleExpandChange = this.handleToggle.bind(this)
+    this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
+    this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
   }
 
-  handleExpandChange(expanded) {
-    this.setState({answersExpanded: expanded})
-  }
-
-  handleToggle(event, toggle) {
+  handleAnswersToggle(event, toggle) {
     this.setState({answersExpanded: toggle})
+  }
+
+  handleCommentsToggle() {
+    this.setState({commentsOpen: !this.state.commentsOpen})
   }
 
   render() {
@@ -70,19 +73,39 @@ class Puzzle extends Component {
               <CardActions>
                 <RaisedButton label="Undo" />
                 <RaisedButton label="Reset" />
+                <RaisedButton
+                  label="Comments"
+                  className={css(styles.btnComments)}
+                  primary={true}
+                  onTouchTap={this.handleCommentsToggle}
+                />
               </CardActions>
               <CardText>
-                <Toggle 
+                <Toggle
                   toggled={this.state.answersExpanded}
                   className={css(styles.toggle)}
                   label="Answers"
-                  onToggle={this.handleToggle}
+                  onToggle={this.handleAnswersToggle}
                 />
               </CardText>
-              <CardText expandable={!this.state.answersExpanded}>
-                <div>{puzzle.data.description}</div>
+              <CardText className={css(styles.answersContainer)} expandable={!this.state.answersExpanded}>
+                <CardHeader
+                  title="Correct Answer"
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                <AnswerBar id={1} current={0} total={3} up={13} down={5} />
+                <CardHeader
+                  title="Wrong Answer"
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                <AnswerBar id={13324} current={0} total={7} up={13} down={5} />
+                <AnswerBar id={133} current={0} total={10} up={13} down={5} />
               </CardText>
             </Card>
+            <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
+            </Drawer>
           </div>
         </div>
       </Layout>
@@ -91,6 +114,14 @@ class Puzzle extends Component {
 }
 
 const styles = StyleSheet.create({
+
+  answersContainer: {
+    padding: 0
+  },
+
+  btnComments: {
+    float: 'right'
+  },
 
   puzzlePage: {
     display: 'flex'
