@@ -1,4 +1,5 @@
 import * as types from '../constants/ActionTypes'
+import * as config from '../constants/Config'
 import { createAction, handleAction, handleActions } from 'redux-actions'
 
 export const fetchPuzzlesRequest = createAction(types.FETCH_PUZZLES_REQUEST)
@@ -12,7 +13,7 @@ export const fetchPuzzleFailure = createAction(types.FETCH_PUZZLE_FAILURE)
 export function fetchPuzzles(page, per_page) {
   return dispatch => {
     dispatch(fetchPuzzlesRequest({page, per_page}))
-    let url = `http://api.ghost-go.com/v1/puzzles?page=${page}`
+    let url = `${config.API_DOMAIN}/v1/puzzles?page=${page}`
     if (per_page != null) {
       url = `${url}&per_page=${per_page}`
     }
@@ -27,8 +28,7 @@ export function fetchPuzzles(page, per_page) {
 export function fetchPuzzle(id) {
   return dispatch => {
     dispatch(fetchPuzzleRequest({id}))
-    let url = `http://api.ghost-go.com/v1/puzzles/${id}`
-    //let url = `http://localhost:3000/v1/puzzles/${id}`
+    let url = `${config.API_DOMAIN}/v1/puzzles/${id}`
     return fetch(url)
       .then(res => res.json())
       .then(data => dispatch(fetchPuzzleSuccess({data})))
