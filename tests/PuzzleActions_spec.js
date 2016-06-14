@@ -1,5 +1,6 @@
 import * as actions from '../assets/javascripts/actions/PuzzleActions'
 import * as types from '../assets/javascripts/constants/ActionTypes'
+import * as config from '../assets/javascripts/constants/Config'
 import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import nock from 'nock'
@@ -52,7 +53,7 @@ describe('async actions', () => {
   })
 
   it('creates FETCH_PUZZLES_SUCCESS when fetching puzzles has been done', (done) => {
-    fetchMock.mock('http://api.ghost-go.com/v1/puzzles?page=1&per_page=1', [{
+    fetchMock.mock(`${config.API_DOMAIN}/v1/puzzles?page=1&per_page=1`, [{
       total_page: 10,
       total: 95,
       data: [{
@@ -138,7 +139,7 @@ describe('async actions', () => {
   })
 
   it('creates FETCH_PUZZLES_FAILURE when fetching puzzles has been failure', (done) => {
-    fetchMock.reMock('http://api.ghost-go.com/v1/puzzles?page=1&per_page=1', 500)
+    fetchMock.reMock(`${config.API_DOMAIN}/v1/puzzles?page=1&per_page=1`, 500)
 
     const expectedActions = [
       { type: types.FETCH_PUZZLES_REQUEST, payload: {page: 1, per_page: 1}},
@@ -150,7 +151,7 @@ describe('async actions', () => {
   })
 
   it('creates FETCH_PUZZLE_FAILURE when fetching puzzle has been done by id', (done) => {
-    fetchMock.reMock('http://api.ghost-go.com/v1/puzzles/1', { })
+    fetchMock.reMock(`${config.API_DOMAIN}/v1/puzzles/1`, { })
 
     const expectedActions = [
       { type: types.FETCH_PUZZLE_REQUEST, payload: {id: 1} },

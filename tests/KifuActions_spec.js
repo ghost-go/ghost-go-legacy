@@ -1,5 +1,6 @@
 import * as actions from '../assets/javascripts/actions/KifuActions'
 import * as types from '../assets/javascripts/constants/ActionTypes'
+import * as config from '../assets/javascripts/constants/Config'
 import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import nock from 'nock'
@@ -53,7 +54,7 @@ describe('async actions', () => {
 
   it('creates FETCH_KIFUS_SUCCESS when fetching kifus has been done', (done) => {
     fetchMock
-    .mock('http://api.ghost-go.com/v1/kifus?page=1&per_page=1', [
+    .mock(`${config.API_DOMAIN}/v1/kifus?page=1&per_page=1`, [
       {
         'id':26879,
         'date': '2016-03-03T00:00:00.000Z',
@@ -154,7 +155,7 @@ describe('async actions', () => {
 
   it('creates FETCH_KIFUS_FAILURE when fetching kifus has been failure', (done) => {
     fetchMock
-    .reMock('http://api.ghost-go.com/v1/kifus?page=1&per_page=1', 500)
+    .reMock(`${config.API_DOMAIN}/v1/kifus?page=1&per_page=1`, 500)
 
     const expectedActions = [
       { type: types.FETCH_KIFUS_REQUEST, payload: {page: 1, per_page: 1}},
@@ -167,7 +168,7 @@ describe('async actions', () => {
 
   it('creates FETCH_KIFU_FAILURE when fetching kifu has been done by id', (done) => {
     fetchMock
-      .reMock('http://api.ghost-go.com/v1/kifus/1', {
+      .reMock(`${config.API_DOMAIN}/v1/kifus/1`, {
         'id': 27119,
         'date':'2016-03-24T00:00:00.000Z',
         'title':'第5届天台山农商银行杯韩国选拔',
