@@ -47,7 +47,7 @@ function mockStore(getState, expectedActions, done) {
   return mockStoreWithMiddleware()
 }
 
-describe('async actions', () => {
+describe('Puzzles async actions', () => {
   afterEach(() => {
     nock.cleanAll()
   })

@@ -1,7 +1,7 @@
 import {kifus, kifu} from '../assets/javascripts/reducers/KifuReducers.js'
 import * as types from '../assets/javascripts/constants/ActionTypes'
 
-describe('kifus reducer', () => {
+describe('Kifus reducer', () => {
   it('should return the initial state', () => {
     expect(
       kifus(undefined, {})

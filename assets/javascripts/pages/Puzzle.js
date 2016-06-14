@@ -45,6 +45,18 @@ class Puzzle extends Component {
 
   render() {
     const { puzzle } = this.props
+    let rightAnswers = []
+    let wrongAnswers = []
+    if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
+
+      puzzle.data.right_answers.forEach((i) => {
+        rightAnswers.push(<AnswerBar key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+      })
+      puzzle.data.wrong_answers.forEach((i) => {
+        wrongAnswers.push(<AnswerBar key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+      })
+
+    }
     return (
       <Layout>
         <div className={css(styles.puzzlePage)}>
@@ -94,14 +106,13 @@ class Puzzle extends Component {
                   actAsExpander={true}
                   showExpandableButton={true}
                 />
-                <AnswerBar id={1} current={0} total={3} up={13} down={5} />
+                {rightAnswers}
                 <CardHeader
                   title="Wrong Answer"
                   actAsExpander={true}
                   showExpandableButton={true}
                 />
-                <AnswerBar id={13324} current={0} total={7} up={13} down={5} />
-                <AnswerBar id={133} current={0} total={10} up={13} down={5} />
+                {wrongAnswers}
               </CardText>
             </Card>
             <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>

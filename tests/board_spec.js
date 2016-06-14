@@ -2,7 +2,7 @@ import Board from '../assets/javascripts/presentations/Board.js'
 import React from 'react'
 import ReactTestUtils from 'react-addons-test-utils'
 
-describe('create a board instance and initial', () => {
+describe('Board spec', () => {
 
   it ('board component should be initial with editable equal false', () => {
     let component = ReactTestUtils.renderIntoDocument(
