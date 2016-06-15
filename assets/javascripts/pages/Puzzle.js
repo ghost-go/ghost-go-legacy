@@ -63,7 +63,6 @@ class Puzzle extends Component {
           <div className={css(styles.puzzleContainer)}>
             <div className={css(styles.puzzleBoard)}>
               <PuzzleBoard className="board"
-                     editable="false"
                      puzzle={puzzle.data.steps}
                      ref="board" />
             </div>
