@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
+
 import IconButton from 'material-ui/IconButton'
+import Paper from 'material-ui/Paper'
 
 export default class AnswerBar extends Component {
 
@@ -11,59 +13,36 @@ export default class AnswerBar extends Component {
   nextStep() {
     let step = this.props.board.state.step
     this.props.board.state.step = step + 1
-    this.props.board.moveTo(step + 1)
   }
 
   prevStep() {
     let step = this.props.board.state.step
     this.props.board.state.step = step - 1
-    this.props.board.moveTo(step - 1)
-  }
-
-  next10Step() {
-    let step = this.props.board.state.step
-    this.props.board.state.step = step + 10
-    this.props.board.moveTo(step + 10)
-  }
-
-  prev10Step() {
-    let step = this.props.board.state.step
-    if (this.props.board.state.step <= 10) {
-      this.props.board.state.step = 1
-      this.props.board.moveTo(1)
-    }
-    else {
-      this.props.board.state.step = step - 10
-      this.props.board.moveTo(step - 10)
-    }
   }
 
   firstStep() {
-    this.props.board.state.step = 1
-    this.props.board.moveTo(1)
+    let step = this.props.board.state.step
+    this.props.board.state.step = step - 1
   }
 
   lastStep() {
-    let last = this.props.board.props.kifu.split(';').length
-    this.props.board.state.step = last
-    this.props.board.moveTo(last)
   }
 
   render() {
     return(
-      <div style={styles.answerContainer}>
+      <Paper style={styles.answerContainer}>
         <div style={styles.noInfo}>{`No.${this.props.id}`}</div>
         <div style={styles.stepInfo}>{`${this.props.current}/${this.props.total}`}</div>
-        <IconButton iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
-        <IconButton iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward" />
-        <IconButton iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />
-        <IconButton iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-forward" />
+        <IconButton ref="firstStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
+        <IconButton ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward"  />
+        <IconButton ref="nextStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />
+        <IconButton ref="lastStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-forward" />
         <div style={styles.voteInfo}>Vote</div>
         <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-up" />
         <span>{this.props.up}</span>
         <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-down" />
         <span>{this.props.down}</span>
-      </div>
+      </Paper>
     )
   }
 }

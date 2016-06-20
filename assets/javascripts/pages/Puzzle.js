@@ -57,6 +57,7 @@ class Puzzle extends Component {
       })
 
     }
+
     return (
       <Layout>
         <div className={css(styles.puzzlePage)}>

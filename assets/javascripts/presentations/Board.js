@@ -82,10 +82,6 @@ export default class Board extends Component {
     return {x, y, posX, posY, ki}
   }
 
-  prevStep() {
-
-  }
-
   clearKifuArray() {
     this._kifuArray = []
     while(this._kifuArray.push(new Array(19).fill(0)) < 19) { }
@@ -98,7 +94,7 @@ export default class Board extends Component {
       this._boardCtx.lineTo(i * this.size, this.grid * this.size)
       this._boardCtx.moveTo(this.size, i * this.size)
       this._boardCtx.lineTo(this.grid * this.size, i * this.size)
-    };
+    }
     this._boardCtx.stroke()
     let dot_size = 3
     if (this.grid == 19) {
@@ -129,7 +125,7 @@ export default class Board extends Component {
     }
     if (liberty === 0) {
       this._kifuArray[i][j] = 0
-      console.log('此位置不能放棋子')
+      //console.log('此位置不能放棋子')
       return false
     }
     this._kifuArray[i][j] = 0
@@ -186,13 +182,13 @@ export default class Board extends Component {
   }
 
   convertPosToRealPos(x, y) {
-    console.log(`x: ${x}, y: ${y}`)
+    //console.log(`x: ${x}, y: ${y}`)
     let letter = LETTERS[Math.round((x - this.size) / this.size)]
     let number = NUMBERS[Math.round((y - this.size) / this.size)]
 
     let results = []
     let {i, j} = this.convertCoordToIndex(`${letter}${number}`)
-    console.log(`rx: ${(i+1) * this.size}, ry: ${(j+1) * this.size}`)
+    //console.log(`rx: ${(i+1) * this.size}, ry: ${(j+1) * this.size}`)
     return {
       x: (i + 1) * this.size,
       y: (j + 1) * this.size
@@ -254,8 +250,8 @@ export default class Board extends Component {
       }
     }
     this._calcLibertyCore(x, y, ki)
-    console.log(this._liberty)
-    console.log(this._recursionPath)
+    //console.log(this._liberty)
+    //console.log(this._recursionPath)
     return {
       liberty: this._liberty,
       recursionPath: this._recursionPath
@@ -267,7 +263,7 @@ export default class Board extends Component {
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
-    console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`)
+    //console.log(`up: ${libertyUp}, down: ${libertyDown}, left: ${libertyLeft}, right: ${libertyRight}`)
     if (libertyUp === 0) {
       recursionPathUp.forEach((i) => {
         this.removePiece(i)
@@ -295,7 +291,7 @@ export default class Board extends Component {
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
-    console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`)
+    //console.log(`canup: ${libertyUp}, candown: ${libertyDown}, canleft: ${libertyLeft}, canright: ${libertyRight}`)
     if (libertyUp === 0 && recursionPathUp.length > 0) {
       return true
     }

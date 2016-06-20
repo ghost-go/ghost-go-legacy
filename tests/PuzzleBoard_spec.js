@@ -1,6 +1,7 @@
-import PuzzleBoard from '../assets/javascripts/presentations/PuzzleBoard.js'
 import React from 'react'
 import ReactTestUtils from 'react-addons-test-utils'
+
+import PuzzleBoard from '../assets/javascripts/presentations/PuzzleBoard.js'
 
 describe('PuzzleBoard spec', () => {
   let component = ReactTestUtils.renderIntoDocument(
@@ -20,6 +21,12 @@ describe('PuzzleBoard spec', () => {
     expect(component.state.step).toEqual(component.props.puzzle.split(';').length)
     expect(component.state.horizontal).toEqual(13)
     expect(component.state.verical).toEqual(11)
+    expect(component.state._puzzleArray[17][1]).toEqual(1)
+    expect(component.state._puzzleArray[17][2]).toEqual(1)
+    expect(component.state._puzzleArray[16][3]).toEqual(1)
+    expect(component.state._puzzleArray[15][3]).toEqual(1)
+    expect(component.state._puzzleArray[16][0]).toEqual(-1)
+    expect(component.state._puzzleArray[14][1]).toEqual(-1)
   })
 
   it ('Piece can be moved on PuzzleBoard', () => {
