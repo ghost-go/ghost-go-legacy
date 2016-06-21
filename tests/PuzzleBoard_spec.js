@@ -17,8 +17,8 @@ describe('PuzzleBoard spec', () => {
   })
 
   it ('Puzzle should be shown on PuzzleBoard', () => {
+    component.initPuzzleArray()
     expect(div).not.toBeNull()
-    expect(component.state.step).toEqual(component.props.puzzle.split(';').length)
     expect(component.state.horizontal).toEqual(13)
     expect(component.state.verical).toEqual(11)
     expect(component.state._puzzleArray[17][1]).toEqual(1)

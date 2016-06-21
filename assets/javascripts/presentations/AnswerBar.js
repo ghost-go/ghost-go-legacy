@@ -8,35 +8,69 @@ export default class AnswerBar extends Component {
 
   constructor(props) {
     super(props)
-  }
+    this.state = {
+      current: 0
+    }
 
-  nextStep() {
-    let step = this.props.board.state.step
-    this.props.board.state.step = step + 1
-  }
+    this.firstStep = this.firstStep.bind(this)
+    this.prevStep = this.prevStep.bind(this)
+    this.nextStep = this.nextStep.bind(this)
+    this.lastStep = this.lastStep.bind(this)
 
-  prevStep() {
-    let step = this.props.board.state.step
-    this.props.board.state.step = step - 1
   }
 
   firstStep() {
-    let step = this.props.board.state.step
-    this.props.board.state.step = step - 1
+    this.setState({ current: 0 }, () => {
+      this.props.board.initPuzzleArray()
+      this.props.board.drawBoard()
+    })
+  }
+
+  prevStep() {
+    let steps = this.props.steps.split(';')
+    if (this.state.current > 0) {
+      this.props.board.initPuzzleArray()
+      this.setState({ current: this.state.current - 1 }, () => {
+        for (let i = 0; i < this.state.current; i++) {
+          this.props.board.moveByStep(steps[i])
+        }
+      })
+      this.props.board.drawBoard()
+    }
+  }
+
+  nextStep() {
+    let steps = this.props.steps.split(';')
+    if (this.state.current < steps.length) {
+      this.props.board.initPuzzleArray()
+      this.setState({ current: this.state.current + 1 }, () => {
+        for (let i = 0; i < this.state.current; i++) {
+          this.props.board.moveByStep(steps[i])
+        }
+      })
+      this.props.board.drawBoard()
+    }
   }
 
   lastStep() {
+    let steps = this.props.steps.split(';')
+    this.setState({ current: steps.length }, () => {
+      this.props.board.initPuzzleArray()
+      steps.forEach((step) => {
+        this.props.board.moveByStep(step)
+      })
+    })
   }
 
   render() {
     return(
       <Paper style={styles.answerContainer}>
         <div style={styles.noInfo}>{`No.${this.props.id}`}</div>
-        <div style={styles.stepInfo}>{`${this.props.current}/${this.props.total}`}</div>
-        <IconButton ref="firstStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
-        <IconButton ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward"  />
-        <IconButton ref="nextStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />
-        <IconButton ref="lastStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-forward" />
+        <div style={styles.stepInfo}>{`${this.state.current}/${this.props.total}`}</div>
+        <IconButton onClick={this.firstStep} ref="firstStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
+        <IconButton onClick={this.prevStep} ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward"  />
+        <IconButton onClick={this.nextStep} ref="nextStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />
+        <IconButton onClick={this.lastStep} ref="lastStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-forward" />
         <div style={styles.voteInfo}>Vote</div>
         <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-up" />
         <span>{this.props.up}</span>

@@ -12,9 +12,10 @@ describe('AnswerBar spec', () => {
 
   let puzzleBoard = ReactTestUtils.renderIntoDocument(
     <PuzzleBoard className="board"
-                 puzzle={'B[rb];B[rc];B[qd];B[pd];B[oc];B[nc];B[lc];B[ra];W[sc];W[rd];W[re];W[qf];W[qc];W[pc];W[qb];W[qa];W[ob]'}
+                 puzzle={'B[qa];B[qb];B[pb];B[pc];B[pd];B[pe];B[qf];B[rf];B[sf];B[ra];W[rb];W[sc];W[qc];W[qd];W[qe];W[re];W[se];W[sd];W[pf];W[pg];W[rh]'}
     />
   )
+
   let div = ReactTestUtils.scryRenderedDOMComponentsWithTag(
     puzzleBoard, 'div'
   )
@@ -23,7 +24,7 @@ describe('AnswerBar spec', () => {
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <AnswerBar key={1}
                  id={12345}
-                 steps={"B[jg];W[jh];B[hh];W[ig];B[hg]"}
+                 steps={"B[rc];W[rd];B[sa];W[qg];B[sb]"}
                  total={5}
                  up={0}
                  down={0}
@@ -39,48 +40,62 @@ describe('AnswerBar spec', () => {
   })
 
   it ('answerbar first step', () => {
+    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
+    ReactTestUtils.Simulate.click(firstStep)
+
     let nextStep = ReactDOM.findDOMNode(bar.refs.nextStep)
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
 
-    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
     ReactTestUtils.Simulate.click(firstStep)
-    expect(puzzleBoard.state.step).toEqual(17)
-    expect(puzzleBoard.state._kifuArray[9][6]).toEqual(0)
+    expect(bar.state.current).toEqual(0)
+    expect(puzzleBoard.state._puzzleArray[17][2]).toEqual(0)
   })
 
   it ('answerbar prev step', () => {
+    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
+    ReactTestUtils.Simulate.click(firstStep)
+
     let nextStep = ReactDOM.findDOMNode(bar.refs.nextStep)
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
 
     let prevStep = ReactDOM.findDOMNode(bar.refs.prevStep)
-    expect(puzzleBoard.state._kifuArray[7][7]).toEqual(1)
+    expect(puzzleBoard.state._puzzleArray[18][0]).toEqual(1)
     ReactTestUtils.Simulate.click(prevStep)
-    expect(puzzleBoard.state.step).toEqual(19)
-    expect(puzzleBoard.state._kifuArray[7][7]).toEqual(0)
+    expect(bar.state.current).toEqual(2)
+    expect(puzzleBoard.state._puzzleArray[18][0]).toEqual(0)
   })
 
   it ('answerbar do not prev step if answer has been move to first step', () => {
+    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
+    ReactTestUtils.Simulate.click(firstStep)
+
     let prevStep = ReactDOM.findDOMNode(bar.refs.prevStep)
     ReactTestUtils.Simulate.click(prevStep)
-    expect(puzzleBoard.state.step).toEqual(17)
-    expect(puzzleBoard.state._kifuArray[9][6]).toEqual(0)
+    expect(bar.state.current).toEqual(0)
+    expect(puzzleBoard.state._puzzleArray[17][2]).toEqual(0)
   })
 
   it ('answerbar next step', () => {
+    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
+    ReactTestUtils.Simulate.click(firstStep)
+
     let nextStep = ReactDOM.findDOMNode(bar.refs.nextStep)
     ReactTestUtils.Simulate.click(nextStep)
-    expect(puzzleBoard.state.step).toEqual(18)
-    expect(puzzleBoard.state._kifuArray[9][6]).toEqual(1)
+    expect(bar.state.current).toEqual(1)
+    expect(puzzleBoard.state._puzzleArray[17][2]).toEqual(1)
     ReactTestUtils.Simulate.click(nextStep)
-    expect(puzzleBoard.state.step).toEqual(19)
-    expect(puzzleBoard.state._kifuArray[9][7]).toEqual(-1)
+    expect(bar.state.current).toEqual(2)
+    expect(puzzleBoard.state._puzzleArray[17][3]).toEqual(-1)
   })
 
   it ('answerbar do not next step if answer has been move to last step', () => {
+    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
+    ReactTestUtils.Simulate.click(firstStep)
+
     let nextStep = ReactDOM.findDOMNode(bar.refs.nextStep)
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
@@ -88,15 +103,18 @@ describe('AnswerBar spec', () => {
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
     ReactTestUtils.Simulate.click(nextStep)
-    expect(puzzleBoard.state.step).toEqual(22)
-    expect(puzzleBoard.state._kifuArray[7][6]).toEqual(1)
+    expect(bar.state.current).toEqual(5)
+    expect(puzzleBoard.state._puzzleArray[18][1]).toEqual(1)
   })
 
   it ('answerbar last step', () => {
+    let firstStep = ReactDOM.findDOMNode(bar.refs.firstStep)
+    ReactTestUtils.Simulate.click(firstStep)
+
     let lastStep = ReactDOM.findDOMNode(bar.refs.lastStep)
     ReactTestUtils.Simulate.click(lastStep)
-    expect(puzzleBoard.state.step).toEqual(22)
-    expect(puzzleBoard.state._kifuArray[7][6]).toEqual(1)
+    expect(bar.state.current).toEqual(5)
+    expect(puzzleBoard.state._puzzleArray[18][1]).toEqual(1)
   })
 
 })

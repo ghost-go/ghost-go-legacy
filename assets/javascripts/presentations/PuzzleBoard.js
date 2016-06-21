@@ -37,7 +37,6 @@ export default class PuzzleBoard extends Component {
 
   autofit(expandH = 2, expandV = 2) {
     const steps = this.props.puzzle.split(';')
-
     let leftmost = 26
     let rightmost = 0
     let topmost = 26
@@ -75,33 +74,31 @@ export default class PuzzleBoard extends Component {
     if (medianH <= 10 && medianV <= 10) {
       this.setState({
         direction: 1,
-        horizontal: rightmost + expandH,
-        verical: bottommost + expandV
+        horizontal: rightmost + expandH > this.state.grid ? this.state.grid : rightmost + expandH,
+        verical: bottommost + expandV > this.state.grid ? this.state.grid : bottommost + expandV
       }, setMaxMinHV)
     }
     else if (medianH > 10 && medianV <= 10) {
       this.setState({
         direction: 2,
-        horizontal: this.state.grid - leftmost + 1 + expandH,
-        verical: bottommost + expandV
+        horizontal: this.state.grid - leftmost + 1 + expandH > this.state.grid ? this.state.grid : this.state.grid - leftmost + 1 + expandH,
+        verical: bottommost + expandV > this.state.grid ? this.state.grid : bottommost + expandV
       }, setMaxMinHV)
     }
     else if (medianH > 10 && medianV > 10) {
       this.setState({
         direction: 3,
-        horizontal: this.state.grid - leftmost + 1 + expandH,
-        verical: this.state.grid - bottommost + 1 + expandV
+        horizontal: this.state.grid - leftmost + 1 + expandH > this.state.grid ? this.state.grid : this.state.grid - leftmost + 1 + expandH,
+        verical: this.state.grid - bottommost + 1 + expandV > this.state.grid ? this.state.grid : this.state.grid - bottommost + 1 + expandV
       }, setMaxMinHV)
     }
     else {
       this.setState({
         direction: 4,
-        horizontal: rightmost + expandH,
-        verical: this.state.grid - bottommost + 1 + expandV
+        horizontal: rightmost + expandH > this.state.grid ? this.state.grid : rightmost + expandH,
+        verical: this.state.grid - bottommost + 1 + expandV > this.state.grid ? this.state.grid : this.state.grid - bottommost + 1 + expandV
       }, setMaxMinHV)
     }
-
-
   }
 
   //Set default theme to pass the test
@@ -117,6 +114,34 @@ export default class PuzzleBoard extends Component {
     }
   }
 
+  moveByStep(step) {
+    const ki = step[0] === 'B' ? 1 : -1
+    const pos = /\[(.*)\]/.exec(step)[1]
+    const x = LETTERS_SGF.indexOf(pos[0])
+    const y = LETTERS_SGF.indexOf(pos[1])
+
+    let offsetH = 0
+    let offsetV = 0
+    switch(this.state.direction) {
+    case 1:
+      break
+    case 2:
+      offsetH = this.state.grid - this.state.maxhv
+      break
+    case 3:
+      offsetH = this.state.grid - this.state.maxhv
+      offsetV = this.state.grid - this.state.maxhv
+      break
+    case 4:
+      offsetV = this.state.grid - this.state.maxhv
+      break
+    }
+    const posX = (x + 1 - offsetH) * this.state.size
+    const posY = (y + 1 - offsetV) * this.state.size
+    this.move(x, y, posX, posY, ki)
+    this.drawBoard()
+  }
+
   markCurrentPiece() {
     if (this.state.step > 0) {
       let {x, y, posX, posY, ki} = this.getCoordByStep(this.state.step)
@@ -125,10 +150,8 @@ export default class PuzzleBoard extends Component {
   }
 
   getCoordByStep(step) {
-    const steps = this.props.puzzle.split(';')
-    const str = steps[step - 1]
-    const ki = str[0] === 'B' ? 1 : -1
-    const pos = /\[(.*)\]/.exec(str)[1]
+    const ki = step[0] === 'B' ? 1 : -1
+    const pos = /\[(.*)\]/.exec(step)[1]
     const x = LETTERS_SGF.indexOf(pos[0])
     const y = LETTERS_SGF.indexOf(pos[1])
 
@@ -159,6 +182,7 @@ export default class PuzzleBoard extends Component {
   }
 
   initPuzzleArray() {
+    this.clearKifuArray()
     const steps = this.props.puzzle.split(';')
     let newArray = this.state._puzzleArray.slice()
     steps.forEach((str) => {
@@ -376,8 +400,8 @@ export default class PuzzleBoard extends Component {
 
   _calcLibertyCore(x, y, ki) {
     if (x >= 0 && x < this.state.grid && y >= 0 && y < this.state.grid) {
-      if (this.state._puzzleArray[x][y] == ki && !this._recursionPath.includes(`${LETTERS[x]}${NUMBERS[y]}`)) {
-        this._recursionPath.push(`${LETTERS[x]}${NUMBERS[y]}`)
+      if (this.state._puzzleArray[x][y] == ki && !this._recursionPath.includes(`${x},${y}`)) {
+        this._recursionPath.push(`${x},${y}`)
         this._calcLibertyCore(x - 1, y, ki)
         this._calcLibertyCore(x + 1, y, ki)
         this._calcLibertyCore(x, y - 1, ki)
@@ -420,22 +444,26 @@ export default class PuzzleBoard extends Component {
     let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
     if (libertyUp === 0) {
       recursionPathUp.forEach((i) => {
-        this.removePiece(i)
+        let coord = i.split(',')
+        this.state._puzzleArray[coord[0]][coord[1]] = 0
       })
     }
     if (libertyDown === 0) {
       recursionPathDown.forEach((i) => {
-        this.removePiece(i)
+        let coord = i.split(',')
+        this.state._puzzleArray[coord[0]][coord[1]] = 0
       })
     }
     if (libertyLeft === 0) {
       recursionPathLeft.forEach((i) => {
-        this.removePiece(i)
+        let coord = i.split(',')
+        this.state._puzzleArray[coord[0]][coord[1]] = 0
       })
     }
     if (libertyRight === 0) {
       recursionPathRight.forEach((i) => {
-        this.removePiece(i)
+        let coord = i.split(',')
+        this.state._puzzleArray[coord[0]][coord[1]] = 0
       })
     }
   }

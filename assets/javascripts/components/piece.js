@@ -8,35 +8,37 @@ export default class Piece {
   }
 
   draw(ctx) {
-    if (this.type == 0) {
-      ctx.clearRect(this.x - this.pieceSize,
-                    this.y - this.pieceSize,
-                    this.x + this.pieceSize,
-                    this.y + this.pieceSize)
-    }
-    else {
-      ctx.beginPath()
-      ctx.arc(this.x, this.y, this.pieceSize, 0, 2 * Math.PI, true)
-      ctx.lineWidth = 1
-      ctx.strokeStyle = '#000'
-      if (this.type == 1)
-        ctx.fillStyle = '#000'
-      else
-        ctx.fillStyle = '#fff'
-      ctx.fill()
-      ctx.stroke()
-
-      if (this.isCurrent) {
+    if (ctx != null) {
+      if (this.type == 0) {
+        ctx.clearRect(this.x - this.pieceSize,
+                      this.y - this.pieceSize,
+                      this.x + this.pieceSize,
+                      this.y + this.pieceSize)
+      }
+      else {
         ctx.beginPath()
-        ctx.arc(this.x, this.y, this.pieceSize * 0.6, 0, 2 * Math.PI, true)
-        ctx.lineWidth = 2
-        if (this.type == 1) {
-          ctx.strokeStyle = '#fff'
-        }
-        else {
-          ctx.strokeStyle = '#000'
-        }
+        ctx.arc(this.x, this.y, this.pieceSize, 0, 2 * Math.PI, true)
+        ctx.lineWidth = 1
+        ctx.strokeStyle = '#000'
+        if (this.type == 1)
+          ctx.fillStyle = '#000'
+        else
+          ctx.fillStyle = '#fff'
+        ctx.fill()
         ctx.stroke()
+
+        if (this.isCurrent) {
+          ctx.beginPath()
+          ctx.arc(this.x, this.y, this.pieceSize * 0.6, 0, 2 * Math.PI, true)
+          ctx.lineWidth = 2
+          if (this.type == 1) {
+            ctx.strokeStyle = '#fff'
+          }
+          else {
+            ctx.strokeStyle = '#000'
+          }
+          ctx.stroke()
+        }
       }
     }
   }

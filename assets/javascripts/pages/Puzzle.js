@@ -50,10 +50,10 @@ class Puzzle extends Component {
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
 
       puzzle.data.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
       puzzle.data.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
 
     }
@@ -76,8 +76,6 @@ class Puzzle extends Component {
                   <strong>Number: </strong>
                   {puzzle.data.number} right/wrong: 10/20
                 </div>
-                <br />
-                <div>{puzzle.data.description}</div>
               </CardText>
               <CardText>
                 <Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
