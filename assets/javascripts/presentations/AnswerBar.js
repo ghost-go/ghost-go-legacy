@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 
+import { convertSGFCoordToPos } from '../components/Helper'
+
 import IconButton from 'material-ui/IconButton'
 import Paper from 'material-ui/Paper'
 
@@ -32,7 +34,8 @@ export default class AnswerBar extends Component {
       this.props.board.initPuzzleArray()
       this.setState({ current: this.state.current - 1 }, () => {
         for (let i = 0; i < this.state.current; i++) {
-          this.props.board.moveByStep(steps[i])
+          let {x, y, ki} = convertSGFCoordToPos(steps[i])
+          this.props.board.move(x, y, ki)
         }
       })
       this.props.board.drawBoard()
@@ -45,7 +48,8 @@ export default class AnswerBar extends Component {
       this.props.board.initPuzzleArray()
       this.setState({ current: this.state.current + 1 }, () => {
         for (let i = 0; i < this.state.current; i++) {
-          this.props.board.moveByStep(steps[i])
+          let {x, y, ki} = convertSGFCoordToPos(steps[i])
+          this.props.board.move(x, y, ki)
         }
       })
       this.props.board.drawBoard()
@@ -57,7 +61,8 @@ export default class AnswerBar extends Component {
     this.setState({ current: steps.length }, () => {
       this.props.board.initPuzzleArray()
       steps.forEach((step) => {
-        this.props.board.moveByStep(step)
+        let {x, y, ki} = convertSGFCoordToPos(step)
+        this.props.board.move(x, y, ki)
       })
     })
   }
