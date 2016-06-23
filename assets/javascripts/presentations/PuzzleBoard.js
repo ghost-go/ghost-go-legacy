@@ -179,7 +179,6 @@ export default class PuzzleBoard extends Component {
     return true
   }
 
-
   calcLiberty(x, y, ki) {
     this._liberty = 0
     this._recursionPath = []
@@ -204,7 +203,6 @@ export default class PuzzleBoard extends Component {
     }
   }
 
-
   canPonnuki(i, j, ki) {
     let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki)
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
@@ -225,14 +223,15 @@ export default class PuzzleBoard extends Component {
     return false
   }
 
-  showCross(coord, color) {
-    let results = this.convertCoordToPos(coord, this.state.size)
-    let cross = new Cross()
-    cross.x = results.x
-    cross.y = results.y
-    cross.size = 5
-    cross.color = color
-    cross.draw(this._crossCtx)
+  showCross(x, y, color) {
+    if (x >= 1 && y >= 1 && x <= this.state.horizontal && y <= this.state.verical) {
+      let cross = new Cross()
+      cross.x = x * this.state.size
+      cross.y = y * this.state.size
+      cross.size = 5
+      cross.color = color
+      cross.draw(this._crossCtx)
+    }
   }
 
   render() {
@@ -268,6 +267,7 @@ export default class PuzzleBoard extends Component {
       this.state.size =  boardWidth / (this.state.maxhv + 1)
       this._boardCtx = this.boardLayer.getContext('2d')
       this._pieceCtx = this.pieceLayer.getContext('2d')
+      this._crossCtx = this.crossLayer.getContext('2d')
       this.refs.board.style.height = '100%'
       this.refs.board.style.width = '100%'
       this.refs.board.parentElement.style.height = boardWidth + 'px'
@@ -277,13 +277,44 @@ export default class PuzzleBoard extends Component {
       = this.boardLayer.height
       = this.pieceLayer.width
       = this.pieceLayer.height
+      = this.crossLayer.width
+      = this.crossLayer.height
       = this.topLayer.width
       = this.topLayer.height
       = boardWidth
       this.boardLayer.style.position
       = this.pieceLayer.style.position
+      = this.crossLayer.style.position
       = this.topLayer.style.position
       = 'absolute'
+
+
+      this.topLayer.onmousemove = (e) => {
+        let x0, y0
+        switch (this.state.direction) {
+        case 1:
+          x0 = Math.round(e.offsetX / this.state.size) - 1
+          y0 = Math.round(e.offsetY / this.state.size) - 1
+          break
+        case 2:
+          x0 = Math.round(e.offsetX / this.state.size) + (this.state.grid - this.state.horizontal) - 1
+          y0 = Math.round(e.offsetY / this.state.size) - 1
+          break
+        case 3:
+          x0 = Math.round(e.offsetX / this.state.size) + (this.state.grid - this.state.horizontal) - 1
+          y0 = Math.round(e.offsetY / this.state.size) + (this.state.grid - this.state.verical) - 1
+          break
+        case 4:
+          x0 = Math.round(e.offsetX / this.state.size) - 1
+          y0 = Math.round(e.offsetY / this.state.size) + (this.state.grid - this.state.verical) - 1
+          break
+        }
+
+        let {x, y} = this._getOffsetPos(x0, y0)
+        this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
+        this.showCross(x, y, '#ff0000')
+      }
+
       this.drawBoard()
     }, 0)
   }
@@ -292,6 +323,7 @@ export default class PuzzleBoard extends Component {
     if (this._pieceCtx != null && this._boardCtx != null && this.props.puzzle != null) {
       this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
       this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
+      this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this.draw()
 
       for (let i = 0; i < this.state.grid; i++) {
