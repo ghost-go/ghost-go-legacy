@@ -290,27 +290,8 @@ export default class PuzzleBoard extends Component {
 
 
       this.topLayer.onmousemove = (e) => {
-        let x0, y0
-        switch (this.state.direction) {
-        case 1:
-          x0 = Math.round(e.offsetX / this.state.size) - 1
-          y0 = Math.round(e.offsetY / this.state.size) - 1
-          break
-        case 2:
-          x0 = Math.round(e.offsetX / this.state.size) + (this.state.grid - this.state.horizontal) - 1
-          y0 = Math.round(e.offsetY / this.state.size) - 1
-          break
-        case 3:
-          x0 = Math.round(e.offsetX / this.state.size) + (this.state.grid - this.state.horizontal) - 1
-          y0 = Math.round(e.offsetY / this.state.size) + (this.state.grid - this.state.verical) - 1
-          break
-        case 4:
-          x0 = Math.round(e.offsetX / this.state.size) - 1
-          y0 = Math.round(e.offsetY / this.state.size) + (this.state.grid - this.state.verical) - 1
-          break
-        }
-
-        let {x, y} = this._getOffsetPos(x0, y0)
+        let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
+        let {x, y} = this._getOffsetPos(p.posX, p.posY)
         this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
         this.showCross(x, y, '#ff0000')
       }
@@ -355,6 +336,29 @@ export default class PuzzleBoard extends Component {
       this.initPuzzleArray()
       this.drawBoardWithResize()
     }
+  }
+
+  _convertCtxposToPos(x, y) {
+    let posX, posY
+    switch (this.state.direction) {
+    case 1:
+      posX = Math.round(x / this.state.size) - 1
+      posY = Math.round(y / this.state.size) - 1
+      break
+    case 2:
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.horizontal) - 1
+      posY = Math.round(y / this.state.size) - 1
+      break
+    case 3:
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.horizontal) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.verical) - 1
+      break
+    case 4:
+      posX = Math.round(x / this.state.size) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.verical) - 1
+      break
+    }
+    return {posX, posY}
   }
 
   _getOffsetPos(x, y) {
