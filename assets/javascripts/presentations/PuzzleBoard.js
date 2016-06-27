@@ -26,7 +26,9 @@ export default class PuzzleBoard extends Component {
       _puzzleArray: [],
       currentKi: 0,
       step: 0,
-      steps: []
+      steps: [],
+      expandH: 5,
+      expandV: 5
     }
     this.clearKifuArray()
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
@@ -77,7 +79,7 @@ export default class PuzzleBoard extends Component {
     }
 
     if (this.state.autofit) {
-      this._autofit(5, 3)
+      this._autofit(this.state.expandH, this.state.expandV)
     }
 
     let size = this.state.size
@@ -232,14 +234,12 @@ export default class PuzzleBoard extends Component {
   }
 
   showCross(x, y, color) {
-    if (x >= 1 && y >= 1 && x <= this.state.horizontal && y <= this.state.verical) {
-      let cross = new Cross()
-      cross.x = x * this.state.size
-      cross.y = y * this.state.size
-      cross.size = 5
-      cross.color = color
-      cross.draw(this._crossCtx)
-    }
+    let cross = new Cross()
+    cross.x = x * this.state.size
+    cross.y = y * this.state.size
+    cross.size = 5
+    cross.color = color
+    cross.draw(this._crossCtx)
   }
 
   render() {
@@ -353,14 +353,17 @@ export default class PuzzleBoard extends Component {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
-        this.showCross(x, y, '#ff0000')
+        if (this._isPosInTheBoard(p.posX, p.posY)) {
+          this.showCross(x, y, '#ff0000')
+        }
       }
 
       this.topLayer.onclick = (e) => {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
-        if (x >= 1 && y >= 1 && x <= this.state.horizontal && y <= this.state.verical) {
+        console.log(p.posX, p.posY)
+        if (this._isPosInTheBoard(p.posX, p.posY)) {
           hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
@@ -434,19 +437,48 @@ export default class PuzzleBoard extends Component {
       posY = Math.round(y / this.state.size) - 1
       break
     case 2:
-      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.horizontal) - 1
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
       posY = Math.round(y / this.state.size) - 1
       break
     case 3:
-      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.horizontal) - 1
-      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.verical) - 1
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
       break
     case 4:
       posX = Math.round(x / this.state.size) - 1
-      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.verical) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
       break
     }
     return {posX, posY}
+  }
+
+  _isPosInTheBoard(x, y) {
+    switch (this.state.direction) {
+    case 1:
+      return x >= 0 &&
+             x < this.state.horizontal &&
+             y >= 0 &&
+             y < this.state.verical
+      break
+    case 2:
+      return x >= this.state.grid - this.state.horizontal && 
+             x < this.state.grid &&
+             y >= 0 &&
+             y < this.state.verical
+      break
+    case 3:
+      return x >= this.state.grid - this.state.horizontal &&
+             x < this.state.grid &&
+             y >= this.state.grid - this.state.verical &&
+             y < this.state.verical
+      break
+    case 4:
+      return x >= 0 &&
+             x < this.state.horizontal &&
+             y >= this.state.grid - this.state.verical &&
+             y < this.state.verical
+      break
+    }
   }
 
   _convertPoxToSgf(x, y, ki) {
