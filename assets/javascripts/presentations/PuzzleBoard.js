@@ -24,6 +24,9 @@ export default class PuzzleBoard extends Component {
       revert: false,
       dotSize: 3,
       _puzzleArray: [],
+      currentKi: 0,
+      step: 0,
+      steps: []
     }
     this.clearKifuArray()
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
@@ -36,8 +39,13 @@ export default class PuzzleBoard extends Component {
       this.state._puzzleArray[x][y] = ki
       this._drawPiece(x, y, ki, isCurrent)
       this._execPonnuki(x, y, -ki)
+      if (this.state.currentKi != 0) {
+        this.state.currentKi = -this.state.currentKi
+      }
+      this.drawBoard()
+      return true
     }
-    this.drawBoard()
+    return false
   }
 
   clearKifuArray() {
@@ -256,6 +264,58 @@ export default class PuzzleBoard extends Component {
     return boardWidth
   }
 
+  response(x, y, ki) {
+    console.log(this.state.steps.join(';'))
+    let rights = []
+    let wrongs = []
+    this.props.right_answers.forEach((i) => {
+      if (i.steps.indexOf(this.state.steps.join(';')) == 0) {
+        rights.push(i)
+      }
+    })
+    this.props.wrong_answers.forEach((i) => {
+      if (i.steps.indexOf(this.state.steps.join(';')) == 0) {
+        wrongs.push(i)
+      }
+    })
+
+    if (rights.length > 0) {
+      const i = Math.floor(Math.random() * rights.length)
+      let stepsStr = this.state.steps.join(';')
+      if (rights[i].steps === stepsStr) {
+        console.log('You are right!!!')
+      }
+      else {
+        const step = rights[i].steps.split(';')[this.state.step]
+        const x = LETTERS_SGF.indexOf(step[2])
+        const y = LETTERS_SGF.indexOf(step[3])
+        const ki = step[0] == 'B' ? 1 : -1
+        this.state.steps.push(step)
+        this.move(x, y, ki)
+        this.state.step++
+      }
+    }
+    else if (wrongs.length > 0) {
+      const i = Math.floor(Math.random() * rights.length)
+      let stepsStr = this.state.steps.join(';')
+      if (wrongs[i].steps === stepsStr) {
+        console.log('You are wrong!!')
+      }
+      else {
+        const step = wrongs[i].steps.split(';')[this.state.step]
+        const x = LETTERS_SGF.indexOf(step[2])
+        const y = LETTERS_SGF.indexOf(step[3])
+        const ki = step[0] == 'B' ? 1 : -1
+        this.state.steps.push(step)
+        this.move(x, y, ki)
+        this.state.step++
+      }
+    }
+    else {
+      console.log('You are wrong!!')
+    }
+
+  }
 
   drawBoardWithResize() {
     //TODO: This need to be refactored
@@ -294,6 +354,25 @@ export default class PuzzleBoard extends Component {
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
         this.showCross(x, y, '#ff0000')
+      }
+
+      this.topLayer.onclick = (e) => {
+        let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
+        let {x, y} = this._getOffsetPos(p.posX, p.posY)
+        let hasMoved = false
+        if (x >= 1 && y >= 1 && x <= this.state.horizontal && y <= this.state.verical) {
+          hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
+          if (hasMoved) {
+            this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
+            console.log(this.state.steps)
+            this.state.step ++
+          }
+        }
+        setTimeout(() => {
+          if (hasMoved) {
+            this.response(p.posX, p.posY, -this.state.currentKi)
+          }
+        }, 500)
       }
 
       this.drawBoard()
@@ -335,6 +414,15 @@ export default class PuzzleBoard extends Component {
     if (this.props.puzzle != null && prevProps.puzzle !== this.props.puzzle) {
       this.initPuzzleArray()
       this.drawBoardWithResize()
+      if (this.props.puzzle[0] == 'B') {
+        this.state.currentKi = 1
+      }
+      else if (this.props.puzzle[0] == 'W') {
+        this.state.currentKi = 1
+      }
+      else {
+        this.state.currentKi = 0
+      }
     }
   }
 
@@ -359,6 +447,17 @@ export default class PuzzleBoard extends Component {
       break
     }
     return {posX, posY}
+  }
+
+  _convertPoxToSgf(x, y, ki) {
+    let step = ''
+    if (ki == 1) {
+      step = `B[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`
+    }
+    else {
+      step = `W[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`
+    }
+    return step
   }
 
   _getOffsetPos(x, y) {
@@ -521,3 +620,4 @@ const styles = StyleSheet.create({
     position: 'relative',
   }
 })
+

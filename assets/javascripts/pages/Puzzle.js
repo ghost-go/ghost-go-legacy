@@ -47,6 +47,7 @@ class Puzzle extends Component {
     const { puzzle } = this.props
     let rightAnswers = []
     let wrongAnswers = []
+    let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
 
       puzzle.data.right_answers.forEach((i) => {
@@ -65,6 +66,9 @@ class Puzzle extends Component {
             <div className={css(styles.puzzleBoard)}>
               <PuzzleBoard className="board"
                      puzzle={puzzle.data.steps}
+                     right_answers={puzzle.data.right_answers}
+                     wrong_answers={puzzle.data.wrong_answers}
+                     answers={puzzle.data.answers}
                      ref="board" />
             </div>
           </div>
