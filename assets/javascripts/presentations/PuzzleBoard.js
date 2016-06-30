@@ -28,7 +28,8 @@ export default class PuzzleBoard extends Component {
       step: 0,
       steps: [],
       expandH: 5,
-      expandV: 5
+      expandV: 5,
+      previewImg: ''
     }
     this.clearKifuArray()
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
@@ -245,6 +246,7 @@ export default class PuzzleBoard extends Component {
   render() {
     return (
       <Paper>
+        <input id="puzzle-img" type="hidden" value={this.state.previewImg} />
         <div className={css(styles.board)} ref="board">
           <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
           <canvas id="cross_layer" className={css(styles.boardCanvas)} ref={(ref) => this.crossLayer = ref }></canvas>
@@ -397,6 +399,11 @@ export default class PuzzleBoard extends Component {
         }
       }
     }
+
+    this.setState({
+      previewImg: this.pieceLayer.toDataURL('image/png')
+    })
+    console.log(this.state.previewImg)
   }
 
 

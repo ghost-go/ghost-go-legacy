@@ -47,15 +47,17 @@ var autoprefixer = require('autoprefixer')
 var precss = require('precss')
 
 module.exports = {
-  entry: [
-    'webpack-dev-server/client?http://localhost:5000',
-    'webpack/hot/dev-server',
-    'whatwg-fetch',
-    './index.js',
-  ],
+  entry: {
+    bundle: [
+      'webpack-dev-server/client?http://localhost:5000', 'webpack/hot/dev-server',
+      'whatwg-fetch',
+      './index.js'
+    ],
+    puzzle: './assets/javascripts/puzzleBoard.js'
+  },
   output: {
     path: __dirname,
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: '/static/'
   },
   resolve: {
