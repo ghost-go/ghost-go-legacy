@@ -8,9 +8,12 @@ class PuzzleBoardPreviewImageMaker {
   constructor(steps) {
 
     this.steps = steps.split(';')
-    this.pieceLayer = document.querySelector('#board_layer')
-    this.boardLayer = document.querySelector('#piece_layer')
-    this.preview = document.querySelector('#preview')
+    //this.pieceLayer = document.querySelector('#board_layer')
+    this.pieceLayer = document.createElement('canvas')
+    //this.boardLayer = document.querySelector('#piece_layer')
+    this.boardLayer = document.createElement('canvas')
+    //this.preview = document.querySelector('#preview')
+    this.preview = document.createElement('canvas')
 
     this.pieceLayer.width = 1024
     this.pieceLayer.height = 1024
@@ -62,7 +65,8 @@ class PuzzleBoardPreviewImageMaker {
     cropRight += this.state.size / 2
 
 
-    let previewImg = document.querySelector('#previewImg')
+    //let previewImg = document.querySelector('#previewImg')
+    let previewImg = document.createElement('canvas')
     let previewImgCtx = previewImg.getContext('2d')
 
     let cropWidth = cropRight - cropLeft
@@ -73,7 +77,7 @@ class PuzzleBoardPreviewImageMaker {
     previewImg.height = cropHeight
     previewImgCtx.drawImage(this.preview, cropLeft, cropTop, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight)
 
-
+    this.result = previewImg.toDataURL()
   }
 
   getBase64() {
@@ -345,16 +349,11 @@ class PuzzleBoardPreviewImageMaker {
     piece.isCurrent = isCurrent
     piece.draw(this._pieceCtx)
   }
-
 }
 
 
-function getQueryString(name) {
-  let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
-  let r = window.location.search.substr(1).match(reg)
-  if (r != null) return unescape(r[2])
-  return null
+export function getResult(steps) {
+  let result = new PuzzleBoardPreviewImageMaker(steps).result
+  return result
 }
 
-let steps = getQueryString('steps')
-var puzzleMaker = new PuzzleBoardPreviewImageMaker(steps)
