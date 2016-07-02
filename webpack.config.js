@@ -49,7 +49,8 @@ var precss = require('precss')
 module.exports = {
   entry: {
     bundle: [
-      'webpack-dev-server/client?http://localhost:5000', 'webpack/hot/dev-server',
+      'webpack-dev-server/client?http://localhost:5000',
+      'webpack/hot/dev-server',
       'whatwg-fetch',
       './index.js'
     ],

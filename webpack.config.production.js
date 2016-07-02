@@ -19,7 +19,6 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
