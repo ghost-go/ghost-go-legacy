@@ -59,6 +59,7 @@
     "redux-actions": "^0.10.0",
     "redux-thunk": "^2.1.0",
     "style-loader": "^0.13.0",
+    "postcss-loader": "^0.9.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "whatwg-fetch": "^1.0.0"
