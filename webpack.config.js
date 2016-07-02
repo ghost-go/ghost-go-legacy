@@ -53,7 +53,7 @@ module.exports = {
       'whatwg-fetch',
       './index.js'
     ],
-    puzzle: './assets/javascripts/puzzleBoard.js'
+    puzzle: './assets/javascripts/puzzle.js'
   },
   output: {
     path: __dirname,

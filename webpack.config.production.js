@@ -4,13 +4,16 @@ var autoprefixer = require('autoprefixer')
 var precss = require('precss')
 
 module.exports = {
-  entry: [
-    'whatwg-fetch',
-    './index.js'
-  ],
+  entry: {
+    bundle: [
+      'whatwg-fetch',
+      './index.js'
+    ],
+    puzzle: './assets/javascripts/puzzle.js'
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: '/static/'
   },
   resolve: {

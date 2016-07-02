@@ -1,8 +1,7 @@
 import Piece from './components/piece.js'
-//import Canvas from 'canvas'
 
-const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
-const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse();
+const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's']
+const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
 
 class PuzzleBoardPreviewImageMaker {
 
@@ -54,7 +53,27 @@ class PuzzleBoardPreviewImageMaker {
     this._previewCtx.fillRect(0, 0, 1024, 1024)
     this._previewCtx.drawImage(this.boardLayer, 0, 0)
     this._previewCtx.drawImage(this.pieceLayer, 0, 0)
-    this.cropImageFromCanvas(this._previewCtx, this.preview)
+
+    let {cropTop, cropBottom, cropLeft, cropRight} = this.removeBlanks(this._previewCtx, this.preview, this.preview.width, this.preview.height)
+    console.log({cropTop, cropBottom, cropLeft, cropRight})
+    cropTop -= this.state.size / 2
+    cropBottom += this.state.size / 2
+    cropLeft -= this.state.size / 2
+    cropRight += this.state.size / 2
+
+
+    let previewImg = document.querySelector('#previewImg')
+    let previewImgCtx = previewImg.getContext('2d')
+
+    let cropWidth = cropRight - cropLeft
+    let cropHeight = cropBottom - cropTop
+    //this._previewCtx.drawImage(this.preview, cropLeft, cropTop, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight)
+
+    previewImg.width = cropWidth
+    previewImg.height = cropHeight
+    previewImgCtx.drawImage(this.preview, cropLeft, cropTop, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight)
+
+
   }
 
   getBase64() {
@@ -191,38 +210,50 @@ class PuzzleBoardPreviewImageMaker {
     }
   }
 
-  cropImageFromCanvas(ctx, canvas) {
-    let w = canvas.width
-    let h = canvas.height
-    let pix = {x:[], y:[]}
-    let imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
-    let x, y, index
 
-    for (y = 0; y < h; y++) {
-      for (x = 0; x < w; x++) {
-        index = (y * w + x) * 4
-        if (imageData.data[index+3] > 0) {
-          pix.x.push(x)
-          pix.y.push(y)
-        }
+  removeBlanks(context, canvas, imgWidth, imgHeight) {
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let data = imageData.data
+    let getRBG = (x, y) => {
+      return {
+        red:   data[(imgWidth*y + x) * 4],
+        green: data[(imgWidth*y + x) * 4 + 1],
+        blue:  data[(imgWidth*y + x) * 4 + 2]
       }
     }
-    pix.x.sort(function(a,b){return a-b})
-    pix.y.sort(function(a,b){return a-b})
-    var n = pix.x.length-1
 
-    w = pix.x[n] - pix.x[0]
-    h = pix.y[n] - pix.y[0]
-    var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h)
+    let isWhite = (rgb) => {
+      return rgb.red == 255 && rgb.green == 255 && rgb.blue == 255
+    }
 
-    canvas.width = w
-    canvas.height = h
-    ctx.putImageData(cut, 0, 0)
+    let scanY = (fromTop) => {
+      let offset = fromTop ? 1 : -1
+      for(let y = fromTop ? 0 : imgHeight - 1; fromTop ? (y < imgHeight) : (y > -1); y += offset) {
+        for(var x = 0; x < imgWidth; x++) {
+          if (!isWhite(getRBG(x, y))) {
+            return y
+          }
+        }
+      }
+      return null
+    }
+    let scanX = function (fromLeft) {
+      var offset = fromLeft? 1 : -1
+      for(var x = fromLeft ? 0 : imgWidth - 1; fromLeft ? (x < imgWidth) : (x > -1); x += offset) {
+        for(var y = 0; y < imgHeight; y++) {
+          if (!isWhite(getRBG(x, y))) {
+            return x
+          }
+        }
+      }
+      return null
+    }
 
-    var image = canvas.toDataURL()
-    console.log(image)
-    //var win=window.open(image, '_blank')
-    //win.focus()
+    let cropTop = scanY(true)
+    let cropBottom = scanY(false)
+    let cropLeft = scanX(true)
+    let cropRight = scanX(false)
+    return {cropTop, cropBottom, cropLeft, cropRight}
   }
 
   _autofit(expandH = 2, expandV = 2) {
@@ -251,7 +282,7 @@ class PuzzleBoardPreviewImageMaker {
     const medianV = (topmost + bottommost) / 2
 
     let setMaxMinHV = () => {
-      this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical,
+      this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
       this.state.mashv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
       this.state.size =  1024 / (this.state.maxhv + 1)
     }
@@ -317,6 +348,13 @@ class PuzzleBoardPreviewImageMaker {
 
 }
 
-var puzzleMaker = new PuzzleBoardPreviewImageMaker('B[ia];B[jb];B[jc];B[la];B[lc];B[mc];B[nc];B[oc];B[ob];W[qb];W[pb];W[pc];W[od];W[nd];W[md];W[ld];W[kd];W[jd];W[ic];W[ib];W[hb];W[ja]')
 
+function getQueryString(name) {
+  let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+  let r = window.location.search.substr(1).match(reg)
+  if (r != null) return unescape(r[2])
+  return null
+}
 
+let steps = getQueryString('steps')
+var puzzleMaker = new PuzzleBoardPreviewImageMaker(steps)
