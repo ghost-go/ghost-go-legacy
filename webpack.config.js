@@ -53,8 +53,8 @@ module.exports = {
       'webpack/hot/dev-server',
       'whatwg-fetch',
       './index.js'
-    ],
-    puzzle: './assets/javascripts/puzzle.js'
+    ]
+    //puzzle: './assets/javascripts/puzzle.js'
   },
   output: {
     path: __dirname,

@@ -8,8 +8,8 @@ module.exports = {
     bundle: [
       'whatwg-fetch',
       './index.js'
-    ],
-    puzzle: './assets/javascripts/puzzle.js'
+    ]
+    //puzzle: './assets/javascripts/puzzle.js'
   },
   output: {
     path: path.join(__dirname, 'dist'),
