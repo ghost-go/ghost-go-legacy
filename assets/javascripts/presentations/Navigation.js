@@ -25,28 +25,16 @@ export default class Navigation extends Component {
 
         <section className="nav-body">
           <div className="nav-body-wrap clearfix">
-            <Link to="/games" activeClassName="active">
-              <FormattedMessage
-                id="app.nav.menu.games"
-                defaultMessage="Games"
-              />
-            </Link>
             <Link to="/puzzles" activeClassName="active">
               <FormattedMessage
                 id='app.nav.menu.puzzles'
-                defaultMessage="Puzzles"
+                defaultMessage="Puzzles Library"
               />
             </Link>
-            <Link to="/me" activeClassName="active">
+            <Link to="/games" activeClassName="active">
               <FormattedMessage
-                id='app.nav.menu.me'
-                defaultMessage="Me"
-              />
-            </Link>
-            <Link to="/help" activeClassName="active">
-              <FormattedMessage
-                id='app.nav.menu.help'
-                defaultMessage="Help"
+                id="app.nav.menu.games"
+                defaultMessage="Games Library(Not Open)"
               />
             </Link>
           </div>

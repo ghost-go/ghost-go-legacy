@@ -267,7 +267,7 @@ export default class PuzzleBoard extends Component {
   }
 
   response(x, y, ki) {
-    console.log(this.state.steps.join(';'))
+    //console.log(this.state.steps.join(';'))
     let rights = []
     let wrongs = []
     this.props.right_answers.forEach((i) => {
@@ -285,7 +285,7 @@ export default class PuzzleBoard extends Component {
       const i = Math.floor(Math.random() * rights.length)
       let stepsStr = this.state.steps.join(';')
       if (rights[i].steps === stepsStr) {
-        console.log('You are right!!!')
+        //console.log('You are right!!!')
       }
       else {
         const step = rights[i].steps.split(';')[this.state.step]
@@ -301,7 +301,7 @@ export default class PuzzleBoard extends Component {
       const i = Math.floor(Math.random() * rights.length)
       let stepsStr = this.state.steps.join(';')
       if (wrongs[i].steps === stepsStr) {
-        console.log('You are wrong!!')
+        //console.log('You are wrong!!')
       }
       else {
         const step = wrongs[i].steps.split(';')[this.state.step]
@@ -314,7 +314,7 @@ export default class PuzzleBoard extends Component {
       }
     }
     else {
-      console.log('You are wrong!!')
+      //console.log('You are wrong!!')
     }
 
   }
@@ -364,12 +364,12 @@ export default class PuzzleBoard extends Component {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
-        console.log(p.posX, p.posY)
+        //console.log(p.posX, p.posY)
         if (this._isPosInTheBoard(p.posX, p.posY)) {
           hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
-            console.log(this.state.steps)
+            //console.log(this.state.steps)
             this.state.step ++
           }
         }
@@ -403,7 +403,7 @@ export default class PuzzleBoard extends Component {
     this.setState({
       previewImg: this.pieceLayer.toDataURL('image/png')
     })
-    console.log(this.state.previewImg)
+    //console.log(this.state.previewImg)
   }
 
 

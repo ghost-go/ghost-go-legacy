@@ -15,10 +15,13 @@ import Drawer from 'material-ui/Drawer'
 
 import { fetchPuzzle } from '../actions/PuzzleActions'
 
+//material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Toggle from 'material-ui/Toggle'
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
+import Dialog from 'material-ui/Dialog'
+import Snackbar from 'material-ui/Snackbar'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -41,6 +44,14 @@ class Puzzle extends Component {
 
   handleCommentsToggle() {
     this.setState({commentsOpen: !this.state.commentsOpen})
+  }
+
+  handleTipsOpen() {
+    this.setState({open: true})
+  }
+
+  handleClose() {
+    this.setState({open: false})
   }
 
   render() {
@@ -120,6 +131,12 @@ class Puzzle extends Component {
             <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
             </Drawer>
           </div>
+          <Snackbar
+            open={this.state.tipsOpen}
+            message={this.state.tipsMessage}
+            autoHideDuration={5000}
+            onRequestClose={this.handleRequestClose}
+          />
         </div>
       </Layout>
     )

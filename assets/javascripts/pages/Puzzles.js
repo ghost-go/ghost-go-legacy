@@ -12,191 +12,94 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 
 //internal component
 import Layout from './Layout'
-import lang from '../components/lang'
-import { fetchPuzzle } from '../actions/PuzzleActions'
+import Navigation from '../presentations/Navigation'
+import { fetchPuzzles } from '../actions/PuzzleActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
 
+//language
+import lang from '../components/lang'
+
 class Puzzles extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      total: 11,
+      current: 0,
+      visablePage: 6
+    }
+    let { query } = this.props.location
+    this.props.dispatch(fetchPuzzles(query.page))
+    this.handlePageChanged = this.handlePageChanged.bind(this)
+  }
+
+  handlePageChanged(newPage) {
+    this.setState({ current: newPage }, () => {
+      this.props.dispatch(fetchKifus(this.state.current + 1))
+    })
+  }
+
   render() {
+    const { puzzles } = this.props
+    let puzzlesCards = []
+    if (puzzles.data.length > 0) {
+      puzzles.data.forEach((i) => {
+        puzzlesCards.push(
+          <Card className={css(styles.card)}>
+            <CardMedia className={css(styles.previewImgWrapper)}>
+              <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
+            </CardMedia>
+            <CardTitle title="Card title" subtitle={`Ranking: ${i.ranking}`}/>
+            <CardActions>
+              <Link to={`/puzzles/${i.id}`}>
+                <RaisedButton className={css(styles.button)} primary={true} label="Solve It" />
+              </Link>
+            </CardActions>
+          </Card>
+        )
+      })
+    }
     return (
       <Layout>
         <div className={css(styles.puzzlesContainer)}>
           <div className={css(styles.puzzlesLeft)}>
             <h1 className={css(styles.title)}>Puzzles Library</h1>
             <div className={css(styles.buttonGroup)}>
-              <RaisedButton className={css(styles.button)} primary={true} label="Undo" />
+              <RaisedButton className={css(styles.button)} primary={true} label="See More" />
               <div className={css(styles.clearfix)}></div>
-              <RaisedButton className={css(styles.button)} secondary={true} label="Undo" />
+              <RaisedButton className={css(styles.button)} disabled={true} label="Create Puzzle(Not Open)" />
             </div>
-            <Card>
+            <Card expanded={true}>
               <CardHeader
-                title="Without Avatar"
-                subtitle="Subtitle"
+                title="RANKING"
                 actAsExpander={true}
                 showExpandableButton={true}
               />
               <CardText expandable={true}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+                <ul>
+                  <li>18k-10k</li>
+                  <li>9k-5k</li>
+                  <li>4k-1k</li>
+                  <li>1d-3d</li>
+                  <li>3d-6d</li>
+                </ul>
               </CardText>
-              <CardActions expandable={true}>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
+            </Card>
+            <Card expanded={true}>
+              <CardHeader
+                title="TAGS"
+                actAsExpander={true}
+                showExpandableButton={true}
+              />
+              <CardText expandable={true}>
+                No Tags(Not Open)
+              </CardText>
             </Card>
           </div>
           <div className={css(styles.puzzlesRight)}>
-            <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-
-            <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-
-            <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-
-
-             <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-
-             <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-
-             <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-
+            { puzzlesCards }
           </div>
-
         </div>
       </Layout>
     )
@@ -205,9 +108,10 @@ class Puzzles extends Component {
 
 const styles = StyleSheet.create({
   puzzlesContainer: {
-    marginTop: '40px',
+    marginTop: '20px',
     backgroundColor: '#fff',
     padding: '20px 60px',
+    width: '100vw',
     float: 'left',
   },
 
@@ -220,7 +124,7 @@ const styles = StyleSheet.create({
   },
 
   puzzlesLeft: {
-    width: '25%',
+    width: '20vw',
     marginLeft: 0,
     float: 'left',
   },
@@ -235,16 +139,20 @@ const styles = StyleSheet.create({
   },
 
   puzzlesRight: {
-    width: '70%',
-    marginLeft: '5%',
+    width: '75vw',
+    marginLeft: '5vw',
     paddingTop: '10px',
     float: 'left',
   },
 
   card: {
-    width: '30%',
-    margin: '0px 1.5% 20px 1.5%',
+    width: '20vw',
+    margin: '0px 1.5vw 20px 1.5vw',
     float: 'left'
+  },
+
+  previewImgWrapper: {
+    height: '20vw'
   },
 
   clearfix: {
@@ -253,8 +161,9 @@ const styles = StyleSheet.create({
 })
 
 function select(state) {
+  console.log(state)
   return {
-    puzzles: state.puzzle
+    puzzles: state.puzzles
   }
 }
 

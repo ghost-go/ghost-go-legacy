@@ -1,56 +1,7 @@
+import Piece from './components/piece.js'
+
 const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's']
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse()
-
-class Piece {
-  constructor(x, y, pieceSize, type) {
-    this.x || 0
-    this.y || 0
-    this.pieceSize = pieceSize || 1
-    this.type = type || 1
-    this.isCurrent = false
-  }
-
-  draw(ctx) {
-    if (ctx != null) {
-      if (this.type == 0) {
-        ctx.clearRect(this.x - this.pieceSize,
-                      this.y - this.pieceSize,
-                      this.x + this.pieceSize,
-                      this.y + this.pieceSize)
-      }
-      else {
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.pieceSize, 0, 2 * Math.PI, true)
-        ctx.lineWidth = 1
-        ctx.strokeStyle = '#000'
-        if (this.type == 1)
-          ctx.fillStyle = '#000'
-        else
-          ctx.fillStyle = '#fff'
-        ctx.fill()
-        ctx.stroke()
-
-        if (this.isCurrent) {
-          ctx.beginPath()
-          ctx.arc(this.x, this.y, this.pieceSize * 0.6, 0, 2 * Math.PI, true)
-          ctx.lineWidth = 2
-          if (this.type == 1) {
-            ctx.strokeStyle = '#fff'
-          }
-          else {
-            ctx.strokeStyle = '#000'
-          }
-          ctx.stroke()
-        }
-      }
-    }
-  }
-
-  remove(ctx, size) {
-    ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size)
-  }
-
-}
 
 class PuzzleBoardPreviewImageMaker {
 
@@ -62,6 +13,7 @@ class PuzzleBoardPreviewImageMaker {
     //this.boardLayer = document.querySelector('#piece_layer')
     this.boardLayer = document.createElement('canvas')
     //this.preview = document.querySelector('#preview')
+    this.preview = document.createElement('canvas')
 
     this.pieceLayer.width = 1024
     this.pieceLayer.height = 1024
@@ -400,7 +352,7 @@ class PuzzleBoardPreviewImageMaker {
 }
 
 
-function getResult(steps) {
+export function getResult(steps) {
   let result = new PuzzleBoardPreviewImageMaker(steps).result
   return result
 }
