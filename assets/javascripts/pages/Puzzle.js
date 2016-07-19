@@ -118,10 +118,10 @@ class Puzzle extends Component {
               <CardText>
                 <div>
                   <strong>Number: </strong>
-                  {puzzle.data.number} right/wrong: 10/20
+                  {`P-${puzzle.data.id}`}
                 </div>
               </CardText>
-              <CardActions>
+              <CardActions style={{padding: '14px'}}>
                 <RaisedButton
                   onClick={this.handleUndo}
                   label="Undo"

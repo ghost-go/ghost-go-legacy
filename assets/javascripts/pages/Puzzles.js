@@ -9,6 +9,7 @@ import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import Snackbar from 'material-ui/Snackbar'
 
 //internal component
 import Layout from './Layout'
@@ -46,6 +47,12 @@ class Puzzles extends Component {
     this.props.dispatch(fetchPuzzles(query.page))
   }
 
+  handleTips() {
+    this.setState({
+      tipsOpen: true
+    })
+  }
+
   render() {
     const { puzzles } = this.props
     let puzzlesCards = []
@@ -73,8 +80,10 @@ class Puzzles extends Component {
             <h1 className={css(styles.title)}>Puzzles Library</h1>
             <div className={css(styles.buttonGroup)}>
               <RaisedButton onClick={this.handleSeeMore} className={css(styles.button)} primary={true} label="See More" />
-              <div className={css(styles.clearfix)}></div>
-              <RaisedButton className={css(styles.button)} disabled={true} label="Create Puzzle(Not Open)" />
+              {
+                //<div className={css(styles.clearfix)}></div>
+                //<RaisedButton onClick={this.handleTips} className={css(styles.button)} disabled={true} label="Create Puzzle" />
+              }
             </div>
             <Card expanded={true}>
               <CardHeader
@@ -106,6 +115,15 @@ class Puzzles extends Component {
           <div className={css(styles.puzzlesRight)}>
             { puzzlesCards }
           </div>
+          <Snackbar
+            open={this.state.tipsOpen}
+            message={'This function is not OPEN'}
+            autoHideDuration={5000}
+            bodyStyle={{
+              backgroundColor: 'black',
+              fontSize: '20px'
+            }}
+          />
         </div>
       </Layout>
     )
@@ -130,7 +148,7 @@ const styles = StyleSheet.create({
   },
 
   puzzlesLeft: {
-    width: '20vw',
+    width: '15vw',
     marginLeft: 0,
     float: 'left',
   },
@@ -145,7 +163,7 @@ const styles = StyleSheet.create({
   },
 
   puzzlesRight: {
-    width: '70vw',
+    width: '75vw',
     marginLeft: '5vw',
     paddingTop: '10px',
     float: 'left',
