@@ -285,7 +285,7 @@ export default class PuzzleBoard extends Component {
       const i = Math.floor(Math.random() * rights.length)
       let stepsStr = this.state.steps.join(';')
       if (rights[i].steps === stepsStr) {
-        //console.log('You are right!!!')
+        this.props.handleRight()
       }
       else {
         const step = rights[i].steps.split(';')[this.state.step]
@@ -301,7 +301,8 @@ export default class PuzzleBoard extends Component {
       const i = Math.floor(Math.random() * rights.length)
       let stepsStr = this.state.steps.join(';')
       if (wrongs[i].steps === stepsStr) {
-        //console.log('You are wrong!!')
+        this.props.handleWrong()
+        console.log('You are wrong!!')
       }
       else {
         const step = wrongs[i].steps.split(';')[this.state.step]
@@ -314,7 +315,8 @@ export default class PuzzleBoard extends Component {
       }
     }
     else {
-      //console.log('You are wrong!!')
+      this.props.handleWrong()
+      console.log('You are wrong!!')
     }
 
   }

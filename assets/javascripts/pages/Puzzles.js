@@ -32,6 +32,7 @@ class Puzzles extends Component {
     let { query } = this.props.location
     this.props.dispatch(fetchPuzzles(query.page))
     this.handlePageChanged = this.handlePageChanged.bind(this)
+    this.handleSeeMore = this.handleSeeMore.bind(this)
   }
 
   handlePageChanged(newPage) {
@@ -40,13 +41,18 @@ class Puzzles extends Component {
     })
   }
 
+  handleSeeMore() {
+    let { query } = this.props.location
+    this.props.dispatch(fetchPuzzles(query.page))
+  }
+
   render() {
     const { puzzles } = this.props
     let puzzlesCards = []
     if (puzzles.data.length > 0) {
       puzzles.data.forEach((i) => {
         puzzlesCards.push(
-          <Card className={css(styles.card)}>
+          <Card key={i.id} className={css(styles.card)}>
             <CardMedia className={css(styles.previewImgWrapper)}>
               <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
             </CardMedia>
@@ -66,7 +72,7 @@ class Puzzles extends Component {
           <div className={css(styles.puzzlesLeft)}>
             <h1 className={css(styles.title)}>Puzzles Library</h1>
             <div className={css(styles.buttonGroup)}>
-              <RaisedButton className={css(styles.button)} primary={true} label="See More" />
+              <RaisedButton onClick={this.handleSeeMore} className={css(styles.button)} primary={true} label="See More" />
               <div className={css(styles.clearfix)}></div>
               <RaisedButton className={css(styles.button)} disabled={true} label="Create Puzzle(Not Open)" />
             </div>
@@ -110,7 +116,7 @@ const styles = StyleSheet.create({
   puzzlesContainer: {
     marginTop: '20px',
     backgroundColor: '#fff',
-    padding: '20px 60px',
+    padding: '20px 0 0 50px',
     width: '100vw',
     float: 'left',
   },
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
   },
 
   puzzlesRight: {
-    width: '75vw',
+    width: '70vw',
     marginLeft: '5vw',
     paddingTop: '10px',
     float: 'left',

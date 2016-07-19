@@ -31,11 +31,15 @@ class Puzzle extends Component {
     let { id } = this.props.params
     this.state = {
       answersExpanded: false,
-      commentsOpen: false
+      commentsOpen: false,
+      rightTipOpen: false,
+      wrongTipOpen: false
     }
     this.props.dispatch(fetchPuzzle(id))
     this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
+    this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
+    this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -46,12 +50,23 @@ class Puzzle extends Component {
     this.setState({commentsOpen: !this.state.commentsOpen})
   }
 
-  handleTipsOpen() {
-    this.setState({open: true})
+  handleRightTipOpen() {
+    this.setState({rightTipOpen: true})
+  }
+
+  handleWrongTipOpen() {
+    this.setState({wrongTipOpen: true})
   }
 
   handleClose() {
     this.setState({open: false})
+  }
+
+  handleReset() {
+
+  }
+
+  handleUndo() {
   }
 
   render() {
@@ -80,6 +95,8 @@ class Puzzle extends Component {
                      right_answers={puzzle.data.right_answers}
                      wrong_answers={puzzle.data.wrong_answers}
                      answers={puzzle.data.answers}
+                     handleRight={this.handleRightTipOpen}
+                     handleWrong={this.handleWrongTipOpen}
                      ref="board" />
             </div>
           </div>
@@ -132,10 +149,24 @@ class Puzzle extends Component {
             </Drawer>
           </div>
           <Snackbar
-            open={this.state.tipsOpen}
-            message={this.state.tipsMessage}
+            open={this.state.rightTipOpen}
+            message={'THAT\'S RIGHT!!'}
+            autoHideDuration={8000}
+            onRequestClose={this.handleRequestClose}
+            bodyStyle={{
+              backgroundColor: 'green',
+              fontSize: '18px'
+            }}
+          />
+          <Snackbar
+            open={this.state.wrongTipOpen}
+            message={'THAT\'S WRONG!!'}
             autoHideDuration={5000}
             onRequestClose={this.handleRequestClose}
+            bodyStyle={{
+              backgroundColor: 'black',
+              fontSize: '18px'
+            }}
           />
         </div>
       </Layout>

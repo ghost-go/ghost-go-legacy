@@ -25,16 +25,16 @@ module.exports = {
       //__DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
       //__PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'true'))
     //}),
-    //new webpack.DefinePlugin({
-      //'process.env': {
-        //'NODE_ENV': JSON.stringify('production')
-      //}
-    //}),
-    //new webpack.optimize.UglifyJsPlugin({
-      //compress: {
-        //warnings: false
-      //}
-    //})
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ],
   module: {
     loaders: [
