@@ -40,6 +40,8 @@ class Puzzle extends Component {
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
     this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
     this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
+    this.handleReset = this.handleReset.bind(this)
+    this.handleUndo = this.handleUndo.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -63,13 +65,23 @@ class Puzzle extends Component {
   }
 
   handleReset() {
-
+    console.log('aaa')
+    this.refs.board.reset()
   }
 
   handleUndo() {
   }
 
   render() {
+    //<RaisedButton
+      //label="Comments"
+      //className={css(styles.btnComments)}
+      //primary={true}
+      //onTouchTap={this.handleCommentsToggle}
+    ///>
+    //<CardText>
+      //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
+    //</CardText>
     const { puzzle } = this.props
     let rightAnswers = []
     let wrongAnswers = []
@@ -109,17 +121,16 @@ class Puzzle extends Component {
                   {puzzle.data.number} right/wrong: 10/20
                 </div>
               </CardText>
-              <CardText>
-                <Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
-              </CardText>
               <CardActions>
-                <RaisedButton label="Undo" />
-                <RaisedButton label="Reset" />
                 <RaisedButton
-                  label="Comments"
-                  className={css(styles.btnComments)}
+                  onClick={this.handleUndo}
+                  label="Undo"
+                  secondary={true}
+                />
+                <RaisedButton
+                  onClick={this.handleReset}
+                  label="Reset"
                   primary={true}
-                  onTouchTap={this.handleCommentsToggle}
                 />
               </CardActions>
               <CardText>

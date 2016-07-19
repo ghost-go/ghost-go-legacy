@@ -35,6 +35,8 @@ export default class PuzzleBoard extends Component {
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+    this.reset = this.reset.bind(this)
+    this.undo = this.undo.bind(this)
   }
 
   move(x, y, ki, isCurrent) {
@@ -49,6 +51,27 @@ export default class PuzzleBoard extends Component {
       return true
     }
     return false
+  }
+
+  reset() {
+    let ki = 0
+    if (this.props.puzzle[0] == 'B') {
+      ki = 1
+    }
+    else {
+      ki = 0
+    }
+    this.setState({
+      step: 0,
+      steps: [],
+      currentKi: ki
+    }, () => {
+      this.initPuzzleArray()
+      this.drawBoard()
+    })
+  }
+
+  undo() {
   }
 
   clearKifuArray() {
