@@ -53,11 +53,19 @@ class Puzzle extends Component {
   }
 
   handleRightTipOpen() {
-    this.setState({rightTipOpen: true})
+    this.setState({
+      rightTipOpen: true,
+      wrongTipOpen: false,
+    })
   }
 
   handleWrongTipOpen() {
-    this.setState({wrongTipOpen: true})
+    this.setState({
+      wrongTipOpen: true,
+      rightTipOpen: false
+    }, () => {
+      setTimeout(() => { this.handleReset() }, 2000)
+    })
   }
 
   handleClose() {
@@ -65,11 +73,11 @@ class Puzzle extends Component {
   }
 
   handleReset() {
-    console.log('aaa')
     this.refs.board.reset()
   }
 
   handleUndo() {
+
   }
 
   render() {
@@ -122,11 +130,14 @@ class Puzzle extends Component {
                 </div>
               </CardText>
               <CardActions style={{padding: '14px'}}>
-                <RaisedButton
-                  onClick={this.handleUndo}
-                  label="Undo"
-                  secondary={true}
-                />
+                {
+                  /*
+                  <RaisedButton
+                    onClick={this.handleUndo}
+                    label="Undo"
+                    secondary={true}
+                  />*/
+                }
                 <RaisedButton
                   onClick={this.handleReset}
                   label="Reset"
