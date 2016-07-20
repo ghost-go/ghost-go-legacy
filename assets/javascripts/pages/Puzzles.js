@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   puzzlesContainer: {
     marginTop: '20px',
     backgroundColor: '#fff',
-    padding: '20px 0 0 50px',
+    paddingTop: '20px',
     width: '100vw',
     float: 'left',
   },
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
   },
 
   puzzlesLeft: {
-    width: '15vw',
-    marginLeft: 0,
+    width: '18vw',
+    marginLeft: '45px',
     float: 'left',
   },
 
@@ -164,19 +164,19 @@ const styles = StyleSheet.create({
 
   puzzlesRight: {
     width: '75vw',
-    marginLeft: '5vw',
+    marginLeft: '2vw',
     paddingTop: '10px',
     float: 'left',
   },
 
   card: {
-    width: '20vw',
+    width: '22vw',
     margin: '0px 1.5vw 20px 1.5vw',
     float: 'left'
   },
 
   previewImgWrapper: {
-    height: '20vw'
+    height: '22vw'
   },
 
   clearfix: {

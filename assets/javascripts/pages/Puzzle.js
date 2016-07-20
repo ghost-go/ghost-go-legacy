@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
     maxWidth: '150'
   }
 
-
 })
 
 function select(state) {

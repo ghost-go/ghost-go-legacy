@@ -54,6 +54,7 @@ export default class PuzzleBoard extends Component {
   }
 
   reset() {
+    console.log('aaa')
     let ki = 0
     if (this.props.puzzle[0] == 'B') {
       ki = 1
@@ -326,6 +327,9 @@ export default class PuzzleBoard extends Component {
       if (wrongs[i].steps === stepsStr) {
         this.props.handleWrong()
         console.log('You are wrong!!')
+        setTimeout(2000, () => {
+          this.reset()
+        })
       }
       else {
         const step = wrongs[i].steps.split(';')[this.state.step]
@@ -340,6 +344,9 @@ export default class PuzzleBoard extends Component {
     else {
       this.props.handleWrong()
       console.log('You are wrong!!')
+      setTimeout(2000, () => {
+        this.reset()
+      })
     }
 
   }
