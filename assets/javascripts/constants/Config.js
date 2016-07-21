@@ -10,4 +10,3 @@ case 'production':
   API_DOMAIN = `${PROTOCOL}://api.ghost-go.com`
   break
 }
-

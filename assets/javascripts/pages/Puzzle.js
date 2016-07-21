@@ -122,7 +122,7 @@ class Puzzle extends Component {
           </div>
           <div className={css(styles.puzzleInfo)}>
             <Card>
-              <CardTitle title={puzzle.data.name} />
+              <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.ranking}`} />
               <CardText>
                 <div>
                   <strong>Number: </strong>

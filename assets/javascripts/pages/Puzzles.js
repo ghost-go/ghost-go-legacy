@@ -28,10 +28,14 @@ class Puzzles extends Component {
     this.state = {
       total: 11,
       current: 0,
-      visablePage: 6
+      visablePage: 6,
+      rankingFilter: 'all'
     }
     let { query } = this.props.location
-    this.props.dispatch(fetchPuzzles(query.page))
+    this.props.dispatch(fetchPuzzles({
+      page: query.page,
+      ranking: query.ranking
+    }))
     this.handlePageChanged = this.handlePageChanged.bind(this)
     this.handleSeeMore = this.handleSeeMore.bind(this)
   }
@@ -42,9 +46,14 @@ class Puzzles extends Component {
     })
   }
 
-  handleSeeMore() {
-    let { query } = this.props.location
-    this.props.dispatch(fetchPuzzles(query.page))
+  handleSeeMore(ranking) {
+    this.setState({ rankingFilter: ranking }, () => {
+      let { query } = this.props.location
+      this.props.dispatch(fetchPuzzles({
+        page: query.page,
+        ranking: ranking
+      }))
+    })
   }
 
   handleTips() {
@@ -92,13 +101,32 @@ class Puzzles extends Component {
                 showExpandableButton={true}
               />
               <CardText expandable={true}>
-                <ul>
-                  <li>18k-10k</li>
-                  <li>9k-5k</li>
-                  <li>4k-1k</li>
-                  <li>1d-3d</li>
-                  <li>3d-6d</li>
-                </ul>
+                <FlatButton
+                  backgroundColor={ this.state.rankingFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, 'all')}
+                  className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="all" />
+                <FlatButton
+                  backgroundColor={ this.state.rankingFilter == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '18k-10k')}
+                  className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="18k-10k" />
+                <FlatButton
+                  backgroundColor={ this.state.rankingFilter == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '9k-5k')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="9k-5k" />
+                <FlatButton
+                  backgroundColor={ this.state.rankingFilter == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '4k-1k')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="4k-1k" />
+                <FlatButton
+                  backgroundColor={ this.state.rankingFilter == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '1d-3d')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="1d-3d" />
+                <FlatButton
+                  backgroundColor={ this.state.rankingFilter == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '4d-6d')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="4d-6d" />
               </CardText>
             </Card>
             <Card expanded={true}>
@@ -185,7 +213,6 @@ const styles = StyleSheet.create({
 })
 
 function select(state) {
-  console.log(state)
   return {
     puzzles: state.puzzles
   }
