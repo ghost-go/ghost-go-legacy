@@ -111,6 +111,7 @@ class Puzzle extends Component {
           <div className={css(styles.puzzleContainer)}>
             <div className={css(styles.puzzleBoard)}>
               <PuzzleBoard className="board"
+                     whofirst={puzzle.data.whofirst}
                      puzzle={puzzle.data.steps}
                      right_answers={puzzle.data.right_answers}
                      wrong_answers={puzzle.data.wrong_answers}

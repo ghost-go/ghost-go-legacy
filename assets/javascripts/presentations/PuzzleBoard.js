@@ -54,17 +54,9 @@ export default class PuzzleBoard extends Component {
   }
 
   reset() {
-    let ki = 0
-    if (this.props.puzzle[0] == 'B') {
-      ki = 1
-    }
-    else {
-      ki = 0
-    }
     this.setState({
       step: 0,
-      steps: [],
-      currentKi: ki
+      steps: []
     }, () => {
       this.initPuzzleArray()
       this.drawBoard()
@@ -81,6 +73,7 @@ export default class PuzzleBoard extends Component {
   }
 
   initPuzzleArray() {
+    this.setState({currentKi: this.props.whofirst == 'Black First' ? 1 : -1})
     this.clearKifuArray()
     const steps = this.props.puzzle.split(';')
     let newArray = this.state._puzzleArray.slice()

@@ -72,7 +72,7 @@ class Puzzles extends Component {
             <CardMedia className={css(styles.previewImgWrapper)}>
               <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
             </CardMedia>
-            <CardTitle title="Card title" subtitle={`Ranking: ${i.ranking}`}/>
+            <CardTitle title={i.whofirst} subtitle={`Ranking: ${i.ranking}`}/>
             <CardActions>
               <Link to={`/puzzles/${i.id}`}>
                 <RaisedButton className={css(styles.button)} primary={true} label="Solve It" />
