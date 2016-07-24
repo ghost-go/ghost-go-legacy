@@ -69,7 +69,7 @@ export default class AnswerBar extends Component {
 
   render() {
     return(
-      <Paper style={styles.answerContainer}>
+      <Paper style={styles.answerContainer} zDepth={0}>
         <div style={styles.noInfo}>{`No.${this.props.id}`}</div>
         <div style={styles.stepInfo}>{`${this.state.current}/${this.props.total}`}</div>
         <IconButton onClick={this.firstStep} ref="firstStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
