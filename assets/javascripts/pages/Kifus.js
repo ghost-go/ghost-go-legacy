@@ -19,7 +19,7 @@ import { fetchKifus } from '../actions/KifuActions'
 import { StyleSheet, css } from 'aphrodite'
 
 //language
-import lang from '../components/lang'
+//import lang from '../components/lang'
 
 class Kifus extends Component {
   constructor(props) {

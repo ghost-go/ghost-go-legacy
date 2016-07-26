@@ -20,7 +20,7 @@ import { fetchPuzzles } from '../actions/PuzzleActions'
 import { StyleSheet, css } from 'aphrodite'
 
 //language
-import lang from '../components/lang'
+//import lang from '../components/lang'
 
 class Puzzles extends Component {
   constructor(props) {

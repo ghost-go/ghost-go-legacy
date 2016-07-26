@@ -3,7 +3,7 @@ import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
-import lang from '../components/lang'
+//import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
