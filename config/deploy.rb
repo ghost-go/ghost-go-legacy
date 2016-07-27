@@ -9,7 +9,7 @@ require 'mina/git'
 set :domain, 'ghost-go.com'
 set :deploy_to, '/var/www/ghost-go.com'
 set :repository, 'git@github.com:happybai/ghost-go.git'
-set :branch, 'develop'
+set :branch, 'master'
 
 # https://github.com/mina-deploy/mina/issues/99
 set :term_mode, nil
