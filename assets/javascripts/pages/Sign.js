@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
-import lang from '../components/lang'
+//import lang from '../components/lang'
 
 import Layout from './Layout'
 

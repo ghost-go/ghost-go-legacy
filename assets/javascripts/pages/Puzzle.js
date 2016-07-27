@@ -3,7 +3,7 @@ import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
-import lang from '../components/lang'
+//import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
@@ -15,10 +15,13 @@ import Drawer from 'material-ui/Drawer'
 
 import { fetchPuzzle } from '../actions/PuzzleActions'
 
+//material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Toggle from 'material-ui/Toggle'
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
+import Dialog from 'material-ui/Dialog'
+import Snackbar from 'material-ui/Snackbar'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -28,11 +31,17 @@ class Puzzle extends Component {
     let { id } = this.props.params
     this.state = {
       answersExpanded: false,
-      commentsOpen: false
+      commentsOpen: false,
+      rightTipOpen: false,
+      wrongTipOpen: false
     }
     this.props.dispatch(fetchPuzzle(id))
     this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
+    this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
+    this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
+    this.handleReset = this.handleReset.bind(this)
+    this.handleUndo = this.handleUndo.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -43,17 +52,55 @@ class Puzzle extends Component {
     this.setState({commentsOpen: !this.state.commentsOpen})
   }
 
+  handleRightTipOpen() {
+    this.setState({
+      rightTipOpen: true,
+      wrongTipOpen: false,
+    })
+  }
+
+  handleWrongTipOpen() {
+    this.setState({
+      wrongTipOpen: true,
+      rightTipOpen: false
+    }, () => {
+      setTimeout(() => { this.handleReset() }, 2000)
+    })
+  }
+
+  handleClose() {
+    this.setState({open: false})
+  }
+
+  handleReset() {
+    this.refs.board.reset()
+  }
+
+  handleUndo() {
+
+  }
+
   render() {
+    //<RaisedButton
+      //label="Comments"
+      //className={css(styles.btnComments)}
+      //primary={true}
+      //onTouchTap={this.handleCommentsToggle}
+    ///>
+    //<CardText>
+      //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
+    //</CardText>
     const { puzzle } = this.props
     let rightAnswers = []
     let wrongAnswers = []
+    let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
 
       puzzle.data.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
       puzzle.data.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.number} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
 
     }
@@ -64,30 +111,38 @@ class Puzzle extends Component {
           <div className={css(styles.puzzleContainer)}>
             <div className={css(styles.puzzleBoard)}>
               <PuzzleBoard className="board"
+                     whofirst={puzzle.data.whofirst}
                      puzzle={puzzle.data.steps}
+                     right_answers={puzzle.data.right_answers}
+                     wrong_answers={puzzle.data.wrong_answers}
+                     answers={puzzle.data.answers}
+                     handleRight={this.handleRightTipOpen}
+                     handleWrong={this.handleWrongTipOpen}
                      ref="board" />
             </div>
           </div>
           <div className={css(styles.puzzleInfo)}>
             <Card>
-              <CardTitle title={puzzle.data.name} />
+              <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.ranking}`} />
               <CardText>
                 <div>
                   <strong>Number: </strong>
-                  {puzzle.data.number} right/wrong: 10/20
+                  {`P-${puzzle.data.id}`}
                 </div>
               </CardText>
-              <CardText>
-                <Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
-              </CardText>
-              <CardActions>
-                <RaisedButton label="Undo" />
-                <RaisedButton label="Reset" />
+              <CardActions style={{padding: '14px'}}>
+                {
+                  /*
+                  <RaisedButton
+                    onClick={this.handleUndo}
+                    label="Undo"
+                    secondary={true}
+                  />*/
+                }
                 <RaisedButton
-                  label="Comments"
-                  className={css(styles.btnComments)}
+                  onClick={this.handleReset}
+                  label="Reset"
                   primary={true}
-                  onTouchTap={this.handleCommentsToggle}
                 />
               </CardActions>
               <CardText>
@@ -116,6 +171,26 @@ class Puzzle extends Component {
             <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
             </Drawer>
           </div>
+          <Snackbar
+            open={this.state.rightTipOpen}
+            message={'THAT\'S RIGHT!!'}
+            autoHideDuration={8000}
+            onRequestClose={this.handleRequestClose}
+            bodyStyle={{
+              backgroundColor: 'green',
+              fontSize: '18px'
+            }}
+          />
+          <Snackbar
+            open={this.state.wrongTipOpen}
+            message={'THAT\'S WRONG!!'}
+            autoHideDuration={5000}
+            onRequestClose={this.handleRequestClose}
+            bodyStyle={{
+              backgroundColor: 'black',
+              fontSize: '18px'
+            }}
+          />
         </div>
       </Layout>
     )
@@ -157,7 +232,6 @@ const styles = StyleSheet.create({
     fontSize: '14px',
     maxWidth: '150'
   }
-
 
 })
 

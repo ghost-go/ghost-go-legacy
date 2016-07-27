@@ -4,13 +4,16 @@ var autoprefixer = require('autoprefixer')
 var precss = require('precss')
 
 module.exports = {
-  entry: [
-    'whatwg-fetch',
-    './index.js'
-  ],
+  entry: {
+    bundle: [
+      'whatwg-fetch',
+      './index.js'
+    ]
+    //puzzle: './assets/javascripts/puzzle.js'
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: '/static/'
   },
   resolve: {
@@ -18,10 +21,10 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-    new webpack.DefinePlugin({
-      __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
-      __PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'true'))
-    }),
+    //new webpack.DefinePlugin({
+      //__DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
+      //__PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'true'))
+    //}),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')

@@ -51,7 +51,7 @@ export function initialize({cookies, isServer, currentLocation} = {}) {
     <Provider store={store} key="provider">
       <div>
         <Router history={history}>
-          <Route path="/" component={Kifus}/>
+          <Route path="/" component={Puzzles}/>
           <Route path="/games" component={Kifus}/>
           <Route path="/kifus/:id" component={Kifu}/>
           <Route path="/puzzles" component={Puzzles}/>
