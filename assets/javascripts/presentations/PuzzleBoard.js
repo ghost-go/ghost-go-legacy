@@ -394,7 +394,7 @@ export default class PuzzleBoard extends Component {
           if (hasMoved) {
             this.response(p.posX, p.posY, -this.state.currentKi)
           }
-        }, 500)
+        }, 300)
       }
 
       this.drawBoard()
