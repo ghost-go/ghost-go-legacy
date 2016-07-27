@@ -4,7 +4,7 @@ import { createAction, handleAction, handleActions } from 'redux-actions'
 export function puzzles(state = {
   isFetching: false,
   isFailure: false,
-  data: []
+  data: null
 }, action) {
   switch (action.type) {
   case types.FETCH_PUZZLES_REQUEST:

@@ -65,8 +65,8 @@ class Puzzles extends Component {
   render() {
     const { puzzles } = this.props
     let puzzlesCards = []
-    if (puzzles.data.length > 0) {
-      puzzles.data.forEach((i) => {
+    if (puzzles.data != null && puzzles.data.puzzles.length > 0) {
+      puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
           <Card key={i.id} className={css(styles.card)}>
             <CardMedia className={css(styles.previewImgWrapper)}>
@@ -110,23 +110,38 @@ class Puzzles extends Component {
                   backgroundColor={ this.state.rankingFilter == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
                   onClick={this.handleSeeMore.bind(this, '18k-10k')}
                   className={css(styles.button)}
-                  style={{textAlign: 'left'}} label="18k-10k" />
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '18k-10k' :
+                      `18k-10k (${puzzles.data.ranking_18k_10k_count}) `
+                  } />
                 <FlatButton
                   backgroundColor={ this.state.rankingFilter == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
                   onClick={this.handleSeeMore.bind(this, '9k-5k')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label="9k-5k" />
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '9k-5k' :
+                      `9k-5k (${puzzles.data.ranking_9k_5k_count}) `
+                  } />
                 <FlatButton
                   backgroundColor={ this.state.rankingFilter == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
                   onClick={this.handleSeeMore.bind(this, '4k-1k')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label="4k-1k" />
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '4k-1k' :
+                      `4k-1k (${puzzles.data.ranking_4k_1k_count}) `
+                  } />
                 <FlatButton
                   backgroundColor={ this.state.rankingFilter == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
                   onClick={this.handleSeeMore.bind(this, '1d-3d')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label="1d-3d" />
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '1d-3d' :
+                      `1d-3d (${puzzles.data.ranking_1d_3d_count}) `
+                  } />
                 <FlatButton
                   backgroundColor={ this.state.rankingFilter == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
                   onClick={this.handleSeeMore.bind(this, '4d-6d')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label="4d-6d" />
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '4d-6d' :
+                      `4d-6d (${puzzles.data.ranking_4d_6d_count}) `
+                  } />
               </CardText>
             </Card>
             <Card expanded={true}>
