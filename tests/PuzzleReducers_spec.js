@@ -8,7 +8,7 @@ describe('puzzles reducers', () => {
     .toEqual({
       isFetching: false,
       isFailure: false,
-      data: []
+      data: null
     })
   })
 
