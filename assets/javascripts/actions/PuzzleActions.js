@@ -2,6 +2,7 @@ import * as types from '../constants/ActionTypes'
 import * as config from '../constants/Config'
 import { createAction, handleAction, handleActions } from 'redux-actions'
 import URI from 'urijs'
+import URITemplate from 'urijs/src/URITemplate'
 
 export const fetchPuzzlesRequest = createAction(types.FETCH_PUZZLES_REQUEST)
 export const fetchPuzzlesSuccess = createAction(types.FETCH_PUZZLES_SUCCESS)
