@@ -106,93 +106,91 @@ class Puzzle extends Component {
     }
 
     return (
-      <Layout>
-        <div className={css(styles.puzzlePage)}>
-          <div className={css(styles.puzzleContainer)}>
-            <div className={css(styles.puzzleBoard)}>
-              <PuzzleBoard className="board"
-                     whofirst={puzzle.data.whofirst}
-                     puzzle={puzzle.data.steps}
-                     right_answers={puzzle.data.right_answers}
-                     wrong_answers={puzzle.data.wrong_answers}
-                     answers={puzzle.data.answers}
-                     handleRight={this.handleRightTipOpen}
-                     handleWrong={this.handleWrongTipOpen}
-                     ref="board" />
-            </div>
+      <div className={css(styles.puzzlePage)}>
+        <div className={css(styles.puzzleContainer)}>
+          <div className={css(styles.puzzleBoard)}>
+            <PuzzleBoard className="board"
+                   whofirst={puzzle.data.whofirst}
+                   puzzle={puzzle.data.steps}
+                   right_answers={puzzle.data.right_answers}
+                   wrong_answers={puzzle.data.wrong_answers}
+                   answers={puzzle.data.answers}
+                   handleRight={this.handleRightTipOpen}
+                   handleWrong={this.handleWrongTipOpen}
+                   ref="board" />
           </div>
-          <div className={css(styles.puzzleInfo)}>
-            <Card>
-              <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.ranking}`} />
-              <CardText>
-                <div>
-                  <strong>Number: </strong>
-                  {`P-${puzzle.data.id}`}
-                </div>
-              </CardText>
-              <CardActions style={{padding: '14px'}}>
-                {
-                  /*
-                  <RaisedButton
-                    onClick={this.handleUndo}
-                    label="Undo"
-                    secondary={true}
-                  />*/
-                }
-                <RaisedButton
-                  onClick={this.handleReset}
-                  label="Reset"
-                  primary={true}
-                />
-              </CardActions>
-              <CardText>
-                <Toggle
-                  toggled={this.state.answersExpanded}
-                  className={css(styles.toggle)}
-                  label="Answers"
-                  onToggle={this.handleAnswersToggle}
-                />
-              </CardText>
-              <CardText className={css(styles.answersContainer)} expandable={!this.state.answersExpanded}>
-                <CardHeader
-                  title="Correct Answer"
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                {rightAnswers}
-                <CardHeader
-                  title="Wrong Answer"
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                {wrongAnswers}
-              </CardText>
-            </Card>
-            <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
-            </Drawer>
-          </div>
-          <Snackbar
-            open={this.state.rightTipOpen}
-            message={'THAT\'S RIGHT!!'}
-            autoHideDuration={8000}
-            onRequestClose={this.handleRequestClose}
-            bodyStyle={{
-              backgroundColor: 'green',
-              fontSize: '18px'
-            }}
-          />
-          <Snackbar
-            open={this.state.wrongTipOpen}
-            message={'THAT\'S WRONG!!'}
-            autoHideDuration={5000}
-            onRequestClose={this.handleRequestClose}
-            bodyStyle={{
-              backgroundColor: 'black',
-              fontSize: '18px'
-            }}
-          />
         </div>
-      </Layout>
+        <div className={css(styles.puzzleInfo)}>
+          <Card>
+            <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.ranking}`} />
+            <CardText>
+              <div>
+                <strong>Number: </strong>
+                {`P-${puzzle.data.id}`}
+              </div>
+            </CardText>
+            <CardActions style={{padding: '14px'}}>
+              {
+                /*
+                <RaisedButton
+                  onClick={this.handleUndo}
+                  label="Undo"
+                  secondary={true}
+                />*/
+              }
+              <RaisedButton
+                onClick={this.handleReset}
+                label="Reset"
+                primary={true}
+              />
+            </CardActions>
+            <CardText>
+              <Toggle
+                toggled={this.state.answersExpanded}
+                className={css(styles.toggle)}
+                label="Answers"
+                onToggle={this.handleAnswersToggle}
+              />
+            </CardText>
+            <CardText className={css(styles.answersContainer)} expandable={!this.state.answersExpanded}>
+              <CardHeader
+                title="Correct Answer"
+                actAsExpander={true}
+                showExpandableButton={true}
+              />
+              {rightAnswers}
+              <CardHeader
+                title="Wrong Answer"
+                actAsExpander={true}
+                showExpandableButton={true}
+              />
+              {wrongAnswers}
+            </CardText>
+          </Card>
+          <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
+          </Drawer>
+        </div>
+        <Snackbar
+          open={this.state.rightTipOpen}
+          message={'THAT\'S RIGHT!!'}
+          autoHideDuration={8000}
+          onRequestClose={this.handleRequestClose}
+          bodyStyle={{
+            backgroundColor: 'green',
+            fontSize: '18px'
+          }}
+        />
+        <Snackbar
+          open={this.state.wrongTipOpen}
+          message={'THAT\'S WRONG!!'}
+          autoHideDuration={5000}
+          onRequestClose={this.handleRequestClose}
+          bodyStyle={{
+            backgroundColor: 'black',
+            fontSize: '18px'
+          }}
+        />
+      </div>
     )
   }
 }

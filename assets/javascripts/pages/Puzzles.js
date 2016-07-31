@@ -64,6 +64,7 @@ class Puzzles extends Component {
 
   render() {
     const { puzzles } = this.props
+
     let puzzlesCards = []
     if (puzzles.data != null && puzzles.data.puzzles.length > 0) {
       puzzles.data.puzzles.forEach((i) => {
@@ -83,92 +84,90 @@ class Puzzles extends Component {
       })
     }
     return (
-      <Layout>
-        <div className={css(styles.puzzlesContainer)}>
-          <div className={css(styles.puzzlesLeft)}>
-            <h1 className={css(styles.title)}>Puzzles Library</h1>
-            <div className={css(styles.buttonGroup)}>
-              <RaisedButton onClick={this.handleSeeMore} className={css(styles.button)} primary={true} label="See More" />
-              {
-                //<div className={css(styles.clearfix)}></div>
-                //<RaisedButton onClick={this.handleTips} className={css(styles.button)} disabled={true} label="Create Puzzle" />
-              }
-            </div>
-            <Card expanded={true}>
-              <CardHeader
-                title="RANKING"
-                actAsExpander={true}
-                showExpandableButton={true}
-              />
-              <CardText expandable={true}>
-                <FlatButton
-                  backgroundColor={ this.state.rankingFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
-                  onClick={this.handleSeeMore.bind(this, 'all')}
-                  className={css(styles.button)}
-                  style={{textAlign: 'left'}} label="all" />
-                <FlatButton
-                  backgroundColor={ this.state.rankingFilter == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
-                  onClick={this.handleSeeMore.bind(this, '18k-10k')}
-                  className={css(styles.button)}
-                  style={{textAlign: 'left'}} label={
-                    puzzles.data == null ?  '18k-10k' :
-                      `18k-10k (${puzzles.data.ranking_18k_10k_count}) `
-                  } />
-                <FlatButton
-                  backgroundColor={ this.state.rankingFilter == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
-                  onClick={this.handleSeeMore.bind(this, '9k-5k')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label={
-                    puzzles.data == null ?  '9k-5k' :
-                      `9k-5k (${puzzles.data.ranking_9k_5k_count}) `
-                  } />
-                <FlatButton
-                  backgroundColor={ this.state.rankingFilter == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
-                  onClick={this.handleSeeMore.bind(this, '4k-1k')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label={
-                    puzzles.data == null ?  '4k-1k' :
-                      `4k-1k (${puzzles.data.ranking_4k_1k_count}) `
-                  } />
-                <FlatButton
-                  backgroundColor={ this.state.rankingFilter == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
-                  onClick={this.handleSeeMore.bind(this, '1d-3d')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label={
-                    puzzles.data == null ?  '1d-3d' :
-                      `1d-3d (${puzzles.data.ranking_1d_3d_count}) `
-                  } />
-                <FlatButton
-                  backgroundColor={ this.state.rankingFilter == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
-                  onClick={this.handleSeeMore.bind(this, '4d-6d')} className={css(styles.button)}
-                  style={{textAlign: 'left'}} label={
-                    puzzles.data == null ?  '4d-6d' :
-                      `4d-6d (${puzzles.data.ranking_4d_6d_count}) `
-                  } />
-              </CardText>
-            </Card>
-            <Card expanded={true}>
-              <CardHeader
-                title="TAGS"
-                actAsExpander={true}
-                showExpandableButton={true}
-              />
-              <CardText expandable={true}>
-                No Tags(Not Open)
-              </CardText>
-            </Card>
+      <div className={css(styles.puzzlesContainer)}>
+        <div className={css(styles.puzzlesLeft)}>
+          <h1 className={css(styles.title)}>Puzzles Library</h1>
+          <div className={css(styles.buttonGroup)}>
+            <RaisedButton onClick={this.handleSeeMore} className={css(styles.button)} primary={true} label="See More" />
+            {
+              //<div className={css(styles.clearfix)}></div>
+              //<RaisedButton onClick={this.handleTips} className={css(styles.button)} disabled={true} label="Create Puzzle" />
+            }
           </div>
-          <div className={css(styles.puzzlesRight)}>
-            { puzzlesCards }
-          </div>
-          <Snackbar
-            open={this.state.tipsOpen}
-            message={'This function is not OPEN'}
-            autoHideDuration={5000}
-            bodyStyle={{
-              backgroundColor: 'black',
-              fontSize: '20px'
-            }}
-          />
+          <Card expanded={true}>
+            <CardHeader
+              title="RANKING"
+              actAsExpander={true}
+              showExpandableButton={true}
+            />
+            <CardText expandable={true}>
+              <FlatButton
+                backgroundColor={ this.state.rankingFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, 'all')}
+                className={css(styles.button)}
+                style={{textAlign: 'left'}} label="all" />
+              <FlatButton
+                backgroundColor={ this.state.rankingFilter == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, '18k-10k')}
+                className={css(styles.button)}
+                style={{textAlign: 'left'}} label={
+                  puzzles.data == null ?  '18k-10k' :
+                    `18k-10k (${puzzles.data.ranking_18k_10k_count}) `
+                } />
+              <FlatButton
+                backgroundColor={ this.state.rankingFilter == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, '9k-5k')} className={css(styles.button)}
+                style={{textAlign: 'left'}} label={
+                  puzzles.data == null ?  '9k-5k' :
+                    `9k-5k (${puzzles.data.ranking_9k_5k_count}) `
+                } />
+              <FlatButton
+                backgroundColor={ this.state.rankingFilter == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, '4k-1k')} className={css(styles.button)}
+                style={{textAlign: 'left'}} label={
+                  puzzles.data == null ?  '4k-1k' :
+                    `4k-1k (${puzzles.data.ranking_4k_1k_count}) `
+                } />
+              <FlatButton
+                backgroundColor={ this.state.rankingFilter == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, '1d-3d')} className={css(styles.button)}
+                style={{textAlign: 'left'}} label={
+                  puzzles.data == null ?  '1d-3d' :
+                    `1d-3d (${puzzles.data.ranking_1d_3d_count}) `
+                } />
+              <FlatButton
+                backgroundColor={ this.state.rankingFilter == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, '4d-6d')} className={css(styles.button)}
+                style={{textAlign: 'left'}} label={
+                  puzzles.data == null ?  '4d-6d' :
+                    `4d-6d (${puzzles.data.ranking_4d_6d_count}) `
+                } />
+            </CardText>
+          </Card>
+          <Card expanded={true}>
+            <CardHeader
+              title="TAGS"
+              actAsExpander={true}
+              showExpandableButton={true}
+            />
+            <CardText expandable={true}>
+              No Tags(Not Open)
+            </CardText>
+          </Card>
         </div>
-      </Layout>
+        <div className={css(styles.puzzlesRight)}>
+          { puzzlesCards }
+        </div>
+        <Snackbar
+          open={this.state.tipsOpen}
+          message={'This function is not OPEN'}
+          autoHideDuration={5000}
+          bodyStyle={{
+            backgroundColor: 'black',
+            fontSize: '20px'
+          }}
+        />
+      </div>
     )
   }
 }

@@ -43,61 +43,59 @@ class Kifus extends Component {
   render() {
     const { kifus } = this.props
     return (
-      <Layout>
-        <div className={css(styles.puzzlesContainer)}>
-          <div className={css(styles.puzzlesLeft)}>
-            <h1 className={css(styles.title)}>Puzzles Library</h1>
-            <div className={css(styles.buttonGroup)}>
-              <RaisedButton className={css(styles.button)} primary={true} label="Undo" />
-              <div className={css(styles.clearfix)}></div>
-              <RaisedButton className={css(styles.button)} secondary={true} label="Undo" />
-            </div>
-            <Card>
-              <CardHeader
-                title="Without Avatar"
-                subtitle="Subtitle"
-                actAsExpander={true}
-                showExpandableButton={true}
-              />
-              <CardText expandable={true}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions expandable={true}>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
+      <div className={css(styles.puzzlesContainer)}>
+        <div className={css(styles.puzzlesLeft)}>
+          <h1 className={css(styles.title)}>Puzzles Library</h1>
+          <div className={css(styles.buttonGroup)}>
+            <RaisedButton className={css(styles.button)} primary={true} label="Undo" />
+            <div className={css(styles.clearfix)}></div>
+            <RaisedButton className={css(styles.button)} secondary={true} label="Undo" />
           </div>
-          <div className={css(styles.puzzlesRight)}>
-            <Card className={css(styles.card)}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/100/100/nature/"
-              />
-              <CardMedia
-                overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-              >
-                <img src="http://lorempixel.com/600/337/nature/" />
-              </CardMedia>
-              <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-          </div>
+          <Card>
+            <CardHeader
+              title="Without Avatar"
+              subtitle="Subtitle"
+              actAsExpander={true}
+              showExpandableButton={true}
+            />
+            <CardText expandable={true}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+            </CardText>
+            <CardActions expandable={true}>
+              <FlatButton label="Action1" />
+              <FlatButton label="Action2" />
+            </CardActions>
+          </Card>
         </div>
-      </Layout>
+        <div className={css(styles.puzzlesRight)}>
+          <Card className={css(styles.card)}>
+            <CardHeader
+              title="URL Avatar"
+              subtitle="Subtitle"
+              avatar="http://lorempixel.com/100/100/nature/"
+            />
+            <CardMedia
+              overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
+            >
+              <img src="http://lorempixel.com/600/337/nature/" />
+            </CardMedia>
+            <CardTitle title="Card title" subtitle="Card subtitle" />
+            <CardText>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+            </CardText>
+            <CardActions>
+              <FlatButton label="Action1" />
+              <FlatButton label="Action2" />
+            </CardActions>
+          </Card>
+        </div>
+      </div>
     )
   //render() {
     //const { kifus } = this.props
