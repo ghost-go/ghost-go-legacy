@@ -14,6 +14,7 @@ import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
 import Sign from './pages/Sign'
 import Login from './pages/Login'
+import User from './pages/User'
 import Container from './pages/Container'
 
 import AuthService from './utils/AuthService'
@@ -79,6 +80,7 @@ export function initialize({cookies, isServer, currentLocation} = {}) {
             <Route path="/kifus/:id" component={Kifu} />
             <Route path="/puzzles" component={Puzzles} />
             <Route path="/puzzles/:id" component={Puzzle} />
+            <Route path="/users/:id" component={User} />
           </Route>
         </Router>
         <App>

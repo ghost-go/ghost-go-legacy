@@ -30,6 +30,7 @@
   "homepage": "https://github.com/happybai/ghost-go#readme",
   "dependencies": {
     "aphrodite": "^0.5.0",
+    "auth0": "^2.3.1",
     "auth0-lock": "^10.0.1",
     "babel-core": "^6.9.0",
     "babel-loader": "^6.2.4",
