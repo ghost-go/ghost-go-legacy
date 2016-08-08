@@ -12,12 +12,12 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 export default class Container extends Component {
 
   render() {
-    //let children = null
-    //if (this.props.children) {
-      //children = React.cloneElement(this.props.children, {
-        //auth: this.props.route.auth //sends auth instance from route to children
-      //})
-    //}
+    let children = null
+    if (this.props.children) {
+      children = React.cloneElement(this.props.children, {
+        auth: this.props.route.auth //sends auth instance from route to children
+      })
+    }
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
       {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
@@ -26,7 +26,7 @@ export default class Container extends Component {
           <section>
             <Sidebar />
           </section>
-          { this.props.children }
+          { children }
         </div>
       {/* </IntlProvider> */}
       </MuiThemeProvider>

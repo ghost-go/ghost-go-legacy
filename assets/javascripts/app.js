@@ -80,7 +80,7 @@ export function initialize({cookies, isServer, currentLocation} = {}) {
             <Route path="/kifus/:id" component={Kifu} />
             <Route path="/puzzles" component={Puzzles} />
             <Route path="/puzzles/:id" component={Puzzle} />
-            <Route path="/users/:id" component={User} />
+            <Route path="/users" component={User} />
           </Route>
         </Router>
         <App>

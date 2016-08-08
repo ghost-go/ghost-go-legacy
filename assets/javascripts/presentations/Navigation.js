@@ -41,7 +41,7 @@ export default class Navigation extends Component {
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
             <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={profile.picture}/>
-            <Link to={`/Users/${profile.user_id}`} >{profile.given_name}</Link>
+            <Link to={'/users'} >{profile.given_name}</Link>
             <Link onClick={this.logout.bind(this)} to=''>Log Out</Link>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -8,16 +8,53 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import Toggle from 'material-ui/Toggle'
 import Divider from 'material-ui/Divider'
 
+import {Row, Col, Thumbnail, Button} from 'react-bootstrap'
+import LinkedAccountsList from '../components/LinkedAccount/LinkedAccountsList'
+//import styles from './styles.module.css'
 
 import { StyleSheet, css } from 'aphrodite'
 import AuthService from '../utils/AuthService'
+//import AuthenticationClient from 'auth0'
+var AuthenticationClient = require('auth0').AuthenticationClient
 
 export default class User extends Component {
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
     this.state = {
-      tab: 'Basic Information'
+      tab: 'Basic Information',
+      profile: props.auth.getProfile()
     }
+
+    //var auth0 = new AuthenticationClient({
+      //domain: 'ghostgo.auth0.com',
+      //clientId: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
+    //})
+
+    //console.log(auth0)
+
+    props.auth.on('profile_updated', (newProfile) => {
+      this.setState({profile: newProfile})
+    })
+
+    //auth0.getUsers(function (err, users) {
+      //if (err) {
+        //// handle error.
+      //}
+      //console.log(users)
+    //})
+    //auth0
+      //.getUsers()
+      //.then(function (users) {
+        //console.log(users)
+      //})
+      //.catch(function (err) {
+        //// Handle error.
+      //})
+  }
+
+  logout(){
+    this.props.auth.logout()
+    this.context.router.push('/login')
   }
 
   handleSeeMore(ranking) {
@@ -25,6 +62,7 @@ export default class User extends Component {
   }
 
   render() {
+    const { profile } = this.state
     return (
       <div className={css(styles.usersContainer)}>
         <div className={css(styles.usersLeft)}>
@@ -50,22 +88,20 @@ export default class User extends Component {
           </Card>
         </div>
         <div className={css(styles.usersRight)}>
-          <h2>Account Infomation</h2>
-          <div className={css(styles.accountSection)}>
-          </div>
-          <h2>Social Network Login Setup</h2>
-          <i class="icon icon-facebook"></i>
-          <Toggle
-            className={css(styles.toggle)}
-            label="Facebook"
-            style={styles.toggle}
-          />
-          <i class="icon icon-google"></i>
-          <Toggle
-            className={css(styles.toggle)}
-            label="Google"
-            style={styles.toggle}
-          />
+          <h2 className={styles.pageTitle}>Home</h2>
+          <Row>
+            <Col md={2} mdOffset={4} className={styles.pane}>
+              <Thumbnail src={profile.picture}>
+                <p>Welcome {profile.name}!</p>
+                <p>
+                  <Button bsStyle="default" onClick={this.logout.bind(this)}>Logout</Button>
+                </p>
+              </Thumbnail>
+            </Col>
+            <Col md={4} className={styles.pane}>
+              <LinkedAccountsList profile={profile} auth={this.props.auth}></LinkedAccountsList>
+            </Col>
+          </Row>
         </div>
       </div>
     )
