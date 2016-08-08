@@ -3,6 +3,10 @@ import {ListGroup, Button} from 'react-bootstrap'
 import LinkedAccountItem from './LinkedAccountItem'
 import AuthService from '../../utils/AuthService'
 import LinkAccountService from '../../utils/LinkAccountService'
+import {List, ListItem} from 'material-ui/List'
+import RaisedButton from 'material-ui/RaisedButton'
+
+import Subheader from 'material-ui/Subheader'
 
 export class LinkedAccountsList extends React.Component {
 
@@ -18,13 +22,24 @@ export class LinkedAccountsList extends React.Component {
 
     return (
       <div>
-        <h3>Linked Accounts</h3>
-        <ListGroup>{items}</ListGroup>
-        <Button onClick={linker.link} bsStyle="primary">Link Account</Button>
+        <Subheader style={{fontSize: '20px'}}>Linked Accounts</Subheader>
+        <List>
+          {items}
+          <ListItem>
+            <RaisedButton onClick={linker.link} label="Link Account" primary={true} />
+          </ListItem>
+        </List>
       </div>
     )
   }
 }
+
+//const styles = {
+  //root: {
+    //display: 'flex',
+    //flexWrap: 'wrap',
+  //},
+//}
 
 LinkedAccountsList.propTypes = {
   auth: T.instanceOf(AuthService),
