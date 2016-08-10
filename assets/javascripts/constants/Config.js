@@ -13,3 +13,13 @@ case 'production':
   APP_DOMAIN = `${PROTOCOL}://www.ghost-go.com`
   break
 }
+
+export const AUTH0_CONFIG = {
+  languageDictionary: {
+    title: ''
+  },
+  theme: {
+    primaryColor: 'black',
+    logo: 'http://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png'
+  }
+}

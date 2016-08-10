@@ -1,11 +1,22 @@
 import { EventEmitter } from 'events'
 import Auth0Lock from 'auth0-lock'
+import * as config from '../constants/Config'
+
+const options = {
+  languageDictionary: {
+    title: ''
+  },
+  theme: {
+    primaryColor: 'black',
+    logo: 'http://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png'
+  }
+}
 
 export default class AuthService extends EventEmitter  {
-  constructor(clientId, domain, options) {
+  constructor(clientId, domain) {
     // Configure Auth0
     super()
-    this.lock = new Auth0Lock(clientId, domain, options)
+    this.lock = new Auth0Lock(clientId, domain, config.AUTH0_CONFIG)
     // Add callback for lock `authenticated` event
     this.lock.on('authenticated', this._doAuthentication.bind(this))
     // binds login functions to keep this context

@@ -1,9 +1,11 @@
 import Auth0Lock from 'auth0-lock'
+import * as config from '../constants/Config'
 
 export default class LinkAccountService {
   constructor(auth, userId) {
     this.auth = auth
-    this.lock = new Auth0Lock(auth.clientId, auth.domain, {
+    let merged = {}
+    Object.assign(merged, config.AUTH0_CONFIG, {
       auth: {
         params: {state: 'linking'}
       },
@@ -12,6 +14,7 @@ export default class LinkAccountService {
         title: 'Link with:'
       }
     })
+    this.lock = new Auth0Lock(auth.clientId, auth.domain, merged)
     this.link = this.link.bind(this)
   }
 

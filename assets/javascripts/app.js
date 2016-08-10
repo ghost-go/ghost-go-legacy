@@ -31,16 +31,7 @@ class App extends React.Component {
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
-const options = {
-  languageDictionary: {
-    title: ''
-  },
-  theme: {
-    primaryColor: 'black',
-    logo: 'http://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png'
-  }
-}
-const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__, options)
+const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
