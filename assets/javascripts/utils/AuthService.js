@@ -133,4 +133,21 @@ export default class AuthService extends EventEmitter  {
     })
   }
 
+
+  updateProfile(userId, data){
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.getToken() //setting authorization header
+    }
+    // making the PATCH http request to auth0 api
+    return fetch(`https://${this.domain}/api/v2/users/${userId}`, {
+      method: 'PATCH',
+      headers: headers,
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(newProfile => this.setProfile(newProfile)) //updating current profile
+  }
+
 }

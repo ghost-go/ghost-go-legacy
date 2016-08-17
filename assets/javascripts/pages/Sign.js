@@ -103,8 +103,8 @@ export default class Sign extends Component {
               <StepContent>
                 <TextField hintText="" floatingLabelText="Age(optional)" />
                 <div className="clearfix"></div>
-                <TextField hintText="" floatingLabelText="Language(optional)" />
-                <div className="clearfix"></div>
+                //<TextField hintText="" floatingLabelText="Language(optional)" />
+                //<div className="clearfix"></div>
                 <TextField hintText="" floatingLabelText="Nationality(optional)" />
                 <div className="clearfix"></div>
                 <TextField hintText="" floatingLabelText="Ranking(optional)" />

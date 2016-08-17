@@ -18,8 +18,10 @@ import LinkedAccountsList from '../components/LinkedAccount/LinkedAccountsList'
 
 import { StyleSheet, css } from 'aphrodite'
 import AuthService from '../utils/AuthService'
+
 //import AuthenticationClient from 'auth0'
 var AuthenticationClient = require('auth0').AuthenticationClient
+var ManagementClient = require('auth0').ManagementClient
 
 export default class User extends Component {
   constructor(props, context) {
@@ -58,6 +60,33 @@ export default class User extends Component {
 
   logout(){
     this.props.auth.logout()
+  }
+
+  handleSave() {
+    console.log(this.props.auth)
+    const { auth } = this.props
+    const { profile } = this.state
+    auth.updateProfile(profile.user_id, {
+      user_metadata: {
+        ranking: '9d'
+      }
+    })
+    //let auth0 = new AuthenticationClient({
+      //domain: 'ghostgo.auth0.com',
+      //clientId: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
+    //})
+    //var management = new ManagementClient({
+      //token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxM3VDUnIwaU43SVFvNmh3N2hkMkNUOVBubEx6ZzJnSiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInJlYWQiXX0sInVzZXJfaWRwX3Rva2VucyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NzEyNDAwOTUsImp0aSI6ImI0YjNiZWM2MTU5ZjA0NzhiOGYyMjk4YzMzYTQ0OTEwIn0.Dxcp9nDg69cv1qgPFfn7BeeFucyhp2n5F-Yn3Rv1eW0',
+      //domain: 'ghostgo.auth0.com'
+    //})
+    ////console.log(auth0)
+    //console.log(management)
+    //management.getUsers((err, users) => {
+      //console.log(users)
+    //})
+    //management.users.updateAppMetadata(this.state.profile.user_id, {
+      //ranking: '10d'
+    //})
   }
 
   fillNotSet(val) {
@@ -149,13 +178,15 @@ export default class User extends Component {
                 primaryText='Nationality'
                 secondaryText={profile.user_metadata.locate}
               />
-              <ListItem
-                primaryText='Language'
-                secondaryText={profile.locate}
-              />
+              {/*
+                <ListItem
+                  primaryText='Language'
+                  secondaryText={profile.locate}
+                />*/
+              }
               <RaisedButton
                 className={css(styles.offsetLeft)}
-                onClick={this.logout.bind(this)}
+                onClick={this.handleSave.bind(this)}
                 label="Save"
                 primary={true}
                 style={{marginBottom: '20px'}}
