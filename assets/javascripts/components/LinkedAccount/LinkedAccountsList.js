@@ -26,7 +26,7 @@ export class LinkedAccountsList extends React.Component {
         <List>
           {items}
           <ListItem>
-            <RaisedButton onClick={linker.link} label="Link Account" primary={true} />
+            <RaisedButton onClick={linker.link} label="Link Account" />
           </ListItem>
         </List>
       </div>

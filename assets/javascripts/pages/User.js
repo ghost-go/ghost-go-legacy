@@ -12,6 +12,7 @@ import Subheader from 'material-ui/Subheader'
 import {List, ListItem} from 'material-ui/List'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import Snackbar from 'material-ui/Snackbar'
 
 import LinkedAccountsList from '../components/LinkedAccount/LinkedAccountsList'
 //import styles from './styles.module.css'
@@ -26,68 +27,49 @@ var ManagementClient = require('auth0').ManagementClient
 export default class User extends Component {
   constructor(props, context) {
     super(props, context)
+    let profile = props.auth.getProfile()
     this.state = {
       tab: 'Basic Information',
-      profile: props.auth.getProfile()
+      profile: profile,
+      ranking: profile.user_metadata.ranking,
+      tipsOpen: false
     }
-
-    //var auth0 = new AuthenticationClient({
-      //domain: 'ghostgo.auth0.com',
-      //clientId: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
-    //})
-
-    //console.log(auth0)
 
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({profile: newProfile})
     })
 
-    //auth0.getUsers(function (err, users) {
-      //if (err) {
-        //// handle error.
-      //}
-      //console.log(users)
-    //})
-    //auth0
-      //.getUsers()
-      //.then(function (users) {
-        //console.log(users)
-      //})
-      //.catch(function (err) {
-        //// Handle error.
-      //})
   }
 
   logout(){
     this.props.auth.logout()
   }
 
-  handleSave() {
-    console.log(this.props.auth)
-    const { auth } = this.props
-    const { profile } = this.state
-    auth.updateProfile(profile.user_id, {
-      user_metadata: {
-        ranking: '9d'
-      }
+  handleChange(event, index, value) {
+    this.setState({ranking: value}, () => {
+      const { auth } = this.props
+      const { profile } = this.state
+      auth.updateProfile(profile.user_id, {
+        user_metadata: {
+          ranking: value
+        }
+      }).then(() => {
+        this.setState({
+          tipsOpen: true,
+        })
+      })
     })
-    //let auth0 = new AuthenticationClient({
-      //domain: 'ghostgo.auth0.com',
-      //clientId: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
-    //})
-    //var management = new ManagementClient({
-      //token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxM3VDUnIwaU43SVFvNmh3N2hkMkNUOVBubEx6ZzJnSiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInJlYWQiXX0sInVzZXJfaWRwX3Rva2VucyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NzEyNDAwOTUsImp0aSI6ImI0YjNiZWM2MTU5ZjA0NzhiOGYyMjk4YzMzYTQ0OTEwIn0.Dxcp9nDg69cv1qgPFfn7BeeFucyhp2n5F-Yn3Rv1eW0',
-      //domain: 'ghostgo.auth0.com'
-    //})
-    ////console.log(auth0)
-    //console.log(management)
-    //management.getUsers((err, users) => {
-      //console.log(users)
-    //})
-    //management.users.updateAppMetadata(this.state.profile.user_id, {
-      //ranking: '10d'
-    //})
   }
+
+  //handleSave() {
+    //const { auth } = this.props
+    //const { profile } = this.state
+    //auth.updateProfile(profile.user_id, {
+      //user_metadata: {
+        //ranking: this.state.ranking
+      //}
+    //})
+  //}
 
   fillNotSet(val) {
     if (val) {
@@ -129,21 +111,24 @@ export default class User extends Component {
           </Card>
         </div>
         <Paper className={css(styles.usersRight)}>
-            <Subheader style={{fontSize: '20px'}} className={styles.pageTitle}>Profile</Subheader>
-            <List>
-              <ListItem
-                primaryText='User Name'
-                secondaryText={profile.name}
-              />
-              <ListItem
-                primaryText='Nick Name'
-                secondaryText={profile.user_metadata.nickname}
-              />
-              <ListItem primaryText='Ranking' />
+            <div className={css(styles.lists)}>
+              <List>
+                <Subheader style={{fontSize: '20px'}}>Profile</Subheader>
+                <ListItem
+                  primaryText='User Name'
+                  secondaryText={profile.name}
+                />
+                <ListItem
+                  primaryText='Nick Name'
+                  secondaryText={profile.user_metadata.nickname}
+                  ref='nickname'
+                />
+                <ListItem primaryText='Ranking' />
                 <SelectField
                    className={css(styles.offsetLeft)}
-                   value={profile.user_metadata.ranking}
-                   onChange={this.handleChange}
+                   value={this.state.ranking}
+                   onChange={this.handleChange.bind(this)}
+                   ref='ranking'
                 >
                   <MenuItem value={'18k'} primaryText="18k" />
                   <MenuItem value={'17k'} primaryText="17k" />
@@ -174,27 +159,18 @@ export default class User extends Component {
                   <MenuItem value={'8d'} primaryText="8d" />
                   <MenuItem value={'9d'} primaryText="9d" />
                 </SelectField>
-              <ListItem
-                primaryText='Nationality'
-                secondaryText={profile.user_metadata.locate}
-              />
-              {/*
-                <ListItem
-                  primaryText='Language'
-                  secondaryText={profile.locate}
-                />*/
-              }
-              <RaisedButton
-                className={css(styles.offsetLeft)}
-                onClick={this.handleSave.bind(this)}
-                label="Save"
-                primary={true}
-                style={{marginBottom: '20px'}}
-              />
-            </List>
-            <Divider />
-            <LinkedAccountsList profile={profile} auth={this.props.auth}></LinkedAccountsList>
+              </List>
+            </div>
+            <div className={css(styles.linkedAccounts)}>
+              <LinkedAccountsList profile={profile} auth={this.props.auth}></LinkedAccountsList>
+            </div>
         </Paper>
+        <Snackbar
+          bodyStyle={{backgroundColor: 'green'}}
+          open={this.state.tipsOpen}
+          message="Profile Updated"
+          autoHideDuration={4000}
+        />
       </div>
     )
   }
@@ -202,15 +178,23 @@ export default class User extends Component {
 
 const styles = StyleSheet.create({
   usersContainer: {
+    display: 'flex',
     marginTop: '20px',
     backgroundColor: '#fff',
-    paddingTop: '20px',
-    width: '100vw',
-    float: 'left',
+    padding: '30px',
+    justifyContent: 'space-around'
   },
 
   accountSection: {
     fontSize: '20px'
+  },
+
+  lists: {
+    flex: '1 1 auto'
+  },
+
+  linkedAccounts: {
+    flex: '1 1 auto'
   },
 
   offsetLeft: {
@@ -226,9 +210,15 @@ const styles = StyleSheet.create({
   },
 
   usersLeft: {
-    width: '18vw',
-    marginLeft: '45px',
-    float: 'left',
+    width: '250px',
+  },
+
+  usersRight: {
+    display: 'flex',
+    flexGrow: 1,
+    flexWrap: 'wrap',
+    marginLeft: '30px',
+    minHeight: '500px'
   },
 
   buttonGroup: {
@@ -246,17 +236,9 @@ const styles = StyleSheet.create({
     fontSize: '16px'
   },
 
-  usersRight: {
-    width: '75vw',
-    marginLeft: '2vw',
-    paddingTop: '10px',
-    float: 'left',
-  },
-
   card: {
     width: '22vw',
     margin: '0px 1.5vw 20px 1.5vw',
-    float: 'left'
   },
 
   previewImgWrapper: {
