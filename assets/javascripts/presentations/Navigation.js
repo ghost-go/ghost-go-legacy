@@ -17,8 +17,6 @@ export default class Navigation extends Component {
   logout() {
     // destroys the session data
     this.props.auth.logout()
-    // redirects to login page
-    this.context.router.push('/login')
   }
 
   handleUserMenu() {
@@ -32,19 +30,20 @@ export default class Navigation extends Component {
       loginSection.push(
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
-            <Link onClick={auth.login.bind(this)} to="">Sign Up</Link>
+            <a href="javascript:void(0)" onClick={auth.login.bind(this)}>Sign Up</a>
           </div>
         </div>
       )
     }
     else {
       let profile = auth.getProfile()
+      console.log(profile)
       loginSection.push(
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
             <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={profile.picture}/>
-            <a href="javascript:void(0)">{profile.given_name}</a>
-            <Link onClick={this.logout.bind(this)} to="">Log Out</Link>
+            <Link to={'/users'} >{profile.nickname}</Link>
+            <Link onClick={this.logout.bind(this)} to=''>Log Out</Link>
           </div>
         </div>
       )

@@ -14,6 +14,7 @@ import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
 import Sign from './pages/Sign'
 import Login from './pages/Login'
+import User from './pages/User'
 import Container from './pages/Container'
 
 import AuthService from './utils/AuthService'
@@ -30,16 +31,7 @@ class App extends React.Component {
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
-const options = {
-  languageDictionary: {
-    title: ''
-  },
-  theme: {
-    primaryColor: 'black',
-    logo: 'http://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png'
-  }
-}
-const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__, options)
+const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -79,6 +71,7 @@ export function initialize({cookies, isServer, currentLocation} = {}) {
             <Route path="/kifus/:id" component={Kifu} />
             <Route path="/puzzles" component={Puzzles} />
             <Route path="/puzzles/:id" component={Puzzle} />
+            <Route path="/users" component={User} />
           </Route>
         </Router>
         <App>
