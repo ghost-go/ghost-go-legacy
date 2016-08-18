@@ -15,6 +15,8 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import Paper from 'material-ui/Paper'
 
+import AuthService from '../utils/AuthService'
+
 export default class Sign extends Component {
   constructor(props) {
     super(props)
@@ -82,13 +84,13 @@ export default class Sign extends Component {
                 Basic Information
               </StepButton>
               <StepContent>
-                <TextField hintText='Email'
+                <TextField hintText=''
                            floatingLabelText='Email' />
                 <div className="clearfix"></div>
-                <TextField hintText="Username"
+                <TextField hintText=''
                            floatingLabelText="Username" />
                 <div className="clearfix"></div>
-                <TextField hintText="Password"
+                <TextField hintText=''
                            floatingLabelText="Password"
                            type="password" />
                 {this.renderStepActions(0)}
@@ -99,13 +101,13 @@ export default class Sign extends Component {
                 Optional Information
               </StepButton>
               <StepContent>
-                <TextField hintText="Age(optional)" floatingLabelText="Age(optional)" />
+                <TextField hintText="" floatingLabelText="Age(optional)" />
                 <div className="clearfix"></div>
-                <TextField hintText="Language(optional)" floatingLabelText="Language(optional)" />
+                //<TextField hintText="" floatingLabelText="Language(optional)" />
+                //<div className="clearfix"></div>
+                <TextField hintText="" floatingLabelText="Nationality(optional)" />
                 <div className="clearfix"></div>
-                <TextField hintText="Nationality(optional)" floatingLabelText="Nationality(optional)" />
-                <div className="clearfix"></div>
-                <TextField hintText="Ranking(optional)" floatingLabelText="Ranking(optional)" />
+                <TextField hintText="" floatingLabelText="Ranking(optional)" />
                 {this.renderStepActions(1)}
               </StepContent>
             </Step>
