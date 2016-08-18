@@ -70,11 +70,19 @@ class Puzzles extends Component {
       puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
           <Card key={i.id} className={css(styles.card)}>
-            <CardMedia className={css(styles.previewImgWrapper)}>
+            <CardMedia
+              className={css(styles.puzzleImg)}
+            >
               <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
             </CardMedia>
-            <CardTitle title={i.whofirst} subtitle={`Ranking: ${i.ranking}`}/>
-            <CardActions>
+            <CardTitle
+              className={css(styles.puzzleTitle)}
+              title={i.whofirst}
+              subtitle={`Ranking: ${i.ranking}`}
+            />
+            <CardActions
+              className={css(styles.puzzleActions)}
+            >
               <Link to={`/puzzles/${i.id}`}>
                 <RaisedButton className={css(styles.button)} primary={true} label="Solve It" />
               </Link>
@@ -174,11 +182,21 @@ class Puzzles extends Component {
 
 const styles = StyleSheet.create({
   puzzlesContainer: {
+    display: 'flex',
     marginTop: '20px',
     backgroundColor: '#fff',
-    paddingTop: '20px',
-    width: '100vw',
-    float: 'left',
+    padding: '20px',
+  },
+
+  puzzlesLeft: {
+  },
+
+  puzzlesRight: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flex: '1 1 auto',
+    paddingTop: '10px',
+    marginLeft: '10px',
   },
 
   title: {
@@ -187,12 +205,6 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     margin: '10px 0 35px',
     padding: '0'
-  },
-
-  puzzlesLeft: {
-    width: '18vw',
-    marginLeft: '45px',
-    float: 'left',
   },
 
   buttonGroup: {
@@ -204,26 +216,31 @@ const styles = StyleSheet.create({
     marginBottom: '15px',
   },
 
-  puzzlesRight: {
-    width: '75vw',
-    marginLeft: '2vw',
-    paddingTop: '10px',
-    float: 'left',
-  },
-
   card: {
-    width: '22vw',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flex: '1 1 auto',
+    width: '300px',
     margin: '0px 1.5vw 20px 1.5vw',
-    float: 'left'
   },
 
-  previewImgWrapper: {
-    height: '22vw'
+  puzzleImg: {
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
   },
 
-  clearfix: {
-    clear: 'both'
-  }
+  puzzleTitle: {
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
+  },
+
+  puzzleActions: {
+    height: '50px',
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
+  },
+
 })
 
 function select(state) {
