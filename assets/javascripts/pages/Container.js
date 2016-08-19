@@ -17,16 +17,16 @@ export default class Container extends Component {
       children = React.cloneElement(this.props.children, {
         auth: this.props.route.auth //sends auth instance from route to children
       })
+      console.log(this.props)
     }
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
       {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
         <div>
           <Navigation auth={this.props.route.auth} />
-          <section>
-            <Sidebar />
-          </section>
-          { children }
+          <div>
+            { children }
+          </div>
         </div>
       {/* </IntlProvider> */}
       </MuiThemeProvider>

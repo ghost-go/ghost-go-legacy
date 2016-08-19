@@ -4,12 +4,6 @@ import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 
 import Layout from './Layout'
 
-import {
-  Step,
-  Stepper,
-  StepButton,
-  StepContent,
-} from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'

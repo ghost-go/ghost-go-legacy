@@ -1,5 +1,4 @@
 import React, { PropTypes as T } from 'react'
-import {ListGroup, Button} from 'react-bootstrap'
 import LinkedAccountItem from './LinkedAccountItem'
 import AuthService from '../../utils/AuthService'
 import LinkAccountService from '../../utils/LinkAccountService'

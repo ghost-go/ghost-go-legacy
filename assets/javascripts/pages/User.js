@@ -166,8 +166,8 @@ export default class User extends Component {
             </div>
         </Paper>
         <Snackbar
-          bodyStyle={{backgroundColor: 'green'}}
           open={this.state.tipsOpen}
+          bodyStyle={{backgroundColor: 'green'}}
           message="Profile Updated"
           autoHideDuration={4000}
         />
