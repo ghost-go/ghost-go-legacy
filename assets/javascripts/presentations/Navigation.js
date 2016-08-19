@@ -25,20 +25,18 @@ export default class Navigation extends Component {
 
   render() {
     const { auth } = this.props
-    const loginSection = []
+    let loginSection = null
     if (!auth.loggedIn()) {
-      loginSection.push(
+      loginSection =
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
             <a href="javascript:void(0)" onClick={auth.login.bind(this)}>Sign Up</a>
           </div>
         </div>
-      )
     }
     else {
       let profile = auth.getProfile()
-      console.log(profile)
-      loginSection.push(
+      loginSection =
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
             <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={profile.picture}/>
@@ -46,7 +44,6 @@ export default class Navigation extends Component {
             <Link onClick={this.logout.bind(this)} to=''>Log Out</Link>
           </div>
         </div>
-      )
     }
     return (
       <div className="nav-container">

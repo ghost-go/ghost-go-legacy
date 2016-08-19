@@ -29,7 +29,8 @@ class Puzzles extends Component {
       total: 11,
       current: 0,
       visablePage: 6,
-      rankingFilter: 'all'
+      rankingFilter: 'all',
+      tipsOpen: false,
     }
     let { query } = this.props.location
     this.props.dispatch(fetchPuzzles({

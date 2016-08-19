@@ -1,5 +1,4 @@
 import React, { PropTypes as T } from 'react'
-import {ListGroupItem, Button} from 'react-bootstrap'
 import {List, ListItem} from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import AuthService from '../../utils/AuthService'

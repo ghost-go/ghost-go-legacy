@@ -3,6 +3,7 @@ import Auth0Lock from 'auth0-lock'
 import * as config from '../constants/Config'
 
 const options = {
+  redirect: true,
   languageDictionary: {
     title: ''
   },
@@ -81,58 +82,6 @@ export default class AuthService extends EventEmitter  {
     localStorage.removeItem('id_token')
     localStorage.removeItem('profile')
   }
-
-  fetchApi(url, options){
-    // performs api calls sending the required authentication headers
-    const headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.getToken()
-    }
-
-    const userId = this.getProfile().user_id
-    return fetch(`https://${this.domain}/api/v2/users/${userId}/${url}`, {
-      headers,
-      ...options
-    })
-    .then(response => response.json())
-  }
-
-  linkAccount(token){
-    // prepares api request body data
-    const data = {
-      link_with: token
-    }
-    // sends a post to auth0 api to create a new identity
-    return this.fetchApi('identities', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      const profile = this.getProfile()
-      if (response.error){
-        alert(response.message)
-      } else {
-        this.setProfile({...profile, identities: response}) // updates profile identities
-      }
-    })
-  }
-
-  unlinkAccount(identity){
-    // sends a delete request to unlink the account identity
-    this.fetchApi(`identities/${identity.provider}/${identity.user_id}`, {
-      method: 'DELETE'
-    })
-    .then(response => {
-      const profile = this.getProfile()
-      if (response.error){
-        alert(response.message)
-      } else {
-        this.setProfile({...profile, identities: response}) // updates profile identities
-      }
-    })
-  }
-
 
   updateProfile(userId, data){
     const headers = {

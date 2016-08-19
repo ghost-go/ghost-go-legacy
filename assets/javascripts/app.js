@@ -12,7 +12,6 @@ import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
 import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
-import Sign from './pages/Sign'
 import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
@@ -40,12 +39,12 @@ const requireAuth = (nextState, replace) => {
 }
 // create your main reducer
 const reducer = combineReducers({
+  routing: routerReducer,
+  // ... add your own reducers here
   kifus,
   kifu,
   puzzles,
   puzzle,
-  routing: routerReducer
-  // ... add your own reducers here
 })
 
 const createStoreWithMiddleware = applyMiddleware(
