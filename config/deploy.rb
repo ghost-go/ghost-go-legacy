@@ -85,6 +85,7 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
+    queue "cp ~/.node_env ./.env"
     queue "nvm use node 5.7.0"
     queue "npm install --production"
     queue "./node_modules/.bin/webpack --config webpack.config.production.js"

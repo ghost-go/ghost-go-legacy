@@ -2,6 +2,20 @@ var webpack = require('webpack')
 var path = require('path')
 var autoprefixer = require('autoprefixer')
 var precss = require('precss')
+const dotenv = require('dotenv')
+const join = path.join
+const resolve = path.resolve
+
+const dotEnvVars = dotenv.config()
+const envVariables = Object.assign({}, dotEnvVars)
+
+const defines =
+  Object.keys(envVariables)
+  .reduce((memo, key) => {
+    const val = JSON.stringify(envVariables[key])
+    memo[`__${key.toUpperCase()}__`] = val
+    return memo
+  }, {})
 
 module.exports = {
   entry: {
@@ -30,6 +44,7 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
+    new webpack.DefinePlugin(defines),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
