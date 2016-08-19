@@ -73,7 +73,8 @@ module.exports = {
       {
         test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
         loader: 'url-loader?limit=100000'
-      }
+      },
+      { test: /\.json$/, loader: 'json-loader' }
     ]
   },
   postcss: function () {
