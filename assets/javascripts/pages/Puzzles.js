@@ -190,12 +190,15 @@ const styles = StyleSheet.create({
   },
 
   puzzlesLeft: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    flex: '0 0 230px'
   },
 
   puzzlesRight: {
     display: 'flex',
-    flexWrap: 'wrap',
-    flex: '1 1 auto',
+    flex: 'auto',
+    flexFlow: 'row wrap',
     paddingTop: '10px',
     marginLeft: '10px',
   },
@@ -221,8 +224,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    flex: '1 1 auto',
-    width: '300px',
+    flex: '1 1 250px',
+    width: '250px',
     margin: '0px 1.5vw 20px 1.5vw',
   },
 
