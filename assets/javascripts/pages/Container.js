@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AuthService from '../utils/AuthService'
 import Navigation from '../presentations/Navigation'
 import Sidebar from '../presentations/Sidebar'
+import Footer from '../presentations/Footer'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 //import lang from '../components/lang'
 
@@ -27,6 +28,7 @@ export default class Container extends Component {
           <div>
             { children }
           </div>
+          <Footer />
         </div>
       {/* </IntlProvider> */}
       </MuiThemeProvider>
