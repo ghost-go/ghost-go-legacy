@@ -145,6 +145,11 @@ class Puzzle extends Component {
               />
             </CardActions>
             <CardText>
+              <div>
+                { `Right Answer Count: ${rightAnswers.length}` }
+                <br />
+                { `Wrong Answer Count: ${wrongAnswers.length}` }
+              </div>
               <Toggle
                 toggled={this.state.answersExpanded}
                 className={css(styles.toggle)}
