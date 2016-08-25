@@ -82,13 +82,13 @@ class Puzzle extends Component {
 
   render() {
     //<RaisedButton
-      //label="Comments"
-      //className={css(styles.btnComments)}
-      //primary={true}
-      //onTouchTap={this.handleCommentsToggle}
+    //label="Comments"
+    //className={css(styles.btnComments)}
+    //primary={true}
+    //onTouchTap={this.handleCommentsToggle}
     ///>
     //<CardText>
-      //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
+    //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
     //</CardText>
     const { puzzle } = this.props
     let rightAnswers = []
@@ -110,14 +110,14 @@ class Puzzle extends Component {
         <div className={css(styles.puzzleContainer)}>
           <div className={css(styles.puzzleBoard)}>
             <PuzzleBoard className="board"
-                   whofirst={puzzle.data.whofirst}
-                   puzzle={puzzle.data.steps}
-                   right_answers={puzzle.data.right_answers}
-                   wrong_answers={puzzle.data.wrong_answers}
-                   answers={puzzle.data.answers}
-                   handleRight={this.handleRightTipOpen}
-                   handleWrong={this.handleWrongTipOpen}
-                   ref="board" />
+              whofirst={puzzle.data.whofirst}
+              puzzle={puzzle.data.steps}
+              right_answers={puzzle.data.right_answers}
+              wrong_answers={puzzle.data.wrong_answers}
+              answers={puzzle.data.answers}
+              handleRight={this.handleRightTipOpen}
+              handleWrong={this.handleWrongTipOpen}
+              ref="board" />
           </div>
         </div>
         <div className={css(styles.puzzleInfo)}>
@@ -132,11 +132,11 @@ class Puzzle extends Component {
             <CardActions style={{padding: '14px'}}>
               {
                 /*
-                <RaisedButton
-                  onClick={this.handleUndo}
-                  label="Undo"
-                  secondary={true}
-                />*/
+                 <RaisedButton
+                 onClick={this.handleUndo}
+                 label="Undo"
+                 secondary={true}
+                 />*/
               }
               <RaisedButton
                 onClick={this.handleReset}
@@ -145,6 +145,11 @@ class Puzzle extends Component {
               />
             </CardActions>
             <CardText>
+              <div>
+                { `Right Answer Count: ${rightAnswers.length}` }
+                <br />
+                { `Wrong Answer Count: ${wrongAnswers.length}` }
+              </div>
               <Toggle
                 toggled={this.state.answersExpanded}
                 className={css(styles.toggle)}
