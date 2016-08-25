@@ -29,7 +29,8 @@ export default class PuzzleBoard extends Component {
       steps: [],
       expandH: 5,
       expandV: 5,
-      previewImg: ''
+      previewImg: '',
+      isRatio1: true,
     }
     this.clearKifuArray()
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
@@ -626,6 +627,12 @@ export default class PuzzleBoard extends Component {
         minhv: this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical,
         maxhv: this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
       }, () => {
+        if (this.state.isRatio1) {
+          this.setState({
+            horizontal: this.state.maxhv,
+            verical: this.state.maxhv,
+          })
+        }
         let boardWidth = this.getBoardWidth()
         this.state.size =  boardWidth / (this.state.maxhv + 1)
       })
