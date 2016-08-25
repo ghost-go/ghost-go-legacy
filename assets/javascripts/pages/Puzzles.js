@@ -74,7 +74,9 @@ class Puzzles extends Component {
             <CardMedia
               className={css(styles.puzzleImg)}
             >
-              <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
+              <Link to={`/puzzles/${i.id}`}>
+                <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
+              </Link>
             </CardMedia>
             <CardTitle
               className={css(styles.puzzleTitle)}
@@ -237,6 +239,10 @@ const styles = StyleSheet.create({
   puzzleTitle: {
     flex: '1 1 auto',
     justifyContent: 'space-between',
+  },
+
+  previewImg: {
+    width: '100%'
   },
 
   puzzleActions: {
