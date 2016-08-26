@@ -673,11 +673,6 @@ PuzzleBoard.childContextTypes = {
 }
 
 const styles = StyleSheet.create({
-  boardCanvas: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-  },
   board: {
     position: 'relative',
   }
