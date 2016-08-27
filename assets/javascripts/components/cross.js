@@ -8,7 +8,7 @@ export default class Cross {
 
   draw(ctx) {
     ctx.beginPath()
-    ctx.lineWidth = 2
+    ctx.lineWidth = 1
     ctx.moveTo(this.x - this.size, this.y - this.size)
     ctx.lineTo(this.x + this.size, this.y + this.size)
     ctx.moveTo(this.x - this.size, this.y + this.size)

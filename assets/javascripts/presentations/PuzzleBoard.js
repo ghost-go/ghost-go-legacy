@@ -105,80 +105,80 @@ export default class PuzzleBoard extends Component {
     let grid = this.state.grid
 
     switch (this.state.direction) {
-    case 1:
-      for (let i = 1;i <= this.state.horizontal; i++) {
-        this._boardCtx.moveTo(i * size, size)
-        this._boardCtx.lineTo(i * size, this.state.verical * size)
-      }
-      for (let i = 1;i <= this.state.verical; i++) {
-        this._boardCtx.moveTo(size, i * size)
-        this._boardCtx.lineTo(this.state.horizontal * size, i * size)
-      }
-      break
-    case 2:
-      for (let i = 1;i <= this.state.horizontal; i++) {
-        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
-        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verical * size)
-      }
-      for (let i = 1;i <= this.state.verical; i++) {
-        this._boardCtx.moveTo(this.state.maxhv * size, i * size)
-        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
-      }
-      break
-    case 3:
-      for (let i = 1;i <= this.state.horizontal; i++) {
-        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verical + 1) * size)
-        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.maxhv * size)
-      }
-      for (let i = 1;i <= this.state.verical; i++) {
-        this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verical + i) * size)
-        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verical + i) * size)
-      }
-      break
-    case 4:
-      for (let i = 1;i <= this.state.horizontal; i++) {
-        this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verical + 1) * size)
-        this._boardCtx.lineTo(i * size, this.state.maxhv * size)
-      }
-      for (let i = 1;i <= this.state.verical; i++) {
-        this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verical + i) * size)
-        this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verical + i) * size)
-      }
-      break
+      case 1:
+        for (let i = 1;i <= this.state.horizontal; i++) {
+          this._boardCtx.moveTo(i * size, size)
+          this._boardCtx.lineTo(i * size, this.state.verical * size)
+        }
+        for (let i = 1;i <= this.state.verical; i++) {
+          this._boardCtx.moveTo(size, i * size)
+          this._boardCtx.lineTo(this.state.horizontal * size, i * size)
+        }
+        break
+      case 2:
+        for (let i = 1;i <= this.state.horizontal; i++) {
+          this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
+          this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verical * size)
+        }
+        for (let i = 1;i <= this.state.verical; i++) {
+          this._boardCtx.moveTo(this.state.maxhv * size, i * size)
+          this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
+        }
+        break
+      case 3:
+        for (let i = 1;i <= this.state.horizontal; i++) {
+          this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verical + 1) * size)
+          this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.maxhv * size)
+        }
+        for (let i = 1;i <= this.state.verical; i++) {
+          this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verical + i) * size)
+          this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verical + i) * size)
+        }
+        break
+      case 4:
+        for (let i = 1;i <= this.state.horizontal; i++) {
+          this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verical + 1) * size)
+          this._boardCtx.lineTo(i * size, this.state.maxhv * size)
+        }
+        for (let i = 1;i <= this.state.verical; i++) {
+          this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verical + i) * size)
+          this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verical + i) * size)
+        }
+        break
     }
     this._boardCtx.stroke()
 
     ;[4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
         switch (this.state.direction) {
-        case 1:
-          if (i < this.state.horizontal && j < this.state.verical) {
-            this._boardCtx.beginPath()
-            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
-            this._boardCtx.fill()
-          }
-          break
-        case 2:
-          if (i < this.state.horizontal && j < this.state.verical) {
-            this._boardCtx.beginPath()
-            this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * j, this.state.dotSize, 0, 2 * Math.PI, true)
-            this._boardCtx.fill()
-          }
-          break
-        case 3:
-          if (i < this.state.horizontal && j < this.state.verical) {
-            this._boardCtx.beginPath()
-            this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
-            this._boardCtx.fill()
-          }
-          break
-        case 4:
-          if (i < this.state.horizontal && j < this.state.verical) {
-            this._boardCtx.beginPath()
-            this._boardCtx.arc(size * i, size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
-            this._boardCtx.fill()
-          }
-          break
+          case 1:
+            if (i < this.state.horizontal && j < this.state.verical) {
+              this._boardCtx.beginPath()
+              this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+              this._boardCtx.fill()
+            }
+            break
+          case 2:
+            if (i < this.state.horizontal && j < this.state.verical) {
+              this._boardCtx.beginPath()
+              this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+              this._boardCtx.fill()
+            }
+            break
+          case 3:
+            if (i < this.state.horizontal && j < this.state.verical) {
+              this._boardCtx.beginPath()
+              this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
+              this._boardCtx.fill()
+            }
+            break
+          case 4:
+            if (i < this.state.horizontal && j < this.state.verical) {
+              this._boardCtx.beginPath()
+              this._boardCtx.arc(size * i, size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
+              this._boardCtx.fill()
+            }
+            break
         }
       })
     })
@@ -421,7 +421,6 @@ export default class PuzzleBoard extends Component {
     this.setState({
       previewImg: this.pieceLayer.toDataURL('image/png')
     })
-    //console.log(this.state.previewImg)
   }
 
 
@@ -457,52 +456,52 @@ export default class PuzzleBoard extends Component {
   _convertCtxposToPos(x, y) {
     let posX, posY
     switch (this.state.direction) {
-    case 1:
-      posX = Math.round(x / this.state.size) - 1
-      posY = Math.round(y / this.state.size) - 1
-      break
-    case 2:
-      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
-      posY = Math.round(y / this.state.size) - 1
-      break
-    case 3:
-      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
-      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
-      break
-    case 4:
-      posX = Math.round(x / this.state.size) - 1
-      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
-      break
+      case 1:
+        posX = Math.round(x / this.state.size) - 1
+        posY = Math.round(y / this.state.size) - 1
+        break
+      case 2:
+        posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+        posY = Math.round(y / this.state.size) - 1
+        break
+      case 3:
+        posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+        posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
+        break
+      case 4:
+        posX = Math.round(x / this.state.size) - 1
+        posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
+        break
     }
     return {posX, posY}
   }
 
   _isPosInTheBoard(x, y) {
     switch (this.state.direction) {
-    case 1:
-      return x >= 0 &&
-             x < this.state.horizontal &&
-             y >= 0 &&
-             y < this.state.verical
-      break
-    case 2:
-      return x >= this.state.grid - this.state.horizontal && 
-             x < this.state.grid &&
-             y >= 0 &&
-             y < this.state.verical
-      break
-    case 3:
-      return x >= this.state.grid - this.state.horizontal &&
-             x < this.state.grid &&
-             y >= this.state.grid - this.state.verical &&
-             y < this.state.verical
-      break
-    case 4:
-      return x >= 0 &&
-             x < this.state.horizontal &&
-             y >= this.state.grid - this.state.verical &&
-             y < this.state.verical
-      break
+      case 1:
+        return x >= 0 &&
+          x < this.state.horizontal &&
+          y >= 0 &&
+          y < this.state.verical
+        break
+      case 2:
+        return x >= this.state.grid - this.state.horizontal && 
+          x < this.state.grid &&
+          y >= 0 &&
+          y < this.state.verical
+        break
+      case 3:
+        return x >= this.state.grid - this.state.horizontal &&
+          x < this.state.grid &&
+          y >= this.state.grid - this.state.verical &&
+          y < this.state.verical
+        break
+      case 4:
+        return x >= 0 &&
+          x < this.state.horizontal &&
+          y >= this.state.grid - this.state.verical &&
+          y < this.state.verical
+        break
     }
   }
 
@@ -521,18 +520,18 @@ export default class PuzzleBoard extends Component {
     let offsetH = 0
     let offsetV = 0
     switch(this.state.direction) {
-    case 1:
-      break
-    case 2:
-      offsetH = this.state.grid - this.state.maxhv
-      break
-    case 3:
-      offsetH = this.state.grid - this.state.maxhv
-      offsetV = this.state.grid - this.state.maxhv
-      break
-    case 4:
-      offsetV = this.state.grid - this.state.maxhv
-      break
+      case 1:
+        break
+      case 2:
+        offsetH = this.state.grid - this.state.maxhv
+        break
+      case 3:
+        offsetH = this.state.grid - this.state.maxhv
+        offsetV = this.state.grid - this.state.maxhv
+        break
+      case 4:
+        offsetV = this.state.grid - this.state.maxhv
+        break
     }
     return {
       x: x - offsetH + 1,
@@ -544,7 +543,7 @@ export default class PuzzleBoard extends Component {
     let piece = new Piece()
     piece.x = x * this.state.size
     piece.y = y * this.state.size
-    piece.pieceSize = this.state.size / 2 - 3
+    piece.pieceSize = this.state.size / 2 - 2
     piece.type = type
     piece.isCurrent = isCurrent
     piece.draw(this._pieceCtx)
@@ -674,11 +673,6 @@ PuzzleBoard.childContextTypes = {
 }
 
 const styles = StyleSheet.create({
-  boardCanvas: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-  },
   board: {
     position: 'relative',
   }
