@@ -31,6 +31,7 @@ class Puzzles extends Component {
       visablePage: 6,
       rankingFilter: 'all',
       tipsOpen: false,
+      isLoading: false,
     }
     let { query } = this.props.location
     this.props.dispatch(fetchPuzzles({
@@ -67,7 +68,7 @@ class Puzzles extends Component {
     const { puzzles } = this.props
 
     let puzzlesCards = []
-    if (puzzles.data != null && puzzles.data.puzzles.length > 0) {
+    if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
       puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
           <Card key={i.id} className={css(styles.card)}>
@@ -93,6 +94,12 @@ class Puzzles extends Component {
           </Card>
         )
       })
+    }
+    else {
+      puzzlesCards =
+        <div className={css(styles.loading)}>
+          <i className="fa fa-spinner fa-pulse fa-fw"></i>
+        </div>
     }
     return (
       <div className={css(styles.puzzlesContainer)}>
@@ -250,6 +257,15 @@ const styles = StyleSheet.create({
     flex: '1 1 auto',
     justifyContent: 'space-between',
   },
+
+  loading: {
+    fontSize: '100px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    margin: '0 auto',
+  }
 
 })
 
