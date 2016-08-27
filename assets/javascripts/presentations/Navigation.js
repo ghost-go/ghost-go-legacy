@@ -56,19 +56,23 @@ export default class Navigation extends Component {
         <section className="nav-body">
           <div className="nav-body-wrap clearfix">
             <Link to="/puzzles" activeClassName="active">
-            {/*<FormattedMessage
-                id='app.nav.menu.puzzles'
-                defaultMessage="Puzzles Library"
-              />*/}
+              {
+                //<FormattedMessage
+                //id='app.nav.menu.puzzles'
+                //defaultMessage="Puzzles Library"
+                ///>
+              }
               Puzzles Library
             </Link>
-            <Link to="/games" activeClassName="active">
-            {/*<FormattedMessage
-                id="app.nav.menu.games"
-                defaultMessage="Games Library(Not Open)"
-              />*/}
-               Games Library(Not Open)
-            </Link>
+            {
+              //<Link to="/games" activeClassName="active">
+              //<FormattedMessage
+                //id="app.nav.menu.games"
+                //defaultMessage="Games Library(Not Open)"
+              ///>
+              // Games Library(Not Open)
+              //</Link>
+            }
           </div>
         </section>
 
