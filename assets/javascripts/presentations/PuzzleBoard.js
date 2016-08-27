@@ -37,7 +37,6 @@ export default class PuzzleBoard extends Component {
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.reset = this.reset.bind(this)
-    this.undo = this.undo.bind(this)
   }
 
   move(x, y, ki, isCurrent) {
@@ -62,10 +61,6 @@ export default class PuzzleBoard extends Component {
       this.initPuzzleArray()
       this.drawBoard()
     })
-  }
-
-  undo() {
-
   }
 
   clearKifuArray() {

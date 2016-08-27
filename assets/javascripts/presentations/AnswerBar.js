@@ -76,11 +76,13 @@ export default class AnswerBar extends Component {
         <IconButton onClick={this.prevStep} ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward"  />
         <IconButton onClick={this.nextStep} ref="nextStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />
         <IconButton onClick={this.lastStep} ref="lastStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-forward" />
-        <div style={styles.voteInfo}>Vote</div>
-        <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-up" />
-        <span>{this.props.up}</span>
-        <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-down" />
-        <span>{this.props.down}</span>
+        {
+          //<div style={styles.voteInfo}>Vote</div>
+          //<IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-up" />
+          //<span>{this.props.up}</span>
+          //<IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-down" />
+          //<span>{this.props.down}</span>
+        }
       </Paper>
     )
   }
@@ -89,24 +91,27 @@ export default class AnswerBar extends Component {
 const styles = {
 
   answerContainer: {
+    display: 'flex',
+    flex: '1 1 auto'
   },
 
   noInfo: {
-    display: 'inline-block',
+    display: 'flex',
+    justifyContent: 'middle',
     width: '70px',
     marginLeft: '25px',
     fontSize: '16px',
+    lineHeight: '36px',
   },
 
   stepInfo: {
-    display: 'inline-block',
     width: '40px',
     marginLeft: '15px',
     fontSize: '16px',
+    lineHeight: '36px',
   },
 
   voteInfo: {
-    display: 'inline-block',
     marginLeft: '20px',
     marginRight: '5px',
     fontSize: '16px',
@@ -125,6 +130,6 @@ const styles = {
   small: {
     width: 36,
     height: 36,
-    padding: 10,
+    padding: 5,
   },
 }

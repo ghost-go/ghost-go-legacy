@@ -30,7 +30,7 @@ class Puzzle extends Component {
     super(props)
     let { id } = this.props.params
     this.state = {
-      answersExpanded: false,
+      answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
       wrongTipOpen: false
@@ -41,7 +41,6 @@ class Puzzle extends Component {
     this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
     this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
     this.handleReset = this.handleReset.bind(this)
-    this.handleUndo = this.handleUndo.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -74,10 +73,6 @@ class Puzzle extends Component {
 
   handleReset() {
     this.refs.board.reset()
-  }
-
-  handleUndo() {
-
   }
 
   render() {
@@ -144,28 +139,25 @@ class Puzzle extends Component {
                 primary={true}
               />
             </CardActions>
-            <CardText>
-              <div>
-                { `Right Answer Count: ${rightAnswers.length}` }
-                <br />
-                { `Wrong Answer Count: ${wrongAnswers.length}` }
-              </div>
-              <Toggle
-                toggled={this.state.answersExpanded}
-                className={css(styles.toggle)}
-                label="Answers"
-                onToggle={this.handleAnswersToggle}
-              />
-            </CardText>
+            {
+              //<CardText>
+                //<Toggle
+                  //toggled={this.state.answersExpanded}
+                  //className={css(styles.toggle)}
+                  //label="Answers"
+                  //onToggle={this.handleAnswersToggle}
+                ///>
+              //</CardText>
+            }
             <CardText className={css(styles.answersContainer)} expandable={!this.state.answersExpanded}>
               <CardHeader
-                title="Correct Answer"
+                title="Right Answers"
                 actAsExpander={true}
                 showExpandableButton={true}
               />
               {rightAnswers}
               <CardHeader
-                title="Wrong Answer"
+                title="Wrong Answers"
                 actAsExpander={true}
                 showExpandableButton={true}
               />
@@ -177,7 +169,7 @@ class Puzzle extends Component {
         </div>
         <Snackbar
           open={this.state.rightTipOpen}
-          message={'THAT\'S RIGHT!!'}
+          message={'You are right!!'}
           autoHideDuration={8000}
           onRequestClose={this.handleRequestClose}
           bodyStyle={{
@@ -187,7 +179,7 @@ class Puzzle extends Component {
         />
         <Snackbar
           open={this.state.wrongTipOpen}
-          message={'THAT\'S WRONG!!'}
+          message={'You are wrong!!'}
           autoHideDuration={5000}
           onRequestClose={this.handleRequestClose}
           bodyStyle={{
@@ -202,32 +194,25 @@ class Puzzle extends Component {
 
 const styles = StyleSheet.create({
 
-  answersContainer: {
-    padding: 0
-  },
-
   btnComments: {
     float: 'right'
   },
 
   puzzlePage: {
-    display: 'flex'
+    display: 'flex',
+    justifyContent: 'space-around'
   },
 
   puzzleContainer: {
-    height: 'calc(100vh - 50px)',
-    display: 'flex'
-  },
-
-  puzzleBoard: {
-    marginTop: '10px',
-    marginLeft: '30px',
-    flex: '1',
-    order: '-1'
+    display: 'flex',
+    flex: '0 0 auto',
+    height: '110vh',
+    padding: '10px 5px 10px 10px',
   },
 
   puzzleInfo: {
-    padding: '10px 10px',
+    flex: '0 1 auto',
+    padding: '10px 10px 10px 5px',
     flexGrow: '1'
   },
 
