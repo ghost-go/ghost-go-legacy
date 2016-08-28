@@ -38,7 +38,6 @@ export default class AnswerBar extends Component {
           this.props.board.move(x, y, ki)
         }
       })
-      this.props.board.drawBoard()
     }
   }
 
@@ -52,7 +51,6 @@ export default class AnswerBar extends Component {
           this.props.board.move(x, y, ki)
         }
       })
-      this.props.board.drawBoard()
     }
   }
 
