@@ -10,6 +10,9 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
+import IconButton from 'material-ui/IconButton';
+import ActionGrade from 'material-ui/svg-icons/action/grade';
+import Rating from 'react-rating'
 
 //internal component
 import Layout from './Layout'
@@ -65,6 +68,33 @@ class Puzzles extends Component {
   }
 
   render() {
+    var SVGIcon = React.createClass({
+      render: function () {
+        // Namespaced attributes are not supported in JSX. As a workaround
+        // we can use the dangerouslySetInnerHTML to set the innerHTML property.
+        // See https://github.com/facebook/react/issues/2250
+        var svg = 
+          `<svg id="svg-source" style="display: none;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <symbol id="icon-star-empty" viewBox="0 0 1024 1024">
+                <title>star-empty</title>
+                <path class="path1" d="M1024 397.050l-353.78-51.408-158.22-320.582-158.216 320.582-353.784 51.408 256 249.538-60.432 352.352 316.432-166.358 316.432 166.358-60.434-352.352 256.002-249.538zM512 753.498l-223.462 117.48 42.676-248.83-180.786-176.222 249.84-36.304 111.732-226.396 111.736 226.396 249.836 36.304-180.788 176.222 42.678 248.83-223.462-117.48z"></path>
+              </symbol>
+              <symbol id="icon-star-full" viewBox="0 0 1024 1024">
+                <title>star-full</title>
+                <path class="path1" d="M1024 397.050l-353.78-51.408-158.22-320.582-158.216 320.582-353.784 51.408 256 249.538-60.432 352.352 316.432-166.358 316.432 166.358-60.434-352.352 256.002-249.538z"></path>
+              </symbol>
+            </defs>
+          </svg>`
+        var svg =
+          '<svg class="' + this.props.className + '">' +
+          '<use xlink:href="' + this.props.href + '"></use>' +
+          '</svg>';
+        return React.createElement('div', {
+          dangerouslySetInnerHTML: {__html: svg}
+        });
+      }
+    });
     const { puzzles } = this.props
 
     let puzzlesCards = []
@@ -84,6 +114,12 @@ class Puzzles extends Component {
               title={i.whofirst}
               subtitle={`Ranking: ${i.ranking}`}
             />
+            <CardActions>
+              <Rating initialRate={3} fractions={10}
+                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
+                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+              />
+            </CardActions>
             <CardActions
               className={css(styles.puzzleActions)}
             >
@@ -103,6 +139,18 @@ class Puzzles extends Component {
     }
     return (
       <div className={css(styles.puzzlesContainer)}>
+        <svg id="svg-source" style={{display: 'none'}} version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <symbol id="icon-star-empty" viewBox="0 0 1024 1024">
+              <title>star-empty</title>
+              <path className={'path1'} d="M1024 397.050l-353.78-51.408-158.22-320.582-158.216 320.582-353.784 51.408 256 249.538-60.432 352.352 316.432-166.358 316.432 166.358-60.434-352.352 256.002-249.538zM512 753.498l-223.462 117.48 42.676-248.83-180.786-176.222 249.84-36.304 111.732-226.396 111.736 226.396 249.836 36.304-180.788 176.222 42.678 248.83-223.462-117.48z"></path>
+            </symbol>
+            <symbol id="icon-star-full" viewBox="0 0 1024 1024">
+              <title>star-full</title>
+              <path className={'path1'} d="M1024 397.050l-353.78-51.408-158.22-320.582-158.216 320.582-353.784 51.408 256 249.538-60.432 352.352 316.432-166.358 316.432 166.358-60.434-352.352 256.002-249.538z"></path>
+            </symbol>
+          </defs>
+        </svg>
         <div className={css(styles.puzzlesLeft)}>
           <h1 className={css(styles.title)}>Puzzles Library</h1>
           <div className={css(styles.buttonGroup)}>
@@ -265,6 +313,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     margin: '0 auto',
+  },
+
+  ratingIcon: {
+    width: 28,
+    height: 28
   }
 
 })
