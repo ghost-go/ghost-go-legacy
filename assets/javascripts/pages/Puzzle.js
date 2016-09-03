@@ -7,11 +7,13 @@ import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
+import SVGIcon from '../presentations/SVGIcon'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Drawer from 'material-ui/Drawer'
+import Rating from 'react-rating'
 
 import { fetchPuzzle } from '../actions/PuzzleActions'
 
@@ -125,6 +127,12 @@ class Puzzle extends Component {
               </div>
             </CardText>
             <CardActions style={{padding: '14px'}}>
+              <Rating initialRate={3}
+                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
+                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+              />
+            </CardActions>
+            <CardActions style={{padding: '14px'}}>
               {
                 /*
                  <RaisedButton
@@ -219,7 +227,12 @@ const styles = StyleSheet.create({
   toggle: {
     fontSize: '14px',
     maxWidth: '150'
-  }
+  },
+
+  ratingIcon: {
+    width: 28,
+    height: 28
+  },
 
 })
 
