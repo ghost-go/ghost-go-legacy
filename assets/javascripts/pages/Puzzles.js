@@ -88,12 +88,12 @@ class Puzzles extends Component {
               subtitle={`Ranking: ${i.ranking}`}
             />
             <CardActions>
-              <Rating initialRate={3} readonly={true}
+              <Rating initialRate={i.rating} readonly={true}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
-              <span>3.0</span>
-              <span>0 ratings</span>
+              <span>{i.rating.toFixed(1)}</span>
+              <span>{i.rating_count} rating</span>
             </CardActions>
             <CardActions
               className={css(styles.puzzleActions)}

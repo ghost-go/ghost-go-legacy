@@ -77,6 +77,10 @@ class Puzzle extends Component {
     this.refs.board.reset()
   }
 
+  handleRatingChange(rate) {
+    console.log(`Rate: ${rate}`)
+  }
+
   render() {
     //<RaisedButton
     //label="Comments"
@@ -127,7 +131,7 @@ class Puzzle extends Component {
               </div>
             </CardText>
             <CardActions style={{padding: '14px'}}>
-              <Rating initialRate={3}
+              <Rating initialRate={3} onChange={this.handleRatingChange}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
