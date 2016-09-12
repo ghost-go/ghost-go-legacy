@@ -364,7 +364,8 @@ export default class PuzzleBoard extends Component {
       = 'absolute'
 
 
-      this.topLayer.onmousemove = (e) => {
+
+      let mousemoveEvent = (e) => {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
@@ -373,12 +374,15 @@ export default class PuzzleBoard extends Component {
         }
       }
 
-      this.topLayer.onclick = (e) => {
+      let clickEvent = (e) => {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
         //console.log(p.posX, p.posY)
         if (this._isPosInTheBoard(p.posX, p.posY)) {
+          this.topLayer.removeEventListener('mousemove', mousemoveEvent)
+          this.topLayer.onclick = () => false
+          this.topLayer.onmousemove = () => false
           hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
@@ -389,9 +393,15 @@ export default class PuzzleBoard extends Component {
         setTimeout(() => {
           if (hasMoved) {
             this.response(p.posX, p.posY, -this.state.currentKi)
+            this.topLayer.onmousemove = mousemoveEvent
+            this.topLayer.onclick = clickEvent
           }
         }, 300)
+
       }
+
+      this.topLayer.onmousemove = mousemoveEvent
+      this.topLayer.onclick = clickEvent
 
       this.drawBoard()
     }, 0)

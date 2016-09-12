@@ -7,11 +7,13 @@ import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
+import SVGIcon from '../presentations/SVGIcon'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Drawer from 'material-ui/Drawer'
+import Rating from 'react-rating'
 
 import { fetchPuzzle } from '../actions/PuzzleActions'
 
@@ -22,6 +24,9 @@ import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 import Dialog from 'material-ui/Dialog'
 import Snackbar from 'material-ui/Snackbar'
+
+import * as config from '../constants/Config'
+import URI from 'urijs'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -75,6 +80,45 @@ class Puzzle extends Component {
     this.refs.board.reset()
   }
 
+  handleRatingChange(rate) {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    console.log(profile)
+    if (auth.loggedIn()) {
+      let { id } = this.props.params
+      let url = URI(`${config.API_DOMAIN}/v1/ratings`)
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          rating: {
+            ratable_id: id,
+            ratable_type: 'Puzzle',
+            rating: rate,
+            user_id: profile.user_id,
+          }
+        })
+      }).then(function(res){
+        return (res.json())
+      }).then(function(json) {
+        console.log('json', json)
+        console.log(json.message)
+        if (json.message != null) {
+          alert(json.message)
+        }
+        else {
+          alert('Thank you for your rating!')
+        }
+      })
+    }
+    else {
+      auth.login()
+    }
+  }
+
   render() {
     //<RaisedButton
     //label="Comments"
@@ -86,6 +130,7 @@ class Puzzle extends Component {
     //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
     //</CardText>
     const { puzzle } = this.props
+    const { auth } = this.props
     let rightAnswers = []
     let wrongAnswers = []
     let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
@@ -124,6 +169,12 @@ class Puzzle extends Component {
                 {`P-${puzzle.data.id}`}
               </div>
             </CardText>
+            <CardActions style={{padding: '14px'}}>
+              <Rating initialRate={puzzle.data.rating} onChange={this.handleRatingChange.bind(this)}
+                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
+                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+              />
+            </CardActions>
             <CardActions style={{padding: '14px'}}>
               {
                 /*
@@ -219,7 +270,12 @@ const styles = StyleSheet.create({
   toggle: {
     fontSize: '14px',
     maxWidth: '150'
-  }
+  },
+
+  ratingIcon: {
+    width: 28,
+    height: 28
+  },
 
 })
 

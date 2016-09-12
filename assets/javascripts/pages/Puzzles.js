@@ -10,10 +10,13 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
+import IconButton from 'material-ui/IconButton'
+import Rating from 'react-rating'
 
 //internal component
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
+import SVGIcon from '../presentations/SVGIcon'
 import { fetchPuzzles } from '../actions/PuzzleActions'
 
 //external component
@@ -84,6 +87,14 @@ class Puzzles extends Component {
               title={i.whofirst}
               subtitle={`Ranking: ${i.ranking}`}
             />
+            <CardActions>
+              <Rating initialRate={i.rating} readonly={true}
+                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
+                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+              />
+              <span>{i.rating.toFixed(1)}</span>
+              <span>{i.rating_count} rating</span>
+            </CardActions>
             <CardActions
               className={css(styles.puzzleActions)}
             >
@@ -265,6 +276,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     margin: '0 auto',
+  },
+
+  ratingIcon: {
+    width: 28,
+    height: 28
   }
 
 })

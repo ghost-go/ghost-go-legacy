@@ -48,7 +48,7 @@ export default class Navigation extends Component {
     return (
       <div className="nav-container">
         <header className="nav-header">
-          <a className="logo">
+          <a href="/" className="logo">
             <span style={{float: 'left', marginLeft: '103px', marginTop: '20px'}}>--alpha</span>
           </a>
         </header>
