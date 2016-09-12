@@ -25,6 +25,9 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 import Dialog from 'material-ui/Dialog'
 import Snackbar from 'material-ui/Snackbar'
 
+import * as config from '../constants/Config'
+import URI from 'urijs'
+
 import { StyleSheet, css } from 'aphrodite'
 
 class Puzzle extends Component {
@@ -78,7 +81,42 @@ class Puzzle extends Component {
   }
 
   handleRatingChange(rate) {
-    console.log(`Rate: ${rate}`)
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    console.log(profile)
+    if (auth.loggedIn()) {
+      let { id } = this.props.params
+      let url = URI(`${config.API_DOMAIN}/v1/ratings`)
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          rating: {
+            ratable_id: id,
+            ratable_type: 'Puzzle',
+            rating: rate,
+            user_id: profile.user_id,
+          }
+        })
+      }).then(function(res){
+        return (res.json())
+      }).then(function(json) {
+        console.log('json', json)
+        console.log(json.message)
+        if (json.message != null) {
+          alert(json.message)
+        }
+        else {
+          alert('Thank you for your rating!')
+        }
+      })
+    }
+    else {
+      auth.login()
+    }
   }
 
   render() {
@@ -92,6 +130,7 @@ class Puzzle extends Component {
     //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
     //</CardText>
     const { puzzle } = this.props
+    const { auth } = this.props
     let rightAnswers = []
     let wrongAnswers = []
     let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
@@ -131,7 +170,7 @@ class Puzzle extends Component {
               </div>
             </CardText>
             <CardActions style={{padding: '14px'}}>
-              <Rating initialRate={3} onChange={this.handleRatingChange}
+              <Rating initialRate={puzzle.data.rating} onChange={this.handleRatingChange.bind(this)}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />

@@ -21,6 +21,7 @@ export default class AuthService extends EventEmitter  {
     // Add callback for lock `authenticated` event
     this.lock.on('authenticated', this._doAuthentication.bind(this))
     // binds login functions to keep this context
+    this.lock.on('authorization_error', this._authorizationError.bind(this))
     this.login = this.login.bind(this)
     this.clientId = __AUTH0_CLIENT_ID__
     this.domain = __AUTH0_DOMAIN__
@@ -42,6 +43,11 @@ export default class AuthService extends EventEmitter  {
         }
       })
     }
+  }
+
+  _authorizationError(error){
+    // Unexpected authentication error
+    console.log('Authentication Error', error)
   }
 
   login(callbackURL) {
