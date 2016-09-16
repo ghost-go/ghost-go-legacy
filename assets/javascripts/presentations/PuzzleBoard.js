@@ -31,6 +31,8 @@ export default class PuzzleBoard extends Component {
       expandV: 5,
       previewImg: '',
       isRatio1: true,
+      rightTipOpen: false,
+      wrongTipOpen: false,
     }
     this.clearKifuArray()
     this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
@@ -39,10 +41,37 @@ export default class PuzzleBoard extends Component {
     this.reset = this.reset.bind(this)
   }
 
-  move(x, y, ki, isCurrent) {
+  handleRightTipOpen() {
+    this.setState({
+      rightTipOpen: true,
+      wrongTipOpen: false,
+    }, () => {
+      this.forceUpdate()
+    })
+  }
+
+  handleWrongTipOpen() {
+    this.setState({
+      wrongTipOpen: true,
+      rightTipOpen: false,
+    }, () => {
+      this.forceUpdate()
+    })
+  }
+
+  handleTipsReset() {
+    this.setState({
+      wrongTipOpen: false,
+      rightTipOpen: false,
+    }, () => {
+      this.forceUpdate()
+    })
+  }
+
+  move(x, y, ki, isMarked) {
     if (this.canMove(x, y, ki)) {
       this.state._puzzleArray[x][y] = ki
-      this._drawPiece(x, y, ki, isCurrent)
+      this._drawPiece(x, y, ki, isMarked)
       this._execPonnuki(x, y, -ki)
       if (this.state.currentKi != 0) {
         this.state.currentKi = -this.state.currentKi
@@ -261,6 +290,20 @@ export default class PuzzleBoard extends Component {
       <Paper>
         <input id="puzzle-img" type="hidden" value={this.state.previewImg} />
         <div className={css(styles.board)} ref="board">
+            {
+              this.state.rightTipOpen ?
+                <div ref="tipRight" className={css(styles.tipRight)}>
+                  <i className="zmdi zmdi-check"></i>
+                </div>
+              : null
+            }
+            {
+              this.state.wrongTipOpen ?
+                <div ref="tipWrong" className={css(styles.tipWrong)}>
+                  <i className="zmdi zmdi-close"></i>
+                </div>
+                  : null
+            }
           <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
           <canvas id="cross_layer" className={css(styles.boardCanvas)} ref={(ref) => this.crossLayer = ref }></canvas>
           <canvas id="piece_layer" className={css(styles.boardCanvas)} ref={(ref) => this.pieceLayer = ref }></canvas>
@@ -383,7 +426,7 @@ export default class PuzzleBoard extends Component {
           this.topLayer.removeEventListener('mousemove', mousemoveEvent)
           this.topLayer.onclick = () => false
           this.topLayer.onmousemove = () => false
-          hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
+          hasMoved = this.move(p.posX, p.posY, this.state.currentKi, true)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
             //console.log(this.state.steps)
@@ -544,13 +587,14 @@ export default class PuzzleBoard extends Component {
     }
   }
 
-  _drawPiece(x, y, type, isCurrent) {
-    let piece = new Piece()
-    piece.x = x * this.state.size
-    piece.y = y * this.state.size
-    piece.pieceSize = this.state.size / 2 - 2
-    piece.type = type
-    piece.isCurrent = isCurrent
+  _drawPiece(x, y, type, isMarked) {
+    let piece = new Piece(
+      x * this.state.size,
+      y * this.state.size,
+      this.state.size / 2 - 2,
+      type,
+      isMarked
+    )
     piece.draw(this._pieceCtx)
   }
 
@@ -680,6 +724,32 @@ PuzzleBoard.childContextTypes = {
 const styles = StyleSheet.create({
   board: {
     position: 'relative',
+  },
+
+  tipRight: {
+    position: 'absolute',
+    width: '300px',
+    height: '300px',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-150px',
+    marginTop: '-150px',
+    fontSize: '300px',
+    color: 'green',
+    textAlign: 'center',
+  },
+
+  tipWrong: {
+    position: 'absolute',
+    width: '300px',
+    height: '300px',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-150px',
+    marginTop: '-150px',
+    fontSize: '300px',
+    color: 'red',
+    textAlign: 'center',
   }
 })
 
