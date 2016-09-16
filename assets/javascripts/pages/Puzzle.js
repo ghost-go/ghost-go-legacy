@@ -31,21 +31,22 @@ import URI from 'urijs'
 import { StyleSheet, css } from 'aphrodite'
 
 class Puzzle extends Component {
+
   constructor(props) {
     super(props)
     let { id } = this.props.params
+    this.props.dispatch(fetchPuzzle(id))
     this.state = {
       answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
       wrongTipOpen: false
     }
-    this.props.dispatch(fetchPuzzle(id))
-    this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
     this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
     this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
     this.handleReset = this.handleReset.bind(this)
+    this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -57,19 +58,12 @@ class Puzzle extends Component {
   }
 
   handleRightTipOpen() {
-    this.setState({
-      rightTipOpen: true,
-      wrongTipOpen: false,
-    })
+    this.refs.board.handleRightTipOpen()
   }
 
   handleWrongTipOpen() {
-    this.setState({
-      wrongTipOpen: true,
-      rightTipOpen: false
-    }, () => {
-      setTimeout(() => { this.handleReset() }, 2000)
-    })
+    this.refs.board.handleWrongTipOpen()
+    setTimeout(() => { this.handleReset() }, 2000)
   }
 
   handleClose() {
@@ -77,6 +71,7 @@ class Puzzle extends Component {
   }
 
   handleReset() {
+    this.refs.board.handleTipsReset()
     this.refs.board.reset()
   }
 
@@ -218,26 +213,6 @@ class Puzzle extends Component {
           <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
           </Drawer>
         </div>
-        <Snackbar
-          open={this.state.rightTipOpen}
-          message={'You are right!!'}
-          autoHideDuration={8000}
-          onRequestClose={this.handleRequestClose}
-          bodyStyle={{
-            backgroundColor: 'green',
-            fontSize: '18px'
-          }}
-        />
-        <Snackbar
-          open={this.state.wrongTipOpen}
-          message={'You are wrong!!'}
-          autoHideDuration={5000}
-          onRequestClose={this.handleRequestClose}
-          bodyStyle={{
-            backgroundColor: 'black',
-            fontSize: '18px'
-          }}
-        />
       </div>
     )
   }
@@ -276,6 +251,24 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28
   },
+
+  tipRight: {
+    position: 'absolute',
+    fontSize: '300px',
+    left: 250,
+    top: 180,
+    color: 'green',
+    textAlign: 'center'
+  },
+
+  tipWrong: {
+    position: 'absolute',
+    fontSize: '300px',
+    left: 250,
+    top: 180,
+    color: 'red',
+    textAlign: 'center'
+  }
 
 })
 

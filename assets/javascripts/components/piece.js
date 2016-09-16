@@ -1,10 +1,12 @@
 export default class Piece {
-  constructor(x, y, pieceSize, type) {
-    this.x || 0
-    this.y || 0
+
+  constructor(x, y, pieceSize, type, isMarked) {
+    this.x = x || 0
+    this.y = y || 0
     this.pieceSize = pieceSize || 1
-    this.type = type || 1
-    this.isCurrent = false
+    this.type = type || 0
+    this.isMarked = isMarked || false
+    this.draw = this.draw.bind(this)
   }
 
   draw(ctx) {
@@ -27,7 +29,7 @@ export default class Piece {
         ctx.fill()
         ctx.stroke()
 
-        if (this.isCurrent) {
+        if (this.isMarked) {
           ctx.beginPath()
           ctx.arc(this.x, this.y, this.pieceSize * 0.6, 0, 2 * Math.PI, true)
           ctx.lineWidth = 2
