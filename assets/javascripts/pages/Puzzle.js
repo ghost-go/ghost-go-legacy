@@ -115,15 +115,6 @@ class Puzzle extends Component {
   }
 
   render() {
-    //<RaisedButton
-    //label="Comments"
-    //className={css(styles.btnComments)}
-    //primary={true}
-    //onTouchTap={this.handleCommentsToggle}
-    ///>
-    //<CardText>
-    //<Toggle className={css(styles.toggle)} label="Research Mode"></Toggle>
-    //</CardText>
     const { puzzle } = this.props
     const { auth } = this.props
     let rightAnswers = []
