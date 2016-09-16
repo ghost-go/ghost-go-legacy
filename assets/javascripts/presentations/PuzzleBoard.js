@@ -436,9 +436,9 @@ export default class PuzzleBoard extends Component {
         setTimeout(() => {
           if (hasMoved) {
             this.response(p.posX, p.posY, -this.state.currentKi)
-            this.topLayer.onmousemove = mousemoveEvent
-            this.topLayer.onclick = clickEvent
           }
+          this.topLayer.onmousemove = mousemoveEvent
+          this.topLayer.onclick = clickEvent
         }, 300)
 
       }
