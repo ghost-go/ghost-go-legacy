@@ -12,7 +12,6 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
-import Drawer from 'material-ui/Drawer'
 import Rating from 'react-rating'
 
 import { fetchPuzzle } from '../actions/PuzzleActions'
@@ -24,6 +23,8 @@ import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 import Dialog from 'material-ui/Dialog'
 import Snackbar from 'material-ui/Snackbar'
+import Drawer from 'material-ui/Drawer'
+import RankingRange from '../presentations/RankingRange'
 
 import * as config from '../constants/Config'
 import URI from 'urijs'
@@ -75,10 +76,30 @@ class Puzzle extends Component {
     this.refs.board.reset()
   }
 
+  handleNext() {
+    let range = this.refs.range.state.range
+    let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then(function(res){
+      return (res.json())
+    }).then(function(json) {
+      if (json == null) {
+        alert('No next puzzle')
+      }
+      else {
+        window.location.replace(`${config.APP_DOMAIN}/puzzles/${json.id}?range=${range}`)
+      }
+    })
+  }
+
   handleRatingChange(rate) {
     const { auth } = this.props
     let profile = auth.getProfile()
-    console.log(profile)
     if (auth.loggedIn()) {
       let { id } = this.props.params
       let url = URI(`${config.API_DOMAIN}/v1/ratings`)
@@ -117,6 +138,7 @@ class Puzzle extends Component {
   render() {
     const { puzzle } = this.props
     const { auth } = this.props
+    const { range } = this.props.location.query
     let rightAnswers = []
     let wrongAnswers = []
     let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
@@ -162,19 +184,17 @@ class Puzzle extends Component {
               />
             </CardActions>
             <CardActions style={{padding: '14px'}}>
-              {
-                /*
-                 <RaisedButton
-                 onClick={this.handleUndo}
-                 label="Undo"
-                 secondary={true}
-                 />*/
-              }
               <RaisedButton
                 onClick={this.handleReset}
                 label="Reset"
                 primary={true}
               />
+              <RaisedButton
+                onClick={this.handleNext.bind(this)}
+                label="Next Puzzle"
+                secondary={true}
+              />
+              <RankingRange rankingRange={range || '5k-1d'} ref='range' />
             </CardActions>
             {
               //<CardText>

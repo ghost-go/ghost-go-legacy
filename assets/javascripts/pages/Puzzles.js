@@ -18,6 +18,7 @@ import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import SVGIcon from '../presentations/SVGIcon'
 import { fetchPuzzles } from '../actions/PuzzleActions'
+import RankingRange from '../presentations/RankingRange'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -119,8 +120,13 @@ class Puzzles extends Component {
           <div className={css(styles.buttonGroup)}>
             <RaisedButton onClick={this.handleSeeMore} className={css(styles.button)} primary={true} label="See More" />
             {
-              //<div className={css(styles.clearfix)}></div>
-              //<RaisedButton onClick={this.handleTips} className={css(styles.button)} disabled={true} label="Create Puzzle" />
+              /*
+              <div>
+                <div className={css(styles.chooseLevel)}>Choose Ranking Range</div>
+                <RankingRange rankingRange={'5k-1d'}/>
+              </div>
+              <RaisedButton className={css(styles.button)} secondary={true} label="Solve Them" />
+              */
             }
           </div>
           <Card expanded={true}>
@@ -229,6 +235,13 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     margin: '10px 0 35px',
     padding: '0'
+  },
+
+  chooseLevel: {
+    fontSize: '22px',
+    lineHeight: '22px',
+    fontWeight: '300',
+    marginTop: '10px',
   },
 
   buttonGroup: {
