@@ -372,7 +372,6 @@ export default class PuzzleBoard extends Component {
         this.move(x, y, ki)
         this.state.step++
         let stepsStr = this.state.steps.join(';')
-        console.log(i)
         if (wrongs[i].steps === stepsStr) {
           this.props.handleWrong()
         }
