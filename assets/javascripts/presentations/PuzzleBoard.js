@@ -351,10 +351,14 @@ export default class PuzzleBoard extends Component {
         this.state.steps.push(step)
         this.move(x, y, ki)
         this.state.step++
+        let stepsStr = this.state.steps.join(';')
+        if (rights[i].steps === stepsStr) {
+          this.props.handleRight()
+        }
       }
     }
     else if (wrongs.length > 0) {
-      const i = Math.floor(Math.random() * rights.length)
+      const i = Math.floor(Math.random() * wrongs.length)
       let stepsStr = this.state.steps.join(';')
       if (wrongs[i].steps === stepsStr) {
         this.props.handleWrong()
@@ -367,6 +371,11 @@ export default class PuzzleBoard extends Component {
         this.state.steps.push(step)
         this.move(x, y, ki)
         this.state.step++
+        let stepsStr = this.state.steps.join(';')
+        console.log(i)
+        if (wrongs[i].steps === stepsStr) {
+          this.props.handleWrong()
+        }
       }
     }
     else {
