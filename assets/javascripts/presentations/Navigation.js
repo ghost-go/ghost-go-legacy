@@ -10,8 +10,15 @@ export default class Navigation extends Component {
     super(props)
     this.state = {
       isSigned: false,
-      isMenuShow: false
+      isMenuShow: false,
+      profile: props.auth.getProfile()
     }
+
+    props.auth.on('profile_updated', (newProfile) => {
+      this.setState({profile: newProfile})
+    })
+
+
   }
 
   logout() {
@@ -35,12 +42,11 @@ export default class Navigation extends Component {
         </div>
     }
     else {
-      let profile = auth.getProfile()
       loginSection =
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
-            <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={profile.picture}/>
-            <Link to={'/users'} >{profile.nickname}</Link>
+            <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
+            <Link to={'/users'} >{this.state.profile.nickname}</Link>
             <Link onClick={this.logout.bind(this)} to=''>Log Out</Link>
           </div>
         </div>
