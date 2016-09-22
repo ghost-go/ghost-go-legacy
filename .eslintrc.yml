@@ -2,6 +2,7 @@ env:
   browser: true
   commonjs: true
   es6: true
+parser: 'babel-eslint'
 extends:
   - 'plugin:jasmine/recommended'
   #- 'eslint:recommended'

@@ -53,11 +53,11 @@ class Puzzles extends Component {
   }
 
   handleSeeMore(ranking) {
-    this.setState({ rankingFilter: ranking }, () => {
+    this.setState({ rankingFilter: ranking || this.state.rankingFilter }, () => {
       let { query } = this.props.location
       this.props.dispatch(fetchPuzzles({
         page: query.page,
-        ranking: ranking
+        ranking: this.state.rankingFilter
       }))
     })
   }
@@ -89,11 +89,11 @@ class Puzzles extends Component {
               subtitle={`Ranking: ${i.ranking}`}
             />
             <CardActions>
-              <Rating initialRate={i.rating} readonly={true}
+              <Rating initialRate={parseFloat(i.rating)} readonly={true}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
-              <span>{i.rating.toFixed(1)}</span>
+              <span>{parseFloat(i.rating).toFixed(1)}</span>
               <span>{i.rating_count} rating</span>
             </CardActions>
             <CardActions
@@ -118,7 +118,7 @@ class Puzzles extends Component {
         <div className={css(styles.puzzlesLeft)}>
           <h1 className={css(styles.title)}>Puzzles Library</h1>
           <div className={css(styles.buttonGroup)}>
-            <RaisedButton onClick={this.handleSeeMore} className={css(styles.button)} primary={true} label="See More" />
+            <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
             {
               /*
               <div>
