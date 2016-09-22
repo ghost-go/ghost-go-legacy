@@ -1,10 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router'
 
 import AuthService from '../utils/AuthService'
 
 export default class Navigation extends Component {
+
+  static propTypes = {
+    auth: PropTypes.instanceOf(AuthService)
+  }
 
   constructor(props) {
     super(props)
@@ -17,7 +21,6 @@ export default class Navigation extends Component {
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({profile: newProfile})
     })
-
 
   }
 
