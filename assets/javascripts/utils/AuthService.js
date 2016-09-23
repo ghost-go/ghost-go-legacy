@@ -2,17 +2,6 @@ import { EventEmitter } from 'events'
 import Auth0Lock from 'auth0-lock'
 import * as config from '../constants/Config'
 
-const options = {
-  redirect: true,
-  languageDictionary: {
-    title: ''
-  },
-  theme: {
-    primaryColor: 'black',
-    logo: 'http://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png'
-  }
-}
-
 export default class AuthService extends EventEmitter  {
   constructor(clientId, domain) {
     // Configure Auth0
@@ -23,8 +12,6 @@ export default class AuthService extends EventEmitter  {
     // binds login functions to keep this context
     this.lock.on('authorization_error', this._authorizationError.bind(this))
     this.login = this.login.bind(this)
-    this.clientId = __AUTH0_CLIENT_ID__
-    this.domain = __AUTH0_DOMAIN__
   }
 
   _doAuthentication(authResult){
@@ -50,7 +37,7 @@ export default class AuthService extends EventEmitter  {
     console.log('Authentication Error', error)
   }
 
-  login(callbackURL) {
+  login() {
     // Call the show method to display the widget.
     this.lock.show()
   }

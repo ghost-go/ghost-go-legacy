@@ -1,8 +1,9 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
-import { Router, Route, hashHistory, browserHistory, IndexRedirect } from 'react-router'
+import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 import { kifus, kifu } from './reducers/KifuReducers'
@@ -17,6 +18,11 @@ import User from './pages/User'
 import Container from './pages/Container'
 
 import AuthService from './utils/AuthService'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+
+require('../stylesheets/base.scss')
+require('../stylesheets/home.scss')
+require('../stylesheets/navigation.scss')
 
 class App extends React.Component {
   render() {
@@ -32,11 +38,6 @@ const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
 const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 
-const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
-    replace({ pathname: '/login' })
-  }
-}
 // create your main reducer
 const reducer = combineReducers({
   routing: routerReducer,
@@ -55,28 +56,36 @@ const store = createStoreWithMiddleware(reducer)
 
 const history = syncHistoryWithStore(browserHistory, store)
 
-// a single function can be used for both client and server-side rendering.
-// when run from the server, this function will need to know the cookies and
-// url of the current request. also be sure to set `isServer` to true.
-export function initialize({cookies, isServer, currentLocation} = {}) {
-  // configure redux-auth BEFORE rendering the page
-  return (
-    <Provider store={store} key="provider">
-      <div>
-        <Router history={history}>
-          <Route path="/" component={Container} auth={auth}>
-            <IndexRedirect to="/puzzles" />
-            <Route path="/games" component={Kifus} />
-            <Route path="/kifus/:id" component={Kifu} />
-            <Route path="/puzzles" component={Puzzles} />
-            <Route path="/puzzles/:id" component={Puzzle} />
-            <Route path="/users" component={User} />
-          </Route>
-        </Router>
-        <App>
-        </App>
-      </div>
-    </Provider>
-  )
+injectTapEventPlugin()
 
+const hashString = window.location.hash;
+if (hashString) {
+  const idString = '&id_token';
+  const firstIndex = hashString.indexOf(idString) + idString.length + 1;
+  const lastIndex = hashString.indexOf('&token_type=');
+  let idToken = hashString.substring(firstIndex, lastIndex)
+  auth.setToken(idToken)
+  auth._doAuthentication({
+    idToken: idToken
+  })
 }
+
+ReactDOM.render(
+  <Provider store={store} key="provider">
+    <div>
+      <Router history={history}>
+        <Route path="/" component={Container} auth={auth}>
+          <IndexRedirect to="/puzzles" />
+          <Route path="/games" component={Kifus} />
+          <Route path="/kifus/:id" component={Kifu} />
+          <Route path="/puzzles" component={Puzzles} />
+          <Route path="/puzzles/:id" component={Puzzle}  />
+          <Route path="/users" component={User} />
+        </Route>
+      </Router>
+      <App>
+      </App>
+    </div>
+  </Provider>,
+  document.querySelector('.app')
+)
