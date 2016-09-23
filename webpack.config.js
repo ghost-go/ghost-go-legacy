@@ -67,7 +67,7 @@ module.exports = {
       'webpack-dev-server/client?http://localhost:5000',
       'webpack/hot/dev-server',
       'whatwg-fetch',
-      './index.js'
+      './assets/javascripts/app.js'
     ]
     //puzzle: './assets/javascripts/puzzle.js'
   },

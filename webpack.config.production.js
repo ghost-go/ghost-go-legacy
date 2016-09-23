@@ -21,7 +21,7 @@ module.exports = {
   entry: {
     bundle: [
       'whatwg-fetch',
-      './index.js'
+      './assets/javascripts/app.js'
     ]
     //puzzle: './assets/javascripts/puzzle.js'
   },
