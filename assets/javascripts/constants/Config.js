@@ -15,6 +15,13 @@ case 'production':
 }
 
 export const AUTH0_CONFIG = {
+  auth: {
+    redirectUrl: APP_DOMAIN,
+    responseType: 'token',
+    authParams: {
+      scope: 'openid profile'
+    }
+  },
   languageDictionary: {
     title: ''
   },
