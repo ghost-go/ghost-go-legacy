@@ -14,7 +14,7 @@ import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
-import { fetchPuzzle } from '../actions/PuzzleActions'
+import { fetchPuzzle, fetchPuzzleNext } from '../actions/PuzzleActions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -78,23 +78,24 @@ class Puzzle extends Component {
 
   handleNext() {
     let range = this.refs.range.state.range
-    let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(function(res){
-      return (res.json())
-    }).then(function(json) {
-      if (json == null) {
-        alert('No next puzzle')
-      }
-      else {
-        window.location.replace(`${config.APP_DOMAIN}/puzzles/${json.id}?range=${range}`)
-      }
-    })
+    this.props.dispatch(fetchPuzzleNext(range))
+    //let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
+    //fetch(url, {
+      //method: 'GET',
+      //headers: {
+        //'Accept': 'application/json',
+        //'Content-Type': 'application/json'
+      //},
+    //}).then(function(res){
+      //return (res.json())
+    //}).then(function(json) {
+      //if (json == null) {
+        //alert('No next puzzle')
+      //}
+      //else {
+        //window.location.replace(`${config.APP_DOMAIN}/puzzles/${json.id}?range=${range}`)
+      //}
+    //})
   }
 
   handleRatingChange(rate) {

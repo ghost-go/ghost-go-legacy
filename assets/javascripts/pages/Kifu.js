@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
@@ -15,6 +14,14 @@ import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 
 class Kifu extends Component {
+
+  static propTypes = {
+    kifu: React.PropTypes.shape({
+      isFetching: React.PropTypes.bool.isRequired,
+      isFailure: React.PropTypes.bool.isRequired,
+    })
+  }
+
   constructor(props) {
     super(props)
     let { id } = this.props.params
@@ -26,6 +33,8 @@ class Kifu extends Component {
       width: 100
     }
     const { kifu } = this.props
+    if (kifu.data == null) return null
+    console.log(kifu)
     return (
       <div className="kifu-container">
         <div className="kifu-board">
@@ -40,41 +49,43 @@ class Kifu extends Component {
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.black' defaultMessage="Black" />
+                    Black
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.b_name }&nbsp;&nbsp;&nbsp;
+                    { this.props.kifu.data.player_b.en_name}&nbsp;&nbsp;&nbsp;
                     { this.props.kifu.data.b_rank }
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.white' defaultMessage="White" />
+                    White
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.w_name }&nbsp;&nbsp;&nbsp;
+                    { this.props.kifu.data.player_w.en_name}&nbsp;&nbsp;&nbsp;
                     { this.props.kifu.data.w_rank }
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.result' defaultMessage="Result" />
+                    Result
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.result }
                   </TableRowColumn>
                 </TableRow>
+                {/*
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.title' defaultMessage="Title" />
+                    Title
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.title }
                   </TableRowColumn>
                 </TableRow>
+                */}
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.place' defaultMessage="Place" />
+                    Place
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.place }
@@ -82,7 +93,7 @@ class Kifu extends Component {
                 </TableRow>
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.komi' defaultMessage="Komi" />
+                    Komi
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.komi }
@@ -90,7 +101,7 @@ class Kifu extends Component {
                 </TableRow>
                 <TableRow>
                   <TableRowColumn style={colWidth}>
-                    <FormattedMessage id='app.kifu.date' defaultMessage="Date" />
+                    Date
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.date }

@@ -76,15 +76,9 @@ export default class Navigation extends Component {
               }
               Puzzles Library
             </Link>
-            {
-              //<Link to="/games" activeClassName="active">
-              //<FormattedMessage
-                //id="app.nav.menu.games"
-                //defaultMessage="Games Library(Not Open)"
-              ///>
-              // Games Library(Not Open)
-              //</Link>
-            }
+            <Link to="/kifus" activeClassName="active">
+              Kifus Library(Not Open)
+            </Link>
           </div>
         </section>
 

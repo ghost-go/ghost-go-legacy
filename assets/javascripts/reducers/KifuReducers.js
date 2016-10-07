@@ -30,7 +30,6 @@ export function kifus(state = {
 export function kifu(state = {
   isFetching: false,
   isFailure: false,
-  data: []
 }, action) {
   switch (action.type) {
   case types.FETCH_KIFU_REQUEST:
