@@ -37,7 +37,7 @@ class Kifus extends Component {
       visablePage: 6
     }
     let { query } = this.props.location
-    this.props.dispatch(fetchKifus(query.page, 12))
+    this.props.dispatch(fetchKifus(query.page, 18))
     this.props.dispatch(fetchTopPlayers(10))
     this.handlePageChanged = this.handlePageChanged.bind(this)
   }
