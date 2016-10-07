@@ -14,6 +14,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import { fetchKifus } from '../actions/KifuActions'
+import { fetchTopPlayers } from '../actions/PlayerActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -22,6 +23,12 @@ import { StyleSheet, css } from 'aphrodite'
 //import lang from '../components/lang'
 
 class Kifus extends Component {
+
+  static propTypes = {
+    kifus: React.PropTypes.object.isRequired,
+    players: React.PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -30,7 +37,8 @@ class Kifus extends Component {
       visablePage: 6
     }
     let { query } = this.props.location
-    this.props.dispatch(fetchKifus(query.page))
+    this.props.dispatch(fetchKifus(query.page, 12))
+    this.props.dispatch(fetchTopPlayers(10))
     this.handlePageChanged = this.handlePageChanged.bind(this)
   }
 
@@ -40,94 +48,101 @@ class Kifus extends Component {
     })
   }
 
+  handleSeeMore() {
+
+  }
+
   render() {
-    const { kifus } = this.props
+    console.log(this.props)
+    const { kifus, players } = this.props
+    let playerItems = []
+    let kifuCards = []
+    players.data.forEach((i) => {
+      playerItems.push(
+        <FlatButton
+          key={i.id}
+          backgroundColor={ this.state.rankingFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
+          onClick={this.handleSeeMore.bind(this, '')}
+          className={css(styles.button)}
+          style={{textAlign: 'left'}} label={i.en_name} />
+      )
+    })
+    kifus.data.forEach((i) => {
+      kifuCards.push(
+        <Card key={i.id} className={css(styles.card)}>
+          <CardMedia
+            className={css(styles.kifuImg)}
+          >
+            <Link to={`/kifus/${i.id}`}>
+              <img className={css(styles.previewImg)} src={i.preview_img.preview_img.x500.url} />
+            </Link>
+          </CardMedia>
+          <CardActions>
+            <span>{i.player_b.en_name}</span><span> </span>
+          </CardActions>
+          <CardActions>
+            <span>{i.player_w.en_name}</span>
+          </CardActions>
+          <CardActions
+            className={css(styles.kifuActions)}
+          >
+            <Link to={`/kifus/${i.id}`}>
+              <RaisedButton className={css(styles.button)} primary={true} label="Review" />
+            </Link>
+          </CardActions>
+        </Card>
+      )
+    })
     return (
-      <div className={css(styles.puzzlesContainer)}>
-        <div className={css(styles.puzzlesLeft)}>
-          <h1 className={css(styles.title)}>Puzzles Library</h1>
+      <div className={css(styles.kifusContainer)}>
+        <div className={css(styles.tip)}>I'm sorry that this page is still under connstruction.</div>
+        <div className={css(styles.kifusLeft)}>
+          <h1 className={css(styles.title)}>Kifus Library</h1>
           <div className={css(styles.buttonGroup)}>
-            <RaisedButton className={css(styles.button)} primary={true} label="Undo" />
-            <div className={css(styles.clearfix)}></div>
-            <RaisedButton className={css(styles.button)} secondary={true} label="Undo" />
+            <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
           </div>
-          <Card>
+          <Card expanded={true}>
             <CardHeader
-              title="Without Avatar"
-              subtitle="Subtitle"
+              title="PLAYER"
               actAsExpander={true}
               showExpandableButton={true}
             />
             <CardText expandable={true}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+            { playerItems }
             </CardText>
-            <CardActions expandable={true}>
-              <FlatButton label="Action1" />
-              <FlatButton label="Action2" />
-            </CardActions>
+          </Card>
+          <Card expanded={true}>
           </Card>
         </div>
-        <div className={css(styles.puzzlesRight)}>
-          <Card className={css(styles.card)}>
-            <CardHeader
-              title="URL Avatar"
-              subtitle="Subtitle"
-              avatar="http://lorempixel.com/100/100/nature/"
-            />
-            <CardMedia
-              overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-            >
-              <img src="http://lorempixel.com/600/337/nature/" />
-            </CardMedia>
-            <CardTitle title="Card title" subtitle="Card subtitle" />
-            <CardText>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-            </CardText>
-            <CardActions>
-              <FlatButton label="Action1" />
-              <FlatButton label="Action2" />
-            </CardActions>
-          </Card>
+        <div className={css(styles.kifusRight)}>
+          { kifuCards }
         </div>
       </div>
     )
-  //render() {
-    //const { kifus } = this.props
-    //return (
-      //<Layout>
-        //<KifuTable kifus={ kifus.data } />
-        //<Pagination current={this.state.current}
-                    //total={this.state.total}
-                    //visiblePages={this.state.visablePage}
-                    //onPageChanged={this.handlePageChanged}
-                    //titles = {{
-                      //first: 'First',
-                      //prev: 'Prev',
-                      //prevSet: '<<<',
-                      //nextSet: '>>>',
-                      //next: 'Next',
-                      //last: 'Last',
-                    //}}
-        ///>
-      //</Layout>
-    //)
-  //}
   }
 
 }
 
 const styles = StyleSheet.create({
-  puzzlesContainer: {
-    marginTop: '40px',
+  kifusContainer: {
+    display: 'flex',
+    marginTop: '50px',
     backgroundColor: '#fff',
-    padding: '20px 60px',
-    float: 'left',
+    padding: '20px',
+  },
+
+  kifusLeft: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    flex: '0 0 230px'
+  },
+
+  kifusRight: {
+    display: 'flex',
+    flex: 'auto',
+    flexFlow: 'row wrap',
+    paddingTop: '10px',
+    marginLeft: '10px',
   },
 
   title: {
@@ -138,14 +153,15 @@ const styles = StyleSheet.create({
     padding: '0'
   },
 
-  puzzlesLeft: {
-    width: '25%',
-    marginLeft: 0,
-    float: 'left',
+  chooseLevel: {
+    fontSize: '22px',
+    lineHeight: '22px',
+    fontWeight: '300',
+    marginTop: '10px',
   },
 
   buttonGroup: {
-    marginBottom: '30px'
+    marginBottom: '20px'
   },
 
   button: {
@@ -153,27 +169,67 @@ const styles = StyleSheet.create({
     marginBottom: '15px',
   },
 
-  puzzlesRight: {
-    width: '70%',
-    marginLeft: '5%',
-    paddingTop: '10px',
-    float: 'left',
-  },
-
   card: {
-    width: '30%',
-    margin: '0px 1.5% 20px 1.5%',
-    float: 'left'
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flex: '1 1 250px',
+    width: '250px',
+    margin: '0px 1.5vw 20px 1.5vw',
   },
 
-  clearfix: {
-    clear: 'both'
+  kifuImg: {
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
+  },
+
+  kifuTitle: {
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
+  },
+
+  previewImg: {
+    width: '100%'
+  },
+
+  kifuActions: {
+    height: '50px',
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
+  },
+
+  loading: {
+    fontSize: '100px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    margin: '0 auto',
+  },
+
+  tip: {
+    position: 'absolute',
+    zIndex: '100',
+    padding: '20',
+    fontSize: '30px',
+    left: '50px',
+    top: '65px',
+    color: 'red'
+  },
+
+  ratingIcon: {
+    width: 28,
+    height: 28
   }
+
 })
 
+
 function select(state) {
+  console.log(state)
   return {
-    kifus: state.kifus
+    kifus: state.kifus,
+    players: state.players
   }
 }
 

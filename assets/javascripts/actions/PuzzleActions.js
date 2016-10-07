@@ -1,4 +1,3 @@
-import * as types from '../constants/ActionTypes'
 import * as config from '../constants/Config'
 import { createAction, createActions, handleAction, handleActions } from 'redux-actions'
 import URI from 'urijs'
@@ -24,6 +23,8 @@ export const {
   'FETCH_PUZZLE_FAILURE'
 )
 
+export const { fetchPuzzleNextRequest } = createActions('FETCH_PUZZLE_NEXT_REQUEST')
+
 export function fetchPuzzles(params) {
   return dispatch => {
     dispatch(fetchPuzzlesRequest(params))
@@ -45,5 +46,27 @@ export function fetchPuzzle(id) {
       .then(res => res.json())
       .then(data => dispatch(fetchPuzzleSuccess({data})))
       .catch(ex => dispatch(fetchPuzzleFailure(ex)))
+  }
+}
+
+export function fetchPuzzleNext(range) {
+  return dispatch => {
+    let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then(function(res){
+      return (res.json())
+    }).then(function(json) {
+      if (json == null) {
+        alert('No next puzzle')
+      }
+      else {
+        window.location.replace(`${config.APP_DOMAIN}/puzzles/${json.id}?range=${range}`)
+      }
+    })
   }
 }
