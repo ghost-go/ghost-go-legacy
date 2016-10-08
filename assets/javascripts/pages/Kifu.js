@@ -52,7 +52,7 @@ class Kifu extends Component {
                     Black
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.player_b.en_name}&nbsp;&nbsp;&nbsp;
+                    { this.props.kifu.data.player_b.en_name}
                     { this.props.kifu.data.b_rank }
                   </TableRowColumn>
                 </TableRow>
@@ -61,7 +61,7 @@ class Kifu extends Component {
                     White
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.player_w.en_name}&nbsp;&nbsp;&nbsp;
+                    { this.props.kifu.data.player_w.en_name}
                     { this.props.kifu.data.w_rank }
                   </TableRowColumn>
                 </TableRow>
