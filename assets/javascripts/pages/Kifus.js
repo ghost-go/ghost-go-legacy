@@ -53,7 +53,6 @@ class Kifus extends Component {
   }
 
   render() {
-    console.log(this.props)
     const { kifus, players } = this.props
     let playerItems = []
     let kifuCards = []
@@ -77,11 +76,13 @@ class Kifus extends Component {
               <img className={css(styles.previewImg)} src={i.preview_img.preview_img.x500.url} />
             </Link>
           </CardMedia>
-          <CardActions>
-            <span>{i.player_b.en_name}</span><span> </span>
+          <CardActions className={css(styles.kifuIntro)}>
+            <span className={css(styles.kifuIntroSpan)}>{`${i.player_b.en_name}(${i.b_rank})`}</span>
+            <span className={css(styles.kifuIntroSpan, styles.versus)}>VS</span>
+            <span className={css(styles.kifuIntroSpan)}>{`${i.player_w.en_name}(${i.w_rank})`}</span>
           </CardActions>
           <CardActions>
-            <span>{i.player_w.en_name}</span>
+            <span>{`Result: ${i.result}`}</span>
           </CardActions>
           <CardActions
             className={css(styles.kifuActions)}
@@ -188,6 +189,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
+  kifuIntro: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+
+  kifuIntroSpan: {
+    flex: '0 1 45%',
+  },
+
+  versus: {
+    flex: '1 1 10%',
+    fontWeight: 'bold',
+    fontSize: '16px'
+  },
+
   previewImg: {
     width: '100%'
   },
@@ -207,6 +224,7 @@ const styles = StyleSheet.create({
     margin: '0 auto',
   },
 
+
   tip: {
     position: 'absolute',
     zIndex: '100',
@@ -220,7 +238,8 @@ const styles = StyleSheet.create({
   ratingIcon: {
     width: 28,
     height: 28
-  }
+  },
+
 
 })
 
