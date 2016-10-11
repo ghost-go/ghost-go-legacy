@@ -84,6 +84,9 @@ class Kifus extends Component {
           <CardActions>
             <span>{`Result: ${i.result}`}</span>
           </CardActions>
+          <CardActions>
+            <span>{`Date: ${i.short_date}`}</span>
+          </CardActions>
           <CardActions
             className={css(styles.kifuActions)}
           >
