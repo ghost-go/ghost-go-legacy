@@ -33,6 +33,7 @@ class Kifus extends Component {
     super(props)
     this.state = {
       playerFilter: 'all',
+      isLoading: false,
     }
     let { query } = this.props.location
     this.props.dispatch(fetchKifus({
@@ -77,37 +78,45 @@ class Kifus extends Component {
           style={{textAlign: 'left'}} label={i.en_name} />
       )
     })
-    kifus.data.forEach((i) => {
-      kifuCards.push(
-        <Card key={i.id} className={css(styles.card)}>
-          <CardMedia
-            className={css(styles.kifuImg)}
-          >
-            <Link to={`/kifus/${i.id}`}>
-              <img className={css(styles.previewImg)} src={i.preview_img.preview_img.x500.url} />
-            </Link>
-          </CardMedia>
-          <CardActions className={css(styles.kifuIntro)}>
-            <span className={css(styles.kifuIntroSpan)}>{`${i.player_b.en_name}(${i.b_rank})`}</span>
-            <span className={css(styles.kifuIntroSpan, styles.versus)}>VS</span>
-            <span className={css(styles.kifuIntroSpan)}>{`${i.player_w.en_name}(${i.w_rank})`}</span>
-          </CardActions>
-          <CardActions>
-            <span>{`Result: ${i.result}`}</span>
-          </CardActions>
-          <CardActions>
-            <span>{`Date: ${i.short_date}`}</span>
-          </CardActions>
-          <CardActions
-            className={css(styles.kifuActions)}
-          >
-            <Link to={`/kifus/${i.id}`}>
-              <RaisedButton className={css(styles.button)} primary={true} label="Review" />
-            </Link>
-          </CardActions>
-        </Card>
-      )
-    })
+    if (!kifus.isFetching && kifus.data != null && kifus.data.length > 0) {
+      kifus.data.forEach((i) => {
+        kifuCards.push(
+          <Card key={i.id} className={css(styles.card)}>
+            <CardMedia
+              className={css(styles.kifuImg)}
+            >
+              <Link to={`/kifus/${i.id}`}>
+                <img className={css(styles.previewImg)} src={i.preview_img.preview_img.x500.url} />
+              </Link>
+            </CardMedia>
+            <CardActions className={css(styles.kifuIntro)}>
+              <span className={css(styles.kifuIntroSpan)}>{`${i.player_b.en_name}(${i.b_rank})`}</span>
+              <span className={css(styles.kifuIntroSpan, styles.versus)}>VS</span>
+              <span className={css(styles.kifuIntroSpan)}>{`${i.player_w.en_name}(${i.w_rank})`}</span>
+            </CardActions>
+            <CardActions>
+              <span>{`Result: ${i.result}`}</span>
+            </CardActions>
+            <CardActions>
+              <span>{`Date: ${i.short_date}`}</span>
+            </CardActions>
+            <CardActions
+              className={css(styles.kifuActions)}
+            >
+              <Link to={`/kifus/${i.id}`}>
+                <RaisedButton className={css(styles.button)} primary={true} label="Review" />
+              </Link>
+            </CardActions>
+          </Card>
+        )
+      })
+    }
+    else {
+      kifuCards =
+        <div className={css(styles.loading)}>
+          <i className="fa fa-spinner fa-pulse fa-fw"></i>
+        </div>
+    }
     return (
       <div className={css(styles.kifusContainer)}>
         <div className={css(styles.tip)}>I'm sorry that this page is still under connstruction.</div>
@@ -128,7 +137,7 @@ class Kifus extends Component {
                 onClick={this.handleSeeMore.bind(this, 'all')}
                 className={css(styles.button)}
                 style={{textAlign: 'left'}} label="all" />
-            { playerItems }
+              { playerItems }
             </CardText>
           </Card>
           <Card expanded={true}>
@@ -242,7 +251,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: '0 auto',
   },
-
 
   tip: {
     position: 'absolute',
