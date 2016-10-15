@@ -32,14 +32,18 @@ class Kifus extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      total: 11,
-      current: 0,
-      visablePage: 6
+      playerFilter: 'all',
     }
     let { query } = this.props.location
-    this.props.dispatch(fetchKifus(query.page, 18))
+    this.props.dispatch(fetchKifus({
+      page: query.page,
+      player: this.state.playerFilter,
+      per_page: 18,
+    }))
     this.props.dispatch(fetchTopPlayers(10))
+
     this.handlePageChanged = this.handlePageChanged.bind(this)
+    this.handleSeeMore = this.handleSeeMore.bind(this)
   }
 
   handlePageChanged(newPage) {
@@ -48,8 +52,15 @@ class Kifus extends Component {
     })
   }
 
-  handleSeeMore() {
-
+  handleSeeMore(player) {
+    this.setState({ playerFilter: player || this.state.playerFilter }, () => {
+      let { query } = this.props.location
+      this.props.dispatch(fetchKifus({
+        per_page: 18,
+        page: query.page,
+        player: this.state.playerFilter
+      }))
+    })
   }
 
   render() {
@@ -60,8 +71,8 @@ class Kifus extends Component {
       playerItems.push(
         <FlatButton
           key={i.id}
-          backgroundColor={ this.state.rankingFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
-          onClick={this.handleSeeMore.bind(this, '')}
+          backgroundColor={ this.state.playerFilter == i.en_name ? 'rgb(235, 235, 235)' : '' }
+          onClick={this.handleSeeMore.bind(this, i.en_name)}
           className={css(styles.button)}
           style={{textAlign: 'left'}} label={i.en_name} />
       )
@@ -112,6 +123,11 @@ class Kifus extends Component {
               showExpandableButton={true}
             />
             <CardText expandable={true}>
+              <FlatButton
+                backgroundColor={ this.state.playerFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
+                onClick={this.handleSeeMore.bind(this, 'all')}
+                className={css(styles.button)}
+                style={{textAlign: 'left'}} label="all" />
             { playerItems }
             </CardText>
           </Card>

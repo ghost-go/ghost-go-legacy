@@ -30,9 +30,6 @@ class Puzzles extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      total: 11,
-      current: 0,
-      visablePage: 6,
       rankingFilter: 'all',
       tipsOpen: false,
       isLoading: false,

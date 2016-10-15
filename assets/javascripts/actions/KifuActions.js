@@ -1,6 +1,8 @@
 import * as types from '../constants/ActionTypes'
 import * as config from '../constants/Config'
 import { createAction, handleAction, handleActions } from 'redux-actions'
+import URI from 'urijs'
+import URITemplate from 'urijs/src/URITemplate'
 
 export const fetchKifusRequest = createAction(types.FETCH_KIFUS_REQUEST)
 export const fetchKifusSuccess = createAction(types.FETCH_KIFUS_SUCCESS)
@@ -10,17 +12,15 @@ export const fetchKifuRequest = createAction(types.FETCH_KIFU_REQUEST)
 export const fetchKifuSuccess = createAction(types.FETCH_KIFU_SUCCESS)
 export const fetchKifuFailure = createAction(types.FETCH_KIFU_FAILURE)
 
-export function fetchKifus(page, per_page) {
+export function fetchKifus(params) {
   return dispatch => {
-    dispatch(fetchKifusRequest({page, per_page}))
-    let url = `${config.API_DOMAIN}/v1/kifus?page=${page}`
-    if (per_page != null) {
-      url = `${url}&per_page=${per_page}`
-    }
+    dispatch(fetchKifusRequest(params))
+    let url = URI(`${config.API_DOMAIN}/v1/kifus`)
+    url = url.query(params)
 
     return fetch(url)
       .then(res => res.json())
-      .then(data => dispatch(fetchKifusSuccess({page, per_page, data})))
+      .then(data => dispatch(fetchKifusSuccess({data})))
       .catch(ex => dispatch(fetchKifusFailure(ex)))
   }
 }
