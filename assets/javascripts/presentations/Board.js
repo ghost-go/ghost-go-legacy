@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { LETTERS, LETTERS_SGF, NUMBERS } from '../constants/Go'
 import Piece from '../components/piece'
@@ -10,6 +10,11 @@ import Paper from 'material-ui/Paper'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 export default class Board extends Component {
+
+  static propTypes = {
+    kifu: React.PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -18,17 +23,12 @@ export default class Board extends Component {
       currentCoord: 'None',
       currentTurn: 1,
       step: 0,
-      kifu: this.props.kifu,
       size: this.props.size
     }
-    this.grid = 19
-    this.sgf = new Sgf({})
-    this.currentCoord = 'None'
     this.currentTurn = 1
     this._kifuArray = []
     this.step = 1
     this.clearKifuArray()
-
   }
 
   //Set default theme to pass the test
@@ -71,7 +71,7 @@ export default class Board extends Component {
   }
 
   getCoordByStep(step) {
-    let steps = this.props.kifu.split(';')
+    let steps = this.props.kifu.data.steps.split(';')
     let str = steps[step - 1]
     let ki = str[0] === 'B' ? 1 : -1
     let pos = /\[(.*)\]/.exec(str)[1]
@@ -89,15 +89,15 @@ export default class Board extends Component {
 
   draw() {
     this._boardCtx.beginPath()
-    for(let i = 1;i <= this.grid; i++) {
+    for(let i = 1;i <= this.state.grid; i++) {
       this._boardCtx.moveTo(i * this.size, this.size)
-      this._boardCtx.lineTo(i * this.size, this.grid * this.size)
+      this._boardCtx.lineTo(i * this.size, this.state.grid * this.size)
       this._boardCtx.moveTo(this.size, i * this.size)
-      this._boardCtx.lineTo(this.grid * this.size, i * this.size)
+      this._boardCtx.lineTo(this.state.grid * this.size, i * this.size)
     }
     this._boardCtx.stroke()
     let dot_size = 3
-    if (this.grid == 19) {
+    if (this.state.grid == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
           this._boardCtx.beginPath()
@@ -218,7 +218,7 @@ export default class Board extends Component {
   }
 
   _calcLibertyCore(x, y, ki) {
-    if (x >= 0 && x < this.grid && y >= 0 && y < this.grid) {
+    if (x >= 0 && x < this.state.grid && y >= 0 && y < this.state.grid) {
       if (this._kifuArray[x][y] == ki && !this._recursionPath.includes(`${LETTERS[x]}${NUMBERS[y]}`)) {
         this._recursionPath.push(`${LETTERS[x]}${NUMBERS[y]}`)
         this._calcLibertyCore(x - 1, y, ki)
@@ -236,7 +236,7 @@ export default class Board extends Component {
     this._liberty = 0
     this._recursionPath = []
 
-    if (x < 0 || y < 0 || x > this.grid - 1 || y > this.grid - 1) {
+    if (x < 0 || y < 0 || x > this.state.grid - 1 || y > this.state.grid - 1) {
       return {
         liberty: 4,
         recursionPath: []
@@ -341,8 +341,15 @@ export default class Board extends Component {
 
   drawBoardWithResize() {
     //TODO: This is need to refactor
+    
     this.clearKifuArray()
-    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight / 20 * 18
+    //let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight / 20 * 18
+    let boardWidth = 0
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 50
+    } else {
+      boardWidth = window.innerWidth
+    }
     this.size =  boardWidth / 20
     this._boardCtx = this.boardLayer.getContext('2d')
     this._pieceCtx = this.pieceLayer.getContext('2d')
@@ -377,6 +384,9 @@ export default class Board extends Component {
     }
   }
 
+  componentDidUpdate() {
+    this.drawBoardWithResize()
+  }
 
   componentDidMount() {
     window.addEventListener('resize', this.drawBoardWithResize.bind(this))

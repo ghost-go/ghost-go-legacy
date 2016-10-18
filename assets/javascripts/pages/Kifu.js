@@ -13,6 +13,9 @@ import { fetchKifu } from '../actions/KifuActions'
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 
+//external component
+import { StyleSheet, css } from 'aphrodite'
+
 class Kifu extends Component {
 
   static propTypes = {
@@ -29,44 +32,40 @@ class Kifu extends Component {
   }
 
   render() {
-    const colWidth = {
-      width: 100
-    }
     const { kifu } = this.props
     if (kifu.data == null) return null
-    console.log(kifu)
     return (
-      <div className="kifu-container">
-        <div className="kifu-board">
+      <div className={css(styles.kifuContainer)}>
+        <div className={css(styles.kifuBoard)}>
           <Board className="board"
-                 editable="false"
-                 kifu={kifu.data.steps}
-                 ref="board" />
+            editable="false"
+            kifu={kifu}
+            ref="board" />
         </div>
-        <div className="kifu-info">
+        <div className={css(styles.kifuInfo)}>
           <Paper>
-            <Table style={{width: 400}} selectable={false}>
+            <Table selectable={false}>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
-                  <TableRowColumn style={colWidth}>
+                  <TableRowColumn>
                     Black
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.player_b.en_name}
-                    { this.props.kifu.data.b_rank }
+                    ({ this.props.kifu.data.b_rank })
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn style={colWidth}>
+                  <TableRowColumn>
                     White
                   </TableRowColumn>
                   <TableRowColumn>
                     { this.props.kifu.data.player_w.en_name}
-                    { this.props.kifu.data.w_rank }
+                    ({ this.props.kifu.data.w_rank })
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn style={colWidth}>
+                  <TableRowColumn>
                     Result
                   </TableRowColumn>
                   <TableRowColumn>
@@ -74,52 +73,71 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 {/*
-                <TableRow>
-                  <TableRowColumn style={colWidth}>
-                    Title
+                  <TableRow>
+                  <TableRowColumn>
+                  Title
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.title }
+                  { this.props.kifu.data.title }
                   </TableRowColumn>
-                </TableRow>
-                */}
-                <TableRow>
-                  <TableRowColumn style={colWidth}>
-                    Place
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    { this.props.kifu.data.place }
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn style={colWidth}>
-                    Komi
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    { this.props.kifu.data.komi }
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn style={colWidth}>
-                    Date
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    { this.props.kifu.data.date }
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn colSpan={2}>
-                    <ControlBar board={this.refs.board} />
-                  </TableRowColumn>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </Paper>
+                  </TableRow>
+                  */}
+                  <TableRow>
+                    <TableRowColumn>
+                      Place
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.place }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn>
+                      Komi
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.komi }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn>
+                      Date
+                    </TableRowColumn>
+                    <TableRowColumn>
+                      { this.props.kifu.data.short_date }
+                    </TableRowColumn>
+                  </TableRow>
+                  <TableRow>
+                    <TableRowColumn colSpan={2}>
+                      <ControlBar board={this.refs.board} />
+                    </TableRowColumn>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
         </div>
-      </div>
     )
   }
 }
+
+const styles = StyleSheet.create({
+
+  kifuContainer: {
+    display: 'flex',
+    '@media (max-width: 1000px)': {
+      flexDirection: 'column',
+    }
+  },
+
+  kifuBoard: {
+    flex: '1 1 1 50%',
+  },
+
+  kifuInfo: {
+    flex: '1 1 auto',
+  },
+
+})
 
 function select(state) {
   return {
