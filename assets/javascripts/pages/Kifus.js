@@ -39,7 +39,7 @@ class Kifus extends Component {
     this.props.dispatch(fetchKifus({
       page: query.page,
       player: this.state.playerFilter,
-      per_page: 18,
+      per_page: 15,
     }))
     this.props.dispatch(fetchTopPlayers(10))
 
@@ -75,7 +75,7 @@ class Kifus extends Component {
           backgroundColor={ this.state.playerFilter == i.en_name ? 'rgb(235, 235, 235)' : '' }
           onClick={this.handleSeeMore.bind(this, i.en_name)}
           className={css(styles.button)}
-          style={{textAlign: 'left'}} label={i.en_name} />
+          style={{textAlign: 'left'}} label={`${i.en_name}(${i.grading})`} />
       )
     })
     if (!kifus.isFetching && kifus.data != null && kifus.data.length > 0) {
