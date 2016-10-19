@@ -11,10 +11,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 export default class Board extends Component {
 
-  static propTypes = {
-    kifu: React.PropTypes.object.isRequired
-  }
-
   constructor(props) {
     super(props)
     this.state = {
@@ -346,7 +342,7 @@ export default class Board extends Component {
     //let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight / 20 * 18
     let boardWidth = 0
     if (screen.width > screen.height) {
-      boardWidth = window.innerHeight - 50
+      boardWidth = window.innerHeight - 60
     } else {
       boardWidth = window.innerWidth
     }

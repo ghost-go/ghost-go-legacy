@@ -81,7 +81,6 @@ class Kifu extends Component {
                   { this.props.kifu.data.title }
                   </TableRowColumn>
                   </TableRow>
-                  */}
                   <TableRow>
                     <TableRowColumn>
                       Place
@@ -90,6 +89,7 @@ class Kifu extends Component {
                       { this.props.kifu.data.place }
                     </TableRowColumn>
                   </TableRow>
+                  */}
                   <TableRow>
                     <TableRowColumn>
                       Komi
@@ -123,6 +123,7 @@ class Kifu extends Component {
 const styles = StyleSheet.create({
 
   kifuContainer: {
+    padding: '10px',
     display: 'flex',
     '@media (max-width: 1000px)': {
       flexDirection: 'column',
@@ -130,6 +131,8 @@ const styles = StyleSheet.create({
   },
 
   kifuBoard: {
+    marginLeft: '10px',
+    marginRight: '10px',
     flex: '1 1 1 50%',
   },
 
