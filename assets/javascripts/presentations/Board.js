@@ -337,37 +337,43 @@ export default class Board extends Component {
 
   drawBoardWithResize() {
     //TODO: This is need to refactor
-    
     this.clearKifuArray()
     //let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight / 20 * 18
-    let boardWidth = 0
-    if (screen.width > screen.height) {
-      boardWidth = window.innerHeight - 60
-    } else {
-      boardWidth = window.innerWidth
-    }
-    this.size =  boardWidth / 20
-    this._boardCtx = this.boardLayer.getContext('2d')
-    this._pieceCtx = this.pieceLayer.getContext('2d')
-    this.refs.board.style.height = boardWidth + 'px'
-    this.refs.board.style.width = boardWidth + 'px'
-    this.refs.board.parentElement.style.height = boardWidth + 'px'
-    this.refs.board.parentElement.style.width = boardWidth + 'px'
-    this.boardLayer.width
-    = this.boardLayer.height
-    = this.pieceLayer.width
-    = this.pieceLayer.height
-    = boardWidth
-    this.boardLayer.style.position
-    = this.pieceLayer.style.position
-    = 'absolute'
-    this.topLayer.width
-    = this.topLayer.height
-    = boardWidth
-    this.topLayer.style.position
-    = 'absolute'
-    this.drawBoard()
-    this.markCurrentPiece()
+    setTimeout(() => {
+      let boardWidth = 0
+      if (screen.width > screen.height) {
+        boardWidth = window.innerHeight - 60
+        console.log('aaa')
+      } else {
+        boardWidth = window.innerWidth
+        console.log('bbb')
+      }
+      console.log(boardWidth)
+      console.log(window.innerWidth, window.innerHeight)
+      console.log(screen.width, screen.height)
+      this.size =  boardWidth / 20
+      this._boardCtx = this.boardLayer.getContext('2d')
+      this._pieceCtx = this.pieceLayer.getContext('2d')
+      this.refs.board.style.height = boardWidth + 'px'
+      this.refs.board.style.width = boardWidth + 'px'
+      this.refs.board.parentElement.style.height = boardWidth + 'px'
+      this.refs.board.parentElement.style.width = boardWidth + 'px'
+      this.boardLayer.width
+      = this.boardLayer.height
+      = this.pieceLayer.width
+      = this.pieceLayer.height
+      = boardWidth
+      this.boardLayer.style.position
+      = this.pieceLayer.style.position
+      = 'absolute'
+      this.topLayer.width
+      = this.topLayer.height
+      = boardWidth
+      this.topLayer.style.position
+      = 'absolute'
+      this.drawBoard()
+      this.markCurrentPiece()
+    }, 0)
   }
 
   drawBoard() {
@@ -385,12 +391,12 @@ export default class Board extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.drawBoardWithResize.bind(this))
+    window.addEventListener('resize', this.drawBoardWithResize.bind(this), false)
     this.drawBoardWithResize()
   }
 
   componentUnmount() {
-    window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
+    window.removeEventListener('resize', this.drawBoardWithResize.bind(this), false)
   }
 }
 

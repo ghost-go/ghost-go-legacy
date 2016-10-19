@@ -47,7 +47,7 @@ class Kifu extends Component {
             <Table selectable={false}>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
-                  <TableRowColumn>
+                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
                     Black
                   </TableRowColumn>
                   <TableRowColumn>
@@ -56,7 +56,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>
+                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
                     White
                   </TableRowColumn>
                   <TableRowColumn>
@@ -65,7 +65,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>
+                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
                     Result
                   </TableRowColumn>
                   <TableRowColumn>
@@ -91,7 +91,7 @@ class Kifu extends Component {
                   </TableRow>
                   */}
                   <TableRow>
-                    <TableRowColumn>
+                    <TableRowColumn className={css(styles.fixedColumnWidth)}>
                       Komi
                     </TableRowColumn>
                     <TableRowColumn>
@@ -99,7 +99,7 @@ class Kifu extends Component {
                     </TableRowColumn>
                   </TableRow>
                   <TableRow>
-                    <TableRowColumn>
+                    <TableRowColumn className={css(styles.fixedColumnWidth)}>
                       Date
                     </TableRowColumn>
                     <TableRowColumn>
@@ -122,17 +122,24 @@ class Kifu extends Component {
 
 const styles = StyleSheet.create({
 
+  fixedColumnWidth: {
+    width: '20%'
+  },
+
   kifuContainer: {
     padding: '10px',
     display: 'flex',
-    '@media (max-width: 1000px)': {
+    '@media (max-width: 992px)': {
+      padding: '0px',
       flexDirection: 'column',
     }
   },
 
   kifuBoard: {
-    marginLeft: '10px',
-    marginRight: '10px',
+    margin: '0 10px 0 10px',
+    '@media (max-width: 992px)': {
+      margin: '10px 0 10px 0',
+    },
     flex: '1 1 1 50%',
   },
 
