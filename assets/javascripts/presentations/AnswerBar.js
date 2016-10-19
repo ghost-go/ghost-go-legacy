@@ -99,14 +99,14 @@ const styles = {
     width: '70px',
     marginLeft: '25px',
     fontSize: '16px',
-    lineHeight: '36px',
+    lineHeight: '32px',
   },
 
   stepInfo: {
     width: '40px',
-    marginLeft: '15px',
+    marginLeft: '10px',
     fontSize: '16px',
-    lineHeight: '36px',
+    lineHeight: '32px',
   },
 
   voteInfo: {
@@ -126,8 +126,8 @@ const styles = {
   },
 
   small: {
-    width: 36,
-    height: 36,
+    width: 32,
+    height: 32,
     padding: 5,
   },
 }

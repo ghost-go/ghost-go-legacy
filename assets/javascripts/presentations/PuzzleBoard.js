@@ -39,6 +39,7 @@ export default class PuzzleBoard extends Component {
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.reset = this.reset.bind(this)
+    this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
   }
 
   handleRightTipOpen() {
@@ -315,7 +316,20 @@ export default class PuzzleBoard extends Component {
 
   //TODO: this function need to be refactored
   getBoardWidth() {
-    let boardWidth = this.refs.board.parentElement.parentElement.offsetHeight - 15
+    let boardWidth = 0
+    if (screen.width > screen.height) {
+      if (screen.height / screen.width >= 0.75) {
+        boardWidth = window.innerHeight - 60
+        console.log('aaa')
+      }
+      else {
+        boardWidth = (window.innerHeight - 60) * 1.2
+        console.log('bbb')
+      }
+    } else {
+      boardWidth = window.innerWidth
+      console.log('ccc')
+    }
     if (boardWidth < 0) {
       boardWidth = 400 //set a default value to pass the test
     }
@@ -388,14 +402,14 @@ export default class PuzzleBoard extends Component {
     //The reason using setTimeout is following url
     //https://github.com/Khan/aphrodite/blame/master/README.md#L128
     setTimeout(() => {
-      this.refs.board.offsetHeight
       let boardWidth = this.getBoardWidth()
-      this.state.size =  boardWidth / (this.state.maxhv + 1)
+      //this.size =  boardWidth / 20
+      //this.state.size = boardWidth / 20
       this._boardCtx = this.boardLayer.getContext('2d')
       this._pieceCtx = this.pieceLayer.getContext('2d')
       this._crossCtx = this.crossLayer.getContext('2d')
-      this.refs.board.style.height = '100%'
-      this.refs.board.style.width = '100%'
+      this.refs.board.style.height = boardWidth + 'px'
+      this.refs.board.style.width = boardWidth + 'px'
       this.refs.board.parentElement.style.height = boardWidth + 'px'
       this.refs.board.parentElement.style.width = boardWidth + 'px'
 

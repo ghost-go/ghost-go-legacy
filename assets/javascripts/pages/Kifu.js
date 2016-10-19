@@ -140,11 +140,11 @@ const styles = StyleSheet.create({
     '@media (max-width: 992px)': {
       margin: '10px 0 10px 0',
     },
-    flex: '1 1 1 50%',
+    flex: 'auto',
   },
 
   kifuInfo: {
-    flex: '1 1 auto',
+    flex: 'auto',
   },
 
 })

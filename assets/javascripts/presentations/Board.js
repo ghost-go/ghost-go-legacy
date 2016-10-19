@@ -343,14 +343,9 @@ export default class Board extends Component {
       let boardWidth = 0
       if (screen.width > screen.height) {
         boardWidth = window.innerHeight - 60
-        console.log('aaa')
       } else {
         boardWidth = window.innerWidth
-        console.log('bbb')
       }
-      console.log(boardWidth)
-      console.log(window.innerWidth, window.innerHeight)
-      console.log(screen.width, screen.height)
       this.size =  boardWidth / 20
       this._boardCtx = this.boardLayer.getContext('2d')
       this._pieceCtx = this.pieceLayer.getContext('2d')

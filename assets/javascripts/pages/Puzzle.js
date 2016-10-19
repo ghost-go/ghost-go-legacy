@@ -207,20 +207,22 @@ class Puzzle extends Component {
                 ///>
               //</CardText>
             }
-            <CardText className={css(styles.answersContainer)} expandable={!this.state.answersExpanded}>
-              <CardHeader
-                title="Right Answers"
-                actAsExpander={true}
-                showExpandableButton={true}
-              />
-              {rightAnswers}
-              <CardHeader
-                title="Wrong Answers"
-                actAsExpander={true}
-                showExpandableButton={true}
-              />
-              {wrongAnswers}
-            </CardText>
+            <div className={css(styles.answersContainer)}>
+              <CardText style={{padding: 0}} expandable={!this.state.answersExpanded}>
+                <CardHeader
+                  title="Right Answers"
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                {rightAnswers}
+                <CardHeader
+                  title="Wrong Answers"
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                {wrongAnswers}
+              </CardText>
+            </div>
           </Card>
           <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
           </Drawer>
@@ -237,21 +239,35 @@ const styles = StyleSheet.create({
   },
 
   puzzlePage: {
+    padding: '10px',
     display: 'flex',
-    justifyContent: 'space-around'
+    '@media (max-width: 992px)': {
+      padding: '0px',
+      flexDirection: 'column',
+    }
   },
 
   puzzleContainer: {
     display: 'flex',
-    flex: '0 0 auto',
-    height: '110vh',
-    padding: '10px 5px 10px 10px',
+  },
+
+  answersContainer: {
+    padding: '16px',
+    '@media screen and (max-aspect-ratio: 4/3)': {
+      padding: '0px'
+    },
+  },
+
+  puzzleBoard: {
+    margin: '0 10px 0 10px',
+    '@media (max-width: 992px)': {
+      margin: '10px 0 10px 0',
+    },
+    flex: 'auto',
   },
 
   puzzleInfo: {
-    flex: '0 1 auto',
-    padding: '10px 10px 10px 5px',
-    flexGrow: '1'
+    flex: 'auto',
   },
 
   toggle: {
