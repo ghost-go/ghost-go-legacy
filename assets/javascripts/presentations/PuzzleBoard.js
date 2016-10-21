@@ -320,15 +320,12 @@ export default class PuzzleBoard extends Component {
     if (screen.width > screen.height) {
       if (screen.height / screen.width >= 0.75) {
         boardWidth = window.innerHeight - 60
-        console.log('aaa')
       }
       else {
         boardWidth = (window.innerHeight - 60) * 1.2
-        console.log('bbb')
       }
     } else {
       boardWidth = window.innerWidth
-      console.log('ccc')
     }
     if (boardWidth < 0) {
       boardWidth = 400 //set a default value to pass the test
@@ -429,6 +426,12 @@ export default class PuzzleBoard extends Component {
       = 'absolute'
 
 
+      var clickEventName = (function() {
+        if ('ontouchstart' in document.documentElement === true)
+          return 'touchstart'
+        else
+          return 'click'
+      })()
 
       let mousemoveEvent = (e) => {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
@@ -440,18 +443,30 @@ export default class PuzzleBoard extends Component {
       }
 
       let clickEvent = (e) => {
-        let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
+        e.stopPropagation()
+        e.preventDefault()
+        console.log('aaa')
+        let p = {}
+        console.log(e.type)
+        if (e.type == 'touchstart') {
+          p = this._convertCtxposToPos(
+            e.touches[0].pageX,
+            e.touches[0].pageY - this.state.size
+          )
+        } else {
+          p = this._convertCtxposToPos(e.offsetX, e.offsetY)
+        }
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
-        //console.log(p.posX, p.posY)
+        console.log(p.posX, p.posY)
         if (this._isPosInTheBoard(p.posX, p.posY)) {
-          this.topLayer.removeEventListener('mousemove', mousemoveEvent)
-          this.topLayer.onclick = () => false
+          this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
+          this.topLayer.removeEventListener(clickEventName, clickEvent, false)
           this.topLayer.onmousemove = () => false
           hasMoved = this.move(p.posX, p.posY, this.state.currentKi, true)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
-            //console.log(this.state.steps)
+            console.log(this.state.steps)
             this.state.step ++
           }
         }
@@ -460,13 +475,13 @@ export default class PuzzleBoard extends Component {
             this.response(p.posX, p.posY, -this.state.currentKi)
           }
           this.topLayer.onmousemove = mousemoveEvent
-          this.topLayer.onclick = clickEvent
+          this.topLayer.addEventListener(clickEventName, clickEvent, false)
         }, 300)
 
       }
 
       this.topLayer.onmousemove = mousemoveEvent
-      this.topLayer.onclick = clickEvent
+      this.topLayer.addEventListener(clickEventName, clickEvent, false)
 
       this.drawBoard()
     }, 0)
