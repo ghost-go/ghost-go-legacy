@@ -46,13 +46,15 @@ export default class Board extends Component {
   }
 
   moveTo(step) {
-    this.setState({step: step})
+    this.setState({step: step}, () => {
+      this.markCurrentPiece()
+    })
   }
 
-  move(x, y, posX, posY, ki, isCurrent) {
+  move(x, y, posX, posY, ki, isMarked) {
     if (this.canMove(x, y, ki)) {
       this._kifuArray[x][y] = ki
-      this.drawPiece(posX, posY, ki, isCurrent)
+      this.drawPiece(posX, posY, ki, isMarked)
       this.execPonnuki(x, y, -ki)
     }
   }
@@ -126,16 +128,16 @@ export default class Board extends Component {
     return true
   }
 
-  drawPiece(x, y, type, isCurrent) {
+  drawPiece(x, y, type, isMarked) {
     let realPos = this.convertPosToRealPos(x, y)
     let coord_sgf = this.convertPosToSgfCoord(x, y, this.size)
-    let piece = new Piece()
-
-    piece.x = realPos.x
-    piece.y = realPos.y
-    piece.pieceSize = this.size / 2 - 3
-    piece.type = type
-    piece.isCurrent = isCurrent
+    let piece = new Piece(
+      realPos.x,
+      realPos.y,
+      this.size / 2 - 2,
+      type,
+      isMarked,
+    )
     piece.draw(this._pieceCtx)
 
     this.step++

@@ -119,7 +119,6 @@ class Kifus extends Component {
     }
     return (
       <div className={css(styles.kifusContainer)}>
-        <div className={css(styles.tip)}>I'm sorry that this page is still under connstruction.</div>
         <div className={css(styles.kifusLeft)}>
           <h1 className={css(styles.title)}>Kifus Library</h1>
           <div className={css(styles.buttonGroup)}>
@@ -155,7 +154,7 @@ class Kifus extends Component {
 const styles = StyleSheet.create({
   kifusContainer: {
     display: 'flex',
-    marginTop: '50px',
+    marginTop: '20px',
     backgroundColor: '#fff',
     padding: '20px',
   },

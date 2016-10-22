@@ -77,7 +77,7 @@ export default class Navigation extends Component {
               Puzzles Library
             </Link>
             <Link to="/kifus" activeClassName="active">
-              Kifus Library(Not Open)
+              Kifus Library
             </Link>
           </div>
         </section>

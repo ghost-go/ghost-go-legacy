@@ -54,25 +54,22 @@ export default class ControlBar extends Component {
   render() {
     return(
       <div className="control-bar">
-        <span className="move-control" ref="firstStep" onClick={this.firstStep.bind(this)}>
+        <span className="move-control" onClick={this.firstStep.bind(this)}>
           <i className="fa fa-fast-backward"></i>
         </span>
-        <span className="move-control" ref="prev10Step" onClick={this.prev10Step.bind(this)}>
+        <span className="move-control" onClick={this.prev10Step.bind(this)}>
           <i className="fa fa-backward"></i>
         </span>
-        <span className="move-control" ref="prevStep" onClick={this.prevStep.bind(this)}>
-          <i className="fa fa-step-backward"></i>
-        </span>
-        <span className="move-control" ref="nextStep" onClick={this.nextStep.bind(this)}>
-          <i className="fa fa-play"></i>
+        <span className="move-control" onClick={this.prevStep.bind(this)}>
+          <i className="fa fa-play rotate"></i>
         </span>
         <span className="move-control" onClick={this.nextStep.bind(this)}>
-          <i className="fa fa-step-forward"></i>
+          <i className="fa fa-play"></i>
         </span>
-        <span className="move-control" ref="next10Step" onClick={this.next10Step.bind(this)}>
+        <span className="move-control" onClick={this.next10Step.bind(this)}>
           <i className="fa fa-forward"></i>
         </span>
-        <span className="move-control" ref="lastStep" onClick={this.lastStep.bind(this)}>
+        <span className="move-control" onClick={this.lastStep.bind(this)}>
           <i className="fa fa-fast-forward"></i>
         </span>
       </div>
