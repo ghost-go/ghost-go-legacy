@@ -33,22 +33,20 @@ export default class Board extends Component {
   }
 
   nextStep(e) {
-    this.state.step ++
-    let {x, y, posX, posY, ki} = this.getCoordByStep(this.state.step)
-    if (this.state.step > 1) {
-      let {posX, posY, ki} = this.getCoordByStep(this.state.step - 1)
-      this.drawPiece(posX, posY, ki, false)
-    }
-    this._liberty = 0
-    this._recursionPath = []
-    this.move(x, y, posX, posY, ki, true)
+    this.setState({step: this.state.step + 1}, () => {
+      let {x, y, posX, posY, ki} = this.getCoordByStep(this.state.step)
+      if (this.state.step > 1) {
+        let {posX, posY, ki} = this.getCoordByStep(this.state.step - 1)
+        this.drawPiece(posX, posY, ki, false)
+      }
+      this._liberty = 0
+      this._recursionPath = []
+      this.move(x, y, posX, posY, ki, true)
+    })
   }
 
   moveTo(step) {
-    this.state.step = step
-    this.clearKifuArray()
-    this.drawBoard()
-    this.markCurrentPiece()
+    this.setState({step: step})
   }
 
   move(x, y, posX, posY, ki, isCurrent) {
@@ -388,6 +386,7 @@ export default class Board extends Component {
   componentDidMount() {
     window.addEventListener('resize', this.drawBoardWithResize.bind(this), false)
     this.drawBoardWithResize()
+    this.props.setBoard(this)
   }
 
   componentUnmount() {

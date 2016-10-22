@@ -28,7 +28,17 @@ class Kifu extends Component {
   constructor(props) {
     super(props)
     let { id } = this.props.params
+    this.state = {
+      board: null
+    }
     this.props.dispatch(fetchKifu(id))
+
+
+    this.setBoard = this.setBoard.bind(this)
+  }
+
+  setBoard(board) {
+    this.setState({board: board})
   }
 
   render() {
@@ -38,9 +48,8 @@ class Kifu extends Component {
       <div className={css(styles.kifuContainer)}>
         <div className={css(styles.kifuBoard)}>
           <Board className="board"
-            editable="false"
-            kifu={kifu}
-            ref="board" />
+            editable="false" setBoard={this.setBoard}
+            kifu={kifu} />
         </div>
         <div className={css(styles.kifuInfo)}>
           <Paper>
@@ -108,7 +117,7 @@ class Kifu extends Component {
                   </TableRow>
                   <TableRow>
                     <TableRowColumn colSpan={2}>
-                      <ControlBar board={this.refs.board} />
+                      <ControlBar board={this.state.board} />
                     </TableRowColumn>
                   </TableRow>
                 </TableBody>

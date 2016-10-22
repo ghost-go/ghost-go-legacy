@@ -5,6 +5,9 @@ export default class ControlBar extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      board: null
+    }
   }
 
   nextStep() {
@@ -43,7 +46,7 @@ export default class ControlBar extends Component {
   }
 
   lastStep() {
-    let last = this.props.board.props.kifu.split(';').length
+    let last = this.props.board.props.kifu.data.steps.split(';').length
     this.props.board.state.step = last
     this.props.board.moveTo(last)
   }

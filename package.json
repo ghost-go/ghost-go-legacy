@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/happybai/ghost-go#readme",
   "dependencies": {
-    "aphrodite": "^0.6.0",
+    "aphrodite": "^1.0.0",
     "auth0": "^2.5.0",
     "auth0-lock": "^10.3.0",
     "autoprefixer": "^6.5.1",
