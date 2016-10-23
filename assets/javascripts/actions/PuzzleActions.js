@@ -50,23 +50,22 @@ export function fetchPuzzle(id) {
 }
 
 export function fetchPuzzleNext(range) {
-  return dispatch => {
-    let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(function(res){
-      return (res.json())
-    }).then(function(json) {
-      if (json == null) {
-        alert('No next puzzle')
-      }
-      else {
-        window.location.replace(`${config.APP_DOMAIN}/puzzles/${json.id}?range=${range}`)
-      }
-    })
-  }
+  let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  }).then(function(res){
+    return (res.json())
+  }).then(function(json) {
+    if (json == null) {
+      alert('No next puzzle')
+    }
+    else {
+      console.log(json)
+      return json
+    }
+  })
 }

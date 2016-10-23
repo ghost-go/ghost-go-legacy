@@ -4,7 +4,7 @@ import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 import { kifus, kifu } from './reducers/KifuReducers'
 import { puzzles, puzzle } from './reducers/PuzzleReducers'
@@ -40,6 +40,7 @@ const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
 const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 
 // create your main reducer
+const historyMiddleware = routerMiddleware(browserHistory)
 const reducer = combineReducers({
   // ... add your own reducers here
   kifus,
@@ -51,7 +52,8 @@ const reducer = combineReducers({
 })
 
 const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware
+  thunkMiddleware,
+  historyMiddleware
 )(createStore)
 
 const store = createStoreWithMiddleware(reducer)

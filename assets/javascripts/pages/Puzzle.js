@@ -3,6 +3,7 @@ import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
+import { push } from 'react-router-redux'
 //import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
@@ -33,6 +34,10 @@ import { StyleSheet, css } from 'aphrodite'
 
 class Puzzle extends Component {
 
+  static contextTypes = {
+    router: PropTypes.object,
+  }
+
   constructor(props) {
     super(props)
     let { id } = this.props.params
@@ -48,6 +53,7 @@ class Puzzle extends Component {
     this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
+    this.handleNext = this.handleNext.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -76,26 +82,30 @@ class Puzzle extends Component {
     this.refs.board.reset()
   }
 
+
   handleNext() {
+    let self = this
     let range = this.refs.range.state.range
-    this.props.dispatch(fetchPuzzleNext(range))
-    //let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
-    //fetch(url, {
-      //method: 'GET',
-      //headers: {
-        //'Accept': 'application/json',
-        //'Content-Type': 'application/json'
-      //},
-    //}).then(function(res){
-      //return (res.json())
-    //}).then(function(json) {
-      //if (json == null) {
-        //alert('No next puzzle')
-      //}
-      //else {
-        //window.location.replace(`${config.APP_DOMAIN}/puzzles/${json.id}?range=${range}`)
-      //}
-    //})
+    //let data = this.props.dispatch(fetchPuzzleNext(range))
+    let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then(function(res){
+      return (res.json())
+    }).then(function(json) {
+      if (json == null) {
+        alert('No next puzzle')
+      }
+      else {
+        let nextUrl = `/puzzles/${json.id}?range=${range}`
+        self.props.dispatch(push(nextUrl))
+        self.props.dispatch(fetchPuzzle(json.id))
+      }
+    })
   }
 
   handleRatingChange(rate) {
