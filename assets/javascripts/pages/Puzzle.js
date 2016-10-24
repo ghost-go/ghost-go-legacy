@@ -104,6 +104,7 @@ class Puzzle extends Component {
         let nextUrl = `/puzzles/${json.id}?range=${range}`
         self.props.dispatch(push(nextUrl))
         self.props.dispatch(fetchPuzzle(json.id))
+        self.refs.board.handleTipsReset()
       }
     })
   }
