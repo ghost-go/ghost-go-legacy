@@ -16,6 +16,7 @@ import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/PuzzleActions'
+import { addRating } from '../actions/RatingActions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -114,33 +115,11 @@ class Puzzle extends Component {
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       let { id } = this.props.params
-      let url = URI(`${config.API_DOMAIN}/v1/ratings`)
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          rating: {
-            ratable_id: id,
-            ratable_type: 'Puzzle',
-            rating: rate,
-            user_id: profile.user_id,
-          }
-        })
-      }).then(function(res){
-        return (res.json())
-      }).then(function(json) {
-        console.log('json', json)
-        console.log(json.message)
-        if (json.message != null) {
-          alert(json.message)
-        }
-        else {
-          alert('Thank you for your rating!')
-        }
-      })
+      this.props.dispatch(addRating({
+        id: id,
+        rating: rate,
+        user_id: profile.user_id
+      }))
     }
     else {
       auth.login()
