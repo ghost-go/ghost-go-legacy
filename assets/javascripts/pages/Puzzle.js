@@ -17,6 +17,7 @@ import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/PuzzleActions'
 import { addRating } from '../actions/RatingActions'
+import { addPuzzleRecord } from '../actions/PuzzleRecordActions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -66,10 +67,26 @@ class Puzzle extends Component {
   }
 
   handleRightTipOpen() {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    this.props.dispatch(addPuzzleRecord({
+      puzzle_id: this.props.puzzle.data.id,
+      user_id: profile.user_id,
+      record_type: 'right'
+    }))
+
     this.refs.board.handleRightTipOpen()
   }
 
   handleWrongTipOpen() {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    this.props.dispatch(addPuzzleRecord({
+      puzzle_id: this.props.puzzle.data.id,
+      user_id: profile.user_id,
+      record_type: 'wrong'
+    }))
+
     this.refs.board.handleWrongTipOpen()
     setTimeout(() => { this.handleReset() }, 2000)
   }

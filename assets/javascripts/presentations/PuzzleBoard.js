@@ -391,7 +391,6 @@ export default class PuzzleBoard extends Component {
     else {
       this.props.handleWrong()
     }
-
   }
 
   drawBoardWithResize() {
