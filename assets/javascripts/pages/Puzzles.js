@@ -90,8 +90,7 @@ class Puzzles extends Component {
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
-              <span>{parseFloat(i.rating).toFixed(1)}</span>
-              <span>{i.rating_count} rating</span>
+              <span>{`${i.right_count} right / ${i.wrong_count} wrong`}</span>
             </CardActions>
             <CardActions
               className={css(styles.puzzleActions)}
