@@ -39,7 +39,7 @@ class Kifus extends Component {
     this.props.dispatch(fetchKifus({
       page: query.page,
       player: this.state.playerFilter,
-      per_page: 15,
+      per_page: 24,
     }))
     this.props.dispatch(fetchTopPlayers(10))
 
@@ -57,7 +57,7 @@ class Kifus extends Component {
     this.setState({ playerFilter: player || this.state.playerFilter }, () => {
       let { query } = this.props.location
       this.props.dispatch(fetchKifus({
-        per_page: 18,
+        per_page: 24,
         page: query.page,
         player: this.state.playerFilter
       }))
