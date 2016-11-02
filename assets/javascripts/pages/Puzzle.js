@@ -149,6 +149,13 @@ class Puzzle extends Component {
       let addthisScript = document.createElement('script');
       addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5818445a7b592e4c')
       if (document.body) document.body.appendChild(addthisScript)
+      let addthisConfig = document.createElement('script');
+      addthisConfig.innerHTML = `
+        var addthis_config = addthis_config || {};
+        addthis_config.data_track_addressbar = false;
+        addthis_config.data_track_clickback = false;
+      `
+      if (document.body) document.body.appendChild(addthisConfig)
     });
   }
 
