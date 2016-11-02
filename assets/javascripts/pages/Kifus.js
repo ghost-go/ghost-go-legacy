@@ -120,7 +120,7 @@ class Kifus extends Component {
     return (
       <div className={css(styles.kifusContainer)}>
         <div className={css(styles.kifusLeft)}>
-          <h1 className={css(styles.title)}>Kifus Library</h1>
+          <h1 className={css(styles.title)}>Kifu Library</h1>
           <div className={css(styles.buttonGroup)}>
             <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
           </div>

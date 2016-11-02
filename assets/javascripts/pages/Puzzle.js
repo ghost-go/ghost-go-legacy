@@ -231,7 +231,7 @@ class Puzzle extends Component {
               />
               <RaisedButton
                 onClick={this.handleNext.bind(this)}
-                label="Next Puzzle"
+                label="Next Tsumego"
                 secondary={true}
               />
               <RankingRange rankingRange={range || '5k-1d'} ref='range' />

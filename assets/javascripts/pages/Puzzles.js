@@ -112,7 +112,7 @@ class Puzzles extends Component {
     return (
       <div className={css(styles.puzzlesContainer)}>
         <div className={css(styles.puzzlesLeft)}>
-          <h1 className={css(styles.title)}>Puzzles Library</h1>
+          <h1 className={css(styles.title)}>Tsumego Library</h1>
           <div className={css(styles.buttonGroup)}>
             <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
             {
