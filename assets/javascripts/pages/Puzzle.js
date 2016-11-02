@@ -180,20 +180,20 @@ class Puzzle extends Component {
     return (
       <div className={css(styles.puzzlePage)}>
         {
-          <Helmet
-            meta={[
-                {"property": "fb:app_id", "content": "160543744369895"},
-                {"property": "og:type", "content": "article"},
-                {"property": "og:title", "content": `Tsumego practice P-${puzzle.data.id}`},
-                {"property": "og:description", "content": "Try to do it!"},
-                {"property": "og:image", "content": puzzle.data.preview_img_r1 != null ? puzzle.data.preview_img_r1.preview_img_r1.x500.url : ''},
-                {"name": "twitter:card", "content": "summary_large_image"},
-                {"name": "twitter:site", "content": "@happybyronbai"},
-                {"name": "twitter:title", "content": `Tsumego practice P-${puzzle.data.id}`},
-                {"name": "twitter:description", "content": "Try to do it!"},
-                {"name": "twitter:image", "content": puzzle.data.preview_img_r1 != null ? puzzle.data.preview_img_r1.preview_img_r1.x500.url : ''},
-            ]}
-          />
+          //<Helmet
+            //meta={[
+                //{"property": "fb:app_id", "content": "160543744369895"},
+                //{"property": "og:type", "content": "article"},
+                //{"property": "og:title", "content": `Tsumego practice P-${puzzle.data.id}`},
+                //{"property": "og:description", "content": "Try to do it!"},
+                //{"property": "og:image", "content": puzzle.data.preview_img_r1 != null ? puzzle.data.preview_img_r1.preview_img_r1.x500.url : ''},
+                //{"name": "twitter:card", "content": "summary_large_image"},
+                //{"name": "twitter:site", "content": "@happybyronbai"},
+                //{"name": "twitter:title", "content": `Tsumego practice P-${puzzle.data.id}`},
+                //{"name": "twitter:description", "content": "Try to do it!"},
+                //{"name": "twitter:image", "content": puzzle.data.preview_img_r1 != null ? puzzle.data.preview_img_r1.preview_img_r1.x500.url : ''},
+            //]}
+          ///>
         }
         <div className={css(styles.puzzleContainer)}>
           <div className={css(styles.puzzleBoard)}>
