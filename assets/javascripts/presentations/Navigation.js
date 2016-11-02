@@ -74,10 +74,10 @@ export default class Navigation extends Component {
                 //defaultMessage="Puzzles Library"
                 ///>
               }
-              Puzzles
+              Tsumego Library
             </Link>
             <Link to="/kifus" activeClassName="active">
-              Kifus
+              Kifu Library
             </Link>
           </div>
         </section>
