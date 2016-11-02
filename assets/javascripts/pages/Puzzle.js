@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { push } from 'react-router-redux'
+import Helmet from "react-helmet";
 //import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
@@ -143,6 +144,14 @@ class Puzzle extends Component {
     }
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      let addthisScript = document.createElement('script');
+      addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5818445a7b592e4c')
+      if (document.body) document.body.appendChild(addthisScript)
+    });
+  }
+
   render() {
     const { puzzle } = this.props
     const { auth } = this.props
@@ -163,6 +172,22 @@ class Puzzle extends Component {
 
     return (
       <div className={css(styles.puzzlePage)}>
+        {
+          <Helmet
+            meta={[
+                {"property": "fb:app_id", "content": "160543744369895"},
+                {"property": "og:type", "content": "article"},
+                {"property": "og:title", "content": `Tsumego practice P-${puzzle.data.id}`},
+                {"property": "og:description", "content": "Try to do it!"},
+                {"property": "og:image", "content": puzzle.data.preview_img_r1 != null ? puzzle.data.preview_img_r1.preview_img_r1.x500.url : ''},
+                {"name": "twitter:card", "content": "summary_large_image"},
+                {"name": "twitter:site", "content": "@happybyronbai"},
+                {"name": "twitter:title", "content": `Tsumego practice P-${puzzle.data.id}`},
+                {"name": "twitter:description", "content": "Try to do it!"},
+                {"name": "twitter:image", "content": puzzle.data.preview_img_r1 != null ? puzzle.data.preview_img_r1.preview_img_r1.x500.url : ''},
+            ]}
+          />
+        }
         <div className={css(styles.puzzleContainer)}>
           <div className={css(styles.puzzleBoard)}>
             <PuzzleBoard className="board"
@@ -203,6 +228,9 @@ class Puzzle extends Component {
                 secondary={true}
               />
               <RankingRange rankingRange={range || '5k-1d'} ref='range' />
+            </CardActions>
+            <CardActions>
+              <div className="addthis_inline_share_toolbox"></div>
             </CardActions>
             {
               //<CardText>
@@ -259,7 +287,7 @@ const styles = StyleSheet.create({
   },
 
   answersContainer: {
-    padding: '16px',
+    padding: '16px 0px',
     '@media screen and (max-aspect-ratio: 4/3)': {
       padding: '0px'
     },
