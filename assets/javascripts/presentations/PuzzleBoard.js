@@ -493,11 +493,26 @@ export default class PuzzleBoard extends Component {
       this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this.draw()
 
+      let lastStep, il, jl
+      if (this.state.steps.length > 0) {
+        lastStep = this.state.steps[this.state.steps.length - 1]
+        il = LETTERS_SGF.indexOf(lastStep[2])
+        jl = LETTERS_SGF.indexOf(lastStep[3])
+      }
+
       for (let i = 0; i < this.state.grid; i++) {
         for (let j = 0; j < this.state.grid; j++) {
           const ki = this.state._puzzleArray[i][j]
           let {x, y} = this._getOffsetPos(i, j)
-          this._drawPiece(x, y, ki)
+
+          if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
+              this._drawPiece(x, y, ki, true)
+            } else {
+              this._drawPiece(x, y, ki)
+            }
+          } else {
+            this._drawPiece(x, y, ki)
+          }
         }
       }
     }
