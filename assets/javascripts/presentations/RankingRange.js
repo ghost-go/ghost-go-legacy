@@ -20,7 +20,13 @@ export default class RankingRange extends Component {
   }
 
   render() {
-    let ranges = this.props.rankingRange.split('-')
+    let ranges
+    if (this.props.rankingRange == 'all') {
+      ranges = ['18k', '9d']
+    } else {
+      ranges = this.props.rankingRange.split('-')
+    }
+
     return (
       <div>
         <RankingList

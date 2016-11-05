@@ -76,7 +76,7 @@ class Puzzles extends Component {
             <CardMedia
               className={css(styles.puzzleImg)}
             >
-              <Link to={`/puzzles/${i.id}`}>
+              <Link to={`/puzzles/${i.id}?range=${this.state.rankingFilter}`}>
                 <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
               </Link>
             </CardMedia>

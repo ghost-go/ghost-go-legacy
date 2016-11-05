@@ -162,7 +162,7 @@ class Puzzle extends Component {
   render() {
     const { puzzle } = this.props
     const { auth } = this.props
-    const { range } = this.props.location.query
+    const { range } = this.props.location.query || this.props.range
     let rightAnswers = []
     let wrongAnswers = []
     let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
@@ -234,7 +234,7 @@ class Puzzle extends Component {
                 label="Next Tsumego"
                 secondary={true}
               />
-              <RankingRange rankingRange={range || '5k-1d'} ref='range' />
+              <RankingRange rankingRange={range || '18k-9d'} ref='range' />
             </CardActions>
             <CardActions>
               <div className="addthis_inline_share_toolbox"></div>
