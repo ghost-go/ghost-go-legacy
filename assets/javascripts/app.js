@@ -6,9 +6,7 @@ import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
 import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
-import { kifus, kifu } from './reducers/KifuReducers'
-import { puzzles, puzzle } from './reducers/PuzzleReducers'
-import { players } from './reducers/PlayerReducers'
+import { puzzles, puzzle, kifus, kifu, topPlayers } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
@@ -47,7 +45,7 @@ const reducer = combineReducers({
   kifu,
   puzzles,
   puzzle,
-  players,
+  players: topPlayers,
   routing: routerReducer,
 })
 
@@ -56,7 +54,8 @@ const createStoreWithMiddleware = applyMiddleware(
   historyMiddleware
 )(createStore)
 
-const store = createStoreWithMiddleware(reducer)
+const store = createStoreWithMiddleware(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+//const store = createStoreWithMiddleware(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const history = syncHistoryWithStore(browserHistory, store)
 

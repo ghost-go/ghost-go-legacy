@@ -62,6 +62,7 @@
     "moment": "^2.15.2",
     "nock": "^9.0.2",
     "node-sass": "^3.11.2",
+    "normalizr": "^2.2.1",
     "path": "^0.12.7",
     "phantomjs-prebuilt": "^2.1.7",
     "postcss-loader": "^1.1.0",

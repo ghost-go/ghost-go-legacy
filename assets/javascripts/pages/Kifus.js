@@ -68,16 +68,18 @@ class Kifus extends Component {
     const { kifus, players } = this.props
     let playerItems = []
     let kifuCards = []
-    players.data.forEach((i) => {
-      playerItems.push(
-        <FlatButton
-          key={i.id}
-          backgroundColor={ this.state.playerFilter == i.en_name ? 'rgb(235, 235, 235)' : '' }
-          onClick={this.handleSeeMore.bind(this, i.en_name)}
-          className={css(styles.button)}
-          style={{textAlign: 'left'}} label={`${i.en_name}(${i.grading})`} />
-      )
-    })
+    if (players.data !== undefined) {
+      players.data.forEach((i) => {
+        playerItems.push(
+          <FlatButton
+            key={i.id}
+            backgroundColor={ this.state.playerFilter == i.en_name ? 'rgb(235, 235, 235)' : '' }
+            onClick={this.handleSeeMore.bind(this, i.en_name)}
+            className={css(styles.button)}
+            style={{textAlign: 'left'}} label={`${i.en_name}(${i.grading})`} />
+        )
+      })
+    }
     if (!kifus.isFetching && kifus.data != null && kifus.data.length > 0) {
       kifus.data.forEach((i) => {
         kifuCards.push(
@@ -271,7 +273,6 @@ const styles = StyleSheet.create({
 
 
 function select(state) {
-  console.log(state)
   return {
     kifus: state.kifus,
     players: state.players
