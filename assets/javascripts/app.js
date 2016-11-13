@@ -6,7 +6,13 @@ import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
 import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
-import { puzzles, puzzle, kifus, kifu, topPlayers } from './reducers/Reducers'
+import { puzzles,
+  puzzle,
+  kifus,
+  kifu,
+  topPlayers,
+  filter,
+} from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
@@ -45,6 +51,7 @@ const reducer = combineReducers({
   kifu,
   puzzles,
   puzzle,
+  filter,
   players: topPlayers,
   routing: routerReducer,
 })

@@ -13,8 +13,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 //internal component
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
-import { fetchKifus } from '../actions/KifuActions'
-import { fetchTopPlayers } from '../actions/PlayerActions'
+import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'

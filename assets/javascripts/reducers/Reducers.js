@@ -57,8 +57,25 @@ function fetchFailure(state, action) {
   return {...state, isFetching: false, isFailure: true}
 }
 
+function setKifuFilter(state, action) {
+  return updateObject(state, {kifuFilter: action.filter})
+}
+
+function setPuzzleFilter(state, action) {
+  return updateObject(state, {puzzleFilter: action.filter})
+}
+
 export const puzzles = buildFetchReducer('PUZZLES', [])
 export const puzzle = buildFetchReducer('PUZZLE', [])
 export const kifus = buildFetchReducer('KIFUS', [])
 export const kifu = buildFetchReducer('KIFU', [])
 export const topPlayers = buildFetchReducer('TOP_PLAYERS', [])
+export const filter = createReducer([], {
+  'SET_KIFU_FILTER': setKifuFilter,
+  'SET_PUZZLE_FILTER': setPuzzleFilter,
+})
+
+
+
+
+

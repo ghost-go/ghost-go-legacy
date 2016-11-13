@@ -99,7 +99,7 @@ export default class PuzzleBoard extends Component {
   }
 
   initPuzzleArray() {
-    this.setState({currentKi: this.props.whofirst == 'Black First' ? 1 : -1})
+    console.log(this.props)
     this.clearKifuArray()
     const steps = this.props.puzzle.split(';')
     let newArray = this.state._puzzleArray.slice()
@@ -109,7 +109,10 @@ export default class PuzzleBoard extends Component {
       const x = LETTERS_SGF.indexOf(pos[0])
       const y = LETTERS_SGF.indexOf(pos[1])
       newArray[x][y] = ki
-      this.setState({_puzzleArray: newArray})
+    })
+    this.setState({
+      currentKi: this.props.whofirst == 'Black First' ? 1 : -1,
+      _puzzleArray: newArray
     })
   }
 
@@ -522,6 +525,10 @@ export default class PuzzleBoard extends Component {
     })
   }
 
+  componentWillMount() {
+    this.initPuzzleArray()
+    this.drawBoardWithResize()
+  }
 
   componentDidMount() {
     window.addEventListener('resize', this.drawBoardWithResize.bind(this))
@@ -532,23 +539,10 @@ export default class PuzzleBoard extends Component {
     window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.puzzle !== this.props.puzzle
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.puzzle != null && prevProps.puzzle !== this.props.puzzle) {
+    if (prevProps.puzzle !== this.props.puzzle) {
       this.initPuzzleArray()
       this.drawBoardWithResize()
-      if (this.props.puzzle[0] == 'B') {
-        this.state.currentKi = 1
-      }
-      else if (this.props.puzzle[0] == 'W') {
-        this.state.currentKi = 1
-      }
-      else {
-        this.state.currentKi = 0
-      }
     }
   }
 

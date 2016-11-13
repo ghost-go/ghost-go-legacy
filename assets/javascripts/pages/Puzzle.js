@@ -16,7 +16,8 @@ import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
-import { fetchPuzzle, fetchPuzzleNext } from '../actions/PuzzleActions'
+import { fetchPuzzleNext } from '../actions/PuzzleActions'
+import { fetchPuzzle } from '../actions/FetchActions'
 import { addRating } from '../actions/RatingActions'
 import { addPuzzleRecord } from '../actions/PuzzleRecordActions'
 
@@ -37,14 +38,9 @@ import { StyleSheet, css } from 'aphrodite'
 
 class Puzzle extends Component {
 
-  static contextTypes = {
-    router: PropTypes.object,
-  }
-
   constructor(props) {
     super(props)
-    let { id } = this.props.params
-    this.props.dispatch(fetchPuzzle(id))
+
     this.state = {
       answersExpanded: true,
       commentsOpen: false,
@@ -105,7 +101,6 @@ class Puzzle extends Component {
   handleNext() {
     let self = this
     let range = this.refs.range.state.range
-    //let data = this.props.dispatch(fetchPuzzleNext(range))
     let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
     fetch(url, {
       method: 'GET',
@@ -122,7 +117,7 @@ class Puzzle extends Component {
       else {
         let nextUrl = `/puzzles/${json.id}?range=${range}`
         self.props.dispatch(push(nextUrl))
-        self.props.dispatch(fetchPuzzle(json.id))
+        self.props.dispatch(fetchPuzzle({id: json.id}))
         self.refs.board.handleTipsReset()
       }
     })
@@ -146,6 +141,8 @@ class Puzzle extends Component {
 
   componentDidMount() {
     setTimeout(() => {
+      let { id } = this.props.params
+      this.props.dispatch(fetchPuzzle({id}))
       let addthisScript = document.createElement('script');
       addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5818445a7b592e4c')
       if (document.body) document.body.appendChild(addthisScript)
@@ -161,20 +158,20 @@ class Puzzle extends Component {
 
   render() {
     const { puzzle } = this.props
+    if (puzzle['data'] === undefined) return null
     const { auth } = this.props
     const { range } = this.props.location.query || this.props.range
     let rightAnswers = []
     let wrongAnswers = []
-    let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
+    let answers = []
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
-
+      answers = puzzle.data.right_answers + puzzle.data.wrong_answers
       puzzle.data.right_answers.forEach((i) => {
         rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
       puzzle.data.wrong_answers.forEach((i) => {
         wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
-
     }
 
     return (

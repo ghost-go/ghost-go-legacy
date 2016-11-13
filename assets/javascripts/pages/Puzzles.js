@@ -17,7 +17,7 @@ import Rating from 'react-rating'
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import SVGIcon from '../presentations/SVGIcon'
-import { fetchPuzzles } from '../actions/PuzzleActions'
+import { fetchPuzzles } from '../actions/FetchActions'
 import RankingRange from '../presentations/RankingRange'
 
 //external component
