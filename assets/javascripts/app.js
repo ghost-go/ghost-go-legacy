@@ -11,7 +11,8 @@ import { puzzles,
   kifus,
   kifu,
   topPlayers,
-  filter,
+  puzzleFilter,
+  kifuFilter,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -51,7 +52,8 @@ const reducer = combineReducers({
   kifu,
   puzzles,
   puzzle,
-  filter,
+  puzzleFilter,
+  kifuFilter,
   players: topPlayers,
   routing: routerReducer,
 })

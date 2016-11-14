@@ -20,7 +20,6 @@ export function fetchPuzzleNext(range) {
       alert('No next puzzle')
     }
     else {
-      console.log(json)
       return json
     }
   })

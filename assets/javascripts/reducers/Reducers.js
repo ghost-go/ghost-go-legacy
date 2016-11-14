@@ -17,7 +17,7 @@ function updateItemInArray(array, itemId, updateItemCallback) {
   return updatedItems;
 }
 
-function buildFetchReducer(name = '', initialState) {
+function buildFetchReducer(initialState, name = '') {
   initialState = {...initialState,
     isFetching: false,
     isFailure: false,
@@ -58,24 +58,19 @@ function fetchFailure(state, action) {
 }
 
 function setKifuFilter(state, action) {
-  return updateObject(state, {kifuFilter: action.filter})
+  return action.payload
+  //return updateObject(state, {kifuFilter: action.payload})
 }
 
 function setPuzzleFilter(state, action) {
-  return updateObject(state, {puzzleFilter: action.filter})
+  return action.payload
+  //return updateObject(state, {puzzleFilter: action.payload})
 }
 
-export const puzzles = buildFetchReducer('PUZZLES', [])
-export const puzzle = buildFetchReducer('PUZZLE', [])
-export const kifus = buildFetchReducer('KIFUS', [])
-export const kifu = buildFetchReducer('KIFU', [])
-export const topPlayers = buildFetchReducer('TOP_PLAYERS', [])
-export const filter = createReducer([], {
-  'SET_KIFU_FILTER': setKifuFilter,
-  'SET_PUZZLE_FILTER': setPuzzleFilter,
-})
-
-
-
-
-
+export const puzzles = buildFetchReducer({}, 'PUZZLES')
+export const puzzle = buildFetchReducer({}, 'PUZZLE')
+export const kifus = buildFetchReducer({}, 'KIFUS')
+export const kifu = buildFetchReducer({}, 'KIFU')
+export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
+export const puzzleFilter = createReducer('all', { 'SET_PUZZLE_FILTER': setPuzzleFilter })
+export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setKifuFilter })

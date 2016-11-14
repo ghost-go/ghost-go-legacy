@@ -18,6 +18,7 @@ import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import SVGIcon from '../presentations/SVGIcon'
 import { fetchPuzzles } from '../actions/FetchActions'
+import { setPuzzleFilter } from '../actions/FilterActions'
 import RankingRange from '../presentations/RankingRange'
 
 //external component
@@ -30,7 +31,6 @@ class Puzzles extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      rankingFilter: 'all',
       tipsOpen: false,
       isLoading: false,
     }
@@ -50,13 +50,10 @@ class Puzzles extends Component {
   }
 
   handleSeeMore(ranking) {
-    this.setState({ rankingFilter: ranking || this.state.rankingFilter }, () => {
-      let { query } = this.props.location
-      this.props.dispatch(fetchPuzzles({
-        page: query.page,
-        ranking: this.state.rankingFilter
-      }))
-    })
+    this.props.dispatch(setPuzzleFilter(ranking || this.props.puzzleFilter))
+    this.props.dispatch(fetchPuzzles({
+      ranking: ranking || this.props.puzzleFilter,
+    }))
   }
 
   handleTips() {
@@ -133,12 +130,12 @@ class Puzzles extends Component {
             />
             <CardText expandable={true}>
               <FlatButton
-                backgroundColor={ this.state.rankingFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.puzzleFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, 'all')}
                 className={css(styles.button)}
                 style={{textAlign: 'left'}} label="all" />
               <FlatButton
-                backgroundColor={ this.state.rankingFilter == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.puzzleFilter == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, '18k-10k')}
                 className={css(styles.button)}
                 style={{textAlign: 'left'}} label={
@@ -146,28 +143,28 @@ class Puzzles extends Component {
                     `18k-10k (${puzzles.data.ranking_18k_10k_count}) `
                 } />
               <FlatButton
-                backgroundColor={ this.state.rankingFilter == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.puzzleFilter == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, '9k-5k')} className={css(styles.button)}
                 style={{textAlign: 'left'}} label={
                   puzzles.data == null ?  '9k-5k' :
                     `9k-5k (${puzzles.data.ranking_9k_5k_count}) `
                 } />
               <FlatButton
-                backgroundColor={ this.state.rankingFilter == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.puzzleFilter == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, '4k-1k')} className={css(styles.button)}
                 style={{textAlign: 'left'}} label={
                   puzzles.data == null ?  '4k-1k' :
                     `4k-1k (${puzzles.data.ranking_4k_1k_count}) `
                 } />
               <FlatButton
-                backgroundColor={ this.state.rankingFilter == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.puzzleFilter == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, '1d-3d')} className={css(styles.button)}
                 style={{textAlign: 'left'}} label={
                   puzzles.data == null ?  '1d-3d' :
                     `1d-3d (${puzzles.data.ranking_1d_3d_count}) `
                 } />
               <FlatButton
-                backgroundColor={ this.state.rankingFilter == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.puzzleFilter == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, '4d-6d')} className={css(styles.button)}
                 style={{textAlign: 'left'}} label={
                   puzzles.data == null ?  '4d-6d' :
@@ -296,7 +293,8 @@ const styles = StyleSheet.create({
 
 function select(state) {
   return {
-    puzzles: state.puzzles
+    puzzles: state.puzzles,
+    puzzleFilter: state.puzzleFilter
   }
 }
 
