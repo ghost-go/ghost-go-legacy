@@ -1,12 +1,12 @@
-import * as actions from '../assets/javascripts/actions/PuzzleActions'
-import * as types from '../assets/javascripts/constants/ActionTypes'
-import * as config from '../assets/javascripts/constants/Config'
-import { applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import nock from 'nock'
-import fetchMock from 'fetch-mock'
+//import * as actions from '../assets/javascripts/actions/PuzzleActions'
+//import * as types from '../assets/javascripts/constants/ActionTypes'
+//import * as config from '../assets/javascripts/constants/Config'
+//import { applyMiddleware } from 'redux'
+//import thunk from 'redux-thunk'
+//import nock from 'nock'
+//import fetchMock from 'fetch-mock'
 
-const middlewares = [ thunk ]
+//const middlewares = [ thunk ]
 
 //function mockStore(getState, expectedActions, done) {
   //if (!Array.isArray(expectedActions)) {
