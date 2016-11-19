@@ -8,11 +8,13 @@ import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-rou
 
 import { puzzles,
   puzzle,
+  puzzleNext,
   kifus,
   kifu,
   topPlayers,
   puzzleFilter,
   kifuFilter,
+  rangeFilter,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -51,9 +53,10 @@ const reducer = combineReducers({
   kifus,
   kifu,
   puzzles,
-  puzzle,
+  puzzle: puzzle,
   puzzleFilter,
   kifuFilter,
+  rangeFilter,
   players: topPlayers,
   routing: routerReducer,
 })

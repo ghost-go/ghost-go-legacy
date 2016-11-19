@@ -37,5 +37,6 @@ export const fetchPuzzles = buildFetchData('PUZZLES', 'v1/puzzles')
 
 export const fetchKifu = buildFetchData('KIFU', 'v1/kifus/#{id}')
 export const fetchPuzzle = buildFetchData('PUZZLE', 'v1/puzzles/#{id}')
+export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', 'v1/puzzles/next')
 
-export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', '/v1/players/top')
+export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', 'v1/players/top')

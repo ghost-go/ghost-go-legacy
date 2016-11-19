@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import reduceReducers from 'reduce-reducers'
 
 function updateObject(oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
@@ -54,23 +55,29 @@ function fetchSuccess(state, action) {
 }
 
 function fetchFailure(state, action) {
-  return {...state, isFetching: false, isFailure: true}
+  return {...state, isFetching: false, isFailure: true, errorInfo: action.payload}
 }
 
 function setKifuFilter(state, action) {
   return action.payload
-  //return updateObject(state, {kifuFilter: action.payload})
 }
 
 function setPuzzleFilter(state, action) {
-  return action.payload
-  //return updateObject(state, {puzzleFilter: action.payload})
+  return updateObject(state, action.payload)
+}
+
+function setRangeFilter(state, action) {
+  return updateObject(state, action.payload)
 }
 
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
-export const puzzle = buildFetchReducer({}, 'PUZZLE')
+export const puzzle = reduceReducers(
+  buildFetchReducer({}, 'PUZZLE'),
+  buildFetchReducer({}, 'PUZZLE_NEXT')
+)
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
-export const puzzleFilter = createReducer('all', { 'SET_PUZZLE_FILTER': setPuzzleFilter })
+export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
+export const rangeFilter = createReducer({start: '18k', end: '9d'}, { 'SET_RANGE_FILTER': setRangeFilter })
 export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setKifuFilter })

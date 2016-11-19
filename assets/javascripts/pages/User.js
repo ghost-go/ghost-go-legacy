@@ -31,7 +31,7 @@ export default class User extends Component {
     this.state = {
       tab: 'Basic Information',
       profile: profile,
-      ranking: profile.user_metadata.ranking,
+      rank: profile.user_metadata.rank,
       tipsOpen: false
     }
 
@@ -46,12 +46,12 @@ export default class User extends Component {
   }
 
   handleChange(event, index, value) {
-    this.setState({ranking: value}, () => {
+    this.setState({rank: value}, () => {
       const { auth } = this.props
       const { profile } = this.state
       auth.updateProfile(profile.user_id, {
         user_metadata: {
-          ranking: value
+          rank: value
         }
       }).then(() => {
         this.setState({
@@ -66,7 +66,7 @@ export default class User extends Component {
     //const { profile } = this.state
     //auth.updateProfile(profile.user_id, {
       //user_metadata: {
-        //ranking: this.state.ranking
+        //rank: this.state.rank
       //}
     //})
   //}
@@ -80,8 +80,8 @@ export default class User extends Component {
     }
   }
 
-  handleSeeMore(ranking) {
-    this.setState({ rankingFilter: ranking })
+  handleSeeMore(rank) {
+    this.setState({ rankFilter: rank })
   }
 
   render() {
@@ -126,9 +126,9 @@ export default class User extends Component {
                 <ListItem primaryText='Ranking' />
                 <SelectField
                    className={css(styles.offsetLeft)}
-                   value={this.state.ranking}
+                   value={this.state.rank}
                    onChange={this.handleChange.bind(this)}
-                   ref='ranking'
+                   ref='rank'
                 >
                   <MenuItem value={'18k'} primaryText="18k" />
                   <MenuItem value={'17k'} primaryText="17k" />
