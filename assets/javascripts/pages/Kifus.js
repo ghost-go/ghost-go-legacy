@@ -13,8 +13,8 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 //internal component
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
-import { fetchKifus } from '../actions/KifuActions'
-import { fetchTopPlayers } from '../actions/PlayerActions'
+import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions'
+import { setKifuFilter } from '../actions/FilterActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -32,7 +32,6 @@ class Kifus extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      playerFilter: 'all',
       isLoading: false,
     }
     let { query } = this.props.location
@@ -54,30 +53,30 @@ class Kifus extends Component {
   }
 
   handleSeeMore(player) {
-    this.setState({ playerFilter: player || this.state.playerFilter }, () => {
-      let { query } = this.props.location
-      this.props.dispatch(fetchKifus({
-        per_page: 24,
-        page: query.page,
-        player: this.state.playerFilter
-      }))
-    })
+    this.props.dispatch(setKifuFilter(player || this.props.kifuFilter))
+    this.props.dispatch(fetchKifus({
+      player: player || this.props.kifuFilter
+    }))
   }
 
   render() {
     const { kifus, players } = this.props
     let playerItems = []
     let kifuCards = []
-    players.data.forEach((i) => {
-      playerItems.push(
-        <FlatButton
-          key={i.id}
-          backgroundColor={ this.state.playerFilter == i.en_name ? 'rgb(235, 235, 235)' : '' }
-          onClick={this.handleSeeMore.bind(this, i.en_name)}
-          className={css(styles.button)}
-          style={{textAlign: 'left'}} label={`${i.en_name}(${i.grading})`} />
-      )
-    })
+    if (players.data !== undefined) {
+      players.data.forEach((i) => {
+        console.log(i.en_name)
+        console.log(this.props.kifuFilter)
+        playerItems.push(
+          <FlatButton
+            key={i.id}
+            backgroundColor={ this.props.kifuFilter === i.en_name ? 'rgb(235, 235, 235)' : '' }
+            onClick={this.handleSeeMore.bind(this, i.en_name)}
+            className={css(styles.button)}
+            style={{textAlign: 'left'}} label={`${i.en_name}(${i.grading})`} />
+        )
+      })
+    }
     if (!kifus.isFetching && kifus.data != null && kifus.data.length > 0) {
       kifus.data.forEach((i) => {
         kifuCards.push(
@@ -132,7 +131,7 @@ class Kifus extends Component {
             />
             <CardText expandable={true}>
               <FlatButton
-                backgroundColor={ this.state.playerFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
+                backgroundColor={ this.props.kifuFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
                 onClick={this.handleSeeMore.bind(this, 'all')}
                 className={css(styles.button)}
                 style={{textAlign: 'left'}} label="all" />
@@ -271,10 +270,10 @@ const styles = StyleSheet.create({
 
 
 function select(state) {
-  console.log(state)
   return {
     kifus: state.kifus,
-    players: state.players
+    players: state.players,
+    kifuFilter: state.kifuFilter
   }
 }
 

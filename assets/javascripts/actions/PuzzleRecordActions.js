@@ -6,7 +6,6 @@ import URITemplate from 'urijs/src/URITemplate'
 
 export function addPuzzleRecord(params) {
 
-  console.log(params)
   return dispatch => {
     let url = URI(`${config.API_DOMAIN}/v1/puzzle_records`)
     return fetch(url, {

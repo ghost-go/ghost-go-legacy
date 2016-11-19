@@ -1,12 +1,12 @@
-import * as actions from '../assets/javascripts/actions/PuzzleActions'
-import * as types from '../assets/javascripts/constants/ActionTypes'
-import * as config from '../assets/javascripts/constants/Config'
-import { applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import nock from 'nock'
-import fetchMock from 'fetch-mock'
+//import * as actions from '../assets/javascripts/actions/PuzzleActions'
+//import * as types from '../assets/javascripts/constants/ActionTypes'
+//import * as config from '../assets/javascripts/constants/Config'
+//import { applyMiddleware } from 'redux'
+//import thunk from 'redux-thunk'
+//import nock from 'nock'
+//import fetchMock from 'fetch-mock'
 
-const middlewares = [ thunk ]
+//const middlewares = [ thunk ]
 
 //function mockStore(getState, expectedActions, done) {
   //if (!Array.isArray(expectedActions)) {
@@ -62,7 +62,7 @@ const middlewares = [ thunk ]
         //name: '一点忠告',
         //steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
         //description: '',
-        //ranking: '7K',
+        //rank: '7K',
         //user_id: 1,
         //created_at: '2016-05-21 16:40:00',
         //updated_at: '2016-05-21 16:40:00',
@@ -75,7 +75,7 @@ const middlewares = [ thunk ]
         //name: '一点忠告',
         //steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
         //description: '',
-        //ranking: '7K',
+        //rank: '7K',
         //user_id: 1,
         //created_at: '2016-05-21 16:40:00',
         //updated_at: '2016-05-21 16:40:00',
@@ -107,7 +107,7 @@ const middlewares = [ thunk ]
               //name: '一点忠告',
               //steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
               //description: '',
-              //ranking: '7K',
+              //rank: '7K',
               //user_id: 1,
               //created_at: '2016-05-21 16:40:00',
               //updated_at: '2016-05-21 16:40:00',
@@ -120,7 +120,7 @@ const middlewares = [ thunk ]
               //name: '一点忠告',
               //steps: 'B[oc];B[nb];B[mb];B[qb];B[pa];B[pc];W[lb];W[lc];W[mc];W[nd];W[od];W[pd];W[qc];W[rc];W[rb]',
               //description: '',
-              //ranking: '7K',
+              //rank: '7K',
               //user_id: 1,
               //created_at: '2016-05-21 16:40:00',
               //updated_at: '2016-05-21 16:40:00',

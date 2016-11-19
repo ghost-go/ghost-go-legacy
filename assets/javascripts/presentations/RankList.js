@@ -5,20 +5,17 @@ import MenuItem from 'material-ui/MenuItem'
 
 export default class RankingList extends Component {
 
+  state = {
+    rank: this.props.rank || '18k',
+  }
+
   static propType = {
-    ranking: React.PropTypes.string.required
+    rank: React.PropTypes.string.required
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      ranking: this.props.ranking || '18k',
-    }
-  }
-
-  handleChange(event, index, value) {
-    this.setState({ranking: value}, () => {
-      this.props.onChange()
+  handleChange = (event, index, value) => {
+    this.setState({rank: value}, () => {
+      this.props.onChange(value)
     })
   }
 
@@ -26,8 +23,8 @@ export default class RankingList extends Component {
     return (
       <SelectField
          style={this.props.inlineStyle}
-         value={this.state.ranking}
-         onChange={this.handleChange.bind(this)}
+         value={this.state.rank}
+         onChange={this.handleChange}
       >
         <MenuItem value={'18k'} primaryText="18k" />
         <MenuItem value={'17k'} primaryText="17k" />

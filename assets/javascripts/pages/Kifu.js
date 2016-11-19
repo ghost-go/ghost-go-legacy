@@ -8,7 +8,7 @@ import Board from '../presentations/Board'
 import ControlBar from '../presentations/ControlBar'
 import Layout from './Layout'
 
-import { fetchKifu } from '../actions/KifuActions'
+import { fetchKifu } from '../actions/FetchActions'
 
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
@@ -31,7 +31,7 @@ class Kifu extends Component {
     this.state = {
       board: null
     }
-    this.props.dispatch(fetchKifu(id))
+    this.props.dispatch(fetchKifu({id: id}))
 
 
     this.setBoard = this.setBoard.bind(this)

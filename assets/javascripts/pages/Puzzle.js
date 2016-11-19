@@ -16,9 +16,11 @@ import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
-import { fetchPuzzle, fetchPuzzleNext } from '../actions/PuzzleActions'
+import { fetchPuzzleNext } from '../actions/FetchActions'
+import { fetchPuzzle } from '../actions/FetchActions'
 import { addRating } from '../actions/RatingActions'
 import { addPuzzleRecord } from '../actions/PuzzleRecordActions'
+import { setRangeFilter } from '../actions/FilterActions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -28,7 +30,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 import Dialog from 'material-ui/Dialog'
 import Snackbar from 'material-ui/Snackbar'
 import Drawer from 'material-ui/Drawer'
-import RankingRange from '../presentations/RankingRange'
+import RankRange from '../presentations/RankRange'
 
 import * as config from '../constants/Config'
 import URI from 'urijs'
@@ -37,14 +39,9 @@ import { StyleSheet, css } from 'aphrodite'
 
 class Puzzle extends Component {
 
-  static contextTypes = {
-    router: PropTypes.object,
-  }
-
   constructor(props) {
     super(props)
-    let { id } = this.props.params
-    this.props.dispatch(fetchPuzzle(id))
+
     this.state = {
       answersExpanded: true,
       commentsOpen: false,
@@ -57,6 +54,7 @@ class Puzzle extends Component {
     this.handleReset = this.handleReset.bind(this)
     this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
     this.handleNext = this.handleNext.bind(this)
+    this.handleRangeChange = this.handleRangeChange.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -103,29 +101,29 @@ class Puzzle extends Component {
 
 
   handleNext() {
-    let self = this
-    let range = this.refs.range.state.range
-    //let data = this.props.dispatch(fetchPuzzleNext(range))
-    let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${range}`)
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(function(res){
-      return (res.json())
-    }).then(function(json) {
-      if (json == null) {
-        alert('No next puzzle')
-      }
-      else {
-        let nextUrl = `/puzzles/${json.id}?range=${range}`
-        self.props.dispatch(push(nextUrl))
-        self.props.dispatch(fetchPuzzle(json.id))
-        self.refs.board.handleTipsReset()
-      }
-    })
+    this.props.dispatch(fetchPuzzleNext({range: this.props.rangeFilter.start + '-' + this.props.rangeFilter.end}))
+
+    //let self = this
+    //let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${this.props.rangeFilter}`)
+    //fetch(url, {
+      //method: 'GET',
+      //headers: {
+        //'Accept': 'application/json',
+        //'Content-Type': 'application/json'
+      //},
+    //}).then(function(res){
+      //return (res.json())
+    //}).then(function(json) {
+      //if (json == null) {
+        //alert('No next puzzle')
+      //}
+      //else {
+        //let nextUrl = `/puzzles/${json.id}?range=${this.props.rangeFilter}`
+        //self.props.dispatch(push(nextUrl))
+        //self.props.dispatch(fetchPuzzle({id: json.id}))
+        //self.refs.board.handleTipsReset()
+      //}
+    //})
   }
 
   handleRatingChange(rate) {
@@ -138,14 +136,19 @@ class Puzzle extends Component {
         rating: rate,
         user_id: profile.user_id
       }))
-    }
-    else {
+    } else {
       auth.login()
     }
   }
 
+  handleRangeChange(range) {
+    this.props.dispatch(setRangeFilter(range))
+  }
+
   componentDidMount() {
     setTimeout(() => {
+      let { id } = this.props.params
+      this.props.dispatch(fetchPuzzle({id}))
       let addthisScript = document.createElement('script');
       addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5818445a7b592e4c')
       if (document.body) document.body.appendChild(addthisScript)
@@ -161,20 +164,19 @@ class Puzzle extends Component {
 
   render() {
     const { puzzle } = this.props
+    if (puzzle['data'] === undefined) return null
     const { auth } = this.props
-    const { range } = this.props.location.query || this.props.range
     let rightAnswers = []
     let wrongAnswers = []
-    let answers = puzzle.data.right_answers + puzzle.data.wrong_answers
+    let answers = []
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
-
+      answers = puzzle.data.right_answers + puzzle.data.wrong_answers
       puzzle.data.right_answers.forEach((i) => {
         rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
       puzzle.data.wrong_answers.forEach((i) => {
         wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
-
     }
 
     return (
@@ -210,7 +212,7 @@ class Puzzle extends Component {
         </div>
         <div className={css(styles.puzzleInfo)}>
           <Card>
-            <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.ranking}`} />
+            <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.rank}`} />
             <CardText>
               <div>
                 <strong>Number: </strong>
@@ -234,7 +236,7 @@ class Puzzle extends Component {
                 label="Next Tsumego"
                 secondary={true}
               />
-              <RankingRange rankingRange={range || '18k-9d'} ref='range' />
+              <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
             </CardActions>
             <CardActions>
               <div className="addthis_inline_share_toolbox"></div>
@@ -344,7 +346,8 @@ const styles = StyleSheet.create({
 
 function select(state) {
   return {
-    puzzle: state.puzzle
+    puzzle: state.puzzle,
+    rangeFilter: state.rangeFilter
   }
 }
 
