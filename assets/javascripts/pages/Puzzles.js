@@ -249,9 +249,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    flex: '1 1 250px',
-    width: '250px',
-    margin: '0px 1.5vw 20px 1.5vw',
+    flex: '1 1 200px',
+    width: '200px',
+    margin: '0px 5px 20px 5px',
   },
 
   puzzleImg: {
