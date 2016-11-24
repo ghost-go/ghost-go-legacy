@@ -101,7 +101,11 @@ class Puzzle extends Component {
 
 
   handleNext() {
-    this.props.dispatch(fetchPuzzleNext({range: this.props.rangeFilter.start + '-' + this.props.rangeFilter.end}))
+    let range = this.props.rangeFilter.start + '-' + this.props.rangeFilter.end
+    this.props.dispatch(fetchPuzzleNext({range: range}))
+    let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
+    this.props.dispatch(push(nextUrl))
+    this.refs.board.handleTipsReset()
 
     //let self = this
     //let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${this.props.rangeFilter}`)
