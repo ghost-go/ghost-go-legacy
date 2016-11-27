@@ -23,19 +23,19 @@ export default class AnswerBar extends Component {
 
   firstStep() {
     this.setState({ current: 0 }, () => {
-      this.props.board.initPuzzleArray()
-      this.props.board.drawBoard()
+      this.props.board.refs.board.initPuzzleArray()
+      this.props.board.refs.board.drawBoard()
     })
   }
 
   prevStep() {
     let steps = this.props.steps.split(';')
     if (this.state.current > 0) {
-      this.props.board.initPuzzleArray()
+      this.props.board.refs.board.initPuzzleArray()
       this.setState({ current: this.state.current - 1 }, () => {
         for (let i = 0; i < this.state.current; i++) {
           let {x, y, ki} = convertSGFCoordToPos(steps[i])
-          this.props.board.move(x, y, ki)
+          this.props.board.refs.board.move(x, y, ki)
         }
       })
     }
@@ -44,11 +44,11 @@ export default class AnswerBar extends Component {
   nextStep() {
     let steps = this.props.steps.split(';')
     if (this.state.current < steps.length) {
-      this.props.board.initPuzzleArray()
+      this.props.board.refs.board.initPuzzleArray()
       this.setState({ current: this.state.current + 1 }, () => {
         for (let i = 0; i < this.state.current; i++) {
           let {x, y, ki} = convertSGFCoordToPos(steps[i])
-          this.props.board.move(x, y, ki)
+          this.props.board.refs.board.move(x, y, ki)
         }
       })
     }
@@ -57,10 +57,10 @@ export default class AnswerBar extends Component {
   lastStep() {
     let steps = this.props.steps.split(';')
     this.setState({ current: steps.length }, () => {
-      this.props.board.initPuzzleArray()
+      this.props.board.refs.board.initPuzzleArray()
       steps.forEach((step) => {
         let {x, y, ki} = convertSGFCoordToPos(step)
-        this.props.board.move(x, y, ki)
+        this.props.board.refs.board.move(x, y, ki)
       })
     })
   }
