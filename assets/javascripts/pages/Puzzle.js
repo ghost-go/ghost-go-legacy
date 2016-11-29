@@ -46,13 +46,15 @@ class Puzzle extends Component {
       answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
-      wrongTipOpen: false
+      wrongTipOpen: false,
+      researchMode: false,
     }
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
     this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
     this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
+    this.handleResearchMode = this.handleResearchMode.bind(this)
     this.handleNext = this.handleNext.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
   }
@@ -63,6 +65,10 @@ class Puzzle extends Component {
 
   handleCommentsToggle() {
     this.setState({commentsOpen: !this.state.commentsOpen})
+  }
+
+  handleResearchMode() {
+    this.setState({researchMode: !this.state.researchMode})
   }
 
   handleRightTipOpen() {
@@ -203,7 +209,7 @@ class Puzzle extends Component {
         }
         <div className={css(styles.puzzleContainer)}>
           <div className={css(styles.puzzleBoard)}>
-            <PuzzleBoard className="board"
+            <PuzzleBoard researchMode={this.state.researchMode} className="board"
               whofirst={puzzle.data.whofirst}
               puzzle={puzzle.data.steps}
               right_answers={puzzle.data.right_answers}
@@ -244,6 +250,13 @@ class Puzzle extends Component {
             </CardActions>
             <CardActions>
               <div className="addthis_inline_share_toolbox"></div>
+              <CardText>
+                <Toggle
+                  className={css(styles.toggle)}
+                  label="Research Mode"
+                  onToggle={this.handleResearchMode}
+                />
+              </CardText>
             </CardActions>
             {
               //<CardText>
