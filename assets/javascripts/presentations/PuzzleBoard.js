@@ -337,7 +337,7 @@ export default class PuzzleBoard extends Component {
   }
 
   response(x, y, ki) {
-    //console.log(this.state.steps.join(';'))
+    if (this.props.researchMode) return
     let rights = []
     let wrongs = []
     this.props.right_answers.forEach((i) => {
@@ -447,9 +447,7 @@ export default class PuzzleBoard extends Component {
       let clickEvent = (e) => {
         e.stopPropagation()
         e.preventDefault()
-        console.log('aaa')
         let p = {}
-        console.log(e.type)
         if (e.type == 'touchstart') {
           p = this._convertCtxposToPos(
             e.touches[0].pageX,
@@ -460,17 +458,17 @@ export default class PuzzleBoard extends Component {
         }
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
-        console.log(p.posX, p.posY)
         if (this._isPosInTheBoard(p.posX, p.posY)) {
           this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
           this.topLayer.removeEventListener(clickEventName, clickEvent, false)
           this.topLayer.onmousemove = () => false
-          hasMoved = this.move(p.posX, p.posY, this.state.currentKi, true)
+          hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
             console.log(this.state.steps)
             this.state.step ++
           }
+          this.markPiece()
         }
         setTimeout(() => {
           if (hasMoved) {
@@ -489,36 +487,42 @@ export default class PuzzleBoard extends Component {
     }, 0)
   }
 
+  markPiece() {
+    let lastStep, il, jl
+    if (this.state.steps.length > 0) {
+      lastStep = this.state.steps[this.state.steps.length - 1]
+      console.log(lastStep)
+
+      il = LETTERS_SGF.indexOf(lastStep[2])
+      jl = LETTERS_SGF.indexOf(lastStep[3])
+    }
+
+    for (let i = 0; i < this.state.grid; i++) {
+      for (let j = 0; j < this.state.grid; j++) {
+        const ki = this.state._puzzleArray[i][j]
+        let {x, y} = this._getOffsetPos(i, j)
+
+        if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
+            this._drawPiece(x, y, ki, true)
+          } else {
+            this._drawPiece(x, y, ki)
+          }
+        } else {
+          this._drawPiece(x, y, ki)
+        }
+      }
+    }
+  }
+
   drawBoard() {
     if (this._pieceCtx != null && this._boardCtx != null && this.props.puzzle != null) {
       this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
       this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this.draw()
-
-      let lastStep, il, jl
-      if (this.state.steps.length > 0) {
-        lastStep = this.state.steps[this.state.steps.length - 1]
-        il = LETTERS_SGF.indexOf(lastStep[2])
-        jl = LETTERS_SGF.indexOf(lastStep[3])
-      }
-
-      for (let i = 0; i < this.state.grid; i++) {
-        for (let j = 0; j < this.state.grid; j++) {
-          const ki = this.state._puzzleArray[i][j]
-          let {x, y} = this._getOffsetPos(i, j)
-
-          if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
-              this._drawPiece(x, y, ki, true)
-            } else {
-              this._drawPiece(x, y, ki)
-            }
-          } else {
-            this._drawPiece(x, y, ki)
-          }
-        }
-      }
     }
+
+    this.markPiece()
 
     this.setState({
       previewImg: this.pieceLayer.toDataURL('image/png')
