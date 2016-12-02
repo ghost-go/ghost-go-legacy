@@ -468,6 +468,7 @@ export default class PuzzleBoard extends Component {
             console.log(this.state.steps)
             this.state.step ++
           }
+          this.markPiece()
         }
         setTimeout(() => {
           if (hasMoved) {
@@ -486,38 +487,42 @@ export default class PuzzleBoard extends Component {
     }, 0)
   }
 
+  markPiece() {
+    let lastStep, il, jl
+    if (this.state.steps.length > 0) {
+      lastStep = this.state.steps[this.state.steps.length - 1]
+      console.log(lastStep)
+
+      il = LETTERS_SGF.indexOf(lastStep[2])
+      jl = LETTERS_SGF.indexOf(lastStep[3])
+    }
+
+    for (let i = 0; i < this.state.grid; i++) {
+      for (let j = 0; j < this.state.grid; j++) {
+        const ki = this.state._puzzleArray[i][j]
+        let {x, y} = this._getOffsetPos(i, j)
+
+        if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
+            this._drawPiece(x, y, ki, true)
+          } else {
+            this._drawPiece(x, y, ki)
+          }
+        } else {
+          this._drawPiece(x, y, ki)
+        }
+      }
+    }
+  }
+
   drawBoard() {
     if (this._pieceCtx != null && this._boardCtx != null && this.props.puzzle != null) {
       this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
       this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this.draw()
-
-      let lastStep, il, jl
-      if (this.state.steps.length > 0) {
-        lastStep = this.state.steps[this.state.steps.length - 1]
-        
-        console.log(lastStep)
-        il = LETTERS_SGF.indexOf(lastStep[2])
-        jl = LETTERS_SGF.indexOf(lastStep[3])
-      }
-
-      for (let i = 0; i < this.state.grid; i++) {
-        for (let j = 0; j < this.state.grid; j++) {
-          const ki = this.state._puzzleArray[i][j]
-          let {x, y} = this._getOffsetPos(i, j)
-
-          if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
-              this._drawPiece(x, y, ki, true)
-            } else {
-              this._drawPiece(x, y, ki)
-            }
-          } else {
-            this._drawPiece(x, y, ki)
-          }
-        }
-      }
     }
+
+    this.markPiece()
 
     this.setState({
       previewImg: this.pieceLayer.toDataURL('image/png')
