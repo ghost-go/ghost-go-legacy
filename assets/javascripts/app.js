@@ -21,6 +21,8 @@ import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
 import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
+import Tests from './pages/Tests'
+import Test from './pages/Test'
 import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
@@ -39,8 +41,7 @@ class App extends React.Component {
         {this.props.children}
       </div>
     )
-  }
-}
+  } }
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
@@ -95,6 +96,8 @@ ReactDOM.render(
           <Route path="/kifus/:id" component={Kifu} />
           <Route path="/puzzles" component={Puzzles} />
           <Route path="/puzzles/:id" component={Puzzle}  />
+          <Route path="/tests" component={Tests}  />
+          <Route path="/test" component={Test} />
           <Route path="/users" component={User} />
         </Route>
       </Router>

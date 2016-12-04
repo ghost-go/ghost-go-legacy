@@ -112,28 +112,6 @@ class Puzzle extends Component {
     let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
     this.props.dispatch(push(nextUrl))
     this.refs.board.handleTipsReset()
-
-    //let self = this
-    //let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${this.props.rangeFilter}`)
-    //fetch(url, {
-      //method: 'GET',
-      //headers: {
-        //'Accept': 'application/json',
-        //'Content-Type': 'application/json'
-      //},
-    //}).then(function(res){
-      //return (res.json())
-    //}).then(function(json) {
-      //if (json == null) {
-        //alert('No next puzzle')
-      //}
-      //else {
-        //let nextUrl = `/puzzles/${json.id}?range=${this.props.rangeFilter}`
-        //self.props.dispatch(push(nextUrl))
-        //self.props.dispatch(fetchPuzzle({id: json.id}))
-        //self.refs.board.handleTipsReset()
-      //}
-    //})
   }
 
   handleRatingChange(rate) {

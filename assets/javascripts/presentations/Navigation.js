@@ -76,6 +76,9 @@ export default class Navigation extends Component {
               }
               Tsumego Library
             </Link>
+            <Link to="/tests" activeClassName="active">
+              Tsumego Test
+            </Link>
             <Link to="/kifus" activeClassName="active">
               Kifu Library
             </Link>
