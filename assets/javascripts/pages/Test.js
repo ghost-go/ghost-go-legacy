@@ -3,6 +3,7 @@ import mainStyles from '../styles/main'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
+import PuzzleList from './presentations/PuzzleList'
 
 export default class Test extends Component {
 
@@ -17,6 +18,9 @@ export default class Test extends Component {
   render() {
     return (
       <div className={css(mainStyles.mainContainer)}>
+        <div>
+          <PuzzleList />
+        </div>
 			</div>
     )
   }
