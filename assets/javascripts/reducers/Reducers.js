@@ -89,6 +89,7 @@ export const puzzle = reduceReducers(
 )
 export const practice = buildFetchReducer({}, 'PRACTICE')
 //export const puzzleRecord = buildPostReducer({}, 'PUZZLE_RECORD')
+export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')

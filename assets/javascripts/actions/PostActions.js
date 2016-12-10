@@ -28,3 +28,4 @@ function buildPostData(name = '', api = '') {
 }
 
 export const postPuzzleRecord = buildPostData('PUZZLE_RECORD', 'v1/puzzle_records')
+export const postRating = buildPostData('RATING', 'v1/ratings')

@@ -17,8 +17,7 @@ import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
-import { postPuzzleRecord } from '../actions/PostActions'
-import { addRating } from '../actions/RatingActions'
+import { postPuzzleRecord, postRating } from '../actions/PostActions'
 import { setRangeFilter } from '../actions/FilterActions'
 
 //material-ui
@@ -42,6 +41,7 @@ class Puzzle extends Component {
     super(props)
 
     this.state = {
+      open: false,
       answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
@@ -56,6 +56,8 @@ class Puzzle extends Component {
     this.handleResearchMode = this.handleResearchMode.bind(this)
     this.handleNext = this.handleNext.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
+    this.handleOpen = this.handleOpen.bind(this)
+    this.handleClose = this.handleClose.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -99,6 +101,10 @@ class Puzzle extends Component {
     this.setState({open: false})
   }
 
+  handleOpen() {
+    this.setState({open: true})
+  }
+
   handleReset() {
     this.refs.board.handleTipsReset()
     this.refs.board.reset()
@@ -118,11 +124,20 @@ class Puzzle extends Component {
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       let { id } = this.props.params
-      this.props.dispatch(addRating({
-        id: id,
-        rating: rate,
+      this.props.dispatch(postRating({
+        ratable_id: id,
+        ratable_type: 'Puzzle',
+        score: rate,
         user_id: profile.user_id
-      }))
+      })).then((promise) => {
+        if (promise.type === 'POST_RATING_SUCCESS') {
+          this.setState({
+            open: true,
+            score: rate,
+            ratingInfo: promise.payload.data.message || 'Thanks for you rating!'
+          })
+        }
+      })
     } else {
       auth.login()
     }
@@ -166,8 +181,25 @@ class Puzzle extends Component {
       })
     }
 
+    const actions = [
+      <FlatButton
+        label="OK"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleClose}
+      />
+    ]
+
     return (
       <div className={css(styles.puzzlePage)}>
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          {this.state.ratingInfo}
+        </Dialog>
         {
           //<Helmet
             //meta={[
@@ -207,7 +239,7 @@ class Puzzle extends Component {
               </div>
             </CardText>
             <CardActions style={{padding: '14px'}}>
-              <Rating initialRate={puzzle.data.rating} onChange={this.handleRatingChange.bind(this)}
+              <Rating initialRate={parseFloat(puzzle.data.score)} onChange={this.handleRatingChange.bind(this)}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
