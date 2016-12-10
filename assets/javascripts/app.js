@@ -9,6 +9,8 @@ import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-rou
 import { puzzles,
   puzzle,
   puzzleNext,
+  practice,
+  //puzzleRecord,
   kifus,
   kifu,
   topPlayers,
@@ -21,8 +23,8 @@ import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
 import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
-import Tests from './pages/Tests'
-import Test from './pages/Test'
+import Practices from './pages/Practices'
+import Practice from './pages/Practice'
 import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
@@ -54,7 +56,9 @@ const reducer = combineReducers({
   kifus,
   kifu,
   puzzles,
-  puzzle: puzzle,
+  puzzle,
+  practice,
+  //puzzleRecord,
   puzzleFilter,
   kifuFilter,
   rangeFilter,
@@ -96,8 +100,8 @@ ReactDOM.render(
           <Route path="/kifus/:id" component={Kifu} />
           <Route path="/puzzles" component={Puzzles} />
           <Route path="/puzzles/:id" component={Puzzle}  />
-          <Route path="/tests" component={Tests}  />
-          <Route path="/test" component={Test} />
+          <Route path="/practices" component={Practices}  />
+          <Route path="/parctice" component={Practice} />
           <Route path="/users" component={User} />
         </Route>
       </Router>

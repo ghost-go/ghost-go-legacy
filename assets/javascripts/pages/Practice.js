@@ -3,9 +3,9 @@ import mainStyles from '../styles/main'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
-import PuzzleList from './presentations/PuzzleList'
+import PuzzleList from '../presentations/PuzzleList'
 
-export default class Test extends Component {
+export default class Practice extends Component {
 
   state = {
 

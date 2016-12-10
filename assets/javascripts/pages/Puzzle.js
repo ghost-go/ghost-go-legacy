@@ -16,10 +16,9 @@ import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
-import { fetchPuzzleNext } from '../actions/FetchActions'
-import { fetchPuzzle } from '../actions/FetchActions'
+import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
+import { postPuzzleRecord } from '../actions/PostActions'
 import { addRating } from '../actions/RatingActions'
-import { addPuzzleRecord } from '../actions/PuzzleRecordActions'
 import { setRangeFilter } from '../actions/FilterActions'
 
 //material-ui
@@ -74,7 +73,7 @@ class Puzzle extends Component {
   handleRightTipOpen() {
     const { auth } = this.props
     let profile = auth.getProfile()
-    this.props.dispatch(addPuzzleRecord({
+    this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
       record_type: 'right'
@@ -86,7 +85,7 @@ class Puzzle extends Component {
   handleWrongTipOpen() {
     const { auth } = this.props
     let profile = auth.getProfile()
-    this.props.dispatch(addPuzzleRecord({
+    this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
       record_type: 'wrong'
