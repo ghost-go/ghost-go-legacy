@@ -1,13 +1,17 @@
 import React, { Component, PropTypes } from 'react'
-import mainStyles from '../styles/main'
+import { connect } from 'react-redux'
 
+//material-ui
 import { Link } from 'react-router'
+
+import mainStyles from '../styles/main'
+import { fetchPuzzles } from '../actions/FetchActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 
-export default class Practices extends Component {
+class Practices extends Component {
 
   state = {
 
@@ -15,6 +19,10 @@ export default class Practices extends Component {
 
   constructor(props) {
     super(props)
+    this.props.dispatch(fetchPuzzles({
+      page: 1,
+      rank: '18k-10k'
+    }))
   }
 
   buildPractice(aaa) {
@@ -102,3 +110,11 @@ const styles = StyleSheet.create({
     margin: '0px 5px 20px 5px',
   },
 })
+
+function select(state) {
+  return {
+    puzzles: state.puzzles
+  }
+}
+
+export default connect(select)(Practices)

@@ -103,7 +103,7 @@ ReactDOM.render(
           <Route path="/puzzles" component={Puzzles} />
           <Route path="/puzzles/:id" component={Puzzle}  />
           <Route path="/practices" component={Practices}  />
-          <Route path="/parctice" component={Practice} />
+          <Route path="/practices/:id" component={Practice} />
           <Route path="/users" component={User} />
         </Route>
       </Router>
