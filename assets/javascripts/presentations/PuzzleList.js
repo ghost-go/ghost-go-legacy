@@ -22,14 +22,14 @@ export default class PuzzleList extends Component {
     let list = []
     this.props.puzzleList.forEach((i) => {
       list.push(
-        <div className="list-item">
+        <div className={css(style.listBox)}>
           <div className="list-preview-img">
-            <img className="preview-img" src={i.preview_img_r1.preview_img_r1.x200.url} />
+            <img className={css(style.previewImg)} src={i.preview_img_r1.preview_img_r1.x200.url} />
           </div>
-          <div>
-            <span>{`${i.number}(${i.rank})`}</span>
+          <div className={css(style.listRight)}>
+            <span className={css(style.title)}>{`${i.number}(${i.rank})`}</span>
             <br />
-            <span>Tag: some tags</span>
+            <span>{i.whofirst}</span>
           </div>
         </div>
       )
@@ -43,3 +43,23 @@ export default class PuzzleList extends Component {
 
   }
 }
+
+const style = StyleSheet.create({
+  listBox: {
+    display: 'flex',
+  },
+
+  previewImg: {
+    width: '100px',
+  },
+
+  title: {
+    fontSize: '20px',
+  },
+
+  listRight: {
+    padding: '10px'
+  }
+
+
+})

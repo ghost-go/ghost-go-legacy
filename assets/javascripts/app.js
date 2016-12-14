@@ -11,7 +11,7 @@ import { puzzles,
   puzzleNext,
   practice,
   rating,
-  //puzzleRecord,
+  puzzleRecords,
   kifus,
   kifu,
   topPlayers,
@@ -29,6 +29,7 @@ import Practice from './pages/Practice'
 import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
+import History from './pages/History'
 
 import AuthService from './utils/AuthService'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -60,7 +61,7 @@ const reducer = combineReducers({
   puzzle,
   practice,
   rating,
-  //puzzleRecord,
+  puzzleRecords,
   puzzleFilter,
   kifuFilter,
   rangeFilter,
@@ -105,6 +106,7 @@ ReactDOM.render(
           <Route path="/practices" component={Practices}  />
           <Route path="/practices/:id" component={Practice} />
           <Route path="/users" component={User} />
+          <Route path="/History" component={History} />
         </Route>
       </Router>
       <App>
