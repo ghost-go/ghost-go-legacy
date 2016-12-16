@@ -49,10 +49,10 @@ export default class Navigation extends Component {
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
             <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
-            <a href="javascript:void(0)">{this.state.profile.nickname}</a>
-            {/*
-            <Link to={'/users'} >{this.state.profile.nickname}</Link>
-            */}
+            {
+              //<a href="javascript:void(0)">{this.state.profile.nickname}</a>
+              <Link to={'/history'} >{this.state.profile.nickname}</Link>
+            }
             <Link onClick={this.logout.bind(this)} to=''>Log Out</Link>
           </div>
         </div>
@@ -73,11 +73,11 @@ export default class Navigation extends Component {
                 //id='app.nav.menu.puzzles'
                 //defaultMessage="Puzzles Library"
                 ///>
+                //<Link to="/practices" activeClassName="active">
+                  //Tsumego Practices
+                //</Link>
               }
               Tsumego Library
-            </Link>
-            <Link to="/practices" activeClassName="active">
-              Tsumego Practices
             </Link>
             <Link to="/kifus" activeClassName="active">
               Kifu Library

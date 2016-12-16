@@ -17,10 +17,13 @@ class History extends Component {
   constructor(props) {
     super(props)
 
-    this.props.dispatch(fetchPuzzleRecords({
-      page: 1,
-      user_id: 'auth0|579b8ef859f81ed14e392e31'
-    }))
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    if (auth.loggedIn()) {
+      this.props.dispatch(fetchPuzzleRecords({ page: 1,
+        user_id: profile.user_id
+      }))
+    }
   }
 
   render() {
