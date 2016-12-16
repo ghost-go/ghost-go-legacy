@@ -81,11 +81,11 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 injectTapEventPlugin()
 
-const hashString = window.location.hash;
+const hashString = window.location.hash
 if (hashString) {
-  const idString = '&id_token';
-  const firstIndex = hashString.indexOf(idString) + idString.length + 1;
-  const lastIndex = hashString.indexOf('&token_type=');
+  const idString = '&id_token'
+  const firstIndex = hashString.indexOf(idString) + idString.length + 1
+  const lastIndex = hashString.indexOf('&token_type=')
   let idToken = hashString.substring(firstIndex, lastIndex)
   auth.setToken(idToken)
   auth._doAuthentication({

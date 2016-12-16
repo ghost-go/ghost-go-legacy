@@ -2,6 +2,17 @@ import React, { Component, PropTypes } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router'
 
+import IconMenu from 'material-ui/IconMenu'
+import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton'
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import {List, ListItem} from 'material-ui/List'
+import HistoryIcon from 'material-ui/svg-icons/action/history'
+import ExitToApp from 'material-ui/svg-icons/action/exit-to-app'
+import Divider from 'material-ui/Divider'
+import ActionInfo from 'material-ui/svg-icons/action/info'
+import AccountCircle from 'material-ui/svg-icons/action/account-circle'
+
 import AuthService from '../utils/AuthService'
 
 export default class Navigation extends Component {
@@ -50,10 +61,9 @@ export default class Navigation extends Component {
           <div className="nav-footer-wrap nav-signup">
             <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
             {
-              //<a href="javascript:void(0)">{this.state.profile.nickname}</a>
-              <Link to={'/history'} >{this.state.profile.nickname}</Link>
+              <a href="javascript:void(0)">{this.state.profile.nickname}</a>
+              //<Link to={'/history'} >{this.state.profile.nickname}</Link>
             }
-            <Link onClick={this.logout.bind(this)} to=''>Log Out</Link>
           </div>
         </div>
     }
@@ -74,7 +84,7 @@ export default class Navigation extends Component {
                 //defaultMessage="Puzzles Library"
                 ///>
                 //<Link to="/practices" activeClassName="active">
-                  //Tsumego Practices
+                //Tsumego Practices
                 //</Link>
               }
               Tsumego Library
@@ -86,23 +96,38 @@ export default class Navigation extends Component {
         </section>
 
         <footer className="nav-footer">
-          {/*
-          <div className="nav-footer-wrap">
+            {/*
+            <div className="nav-footer-wrap">
             <a href="#">
-              <i className="fa fa-search"></i>
+            <i className="fa fa-search"></i>
             </a>
-          </div>
-          <div className="nav-footer-wrap nav-question">
+            </div>
+            <div className="nav-footer-wrap nav-question">
             <a href="#">
-              <i className="fa fa-question-circle"></i>
+            <i className="fa fa-question-circle"></i>
             </a>
-          </div>
+            </div>
             */}
-          {
-            loginSection
-          }
-        </footer>
-      </div>
+            <IconMenu
+              iconButtonElement={
+                loginSection
+              }
+              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            >
+              <List>
+                <Link to={'/history'}>
+                  <ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
+                  <ListItem primaryText="History" leftIcon={<HistoryIcon />} />
+                </Link>
+                <Divider />
+                <Link onClick={this.logout.bind(this)} to=''>
+                  <ListItem primaryText="Log Out" leftIcon={<ExitToApp />} />
+                </Link>
+              </List>
+            </IconMenu>
+          </footer>
+        </div>
     )
   }
 }
