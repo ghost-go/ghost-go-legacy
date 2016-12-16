@@ -30,6 +30,18 @@ function buildFetchReducer(initialState, name = '') {
   return createReducer(initialState, handlers)
 }
 
+function buildPostReducer(initialState, name = '') {
+  initialState = {...initialState,
+    isFetching: false,
+    isFailure: false,
+  }
+  let handlers = {}
+  handlers[`POST_${name}_REQUEST`] = fetchRequest
+  handlers[`POST_${name}_SUCCESS`] = fetchSuccess
+  handlers[`POST_${name}_FAILURE`] = fetchFailure
+  return createReducer(initialState, handlers)
+}
+
 function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
@@ -75,6 +87,12 @@ export const puzzle = reduceReducers(
   buildFetchReducer({}, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT')
 )
+export const practice = buildFetchReducer({}, 'PRACTICE')
+export const puzzleRecords = reduceReducers(
+  buildFetchReducer({}, 'PUZZLE_RECORDS'),
+  buildPostReducer({}, 'PUZZLE_RECORDS')
+)
+export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')

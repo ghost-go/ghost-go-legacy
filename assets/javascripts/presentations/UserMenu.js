@@ -8,6 +8,7 @@ export default class Sidebar extends Component {
     return (
       <div className="user-menu">
         <ul>
+          <li>History</li>
           <li>Sign Out</li>
           <li></li>
           <li></li>

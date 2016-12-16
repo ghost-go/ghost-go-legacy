@@ -91,7 +91,7 @@ class Puzzles extends Component {
               subtitle={`Rank: ${i.rank}`}
             />
             <CardActions>
-              <Rating initialRate={parseFloat(i.rating)} readonly={true}
+              <Rating initialRate={parseFloat(i.score)} readonly={true}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
@@ -119,6 +119,9 @@ class Puzzles extends Component {
         <div className={css(styles.puzzlesLeft)}>
           <h1 className={css(styles.title)}>Tsumego Library</h1>
           <div className={css(styles.buttonGroup)}>
+            {
+              //<RaisedButton className={css(styles.button)} secondary={true} label="Tsumego Test" /> 
+            }
             <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
           </div>
           <Card expanded={true}>

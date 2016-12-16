@@ -9,6 +9,9 @@ import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-rou
 import { puzzles,
   puzzle,
   puzzleNext,
+  practice,
+  rating,
+  puzzleRecords,
   kifus,
   kifu,
   topPlayers,
@@ -21,9 +24,12 @@ import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
 import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
+import Practices from './pages/Practices'
+import Practice from './pages/Practice'
 import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
+import History from './pages/History'
 
 import AuthService from './utils/AuthService'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -39,8 +45,7 @@ class App extends React.Component {
         {this.props.children}
       </div>
     )
-  }
-}
+  } }
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
@@ -53,7 +58,10 @@ const reducer = combineReducers({
   kifus,
   kifu,
   puzzles,
-  puzzle: puzzle,
+  puzzle,
+  practice,
+  rating,
+  puzzleRecords,
   puzzleFilter,
   kifuFilter,
   rangeFilter,
@@ -95,7 +103,10 @@ ReactDOM.render(
           <Route path="/kifus/:id" component={Kifu} />
           <Route path="/puzzles" component={Puzzles} />
           <Route path="/puzzles/:id" component={Puzzle}  />
+          <Route path="/practices" component={Practices}  />
+          <Route path="/practices/:id" component={Practice} />
           <Route path="/users" component={User} />
+          <Route path="/History" component={History} />
         </Route>
       </Router>
       <App>

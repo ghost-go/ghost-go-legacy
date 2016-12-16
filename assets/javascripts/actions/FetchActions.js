@@ -34,6 +34,7 @@ function buildFetchData(name = '', api = '') {
 
 export const fetchKifus = buildFetchData('KIFUS', 'v1/kifus')
 export const fetchPuzzles = buildFetchData('PUZZLES', 'v1/puzzles')
+export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', 'v1/puzzle_records')
 
 export const fetchKifu = buildFetchData('KIFU', 'v1/kifus/#{id}')
 export const fetchPuzzle = buildFetchData('PUZZLE', 'v1/puzzles/#{id}')

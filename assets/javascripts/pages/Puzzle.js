@@ -16,10 +16,8 @@ import Layout from './Layout'
 import AnswerBar from '../presentations/AnswerBar'
 import Rating from 'react-rating'
 
-import { fetchPuzzleNext } from '../actions/FetchActions'
-import { fetchPuzzle } from '../actions/FetchActions'
-import { addRating } from '../actions/RatingActions'
-import { addPuzzleRecord } from '../actions/PuzzleRecordActions'
+import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
+import { postPuzzleRecord, postRating } from '../actions/PostActions'
 import { setRangeFilter } from '../actions/FilterActions'
 
 //material-ui
@@ -43,6 +41,7 @@ class Puzzle extends Component {
     super(props)
 
     this.state = {
+      open: false,
       answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
@@ -57,6 +56,8 @@ class Puzzle extends Component {
     this.handleResearchMode = this.handleResearchMode.bind(this)
     this.handleNext = this.handleNext.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
+    this.handleOpen = this.handleOpen.bind(this)
+    this.handleClose = this.handleClose.bind(this)
   }
 
   handleAnswersToggle(event, toggle) {
@@ -74,7 +75,7 @@ class Puzzle extends Component {
   handleRightTipOpen() {
     const { auth } = this.props
     let profile = auth.getProfile()
-    this.props.dispatch(addPuzzleRecord({
+    this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
       record_type: 'right'
@@ -86,7 +87,7 @@ class Puzzle extends Component {
   handleWrongTipOpen() {
     const { auth } = this.props
     let profile = auth.getProfile()
-    this.props.dispatch(addPuzzleRecord({
+    this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
       record_type: 'wrong'
@@ -98,6 +99,10 @@ class Puzzle extends Component {
 
   handleClose() {
     this.setState({open: false})
+  }
+
+  handleOpen() {
+    this.setState({open: true})
   }
 
   handleReset() {
@@ -112,28 +117,6 @@ class Puzzle extends Component {
     let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
     this.props.dispatch(push(nextUrl))
     this.refs.board.handleTipsReset()
-
-    //let self = this
-    //let url = URI(`${config.API_DOMAIN}/v1/puzzles/next?range=${this.props.rangeFilter}`)
-    //fetch(url, {
-      //method: 'GET',
-      //headers: {
-        //'Accept': 'application/json',
-        //'Content-Type': 'application/json'
-      //},
-    //}).then(function(res){
-      //return (res.json())
-    //}).then(function(json) {
-      //if (json == null) {
-        //alert('No next puzzle')
-      //}
-      //else {
-        //let nextUrl = `/puzzles/${json.id}?range=${this.props.rangeFilter}`
-        //self.props.dispatch(push(nextUrl))
-        //self.props.dispatch(fetchPuzzle({id: json.id}))
-        //self.refs.board.handleTipsReset()
-      //}
-    //})
   }
 
   handleRatingChange(rate) {
@@ -141,11 +124,20 @@ class Puzzle extends Component {
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       let { id } = this.props.params
-      this.props.dispatch(addRating({
-        id: id,
-        rating: rate,
+      this.props.dispatch(postRating({
+        ratable_id: id,
+        ratable_type: 'Puzzle',
+        score: rate,
         user_id: profile.user_id
-      }))
+      })).then((promise) => {
+        if (promise.type === 'POST_RATING_SUCCESS') {
+          this.setState({
+            open: true,
+            score: rate,
+            ratingInfo: promise.payload.data.message || 'Thanks for you rating!'
+          })
+        }
+      })
     } else {
       auth.login()
     }
@@ -189,8 +181,25 @@ class Puzzle extends Component {
       })
     }
 
+    const actions = [
+      <FlatButton
+        label="OK"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleClose}
+      />
+    ]
+
     return (
       <div className={css(styles.puzzlePage)}>
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          {this.state.ratingInfo}
+        </Dialog>
         {
           //<Helmet
             //meta={[
@@ -230,7 +239,7 @@ class Puzzle extends Component {
               </div>
             </CardText>
             <CardActions style={{padding: '14px'}}>
-              <Rating initialRate={puzzle.data.rating} onChange={this.handleRatingChange.bind(this)}
+              <Rating initialRate={parseFloat(puzzle.data.score)} onChange={this.handleRatingChange.bind(this)}
                 empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
                 full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
               />
