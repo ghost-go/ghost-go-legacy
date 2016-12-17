@@ -49,6 +49,7 @@ const style = StyleSheet.create({
   listBox: {
     display: 'flex',
     width: '300px',
+    height: '120px',
     float: 'left',
   },
 
@@ -68,6 +69,7 @@ const style = StyleSheet.create({
 
   date: {
     marginTop: 'auto',
+    marginBottom: '20px',
   }
 
 })
