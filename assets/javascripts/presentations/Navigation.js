@@ -116,8 +116,12 @@ export default class Navigation extends Component {
               targetOrigin={{horizontal: 'left', vertical: 'top'}}
             >
               <List>
+                {
+                //<Link to={'/users'}>
+                  //<ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
+                //</Link>
+                }
                 <Link to={'/history'}>
-                  <ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
                   <ListItem primaryText="History" leftIcon={<HistoryIcon />} />
                 </Link>
                 <Divider />
