@@ -46,7 +46,7 @@ export default class Navigation extends Component {
 
   render() {
     const { auth } = this.props
-    let loginSection = null
+    let loginSection, loginList
     if (!auth.loggedIn()) {
       loginSection =
         <div className='nav-sign'>
@@ -60,13 +60,30 @@ export default class Navigation extends Component {
         <div className='nav-sign'>
           <div className="nav-footer-wrap nav-signup">
             <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
-            {
-              <a href="javascript:void(0)">{this.state.profile.nickname}</a>
-              //<Link to={'/history'} >{this.state.profile.nickname}</Link>
-            }
+            <a href="javascript:void(0)">{this.state.profile.nickname}</a>
+            <span style={{color: 'rgb(0, 188, 212)', fontSize: '12px', position: 'absolute', top: '0px', right: '5px'}}>New Feature</span>
           </div>
         </div>
+
+      loginList =
+        <List>
+          {
+          //<Link to={'/users'}>
+            //<ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
+          //</Link>
+          }
+          <Link to={'/history'}>
+            <ListItem primaryText="History" leftIcon={<HistoryIcon />} />
+          </Link>
+          <Divider />
+          <Link onClick={this.logout.bind(this)} to=''>
+            <ListItem primaryText="Log Out" leftIcon={<ExitToApp />} />
+          </Link>
+        </List>
+
     }
+
+
     return (
       <div className="nav-container">
         <header className="nav-header">
@@ -115,20 +132,7 @@ export default class Navigation extends Component {
               anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
               targetOrigin={{horizontal: 'left', vertical: 'top'}}
             >
-              <List>
-                {
-                //<Link to={'/users'}>
-                  //<ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
-                //</Link>
-                }
-                <Link to={'/history'}>
-                  <ListItem primaryText="History" leftIcon={<HistoryIcon />} />
-                </Link>
-                <Divider />
-                <Link onClick={this.logout.bind(this)} to=''>
-                  <ListItem primaryText="Log Out" leftIcon={<ExitToApp />} />
-                </Link>
-              </List>
+              { loginList }
             </IconMenu>
           </footer>
         </div>
