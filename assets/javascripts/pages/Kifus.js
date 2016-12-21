@@ -14,7 +14,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions'
-import { setKifuFilter } from '../actions/FilterActions'
+import { setKifuFilter } from '../actions/Actions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'

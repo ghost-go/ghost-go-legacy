@@ -100,14 +100,14 @@ export default class Navigation extends Component {
                 //id='app.nav.menu.puzzles'
                 //defaultMessage="Puzzles Library"
                 ///>
-                //<Link to="/practices" activeClassName="active">
-                //Tsumego Practices
-                //</Link>
               }
               Tsumego Library
             </Link>
             <Link to="/kifus" activeClassName="active">
               Kifu Library
+            </Link>
+            <Link to="/practices" activeClassName="active">
+              Tsumego Practices
             </Link>
           </div>
         </section>

@@ -10,6 +10,7 @@ import { puzzles,
   puzzle,
   puzzleNext,
   practice,
+  practicePuzzleId,
   rating,
   puzzleRecords,
   kifus,
@@ -55,10 +56,8 @@ const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 const historyMiddleware = routerMiddleware(browserHistory)
 const reducer = combineReducers({
   // ... add your own reducers here
-  kifus,
-  kifu,
-  puzzles,
-  puzzle,
+  kifus, kifu,
+  puzzles, puzzle,
   practice,
   rating,
   puzzleRecords,
@@ -67,6 +66,7 @@ const reducer = combineReducers({
   rangeFilter,
   players: topPlayers,
   routing: routerReducer,
+  practicePuzzleId,
 })
 
 const createStoreWithMiddleware = applyMiddleware(

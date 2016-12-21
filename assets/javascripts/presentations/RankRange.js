@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import RankList from './RankList'
 import { StyleSheet, css } from 'aphrodite'
-import { setRangeFilter } from '../actions/FilterActions'
+import { setRangeFilter } from '../actions/Actions'
 
 export default class RankRange extends Component {
 

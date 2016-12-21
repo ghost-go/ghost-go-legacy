@@ -22,7 +22,7 @@ export default class PuzzleList extends Component {
     let list = []
     this.props.puzzleList.forEach((i) => {
       list.push(
-        <div className={css(style.listBox)}>
+        <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={css(style.listBox)}>
           <div className="list-preview-img">
             <img className={css(style.previewImg)} src={i.preview_img_r1.preview_img_r1.x200.url} />
           </div>
@@ -46,6 +46,7 @@ export default class PuzzleList extends Component {
 
 const style = StyleSheet.create({
   listBox: {
+    cursor: 'pointer',
     display: 'flex',
   },
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { push } from 'react-router-redux'
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet'
 //import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
@@ -18,7 +18,7 @@ import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord, postRating } from '../actions/PostActions'
-import { setRangeFilter } from '../actions/FilterActions'
+import { setRangeFilter } from '../actions/Actions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'

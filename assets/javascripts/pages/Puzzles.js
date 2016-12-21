@@ -18,7 +18,7 @@ import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import SVGIcon from '../presentations/SVGIcon'
 import { fetchPuzzles } from '../actions/FetchActions'
-import { setPuzzleFilter, setRangeFilter } from '../actions/FilterActions'
+import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'
 import RankRange from '../presentations/RankRange'
 
 //external component

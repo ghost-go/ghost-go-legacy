@@ -82,6 +82,10 @@ function setRangeFilter(state, action) {
   return updateObject(state, action.payload)
 }
 
+function setPracticePuzzleId(state, action) {
+  return action.payload
+}
+
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
 export const puzzle = reduceReducers(
   buildFetchReducer({}, 'PUZZLE'),
@@ -99,3 +103,4 @@ export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
 export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
 export const rangeFilter = createReducer({start: '18k', end: '9d'}, { 'SET_RANGE_FILTER': setRangeFilter })
 export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setKifuFilter })
+export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
