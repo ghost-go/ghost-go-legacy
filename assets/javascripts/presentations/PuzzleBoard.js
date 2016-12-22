@@ -29,7 +29,6 @@ export default class PuzzleBoard extends Component {
       steps: [],
       expandH: 5,
       expandV: 5,
-      previewImg: '',
       isRatio1: true,
       rightTipOpen: false,
       wrongTipOpen: false,
@@ -40,7 +39,6 @@ export default class PuzzleBoard extends Component {
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.reset = this.reset.bind(this)
     this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
-    this.getBoardWidth = this.getBoardWidth.bind(this)
   }
 
   handleRightTipOpen() {
@@ -292,49 +290,27 @@ export default class PuzzleBoard extends Component {
 
   render() {
     return (
-      <Paper>
-        <input id="puzzle-img" type="hidden" value={this.state.previewImg} />
-        <div className={css(styles.board)} ref="board">
-            {
-              this.state.rightTipOpen ?
-                <div ref="tipRight" className={css(styles.tipRight)}>
-                  <i className="zmdi zmdi-check"></i>
-                </div>
-              : null
-            }
-            {
-              this.state.wrongTipOpen ?
-                <div ref="tipWrong" className={css(styles.tipWrong)}>
-                  <i className="zmdi zmdi-close"></i>
-                </div>
-                  : null
-            }
-          <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
-          <canvas id="cross_layer" className={css(styles.boardCanvas)} ref={(ref) => this.crossLayer = ref }></canvas>
-          <canvas id="piece_layer" className={css(styles.boardCanvas)} ref={(ref) => this.pieceLayer = ref }></canvas>
-          <canvas id="top_layer" className={css(styles.boardCanvas)} ref={(ref) => this.topLayer = ref }></canvas>
-        </div>
-      </Paper>
+      <div className={css(styles.board)} ref="board">
+          {
+            this.state.rightTipOpen ?
+              <div ref="tipRight" className={css(styles.tipRight)}>
+                <i className="zmdi zmdi-check"></i>
+              </div>
+            : null
+          }
+          {
+            this.state.wrongTipOpen ?
+              <div ref="tipWrong" className={css(styles.tipWrong)}>
+                <i className="zmdi zmdi-close"></i>
+              </div>
+                : null
+          }
+        <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
+        <canvas id="cross_layer" className={css(styles.boardCanvas)} ref={(ref) => this.crossLayer = ref }></canvas>
+        <canvas id="piece_layer" className={css(styles.boardCanvas)} ref={(ref) => this.pieceLayer = ref }></canvas>
+        <canvas id="top_layer" className={css(styles.boardCanvas)} ref={(ref) => this.topLayer = ref }></canvas>
+      </div>
     )
-  }
-
-  //TODO: this function need to be refactored
-  getBoardWidth() {
-    let boardWidth = 0
-    if (screen.width > screen.height) {
-      if (screen.height / screen.width >= 0.75) {
-        boardWidth = window.innerHeight - this.props.scaleOffset
-      }
-      else {
-        boardWidth = (window.innerHeight - this.props.scaleOffset) * 1.2
-      }
-    } else {
-      boardWidth = window.innerWidth
-    }
-    if (boardWidth < 0) {
-      boardWidth = 400 //set a default value to pass the test
-    }
-    return boardWidth
   }
 
   response(x, y, ki) {
@@ -399,34 +375,22 @@ export default class PuzzleBoard extends Component {
 
   drawBoardWithResize() {
     //TODO: This need to be refactored
-    //The reason using setTimeout is following url
+    //The reason that using setTimeout is the following url
     //https://github.com/Khan/aphrodite/blame/master/README.md#L128
     setTimeout(() => {
-      let boardWidth = this.getBoardWidth()
-      //this.size =  boardWidth / 20
-      //this.state.size = boardWidth / 20
+
       this._boardCtx = this.boardLayer.getContext('2d')
       this._pieceCtx = this.pieceLayer.getContext('2d')
       this._crossCtx = this.crossLayer.getContext('2d')
-      this.refs.board.style.height = boardWidth + 'px'
-      this.refs.board.style.width = boardWidth + 'px'
-      this.refs.board.parentElement.style.height = boardWidth + 'px'
-      this.refs.board.parentElement.style.width = boardWidth + 'px'
 
-      this.boardLayer.width
-      = this.boardLayer.height
-      = this.pieceLayer.width
-      = this.pieceLayer.height
-      = this.crossLayer.width
-      = this.crossLayer.height
-      = this.topLayer.width
-      = this.topLayer.height
-      = boardWidth
-      this.boardLayer.style.position
-      = this.pieceLayer.style.position
-      = this.crossLayer.style.position
-      = this.topLayer.style.position
-      = 'absolute'
+      this.boardLayer.width = this.boardLayer.offsetWidth
+      this.boardLayer.height = this.boardLayer.offsetHeight
+      this.pieceLayer.width = this.pieceLayer.offsetWidth
+      this.pieceLayer.height = this.pieceLayer.offsetHeight
+      this.crossLayer.width = this.crossLayer.offsetWidth
+      this.crossLayer.height = this.crossLayer.offsetHeight
+      this.topLayer.width = this.topLayer.offsetWidth
+      this.topLayer.height = this.topLayer.offsetHeight
 
 
       var clickEventName = (function() {
@@ -524,10 +488,6 @@ export default class PuzzleBoard extends Component {
     }
 
     this.markPiece()
-
-    this.setState({
-      previewImg: this.pieceLayer.toDataURL('image/png')
-    })
   }
 
   componentWillMount() {
@@ -731,8 +691,7 @@ export default class PuzzleBoard extends Component {
             verical: this.state.maxhv,
           })
         }
-        let boardWidth = this.getBoardWidth()
-        this.state.size =  boardWidth / (this.state.maxhv + 1)
+        this.state.size =  this.boardLayer.height / (this.state.maxhv + 1)
       })
     }
 
@@ -774,12 +733,16 @@ PuzzleBoard.childContextTypes = {
 const styles = StyleSheet.create({
 
   boardCanvas: {
-    height: '100vh',
-    width: '100vh'
+    position: 'absolute',
+    height: '100%',
+    width: '100%'
   },
 
   board: {
+    display: 'flex',
     position: 'relative',
+    height: '100%',
+    width: '100%'
   },
 
   tipRight: {

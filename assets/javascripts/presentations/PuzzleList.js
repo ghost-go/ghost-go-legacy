@@ -40,7 +40,7 @@ export default class PuzzleList extends Component {
     })
 
     return (
-      <List className={css(style.listBoxContainer)}>
+      <List>
         { list }
       </List>
     )
@@ -49,12 +49,6 @@ export default class PuzzleList extends Component {
 }
 
 const style = StyleSheet.create({
-
-  listBoxContainer: {
-    //height: '96%',
-    //overflow: 'hidden',
-    //overflowY: 'visible',
-  },
 
   listBox: {
     padding: '5px',

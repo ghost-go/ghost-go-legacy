@@ -46,17 +46,18 @@ class Practice extends Component {
                                  answers={puzzle.answers}
                                  handleRight={this.handleRightTipOpen}
                                  handleWrong={this.handleWrongTipOpen}
-                                 scaleOffset={188}
                                  ref="board" />
 
     }
     return (
       <div className={css(mainStyles.mainContainer)}>
-        <Paper className={css(styles.puzzleList)}>
+        <Paper className={css(styles.list)}>
           { puzzleList }
         </Paper>
-        <Paper className={css(styles.puzzleBoard)}>
+        <Paper className={css(styles.board)}>
           { puzzleBoard }
+        </Paper>
+        <Paper className={css(styles.panel)}>
         </Paper>
 			</div>
     )
@@ -65,15 +66,22 @@ class Practice extends Component {
 
 const styles = StyleSheet.create({
 
-  puzzleList: {
+  list: {
     display: 'flex',
     height: 'calc(100vmin - 100px)',
     overflow: 'hidden',
     overflowY: 'visible',
-    //height: '300px',
-    //overflowY: 'visible',
   },
-  puzzleBoard: {
+
+  board: {
+    width: 'calc(100vmin - 100px)',
+    height: 'calc(100vmin - 100px)',
+    marginLeft: '20px',
+  },
+
+  panel: {
+    flex: '1 1 auto',
+    height: 'calc(100vmin - 100px)',
     marginLeft: '20px',
   }
 
