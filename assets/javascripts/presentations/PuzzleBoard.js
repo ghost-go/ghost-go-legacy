@@ -40,6 +40,7 @@ export default class PuzzleBoard extends Component {
     this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
     this.reset = this.reset.bind(this)
     this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
+    this.getBoardWidth = this.getBoardWidth.bind(this)
   }
 
   handleRightTipOpen() {
@@ -322,10 +323,10 @@ export default class PuzzleBoard extends Component {
     let boardWidth = 0
     if (screen.width > screen.height) {
       if (screen.height / screen.width >= 0.75) {
-        boardWidth = window.innerHeight - 60
+        boardWidth = window.innerHeight - this.props.scaleOffset
       }
       else {
-        boardWidth = (window.innerHeight - 60) * 1.2
+        boardWidth = (window.innerHeight - this.props.scaleOffset) * 1.2
       }
     } else {
       boardWidth = window.innerWidth
@@ -771,6 +772,12 @@ PuzzleBoard.childContextTypes = {
 }
 
 const styles = StyleSheet.create({
+
+  boardCanvas: {
+    height: '100vh',
+    width: '100vh'
+  },
+
   board: {
     position: 'relative',
   },

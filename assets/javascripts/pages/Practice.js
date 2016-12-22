@@ -10,6 +10,7 @@ import PuzzleList from '../presentations/PuzzleList'
 import { fetchPuzzles } from '../actions/FetchActions'
 import { setPracticePuzzleId } from '../actions/Actions'
 import PuzzleBoard from '../presentations/PuzzleBoard'
+import Paper from 'material-ui/Paper'
 
 class Practice extends Component {
 
@@ -36,9 +37,7 @@ class Practice extends Component {
     let puzzleList, puzzle, puzzleBoard
     if (this.props.puzzles.data !== undefined) {
       puzzleList = <PuzzleList puzzleListOnClick={this.handleClick} puzzleList={this.props.puzzles.data.puzzles} />
-      console.log(this.props.puzzles.data.puzzles[0].id)
       puzzle = _.find(this.props.puzzles.data.puzzles, {id: this.props.currentPuzzleId || this.props.puzzles.data.puzzles[0].id})
-      console.log(puzzle)
       puzzleBoard = <PuzzleBoard researchMode={this.state.researchMode} className="board"
                                  whofirst={puzzle.whofirst}
                                  puzzle={puzzle.steps}
@@ -47,23 +46,36 @@ class Practice extends Component {
                                  answers={puzzle.answers}
                                  handleRight={this.handleRightTipOpen}
                                  handleWrong={this.handleWrongTipOpen}
+                                 scaleOffset={188}
                                  ref="board" />
 
     }
     return (
       <div className={css(mainStyles.mainContainer)}>
-        <div>
+        <Paper className={css(styles.puzzleList)}>
           { puzzleList }
-        </div>
-        <div>
+        </Paper>
+        <Paper className={css(styles.puzzleBoard)}>
           { puzzleBoard }
-        </div>
+        </Paper>
 			</div>
     )
   }
 }
 
 const styles = StyleSheet.create({
+
+  puzzleList: {
+    display: 'flex',
+    height: 'calc(100vmin - 100px)',
+    overflow: 'hidden',
+    overflowY: 'visible',
+    //height: '300px',
+    //overflowY: 'visible',
+  },
+  puzzleBoard: {
+    marginLeft: '20px',
+  }
 
 })
 

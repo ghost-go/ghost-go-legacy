@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import {List, ListItem} from 'material-ui/List'
+import Divider from 'material-ui/Divider'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -22,21 +23,24 @@ export default class PuzzleList extends Component {
     let list = []
     this.props.puzzleList.forEach((i) => {
       list.push(
-        <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={css(style.listBox)}>
-          <div className="list-preview-img">
-            <img className={css(style.previewImg)} src={i.preview_img_r1.preview_img_r1.x200.url} />
+        <div>
+          <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={this.props.currentPuzzleId === i.id ? css(style.listBox, style.selected) : css(style.listBox)}>
+            <div className="list-preview-img">
+              <img className={css(style.previewImg)} src={i.preview_img_r1.preview_img_r1.x200.url} />
+            </div>
+            <div className={css(style.listRight)}>
+              <span className={css(style.title)}>{`${i.number}(${i.rank})`}</span>
+              <br />
+              <span>{i.whofirst}</span>
+            </div>
           </div>
-          <div className={css(style.listRight)}>
-            <span className={css(style.title)}>{`${i.number}(${i.rank})`}</span>
-            <br />
-            <span>{i.whofirst}</span>
-          </div>
+          <Divider />
         </div>
       )
     })
 
     return (
-      <List>
+      <List className={css(style.listBoxContainer)}>
         { list }
       </List>
     )
@@ -45,9 +49,24 @@ export default class PuzzleList extends Component {
 }
 
 const style = StyleSheet.create({
+
+  listBoxContainer: {
+    //height: '96%',
+    //overflow: 'hidden',
+    //overflowY: 'visible',
+  },
+
   listBox: {
+    padding: '5px',
     cursor: 'pointer',
     display: 'flex',
+    ':hover': {
+      backgroundColor: '#eee'
+    }
+  },
+
+  selected: {
+    backgroundColor: '#eee'
   },
 
   previewImg: {
