@@ -12,6 +12,10 @@ import { setPracticePuzzleId } from '../actions/Actions'
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import Paper from 'material-ui/Paper'
 
+import Favorite from 'material-ui/svg-icons/action/favorite'
+import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
+
+
 class Practice extends Component {
 
   state = {
@@ -58,6 +62,20 @@ class Practice extends Component {
           { puzzleBoard }
         </Paper>
         <Paper className={css(styles.panel)}>
+          <div>
+            <h1>Life: </h1>
+            <Favorite className={css(styles.favorite)} />
+            <Favorite className={css(styles.favorite)} />
+            <Favorite className={css(styles.favorite)} />
+            <Favorite className={css(styles.favorite)} />
+            <FavoriteBorder className={css(styles.favorite)} />
+          </div>
+          <div>
+            <h1>Time Left: </h1>
+          </div>
+          <div>
+            Research
+          </div>
         </Paper>
 			</div>
     )
@@ -80,9 +98,16 @@ const styles = StyleSheet.create({
   },
 
   panel: {
+    padding: '20px',
     flex: '1 1 auto',
     height: 'calc(100vmin - 100px)',
     marginLeft: '20px',
+  },
+
+  favorite: {
+    width: '40px',
+    height: '40px',
+    color: 'red',
   }
 
 })
