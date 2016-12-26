@@ -57,13 +57,13 @@ export default class Navigation extends Component {
     }
     else {
       loginSection =
-        <div className='nav-sign'>
-          <div className="nav-footer-wrap nav-signup">
-            <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
-            <a href="javascript:void(0)">{this.state.profile.nickname}</a>
-            <span style={{color: 'rgb(0, 188, 212)', fontSize: '12px', position: 'absolute', top: '0px', right: '5px'}}>New Feature</span>
+          <div className='nav-sign'>
+            <div className="nav-footer-wrap nav-signup">
+              <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
+              <a href="javascript:void(0)">{this.state.profile.nickname}</a>
+              <span style={{color: 'rgb(0, 188, 212)', fontSize: '12px', position: 'absolute', top: '0px', right: '5px'}}>New Feature</span>
+            </div>
           </div>
-        </div>
 
       loginList =
         <List>

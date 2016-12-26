@@ -23,7 +23,7 @@ export default class PuzzleList extends Component {
     let list = []
     this.props.puzzleList.forEach((i) => {
       list.push(
-        <div>
+        <div key={`P-${i.id}`}>
           <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={this.props.currentPuzzleId === i.id ? css(style.listBox, style.selected) : css(style.listBox)}>
             <div className="list-preview-img">
               <img className={css(style.previewImg)} src={i.preview_img_r1.preview_img_r1.x200.url} />
@@ -68,7 +68,7 @@ const style = StyleSheet.create({
   },
 
   title: {
-    fontSize: '20px',
+    fontSize: '18px',
   },
 
   listRight: {
