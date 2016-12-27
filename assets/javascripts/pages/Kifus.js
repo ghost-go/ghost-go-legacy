@@ -85,7 +85,7 @@ class Kifus extends Component {
               className={css(styles.kifuImg)}
             >
               <Link to={`/kifus/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img.preview_img.x500.url} />
+                <img className={css(styles.previewImg)} src={i.preview_img.x500.url} />
               </Link>
             </CardMedia>
             <CardActions className={css(styles.kifuIntro)}>

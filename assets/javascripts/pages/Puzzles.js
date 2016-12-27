@@ -82,7 +82,7 @@ class Puzzles extends Component {
               className={css(styles.puzzleImg)}
             >
               <Link to={`/puzzles/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
+                <img className={css(styles.previewImg)} src={i.preview_img_r1.x500.url} />
               </Link>
             </CardMedia>
             <CardTitle

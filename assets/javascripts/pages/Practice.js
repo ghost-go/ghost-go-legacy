@@ -11,6 +11,9 @@ import { fetchPuzzles } from '../actions/FetchActions'
 import { setPracticePuzzleId } from '../actions/Actions'
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import Paper from 'material-ui/Paper'
+import RaisedButton from 'material-ui/RaisedButton'
+import Divider from 'material-ui/Divider'
+import { postPuzzleRecord, postRating } from '../actions/PostActions'
 
 import Favorite from 'material-ui/svg-icons/action/favorite'
 import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
@@ -21,6 +24,7 @@ class Practice extends Component {
   state = {
     intervalId: null,
     timeLeft: 60,
+    life: 5,
   }
 
   constructor(props) {
@@ -30,21 +34,80 @@ class Practice extends Component {
       page: 1,
       rank: '18k-10k'
     }))
+  }
 
-    this.handleClick = this.handleClick.bind(this)
-    this.timer = this.timer.bind(this)
+  nextPuzzle() {
+    let index = this._getCurrentPuzzleIndex()
+    if (index < this.props.puzzles.data.puzzles.length) {
+      this.props.dispatch(setPracticePuzzleId(this.props.puzzles.data.puzzles[index + 1].id))
+    } else {
+      console.log('bottom')
+    }
+    this.handlePanelReset()
+  }
+
+  prevPuzzle() {
+    let index = this._getCurrentPuzzleIndex()
+    if (index > 0) {
+      this.props.dispatch(setPracticePuzzleId(this.props.puzzles.data.puzzles[index - 1].id))
+    } else {
+      console.log('top')
+    }
   }
 
   handleClick(id) {
     this.props.dispatch(setPracticePuzzleId(id))
   }
 
+  handleRight() {
+    this._handlePuzzleRecord('right')
+    clearInterval(this.state.intervalId)
+    this.refs.board.handleRightTipOpen()
+    setTimeout(() => {
+      this.handleReset()
+      this.nextPuzzle()
+    }, 2000)
+  }
+
+  handleWrong() {
+    this._handlePuzzleRecord('wrong')
+    this.refs.board.handleWrongTipOpen()
+    this.minusLife()
+    setTimeout(() => {
+      this.handleReset()
+      if (this.state.life === 0) {
+        this.nextPuzzle()
+      }
+    }, 2000)
+  }
+
+  handleReset() {
+    this.refs.board.handleTipsReset()
+    this.refs.board.reset()
+  }
+
+  handlePanelReset() {
+
+  }
+
+  handlePause() {
+
+  }
+
   componentDidMount() {
-    this.setState({ intervalId: setInterval(this.timer, 1000) })
+    this.setState({ intervalId: setInterval(::this.timer, 1000) })
   }
 
   componentWillUnmount() {
     clearInterval(this.state.intervalId)
+  }
+
+  minusLife() {
+    this.setState((prevState, props) => {
+      if (prevState.life > 0) {
+        return { life: prevState.life - 1 }
+      }
+    })
   }
 
   timer() {
@@ -59,11 +122,31 @@ class Practice extends Component {
     })
   }
 
+  _handlePuzzleRecord(type) {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    let puzzle = this._getCurrentPuzzle()
+
+    this.props.dispatch(postPuzzleRecord({
+      puzzle_id: puzzle.id,
+      user_id: profile.user_id,
+      record_type: type
+    }))
+  }
+
+  _getCurrentPuzzleIndex() {
+    return _.findIndex(this.props.puzzles.data.puzzles, { id: this.props.currentPuzzleId || this.props.puzzles.data.puzzles[0].id })
+  }
+
+  _getCurrentPuzzle() {
+    return _.find(this.props.puzzles.data.puzzles, {id: this.props.currentPuzzleId || this.props.puzzles.data.puzzles[0].id})
+  }
+
   render() {
-    let puzzleList, puzzle, puzzleBoard
+    let puzzleList, puzzle, puzzleBoard, whofirst, rank, favorite
     if (this.props.puzzles.data !== undefined) {
-      puzzle = _.find(this.props.puzzles.data.puzzles, {id: this.props.currentPuzzleId || this.props.puzzles.data.puzzles[0].id})
-      puzzleList = <PuzzleList puzzleListOnClick={this.handleClick}
+      puzzle = this._getCurrentPuzzle()
+      puzzleList = <PuzzleList puzzleListOnClick={::this.handleClick}
         puzzleList={this.props.puzzles.data.puzzles}
         currentPuzzleId={puzzle.id}
       />
@@ -73,9 +156,19 @@ class Practice extends Component {
         right_answers={puzzle.right_answers}
         wrong_answers={puzzle.wrong_answers}
         answers={puzzle.answers}
-        handleRight={this.handleRightTipOpen}
-        handleWrong={this.handleWrongTipOpen}
+        handleRight={::this.handleRight}
+        handleWrong={::this.handleWrong}
         ref="board" />
+
+      whofirst = <h1 className={css(styles.title)}>{puzzle.whofirst}</h1>
+      rank = <h1 className={css(styles.title)}>{puzzle.rank}</h1>
+      favorite = []
+      for (let i = 0; i < this.state.life; i++) {
+        favorite.push(<Favorite key={`fav-${i}`} className={css(styles.favorite)} />)
+      }
+      for (let i = 0; i < 5 - this.state.life; i++) {
+        favorite.push(<FavoriteBorder key={`fav-b-${i}`} className={css(styles.favorite)} />)
+      }
     }
     return (
       <div className={css(mainStyles.mainContainer)}>
@@ -87,16 +180,28 @@ class Practice extends Component {
         </Paper>
         <Paper className={css(styles.panel)}>
           <div>
+            { whofirst }
+          </div>
+          <Divider />
+          <div>
+            { rank }
+          </div>
+          <Divider />
+          <div>
             <h1 className={css(styles.title)}>Life: </h1>
-            <Favorite className={css(styles.favorite)} />
-            <Favorite className={css(styles.favorite)} />
-            <Favorite className={css(styles.favorite)} />
-            <Favorite className={css(styles.favorite)} />
-            <FavoriteBorder className={css(styles.favorite)} />
+            { favorite }
           </div>
           <div>
-            <h1 className={css(styles.title)}>Time Left</h1>
+            <h1 className={css(styles.title)}>Time Left:</h1>
             <div className={css(styles.title)}>{`${ this.state.timeLeft }s`}</div>
+          </div>
+          <Divider />
+          <div>
+            <RaisedButton
+              onClick={::this.handlePause}
+              label="Pause"
+              primary={true}
+            />
           </div>
         </Paper>
       </div>
@@ -122,7 +227,7 @@ const styles = StyleSheet.create({
 
   panel: {
     padding: '20px',
-    flex: '1 0 200px',
+    flex: '0 0 270px',
     height: 'calc(100vmin - 100px)',
     marginLeft: '20px',
   },
