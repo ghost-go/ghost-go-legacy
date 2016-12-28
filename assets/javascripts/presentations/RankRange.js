@@ -3,6 +3,8 @@ import RankList from './RankList'
 import { StyleSheet, css } from 'aphrodite'
 import { setRangeFilter } from '../actions/Actions'
 
+import Remove from 'material-ui/svg-icons/content/remove'
+
 export default class RankRange extends Component {
 
   static propTypes = {
@@ -26,16 +28,16 @@ export default class RankRange extends Component {
 
   render() {
     return (
-      <div>
+      <div className={css(styles.rangeContainer)}>
         <RankList
+          floatingLabelText='RANK RANGE FROM'
           inlineStyle={styles.customWidth}
           rank={this.props.rankRange.start}
           onChange={this.handleRangeStart}
         />
-        <div style={{display: 'inline-block', padding: '18px', fontSize: '16px'}}>
-          <i className="zmdi zmdi-minus"></i>
-        </div>
+        <Remove className={css(styles.remove)} />
         <RankList
+          floatingLabelText='TO'
           inlineStyle={styles.customWidth}
           rank={this.props.rankRange.end}
           onChange={this.handleRangeEnd}
@@ -46,8 +48,18 @@ export default class RankRange extends Component {
 
 }
 
-const styles = {
+const styles = StyleSheet.create({
+
+  rangeContainer: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+
+  remove: {
+    margin: '0 15px',
+  },
+
   customWidth: {
     width: 90,
   },
-}
+})

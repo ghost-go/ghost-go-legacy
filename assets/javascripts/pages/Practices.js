@@ -9,12 +9,18 @@ import { fetchPuzzles } from '../actions/FetchActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import Dialog from 'material-ui/Dialog'
+
+import RankRange from '../presentations/RankRange'
 
 class Practices extends Component {
 
   state = {
-
+    open: false
   }
 
   constructor(props) {
@@ -26,12 +32,74 @@ class Practices extends Component {
   }
 
   buildPractice(aaa) {
-    console.log(aaa)
+
+  }
+
+  handleOpen() {
+    this.setState({open: true})
+  }
+
+  handleClose() {
+    this.setState({open: false})
+  }
+
+  handleCreatePractice() {
+    this.setState({open: true})
+  }
+
+  handleRangeChange(range) {
+    this.props.dispatch(setRangeFilter(range))
   }
 
   render() {
+    const actions = [
+      <FlatButton
+        onTouchTap={::this.handleClose}
+        primary={true}
+        label="Cancel"
+      />,
+      <FlatButton
+        onTouchTap={::this.handleCreatePractice}
+        primary={true}
+        keyboardFocused={true}
+        label="Create"
+      />,
+    ]
     return (
       <div className={css(mainStyles.mainContainer)}>
+        <RaisedButton
+          onTouchTap={::this.handleCreatePractice}
+          label="Create Practice"
+          primary={true}
+        />
+        <Dialog
+          title="Create Practice"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={::this.handleClose}
+          autoScrollBodyContent={true}
+        >
+          <TextField
+            defaultValue="10"
+            hintText="TSUMEGO COUNT"
+            floatingLabelText="TSUMEGO COUNT"
+          />
+          <br />
+          <TextField
+            defaultValue="1"
+            hintText="LIFE COUNT"
+            floatingLabelText="LIFE COUNT"
+          />
+          <br />
+          <TextField
+            defaultValue="10"
+            hintText="TIME LEFT"
+            floatingLabelText="TIME LEFT"
+          />
+          <br />
+          <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
+        </Dialog>
         <Card
           key={'lv-1'} className={css(styles.card)}
           onClick={this.buildPractice.bind(this, {rank: '18k-10k'})}
@@ -113,7 +181,8 @@ const styles = StyleSheet.create({
 
 function select(state) {
   return {
-    puzzles: state.puzzles
+    puzzles: state.puzzles,
+    rangeFilter: state.rangeFilter
   }
 }
 
