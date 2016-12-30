@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-
-//material-ui
+import { push } from 'react-router-redux'
 import { Link } from 'react-router'
 
 import mainStyles from '../styles/main'
 import { fetchPuzzles } from '../actions/FetchActions'
 import { postPractice } from '../actions/PostActions'
 
-//external component
+//material-ui
 import { StyleSheet, css } from 'aphrodite'
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -63,7 +62,11 @@ class Practices extends Component {
       time: this.state.time,
       puzzle_count: this.state.puzzleCount,
       rank_range: this.state.rankRange,
-    }))
+    })).then(() => {
+      let nextUrl = `/practices/${this.props.practice.data.id}`
+      this.props.dispatch(push(nextUrl))
+    })
+
   }
 
   handleRangeChange(range) {
@@ -216,6 +219,7 @@ const styles = StyleSheet.create({
 
 function select(state) {
   return {
+    practice: state.practice,
     puzzles: state.puzzles,
     rangeFilter: state.rangeFilter
   }
