@@ -32,3 +32,5 @@ export const AUTH0_CONFIG = {
     logo: `${PROTOCOL}://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png`
   }
 }
+
+export const API_VERSION = 'v1'

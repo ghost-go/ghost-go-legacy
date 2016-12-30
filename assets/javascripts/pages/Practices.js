@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 
 import mainStyles from '../styles/main'
 import { fetchPuzzles } from '../actions/FetchActions'
+import { postPractice } from '../actions/PostActions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -20,7 +21,11 @@ import RankRange from '../presentations/RankRange'
 class Practices extends Component {
 
   state = {
-    open: false
+    open: false,
+    life: 2,
+    time: 10,
+    puzzleCount: 10,
+    rankRange: '18k-10k',
   }
 
   constructor(props) {
@@ -47,8 +52,35 @@ class Practices extends Component {
     this.setState({open: true})
   }
 
+  handlePostPractice() {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+
+    this.props.dispatch(postPractice({
+      practice_type: 'approved',
+      user_id: profile.user_id,
+      life: this.state.life,
+      time: this.state.time,
+      puzzle_count: this.state.puzzleCount,
+      rank_range: this.state.rankRange,
+    }))
+  }
+
   handleRangeChange(range) {
     this.props.dispatch(setRangeFilter(range))
+  }
+
+  handlePuzzleCountChange(e) {
+    console.log(this.state)
+    this.setState({ puzzleCount: e.target.value })
+  }
+
+  handleLifeCountChange(e) {
+    this.setState({ puzzleCount: e.target.value })
+  }
+
+  handleTimeLeftChange(e) {
+    this.setState({ puzzleCount: e.target.value })
   }
 
   render() {
@@ -59,7 +91,7 @@ class Practices extends Component {
         label="Cancel"
       />,
       <FlatButton
-        onTouchTap={::this.handleCreatePractice}
+        onTouchTap={::this.handlePostPractice}
         primary={true}
         keyboardFocused={true}
         label="Create"
@@ -81,18 +113,21 @@ class Practices extends Component {
           autoScrollBodyContent={true}
         >
           <TextField
+            onChange={::this.handlePuzzleCountChange}
             defaultValue="10"
             hintText="TSUMEGO COUNT"
             floatingLabelText="TSUMEGO COUNT"
           />
           <br />
           <TextField
+            onChange={::this.handleLifeCountChange}
             defaultValue="1"
             hintText="LIFE COUNT"
             floatingLabelText="LIFE COUNT"
           />
           <br />
           <TextField
+            onChange={::this.handleTimeLeftChange}
             defaultValue="10"
             hintText="TIME LEFT"
             floatingLabelText="TIME LEFT"
