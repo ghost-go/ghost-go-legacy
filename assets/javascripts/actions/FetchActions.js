@@ -42,4 +42,4 @@ export const fetchPuzzle = buildFetchData('PUZZLE', `${config.API_VERSION}/puzzl
 export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', `${config.API_VERSION}/puzzles/next`)
 
 export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', `${config.API_VERSION}/players/top`)
-export const fetchPractice = buildFetchData('PRACTICES', `${config.API_VERSION}/practices/#{id}`)
+export const fetchPractice = buildFetchData('PRACTICE', `${config.API_VERSION}/practices/#{id}`)

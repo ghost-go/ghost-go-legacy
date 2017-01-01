@@ -58,6 +58,7 @@ function fetchRequest(state, action) {
 }
 
 function fetchSuccess(state, action) {
+  console.log(state)
   return {
     ...state,
     isFetching: false,
