@@ -31,3 +31,4 @@ export const postPuzzleRecord = buildPostData('PUZZLE_RECORD', `${config.API_VER
 export const postRating = buildPostData('RATING', `${config.API_VERSION}/ratings`)
 export const postPractice = buildPostData('PRACTICE', `${config.API_VERSION}/practices`)
 export const postPracticeRecord = buildPostData('PRACTICE_RECORD', `${config.API_VERSION}/practice_records`)
+export const postPracticeTemplate = buildPostData('PRACTICE_TEMPLATE', `${config.API_VERSION}/practice_templates`)

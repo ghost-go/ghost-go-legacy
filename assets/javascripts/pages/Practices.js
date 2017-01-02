@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 
 import mainStyles from '../styles/main'
 import { fetchPuzzles } from '../actions/FetchActions'
-import { postPractice } from '../actions/PostActions'
+import { postPractice, postPracticeTemplate } from '../actions/PostActions'
 
 //material-ui
 import { StyleSheet, css } from 'aphrodite'
@@ -20,9 +20,11 @@ import RankRange from '../presentations/RankRange'
 class Practices extends Component {
 
   state = {
-    open: false,
+    templateOpen: false,
+    practiceOpen: false,
     life: 2,
     time: 10,
+    templateName: 'TEMPLATE NAME 1',
     puzzleCount: 10,
     rankRange: '18k-10k',
   }
@@ -39,33 +41,47 @@ class Practices extends Component {
 
   }
 
-  handleOpen() {
-    this.setState({open: true})
+  handleTemplateOpen() {
+    this.setState({templateOpen: true})
   }
 
-  handleClose() {
-    this.setState({open: false})
+  handleTemplateClose() {
+    this.setState({templateOpen: false})
+  }
+
+  handlePracticeOpen() {
+    this.setState({practiceOpen: true})
+  }
+
+  handlePracticeClose() {
+    this.setState({practiceOpen: false})
+  }
+
+  handleCreatePracticeTemplate() {
+    this.setState({templateOpen: true})
   }
 
   handleCreatePractice() {
-    this.setState({open: true})
+    this.setState({practiceOpen: true})
   }
 
-  handlePostPractice() {
+  handlePostPracticeTemplate() {
     const { auth } = this.props
     let profile = auth.getProfile()
 
-    this.props.dispatch(postPractice({
-      practice_type: 'approved',
+    this.props.dispatch(postPracticeTemplate({
+      name: this.state.templateName,
+      template_type: 'approved',
       user_id: profile.user_id,
       life: this.state.life,
       time: this.state.time,
       puzzle_count: this.state.puzzleCount,
       rank_range: this.state.rankRange,
-    })).then(() => {
-      let nextUrl = `/practices/${this.props.practice.data.id}`
-      this.props.dispatch(push(nextUrl))
-    })
+    }))
+      //.then(() => {
+      //let nextUrl = `/practices/${this.props.practice.data.id}`
+      //this.props.dispatch(push(nextUrl))
+    //})
 
   }
 
@@ -74,8 +90,11 @@ class Practices extends Component {
   }
 
   handlePuzzleCountChange(e) {
-    console.log(this.state)
     this.setState({ puzzleCount: e.target.value })
+  }
+
+  handleTemplateNameChange(e) {
+    this.setState({ templateName: e.target.value })
   }
 
   handleLifeCountChange(e) {
@@ -87,14 +106,27 @@ class Practices extends Component {
   }
 
   render() {
-    const actions = [
+    const templateActions = [
       <FlatButton
-        onTouchTap={::this.handleClose}
+        onTouchTap={::this.handleTemplateClose}
         primary={true}
         label="Cancel"
       />,
       <FlatButton
-        onTouchTap={::this.handlePostPractice}
+        onTouchTap={::this.handlePostPracticeTemplate}
+        primary={true}
+        keyboardFocused={true}
+        label="Create"
+      />,
+    ]
+    const practiceActions = [
+      <FlatButton
+        onTouchTap={::this.handleTemplateClose}
+        primary={true}
+        label="Cancel"
+      />,
+      <FlatButton
+        onTouchTap={::this.handlePostPracticeTemplate}
         primary={true}
         keyboardFocused={true}
         label="Create"
@@ -107,14 +139,26 @@ class Practices extends Component {
           label="Create Practice"
           primary={true}
         />
+        <RaisedButton
+          onTouchTap={::this.handleCreatePracticeTemplate}
+          label="Create Practice Template"
+          secondary={true}
+        />
         <Dialog
-          title="Create Practice"
-          actions={actions}
+          title="Create Practice Template"
+          actions={templateActions}
           modal={false}
-          open={this.state.open}
-          onRequestClose={::this.handleClose}
+          open={this.state.templateOpen}
+          onRequestClose={::this.handleTemplateClose}
           autoScrollBodyContent={true}
         >
+          <TextField
+            onChange={::this.handleTemplateNameChange}
+            defaultValue="TEMPLATE NAME 1"
+            hintText="TEMPLATE NAME"
+            floatingLabelText="TEMPLATE NAME"
+          />
+          <br />
           <TextField
             onChange={::this.handlePuzzleCountChange}
             defaultValue="10"
@@ -138,6 +182,7 @@ class Practices extends Component {
           <br />
           <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
         </Dialog>
+        {/*
         <Card
           key={'lv-1'} className={css(styles.card)}
           onClick={this.buildPractice.bind(this, {rank: '18k-10k'})}
@@ -201,6 +246,7 @@ class Practices extends Component {
             <span>1d - 3d</span>
           </CardActions>
         </Card>
+        */}
       </div>
     )
   }
@@ -219,6 +265,7 @@ const styles = StyleSheet.create({
 
 function select(state) {
   return {
+    template: state.practiceTemplate,
     practice: state.practice,
     puzzles: state.puzzles,
     rangeFilter: state.rangeFilter
