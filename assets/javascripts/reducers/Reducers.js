@@ -58,7 +58,6 @@ function fetchRequest(state, action) {
 }
 
 function fetchSuccess(state, action) {
-  console.log(state)
   return {
     ...state,
     isFetching: false,
@@ -109,6 +108,8 @@ export const puzzleRecord = reduceReducers(
   buildPostReducer({}, 'PUZZLE_RECORDS')
 )
 
+export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES')
+export const practices = buildFetchReducer({}, 'PRACTICES')
 export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')

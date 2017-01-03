@@ -98,7 +98,6 @@ export default class PuzzleBoard extends Component {
   }
 
   initPuzzleArray() {
-    console.log(this.props)
     this.clearKifuArray()
     const steps = this.props.puzzle.split(';')
     let newArray = this.state._puzzleArray.slice()
