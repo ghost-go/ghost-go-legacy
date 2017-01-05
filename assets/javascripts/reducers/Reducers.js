@@ -91,25 +91,30 @@ export const puzzle = reduceReducers(
   buildFetchReducer({}, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT')
 )
+
+export const practices = buildFetchReducer({}, 'PRACTICES')
 export const practice = reduceReducers(
   buildFetchReducer({}, 'PRACTICE'),
   buildPostReducer({}, 'PRACTICE')
 )
+
 export const practiceRecord = reduceReducers(
   buildFetchReducer({}, 'PRACTICE_RECORDS'),
   buildPostReducer({}, 'PRACTICE_RECORDS')
 )
+
+export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES')
 export const practiceTemplate = reduceReducers(
   buildFetchReducer({}, 'PRACTICE_TEMPLATE'),
   buildPostReducer({}, 'PRACTICE_TEMPLATE')
 )
+
+export const puzzleRecords = buildFetchReducer({}, 'PUZZLE_RECORDS')
 export const puzzleRecord = reduceReducers(
-  buildFetchReducer({}, 'PUZZLE_RECORDS'),
-  buildPostReducer({}, 'PUZZLE_RECORDS')
+  buildFetchReducer({}, 'PUZZLE_RECORD'),
+  buildPostReducer({}, 'PUZZLE_RECORD')
 )
 
-export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES')
-export const practices = buildFetchReducer({}, 'PRACTICES')
 export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')

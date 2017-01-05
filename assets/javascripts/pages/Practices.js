@@ -37,16 +37,17 @@ class Practices extends Component {
     this.props.dispatch(fetchPractices({ page: 1 }))
   }
 
-  buildPractice(aaa) {
-
-  }
-
   handleTemplateOpen() {
     this.setState({templateOpen: true})
   }
 
   handleTemplateClose() {
     this.setState({templateOpen: false})
+  }
+
+  handlePractice(id) {
+    let url = `/practices/${id}`
+    this.props.dispatch(push(url))
   }
 
   handlePracticeOpen(id) {
@@ -159,11 +160,34 @@ class Practices extends Component {
       />,
     ]
     let templateList = []
+    let practiceList = []
     if (this.props.templates.data !== undefined && this.props.templates.data !== null) {
       this.props.templates.data.forEach((i) => {
         templateList.push(
           <Card key={i.id} className={css(styles.card)}
             onClick={this.handlePracticeOpen.bind(this, i.id)}
+          >
+            <CardMedia className={css(mainStyles.mainImg)} >
+            </CardMedia>
+            <CardActions>
+              <h2>{i.name}</h2>
+              <span>Rank Range: {i.rank_range}</span>
+              <br />
+              <span>Life: {i.life}</span>
+              <br />
+              <span>Time: {i.time}</span>
+              <br />
+              <span>Puzzle Count: {i.puzzle_count}</span>
+            </CardActions>
+          </Card>
+        )
+      })
+    }
+    if (this.props.practices.data !== undefined && this.props.practices.data !== null) {
+      this.props.practices.data.forEach((i) => {
+        practiceList.push(
+          <Card key={i.id} className={css(styles.card)}
+            onClick={this.handlePractice.bind(this, i.id)}
           >
             <CardMedia className={css(mainStyles.mainImg)} >
             </CardMedia>
@@ -195,14 +219,11 @@ class Practices extends Component {
           />
         </div>
         <Divider />
-        <div className={css(styles.cardContainer)}>
-          <h2>Practice</h2>
-          <Divider />
-          <RaisedButton
-            onTouchTap={::this.handleCreatePractice}
-            label="Create Practice"
-            primary={true}
-          />
+        <div>
+          <h2>Recent Practice</h2>
+          <div className={css(styles.cardContainer)}>
+            { practiceList }
+          </div>
         </div>
         <Dialog
           title="Create Practice Template"
@@ -292,18 +313,17 @@ const styles = StyleSheet.create({
   },
 
   card: {
+    width: '300px',
     cursor: 'pointer',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    flex: 'auto',
-    margin: '0px 5px 20px 5px',
     ':hover': {
-      backgroundColor: '#eee'
+      backgroundColor: '#eee',
     },
+    margin: '0px 10px 20px 10px',
   },
 
   cardContainer: {
     display: 'flex',
+    flexWrap: 'wrap',
     flexDirection: 'row'
   }
 

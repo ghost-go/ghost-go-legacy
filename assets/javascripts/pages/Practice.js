@@ -23,13 +23,12 @@ class Practice extends Component {
 
   state = {
     intervalId: null,
-    timeLeft: 60,
+    time: 60,
     life: 5,
   }
 
   constructor(props) {
     super(props)
-
   }
 
   nextPuzzle() {
@@ -37,7 +36,7 @@ class Practice extends Component {
     if (index < this.props.practice.data.puzzles.length) {
       this.props.dispatch(setPracticePuzzleId(this.props.practice.data.puzzles[index + 1].id))
     } else {
-      console.log('bottom')
+      clearInterval(this.state.intervalId)
     }
     this.handlePanelReset()
   }
@@ -67,6 +66,7 @@ class Practice extends Component {
 
   handleWrong() {
     this._handlePuzzleRecord('wrong')
+    clearInterval(this.state.intervalId)
     this.refs.board.handleWrongTipOpen()
     this.minusLife()
     setTimeout(() => {
@@ -82,8 +82,16 @@ class Practice extends Component {
     this.refs.board.reset()
   }
 
-  handlePanelReset() {
+  handleResetTime() {
+    this.setState({ time: this.props.practice.data.time })
+  }
 
+  handlePanelReset() {
+    this.setState({
+      time: this.props.practice.data.time,
+      life: this.props.practice.data.life,
+      intervalId: setInterval(::this.timer, 1000),
+    })
   }
 
   handlePause() {
@@ -104,20 +112,25 @@ class Practice extends Component {
 
   timer() {
     this.setState((prevState, props) => {
-      let timeLeft = prevState.timeLeft
-      if (timeLeft > 0) {
-        timeLeft --
+      let time = prevState.time
+      if (time > 0) {
+        time --
       } else {
-        console.log('Time out!')
+        this.nextPuzzle()
       }
-      return { timeLeft: timeLeft }
+      return { time: time }
     })
   }
 
   componentDidMount() {
     let { id } = this.props.params
-    this.props.dispatch(fetchPractice({id}))
-    this.setState({ intervalId: setInterval(::this.timer, 1000) })
+    this.props.dispatch(fetchPractice({id})).then(() => {
+      this.setState({
+        life: this.props.practice.data.life,
+        time: this.props.practice.data.time,
+        intervalId: setInterval(::this.timer, 1000) 
+      })
+    })
   }
 
 
@@ -145,7 +158,7 @@ class Practice extends Component {
       for (let i = 0; i < this.state.life; i++) {
         favorite.push(<Favorite key={`fav-${i}`} className={css(styles.favorite)} />)
       }
-      for (let i = 0; i < 5 - this.state.life; i++) {
+      for (let i = 0; i < this.props.practice.data.life - this.state.life; i++) {
         favorite.push(<FavoriteBorder key={`fav-b-${i}`} className={css(styles.favorite)} />)
       }
     }
@@ -172,7 +185,7 @@ class Practice extends Component {
           </div>
           <div>
             <h1 className={css(styles.title)}>Time Left:</h1>
-            <div className={css(styles.title)}>{`${ this.state.timeLeft }s`}</div>
+            <div className={css(styles.title)}>{`${ this.state.time }s`}</div>
           </div>
           <Divider />
           <div>
