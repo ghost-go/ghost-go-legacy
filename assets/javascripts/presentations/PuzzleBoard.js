@@ -411,6 +411,9 @@ export default class PuzzleBoard extends Component {
       let clickEvent = (e) => {
         e.stopPropagation()
         e.preventDefault()
+        if (this.props.afterClickEvent) {
+          this.props.afterClickEvent()
+        }
         let p = {}
         if (e.type == 'touchstart') {
           p = this._convertCtxposToPos(

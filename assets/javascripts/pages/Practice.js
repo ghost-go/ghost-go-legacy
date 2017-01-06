@@ -50,6 +50,10 @@ class Practice extends Component {
     }
   }
 
+  handleAfterClick() {
+    this.setState({ time: this.props.practice.data.time })
+  }
+
   handleClick(id) {
     this.props.dispatch(setPracticePuzzleId(id))
   }
@@ -80,10 +84,6 @@ class Practice extends Component {
   handleReset() {
     this.refs.board.handleTipsReset()
     this.refs.board.reset()
-  }
-
-  handleResetTime() {
-    this.setState({ time: this.props.practice.data.time })
   }
 
   handlePanelReset() {
@@ -150,6 +150,7 @@ class Practice extends Component {
         answers={puzzle.answers}
         handleRight={::this.handleRight}
         handleWrong={::this.handleWrong}
+        afterClickEvent={::this.handleAfterClick}
         ref="board" />
 
       whofirst = <h1 className={css(styles.title)}>{puzzle.whofirst}</h1>
