@@ -61,7 +61,7 @@ class Practice extends Component {
   }
 
   handleAfterClick() {
-    this.setState({ time: this.props.practice.data.time })
+    this.handleTimeReset()
   }
 
   handleClick(id) {
@@ -74,21 +74,28 @@ class Practice extends Component {
     clearInterval(this.state.intervalId)
     this.refs.board.handleRightTipOpen()
     setTimeout(() => {
+      this.handleTimeReset()
       this.handleReset()
       this.nextPuzzle()
     }, 2000)
   }
 
   handleWrong() {
-    this.buildPracticeRecord(false)
     this._handlePuzzleRecord('wrong')
     clearInterval(this.state.intervalId)
     this.refs.board.handleWrongTipOpen()
     this.minusLife()
     setTimeout(() => {
+      this.handleTimeReset()
       this.handleReset()
       if (this.state.life === 0) {
+        this.buildPracticeRecord(false)
         this.nextPuzzle()
+      }
+      else {
+        this.setState({
+          intervalId: setInterval(::this.timer, 1000),
+        })
       }
     }, 2000)
   }
@@ -96,6 +103,10 @@ class Practice extends Component {
   handleReset() {
     this.refs.board.handleTipsReset()
     this.refs.board.reset()
+  }
+
+  handleTimeReset() {
+    this.setState({ time: this.props.practice.data.time })
   }
 
   handlePanelReset() {
@@ -128,7 +139,7 @@ class Practice extends Component {
       if (time > 0) {
         time --
       } else {
-        this.nextPuzzle()
+        this.handleWrong()
       }
       return { time: time }
     })

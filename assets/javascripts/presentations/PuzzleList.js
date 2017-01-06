@@ -28,11 +28,14 @@ export default class PuzzleList extends Component {
     this.props.puzzleList.forEach((i) => {
       let record = _.find(this.props.record, {puzzle_id: i.id})
       let result
-      if (record && record.isRight) {
+      if (record === undefined || record === null) {
+        result = null
+      } else if (record.isRight) {
         result = <Done className={css(style.symbol, style.colorGreen)} />
       } else {
         result = <Clear className={css(style.symbol, style.colorRed)} />
       }
+
       list.push(
         <div key={`P-${i.id}`}>
           <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={this.props.currentPuzzleId === i.id ? css(style.listBox, style.selected) : css(style.listBox)}>
