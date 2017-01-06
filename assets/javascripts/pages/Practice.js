@@ -25,6 +25,7 @@ class Practice extends Component {
     intervalId: null,
     time: 60,
     life: 5,
+    record: []
   }
 
   constructor(props) {
@@ -50,6 +51,15 @@ class Practice extends Component {
     }
   }
 
+  buildPracticeRecord(isRight) {
+    let puzzle = this._getCurrentPuzzle()
+    this.state.record.push({
+      puzzle_id: puzzle.id,
+      index: this._getCurrentPuzzleIndex(),
+      isRight: isRight
+    })
+  }
+
   handleAfterClick() {
     this.setState({ time: this.props.practice.data.time })
   }
@@ -59,6 +69,7 @@ class Practice extends Component {
   }
 
   handleRight() {
+    this.buildPracticeRecord(true)
     this._handlePuzzleRecord('right')
     clearInterval(this.state.intervalId)
     this.refs.board.handleRightTipOpen()
@@ -69,6 +80,7 @@ class Practice extends Component {
   }
 
   handleWrong() {
+    this.buildPracticeRecord(false)
     this._handlePuzzleRecord('wrong')
     clearInterval(this.state.intervalId)
     this.refs.board.handleWrongTipOpen()
@@ -141,6 +153,7 @@ class Practice extends Component {
       puzzleList = <PuzzleList puzzleListOnClick={::this.handleClick}
         puzzleList={this.props.practice.data.puzzles}
         currentPuzzleId={puzzle.id}
+        record={this.state.record}
       />
       puzzleBoard = <PuzzleBoard researchMode={this.state.researchMode} className="board"
         whofirst={puzzle.whofirst}

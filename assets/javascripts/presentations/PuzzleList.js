@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Divider from 'material-ui/Divider'
+import Clear from 'material-ui/svg-icons/content/clear'
+import Done from 'material-ui/svg-icons/action/done'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -22,7 +24,15 @@ export default class PuzzleList extends Component {
 
   render() {
     let list = []
+
     this.props.puzzleList.forEach((i) => {
+      let record = _.find(this.props.record, {puzzle_id: i.id})
+      let result
+      if (record && record.isRight) {
+        result = <Done className={css(style.symbol, style.colorGreen)} />
+      } else {
+        result = <Clear className={css(style.symbol, style.colorRed)} />
+      }
       list.push(
         <div key={`P-${i.id}`}>
           <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={this.props.currentPuzzleId === i.id ? css(style.listBox, style.selected) : css(style.listBox)}>
@@ -33,6 +43,7 @@ export default class PuzzleList extends Component {
               <span className={css(style.title)}>{`${i.number}(${i.rank})`}</span>
               <br />
               <span>{i.whofirst}</span>
+              <div>{result}</div>
             </div>
           </div>
           <Divider />
@@ -52,12 +63,29 @@ export default class PuzzleList extends Component {
 const style = StyleSheet.create({
 
   listBox: {
+    position: 'relative',
     padding: '5px',
     cursor: 'pointer',
     display: 'flex',
     ':hover': {
       backgroundColor: '#eee'
     }
+  },
+
+  symbol: {
+    position: 'absolute',
+    right: '5px',
+    bottom: '10px',
+    width: '50px',
+    height: '50px',
+  },
+
+  colorRed: {
+    color: 'red',
+  },
+
+  colorGreen: {
+    color: 'green',
   },
 
   selected: {
