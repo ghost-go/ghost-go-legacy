@@ -13,7 +13,7 @@ import PuzzleBoard from '../presentations/PuzzleBoard'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
-import { postPuzzleRecord, postRating } from '../actions/PostActions'
+import { postPuzzleRecord, postRating, postPracticeRecord } from '../actions/PostActions'
 
 import Favorite from 'material-ui/svg-icons/action/favorite'
 import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
@@ -34,12 +34,32 @@ class Practice extends Component {
 
   nextPuzzle() {
     let index = this._getCurrentPuzzleIndex()
-    if (index < this.props.practice.data.puzzles.length) {
-      this.props.dispatch(setPracticePuzzleId(this.props.practice.data.puzzles[index + 1].id))
+    let puzzleCount = this.props.practice.data.puzzles.length
+    if (this.state.record.length < puzzleCount) {
+      for (let i = 0; i < puzzleCount; i++) {
+        let record = _.find(this.state.record, {index: i})
+        if (record === undefined) {
+          this.props.dispatch(setPracticePuzzleId(this.props.practice.data.puzzles[i].id))
+          this.handlePanelReset()
+          return;
+        }
+      }
     } else {
       clearInterval(this.state.intervalId)
+      const { auth } = this.props
+      let rightRecords = _.find(this.state.record, {isRight: true}) || []
+      let rightCount = rightRecords.length
+      let profile = auth.getProfile()
+      this.props.dispatch(postPracticeRecord({
+        right_count: rightCount,
+        wrong_count: puzzleCount - rightCount,
+        puzzle_count: puzzleCount,
+        total_time: 0,
+        practice_id: this.props.practice.data.id,
+        user_id: profile.id,
+        results: this.state.record,
+      }))
     }
-    this.handlePanelReset()
   }
 
   prevPuzzle() {
@@ -80,8 +100,10 @@ class Practice extends Component {
     }, 2000)
   }
 
-  handleWrong() {
-    this._handlePuzzleRecord('wrong')
+  handleWrong(isRecord = true) {
+    if (isRecord) {
+      this._handlePuzzleRecord('wrong')
+    }
     clearInterval(this.state.intervalId)
     this.refs.board.handleWrongTipOpen()
     this.minusLife()
@@ -139,7 +161,7 @@ class Practice extends Component {
       if (time > 0) {
         time --
       } else {
-        this.handleWrong()
+        this.handleWrong(false)
       }
       return { time: time }
     })
