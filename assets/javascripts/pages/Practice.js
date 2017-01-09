@@ -14,6 +14,8 @@ import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
 import { postPuzzleRecord, postRating, postPracticeRecord } from '../actions/PostActions'
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 
 import Favorite from 'material-ui/svg-icons/action/favorite'
 import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
@@ -22,6 +24,7 @@ import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 class Practice extends Component {
 
   state = {
+    pause: true,
     intervalId: null,
     time: 60,
     life: 5,
@@ -140,7 +143,15 @@ class Practice extends Component {
   }
 
   handlePause() {
+    clearInterval(this.state.intervalId)
+    this.setState({ pause: true })
+  }
 
+  handleGo() {
+    this.setState({
+      pause: false,
+      intervalId: setInterval(::this.timer, 1000)
+    })
   }
 
   componentWillUnmount() {
@@ -173,13 +184,19 @@ class Practice extends Component {
       this.setState({
         life: this.props.practice.data.life,
         time: this.props.practice.data.time,
-        intervalId: setInterval(::this.timer, 1000) 
       })
     })
   }
 
 
   render() {
+    const actions = [
+          <FlatButton
+            label="GO"
+            primary={true}
+            onTouchTap={::this.handleGo}
+          />
+        ]
     let puzzleList, puzzle, puzzleBoard, whofirst, rank, favorite
     if (this.props.practice.data !== undefined) {
       puzzle = this._getCurrentPuzzle()
@@ -211,6 +228,16 @@ class Practice extends Component {
     }
     return (
       <div className={css(mainStyles.mainContainer)}>
+        <Dialog
+          bodyStyle={{fontSize: '24px'}}
+          title="Ready"
+          overlayStyle={{filter: 'blur(5px)'}}
+          actions={actions}
+          modal={true}
+          open={this.state.pause}
+        >
+          Are you ready?
+        </Dialog>
         <Paper className={css(styles.list)}>
           { puzzleList }
         </Paper>
