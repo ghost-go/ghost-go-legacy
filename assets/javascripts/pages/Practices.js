@@ -125,11 +125,11 @@ class Practices extends Component {
   }
 
   handleLifeCountChange(e) {
-    this.setState({ puzzleCount: e.target.value })
+    this.setState({ life: e.target.value })
   }
 
-  handleTimeLeftChange(e) {
-    this.setState({ puzzleCount: e.target.value })
+  handleTimeChange(e) {
+    this.setState({ time: e.target.value })
   }
 
   render() {
@@ -255,7 +255,7 @@ class Practices extends Component {
           />
           <br />
           <TextField
-            onChange={::this.handleTimeLeftChange}
+            onChange={::this.handleTimeChange}
             defaultValue="10"
             hintText="TIME LEFT"
             floatingLabelText="TIME LEFT"
@@ -293,7 +293,7 @@ class Practices extends Component {
           />
           <br />
           <TextField
-            onChange={::this.handleTimeLeftChange}
+            onChange={::this.handleTimeChange}
             defaultValue={this.state.time}
             hintText="TIME LEFT"
             floatingLabelText="TIME LEFT"

@@ -13,7 +13,7 @@ import PuzzleBoard from '../presentations/PuzzleBoard'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
-import { postPuzzleRecord, postRating, postPracticeRecord } from '../actions/PostActions'
+import { postPuzzleRecord, postPracticeRecord } from '../actions/PostActions'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 
@@ -36,7 +36,6 @@ class Practice extends Component {
   }
 
   nextPuzzle() {
-    let index = this._getCurrentPuzzleIndex()
     let puzzleCount = this.props.practice.data.puzzles.length
     if (this.state.record.length < puzzleCount) {
       for (let i = 0; i < puzzleCount; i++) {
@@ -205,7 +204,9 @@ class Practice extends Component {
         currentPuzzleId={puzzle.id}
         record={this.state.record}
       />
-      puzzleBoard = <PuzzleBoard researchMode={this.state.researchMode} className="board"
+      puzzleBoard = <PuzzleBoard
+        className="board"
+        researchMode={this.state.researchMode}
         whofirst={puzzle.whofirst}
         puzzle={puzzle.steps}
         right_answers={puzzle.right_answers}

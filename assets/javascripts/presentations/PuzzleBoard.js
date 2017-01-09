@@ -1,16 +1,21 @@
 import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
-import { LETTERS, LETTERS_SGF, NUMBERS } from '../constants/Go'
+import { LETTERS_SGF } from '../constants/Go'
 import Piece from '../components/piece'
 import Sgf from '../components/sgf'
 import Cross from '../components/cross'
 
-import Paper from 'material-ui/Paper'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-
 import { StyleSheet, css } from 'aphrodite'
 
 export default class PuzzleBoard extends Component {
+
+  static propTypes = {
+    size: React.PropTypes.func,
+  }
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -34,9 +39,10 @@ export default class PuzzleBoard extends Component {
       wrongTipOpen: false,
     }
     this.clearKifuArray()
-    this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
-    this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
-    this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+    this.setState({
+      minhv: this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical,
+      maxhv: this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+    })
     this.reset = this.reset.bind(this)
     this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
   }
@@ -70,13 +76,21 @@ export default class PuzzleBoard extends Component {
 
   move(x, y, ki, isMarked) {
     if (this.canMove(x, y, ki)) {
-      this.state._puzzleArray[x][y] = ki
-      this._drawPiece(x, y, ki, isMarked)
-      this._execPonnuki(x, y, -ki)
-      if (this.state.currentKi != 0) {
-        this.state.currentKi = -this.state.currentKi
-      }
-      this.drawBoard()
+      let array = this.state._puzzleArray
+      array[x][y] = ki
+      this.setState({
+        _puzzleArray: array
+      }, () => {
+        this._drawPiece(x, y, ki, isMarked)
+        this._execPonnuki(x, y, -ki)
+        if (this.state.currentKi != 0) {
+          this.setState({
+            currentKi: -this.state.currentKi
+          })
+          this.state.currentKi = -this.state.currentKi
+        }
+        this.drawBoard()
+      })
       return true
     }
     return false
@@ -506,7 +520,7 @@ export default class PuzzleBoard extends Component {
     window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.puzzle !== this.props.puzzle) {
       this.initPuzzleArray()
       this.drawBoardWithResize()
@@ -516,52 +530,48 @@ export default class PuzzleBoard extends Component {
   _convertCtxposToPos(x, y) {
     let posX, posY
     switch (this.state.direction) {
-      case 1:
-        posX = Math.round(x / this.state.size) - 1
-        posY = Math.round(y / this.state.size) - 1
-        break
-      case 2:
-        posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
-        posY = Math.round(y / this.state.size) - 1
-        break
-      case 3:
-        posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
-        posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
-        break
-      case 4:
-        posX = Math.round(x / this.state.size) - 1
-        posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
-        break
+    case 1:
+      posX = Math.round(x / this.state.size) - 1
+      posY = Math.round(y / this.state.size) - 1
+      break
+    case 2:
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+      posY = Math.round(y / this.state.size) - 1
+      break
+    case 3:
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
+      break
+    case 4:
+      posX = Math.round(x / this.state.size) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
+      break
     }
     return {posX, posY}
   }
 
   _isPosInTheBoard(x, y) {
     switch (this.state.direction) {
-      case 1:
-        return x >= 0 &&
-          x < this.state.horizontal &&
-          y >= 0 &&
-          y < this.state.verical
-        break
-      case 2:
-        return x >= this.state.grid - this.state.horizontal && 
-          x < this.state.grid &&
-          y >= 0 &&
-          y < this.state.verical
-        break
-      case 3:
-        return x >= this.state.grid - this.state.horizontal &&
-          x < this.state.grid &&
-          y >= this.state.grid - this.state.verical &&
-          y < this.state.verical
-        break
-      case 4:
-        return x >= 0 &&
-          x < this.state.horizontal &&
-          y >= this.state.grid - this.state.verical &&
-          y < this.state.verical
-        break
+    case 1:
+      return x >= 0 &&
+        x < this.state.horizontal &&
+        y >= 0 &&
+        y < this.state.verical
+    case 2:
+      return x >= this.state.grid - this.state.horizontal && 
+        x < this.state.grid &&
+        y >= 0 &&
+        y < this.state.verical
+    case 3:
+      return x >= this.state.grid - this.state.horizontal &&
+        x < this.state.grid &&
+        y >= this.state.grid - this.state.verical &&
+        y < this.state.verical
+    case 4:
+      return x >= 0 &&
+        x < this.state.horizontal &&
+        y >= this.state.grid - this.state.verical &&
+        y < this.state.verical
     }
   }
 
@@ -728,9 +738,6 @@ export default class PuzzleBoard extends Component {
   }
 }
 
-PuzzleBoard.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-}
 
 const styles = StyleSheet.create({
 

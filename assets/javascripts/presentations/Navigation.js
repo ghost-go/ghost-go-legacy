@@ -60,29 +60,31 @@ export default class Navigation extends Component {
           <div className='nav-sign'>
             <div className="nav-footer-wrap nav-signup">
               <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
-              <a href="javascript:void(0)">{this.state.profile.nickname}</a>
-              <span style={{color: 'rgb(0, 188, 212)', fontSize: '12px', position: 'absolute', top: '0px', right: '5px'}}>New Feature</span>
             </div>
           </div>
 
       loginList =
         <List>
-          {
-          //<Link to={'/users'}>
-            //<ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
-          //</Link>
-          }
+          <Link to={'/users'}>
+            {`Signed in as ${this.state.profile.nickname}`}
+          </Link>
+          <Divider />
+          <Link to={'/users'}>
+            <ListItem primaryText="Your profile" leftIcon={<AccountCircle />} />
+          </Link>
+          <Link to={'/users'}>
+            <ListItem primaryText="Your practices" leftIcon={<AccountCircle />} />
+          </Link>
           <Link to={'/history'}>
-            <ListItem primaryText="History" leftIcon={<HistoryIcon />} />
+            <ListItem primaryText="puzzle History" leftIcon={<HistoryIcon />} />
           </Link>
           <Divider />
           <Link onClick={this.logout.bind(this)} to=''>
+            <ListItem primaryText="Settings" leftIcon={<HistoryIcon />} />
             <ListItem primaryText="Log Out" leftIcon={<ExitToApp />} />
           </Link>
         </List>
-
     }
-
 
     return (
       <div className="nav-container">
