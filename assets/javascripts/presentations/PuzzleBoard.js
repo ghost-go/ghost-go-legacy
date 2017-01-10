@@ -14,6 +14,10 @@ export default class PuzzleBoard extends Component {
     puzzle: PropTypes.string.isRequired,
     whofirst: PropTypes.string.isRequired,
     researchMode: PropTypes.bool.isRequired,
+    rightAnswers: PropTypes.array.isRequired,
+    wrongAnswers: PropTypes.array.isRequired,
+    handleRight: PropTypes.func.isRequired,
+    handleWrong: PropTypes.func.isRequired,
   }
 
   static childContextTypes = {
@@ -327,12 +331,12 @@ export default class PuzzleBoard extends Component {
     if (this.props.researchMode) return
     let rights = []
     let wrongs = []
-    this.props.right_answers.forEach((i) => {
+    this.props.rightAnswers.forEach((i) => {
       if (i.steps.indexOf(this.state.steps.join(';')) == 0) {
         rights.push(i)
       }
     })
-    this.props.wrong_answers.forEach((i) => {
+    this.props.wrongAnswers.forEach((i) => {
       if (i.steps.indexOf(this.state.steps.join(';')) == 0) {
         wrongs.push(i)
       }

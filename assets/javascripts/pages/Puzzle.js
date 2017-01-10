@@ -222,8 +222,8 @@ class Puzzle extends Component {
             <PuzzleBoard researchMode={this.state.researchMode} className="board"
               whofirst={puzzle.data.whofirst}
               puzzle={puzzle.data.steps}
-              right_answers={puzzle.data.right_answers}
-              wrong_answers={puzzle.data.wrong_answers}
+              rightAnswers={puzzle.data.right_answers}
+              wrongAnswers={puzzle.data.wrong_answers}
               answers={puzzle.data.answers}
               handleRight={this.handleRightTipOpen}
               handleWrong={this.handleWrongTipOpen}

@@ -209,8 +209,8 @@ class Practice extends Component {
         researchMode={this.state.researchMode}
         whofirst={puzzle.whofirst}
         puzzle={puzzle.steps}
-        right_answers={puzzle.right_answers}
-        wrong_answers={puzzle.wrong_answers}
+        rightAnswers={puzzle.right_answers}
+        wrongAnswers={puzzle.wrong_answers}
         answers={puzzle.answers}
         handleRight={::this.handleRight}
         handleWrong={::this.handleWrong}
