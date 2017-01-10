@@ -23,8 +23,23 @@ import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 
 class Practice extends Component {
 
+  static propTypes = {
+    practice: PropTypes.object.isRequired,
+    dispatch: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    currentPuzzleId: PropTypes.number.isRequired,
+  }
+
   state = {
-    pause: true,
+    detailMode: false,
+    scoreDisplay: false,
+    score: 0,
+    submit: false,
+    alert: true,
+    alertContent: 'Are you ready?',
+    alertTitle: 'Ready',
+    alertButtonText: 'Go',
     intervalId: null,
     time: 60,
     life: 5,
@@ -43,33 +58,12 @@ class Practice extends Component {
         if (record === undefined) {
           this.props.dispatch(setPracticePuzzleId(this.props.practice.data.puzzles[i].id))
           this.handlePanelReset()
-          return;
+          return
         }
       }
     } else {
       clearInterval(this.state.intervalId)
-      const { auth } = this.props
-      let rightRecords = _.find(this.state.record, {isRight: true}) || []
-      let rightCount = rightRecords.length
-      let profile = auth.getProfile()
-      this.props.dispatch(postPracticeRecord({
-        right_count: rightCount,
-        wrong_count: puzzleCount - rightCount,
-        puzzle_count: puzzleCount,
-        total_time: 0,
-        practice_id: this.props.practice.data.id,
-        user_id: profile.id,
-        results: this.state.record,
-      }))
-    }
-  }
-
-  prevPuzzle() {
-    let index = this._getCurrentPuzzleIndex()
-    if (index > 0) {
-      this.props.dispatch(setPracticePuzzleId(this.props.practice.data.puzzles[index - 1].id))
-    } else {
-      console.log('top')
+      this.handleSubmitRecord()
     }
   }
 
@@ -143,12 +137,60 @@ class Practice extends Component {
 
   handlePause() {
     clearInterval(this.state.intervalId)
-    this.setState({ pause: true })
+    this.setState({
+      alertTitle: 'Pause',
+      alertContent: `Time left: ${this.state.time}s`,
+      alertButtonText: 'Continue',
+      alert: true,
+    })
+  }
+
+  handleSubmit() {
+    clearInterval(this.state.intervalId)
+    this.setState({ submit: true })
+  }
+
+  handleNo() {
+    this.setState({
+      submit: false,
+      intervalId: setInterval(::this.timer, 1000),
+    })
+  }
+
+  handleScoreClose() {
+    this.setState({ scoreDisplay: false, })
+  }
+
+  handleScore() {
+    this.setState({ detailMode: true })
+  }
+
+  handleSubmitRecord() {
+    let puzzleCount = this.props.practice.data.puzzles.length
+    const { auth } = this.props
+    let rightRecords = _.find(this.state.record, {isRight: true}) || []
+    let rightCount = rightRecords.length
+    let profile = auth.getProfile()
+    this.props.dispatch(postPracticeRecord({
+      right_count: rightCount,
+      wrong_count: puzzleCount - rightCount,
+      puzzle_count: puzzleCount,
+      total_time: 0,
+      practice_id: this.props.practice.data.id,
+      user_id: profile.id,
+      results: this.state.record,
+    })).then((data) => {
+      this.setState({
+        submit: false,
+        scoreDisplay: true,
+        score: data.payload.data.score,
+      })
+    })
   }
 
   handleGo() {
     this.setState({
-      pause: false,
+      alert: false,
       intervalId: setInterval(::this.timer, 1000)
     })
   }
@@ -158,7 +200,7 @@ class Practice extends Component {
   }
 
   minusLife() {
-    this.setState((prevState, props) => {
+    this.setState((prevState) => {
       if (prevState.life > 0) {
         return { life: prevState.life - 1 }
       }
@@ -166,7 +208,7 @@ class Practice extends Component {
   }
 
   timer() {
-    this.setState((prevState, props) => {
+    this.setState((prevState) => {
       let time = prevState.time
       if (time > 0) {
         time --
@@ -190,12 +232,34 @@ class Practice extends Component {
 
   render() {
     const actions = [
-          <FlatButton
-            label="GO"
-            primary={true}
-            onTouchTap={::this.handleGo}
-          />
-        ]
+      <FlatButton
+        label={this.state.alertButtonText}
+        primary={true}
+        onTouchTap={::this.handleGo}
+      />
+    ]
+    const submitActions = [
+      <FlatButton
+        label='Yes'
+        primary={true}
+        onTouchTap={::this.handleSubmitRecord}
+      />,
+      <FlatButton
+        label='No'
+        onTouchTap={::this.handleNo}
+      />
+    ]
+    const scoreActions = [
+      <FlatButton
+        label='Close'
+        onTouchTap={::this.handleScoreClose}
+      />,
+      <FlatButton
+        label='Details'
+        primary={true}
+        onTouchTap={::this.handleScore}
+      />
+    ]
     let puzzleList, puzzle, puzzleBoard, whofirst, rank, favorite
     if (this.props.practice.data !== undefined) {
       puzzle = this._getCurrentPuzzle()
@@ -217,8 +281,8 @@ class Practice extends Component {
         afterClickEvent={::this.handleAfterClick}
         ref="board" />
 
-      whofirst = <h1 className={css(styles.title)}>{puzzle.whofirst}</h1>
-      rank = <h1 className={css(styles.title)}>{puzzle.rank}</h1>
+      whofirst = <h1 className={css(styles.content)}>{puzzle.whofirst}</h1>
+      rank = puzzle.rank
       favorite = []
       for (let i = 0; i < this.state.life; i++) {
         favorite.push(<Favorite key={`fav-${i}`} className={css(styles.favorite)} />)
@@ -230,14 +294,31 @@ class Practice extends Component {
     return (
       <div className={css(mainStyles.mainContainer)}>
         <Dialog
-          bodyStyle={{fontSize: '24px'}}
-          title="Ready"
-          overlayStyle={{filter: 'blur(5px)'}}
+          bodyStyle={{fontSize: '20px'}}
+          title={ this.state.alertTitle }
           actions={actions}
           modal={true}
-          open={this.state.pause}
+          open={this.state.alert}
         >
-          Are you ready?
+          { this.state.alertContent }
+        </Dialog>
+        <Dialog
+          bodyStyle={{fontSize: '24px'}}
+          title='Submit'
+          actions={submitActions}
+          modal={true}
+          open={this.state.submit}
+        >
+          Do you want to submit?
+        </Dialog>
+        <Dialog
+          bodyStyle={{fontSize: '32px'}}
+          title='Your Score'
+          actions={scoreActions}
+          modal={true}
+          open={this.state.scoreDisplay}
+        >
+          {`${this.state.score}`}
         </Dialog>
         <Paper className={css(styles.list)}>
           { puzzleList }
@@ -251,23 +332,29 @@ class Practice extends Component {
           </div>
           <Divider />
           <div>
-            { rank }
+            <div className={css(styles.title)}>Rank: </div>
+            <div className={css(styles.content)}>{ rank }</div>
           </div>
-          <Divider />
           <div>
-            <h1 className={css(styles.title)}>Life: </h1>
+            <div className={css(styles.title)}>Life: </div>
             { favorite }
           </div>
           <div>
-            <h1 className={css(styles.title)}>Time Left:</h1>
-            <div className={css(styles.title)}>{`${ this.state.time }s`}</div>
+            <div className={css(styles.title)}>Time Left:</div>
+            <div className={css(styles.content)}>{`${ this.state.time }s`}</div>
           </div>
-          <Divider />
           <div>
             <RaisedButton
+              className={css(styles.alert)}
               onClick={::this.handlePause}
               label="Pause"
               primary={true}
+            />
+            <RaisedButton
+              className={css(styles.alert)}
+              onClick={::this.handleSubmit}
+              label="Submit"
+              secondary={true}
             />
           </div>
         </Paper>
@@ -327,8 +414,19 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: '24px'
-  }
+    padding: '15px 0px',
+    fontSize: '16px',
+  },
+
+  content: {
+    fontSize: '22px',
+    fontWeight: 'bold',
+  },
+
+  alert: {
+    marginTop: '20px',
+    marginRight: '10px',
+  },
 
 })
 

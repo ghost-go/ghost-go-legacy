@@ -32,7 +32,6 @@ import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
 import Practices from './pages/Practices'
 import Practice from './pages/Practice'
-import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
 import History from './pages/History'
@@ -115,6 +114,7 @@ ReactDOM.render(
           <Route path="/puzzles/:id" component={Puzzle}  />
           <Route path="/practices" component={Practices}  />
           <Route path="/practices/:id" component={Practice} />
+          <Route path="/practice_records/:id" component={Practice} />
           <Route path="/users" component={User} />
           <Route path="/History" component={History} />
         </Route>

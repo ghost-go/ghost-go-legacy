@@ -191,6 +191,7 @@ class Puzzle extends Component {
       />
     ]
 
+    console.log(puzzle)
     return (
       <div className={css(styles.puzzlePage)}>
         <Dialog
@@ -218,7 +219,7 @@ class Puzzle extends Component {
           ///>
         }
         <div className={css(styles.puzzleContainer)}>
-          <div className={css(styles.puzzleBoard)}>
+          <Paper className={css(styles.puzzleBoard)}>
             <PuzzleBoard researchMode={this.state.researchMode} className="board"
               whofirst={puzzle.data.whofirst}
               puzzle={puzzle.data.steps}
@@ -228,7 +229,7 @@ class Puzzle extends Component {
               handleRight={this.handleRightTipOpen}
               handleWrong={this.handleWrongTipOpen}
               ref="board" />
-          </div>
+          </Paper>
         </div>
         <div className={css(styles.puzzleInfo)}>
           <Card>
@@ -331,10 +332,12 @@ const styles = StyleSheet.create({
 
   puzzleBoard: {
     margin: '0 10px 0 10px',
+    flex: '1 1 auto',
+    width: 'calc(100vmin)',
+    height: 'calc(100vmin)',
     '@media (max-width: 992px)': {
       margin: '10px 0 10px 0',
     },
-    flex: 'auto',
   },
 
   puzzleInfo: {

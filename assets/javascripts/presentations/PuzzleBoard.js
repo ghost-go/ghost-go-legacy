@@ -29,7 +29,7 @@ export default class PuzzleBoard extends Component {
     this.state = {
       grid: 19,
       sgf: new Sgf({}),
-      size: this.props.size,
+      size: 0,
       horizontal: 19,
       verical: 19,
       autofit: true,
@@ -610,6 +610,7 @@ export default class PuzzleBoard extends Component {
   }
 
   _drawPiece(x, y, type, isMarked) {
+    console.log(this.state.size)
     let piece = new Piece(
       x * this.state.size,
       y * this.state.size,
@@ -703,6 +704,8 @@ export default class PuzzleBoard extends Component {
             verical: this.state.maxhv,
           })
         }
+        console.log(this.boardLayer.height)
+        console.log(this.state.maxhv + 1)
         this.state.size =  this.boardLayer.height / (this.state.maxhv + 1)
       })
     }

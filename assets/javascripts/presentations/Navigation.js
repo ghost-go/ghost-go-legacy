@@ -1,17 +1,15 @@
 import React, { Component, PropTypes } from 'react'
-import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router'
+import {blue500, red500, greenA200} from 'material-ui/styles/colors';
 
 import IconMenu from 'material-ui/IconMenu'
-import MenuItem from 'material-ui/MenuItem'
-import IconButton from 'material-ui/IconButton'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import {List, ListItem} from 'material-ui/List'
 import HistoryIcon from 'material-ui/svg-icons/action/history'
 import ExitToApp from 'material-ui/svg-icons/action/exit-to-app'
 import Divider from 'material-ui/Divider'
-import ActionInfo from 'material-ui/svg-icons/action/info'
 import AccountCircle from 'material-ui/svg-icons/action/account-circle'
+import KeyBoardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
+
 
 import AuthService from '../utils/AuthService'
 
@@ -59,7 +57,8 @@ export default class Navigation extends Component {
       loginSection =
           <div className='nav-sign'>
             <div className="nav-footer-wrap nav-signup">
-              <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
+              <img style={{height: '30px', marginTop: '10px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
+              <KeyBoardArrowDown className="arrow" style={{height: '50px'}} hoverColor={blue500} />
             </div>
           </div>
 
@@ -90,7 +89,7 @@ export default class Navigation extends Component {
       <div className="nav-container">
         <header className="nav-header">
           <a href="/" className="logo">
-            <span style={{float: 'left', marginLeft: '103px', marginTop: '20px'}}>--alpha</span>
+            <span style={{float: 'left', marginLeft: '103px', marginTop: '20px'}}>--beta</span>
           </a>
         </header>
 
