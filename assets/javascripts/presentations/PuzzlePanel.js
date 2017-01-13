@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import Rating from 'react-rating'
 import SVGIcon from '../presentations/SVGIcon'
+import { postRating } from '../actions/PostActions'
 import Toggle from 'material-ui/Toggle'
 import AnswerBar from '../presentations/AnswerBar'
 
@@ -15,6 +16,9 @@ export default class PuzzlePanel extends Component {
     puzzle: PropTypes.object.isRequired,
     rangeFilter: PropTypes.object.isRequired,
     className: PropTypes.object,
+    params: PropTypes.object,
+    dispatch: PropTypes.object,
+    auth: PropTypes.object,
   }
 
   constructor(props) {
@@ -85,12 +89,22 @@ export default class PuzzlePanel extends Component {
             label="Reset"
             primary={true}
           />
-          <RaisedButton
-            onClick={this.props.handleNext}
-            label="Next Tsumego"
-            secondary={true}
-          />
-          <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
+          {
+            () => {
+              if (this.props.showNext === true) {
+                return (
+                  <div>
+                    <RaisedButton
+                      onClick={this.props.handleNext}
+                      label="Next Tsumego"
+                      secondary={true}
+                    />
+                    <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
+                  </div>
+                )
+              }
+            }
+          }
         </CardActions>
         <CardActions>
           <div className="addthis_inline_share_toolbox"></div>
@@ -127,9 +141,9 @@ export default class PuzzlePanel extends Component {
 const styles = StyleSheet.create({
 
   answersContainer: {
-    padding: '16px 0px',
+    padding: '0px',
     '@media screen and (max-aspect-ratio: 4/3)': {
-      padding: '0px'
+      padding: '0px',
     },
   },
 

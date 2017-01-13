@@ -44,6 +44,7 @@ export default class AnswerBar extends Component {
   nextStep() {
     let steps = this.props.steps.split(';')
     if (this.state.current < steps.length) {
+      console.log(this.props.board)
       this.props.board.refs.board.initPuzzleArray()
       this.setState({ current: this.state.current + 1 }, () => {
         for (let i = 0; i < this.state.current; i++) {
@@ -97,7 +98,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'middle',
     width: '70px',
-    marginLeft: '25px',
+    marginLeft: '15px',
     fontSize: '16px',
     lineHeight: '32px',
   },

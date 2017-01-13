@@ -148,14 +148,12 @@ class Puzzle extends Component {
     const { auth } = this.props
     let rightAnswers = []
     let wrongAnswers = []
-    let answers = []
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
-      answers = puzzle.data.right_answers + puzzle.data.wrong_answers
       puzzle.data.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
       puzzle.data.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
     }
 

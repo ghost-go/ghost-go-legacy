@@ -18,6 +18,7 @@ export default class PuzzleBoard extends Component {
     wrongAnswers: PropTypes.array.isRequired,
     handleRight: PropTypes.func.isRequired,
     handleWrong: PropTypes.func.isRequired,
+    afterClickEvent: PropTypes.func
   }
 
   static childContextTypes = {
@@ -67,7 +68,7 @@ export default class PuzzleBoard extends Component {
   }
 
   move(x, y, ki, isMarked) {
-    if (this.canMove(x, y, ki)) {
+    if (this.canMove(this.state.puzzleArray, x, y, ki)) {
       let array = this.state.puzzleArray.slice()
       array[x][y] = ki
       this.setState({
@@ -79,8 +80,11 @@ export default class PuzzleBoard extends Component {
           })
         }
         this._drawPiece(x, y, ki, isMarked)
-        this._execPonnuki(x, y, -ki)
-        this.drawBoard()
+        this.setState({
+          puzzleArray: this.execPonnuki(array, x, y, -ki)
+        }, () => {
+          this.drawBoard()
+        })
       })
       return true
     }
@@ -210,27 +214,24 @@ export default class PuzzleBoard extends Component {
     })
   }
 
-  canMove(i, j, ki) {
-    if (this.state.puzzleArray[i][j] != 0) {
+  canMove(array, i, j, ki) {
+    array = _.clone(array)
+    if (array[i][j] != 0) {
       return false
     }
 
-    this.state.puzzleArray[i][j] = ki
-    let {liberty, recursionPath} = this.calcLiberty(i, j, ki)
+    array[i][j] = ki
+    let { liberty } = this.calcLiberty(i, j, ki)
     if (this.canPonnuki(i, j, -ki)) {
-      this.state.puzzleArray[i][j] = 0
       return true
     }
     if (this.canPonnuki(i, j, ki)) {
-      this.state.puzzleArray[i][j] = 0
       return false
     }
     if (liberty === 0) {
-      this.state.puzzleArray[i][j] = 0
       console.log('This place has been used')
       return false
     }
-    this.state.puzzleArray[i][j] = 0
     return true
   }
 
@@ -423,7 +424,6 @@ export default class PuzzleBoard extends Component {
         } else {
           p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         }
-        let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
         if (this._isPosInTheBoard(p.posX, p.posY)) {
           this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
@@ -457,7 +457,6 @@ export default class PuzzleBoard extends Component {
     let lastStep, il, jl
     if (this.state.steps.length > 0) {
       lastStep = this.state.steps[this.state.steps.length - 1]
-      console.log(lastStep)
 
       il = LETTERS_SGF.indexOf(lastStep[2])
       jl = LETTERS_SGF.indexOf(lastStep[3])
@@ -468,7 +467,8 @@ export default class PuzzleBoard extends Component {
         const ki = this.state.puzzleArray[i][j]
         let {x, y} = this._getOffsetPos(i, j)
 
-        if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
+        if (lastStep != null && il != null && il != null) {
+          if (i == il && j == jl) {
             this._drawPiece(x, y, ki, true)
           } else {
             this._drawPiece(x, y, ki)
@@ -595,7 +595,6 @@ export default class PuzzleBoard extends Component {
   }
 
   _drawPiece(x, y, type, isMarked) {
-    console.log(this.state.size)
     let piece = new Piece(
       x * this.state.size,
       y * this.state.size,
@@ -606,7 +605,7 @@ export default class PuzzleBoard extends Component {
     piece.draw(this._pieceCtx)
   }
 
-  _execPonnuki(i, j, ki) {
+  execPonnuki(array, i, j, ki) {
     let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki)
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
@@ -614,27 +613,28 @@ export default class PuzzleBoard extends Component {
     if (libertyUp === 0) {
       recursionPathUp.forEach((i) => {
         let coord = i.split(',')
-        this.state.puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
     if (libertyDown === 0) {
       recursionPathDown.forEach((i) => {
         let coord = i.split(',')
-        this.state.puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
     if (libertyLeft === 0) {
       recursionPathLeft.forEach((i) => {
         let coord = i.split(',')
-        this.state.puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
     if (libertyRight === 0) {
       recursionPathRight.forEach((i) => {
         let coord = i.split(',')
-        this.state.puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
+    return array
   }
 
   _calcLibertyCore(x, y, ki) {
@@ -689,9 +689,9 @@ export default class PuzzleBoard extends Component {
             verical: this.state.maxhv,
           })
         }
-        console.log(this.boardLayer.height)
-        console.log(this.state.maxhv + 1)
-        this.state.size =  this.boardLayer.height / (this.state.maxhv + 1)
+        this.setState({
+          size: this.boardLayer.height / (this.state.maxhv + 1)
+        })
       })
     }
 
