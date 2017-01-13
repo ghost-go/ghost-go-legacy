@@ -32,12 +32,16 @@ function buildFetchData(name = '', api = '') {
   }
 }
 
-export const fetchKifus = buildFetchData('KIFUS', 'v1/kifus')
-export const fetchPuzzles = buildFetchData('PUZZLES', 'v1/puzzles')
-export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', 'v1/puzzle_records')
+export const fetchKifus = buildFetchData('KIFUS', `${config.API_VERSION}/kifus`)
+export const fetchPuzzles = buildFetchData('PUZZLES', `${config.API_VERSION}/puzzles`)
+export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', `${config.API_VERSION}/puzzle_records`)
+export const fetchPractices = buildFetchData('PRACTICES', `${config.API_VERSION}/practices`)
+export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', `${config.API_VERSION}/practice_templates`)
 
-export const fetchKifu = buildFetchData('KIFU', 'v1/kifus/#{id}')
-export const fetchPuzzle = buildFetchData('PUZZLE', 'v1/puzzles/#{id}')
-export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', 'v1/puzzles/next')
+export const fetchKifu = buildFetchData('KIFU', `${config.API_VERSION}/kifus/#{id}`)
+export const fetchPuzzle = buildFetchData('PUZZLE', `${config.API_VERSION}/puzzles/#{id}`)
+export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', `${config.API_VERSION}/puzzles/next`)
 
-export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', 'v1/players/top')
+export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', `${config.API_VERSION}/players/top`)
+export const fetchPractice = buildFetchData('PRACTICE', `${config.API_VERSION}/practices/#{id}`)
+export const fetchPracticeTemplate = buildFetchData('PRACTICE_TEMPLATE', `${config.API_VERSION}/practice_templates/#{id}`)

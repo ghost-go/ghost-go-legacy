@@ -10,7 +10,13 @@ import { puzzles,
   puzzle,
   puzzleNext,
   practice,
+  practices,
+  practicePuzzleId,
+  practiceRecord,
+  practiceTemplate,
+  practiceTemplates,
   rating,
+  puzzleRecord,
   puzzleRecords,
   kifus,
   kifu,
@@ -26,7 +32,6 @@ import Kifus from './pages/Kifus'
 import Kifu from './pages/Kifu'
 import Practices from './pages/Practices'
 import Practice from './pages/Practice'
-import Login from './pages/Login'
 import User from './pages/User'
 import Container from './pages/Container'
 import History from './pages/History'
@@ -55,18 +60,22 @@ const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 const historyMiddleware = routerMiddleware(browserHistory)
 const reducer = combineReducers({
   // ... add your own reducers here
-  kifus,
-  kifu,
-  puzzles,
-  puzzle,
+  kifus, kifu,
+  puzzles, puzzle,
   practice,
+  practices,
+  practiceRecord,
+  practiceTemplate,
+  practiceTemplates,
   rating,
+  puzzleRecord,
   puzzleRecords,
   puzzleFilter,
   kifuFilter,
   rangeFilter,
   players: topPlayers,
   routing: routerReducer,
+  practicePuzzleId,
 })
 
 const createStoreWithMiddleware = applyMiddleware(
@@ -105,6 +114,7 @@ ReactDOM.render(
           <Route path="/puzzles/:id" component={Puzzle}  />
           <Route path="/practices" component={Practices}  />
           <Route path="/practices/:id" component={Practice} />
+          <Route path="/practice_records/:id" component={Practice} />
           <Route path="/users" component={User} />
           <Route path="/History" component={History} />
         </Route>

@@ -1,17 +1,15 @@
 import React, { Component, PropTypes } from 'react'
-import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router'
+import {blue500, red500, greenA200} from 'material-ui/styles/colors';
 
 import IconMenu from 'material-ui/IconMenu'
-import MenuItem from 'material-ui/MenuItem'
-import IconButton from 'material-ui/IconButton'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import {List, ListItem} from 'material-ui/List'
 import HistoryIcon from 'material-ui/svg-icons/action/history'
 import ExitToApp from 'material-ui/svg-icons/action/exit-to-app'
 import Divider from 'material-ui/Divider'
-import ActionInfo from 'material-ui/svg-icons/action/info'
 import AccountCircle from 'material-ui/svg-icons/action/account-circle'
+import KeyBoardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
+
 
 import AuthService from '../utils/AuthService'
 
@@ -57,38 +55,41 @@ export default class Navigation extends Component {
     }
     else {
       loginSection =
-        <div className='nav-sign'>
-          <div className="nav-footer-wrap nav-signup">
-            <img style={{height: '40px', marginTop: '5px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
-            <a href="javascript:void(0)">{this.state.profile.nickname}</a>
-            <span style={{color: 'rgb(0, 188, 212)', fontSize: '12px', position: 'absolute', top: '0px', right: '5px'}}>New Feature</span>
+          <div className='nav-sign'>
+            <div className="nav-footer-wrap nav-signup">
+              <img style={{height: '30px', marginTop: '10px', float: 'left'}} alt="avatar" src={this.state.profile.picture}/>
+              <KeyBoardArrowDown className="arrow" style={{height: '50px'}} hoverColor={blue500} />
+            </div>
           </div>
-        </div>
 
       loginList =
         <List>
-          {
-          //<Link to={'/users'}>
-            //<ListItem primaryText="Profile" leftIcon={<AccountCircle />} />
-          //</Link>
-          }
+          <Link to={'/users'}>
+            {`Signed in as ${this.state.profile.nickname}`}
+          </Link>
+          <Divider />
+          <Link to={'/users'}>
+            <ListItem primaryText="Your profile" leftIcon={<AccountCircle />} />
+          </Link>
+          <Link to={'/users'}>
+            <ListItem primaryText="Your practices" leftIcon={<AccountCircle />} />
+          </Link>
           <Link to={'/history'}>
-            <ListItem primaryText="History" leftIcon={<HistoryIcon />} />
+            <ListItem primaryText="puzzle History" leftIcon={<HistoryIcon />} />
           </Link>
           <Divider />
           <Link onClick={this.logout.bind(this)} to=''>
+            <ListItem primaryText="Settings" leftIcon={<HistoryIcon />} />
             <ListItem primaryText="Log Out" leftIcon={<ExitToApp />} />
           </Link>
         </List>
-
     }
-
 
     return (
       <div className="nav-container">
         <header className="nav-header">
           <a href="/" className="logo">
-            <span style={{float: 'left', marginLeft: '103px', marginTop: '20px'}}>--alpha</span>
+            <span style={{float: 'left', marginLeft: '103px', marginTop: '20px'}}>--beta</span>
           </a>
         </header>
 
@@ -100,14 +101,14 @@ export default class Navigation extends Component {
                 //id='app.nav.menu.puzzles'
                 //defaultMessage="Puzzles Library"
                 ///>
-                //<Link to="/practices" activeClassName="active">
-                //Tsumego Practices
-                //</Link>
               }
               Tsumego Library
             </Link>
             <Link to="/kifus" activeClassName="active">
               Kifu Library
+            </Link>
+            <Link to="/practices" activeClassName="active">
+              Tsumego Practices
             </Link>
           </div>
         </section>

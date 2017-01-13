@@ -4,11 +4,12 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { push } from 'react-router-redux'
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet'
 //import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
+import PuzzlePanel from '../presentations/PuzzlePanel'
 import SVGIcon from '../presentations/SVGIcon'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -18,7 +19,7 @@ import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord, postRating } from '../actions/PostActions'
-import { setRangeFilter } from '../actions/FilterActions'
+import { setRangeFilter } from '../actions/Actions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -113,34 +114,11 @@ class Puzzle extends Component {
 
   handleNext() {
     let range = this.props.rangeFilter.start + '-' + this.props.rangeFilter.end
-    this.props.dispatch(fetchPuzzleNext({range: range}))
-    let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
-    this.props.dispatch(push(nextUrl))
-    this.refs.board.handleTipsReset()
-  }
-
-  handleRatingChange(rate) {
-    const { auth } = this.props
-    let profile = auth.getProfile()
-    if (auth.loggedIn()) {
-      let { id } = this.props.params
-      this.props.dispatch(postRating({
-        ratable_id: id,
-        ratable_type: 'Puzzle',
-        score: rate,
-        user_id: profile.user_id
-      })).then((promise) => {
-        if (promise.type === 'POST_RATING_SUCCESS') {
-          this.setState({
-            open: true,
-            score: rate,
-            ratingInfo: promise.payload.data.message || 'Thanks for you rating!'
-          })
-        }
-      })
-    } else {
-      auth.login()
-    }
+    this.props.dispatch(fetchPuzzleNext({range: range})).then(() => {
+      let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
+      this.props.dispatch(push(nextUrl))
+      this.handleReset()
+    })
   }
 
   handleRangeChange(range) {
@@ -166,18 +144,16 @@ class Puzzle extends Component {
 
   render() {
     const { puzzle } = this.props
-    if (puzzle['data'] === undefined) return null
+    if (puzzle === undefined || puzzle['data'] === undefined) return null
     const { auth } = this.props
     let rightAnswers = []
     let wrongAnswers = []
-    let answers = []
     if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
-      answers = puzzle.data.right_answers + puzzle.data.wrong_answers
       puzzle.data.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
       puzzle.data.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
       })
     }
 
@@ -217,85 +193,26 @@ class Puzzle extends Component {
           ///>
         }
         <div className={css(styles.puzzleContainer)}>
-          <div className={css(styles.puzzleBoard)}>
+          <Paper className={css(styles.puzzleBoard)}>
             <PuzzleBoard researchMode={this.state.researchMode} className="board"
               whofirst={puzzle.data.whofirst}
               puzzle={puzzle.data.steps}
-              right_answers={puzzle.data.right_answers}
-              wrong_answers={puzzle.data.wrong_answers}
+              rightAnswers={puzzle.data.right_answers}
+              wrongAnswers={puzzle.data.wrong_answers}
               answers={puzzle.data.answers}
               handleRight={this.handleRightTipOpen}
               handleWrong={this.handleWrongTipOpen}
               ref="board" />
-          </div>
+          </Paper>
         </div>
         <div className={css(styles.puzzleInfo)}>
-          <Card>
-            <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.rank}`} />
-            <CardText>
-              <div>
-                <strong>Number: </strong>
-                {`P-${puzzle.data.id}`}
-              </div>
-            </CardText>
-            <CardActions style={{padding: '14px'}}>
-              <Rating initialRate={parseFloat(puzzle.data.score)} onChange={this.handleRatingChange.bind(this)}
-                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
-                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
-              />
-            </CardActions>
-            <CardActions style={{padding: '14px'}}>
-              <RaisedButton
-                onClick={this.handleReset}
-                label="Reset"
-                primary={true}
-              />
-              <RaisedButton
-                onClick={this.handleNext.bind(this)}
-                label="Next Tsumego"
-                secondary={true}
-              />
-              <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
-            </CardActions>
-            <CardActions>
-              <div className="addthis_inline_share_toolbox"></div>
-              <CardText>
-                <Toggle
-                  className={css(styles.toggle)}
-                  label="Research Mode"
-                  onToggle={this.handleResearchMode}
-                />
-              </CardText>
-            </CardActions>
-            {
-              //<CardText>
-                //<Toggle
-                  //toggled={this.state.answersExpanded}
-                  //className={css(styles.toggle)}
-                  //label="Answers"
-                  //onToggle={this.handleAnswersToggle}
-                ///>
-              //</CardText>
-            }
-            <div className={css(styles.answersContainer)}>
-              <CardText style={{padding: 0}} expandable={!this.state.answersExpanded}>
-                <CardHeader
-                  title="Right Answers"
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                {rightAnswers}
-                <CardHeader
-                  title="Wrong Answers"
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                {wrongAnswers}
-              </CardText>
-            </div>
-          </Card>
-          <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
-          </Drawer>
+          <PuzzlePanel
+            puzzle={this.props.puzzle.data}
+            handleRangeChange={this.handleRangeChange}
+            handleNext={this.handleNext}
+            rangeFilter={this.props.rangeFilter}
+            handleReset={::this.handleReset}
+          />
         </div>
       </div>
     )
@@ -321,19 +238,14 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
 
-  answersContainer: {
-    padding: '16px 0px',
-    '@media screen and (max-aspect-ratio: 4/3)': {
-      padding: '0px'
-    },
-  },
-
   puzzleBoard: {
     margin: '0 10px 0 10px',
+    flex: '1 1 auto',
+    width: 'calc(100vmin)',
+    height: 'calc(100vmin)',
     '@media (max-width: 992px)': {
       margin: '10px 0 10px 0',
     },
-    flex: 'auto',
   },
 
   puzzleInfo: {

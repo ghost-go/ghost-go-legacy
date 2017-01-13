@@ -1,118 +1,121 @@
-import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
-import { LETTERS, LETTERS_SGF, NUMBERS } from '../constants/Go'
+import React, {Component, PropTypes} from 'react'
+import _ from 'lodash'
+import { LETTERS_SGF } from '../constants/Go'
 import Piece from '../components/piece'
 import Sgf from '../components/sgf'
 import Cross from '../components/cross'
 
-import Paper from 'material-ui/Paper'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-
 import { StyleSheet, css } from 'aphrodite'
 
 export default class PuzzleBoard extends Component {
+
+  static propTypes = {
+    size: PropTypes.number.isRequired,
+    puzzle: PropTypes.string.isRequired,
+    whofirst: PropTypes.string.isRequired,
+    researchMode: PropTypes.bool.isRequired,
+    rightAnswers: PropTypes.array.isRequired,
+    wrongAnswers: PropTypes.array.isRequired,
+    handleRight: PropTypes.func.isRequired,
+    handleWrong: PropTypes.func.isRequired,
+    afterClickEvent: PropTypes.func
+  }
+
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = {
       grid: 19,
       sgf: new Sgf({}),
-      size: this.props.size,
+      size: 0,
       horizontal: 19,
       verical: 19,
       autofit: true,
       direction: 0,
       revert: false,
       dotSize: 3,
-      _puzzleArray: [],
+      puzzleArray: _.chunk(new Array(361).fill(0), 19),
       currentKi: 0,
       step: 0,
       steps: [],
       expandH: 5,
       expandV: 5,
-      previewImg: '',
       isRatio1: true,
       rightTipOpen: false,
       wrongTipOpen: false,
     }
-    this.clearKifuArray()
-    this.state.minhv = this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical
-    this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
-    this.state.maxhv = this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+    this.setState({
+      minhv: this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical,
+      maxhv: this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
+    })
     this.reset = this.reset.bind(this)
     this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
   }
 
   handleRightTipOpen() {
-    this.setState({
-      rightTipOpen: true,
-      wrongTipOpen: false,
-    }, () => {
-      this.forceUpdate()
-    })
+    this.setState({ rightTipOpen: true, wrongTipOpen: false })
   }
 
   handleWrongTipOpen() {
-    this.setState({
-      wrongTipOpen: true,
-      rightTipOpen: false,
-    }, () => {
-      this.forceUpdate()
-    })
+    this.setState({ wrongTipOpen: true, rightTipOpen: false })
   }
 
   handleTipsReset() {
-    this.setState({
-      wrongTipOpen: false,
-      rightTipOpen: false,
-    }, () => {
-      this.forceUpdate()
-    })
+    this.setState({ wrongTipOpen: false, rightTipOpen: false })
   }
 
   move(x, y, ki, isMarked) {
-    if (this.canMove(x, y, ki)) {
-      this.state._puzzleArray[x][y] = ki
-      this._drawPiece(x, y, ki, isMarked)
-      this._execPonnuki(x, y, -ki)
-      if (this.state.currentKi != 0) {
-        this.state.currentKi = -this.state.currentKi
-      }
-      this.drawBoard()
+    if (this.canMove(this.state.puzzleArray, x, y, ki)) {
+      let array = this.state.puzzleArray.slice()
+      array[x][y] = ki
+      this.setState({
+        puzzleArray: array
+      }, () => {
+        if (this.state.currentKi != 0) {
+          this.setState({
+            currentKi: -this.state.currentKi
+          })
+        }
+        this._drawPiece(x, y, ki, isMarked)
+        this.setState({
+          puzzleArray: this.execPonnuki(array, x, y, -ki)
+        }, () => {
+          this.drawBoard()
+        })
+      })
       return true
     }
     return false
   }
 
   reset() {
+    this.initPuzzleArray()
     this.setState({
       step: 0,
       steps: []
     }, () => {
-      this.initPuzzleArray()
       this.drawBoard()
     })
   }
 
-  clearKifuArray() {
-    this.state._puzzleArray = []
-    while(this.state._puzzleArray.push(new Array(19).fill(0)) < 19) { }
-  }
-
   initPuzzleArray() {
-    console.log(this.props)
-    this.clearKifuArray()
-    const steps = this.props.puzzle.split(';')
-    let newArray = this.state._puzzleArray.slice()
-    steps.forEach((str) => {
-      const ki = str[0] === 'B' ? 1 : -1
-      const pos = /\[(.*)\]/.exec(str)[1]
-      const x = LETTERS_SGF.indexOf(pos[0])
-      const y = LETTERS_SGF.indexOf(pos[1])
-      newArray[x][y] = ki
-    })
-    this.setState({
-      currentKi: this.props.whofirst == 'Black First' ? 1 : -1,
-      _puzzleArray: newArray
+    this.setState({puzzleArray: _.chunk(new Array(361).fill(0), 19)}, () => {
+      const steps = this.props.puzzle.split(';')
+      let newArray = this.state.puzzleArray.slice()
+      steps.forEach((str) => {
+        const ki = str[0] === 'B' ? 1 : -1
+        const pos = /\[(.*)\]/.exec(str)[1]
+        const x = LETTERS_SGF.indexOf(pos[0])
+        const y = LETTERS_SGF.indexOf(pos[1])
+        newArray[x][y] = ki
+      })
+      this.setState({
+        currentKi: this.props.whofirst == 'Black First' ? 1 : -1,
+        puzzleArray: newArray
+      })
     })
   }
 
@@ -120,9 +123,9 @@ export default class PuzzleBoard extends Component {
     this._boardCtx.beginPath()
 
     if (this.state.revert && this.state.puzzle != null) {
-      this.state.puzzle = this.state.puzzle.replace(/B/g, 'X')
-      this.state.puzzle = this.state.puzzle.replace(/W/g, 'B')
-      this.state.puzzle = this.state.puzzle.replace(/X/g, 'W')
+      this.setState({
+        puzzle: this.state.puzzle.replace(/B/g, 'X').replace(/W/g, 'B').replace(/X/g, 'W')
+      })
     }
 
     if (this.state.autofit) {
@@ -130,109 +133,105 @@ export default class PuzzleBoard extends Component {
     }
 
     let size = this.state.size
-    let grid = this.state.grid
 
     switch (this.state.direction) {
-      case 1:
-        for (let i = 1;i <= this.state.horizontal; i++) {
-          this._boardCtx.moveTo(i * size, size)
-          this._boardCtx.lineTo(i * size, this.state.verical * size)
-        }
-        for (let i = 1;i <= this.state.verical; i++) {
-          this._boardCtx.moveTo(size, i * size)
-          this._boardCtx.lineTo(this.state.horizontal * size, i * size)
-        }
-        break
-      case 2:
-        for (let i = 1;i <= this.state.horizontal; i++) {
-          this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
-          this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verical * size)
-        }
-        for (let i = 1;i <= this.state.verical; i++) {
-          this._boardCtx.moveTo(this.state.maxhv * size, i * size)
-          this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
-        }
-        break
-      case 3:
-        for (let i = 1;i <= this.state.horizontal; i++) {
-          this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verical + 1) * size)
-          this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.maxhv * size)
-        }
-        for (let i = 1;i <= this.state.verical; i++) {
-          this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verical + i) * size)
-          this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verical + i) * size)
-        }
-        break
-      case 4:
-        for (let i = 1;i <= this.state.horizontal; i++) {
-          this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verical + 1) * size)
-          this._boardCtx.lineTo(i * size, this.state.maxhv * size)
-        }
-        for (let i = 1;i <= this.state.verical; i++) {
-          this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verical + i) * size)
-          this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verical + i) * size)
-        }
-        break
+    case 1:
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo(i * size, size)
+        this._boardCtx.lineTo(i * size, this.state.verical * size)
+      }
+      for (let i = 1;i <= this.state.verical; i++) {
+        this._boardCtx.moveTo(size, i * size)
+        this._boardCtx.lineTo(this.state.horizontal * size, i * size)
+      }
+      break
+    case 2:
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, size)
+        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.verical * size)
+      }
+      for (let i = 1;i <= this.state.verical; i++) {
+        this._boardCtx.moveTo(this.state.maxhv * size, i * size)
+        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, i * size)
+      }
+      break
+    case 3:
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo((this.state.maxhv - i + 1) * size, (this.state.maxhv - this.state.verical + 1) * size)
+        this._boardCtx.lineTo((this.state.maxhv - i + 1) * size, this.state.maxhv * size)
+      }
+      for (let i = 1;i <= this.state.verical; i++) {
+        this._boardCtx.moveTo(this.state.maxhv * size, (this.state.maxhv - this.state.verical + i) * size)
+        this._boardCtx.lineTo((this.state.maxhv - this.state.horizontal + 1) * size, (this.state.maxhv - this.state.verical + i) * size)
+      }
+      break
+    case 4:
+      for (let i = 1;i <= this.state.horizontal; i++) {
+        this._boardCtx.moveTo(i * size, (this.state.maxhv - this.state.verical + 1) * size)
+        this._boardCtx.lineTo(i * size, this.state.maxhv * size)
+      }
+      for (let i = 1;i <= this.state.verical; i++) {
+        this._boardCtx.moveTo(size, (this.state.maxhv - this.state.verical + i) * size)
+        this._boardCtx.lineTo(this.state.horizontal * size, (this.state.maxhv - this.state.verical + i) * size)
+      }
+      break
     }
     this._boardCtx.stroke()
 
     ;[4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
         switch (this.state.direction) {
-          case 1:
-            if (i < this.state.horizontal && j < this.state.verical) {
-              this._boardCtx.beginPath()
-              this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
-              this._boardCtx.fill()
-            }
-            break
-          case 2:
-            if (i < this.state.horizontal && j < this.state.verical) {
-              this._boardCtx.beginPath()
-              this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * j, this.state.dotSize, 0, 2 * Math.PI, true)
-              this._boardCtx.fill()
-            }
-            break
-          case 3:
-            if (i < this.state.horizontal && j < this.state.verical) {
-              this._boardCtx.beginPath()
-              this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
-              this._boardCtx.fill()
-            }
-            break
-          case 4:
-            if (i < this.state.horizontal && j < this.state.verical) {
-              this._boardCtx.beginPath()
-              this._boardCtx.arc(size * i, size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
-              this._boardCtx.fill()
-            }
-            break
+        case 1:
+          if (i < this.state.horizontal && j < this.state.verical) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * i, size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        case 2:
+          if (i < this.state.horizontal && j < this.state.verical) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * j, this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        case 3:
+          if (i < this.state.horizontal && j < this.state.verical) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * (this.state.maxhv - i + 1), size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
+        case 4:
+          if (i < this.state.horizontal && j < this.state.verical) {
+            this._boardCtx.beginPath()
+            this._boardCtx.arc(size * i, size * (this.state.maxhv - j + 1), this.state.dotSize, 0, 2 * Math.PI, true)
+            this._boardCtx.fill()
+          }
+          break
         }
       })
     })
   }
 
-  canMove(i, j, ki) {
-    if (this.state._puzzleArray[i][j] != 0) {
+  canMove(array, i, j, ki) {
+    array = _.clone(array)
+    if (array[i][j] != 0) {
       return false
     }
 
-    this.state._puzzleArray[i][j] = ki
-    let {liberty, recursionPath} = this.calcLiberty(i, j, ki)
+    array[i][j] = ki
+    let { liberty } = this.calcLiberty(i, j, ki)
     if (this.canPonnuki(i, j, -ki)) {
-      this.state._puzzleArray[i][j] = 0
       return true
     }
     if (this.canPonnuki(i, j, ki)) {
-      this.state._puzzleArray[i][j] = 0
       return false
     }
     if (liberty === 0) {
-      this.state._puzzleArray[i][j] = 0
       console.log('This place has been used')
       return false
     }
-    this.state._puzzleArray[i][j] = 0
     return true
   }
 
@@ -247,7 +246,7 @@ export default class PuzzleBoard extends Component {
       }
     }
 
-    if (this.state._puzzleArray[x][y] == 0) {
+    if (this.state.puzzleArray[x][y] == 0) {
       return {
         liberty: 4,
         recursionPath: []
@@ -291,61 +290,39 @@ export default class PuzzleBoard extends Component {
 
   render() {
     return (
-      <Paper>
-        <input id="puzzle-img" type="hidden" value={this.state.previewImg} />
-        <div className={css(styles.board)} ref="board">
-            {
-              this.state.rightTipOpen ?
-                <div ref="tipRight" className={css(styles.tipRight)}>
-                  <i className="zmdi zmdi-check"></i>
-                </div>
-              : null
-            }
-            {
-              this.state.wrongTipOpen ?
-                <div ref="tipWrong" className={css(styles.tipWrong)}>
-                  <i className="zmdi zmdi-close"></i>
-                </div>
-                  : null
-            }
-          <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
-          <canvas id="cross_layer" className={css(styles.boardCanvas)} ref={(ref) => this.crossLayer = ref }></canvas>
-          <canvas id="piece_layer" className={css(styles.boardCanvas)} ref={(ref) => this.pieceLayer = ref }></canvas>
-          <canvas id="top_layer" className={css(styles.boardCanvas)} ref={(ref) => this.topLayer = ref }></canvas>
-        </div>
-      </Paper>
+      <div className={css(styles.board)} ref="board">
+          {
+            this.state.rightTipOpen ?
+              <div ref="tipRight" className={css(styles.tipRight)}>
+                <i className="zmdi zmdi-check"></i>
+              </div>
+            : null
+          }
+          {
+            this.state.wrongTipOpen ?
+              <div ref="tipWrong" className={css(styles.tipWrong)}>
+                <i className="zmdi zmdi-close"></i>
+              </div>
+                : null
+          }
+        <canvas id="board_layer" className={css(styles.boardCanvas)} ref={(ref) => this.boardLayer = ref }></canvas>
+        <canvas id="cross_layer" className={css(styles.boardCanvas)} ref={(ref) => this.crossLayer = ref }></canvas>
+        <canvas id="piece_layer" className={css(styles.boardCanvas)} ref={(ref) => this.pieceLayer = ref }></canvas>
+        <canvas id="top_layer" className={css(styles.boardCanvas)} ref={(ref) => this.topLayer = ref }></canvas>
+      </div>
     )
   }
 
-  //TODO: this function need to be refactored
-  getBoardWidth() {
-    let boardWidth = 0
-    if (screen.width > screen.height) {
-      if (screen.height / screen.width >= 0.75) {
-        boardWidth = window.innerHeight - 60
-      }
-      else {
-        boardWidth = (window.innerHeight - 60) * 1.2
-      }
-    } else {
-      boardWidth = window.innerWidth
-    }
-    if (boardWidth < 0) {
-      boardWidth = 400 //set a default value to pass the test
-    }
-    return boardWidth
-  }
-
-  response(x, y, ki) {
+  response() {
     if (this.props.researchMode) return
     let rights = []
     let wrongs = []
-    this.props.right_answers.forEach((i) => {
+    this.props.rightAnswers.forEach((i) => {
       if (i.steps.indexOf(this.state.steps.join(';')) == 0) {
         rights.push(i)
       }
     })
-    this.props.wrong_answers.forEach((i) => {
+    this.props.wrongAnswers.forEach((i) => {
       if (i.steps.indexOf(this.state.steps.join(';')) == 0) {
         wrongs.push(i)
       }
@@ -398,34 +375,22 @@ export default class PuzzleBoard extends Component {
 
   drawBoardWithResize() {
     //TODO: This need to be refactored
-    //The reason using setTimeout is following url
+    //The reason that using setTimeout is the following url
     //https://github.com/Khan/aphrodite/blame/master/README.md#L128
     setTimeout(() => {
-      let boardWidth = this.getBoardWidth()
-      //this.size =  boardWidth / 20
-      //this.state.size = boardWidth / 20
+
       this._boardCtx = this.boardLayer.getContext('2d')
       this._pieceCtx = this.pieceLayer.getContext('2d')
       this._crossCtx = this.crossLayer.getContext('2d')
-      this.refs.board.style.height = boardWidth + 'px'
-      this.refs.board.style.width = boardWidth + 'px'
-      this.refs.board.parentElement.style.height = boardWidth + 'px'
-      this.refs.board.parentElement.style.width = boardWidth + 'px'
 
-      this.boardLayer.width
-      = this.boardLayer.height
-      = this.pieceLayer.width
-      = this.pieceLayer.height
-      = this.crossLayer.width
-      = this.crossLayer.height
-      = this.topLayer.width
-      = this.topLayer.height
-      = boardWidth
-      this.boardLayer.style.position
-      = this.pieceLayer.style.position
-      = this.crossLayer.style.position
-      = this.topLayer.style.position
-      = 'absolute'
+      this.boardLayer.width = this.boardLayer.offsetWidth
+      this.boardLayer.height = this.boardLayer.offsetHeight
+      this.pieceLayer.width = this.pieceLayer.offsetWidth
+      this.pieceLayer.height = this.pieceLayer.offsetHeight
+      this.crossLayer.width = this.crossLayer.offsetWidth
+      this.crossLayer.height = this.crossLayer.offsetHeight
+      this.topLayer.width = this.topLayer.offsetWidth
+      this.topLayer.height = this.topLayer.offsetHeight
 
 
       var clickEventName = (function() {
@@ -447,6 +412,9 @@ export default class PuzzleBoard extends Component {
       let clickEvent = (e) => {
         e.stopPropagation()
         e.preventDefault()
+        if (this.props.afterClickEvent) {
+          this.props.afterClickEvent()
+        }
         let p = {}
         if (e.type == 'touchstart') {
           p = this._convertCtxposToPos(
@@ -456,7 +424,6 @@ export default class PuzzleBoard extends Component {
         } else {
           p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         }
-        let {x, y} = this._getOffsetPos(p.posX, p.posY)
         let hasMoved = false
         if (this._isPosInTheBoard(p.posX, p.posY)) {
           this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
@@ -465,7 +432,6 @@ export default class PuzzleBoard extends Component {
           hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
           if (hasMoved) {
             this.state.steps.push(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
-            console.log(this.state.steps)
             this.state.step ++
           }
           this.markPiece()
@@ -491,7 +457,6 @@ export default class PuzzleBoard extends Component {
     let lastStep, il, jl
     if (this.state.steps.length > 0) {
       lastStep = this.state.steps[this.state.steps.length - 1]
-      console.log(lastStep)
 
       il = LETTERS_SGF.indexOf(lastStep[2])
       jl = LETTERS_SGF.indexOf(lastStep[3])
@@ -499,10 +464,11 @@ export default class PuzzleBoard extends Component {
 
     for (let i = 0; i < this.state.grid; i++) {
       for (let j = 0; j < this.state.grid; j++) {
-        const ki = this.state._puzzleArray[i][j]
+        const ki = this.state.puzzleArray[i][j]
         let {x, y} = this._getOffsetPos(i, j)
 
-        if (lastStep != null && il != null && il != null) { if (i == il && j == jl) {
+        if (lastStep != null && il != null && il != null) {
+          if (i == il && j == jl) {
             this._drawPiece(x, y, ki, true)
           } else {
             this._drawPiece(x, y, ki)
@@ -523,10 +489,6 @@ export default class PuzzleBoard extends Component {
     }
 
     this.markPiece()
-
-    this.setState({
-      previewImg: this.pieceLayer.toDataURL('image/png')
-    })
   }
 
   componentWillMount() {
@@ -543,7 +505,7 @@ export default class PuzzleBoard extends Component {
     window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.puzzle !== this.props.puzzle) {
       this.initPuzzleArray()
       this.drawBoardWithResize()
@@ -553,52 +515,48 @@ export default class PuzzleBoard extends Component {
   _convertCtxposToPos(x, y) {
     let posX, posY
     switch (this.state.direction) {
-      case 1:
-        posX = Math.round(x / this.state.size) - 1
-        posY = Math.round(y / this.state.size) - 1
-        break
-      case 2:
-        posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
-        posY = Math.round(y / this.state.size) - 1
-        break
-      case 3:
-        posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
-        posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
-        break
-      case 4:
-        posX = Math.round(x / this.state.size) - 1
-        posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
-        break
+    case 1:
+      posX = Math.round(x / this.state.size) - 1
+      posY = Math.round(y / this.state.size) - 1
+      break
+    case 2:
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+      posY = Math.round(y / this.state.size) - 1
+      break
+    case 3:
+      posX = Math.round(x / this.state.size) + (this.state.grid - this.state.maxhv) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
+      break
+    case 4:
+      posX = Math.round(x / this.state.size) - 1
+      posY = Math.round(y / this.state.size) + (this.state.grid - this.state.minhv) - 1
+      break
     }
     return {posX, posY}
   }
 
   _isPosInTheBoard(x, y) {
     switch (this.state.direction) {
-      case 1:
-        return x >= 0 &&
-          x < this.state.horizontal &&
-          y >= 0 &&
-          y < this.state.verical
-        break
-      case 2:
-        return x >= this.state.grid - this.state.horizontal && 
-          x < this.state.grid &&
-          y >= 0 &&
-          y < this.state.verical
-        break
-      case 3:
-        return x >= this.state.grid - this.state.horizontal &&
-          x < this.state.grid &&
-          y >= this.state.grid - this.state.verical &&
-          y < this.state.verical
-        break
-      case 4:
-        return x >= 0 &&
-          x < this.state.horizontal &&
-          y >= this.state.grid - this.state.verical &&
-          y < this.state.verical
-        break
+    case 1:
+      return x >= 0 &&
+        x < this.state.horizontal &&
+        y >= 0 &&
+        y < this.state.verical
+    case 2:
+      return x >= this.state.grid - this.state.horizontal && 
+        x < this.state.grid &&
+        y >= 0 &&
+        y < this.state.verical
+    case 3:
+      return x >= this.state.grid - this.state.horizontal &&
+        x < this.state.grid &&
+        y >= this.state.grid - this.state.verical &&
+        y < this.state.verical
+    case 4:
+      return x >= 0 &&
+        x < this.state.horizontal &&
+        y >= this.state.grid - this.state.verical &&
+        y < this.state.verical
     }
   }
 
@@ -617,18 +575,18 @@ export default class PuzzleBoard extends Component {
     let offsetH = 0
     let offsetV = 0
     switch(this.state.direction) {
-      case 1:
-        break
-      case 2:
-        offsetH = this.state.grid - this.state.maxhv
-        break
-      case 3:
-        offsetH = this.state.grid - this.state.maxhv
-        offsetV = this.state.grid - this.state.maxhv
-        break
-      case 4:
-        offsetV = this.state.grid - this.state.maxhv
-        break
+    case 1:
+      break
+    case 2:
+      offsetH = this.state.grid - this.state.maxhv
+      break
+    case 3:
+      offsetH = this.state.grid - this.state.maxhv
+      offsetV = this.state.grid - this.state.maxhv
+      break
+    case 4:
+      offsetV = this.state.grid - this.state.maxhv
+      break
     }
     return {
       x: x - offsetH + 1,
@@ -647,7 +605,7 @@ export default class PuzzleBoard extends Component {
     piece.draw(this._pieceCtx)
   }
 
-  _execPonnuki(i, j, ki) {
+  execPonnuki(array, i, j, ki) {
     let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki)
     let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
     let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
@@ -655,39 +613,40 @@ export default class PuzzleBoard extends Component {
     if (libertyUp === 0) {
       recursionPathUp.forEach((i) => {
         let coord = i.split(',')
-        this.state._puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
     if (libertyDown === 0) {
       recursionPathDown.forEach((i) => {
         let coord = i.split(',')
-        this.state._puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
     if (libertyLeft === 0) {
       recursionPathLeft.forEach((i) => {
         let coord = i.split(',')
-        this.state._puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
     if (libertyRight === 0) {
       recursionPathRight.forEach((i) => {
         let coord = i.split(',')
-        this.state._puzzleArray[coord[0]][coord[1]] = 0
+        array[coord[0]][coord[1]] = 0
       })
     }
+    return array
   }
 
   _calcLibertyCore(x, y, ki) {
     if (x >= 0 && x < this.state.grid && y >= 0 && y < this.state.grid) {
-      if (this.state._puzzleArray[x][y] == ki && !this._recursionPath.includes(`${x},${y}`)) {
+      if (this.state.puzzleArray[x][y] == ki && !this._recursionPath.includes(`${x},${y}`)) {
         this._recursionPath.push(`${x},${y}`)
         this._calcLibertyCore(x - 1, y, ki)
         this._calcLibertyCore(x + 1, y, ki)
         this._calcLibertyCore(x, y - 1, ki)
         this._calcLibertyCore(x, y + 1, ki)
       }
-      else if(this.state._puzzleArray[x][y] == 0) {
+      else if(this.state.puzzleArray[x][y] == 0) {
         this._liberty++
       }
     }
@@ -730,8 +689,9 @@ export default class PuzzleBoard extends Component {
             verical: this.state.maxhv,
           })
         }
-        let boardWidth = this.getBoardWidth()
-        this.state.size =  boardWidth / (this.state.maxhv + 1)
+        this.setState({
+          size: this.boardLayer.height / (this.state.maxhv + 1)
+        })
       })
     }
 
@@ -766,13 +726,21 @@ export default class PuzzleBoard extends Component {
   }
 }
 
-PuzzleBoard.childContextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-}
 
 const styles = StyleSheet.create({
+
+  boardCanvas: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
+
   board: {
+    display: 'flex',
+    justifyContent: 'center',
     position: 'relative',
+    height: '100%',
+    width: '100%',
   },
 
   tipRight: {

@@ -5,9 +5,11 @@ env:
 parser: 'babel-eslint'
 extends:
   - 'plugin:jasmine/recommended'
-  #- 'eslint:recommended'
+  - 'eslint:recommended'
+  - 'plugin:react/recommended'
 parserOptions:
   ecmaFeatures:
+    ecmaFeatures.classes: true
     experimentalObjectRestSpread: true
     jsx: true
   sourceType: module

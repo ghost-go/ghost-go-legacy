@@ -82,16 +82,39 @@ function setRangeFilter(state, action) {
   return updateObject(state, action.payload)
 }
 
+function setPracticePuzzleId(state, action) {
+  return action.payload
+}
+
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
 export const puzzle = reduceReducers(
   buildFetchReducer({}, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT')
 )
-export const practice = buildFetchReducer({}, 'PRACTICE')
-export const puzzleRecords = reduceReducers(
-  buildFetchReducer({}, 'PUZZLE_RECORDS'),
-  buildPostReducer({}, 'PUZZLE_RECORDS')
+
+export const practices = buildFetchReducer({}, 'PRACTICES')
+export const practice = reduceReducers(
+  buildFetchReducer({}, 'PRACTICE'),
+  buildPostReducer({}, 'PRACTICE')
 )
+
+export const practiceRecord = reduceReducers(
+  buildFetchReducer({}, 'PRACTICE_RECORDS'),
+  buildPostReducer({}, 'PRACTICE_RECORDS')
+)
+
+export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES')
+export const practiceTemplate = reduceReducers(
+  buildFetchReducer({}, 'PRACTICE_TEMPLATE'),
+  buildPostReducer({}, 'PRACTICE_TEMPLATE')
+)
+
+export const puzzleRecords = buildFetchReducer({}, 'PUZZLE_RECORDS')
+export const puzzleRecord = reduceReducers(
+  buildFetchReducer({}, 'PUZZLE_RECORD'),
+  buildPostReducer({}, 'PUZZLE_RECORD')
+)
+
 export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')
@@ -99,3 +122,4 @@ export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
 export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
 export const rangeFilter = createReducer({start: '18k', end: '9d'}, { 'SET_RANGE_FILTER': setRangeFilter })
 export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setKifuFilter })
+export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })

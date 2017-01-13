@@ -14,7 +14,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions'
-import { setKifuFilter } from '../actions/FilterActions'
+import { setKifuFilter } from '../actions/Actions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -85,7 +85,7 @@ class Kifus extends Component {
               className={css(styles.kifuImg)}
             >
               <Link to={`/kifus/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img.preview_img.x500.url} />
+                <img className={css(styles.previewImg)} src={i.preview_img.x500.url} />
               </Link>
             </CardMedia>
             <CardActions className={css(styles.kifuIntro)}>

@@ -3,7 +3,7 @@ import { StyleSheet, css } from 'aphrodite'
 export default StyleSheet.create({
   mainContainer: {
     display: 'flex',
-    marginTop: '20px',
+    marginTop: '10px',
     backgroundColor: '#fff',
     padding: '20px',
   },

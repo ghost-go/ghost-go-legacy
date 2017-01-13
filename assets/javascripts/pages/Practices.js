@@ -1,100 +1,306 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-
-//material-ui
+import { push } from 'react-router-redux'
 import { Link } from 'react-router'
 
 import mainStyles from '../styles/main'
-import { fetchPuzzles } from '../actions/FetchActions'
+import { fetchPracticeTemplates, fetchPractices } from '../actions/FetchActions'
+import { postPractice, postPracticeTemplate } from '../actions/PostActions'
 
-//external component
+//material-ui
 import { StyleSheet, css } from 'aphrodite'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import Dialog from 'material-ui/Dialog'
+import Divider from 'material-ui/Divider'
+
+import RankRange from '../presentations/RankRange'
 
 class Practices extends Component {
 
   state = {
-
+    templateOpen: false,
+    practiceOpen: false,
+    life: 2,
+    time: 10,
+    templateName: 'TEMPLATE NAME 1',
+    template_id: null,
+    puzzleCount: 10,
+    rankRange: '18k-10k',
   }
 
   constructor(props) {
     super(props)
-    this.props.dispatch(fetchPuzzles({
-      page: 1,
-      rank: '18k-10k'
-    }))
+    this.props.dispatch(fetchPracticeTemplates({ page: 1 }))
+    this.props.dispatch(fetchPractices({ page: 1 }))
   }
 
-  buildPractice(aaa) {
-    console.log(aaa)
+  handleTemplateOpen() {
+    this.setState({templateOpen: true})
+  }
+
+  handleTemplateClose() {
+    this.setState({templateOpen: false})
+  }
+
+  handlePractice(id) {
+    let url = `/practices/${id}`
+    this.props.dispatch(push(url))
+  }
+
+  handlePracticeOpen(id) {
+    let template = _.find(this.props.templates.data, {id})
+    this.setState({
+      life: template.life,
+      time: template.time,
+      template_id: template.id,
+      templateName: template.name,
+      puzzleCount: template.puzzle_count,
+      rankRange: template.rank_range,
+      practiceOpen: true
+    })
+  }
+
+  handlePracticeClose() {
+    this.setState({practiceOpen: false})
+  }
+
+  handleCreatePracticeTemplate() {
+    this.setState({templateOpen: true})
+  }
+
+  handleCreatePractice() {
+    this.setState({practiceOpen: true})
+  }
+
+  handlePostPracticeTemplate() {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+
+    this.props.dispatch(postPracticeTemplate({
+      name: this.state.templateName,
+      template_type: 'approved',
+      user_id: profile.user_id,
+      life: this.state.life,
+      time: this.state.time,
+      puzzle_count: this.state.puzzleCount,
+      rank_range: this.state.rankRange,
+    })).then(() => {
+      this.handleTemplateClose()
+      this.props.dispatch(fetchPracticeTemplates({ page: 1 }))
+    })
+  }
+
+  handlePostPractice() {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+
+    this.props.dispatch(postPractice({
+      name: this.state.templateName,
+      practice_type: 'approved',
+      user_id: profile.user_id,
+      practice_template_id: this.state.template_id,
+      life: this.state.life,
+      time: this.state.time,
+      puzzle_count: this.state.puzzleCount,
+      rank_range: this.state.rankRange,
+    })).then(() => {
+      let nextUrl = `/practices/${this.props.practice.data.id}`
+      this.props.dispatch(push(nextUrl))
+    })
+  }
+
+  handleRangeChange(range) {
+    this.props.dispatch(setRangeFilter(range))
+  }
+
+  handlePuzzleCountChange(e) {
+    this.setState({ puzzleCount: e.target.value })
+  }
+
+  handleTemplateNameChange(e) {
+    this.setState({ templateName: e.target.value })
+  }
+
+  handleLifeCountChange(e) {
+    this.setState({ life: e.target.value })
+  }
+
+  handleTimeChange(e) {
+    this.setState({ time: e.target.value })
   }
 
   render() {
+    const templateActions = [
+      <FlatButton
+        onTouchTap={::this.handleTemplateClose}
+        primary={true}
+        label="Cancel"
+      />,
+      <FlatButton
+        onTouchTap={::this.handlePostPracticeTemplate}
+        primary={true}
+        keyboardFocused={true}
+        label="Create"
+      />,
+    ]
+    const practiceActions = [
+      <FlatButton
+        onTouchTap={::this.handlePracticeClose}
+        primary={true}
+        label="Cancel"
+      />,
+      <FlatButton
+        onTouchTap={::this.handlePostPractice}
+        primary={true}
+        keyboardFocused={true}
+        label="Create"
+      />,
+    ]
+    let templateList = []
+    let practiceList = []
+    if (this.props.templates.data !== undefined && this.props.templates.data !== null) {
+      this.props.templates.data.forEach((i) => {
+        templateList.push(
+          <Card key={i.id} className={css(styles.card)}
+            onClick={this.handlePracticeOpen.bind(this, i.id)}
+          >
+            <CardMedia className={css(mainStyles.mainImg)} >
+            </CardMedia>
+            <CardActions>
+              <h2>{i.name}</h2>
+              <span>Rank Range: {i.rank_range}</span>
+              <br />
+              <span>Life: {i.life}</span>
+              <br />
+              <span>Time: {i.time}</span>
+              <br />
+              <span>Puzzle Count: {i.puzzle_count}</span>
+            </CardActions>
+          </Card>
+        )
+      })
+    }
+    if (this.props.practices.data !== undefined && this.props.practices.data !== null) {
+      this.props.practices.data.forEach((i) => {
+        practiceList.push(
+          <Card key={i.id} className={css(styles.card)}
+            onClick={this.handlePractice.bind(this, i.id)}
+          >
+            <CardMedia className={css(mainStyles.mainImg)} >
+            </CardMedia>
+            <CardActions>
+              <h2>{i.name}</h2>
+              <span>Rank Range: {i.rank_range}</span>
+              <br />
+              <span>Life: {i.life}</span>
+              <br />
+              <span>Time: {i.time}</span>
+              <br />
+              <span>Puzzle Count: {i.puzzle_count}</span>
+            </CardActions>
+          </Card>
+        )
+      })
+    }
     return (
-      <div className={css(mainStyles.mainContainer)}>
-        <Card
-          key={'lv-1'} className={css(styles.card)}
-          onClick={this.buildPractice.bind(this, {rank: '18k-10k'})}
+      <div className={css(mainStyles.mainContainer, styles.column)}>
+        <div>
+          <h2>Practice Template</h2>
+          <div className={css(styles.cardContainer)}>
+            { templateList }
+          </div>
+          <RaisedButton
+            onTouchTap={::this.handleCreatePracticeTemplate}
+            label="Create Practice Template"
+            secondary={true}
+          />
+        </div>
+        <Divider />
+        <div>
+          <h2>Recent Practice</h2>
+          <div className={css(styles.cardContainer)}>
+            { practiceList }
+          </div>
+        </div>
+        <Dialog
+          title="Create Practice Template"
+          actions={templateActions}
+          modal={false}
+          open={this.state.templateOpen}
+          onRequestClose={::this.handleTemplateClose}
+          autoScrollBodyContent={true}
         >
-          <CardMedia className={css(mainStyles.mainImg)} >
-          </CardMedia>
-          <CardActions>
-            <h1>Level 1</h1>
-            <span>18k - 10k</span>
-          </CardActions>
-        </Card>
-        <Card
-          key={'lv-2'} className={css(styles.card)}
-          onClick={this.buildPractice.bind(this, {rank: '10k-5k'})}
+          <TextField
+            onChange={::this.handleTemplateNameChange}
+            defaultValue="TEMPLATE NAME 1"
+            hintText="TEMPLATE NAME"
+            floatingLabelText="TEMPLATE NAME"
+          />
+          <br />
+          <TextField
+            onChange={::this.handlePuzzleCountChange}
+            defaultValue="10"
+            hintText="TSUMEGO COUNT"
+            floatingLabelText="TSUMEGO COUNT"
+          />
+          <br />
+          <TextField
+            onChange={::this.handleLifeCountChange}
+            defaultValue="1"
+            hintText="LIFE COUNT"
+            floatingLabelText="LIFE COUNT"
+          />
+          <br />
+          <TextField
+            onChange={::this.handleTimeChange}
+            defaultValue="10"
+            hintText="TIME LEFT"
+            floatingLabelText="TIME LEFT"
+          />
+          <br />
+          <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
+        </Dialog>
+        <Dialog
+          title="Create Practice"
+          actions={practiceActions}
+          modal={false}
+          open={this.state.practiceOpen}
+          onRequestClose={::this.handlePracticeClose}
+          autoScrollBodyContent={true}
         >
-          <CardMedia className={css(mainStyles.mainImg)} >
-          </CardMedia>
-          <CardActions className={css(styles.mainIntro)}>
-            <h1>Level 2</h1>
-            <span>10k - 5k</span>
-          </CardActions>
-        </Card>
-        <Card
-          key={'lv-3'} className={css(styles.card)}
-          onClick={this.buildPractice.bind(this, {rank: '7k-3k'})}
-        >
-          <CardMedia className={css(mainStyles.mainImg)} >
-          </CardMedia>
-          <CardActions>
-            <h1>Level 3</h1>
-            <span>7k - 3k</span>
-          </CardActions>
-        </Card>
-        <Card
-          key={'lv-4'} className={css(styles.card)}
-          onClick={this.buildPractice.bind(this, {rank: '5k-1k'})}
-        >
-          <CardMedia className={css(mainStyles.mainImg)} >
-          </CardMedia>
-          <CardActions>
-            <h1>Level 4</h1>
-            <span>5k - 1k</span>
-          </CardActions>
-        </Card>
-        <Card
-          key={'lv-5'} className={css(styles.card)}
-          onClick={this.buildPractice.bind(this, {rank: '3k-1d'})}
-        >
-          <CardMedia className={css(mainStyles.mainImg)} >
-          </CardMedia>
-          <CardActions>
-            <h1>Level 5</h1>
-            <span>3k - 1d</span>
-          </CardActions>
-        </Card>
-        <Card key={'lv-6'} className={css(styles.card)}>
-          <CardMedia className={css(mainStyles.mainImg)} >
-          </CardMedia>
-          <CardActions>
-            <h1>Level 6</h1>
-            <span>1d - 3d</span>
-          </CardActions>
-        </Card>
+          <TextField
+            disabled={true}
+            defaultValue={this.state.templateName}
+            hintText="BASE TEMPLATE"
+            floatingLabelText="BASE TEMPLATE NAME"
+          />
+          <br />
+          <TextField
+            onChange={::this.handlePuzzleCountChange}
+            defaultValue={this.state.puzzleCount}
+            hintText="TSUMEGO COUNT"
+            floatingLabelText="TSUMEGO COUNT"
+          />
+          <br />
+          <TextField
+            onChange={::this.handleLifeCountChange}
+            defaultValue={this.state.life}
+            hintText="LIFE COUNT"
+            floatingLabelText="LIFE COUNT"
+          />
+          <br />
+          <TextField
+            onChange={::this.handleTimeChange}
+            defaultValue={this.state.time}
+            hintText="TIME LEFT"
+            floatingLabelText="TIME LEFT"
+          />
+          <br />
+          <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
+        </Dialog>
       </div>
     )
   }
@@ -102,18 +308,35 @@ class Practices extends Component {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    flex: 'auto',
-    margin: '0px 5px 20px 5px',
+  column: {
+    flexDirection: 'column'
   },
+
+  card: {
+    width: '300px',
+    cursor: 'pointer',
+    ':hover': {
+      backgroundColor: '#eee',
+    },
+    margin: '0px 10px 20px 10px',
+  },
+
+  cardContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row'
+  }
+
 })
 
 function select(state) {
   return {
-    puzzles: state.puzzles
+    templates: state.practiceTemplates,
+    template: state.practiceTemplate,
+    practices: state.practices,
+    practice: state.practice,
+    puzzles: state.puzzles,
+    rangeFilter: state.rangeFilter
   }
 }
 

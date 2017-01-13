@@ -18,8 +18,7 @@ import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import SVGIcon from '../presentations/SVGIcon'
 import { fetchPuzzles } from '../actions/FetchActions'
-import { setPuzzleFilter, setRangeFilter } from '../actions/FilterActions'
-import RankRange from '../presentations/RankRange'
+import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -82,7 +81,7 @@ class Puzzles extends Component {
               className={css(styles.puzzleImg)}
             >
               <Link to={`/puzzles/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img_r1.preview_img_r1.x500.url} />
+                <img className={css(styles.previewImg)} src={i.preview_img_r1.x500.url} />
               </Link>
             </CardMedia>
             <CardTitle
