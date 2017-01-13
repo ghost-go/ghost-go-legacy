@@ -9,6 +9,7 @@ import Helmet from 'react-helmet'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
+import PuzzlePanel from '../presentations/PuzzlePanel'
 import SVGIcon from '../presentations/SVGIcon'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -120,30 +121,6 @@ class Puzzle extends Component {
     })
   }
 
-  handleRatingChange(rate) {
-    const { auth } = this.props
-    let profile = auth.getProfile()
-    if (auth.loggedIn()) {
-      let { id } = this.props.params
-      this.props.dispatch(postRating({
-        ratable_id: id,
-        ratable_type: 'Puzzle',
-        score: rate,
-        user_id: profile.user_id
-      })).then((promise) => {
-        if (promise.type === 'POST_RATING_SUCCESS') {
-          this.setState({
-            open: true,
-            score: rate,
-            ratingInfo: promise.payload.data.message || 'Thanks for you rating!'
-          })
-        }
-      })
-    } else {
-      auth.login()
-    }
-  }
-
   handleRangeChange(range) {
     this.props.dispatch(setRangeFilter(range))
   }
@@ -167,7 +144,7 @@ class Puzzle extends Component {
 
   render() {
     const { puzzle } = this.props
-    if (puzzle['data'] === undefined) return null
+    if (puzzle === undefined || puzzle['data'] === undefined) return null
     const { auth } = this.props
     let rightAnswers = []
     let wrongAnswers = []
@@ -191,7 +168,6 @@ class Puzzle extends Component {
       />
     ]
 
-    console.log(puzzle)
     return (
       <div className={css(styles.puzzlePage)}>
         <Dialog
@@ -232,72 +208,13 @@ class Puzzle extends Component {
           </Paper>
         </div>
         <div className={css(styles.puzzleInfo)}>
-          <Card>
-            <CardTitle title={`${puzzle.data.whofirst} ${puzzle.data.rank}`} />
-            <CardText>
-              <div>
-                <strong>Number: </strong>
-                {`P-${puzzle.data.id}`}
-              </div>
-            </CardText>
-            <CardActions style={{padding: '14px'}}>
-              <Rating initialRate={parseFloat(puzzle.data.score)} onChange={this.handleRatingChange.bind(this)}
-                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
-                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
-              />
-            </CardActions>
-            <CardActions style={{padding: '14px'}}>
-              <RaisedButton
-                onClick={this.handleReset}
-                label="Reset"
-                primary={true}
-              />
-              <RaisedButton
-                onClick={this.handleNext.bind(this)}
-                label="Next Tsumego"
-                secondary={true}
-              />
-              <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
-            </CardActions>
-            <CardActions>
-              <div className="addthis_inline_share_toolbox"></div>
-              <CardText>
-                <Toggle
-                  className={css(styles.toggle)}
-                  label="Research Mode"
-                  onToggle={this.handleResearchMode}
-                />
-              </CardText>
-            </CardActions>
-            {
-              //<CardText>
-                //<Toggle
-                  //toggled={this.state.answersExpanded}
-                  //className={css(styles.toggle)}
-                  //label="Answers"
-                  //onToggle={this.handleAnswersToggle}
-                ///>
-              //</CardText>
-            }
-            <div className={css(styles.answersContainer)}>
-              <CardText style={{padding: 0}} expandable={!this.state.answersExpanded}>
-                <CardHeader
-                  title="Right Answers"
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                {rightAnswers}
-                <CardHeader
-                  title="Wrong Answers"
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
-                {wrongAnswers}
-              </CardText>
-            </div>
-          </Card>
-          <Drawer docked={true} width={350} open={this.state.commentsOpen} openSecondary={true}>
-          </Drawer>
+          <PuzzlePanel
+            puzzle={this.props.puzzle.data}
+            handleRangeChange={this.handleRangeChange}
+            handleNext={this.handleNext}
+            rangeFilter={this.props.rangeFilter}
+            handleReset={::this.handleReset}
+          />
         </div>
       </div>
     )
@@ -321,13 +238,6 @@ const styles = StyleSheet.create({
 
   puzzleContainer: {
     display: 'flex',
-  },
-
-  answersContainer: {
-    padding: '16px 0px',
-    '@media screen and (max-aspect-ratio: 4/3)': {
-      padding: '0px'
-    },
   },
 
   puzzleBoard: {

@@ -23,7 +23,7 @@ export default class RankingList extends Component {
     return (
       <SelectField
          floatingLabelText={this.props.floatingLabelText}
-         style={this.props.inlineStyle}
+         style={{width: 80}}
          value={this.state.rank}
          onChange={this.handleChange}
       >

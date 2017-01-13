@@ -55,30 +55,15 @@ export default class PuzzleBoard extends Component {
   }
 
   handleRightTipOpen() {
-    this.setState({
-      rightTipOpen: true,
-      wrongTipOpen: false,
-    }, () => {
-      this.forceUpdate()
-    })
+    this.setState({ rightTipOpen: true, wrongTipOpen: false })
   }
 
   handleWrongTipOpen() {
-    this.setState({
-      wrongTipOpen: true,
-      rightTipOpen: false,
-    }, () => {
-      this.forceUpdate()
-    })
+    this.setState({ wrongTipOpen: true, rightTipOpen: false })
   }
 
   handleTipsReset() {
-    this.setState({
-      wrongTipOpen: false,
-      rightTipOpen: false,
-    }, () => {
-      this.forceUpdate()
-    })
+    this.setState({ wrongTipOpen: false, rightTipOpen: false })
   }
 
   move(x, y, ki, isMarked) {
@@ -103,11 +88,11 @@ export default class PuzzleBoard extends Component {
   }
 
   reset() {
+    this.initPuzzleArray()
     this.setState({
       step: 0,
       steps: []
     }, () => {
-      this.initPuzzleArray()
       this.drawBoard()
     })
   }

@@ -30,8 +30,7 @@ export default class RankRange extends Component {
     return (
       <div className={css(styles.rangeContainer)}>
         <RankList
-          floatingLabelText='RANK RANGE FROM'
-          inlineStyle={styles.customWidth}
+          floatingLabelText='FROM'
           rank={this.props.rankRange.start}
           onChange={this.handleRangeStart}
         />
@@ -51,7 +50,6 @@ export default class RankRange extends Component {
 const styles = StyleSheet.create({
 
   rangeContainer: {
-    display: 'flex',
     alignItems: 'center'
   },
 
@@ -60,6 +58,6 @@ const styles = StyleSheet.create({
   },
 
   customWidth: {
-    width: 90,
+    width: 60,
   },
 })

@@ -9,7 +9,9 @@ import { StyleSheet, css } from 'aphrodite'
 import PuzzleList from '../presentations/PuzzleList'
 import { fetchPractice } from '../actions/FetchActions'
 import { setPracticePuzzleId } from '../actions/Actions'
+import PuzzlePanel from '../presentations/PuzzlePanel'
 import PuzzleBoard from '../presentations/PuzzleBoard'
+
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
@@ -32,7 +34,7 @@ class Practice extends Component {
   }
 
   state = {
-    detailMode: false,
+    resultMode: false,
     scoreDisplay: false,
     score: 0,
     submit: false,
@@ -162,7 +164,11 @@ class Practice extends Component {
   }
 
   handleScore() {
-    this.setState({ detailMode: true })
+    clearInterval(this.state.intervalId)
+    this.setState({
+      resultMode: true,
+      scoreDisplay: false,
+    })
   }
 
   handleSubmitRecord() {
@@ -240,14 +246,14 @@ class Practice extends Component {
     ]
     const submitActions = [
       <FlatButton
+        label='No'
+        onTouchTap={::this.handleNo}
+      />,
+      <FlatButton
         label='Yes'
         primary={true}
         onTouchTap={::this.handleSubmitRecord}
       />,
-      <FlatButton
-        label='No'
-        onTouchTap={::this.handleNo}
-      />
     ]
     const scoreActions = [
       <FlatButton
@@ -260,7 +266,7 @@ class Practice extends Component {
         onTouchTap={::this.handleScore}
       />
     ]
-    let puzzleList, puzzle, puzzleBoard, whofirst, rank, favorite
+    let puzzleList, puzzle, puzzleBoard, whofirst, rank, favorite, panel
     if (this.props.practice.data !== undefined) {
       puzzle = this._getCurrentPuzzle()
       puzzleList = <PuzzleList puzzleListOnClick={::this.handleClick}
@@ -290,6 +296,53 @@ class Practice extends Component {
       for (let i = 0; i < this.props.practice.data.life - this.state.life; i++) {
         favorite.push(<FavoriteBorder key={`fav-b-${i}`} className={css(styles.favorite)} />)
       }
+    }
+    if (this.state.resultMode == true) {
+      panel =
+        <PuzzlePanel
+          className={css(styles.resultPanel)}
+          puzzle={puzzle}
+          handleRangeChange={this.handleRangeChange}
+          handleNext={this.handleNext}
+          rangeFilter={this.props.rangeFilter}
+          handleReset={::this.handleReset}
+        />
+    } else {
+      panel =
+        <Paper className={css(styles.panel)}>
+          <div>
+            <div>
+              { whofirst }
+            </div>
+            <Divider />
+            <div>
+              <div className={css(styles.title)}>Rank: </div>
+              <div className={css(styles.content)}>{ rank }</div>
+            </div>
+            <div>
+              <div className={css(styles.title)}>Life: </div>
+              { favorite }
+            </div>
+            <div>
+              <div className={css(styles.title)}>Time Left:</div>
+              <div className={css(styles.content)}>{`${ this.state.time }s`}</div>
+            </div>
+            <div>
+              <RaisedButton
+                className={css(styles.alert)}
+                onClick={::this.handlePause}
+                label="Pause"
+                primary={true}
+              />
+              <RaisedButton
+                className={css(styles.alert)}
+                onClick={::this.handleSubmit}
+                label="Submit"
+                secondary={true}
+              />
+            </div>
+          </div>
+        </Paper>
     }
     return (
       <div className={css(mainStyles.mainContainer)}>
@@ -326,38 +379,7 @@ class Practice extends Component {
         <Paper className={css(styles.board)}>
           { puzzleBoard }
         </Paper>
-        <Paper className={css(styles.panel)}>
-          <div>
-            { whofirst }
-          </div>
-          <Divider />
-          <div>
-            <div className={css(styles.title)}>Rank: </div>
-            <div className={css(styles.content)}>{ rank }</div>
-          </div>
-          <div>
-            <div className={css(styles.title)}>Life: </div>
-            { favorite }
-          </div>
-          <div>
-            <div className={css(styles.title)}>Time Left:</div>
-            <div className={css(styles.content)}>{`${ this.state.time }s`}</div>
-          </div>
-          <div>
-            <RaisedButton
-              className={css(styles.alert)}
-              onClick={::this.handlePause}
-              label="Pause"
-              primary={true}
-            />
-            <RaisedButton
-              className={css(styles.alert)}
-              onClick={::this.handleSubmit}
-              label="Submit"
-              secondary={true}
-            />
-          </div>
-        </Paper>
+        { panel }
       </div>
     )
   }
@@ -407,6 +429,10 @@ const styles = StyleSheet.create({
     marginLeft: '20px',
   },
 
+  resultPanel: {
+    marginLeft: '20px'
+  },
+
   favorite: {
     width: '30px',
     height: '30px',
@@ -433,7 +459,8 @@ const styles = StyleSheet.create({
 function select(state) {
   return {
     currentPuzzleId: state.practicePuzzleId,
-    practice: state.practice
+    practice: state.practice,
+    rangeFilter: state.rangeFilter,
   }
 }
 
