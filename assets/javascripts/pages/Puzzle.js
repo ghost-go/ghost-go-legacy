@@ -18,7 +18,13 @@ import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord, postRating } from '../actions/PostActions'
-import { setRangeFilter, addSteps, resetSteps, setCurrentAnswerId } from '../actions/Actions'
+import {
+  setCurrentMode,
+  setRangeFilter,
+  addSteps,
+  resetSteps,
+  setCurrentAnswerId
+} from '../actions/Actions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -127,6 +133,10 @@ class Puzzle extends Component {
     this.props.dispatch(addSteps(step))
   }
 
+  setCurrentMode(mode) {
+    this.props.dispatch(setCurrentMode(mode))
+  }
+
   resetSteps() {
     this.props.dispatch(resetSteps())
   }
@@ -193,13 +203,15 @@ class Puzzle extends Component {
         }
         <div className={css(styles.puzzleContainer)}>
           <Paper className={css(styles.puzzleBoard)}>
-            <PuzzleBoard researchMode={this.state.researchMode} className="board"
+            <PuzzleBoard className="board"
               steps={this.props.steps}
               addSteps={::this.addSteps}
               resetSteps={::this.resetSteps}
               puzzle={puzzle}
               handleRight={this.handleRightTipOpen}
               handleWrong={this.handleWrongTipOpen}
+              currentMode={this.props.currentMode}
+              setCurrentMode={::this.setCurrentMode}
               ref="board" />
           </Paper>
         </div>
@@ -213,6 +225,7 @@ class Puzzle extends Component {
             addSteps={::this.addSteps}
             resetSteps={::this.resetSteps}
             setCurrentAnswerId={::this.setCurrentAnswerId}
+            setCurrentMode={::this.setCurrentMode}
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
           />
@@ -290,6 +303,7 @@ function select(state) {
     rangeFilter: state.rangeFilter,
     steps: state.steps,
     currentAnswerId: state.currentAnswerId,
+    currentMode: state.currentMode,
   }
 }
 

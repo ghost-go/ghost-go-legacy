@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
 
 function updateObject(oldObject, newValues) {
-  return Object.assign({}, oldObject, newValues);
+  return Object.assign({}, oldObject, newValues)
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
@@ -97,6 +97,10 @@ export const steps = createReducer([], {
   'RESET_STEPS': function() {
     return []
   }
+})
+
+export const currentMode = createReducer('answer', {
+  'SET_CURRENT_MODE': (state, action) => { return action.payload }
 })
 
 export const currentAnswerId = createReducer(null, {

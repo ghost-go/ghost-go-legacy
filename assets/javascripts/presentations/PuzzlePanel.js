@@ -23,6 +23,7 @@ export default class PuzzlePanel extends Component {
     resetSteps: PropTypes.func,
     steps: PropTypes.array,
     setCurrentAnswerId: PropTypes.func,
+    setCurrentMode: PropTypes.func,
     currentAnswerId: PropTypes.number,
   }
 
@@ -77,6 +78,7 @@ export default class PuzzlePanel extends Component {
             answer={i.steps}
             steps={this.props.steps}
             currentAnswerId={this.props.currentAnswerId}
+            setCurrentMode={this.props.setCurrentMode}
             current={0}
             up={0}
             down={0}
@@ -94,6 +96,7 @@ export default class PuzzlePanel extends Component {
             answer={i.steps}
             steps={this.props.steps}
             currentAnswerId={this.props.currentAnswerId}
+            setCurrentMode={this.props.setCurrentMode}
             current={0}
             up={0}
             down={0}

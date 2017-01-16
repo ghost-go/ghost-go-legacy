@@ -11,12 +11,14 @@ export default class PuzzleBoard extends Component {
 
   static propTypes = {
     puzzle: PropTypes.object.isRequired,
-    researchMode: PropTypes.bool.isRequired,
+    currentMode: PropTypes.string.isRequired,
     handleRight: PropTypes.func.isRequired,
     handleWrong: PropTypes.func.isRequired,
     afterClickEvent: PropTypes.func,
     addSteps: PropTypes.func,
     resetSteps: PropTypes.func,
+    setCurrentMode: PropTypes.func,
+    steps: PropTypes.array,
   }
 
   static childContextTypes = {
@@ -59,18 +61,17 @@ export default class PuzzleBoard extends Component {
     this.setState({ wrongTipOpen: false, rightTipOpen: false })
   }
 
-  move(x, y, ki, isMarked) {
+  move(step) {
+    const x = LETTERS_SGF.indexOf(step[2])
+    const y = LETTERS_SGF.indexOf(step[3])
+    const ki = step[0] == 'B' ? 1 : -1
     if (this.canMove(this.state.puzzleArray, x, y, ki)) {
       let array = _.clone(this.state.puzzleArray)
       array[x][y] = ki
-      array = this.execPonnuki(array, x, y, -ki)
-      this.setState({ puzzleArray: array }, () => {
+      this.setState({
+        puzzleArray: this.execPonnuki(array, x, y, -ki)
+      }, () => {
         this.drawBoard()
-        //if (this.state.currentKi != 0) {
-          //this.setState({
-            //currentKi: -this.state.currentKi
-          //})
-        //}
       })
       return true
     }
@@ -98,21 +99,14 @@ export default class PuzzleBoard extends Component {
         currentKi: this.props.puzzle.data.whofirst == 'Black First' ? 1 : -1,
         puzzleArray: newArray
       }, () => {
-        if (this.props.researchMode === true) {
-          this.moveSteps(this.props.steps)
-        }
+        this.moveSteps(this.props.steps)
       })
     })
   }
 
   moveSteps(steps) {
     steps.forEach((str) => {
-      const ki = str[0] === 'B' ? 1 : -1
-      const pos = /\[(.*)\]/.exec(str)[1]
-      const x = LETTERS_SGF.indexOf(pos[0])
-      const y = LETTERS_SGF.indexOf(pos[1])
-      this.move(x, y, ki)
-      console.log(this.state.puzzleArray[18][2])
+      this.move(str)
     })
   }
 
@@ -311,7 +305,7 @@ export default class PuzzleBoard extends Component {
   }
 
   response() {
-    if (this.props.researchMode) return
+    if (this.props.currentMode === 'research') return
     let rights = []
     let wrongs = []
     this.props.puzzle.data.right_answers.forEach((i) => {
@@ -333,11 +327,7 @@ export default class PuzzleBoard extends Component {
       }
       else {
         const step = rights[i].steps.split(';')[this.props.steps.length]
-        const x = LETTERS_SGF.indexOf(step[2])
-        const y = LETTERS_SGF.indexOf(step[3])
-        const ki = step[0] == 'B' ? 1 : -1
         this.props.addSteps(step)
-        this.move(x, y, ki)
         let stepsStr = this.props.steps.join(';')
         if (rights[i].steps === stepsStr) {
           this.props.handleRight()
@@ -352,11 +342,7 @@ export default class PuzzleBoard extends Component {
       }
       else {
         const step = wrongs[i].steps.split(';')[this.props.steps.length]
-        const x = LETTERS_SGF.indexOf(step[2])
-        const y = LETTERS_SGF.indexOf(step[3])
-        const ki = step[0] == 'B' ? 1 : -1
         this.props.addSteps(step)
-        this.move(x, y, ki)
         let stepsStr = this.props.steps.join(';')
         if (wrongs[i].steps === stepsStr) {
           this.props.handleWrong()
@@ -424,19 +410,23 @@ export default class PuzzleBoard extends Component {
           this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
           this.topLayer.removeEventListener(clickEventName, clickEvent, false)
           this.topLayer.onmousemove = () => false
-          hasMoved = this.move(p.posX, p.posY, this.state.currentKi)
+          let step = this._convertPosToSgf(p.posX, p.posY, this.state.currentKi)
+          hasMoved = this.move(step)
           if (hasMoved) {
-            this.props.addSteps(this._convertPoxToSgf(p.posX, p.posY, -this.state.currentKi))
+            this.props.addSteps(step)
+            this.props.setCurrentMode('answer')
+            this.setState({ currentKi: -this.state.currentKi }, () => {
+              setTimeout(() => {
+                if (hasMoved) {
+                  this.response(p.posX, p.posY, this.state.currentKi)
+                }
+                this.topLayer.onmousemove = mousemoveEvent
+                this.topLayer.addEventListener(clickEventName, clickEvent, false)
+              }, 300)
+            })
           }
           this.markPiece()
         }
-        setTimeout(() => {
-          if (hasMoved) {
-            this.response(p.posX, p.posY, -this.state.currentKi)
-          }
-          this.topLayer.onmousemove = mousemoveEvent
-          this.topLayer.addEventListener(clickEventName, clickEvent, false)
-        }, 300)
 
       }
 
@@ -553,7 +543,7 @@ export default class PuzzleBoard extends Component {
     }
   }
 
-  _convertPoxToSgf(x, y, ki) {
+  _convertPosToSgf(x, y, ki) {
     let step = ''
     if (ki == 1) {
       step = `B[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`

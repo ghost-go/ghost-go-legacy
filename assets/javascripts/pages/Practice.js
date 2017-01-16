@@ -460,7 +460,10 @@ function select(state) {
   return {
     currentPuzzleId: state.practicePuzzleId,
     practice: state.practice,
+    steps: state.steps,
     rangeFilter: state.rangeFilter,
+    currentAnswerId: state.currentAnswerId,
+    currentMode: state.currentMode,
   }
 }
 

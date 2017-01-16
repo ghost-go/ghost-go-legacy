@@ -9,6 +9,7 @@ import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-rou
 import { puzzles,
   puzzle,
   currentAnswerId,
+  currentMode,
   practice,
   practices,
   practicePuzzleId,
@@ -79,6 +80,7 @@ const reducer = combineReducers({
   practicePuzzleId,
   steps,
   currentAnswerId,
+  currentMode,
 })
 
 const createStoreWithMiddleware = applyMiddleware(

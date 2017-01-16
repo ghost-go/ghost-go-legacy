@@ -16,6 +16,7 @@ export default class AnswerBar extends Component {
     resetSteps: PropTypes.func,
     setCurrentAnswerId: PropTypes.func,
     currentAnswerId: PropTypes.number,
+    setCurrentMode: PropTypes.func,
   }
 
   constructor(props) {
@@ -27,6 +28,7 @@ export default class AnswerBar extends Component {
 
   firstStep() {
     let steps = this.props.answer.split(';')
+    this.props.setCurrentMode('research')
     this.props.setCurrentAnswerId(this.props.id)
     this.props.resetSteps()
     this.props.addSteps(steps[0])
@@ -34,12 +36,14 @@ export default class AnswerBar extends Component {
 
   prevStep() {
     let steps = this.props.answer.split(';')
+    this.props.setCurrentMode('research')
     this.props.resetSteps()
     this.props.addSteps(steps.slice(0, this.props.steps.length - 1))
   }
 
   nextStep() {
     let steps = this.props.answer.split(';')
+    this.props.setCurrentMode('research')
     if (this.props.currentAnswerId !== this.props.id) {
       this.firstStep()
     } else {
@@ -50,6 +54,7 @@ export default class AnswerBar extends Component {
 
   lastStep() {
     let steps = this.props.answer.split(';')
+    this.props.setCurrentMode('research')
     this.props.resetSteps()
     this.props.addSteps(steps)
   }
