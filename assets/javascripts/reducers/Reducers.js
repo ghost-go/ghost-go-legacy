@@ -90,13 +90,17 @@ export const steps = createReducer([], {
   'ADD_STEPS': function(state, action) {
     if (typeof(action.payload) === 'string') {
       return state.concat([action.payload])
-    } else if (typeof(action.payload === 'array')) {
+    } else {
       return state.concat(action.payload)
     }
   },
   'RESET_STEPS': function() {
     return []
   }
+})
+
+export const currentAnswerId = createReducer(null, {
+  'SET_CURRENT_ANSWER_ID': (state, action) => { return action.payload }
 })
 
 export const puzzles = buildFetchReducer({}, 'PUZZLES')

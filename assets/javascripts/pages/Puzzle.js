@@ -18,7 +18,7 @@ import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord, postRating } from '../actions/PostActions'
-import { setRangeFilter, addSteps, resetSteps } from '../actions/Actions'
+import { setRangeFilter, addSteps, resetSteps, setCurrentAnswerId } from '../actions/Actions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -99,8 +99,7 @@ class Puzzle extends Component {
 
   handleClose() {
     this.setState({open: false})
-  }
-
+  } 
   handleOpen() {
     this.setState({open: true})
   }
@@ -130,6 +129,10 @@ class Puzzle extends Component {
 
   resetSteps() {
     this.props.dispatch(resetSteps())
+  }
+
+  setCurrentAnswerId(id) {
+    this.props.dispatch(setCurrentAnswerId(id))
   }
 
   componentDidMount() {
@@ -209,11 +212,12 @@ class Puzzle extends Component {
             handleReset={::this.handleReset}
             addSteps={::this.addSteps}
             resetSteps={::this.resetSteps}
+            setCurrentAnswerId={::this.setCurrentAnswerId}
+            currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
           />
         </div>
-      </div>
-    )
+      </div>)
   }
 }
 
@@ -285,6 +289,7 @@ function select(state) {
     puzzle: state.puzzle,
     rangeFilter: state.rangeFilter,
     steps: state.steps,
+    currentAnswerId: state.currentAnswerId,
   }
 }
 
