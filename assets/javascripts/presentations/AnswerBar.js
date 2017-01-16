@@ -40,8 +40,6 @@ export default class AnswerBar extends Component {
 
   nextStep() {
     let steps = this.props.answer.split(';')
-    console.log(this.props.currentAnswerId)
-    console.log(this.props.id)
     if (this.props.currentAnswerId !== this.props.id) {
       this.firstStep()
     } else {
@@ -57,10 +55,11 @@ export default class AnswerBar extends Component {
   }
 
   render() {
+    let current = this.props.currentAnswerId === this.props.id ? this.props.steps.length : 0
     return(
       <Paper style={styles.answerContainer} zDepth={0}>
         <div style={styles.noInfo}>{`No.${this.props.id}`}</div>
-        <div style={styles.stepInfo}>{`${this.state.current}/${this.props.total}`}</div>
+        <div style={styles.stepInfo}>{`${current}/${this.props.answer.split(';').length}`}</div>
         <IconButton onClick={::this.firstStep} ref="firstStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
         <IconButton onClick={::this.prevStep} ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward"  />
         <IconButton onClick={::this.nextStep} ref="nextStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />

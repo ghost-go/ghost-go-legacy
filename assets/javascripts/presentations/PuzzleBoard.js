@@ -61,22 +61,16 @@ export default class PuzzleBoard extends Component {
 
   move(x, y, ki, isMarked) {
     if (this.canMove(this.state.puzzleArray, x, y, ki)) {
-      let array = this.state.puzzleArray.slice()
+      let array = _.clone(this.state.puzzleArray)
       array[x][y] = ki
-      this.setState({
-        puzzleArray: array
-      }, () => {
-        if (this.state.currentKi != 0) {
-          this.setState({
-            currentKi: -this.state.currentKi
-          })
-        }
-        this._drawPiece(x, y, ki, isMarked)
-        this.setState({
-          puzzleArray: this.execPonnuki(array, x, y, -ki)
-        }, () => {
-          this.drawBoard()
-        })
+      array = this.execPonnuki(array, x, y, -ki)
+      this.setState({ puzzleArray: array }, () => {
+        this.drawBoard()
+        //if (this.state.currentKi != 0) {
+          //this.setState({
+            //currentKi: -this.state.currentKi
+          //})
+        //}
       })
       return true
     }
@@ -92,9 +86,6 @@ export default class PuzzleBoard extends Component {
   initPuzzleArray() {
     this.setState({puzzleArray: _.chunk(new Array(361).fill(0), 19)}, () => {
       let steps = this.props.puzzle.data.steps.split(';')
-      if (this.props.researchMode === true) {
-        steps = steps.concat(this.props.steps)
-      }
       let newArray = this.state.puzzleArray.slice()
       steps.forEach((str) => {
         const ki = str[0] === 'B' ? 1 : -1
@@ -106,7 +97,22 @@ export default class PuzzleBoard extends Component {
       this.setState({
         currentKi: this.props.puzzle.data.whofirst == 'Black First' ? 1 : -1,
         puzzleArray: newArray
+      }, () => {
+        if (this.props.researchMode === true) {
+          this.moveSteps(this.props.steps)
+        }
       })
+    })
+  }
+
+  moveSteps(steps) {
+    steps.forEach((str) => {
+      const ki = str[0] === 'B' ? 1 : -1
+      const pos = /\[(.*)\]/.exec(str)[1]
+      const x = LETTERS_SGF.indexOf(pos[0])
+      const y = LETTERS_SGF.indexOf(pos[1])
+      this.move(x, y, ki)
+      console.log(this.state.puzzleArray[18][2])
     })
   }
 
@@ -475,7 +481,6 @@ export default class PuzzleBoard extends Component {
       this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
       this.draw()
     }
-
     this.markPiece()
   }
 
@@ -642,7 +647,6 @@ export default class PuzzleBoard extends Component {
 
   _autofit(expandH = 2, expandV = 2) {
     let steps = this.props.puzzle.data.steps.split(';')
-    if (this.props.researchMode === true) { steps = steps.concat(this.props.steps) }
     let leftmost = 26
     let rightmost = 0
     let topmost = 26
