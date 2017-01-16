@@ -24,6 +24,7 @@ import { puzzles,
   puzzleFilter,
   kifuFilter,
   rangeFilter,
+  steps,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -76,6 +77,7 @@ const reducer = combineReducers({
   players: topPlayers,
   routing: routerReducer,
   practicePuzzleId,
+  steps,
 })
 
 const createStoreWithMiddleware = applyMiddleware(

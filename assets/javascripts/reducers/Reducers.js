@@ -86,6 +86,19 @@ function setPracticePuzzleId(state, action) {
   return action.payload
 }
 
+export const steps = createReducer([], {
+  'ADD_STEPS': function(state, action) {
+    if (typeof(action.payload) === 'string') {
+      return state.concat([action.payload])
+    } else if (typeof(action.payload === 'array')) {
+      return state.concat(action.payload)
+    }
+  },
+  'RESET_STEPS': function() {
+    return []
+  }
+})
+
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
 export const puzzle = reduceReducers(
   buildFetchReducer({}, 'PUZZLE'),

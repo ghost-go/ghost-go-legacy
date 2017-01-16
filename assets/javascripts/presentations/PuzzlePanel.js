@@ -19,6 +19,9 @@ export default class PuzzlePanel extends Component {
     params: PropTypes.object,
     dispatch: PropTypes.object,
     auth: PropTypes.object,
+    addSteps: PropTypes.func,
+    resetSteps: PropTypes.func,
+    steps: PropTypes.array,
   }
 
   constructor(props) {
@@ -62,10 +65,10 @@ export default class PuzzlePanel extends Component {
     let wrongAnswers = []
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        rightAnswers.push(<AnswerBar addSteps={this.props.addSteps} resetSteps={this.props.resetSteps} key={i.id} id={i.id} answer={i.steps} steps={this.props.steps} current={0} up={0} down={0} />)
       })
       puzzle.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        wrongAnswers.push(<AnswerBar addSteps={this.props.addSteps} resetSteps={this.props.resetSteps} key={i.id} id={i.id} answer={i.steps} steps={this.props.steps} current={0} up={0} down={0} />)
       })
     }
     return (

@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { push } from 'react-router-redux'
-import Helmet from 'react-helmet'
-//import lang from '../components/lang'
+import Helmet from 'react-helmet' //import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import ControlBar from '../presentations/ControlBar'
@@ -19,7 +18,7 @@ import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord, postRating } from '../actions/PostActions'
-import { setRangeFilter } from '../actions/Actions'
+import { setRangeFilter, addSteps, resetSteps } from '../actions/Actions'
 
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -47,7 +46,7 @@ class Puzzle extends Component {
       commentsOpen: false,
       rightTipOpen: false,
       wrongTipOpen: false,
-      researchMode: false,
+      researchMode: true,
     }
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
     this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
@@ -125,6 +124,14 @@ class Puzzle extends Component {
     this.props.dispatch(setRangeFilter(range))
   }
 
+  addSteps(step) {
+    this.props.dispatch(addSteps(step))
+  }
+
+  resetSteps() {
+    this.props.dispatch(resetSteps())
+  }
+
   componentDidMount() {
     setTimeout(() => {
       let { id } = this.props.params
@@ -139,23 +146,12 @@ class Puzzle extends Component {
         addthis_config.data_track_clickback = false;
       `
       if (document.body) document.body.appendChild(addthisConfig)
-    });
+    })
   }
 
   render() {
     const { puzzle } = this.props
     if (puzzle === undefined || puzzle['data'] === undefined) return null
-    const { auth } = this.props
-    let rightAnswers = []
-    let wrongAnswers = []
-    if (puzzle != null && puzzle.data != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
-      puzzle.data.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
-      })
-      puzzle.data.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar board={this.refs.board} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
-      })
-    }
 
     const actions = [
       <FlatButton
@@ -195,11 +191,10 @@ class Puzzle extends Component {
         <div className={css(styles.puzzleContainer)}>
           <Paper className={css(styles.puzzleBoard)}>
             <PuzzleBoard researchMode={this.state.researchMode} className="board"
-              whofirst={puzzle.data.whofirst}
-              puzzle={puzzle.data.steps}
-              rightAnswers={puzzle.data.right_answers}
-              wrongAnswers={puzzle.data.wrong_answers}
-              answers={puzzle.data.answers}
+              steps={this.props.steps}
+              addSteps={::this.addSteps}
+              resetSteps={::this.resetSteps}
+              puzzle={puzzle}
               handleRight={this.handleRightTipOpen}
               handleWrong={this.handleWrongTipOpen}
               ref="board" />
@@ -212,6 +207,9 @@ class Puzzle extends Component {
             handleNext={this.handleNext}
             rangeFilter={this.props.rangeFilter}
             handleReset={::this.handleReset}
+            addSteps={::this.addSteps}
+            resetSteps={::this.resetSteps}
+            steps={this.props.steps}
           />
         </div>
       </div>
@@ -285,7 +283,8 @@ const styles = StyleSheet.create({
 function select(state) {
   return {
     puzzle: state.puzzle,
-    rangeFilter: state.rangeFilter
+    rangeFilter: state.rangeFilter,
+    steps: state.steps,
   }
 }
 
