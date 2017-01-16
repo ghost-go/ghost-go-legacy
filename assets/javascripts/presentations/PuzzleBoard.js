@@ -305,7 +305,6 @@ export default class PuzzleBoard extends Component {
   }
 
   response() {
-    if (this.props.currentMode === 'research') return
     let rights = []
     let wrongs = []
     this.props.puzzle.data.right_answers.forEach((i) => {
@@ -414,10 +413,9 @@ export default class PuzzleBoard extends Component {
           hasMoved = this.move(step)
           if (hasMoved) {
             this.props.addSteps(step)
-            this.props.setCurrentMode('answer')
             this.setState({ currentKi: -this.state.currentKi }, () => {
               setTimeout(() => {
-                if (hasMoved) {
+                if (hasMoved && this.props.currentMode !== 'research') {
                   this.response(p.posX, p.posY, this.state.currentKi)
                 }
                 this.topLayer.onmousemove = mousemoveEvent

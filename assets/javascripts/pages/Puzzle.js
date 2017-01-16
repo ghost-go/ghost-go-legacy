@@ -212,7 +212,8 @@ class Puzzle extends Component {
               handleWrong={this.handleWrongTipOpen}
               currentMode={this.props.currentMode}
               setCurrentMode={::this.setCurrentMode}
-              ref="board" />
+              ref="board"
+            />
           </Paper>
         </div>
         <div className={css(styles.puzzleInfo)}>
@@ -226,6 +227,7 @@ class Puzzle extends Component {
             resetSteps={::this.resetSteps}
             setCurrentAnswerId={::this.setCurrentAnswerId}
             setCurrentMode={::this.setCurrentMode}
+            currentMode={this.props.currentMode}
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
           />

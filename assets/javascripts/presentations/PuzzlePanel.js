@@ -24,6 +24,7 @@ export default class PuzzlePanel extends Component {
     steps: PropTypes.array,
     setCurrentAnswerId: PropTypes.func,
     setCurrentMode: PropTypes.func,
+    currentMode: PropTypes.string,
     currentAnswerId: PropTypes.number,
   }
 
@@ -34,6 +35,14 @@ export default class PuzzlePanel extends Component {
       answersExpanded: true,
     }
 
+  }
+
+  handleResearchMode() {
+    if (this.props.currentMode === 'answer') {
+      this.props.setCurrentMode('research')
+    } else {
+      this.props.setCurrentMode('answer')
+    }
   }
 
   handleRatingChange(rate) {
@@ -148,7 +157,7 @@ export default class PuzzlePanel extends Component {
             <Toggle
               className={css(styles.toggle)}
               label="Research Mode"
-              onToggle={this.handleResearchMode}
+              onToggle={::this.handleResearchMode}
             />
           </CardText>
         </CardActions>
