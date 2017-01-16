@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import _ from 'lodash'
-import { LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V } from '../constants/Go'
+import { LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
 import Piece from '../components/piece'
 import Sgf from '../components/sgf'
 import Cross from '../components/cross'
@@ -41,12 +41,9 @@ export default class PuzzleBoard extends Component {
       wrongTipOpen: false,
     }
     this.size = 0
-    this.setState({
-      minhv: this.state.verical > this.state.horizontal ? this.state.horizontal : this.state.verical,
-      maxhv: this.state.verical > this.state.horizontal ? this.state.verical : this.state.horizontal
-    })
     this.reset = this.reset.bind(this)
     this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
+    this.props.resetSteps()
   }
 
   handleRightTipOpen() {
@@ -86,7 +83,7 @@ export default class PuzzleBoard extends Component {
 
   initPuzzleArray() {
     this.setState({puzzleArray: _.chunk(new Array(361).fill(0), 19)}, () => {
-      let steps = this.props.puzzle.data.steps.split(';')
+      let steps = this.props.puzzle.steps.split(';')
       let newArray = this.state.puzzleArray.slice()
       steps.forEach((str) => {
         const ki = str[0] === 'B' ? 1 : -1
@@ -96,7 +93,7 @@ export default class PuzzleBoard extends Component {
         newArray[x][y] = ki
       })
       this.setState({
-        currentKi: this.props.puzzle.data.whofirst == 'Black First' ? 1 : -1,
+        currentKi: this.props.puzzle.whofirst == 'Black First' ? 1 : -1,
         puzzleArray: newArray
       }, () => {
         this.moveSteps(this.props.steps)
@@ -307,12 +304,12 @@ export default class PuzzleBoard extends Component {
   response() {
     let rights = []
     let wrongs = []
-    this.props.puzzle.data.right_answers.forEach((i) => {
+    this.props.puzzle.right_answers.forEach((i) => {
       if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
         rights.push(i)
       }
     })
-    this.props.puzzle.data.wrong_answers.forEach((i) => {
+    this.props.puzzle.wrong_answers.forEach((i) => {
       if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
         wrongs.push(i)
       }
@@ -406,21 +403,21 @@ export default class PuzzleBoard extends Component {
         }
         let hasMoved = false
         if (this._isPosInTheBoard(p.posX, p.posY)) {
-          this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
-          this.topLayer.removeEventListener(clickEventName, clickEvent, false)
-          this.topLayer.onmousemove = () => false
           let step = this._convertPosToSgf(p.posX, p.posY, this.state.currentKi)
           hasMoved = this.move(step)
           if (hasMoved) {
             this.props.addSteps(step)
             this.setState({ currentKi: -this.state.currentKi }, () => {
+              this.topLayer.onmousemove = () => false
+              this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
+              this.topLayer.removeEventListener(clickEventName, clickEvent, false)
               setTimeout(() => {
                 if (hasMoved && this.props.currentMode !== 'research') {
                   this.response(p.posX, p.posY, this.state.currentKi)
                 }
                 this.topLayer.onmousemove = mousemoveEvent
                 this.topLayer.addEventListener(clickEventName, clickEvent, false)
-              }, 300)
+              }, RESPONSE_TIME)
             })
           }
           this.markPiece()
@@ -634,7 +631,7 @@ export default class PuzzleBoard extends Component {
   }
 
   _autofit(expandH = 2, expandV = 2) {
-    let steps = this.props.puzzle.data.steps.split(';')
+    let steps = this.props.puzzle.steps.split(';')
     let leftmost = 26
     let rightmost = 0
     let topmost = 26

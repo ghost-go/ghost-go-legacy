@@ -105,7 +105,8 @@ class Puzzle extends Component {
 
   handleClose() {
     this.setState({open: false})
-  } 
+  }
+
   handleOpen() {
     this.setState({open: true})
   }
@@ -203,11 +204,12 @@ class Puzzle extends Component {
         }
         <div className={css(styles.puzzleContainer)}>
           <Paper className={css(styles.puzzleBoard)}>
-            <PuzzleBoard className="board"
+            <PuzzleBoard
+              className="board"
               steps={this.props.steps}
               addSteps={::this.addSteps}
               resetSteps={::this.resetSteps}
-              puzzle={puzzle}
+              puzzle={puzzle.data}
               handleRight={this.handleRightTipOpen}
               handleWrong={this.handleWrongTipOpen}
               currentMode={this.props.currentMode}

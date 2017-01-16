@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-
 import mainStyles from '../styles/main'
 import { connect } from 'react-redux'
 
@@ -15,7 +14,17 @@ import PuzzleBoard from '../presentations/PuzzleBoard'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
-import { postPuzzleRecord, postPracticeRecord } from '../actions/PostActions'
+import {
+  postPuzzleRecord,
+  postPracticeRecord,
+} from '../actions/PostActions'
+import {
+  setCurrentMode,
+  addSteps,
+  resetSteps,
+  setCurrentAnswerId,
+} from '../actions/Actions'
+
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 
@@ -27,10 +36,10 @@ class Practice extends Component {
 
   static propTypes = {
     practice: PropTypes.object.isRequired,
-    dispatch: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    currentPuzzleId: PropTypes.number.isRequired,
+    currentPuzzleId: PropTypes.number,
   }
 
   state = {
@@ -55,8 +64,7 @@ class Practice extends Component {
   nextPuzzle() {
     let puzzleCount = this.props.practice.data.puzzles.length
     if (this.state.record.length < puzzleCount) {
-      for (let i = 0; i < puzzleCount; i++) {
-        let record = _.find(this.state.record, {index: i})
+      for (let i = 0; i < puzzleCount; i++) { let record = _.find(this.state.record, {index: i})
         if (record === undefined) {
           this.props.dispatch(setPracticePuzzleId(this.props.practice.data.puzzles[i].id))
           this.handlePanelReset()
@@ -78,11 +86,28 @@ class Practice extends Component {
     })
   }
 
+  addSteps(step) {
+    this.props.dispatch(addSteps(step))
+  }
+
+  setCurrentMode(mode) {
+    this.props.dispatch(setCurrentMode(mode))
+  }
+
+  resetSteps() {
+    this.props.dispatch(resetSteps())
+  }
+
+  setCurrentAnswerId(id) {
+    this.props.dispatch(setCurrentAnswerId(id))
+  }
+
   handleAfterClick() {
     this.handleTimeReset()
   }
 
   handleClick(id) {
+    this.props.dispatch(resetSteps())
     this.props.dispatch(setPracticePuzzleId(id))
   }
 
@@ -201,9 +226,6 @@ class Practice extends Component {
     })
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId)
-  }
 
   minusLife() {
     this.setState((prevState) => {
@@ -223,6 +245,10 @@ class Practice extends Component {
       }
       return { time: time }
     })
+  }
+
+  componentUnmount() {
+    clearInterval(this.state.intervalId)
   }
 
   componentDidMount() {
@@ -269,23 +295,26 @@ class Practice extends Component {
     let puzzleList, puzzle, puzzleBoard, whofirst, rank, favorite, panel
     if (this.props.practice.data !== undefined) {
       puzzle = this._getCurrentPuzzle()
-      puzzleList = <PuzzleList puzzleListOnClick={::this.handleClick}
+      puzzleList = <PuzzleList
+        puzzleListOnClick={::this.handleClick}
         puzzleList={this.props.practice.data.puzzles}
         currentPuzzleId={puzzle.id}
         record={this.state.record}
       />
+
       puzzleBoard = <PuzzleBoard
         className="board"
-        researchMode={this.state.researchMode}
-        whofirst={puzzle.whofirst}
-        puzzle={puzzle.steps}
-        rightAnswers={puzzle.right_answers}
-        wrongAnswers={puzzle.wrong_answers}
-        answers={puzzle.answers}
+        steps={this.props.steps}
+        addSteps={::this.addSteps}
+        resetSteps={::this.resetSteps}
+        puzzle={puzzle}
         handleRight={::this.handleRight}
         handleWrong={::this.handleWrong}
+        currentMode={this.props.currentMode}
+        setCurrentMode={::this.setCurrentMode}
+        ref="board"
         afterClickEvent={::this.handleAfterClick}
-        ref="board" />
+      />
 
       whofirst = <h1 className={css(styles.content)}>{puzzle.whofirst}</h1>
       rank = puzzle.rank
@@ -306,6 +335,13 @@ class Practice extends Component {
           handleNext={this.handleNext}
           rangeFilter={this.props.rangeFilter}
           handleReset={::this.handleReset}
+          addSteps={::this.addSteps}
+          resetSteps={::this.resetSteps}
+          setCurrentAnswerId={::this.setCurrentAnswerId}
+          setCurrentMode={::this.setCurrentMode}
+          currentMode={this.props.currentMode}
+          currentAnswerId={this.props.currentAnswerId}
+          steps={this.props.steps}
         />
     } else {
       panel =

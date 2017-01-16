@@ -17,7 +17,7 @@ export default class PuzzlePanel extends Component {
     rangeFilter: PropTypes.object.isRequired,
     className: PropTypes.object,
     params: PropTypes.object,
-    dispatch: PropTypes.object,
+    dispatch: PropTypes.func,
     auth: PropTypes.object,
     addSteps: PropTypes.func,
     resetSteps: PropTypes.func,
@@ -157,6 +157,7 @@ export default class PuzzlePanel extends Component {
             <Toggle
               className={css(styles.toggle)}
               label="Research Mode"
+              defaultToggled={this.props.currentMode === 'research'}
               onToggle={::this.handleResearchMode}
             />
           </CardText>
