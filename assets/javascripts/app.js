@@ -8,7 +8,8 @@ import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-rou
 
 import { puzzles,
   puzzle,
-  puzzleNext,
+  currentAnswerId,
+  currentMode,
   practice,
   practices,
   practicePuzzleId,
@@ -24,6 +25,7 @@ import { puzzles,
   puzzleFilter,
   kifuFilter,
   rangeFilter,
+  steps,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -76,6 +78,9 @@ const reducer = combineReducers({
   players: topPlayers,
   routing: routerReducer,
   practicePuzzleId,
+  steps,
+  currentAnswerId,
+  currentMode,
 })
 
 const createStoreWithMiddleware = applyMiddleware(

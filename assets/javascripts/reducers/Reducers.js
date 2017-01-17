@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
 
 function updateObject(oldObject, newValues) {
-  return Object.assign({}, oldObject, newValues);
+  return Object.assign({}, oldObject, newValues)
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
@@ -85,6 +85,27 @@ function setRangeFilter(state, action) {
 function setPracticePuzzleId(state, action) {
   return action.payload
 }
+
+export const steps = createReducer([], {
+  'ADD_STEPS': function(state, action) {
+    if (typeof(action.payload) === 'string') {
+      return state.concat([action.payload])
+    } else {
+      return state.concat(action.payload)
+    }
+  },
+  'RESET_STEPS': function() {
+    return []
+  }
+})
+
+export const currentMode = createReducer('answer', {
+  'SET_CURRENT_MODE': (state, action) => { return action.payload }
+})
+
+export const currentAnswerId = createReducer(null, {
+  'SET_CURRENT_ANSWER_ID': (state, action) => { return action.payload }
+})
 
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
 export const puzzle = reduceReducers(

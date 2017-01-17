@@ -17,8 +17,15 @@ export default class PuzzlePanel extends Component {
     rangeFilter: PropTypes.object.isRequired,
     className: PropTypes.object,
     params: PropTypes.object,
-    dispatch: PropTypes.object,
+    dispatch: PropTypes.func,
     auth: PropTypes.object,
+    addSteps: PropTypes.func,
+    resetSteps: PropTypes.func,
+    steps: PropTypes.array,
+    setCurrentAnswerId: PropTypes.func,
+    setCurrentMode: PropTypes.func,
+    currentMode: PropTypes.string,
+    currentAnswerId: PropTypes.number,
   }
 
   constructor(props) {
@@ -28,6 +35,14 @@ export default class PuzzlePanel extends Component {
       answersExpanded: true,
     }
 
+  }
+
+  handleResearchMode() {
+    if (this.props.currentMode === 'answer') {
+      this.props.setCurrentMode('research')
+    } else {
+      this.props.setCurrentMode('answer')
+    }
   }
 
   handleRatingChange(rate) {
@@ -62,10 +77,40 @@ export default class PuzzlePanel extends Component {
     let wrongAnswers = []
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
-        rightAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        rightAnswers.push(
+          <AnswerBar
+            setCurrentAnswerId={this.props.setCurrentAnswerId}
+            addSteps={this.props.addSteps}
+            resetSteps={this.props.resetSteps}
+            key={i.id}
+            id={i.id}
+            answer={i.steps}
+            steps={this.props.steps}
+            currentAnswerId={this.props.currentAnswerId}
+            setCurrentMode={this.props.setCurrentMode}
+            current={0}
+            up={0}
+            down={0}
+          />
+        )
       })
       puzzle.wrong_answers.forEach((i) => {
-        wrongAnswers.push(<AnswerBar board={this} key={i.id} id={i.id} steps={i.steps} current={0} total={i.steps_count} up={0} down={0} />)
+        wrongAnswers.push(
+          <AnswerBar
+            setCurrentAnswerId={this.props.setCurrentAnswerId}
+            addSteps={this.props.addSteps}
+            resetSteps={this.props.resetSteps}
+            key={i.id}
+            id={i.id}
+            answer={i.steps}
+            steps={this.props.steps}
+            currentAnswerId={this.props.currentAnswerId}
+            setCurrentMode={this.props.setCurrentMode}
+            current={0}
+            up={0}
+            down={0}
+          />
+        )
       })
     }
     return (
@@ -112,7 +157,8 @@ export default class PuzzlePanel extends Component {
             <Toggle
               className={css(styles.toggle)}
               label="Research Mode"
-              onToggle={this.handleResearchMode}
+              defaultToggled={this.props.currentMode === 'research'}
+              onToggle={::this.handleResearchMode}
             />
           </CardText>
         </CardActions>
