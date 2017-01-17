@@ -247,6 +247,10 @@ class Practice extends Component {
     })
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId)
+  }
+
   componentUnmount() {
     clearInterval(this.state.intervalId)
   }
