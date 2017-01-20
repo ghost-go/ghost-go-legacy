@@ -3,7 +3,6 @@ import _ from 'lodash'
 import mainStyles from '../styles/main'
 import { connect } from 'react-redux'
 
-//external component
 import { StyleSheet, css } from 'aphrodite'
 import PuzzleList from '../presentations/PuzzleList'
 import { fetchPractice } from '../actions/FetchActions'

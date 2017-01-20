@@ -10,6 +10,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import IconButton from 'material-ui/IconButton'
 
 //material-ui
+import ReactPaginate from 'react-paginate'
 import { StyleSheet, css } from 'aphrodite'
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -24,11 +25,14 @@ import Favorite from 'material-ui/svg-icons/action/favorite'
 import Description from 'material-ui/svg-icons/action/description'
 import Grade from 'material-ui/svg-icons/action/grade'
 import List from 'material-ui/svg-icons/action/list'
+import { Step, Stepper, StepLabel } from 'material-ui/Stepper'
 import {orange500, red500, blue500, grey200, green500} from 'material-ui/styles/colors'
 
 import RankRange from '../presentations/RankRange'
 
 class Practices extends Component {
+
+  PER_PAGE = 10
 
   state = {
     templateOpen: false,
@@ -44,7 +48,13 @@ class Practices extends Component {
   constructor(props) {
     super(props)
     this.props.dispatch(fetchPracticeTemplates({ page: 1 }))
-    this.props.dispatch(fetchPractices({ page: 1 }))
+    this.props.dispatch(fetchPractices({ page: 1, per_page: this.PER_PAGE }))
+  }
+
+  handlePageClick(data) {
+    let page = data.selected + 1
+    this.props.dispatch(fetchPractices({ page: page, per_page: this.PER_PAGE }))
+    this.props.dispatch(push(`/practices?page=${page}`))
   }
 
   handleTemplateOpen() {
@@ -143,6 +153,23 @@ class Practices extends Component {
   }
 
   render() {
+    let pagination
+    if (this.props.practices.data !== undefined) {
+      let pageCount = this.props.practices.data.total_pages
+      if (pageCount > 1) {
+        pagination = <ReactPaginate previousLabel={"previous"}
+                                    nextLabel={"next"}
+                                    breakLabel={<a href="">...</a>}
+                                    breakClassName={"break-me"}
+                                    pageCount={pageCount}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={::this.handlePageClick}
+                                    containerClassName={"pagination"}
+                                    subContainerClassName={"pages pagination"}
+                                    activeClassName={"active"} />
+      }
+    }
     const templateActions = [
       <FlatButton
         onTouchTap={::this.handleTemplateClose}
@@ -179,26 +206,28 @@ class Practices extends Component {
           >
             <CardMedia className={css(mainStyles.mainImg)} >
             </CardMedia>
-            <CardActions>
-              <h2>{i.name}</h2>
-              <span>Rank Range: {i.rank_range}</span>
-              <br />
-              <span>Life: {i.life}</span>
-              <br />
-              <span>Time: {i.time}</span>
-              <br />
-              <span>Puzzle Count: {i.puzzle_count}</span>
+            <CardActions className={css(styles.practiceInfo)}>
+              <div className={css(styles.name)}>{i.name}</div>
+              <Grade className={css(styles.icon, styles.grade)} />
+              <span className={css(styles.range)}>{i.rank_range}</span>
+              <Favorite className={css(styles.icon, styles.favorite)} />
+              <span className={css(styles.life)}>{i.life}</span>
+              <Schedule className={css(styles.icon, styles.schedule)}  />
+              <span className={css(styles.time)}>{i.time}</span>
+              <List className={css(styles.icon, styles.list)} />
+              <span className={css(styles.puzzleCount)}>{i.puzzle_count}</span>
             </CardActions>
           </Card>
         )
       })
     }
     if (this.props.practices.data !== undefined && this.props.practices.data !== null) {
-      this.props.practices.data.forEach((i) => {
-        console.log(i)
+      this.props.practices.data.data.forEach((i) => {
         let imgList = []
-        i.puzzles.forEach((j) => {
-          imgList.push(<img className={css(styles.img)} alt={j.id} src={j.preview_img_r1.x200.url} />)
+        i.puzzles.forEach((j, index) => {
+          if (index < 6) {
+            imgList.push(<img key={j.id} className={css(styles.img)} alt={j.id} src={j.preview_img_r1.x200.url} />)
+          }
         })
 
         practiceList.push(
@@ -225,28 +254,38 @@ class Practices extends Component {
     }
     return (
       <div className={css(mainStyles.mainContainer, styles.column)}>
-        {/*
-          <div>
-            <h2>Practice Template</h2>
-            <div className={css(styles.cardContainer)}>
-              { templateList }
-            </div>
-            <RaisedButton
-              onTouchTap={::this.handleCreatePracticeTemplate}
-              label="Create Practice Template"
-              secondary={true}
-            />
-          </div>
-        */}
         <div>
-          <FloatingActionButton className={css(styles.createBtn)}>
+          <FloatingActionButton className={css(styles.createBtn)} onClick={::this.handleTemplateOpen}>
             <ContentAdd />
           </FloatingActionButton>
           <h2>Recent Practice</h2>
           <div className={css(styles.cardContainer)}>
             { practiceList }
           </div>
+          <div>
+            { pagination }
+          </div>
         </div>
+        <Dialog
+          title="Choose Template"
+          actions={templateActions}
+          modal={false}
+          open={this.state.templateOpen}
+          onRequestClose={::this.handleTemplateClose}
+          autoScrollBodyContent={true}
+        >
+          <div className={css(styles.cardContainer)}>
+            { templateList }
+          </div>
+          {/*
+          <RaisedButton
+            onTouchTap={::this.handleCreatePracticeTemplate}
+            label="Create Practice Template"
+            secondary={true}
+           />
+           */}
+        </Dialog>
+        {/*
         <Dialog
           title="Create Practice Template"
           actions={templateActions}
@@ -285,6 +324,7 @@ class Practices extends Component {
           <br />
           <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.handleRangeChange} ref='range' />
         </Dialog>
+        */}
         <Dialog
           title="Create Practice"
           actions={practiceActions}
@@ -343,14 +383,14 @@ const styles = StyleSheet.create({
   },
 
   img: {
-    width: '100px',
-    height: '100px',
+    width: '70px',
+    height: '70px',
   },
 
   practiceInfo: {
     display: 'flex',
     alignItems: 'center',
-    fontSize: '18px',
+    fontSize: '16px',
   },
 
   cardContainer: {
@@ -367,7 +407,7 @@ const styles = StyleSheet.create({
 
   list: { color: green500, },
 
-  name: { width: '200px', },
+  name: { width: '150px', },
 
   range: { width: '80px', },
 
@@ -378,7 +418,8 @@ const styles = StyleSheet.create({
   puzzleCount: { width: '16px', },
 
   createBtn: {
-    position: 'absolute',
+    position: 'fixed',
+    zIndex: 100,
     right: '40px',
     bottom: '40px',
   },
