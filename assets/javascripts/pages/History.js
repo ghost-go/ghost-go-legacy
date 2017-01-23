@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 
   titleContainer: {
     display: 'flex',
-    fontSize: '28px',
+    fontSize: '24px',
     fontWeight: 'bold',
   },
 
