@@ -37,6 +37,7 @@ export const fetchPuzzles = buildFetchData('PUZZLES', `${config.API_VERSION}/puz
 export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', `${config.API_VERSION}/puzzle_records`)
 export const fetchPractices = buildFetchData('PRACTICES', `${config.API_VERSION}/practices`)
 export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', `${config.API_VERSION}/practice_templates`)
+export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', `${config.API_VERSION}/practice_records/#{id}`)
 
 export const fetchKifu = buildFetchData('KIFU', `${config.API_VERSION}/kifus/#{id}`)
 export const fetchPuzzle = buildFetchData('PUZZLE', `${config.API_VERSION}/puzzles/#{id}`)

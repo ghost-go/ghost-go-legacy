@@ -120,9 +120,11 @@ export const practice = reduceReducers(
 )
 
 export const practiceRecord = reduceReducers(
-  buildFetchReducer({}, 'PRACTICE_RECORDS'),
+  buildFetchReducer({}, 'PRACTICE_RECORD'),
   buildPostReducer({}, 'PRACTICE_RECORDS')
 )
+
+export const practiceRecords = buildFetchReducer({}, 'PRACTICE_RECORDS')
 
 export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES')
 export const practiceTemplate = reduceReducers(

@@ -2,10 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import mainStyles from '../styles/main'
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 import { StyleSheet, css } from 'aphrodite'
 import PuzzleList from '../presentations/PuzzleList'
-import { fetchPractice } from '../actions/FetchActions'
+import { fetchPractice, fetchPracticeRecord } from '../actions/FetchActions'
 import { setPracticePuzzleId } from '../actions/Actions'
 import PuzzlePanel from '../presentations/PuzzlePanel'
 import PuzzleBoard from '../presentations/PuzzleBoard'
@@ -45,8 +46,9 @@ class Practice extends Component {
     resultMode: false,
     scoreDisplay: false,
     score: 0,
+    resultId: null,
     submit: false,
-    alert: true,
+    alert: false,
     alertContent: 'Are you ready?',
     alertTitle: 'Ready',
     alertButtonText: 'Go',
@@ -192,6 +194,9 @@ class Practice extends Component {
     this.setState({
       resultMode: true,
       scoreDisplay: false,
+    }, () => {
+      let nextUrl = `/practice_records/${this.state.resultId}`
+      this.props.dispatch(push(nextUrl))
     })
   }
 
@@ -214,6 +219,7 @@ class Practice extends Component {
         submit: false,
         scoreDisplay: true,
         score: data.payload.data.score,
+        resultId: data.payload.data.id,
       })
     })
   }
@@ -256,12 +262,28 @@ class Practice extends Component {
 
   componentDidMount() {
     let { id } = this.props.params
-    this.props.dispatch(fetchPractice({id})).then(() => {
-      this.setState({
-        life: this.props.practice.data.life,
-        time: this.props.practice.data.time,
+    if (this.props.route.path === '/practice_records/:id') {
+      this.props.dispatch(fetchPracticeRecord({id})).then((data) => {
+        let pid = data.payload.data.practice_id
+        this.props.dispatch(fetchPractice({id: pid})).then(() => {
+          this.setState({
+            life: this.props.practice.data.life,
+            time: this.props.practice.data.time,
+          })
+        }).then(() => {
+          this.setState({ resultMode: true })
+        })
       })
-    })
+    } else {
+      let { id } = this.props.params
+      this.props.dispatch(fetchPractice({id})).then(() => {
+        this.setState({
+          alert: true,
+          life: this.props.practice.data.life,
+          time: this.props.practice.data.time,
+        })
+      })
+    }
   }
 
 
