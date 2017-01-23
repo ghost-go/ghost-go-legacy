@@ -10,6 +10,9 @@ import { fetchPuzzleRecords } from '../actions/FetchActions'
 import ReactPaginate from 'react-paginate'
 import { push } from 'react-router-redux'
 
+import Paper from 'material-ui/Paper'
+import MenuItem from 'material-ui/MenuItem'
+
 class History extends Component {
 
   state = {
@@ -46,32 +49,39 @@ class History extends Component {
       recordList = <RecordList recordList={this.props.records.data.data} />
       let pageCount = this.props.records.data.total_pages
       if (pageCount > 1) {
-        pagination = <ReactPaginate previousLabel={"previous"}
-                                    nextLabel={"next"}
+        pagination = <ReactPaginate previousLabel={'previous'}
+                                    nextLabel={'next'}
                                     breakLabel={<a href="">...</a>}
-                                    breakClassName={"break-me"}
+                                    breakClassName={'break-me'}
                                     pageCount={pageCount}
                                     marginPagesDisplayed={2}
                                     pageRangeDisplayed={5}
                                     onPageChange={this.handlePageClick}
-                                    containerClassName={"pagination"}
-                                    subContainerClassName={"pages pagination"}
-                                    activeClassName={"active"} />
+                                    containerClassName={'pagination'}
+                                    subContainerClassName={'pages pagination'}
+                                    activeClassName={'active'} />
       }
     }
     return (
       <div className={css(mainStyles.mainContainer, styles.centerContainer)}>
-        <div className={css(styles.historyContainer)}>
-          <div className={css(styles.titleContainer)}>
-            <i className={`zmdi zmdi-alarm ${css(styles.icon)}`}></i>
-            <span className={css(styles.title)}>Tsumego History</span>
-          </div>
-          <div className={css(styles.listContainer)}>
-            { recordList }
-          </div>
+        <div className={css(styles.titleContainer)}>
+          <i className={`zmdi zmdi-alarm ${css(styles.icon)}`}></i>
+          <span className={css(styles.title)}>Recently Viewed</span>
         </div>
-        <div className={css(styles.pageContainer)}>
-           { pagination }
+        <div className={css(styles.historyContainer)}>
+          <Paper className={css(styles.leftMenu)}>
+            <MenuItem>Tsumegos</MenuItem>
+            <MenuItem>Tsumego Practices</MenuItem>
+            <MenuItem>Kifus</MenuItem>
+          </Paper>
+          <div className={css(styles.right)}>
+            <div className={css(styles.listContainer)}>
+              { recordList }
+            </div>
+            <div className={css(styles.pageContainer)}>
+               { pagination }
+            </div>
+          </div>
         </div>
 			</div>
     )
@@ -85,14 +95,25 @@ const styles = StyleSheet.create({
   },
 
   historyContainer: {
+    padding: '10px',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
   },
 
   titleContainer: {
     display: 'flex',
     fontSize: '24px',
     fontWeight: 'bold',
+  },
+
+  leftMenu: {
+    marginTop: '10px',
+    flex: '0 0 250px',
+    height: '600px'
+  },
+
+  right: {
+    marginLeft: '40px',
   },
 
   icon: {
@@ -105,7 +126,6 @@ const styles = StyleSheet.create({
   },
 
   listContainer: {
-    marginTop: '20px',
     display: 'flex',
   },
 

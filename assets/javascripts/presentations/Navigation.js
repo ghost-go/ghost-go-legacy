@@ -77,7 +77,7 @@ export default class Navigation extends Component {
             </Link>
             */}
           <Link to={'/history'}>
-            <ListItem primaryText="Puzzle History" leftIcon={<HistoryIcon />} />
+            <ListItem primaryText="Recently Viewed" leftIcon={<HistoryIcon />} />
           </Link>
           <Divider />
           <Link onClick={this.logout.bind(this)} to=''>
