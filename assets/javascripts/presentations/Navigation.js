@@ -68,14 +68,16 @@ export default class Navigation extends Component {
             {`Signed in as ${this.state.profile.nickname}`}
           </Link>
           <Divider />
-          <Link to={'/users'}>
-            <ListItem primaryText="Your profile" leftIcon={<AccountCircle />} />
-          </Link>
-          <Link to={'/users'}>
-            <ListItem primaryText="Your practices" leftIcon={<AccountCircle />} />
-          </Link>
+          {/*
+            <Link to={'/users'}>
+              <ListItem primaryText="Your profile" leftIcon={<AccountCircle />} />
+            </Link>
+            <Link to={'/users'}>
+              <ListItem primaryText="Your practices" leftIcon={<AccountCircle />} />
+            </Link>
+            */}
           <Link to={'/history'}>
-            <ListItem primaryText="puzzle History" leftIcon={<HistoryIcon />} />
+            <ListItem primaryText="Puzzle History" leftIcon={<HistoryIcon />} />
           </Link>
           <Divider />
           <Link onClick={this.logout.bind(this)} to=''>
@@ -108,7 +110,7 @@ export default class Navigation extends Component {
               Kifu Library
             </Link>
             <Link to="/practices" activeClassName="active">
-              Tsumego Practices
+              Tsumego Practices(beta)
             </Link>
           </div>
         </section>
