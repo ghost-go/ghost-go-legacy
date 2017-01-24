@@ -71,7 +71,8 @@ class History extends Component {
         <div className={css(styles.historyContainer)}>
           <Paper className={css(styles.leftMenu)}>
             <MenuItem>Tsumegos</MenuItem>
-            <MenuItem>Tsumego Practices</MenuItem>
+            <MenuItem>Practices</MenuItem>
+            <MenuItem>Practice Records</MenuItem>
             <MenuItem>Kifus</MenuItem>
           </Paper>
           <div className={css(styles.right)}>

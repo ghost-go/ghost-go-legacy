@@ -258,8 +258,67 @@ class Practices extends Component {
           <FloatingActionButton className={css(styles.createBtn)} onClick={::this.handleTemplateOpen}>
             <ContentAdd />
           </FloatingActionButton>
-          <h2>Recent Practice</h2>
           <div className={css(styles.cardContainer)}>
+            <Card expanded={true}>
+              <CardHeader
+                title="RANKS"
+                actAsExpander={true}
+                showExpandableButton={true}
+              />
+              <CardText expandable={true}>
+                <FlatButton
+                  backgroundColor={ range == '18k-9d' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, 'all')}
+                  className={css(styles.button)}
+                  style={{textAlign: 'left'}} label="all" />
+                <FlatButton
+                  backgroundColor={ range == '18k-10k' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '18k-10k')}
+                  className={css(styles.button)}
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '18k-10k' :
+                      `18k-10k (${puzzles.data.rank_18k_10k_count}) `
+                  } />
+                <FlatButton
+                  backgroundColor={ range == '9k-5k' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '9k-5k')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '9k-5k' :
+                      `9k-5k (${puzzles.data.rank_9k_5k_count}) `
+                  } />
+                <FlatButton
+                  backgroundColor={ range == '4k-1k' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '4k-1k')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '4k-1k' :
+                      `4k-1k (${puzzles.data.rank_4k_1k_count}) `
+                  } />
+                <FlatButton
+                  backgroundColor={ range == '1d-3d' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '1d-3d')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '1d-3d' :
+                      `1d-3d (${puzzles.data.rank_1d_3d_count}) `
+                  } />
+                <FlatButton
+                  backgroundColor={ range == '4d-6d' ? 'rgb(235, 235, 235)' : '' }
+                  onClick={this.handleSeeMore.bind(this, '4d-6d')} className={css(styles.button)}
+                  style={{textAlign: 'left'}} label={
+                    puzzles.data == null ?  '4d-6d' :
+                      `4d-6d (${puzzles.data.rank_4d_6d_count}) `
+                  } />
+              </CardText>
+            </Card>
+            <Card expanded={true}>
+              <CardHeader
+                title="TEMPLATE"
+                actAsExpander={true}
+                showExpandableButton={true}
+              />
+              <CardText expandable={true}>
+                No Tags(Not Open)
+              </CardText>
+            </Card>
             { practiceList }
           </div>
           <div>
