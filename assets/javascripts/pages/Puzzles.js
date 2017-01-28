@@ -44,8 +44,8 @@ class Puzzles extends Component {
     } else {
       range = rank.split('-')
     }
-    this.props.dispatch(setPuzzleFilter({start: range[0], end: range[1] }|| this.props.puzzleFilter))
-    this.props.dispatch(setRangeFilter({start: range[0], end: range[1] }|| this.props.rangeFilter))
+    this.props.dispatch(setPuzzleFilter({start: range[0], end: range[1] }))
+    this.props.dispatch(setRangeFilter({start: range[0], end: range[1] }))
     this.props.dispatch(fetchPuzzles({
       rank: rank || this.props.puzzleFilter,
     }))
@@ -67,12 +67,24 @@ class Puzzles extends Component {
 
   render() {
     const { puzzles } = this.props
+    if (puzzles == undefined) return null
     console.log(puzzles)
     console.log(puzzles.data)
 
     let range = this.props.puzzleFilter['start'] + '-' + this.props.puzzleFilter['end']
     let puzzlesCards = []
+    let filter
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
+      filter =
+          <FilterPanel
+            handleSeeMore={this.handleSeeMore}
+            range={range}
+            rank_18k_10k_count={puzzles.data.rank_18k_10k_count}
+            rank_9k_5k_count={puzzles.data.rank_9k_5k_count}
+            rank_4k_1k_count={puzzles.data.rank_4k_1k_count}
+            rank_1d_3d_count={puzzles.data.rank_1d_3d_count}
+            rank_4d_6d_count={puzzles.data.rank_4d_6d_count}
+          />
       puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
           <Card key={i.id} className={css(styles.card)}>
@@ -122,17 +134,7 @@ class Puzzles extends Component {
             }
             <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
           </div>
-
-          {/*
-          <FilterPanel
-            range={range}
-            rank_18k_10k_count={puzzles.data.rank_18k_10k_count}
-            rank_9k_5k_count={puzzles.data.rank_9k_5k_count}
-            rank_4k_1k_count={puzzles.data.rank_4k_1k_count}
-            rank_1d_3d_count={puzzles.data.rank_1d_3d_count}
-            rank_4d_6d_count={puzzles.data.rank_4d_6d_count}
-          />
-          */}
+          { filter }
         </div>
         <div className={css(styles.puzzlesRight)}>
           { puzzlesCards }
