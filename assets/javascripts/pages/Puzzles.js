@@ -123,6 +123,16 @@ class Puzzles extends Component {
         <div className={css(styles.loading)}>
           <i className="fa fa-spinner fa-pulse fa-fw"></i>
         </div>
+      filter =
+          <FilterPanel
+            handleSeeMore={this.handleSeeMore}
+            range={range}
+            rank_18k_10k_count={0}
+            rank_9k_5k_count={0}
+            rank_4k_1k_count={0}
+            rank_1d_3d_count={0}
+            rank_4d_6d_count={0}
+          />
     }
     return (
       <div className={css(styles.puzzlesContainer)}>

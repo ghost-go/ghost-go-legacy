@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import ReactPaginate from 'react-paginate'
+import { push } from 'react-router-redux'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
 //material-ui
@@ -29,6 +31,10 @@ class Kifus extends Component {
     players: React.PropTypes.object.isRequired,
   }
 
+  state = {
+    isLoading: false,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -38,12 +44,22 @@ class Kifus extends Component {
     this.props.dispatch(fetchKifus({
       page: query.page,
       player: this.state.playerFilter,
-      per_page: 24,
+      per_page: 20,
     }))
     this.props.dispatch(fetchTopPlayers(10))
+    this.getRecordData()
 
-    this.handlePageChanged = this.handlePageChanged.bind(this)
     this.handleSeeMore = this.handleSeeMore.bind(this)
+  }
+
+  getRecordData(page = 1) {
+    this.props.dispatch(fetchKifus({ page: page}))
+  }
+
+  handlePageClick(data) {
+    let page = data.selected + 1
+    this.getRecordData(page)
+    this.props.dispatch(push(`/kifus?page=${page}`))
   }
 
   handlePageChanged(newPage) {
@@ -63,10 +79,13 @@ class Kifus extends Component {
     const { kifus, players } = this.props
     let playerItems = []
     let kifuCards = []
+    let pagination, page = 0
+    let { query } = this.props.location
+    if (query && query.page) {
+      page = parseInt(query.page - 1)
+    }
     if (players.data !== undefined) {
       players.data.forEach((i) => {
-        console.log(i.en_name)
-        console.log(this.props.kifuFilter)
         playerItems.push(
           <FlatButton
             key={i.id}
@@ -77,8 +96,25 @@ class Kifus extends Component {
         )
       })
     }
-    if (!kifus.isFetching && kifus.data != null && kifus.data.length > 0) {
-      kifus.data.forEach((i) => {
+    if (this.props.kifus.data !== undefined) {
+      let pageCount = this.props.kifus.data.total_pages
+      if (pageCount > 1) {
+        pagination = <ReactPaginate initialPage={page}
+                                    previousLabel={'previous'}
+                                    nextLabel={'next'}
+                                    breakLabel={<a href="">...</a>}
+                                    breakClassName={'break-me'}
+                                    pageCount={pageCount}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={::this.handlePageClick}
+                                    containerClassName={'pagination'}
+                                    subContainerClassName={'pages pagination'}
+                                    activeClassName={'active'} />
+      }
+    }
+    if (!kifus.isFetching && kifus.data != null) {
+      kifus.data.data.forEach((i) => {
         kifuCards.push(
           <Card key={i.id} className={css(styles.card)}>
             <CardMedia
@@ -143,6 +179,7 @@ class Kifus extends Component {
         </div>
         <div className={css(styles.kifusRight)}>
           { kifuCards }
+          { pagination }
         </div>
       </div>
     )

@@ -1,28 +1,33 @@
 import React, { Component } from 'react'
-
-import mainStyles from '../styles/main'
+import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
-//external component
-import { StyleSheet, css } from 'aphrodite'
-import RecordList from '../presentations/RecordList'
 import { fetchPuzzleRecords } from '../actions/FetchActions'
-import ReactPaginate from 'react-paginate'
-import { push } from 'react-router-redux'
+import mainStyles from '../styles/main'
+
+import RecordList from '../presentations/RecordList'
+import LeftMenu from '../presentations/LeftMenu'
 
 import Paper from 'material-ui/Paper'
 import MenuItem from 'material-ui/MenuItem'
+import {grey300} from 'material-ui/styles/colors'
+import ReactPaginate from 'react-paginate'
+
+
+import { StyleSheet, css } from 'aphrodite'
 
 class History extends Component {
 
   state = {
-
+    filter: 'Kifu',
+    page: 1,
   }
 
   constructor(props) {
     super(props)
 
-    this.getRecordData()
+    let { query } = this.props.location
+    this.getRecordData(query.page)
     this.handlePageClick = this.handlePageClick.bind(this)
   }
 
@@ -43,19 +48,39 @@ class History extends Component {
     this.props.dispatch(push(`/history?page=${page}`))
   }
 
+  handleSelectedStyle(key) {
+    if (key === this.state.filter) {
+      return { backgroundColor: grey300 }
+    } else {
+      return { }
+    }
+  }
+
+  handleMenuClick(filter) {
+    this.setState({filter: filter})
+  }
+
+  componentWillMount() {
+  }
+
   render() {
-    let recordList, pagination
+    let recordList, pagination, page = 0
+    let { query } = this.props.location
+    if (query && query.page) {
+      page = parseInt(query.page - 1)
+    }
     if (this.props.records.data !== undefined) {
       recordList = <RecordList recordList={this.props.records.data.data} />
       let pageCount = this.props.records.data.total_pages
       if (pageCount > 1) {
-        pagination = <ReactPaginate previousLabel={'previous'}
+        pagination = <ReactPaginate initialPage={page}
+                                    previousLabel={'previous'}
                                     nextLabel={'next'}
                                     breakLabel={<a href="">...</a>}
                                     breakClassName={'break-me'}
                                     pageCount={pageCount}
                                     marginPagesDisplayed={2}
-                                    pageRangeDisplayed={5}
+                                    pageRangeDisplayed={10}
                                     onPageChange={this.handlePageClick}
                                     containerClassName={'pagination'}
                                     subContainerClassName={'pages pagination'}
@@ -70,10 +95,7 @@ class History extends Component {
         </div>
         <div className={css(styles.historyContainer)}>
           <Paper className={css(styles.leftMenu)}>
-            <MenuItem>Tsumegos</MenuItem>
-            <MenuItem>Practices</MenuItem>
-            <MenuItem>Practice Records</MenuItem>
-            <MenuItem>Kifus</MenuItem>
+            <LeftMenu />
           </Paper>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>
