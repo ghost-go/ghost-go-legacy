@@ -237,9 +237,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    flex: '1 1 250px',
-    width: '250px',
-    margin: '0px 1.5vw 20px 1.5vw',
+    width: '220px',
+    margin: '0px 10px 20px 10px',
+    float: 'left',
   },
 
   kifuImg: {

@@ -75,6 +75,18 @@ export default class PuzzlePanel extends Component {
     if (puzzle === undefined) return null
     let rightAnswers = []
     let wrongAnswers = []
+    let nextPanel
+    if (this.props.showNext === true) {
+      nextPanel =
+        <div>
+          <RaisedButton
+            onClick={this.props.handleNext}
+            label="Next Tsumego"
+            secondary={true}
+          />
+          <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
+        </div>
+    }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
         rightAnswers.push(
@@ -134,22 +146,7 @@ export default class PuzzlePanel extends Component {
             label="Reset"
             primary={true}
           />
-          {
-            () => {
-              if (this.props.showNext === true) {
-                return (
-                  <div>
-                    <RaisedButton
-                      onClick={this.props.handleNext}
-                      label="Next Tsumego"
-                      secondary={true}
-                    />
-                    <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
-                  </div>
-                )
-              }
-            }
-          }
+          { nextPanel }
         </CardActions>
         <CardActions>
           <div className="addthis_inline_share_toolbox"></div>

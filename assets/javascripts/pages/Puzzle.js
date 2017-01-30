@@ -220,6 +220,7 @@ class Puzzle extends Component {
         </div>
         <div className={css(styles.puzzleInfo)}>
           <PuzzlePanel
+            showNext={true}
             puzzle={this.props.puzzle.data}
             handleRangeChange={this.handleRangeChange}
             handleNext={this.handleNext}
