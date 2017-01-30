@@ -62,8 +62,8 @@ export default class PuzzleBoard extends Component {
     const x = LETTERS_SGF.indexOf(step[2])
     const y = LETTERS_SGF.indexOf(step[3])
     const ki = step[0] == 'B' ? 1 : -1
-    if (this.canMove(this.state.puzzleArray, x, y, ki)) {
-      let array = _.clone(this.state.puzzleArray)
+    let array = _.clone(this.state.puzzleArray)
+    if (this.canMove(array, x, y, ki)) {
       array[x][y] = ki
       this.setState({
         puzzleArray: this.execPonnuki(array, x, y, -ki)
@@ -76,9 +76,12 @@ export default class PuzzleBoard extends Component {
   }
 
   reset() {
-    this.initPuzzleArray()
-    this.props.resetSteps()
-    this.drawBoard()
+    let currentKi = this.props.puzzle.whofirst == 'Black First' ? 1 : -1
+    this.setState({currentKi: currentKi}, () => {
+      this.initPuzzleArray()
+      this.props.resetSteps()
+      this.drawBoard()
+    })
   }
 
   initPuzzleArray() {
@@ -93,7 +96,6 @@ export default class PuzzleBoard extends Component {
         newArray[x][y] = ki
       })
       this.setState({
-        currentKi: this.props.puzzle.whofirst == 'Black First' ? 1 : -1,
         puzzleArray: newArray
       }, () => {
         this.moveSteps(this.props.steps)
@@ -203,27 +205,31 @@ export default class PuzzleBoard extends Component {
   }
 
   canMove(array, i, j, ki) {
-    array = _.clone(array)
-    if (array[i][j] != 0) {
+    let newArray = _.cloneDeep(array)
+    if (newArray[i][j] !== 0) {
+      console.log(newArray[i][j])
+      console.log('This place has been used')
       return false
     }
 
-    array[i][j] = ki
-    let { liberty } = this.calcLiberty(i, j, ki)
-    if (this.canPonnuki(i, j, -ki)) {
+    newArray[i][j] = ki
+    let { liberty } = this.calcLiberty(newArray, i, j, ki)
+    if (this.canPonnuki(newArray, i, j, -ki)) {
+      console.log('canPonnuki true')
       return true
     }
-    if (this.canPonnuki(i, j, ki)) {
+    if (this.canPonnuki(newArray, i, j, ki)) {
+      console.log('canPonnuki false')
       return false
     }
     if (liberty === 0) {
-      console.log('This place has been used')
+      console.log('no liberty')
       return false
     }
     return true
   }
 
-  calcLiberty(x, y, ki) {
+  calcLiberty(array, x, y, ki) {
     this._liberty = 0
     this._recursionPath = []
 
@@ -234,24 +240,24 @@ export default class PuzzleBoard extends Component {
       }
     }
 
-    if (this.state.puzzleArray[x][y] == 0) {
+    if (array[x][y] == 0) {
       return {
         liberty: 4,
         recursionPath: []
       }
     }
-    this._calcLibertyCore(x, y, ki)
+    this._calcLibertyCore(array, x, y, ki)
     return {
       liberty: this._liberty,
       recursionPath: this._recursionPath
     }
   }
 
-  canPonnuki(i, j, ki) {
-    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki)
-    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
-    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
-    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
+  canPonnuki(array, i, j, ki) {
+    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(array, i, j - 1, ki)
+    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(array, i, j + 1, ki)
+    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(array, i - 1, j, ki)
+    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(array, i + 1, j, ki)
     if (libertyUp === 0 && recursionPathUp.length > 0) {
       return true
     }
@@ -406,14 +412,14 @@ export default class PuzzleBoard extends Component {
           let step = this._convertPosToSgf(p.posX, p.posY, this.state.currentKi)
           hasMoved = this.move(step)
           if (hasMoved) {
-            this.props.addSteps(step)
-            this.setState({ currentKi: -this.state.currentKi }, () => {
+            this.setState({currentKi: -this.state.currentKi}, () => {
+              this.props.addSteps(step)
               this.topLayer.onmousemove = () => false
               this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
               this.topLayer.removeEventListener(clickEventName, clickEvent, false)
               setTimeout(() => {
-                if (hasMoved && this.props.currentMode !== 'research') {
-                  this.response(p.posX, p.posY, this.state.currentKi)
+                if (this.props.currentMode !== 'research') {
+                  this.response()
                 }
                 this.topLayer.onmousemove = mousemoveEvent
                 this.topLayer.addEventListener(clickEventName, clickEvent, false)
@@ -422,7 +428,6 @@ export default class PuzzleBoard extends Component {
           }
           this.markPiece()
         }
-
       }
 
       this.topLayer.onmousemove = mousemoveEvent
@@ -469,11 +474,6 @@ export default class PuzzleBoard extends Component {
     this.markPiece()
   }
 
-  componentWillMount() {
-    this.initPuzzleArray()
-    this.drawBoardWithResize()
-  }
-
   componentDidMount() {
     window.addEventListener('resize', this.drawBoardWithResize.bind(this))
     this.drawBoardWithResize()
@@ -484,10 +484,16 @@ export default class PuzzleBoard extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.state.currentKi === 0) {
+      let currentKi = this.props.puzzle.whofirst == 'Black First' ? 1 : -1
+      this.setState({currentKi: currentKi})
+    }
+
     if ((prevProps.puzzle !== this.props.puzzle) || (prevProps.steps !== this.props.steps)) {
       this.initPuzzleArray()
       this.drawBoardWithResize()
     }
+
   }
 
   _convertCtxposToPos(x, y) {
@@ -584,10 +590,10 @@ export default class PuzzleBoard extends Component {
   }
 
   execPonnuki(array, i, j, ki) {
-    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(i, j - 1, ki)
-    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(i, j + 1, ki)
-    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(i - 1, j, ki)
-    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(i + 1, j, ki)
+    let {liberty: libertyUp, recursionPath: recursionPathUp} = this.calcLiberty(array, i, j - 1, ki)
+    let {liberty: libertyDown, recursionPath: recursionPathDown} = this.calcLiberty(array, i, j + 1, ki)
+    let {liberty: libertyLeft, recursionPath: recursionPathLeft} = this.calcLiberty(array, i - 1, j, ki)
+    let {liberty: libertyRight, recursionPath: recursionPathRight} = this.calcLiberty(array, i + 1, j, ki)
     if (libertyUp === 0) {
       recursionPathUp.forEach((i) => {
         let coord = i.split(',')
@@ -615,16 +621,16 @@ export default class PuzzleBoard extends Component {
     return array
   }
 
-  _calcLibertyCore(x, y, ki) {
+  _calcLibertyCore(array, x, y, ki) {
     if (x >= 0 && x < GRID && y >= 0 && y < GRID) {
-      if (this.state.puzzleArray[x][y] == ki && !this._recursionPath.includes(`${x},${y}`)) {
+      if (array[x][y] == ki && !this._recursionPath.includes(`${x},${y}`)) {
         this._recursionPath.push(`${x},${y}`)
-        this._calcLibertyCore(x - 1, y, ki)
-        this._calcLibertyCore(x + 1, y, ki)
-        this._calcLibertyCore(x, y - 1, ki)
-        this._calcLibertyCore(x, y + 1, ki)
+        this._calcLibertyCore(array, x - 1, y, ki)
+        this._calcLibertyCore(array, x + 1, y, ki)
+        this._calcLibertyCore(array, x, y - 1, ki)
+        this._calcLibertyCore(array, x, y + 1, ki)
       }
-      else if(this.state.puzzleArray[x][y] == 0) {
+      else if(array[x][y] == 0) {
         this._liberty++
       }
     }
