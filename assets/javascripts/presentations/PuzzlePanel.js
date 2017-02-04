@@ -21,11 +21,13 @@ export default class PuzzlePanel extends Component {
     auth: PropTypes.object,
     addSteps: PropTypes.func,
     resetSteps: PropTypes.func,
+    handleReset: PropTypes.func,
     steps: PropTypes.array,
     setCurrentAnswerId: PropTypes.func,
     setCurrentMode: PropTypes.func,
     currentMode: PropTypes.string,
     currentAnswerId: PropTypes.number,
+    showNext: PropTypes.bool,
   }
 
   constructor(props) {
@@ -75,17 +77,14 @@ export default class PuzzlePanel extends Component {
     if (puzzle === undefined) return null
     let rightAnswers = []
     let wrongAnswers = []
-    let nextPanel
+    let nextPanel, nextBtn
     if (this.props.showNext === true) {
-      nextPanel =
-        <div>
-          <RaisedButton
-            onClick={this.props.handleNext}
-            label="Next Tsumego"
-            secondary={true}
-          />
-          <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
-        </div>
+      nextBtn = <RaisedButton
+                  onClick={this.props.handleNext}
+                  label="Next Tsumego"
+                  secondary={true}
+                />
+      nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
@@ -141,12 +140,18 @@ export default class PuzzlePanel extends Component {
           />
         </CardActions>
         <CardActions style={{padding: '14px'}}>
-          <RaisedButton
-            onClick={this.props.handleReset}
-            label="Reset"
-            primary={true}
-          />
-          { nextPanel }
+          <div>
+            <RaisedButton
+              style={{marginRight: '10px'}}
+              onClick={this.props.handleReset}
+              label="Reset"
+              primary={true}
+            />
+            { nextBtn }
+          </div>
+          <div>
+            { nextPanel }
+          </div>
         </CardActions>
         <CardActions>
           <div className="addthis_inline_share_toolbox"></div>
