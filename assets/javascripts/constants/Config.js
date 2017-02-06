@@ -1,4 +1,4 @@
-export let PROTOCOL = ''
+export let PROTOCOL = 'http'
 
 export let API_DOMAIN = ''
 export let APP_DOMAIN = ''

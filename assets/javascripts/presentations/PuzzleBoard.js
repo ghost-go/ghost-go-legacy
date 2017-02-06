@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import _ from 'lodash'
-import { LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
+import { SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
 import Piece from '../components/piece'
 import Sgf from '../components/sgf'
 import Cross from '../components/cross'
@@ -34,16 +34,13 @@ export default class PuzzleBoard extends Component {
       autofit: true,
       direction: 0,
       revert: false,
-      puzzleArray: _.chunk(new Array(361).fill(0), 19),
-      currentKi: 0,
+      puzzleArray: BLANK_ARRAY,
       isRatio1: true,
       rightTipOpen: false,
       wrongTipOpen: false,
     }
+    this.currentKi = 0
     this.size = 0
-    this.reset = this.reset.bind(this)
-    this.drawBoardWithResize = this.drawBoardWithResize.bind(this)
-    this.props.resetSteps()
   }
 
   handleRightTipOpen() {
@@ -58,55 +55,34 @@ export default class PuzzleBoard extends Component {
     this.setState({ wrongTipOpen: false, rightTipOpen: false })
   }
 
-  move(step) {
-    const x = LETTERS_SGF.indexOf(step[2])
-    const y = LETTERS_SGF.indexOf(step[3])
-    const ki = step[0] == 'B' ? 1 : -1
-    let array = _.clone(this.state.puzzleArray)
-    if (this.canMove(array, x, y, ki)) {
-      array[x][y] = ki
-      this.setState({
-        puzzleArray: this.execPonnuki(array, x, y, -ki)
-      }, () => {
-        this.drawBoard()
-      })
-      return true
-    }
-    return false
+  reset() {
+    this.currentKi = this.props.puzzle.whofirst == 'Black First' ? 1 : -1
+    this.props.resetSteps()
+    this.drawBoard()
   }
 
-  reset() {
-    let currentKi = this.props.puzzle.whofirst == 'Black First' ? 1 : -1
-    this.setState({currentKi: currentKi}, () => {
-      this.initPuzzleArray()
-      this.props.resetSteps()
-      this.drawBoard()
+  showKi(array, steps, isPonnuki = true) {
+    let newArray = _.cloneDeep(array)
+    steps.forEach((str) => {
+      const {x, y, ki} = SGFToPosition(str)
+      if (isPonnuki) {
+        if (this.canMove(newArray, x, y, ki)) {
+          newArray[x][y] = ki
+          newArray = this.execPonnuki(newArray, x, y, -ki)
+          this.currentKi = -this.currentKi
+        }
+      } else {
+        newArray[x][y] = ki
+      }
     })
+    return newArray
   }
 
   initPuzzleArray() {
-    this.setState({puzzleArray: _.chunk(new Array(361).fill(0), 19)}, () => {
-      let steps = this.props.puzzle.steps.split(';')
-      let newArray = this.state.puzzleArray.slice()
-      steps.forEach((str) => {
-        const ki = str[0] === 'B' ? 1 : -1
-        const pos = /\[(.*)\]/.exec(str)[1]
-        const x = LETTERS_SGF.indexOf(pos[0])
-        const y = LETTERS_SGF.indexOf(pos[1])
-        newArray[x][y] = ki
-      })
-      this.setState({
-        puzzleArray: newArray
-      }, () => {
-        this.moveSteps(this.props.steps)
-      })
-    })
-  }
-
-  moveSteps(steps) {
-    steps.forEach((str) => {
-      this.move(str)
-    })
+    this.currentKi = this.props.puzzle.whofirst == 'Black First' ? 1 : -1
+    let array = this.showKi(BLANK_ARRAY, this.props.puzzle.steps.split(';'), false)
+    array = this.showKi(array, this.props.steps)
+    this.setState({ puzzleArray: array })
   }
 
   draw() {
@@ -205,25 +181,20 @@ export default class PuzzleBoard extends Component {
   }
 
   canMove(array, i, j, ki) {
-    let newArray = _.cloneDeep(array)
-    if (newArray[i][j] !== 0) {
-      console.log(newArray[i][j])
+    if (array[i][j] !== 0) {
       console.log('This place has been used')
       return false
     }
 
-    newArray[i][j] = ki
-    let { liberty } = this.calcLiberty(newArray, i, j, ki)
-    if (this.canPonnuki(newArray, i, j, -ki)) {
-      console.log('canPonnuki true')
+    array[i][j] = ki
+    let { liberty } = this.calcLiberty(array, i, j, ki)
+    if (this.canPonnuki(array, i, j, -ki)) {
       return true
     }
-    if (this.canPonnuki(newArray, i, j, ki)) {
-      console.log('canPonnuki false')
+    if (this.canPonnuki(array, i, j, ki)) {
       return false
     }
     if (liberty === 0) {
-      console.log('no liberty')
       return false
     }
     return true
@@ -357,7 +328,6 @@ export default class PuzzleBoard extends Component {
   }
 
   drawBoardWithResize() {
-    //TODO: This need to be refactored
     //The reason that using setTimeout is the following url
     //https://github.com/Khan/aphrodite/blame/master/README.md#L128
     setTimeout(() => {
@@ -375,14 +345,6 @@ export default class PuzzleBoard extends Component {
       this.topLayer.width = this.topLayer.offsetWidth
       this.topLayer.height = this.topLayer.offsetHeight
 
-
-      var clickEventName = (function() {
-        if ('ontouchstart' in document.documentElement === true)
-          return 'touchstart'
-        else
-          return 'click'
-      })()
-
       let mousemoveEvent = (e) => {
         let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
         let {x, y} = this._getOffsetPos(p.posX, p.posY)
@@ -392,46 +354,7 @@ export default class PuzzleBoard extends Component {
         }
       }
 
-      let clickEvent = (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-        if (this.props.afterClickEvent) {
-          this.props.afterClickEvent()
-        }
-        let p = {}
-        if (e.type == 'touchstart') {
-          p = this._convertCtxposToPos(
-            e.touches[0].pageX,
-            e.touches[0].pageY - this.size
-          )
-        } else {
-          p = this._convertCtxposToPos(e.offsetX, e.offsetY)
-        }
-        let hasMoved = false
-        if (this._isPosInTheBoard(p.posX, p.posY)) {
-          let step = this._convertPosToSgf(p.posX, p.posY, this.state.currentKi)
-          hasMoved = this.move(step)
-          if (hasMoved) {
-            this.setState({currentKi: -this.state.currentKi}, () => {
-              this.props.addSteps(step)
-              this.topLayer.onmousemove = () => false
-              this.topLayer.removeEventListener('mousemove', mousemoveEvent, false)
-              this.topLayer.removeEventListener(clickEventName, clickEvent, false)
-              setTimeout(() => {
-                if (this.props.currentMode !== 'research') {
-                  this.response()
-                }
-                this.topLayer.onmousemove = mousemoveEvent
-                this.topLayer.addEventListener(clickEventName, clickEvent, false)
-              }, RESPONSE_TIME)
-            })
-          }
-          this.markPiece()
-        }
-      }
-
       this.topLayer.onmousemove = mousemoveEvent
-      this.topLayer.addEventListener(clickEventName, clickEvent, false)
 
       this.drawBoard()
     }, 0)
@@ -465,6 +388,7 @@ export default class PuzzleBoard extends Component {
   }
 
   drawBoard() {
+    this.initPuzzleArray()
     if (this._pieceCtx != null && this._boardCtx != null && this.props.puzzle != null) {
       this._pieceCtx.clearRect(0, 0, this.pieceLayer.width, this.pieceLayer.height)
       this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
@@ -475,22 +399,59 @@ export default class PuzzleBoard extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.drawBoardWithResize.bind(this))
+    window.addEventListener('resize', this.drawBoardWithResize)
+
+    var clickEventName = (function() {
+      if ('ontouchstart' in document.documentElement === true)
+        return 'touchstart'
+      else
+        return 'click'
+    })()
+
+    let clickEvent = (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+      if (this.props.afterClickEvent) {
+        this.props.afterClickEvent()
+      }
+      let p = {}
+      if (e.type == 'touchstart') {
+        p = this._convertCtxposToPos(
+          e.touches[0].pageX,
+          e.touches[0].pageY - this.size
+        )
+      } else {
+        p = this._convertCtxposToPos(e.offsetX, e.offsetY)
+      }
+      let hasMoved = false
+      if (this._isPosInTheBoard(p.posX, p.posY)) {
+        let step = this._convertPosToSgf(p.posX, p.posY, this.currentKi)
+        let {x, y, ki} = SGFToPosition(step)
+        hasMoved = this.canMove(this.state.puzzleArray, x, y, ki)
+        if (hasMoved) {
+          this.props.addSteps(step)
+          this.topLayer.onmousemove = () => false
+          this.topLayer.removeEventListener(clickEventName, clickEvent, false)
+          setTimeout(() => {
+            if (this.props.currentMode !== 'research') {
+              this.response()
+            }
+            this.topLayer.addEventListener(clickEventName, clickEvent, false)
+          }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME)
+        }
+      }
+    }
+    this.topLayer.addEventListener(clickEventName, clickEvent, false)
     this.drawBoardWithResize()
   }
 
   componentUnmount() {
-    window.removeEventListener('resize', this.drawBoardWithResize.bind(this))
+    window.removeEventListener('resize', this.drawBoardWithResize)
   }
 
   componentDidUpdate(prevProps) {
-    if (this.state.currentKi === 0) {
-      let currentKi = this.props.puzzle.whofirst == 'Black First' ? 1 : -1
-      this.setState({currentKi: currentKi})
-    }
 
     if ((prevProps.puzzle !== this.props.puzzle) || (prevProps.steps !== this.props.steps)) {
-      this.initPuzzleArray()
       this.drawBoardWithResize()
     }
 
