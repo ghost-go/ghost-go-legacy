@@ -70,7 +70,7 @@ function fetchFailure(state, action) {
   return {...state, isFetching: false, isFailure: true, errorInfo: action.payload}
 }
 
-function setKifuFilter(state, action) {
+function setGenernalFilter(state, action) {
   return action.payload
 }
 
@@ -144,5 +144,7 @@ export const kifu = buildFetchReducer({}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
 export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
 export const rangeFilter = createReducer({start: '18k', end: '9d'}, { 'SET_RANGE_FILTER': setRangeFilter })
-export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setKifuFilter })
+export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setGenernalFilter})
+export const tagFilter = createReducer('all', { 'SET_TAG_FILTER': setGenernalFilter})
 export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
+export const tags = buildFetchReducer({}, 'TAGS')

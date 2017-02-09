@@ -18,7 +18,7 @@ import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
 import SVGIcon from '../presentations/SVGIcon'
 import FilterPanel from '../presentations/FilterPanel'
-import { fetchPuzzles } from '../actions/FetchActions'
+import { fetchPuzzles, fetchTags } from '../actions/FetchActions'
 import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'
 
 //external component
@@ -59,6 +59,7 @@ class Puzzles extends Component {
 
   componentDidMount() {
     let { query } = this.props.location
+    this.props.dispatch(fetchTags({}))
     this.props.dispatch(fetchPuzzles({
       page: query.page,
       rank: query.rank
@@ -260,6 +261,7 @@ function select(state) {
     puzzles: state.puzzles,
     puzzleFilter: state.puzzleFilter,
     rangeFilter: state.rangeFilter,
+    tags: state.tags,
   }
 }
 

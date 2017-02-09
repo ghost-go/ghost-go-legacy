@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
 import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
@@ -27,6 +27,7 @@ import { puzzles,
   kifuFilter,
   rangeFilter,
   steps,
+  tags,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -83,11 +84,20 @@ const reducer = combineReducers({
   steps,
   currentAnswerId,
   currentMode,
+  tags,
 })
 
+
+let middlewares = [thunkMiddleware, historyMiddleware]
+if (process.env.NODE_ENV === 'development') {
+  const createLogger = require('redux-logger')
+  middlewares.push(createLogger())
+}
+
 const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  historyMiddleware
+  ...middlewares
+  //thunkMiddleware,
+  //historyMiddleware,
 )(createStore)
 
 const store = createStoreWithMiddleware(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())

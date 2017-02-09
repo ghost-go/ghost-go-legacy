@@ -46,3 +46,5 @@ export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', `${config.API_VERSI
 export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', `${config.API_VERSION}/players/top`)
 export const fetchPractice = buildFetchData('PRACTICE', `${config.API_VERSION}/practices/#{id}`)
 export const fetchPracticeTemplate = buildFetchData('PRACTICE_TEMPLATE', `${config.API_VERSION}/practice_templates/#{id}`)
+
+export const fetchTags = buildFetchData('TAGS', `${config.API_VERSION}/tags`)
