@@ -69,8 +69,6 @@ class Puzzles extends Component {
   render() {
     const { puzzles } = this.props
     if (puzzles == undefined) return null
-    console.log(puzzles)
-    console.log(puzzles.data)
 
     let range = this.props.puzzleFilter['start'] + '-' + this.props.puzzleFilter['end']
     let puzzlesCards = []
