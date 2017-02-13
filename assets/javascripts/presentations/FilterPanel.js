@@ -3,18 +3,31 @@ import React, { Component, PropTypes } from 'react'
 import {Card, CardHeader, CardText} from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 
+import TagList from './TagList'
+
 import { StyleSheet, css } from 'aphrodite'
 
-export default class PuzzlePanel extends Component {
+export default class FilterPanel extends Component {
 
   static propTypes = {
     range: PropTypes.string,
+    tags: PropTypes.array.isRequired,
     rank_18k_10k_count: PropTypes.number,
     rank_9k_5k_count: PropTypes.number,
     rank_4k_1k_count: PropTypes.number,
     rank_1d_3d_count: PropTypes.number,
     rank_4d_6d_count: PropTypes.number,
   }
+
+  static defaultProps = {
+    tags: [],
+    rank_18k_10k_count: 0,
+    rank_9k_5k_count: 0,
+    rank_4k_1k_count: 0,
+    rank_1d_3d_count: 0,
+    rank_4d_6d_count: 0,
+  }
+
 
   constructor(props) {
     super(props)
@@ -65,7 +78,7 @@ export default class PuzzlePanel extends Component {
             showExpandableButton={true}
           />
           <CardText expandable={true}>
-            No Tags(Not Open)
+            <TagList tags={this.props.tags} />
           </CardText>
         </Card>
       </div>

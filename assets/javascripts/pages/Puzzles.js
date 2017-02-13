@@ -67,8 +67,8 @@ class Puzzles extends Component {
   }
 
   render() {
-    const { puzzles } = this.props
-    if (puzzles == undefined) return null
+    const { puzzles, tags } = this.props
+    if (!puzzles || !tags) return null
 
     let range = this.props.puzzleFilter['start'] + '-' + this.props.puzzleFilter['end']
     let puzzlesCards = []
@@ -77,6 +77,7 @@ class Puzzles extends Component {
       filter =
           <FilterPanel
             handleSeeMore={this.handleSeeMore}
+            tags={tags.data}
             range={range}
             rank_18k_10k_count={puzzles.data.rank_18k_10k_count}
             rank_9k_5k_count={puzzles.data.rank_9k_5k_count}
@@ -91,9 +92,10 @@ class Puzzles extends Component {
               className={css(styles.puzzleImg)}
             >
               <Link to={`/puzzles/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img_r1.x500.url} />
+                <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
               </Link>
             </CardMedia>
+            {/*
             <CardTitle
               className={css(styles.puzzleTitle)}
               title={i.whofirst}
@@ -106,13 +108,7 @@ class Puzzles extends Component {
               />
               <span>{`${i.right_count} right / ${i.wrong_count} wrong`}</span>
             </CardActions>
-            <CardActions
-              className={css(styles.puzzleActions)}
-            >
-              <Link to={`/puzzles/${i.id}`}>
-                <RaisedButton className={css(styles.button)} primary={true} label="Solve It" />
-              </Link>
-            </CardActions>
+            */}
           </Card>
         )
       })
@@ -125,6 +121,7 @@ class Puzzles extends Component {
       filter =
           <FilterPanel
             handleSeeMore={this.handleSeeMore}
+            tags={tags.data}
             range={range}
             rank_18k_10k_count={0}
             rank_9k_5k_count={0}
@@ -178,9 +175,6 @@ const styles = StyleSheet.create({
   },
 
   puzzlesRight: {
-    display: 'flex',
-    flex: 'auto',
-    flexFlow: 'row wrap',
     paddingTop: '10px',
     marginLeft: '10px',
   },
@@ -210,11 +204,9 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    width: '220px',
-    margin: '0px 10px 20px 10px',
+    width: '130px',
+    height: '170px',
+    margin: '0px 5px 10px 5px',
     float: 'left',
   },
 
@@ -229,7 +221,7 @@ const styles = StyleSheet.create({
   },
 
   previewImg: {
-    width: '100%'
+    width: '100%',
   },
 
   puzzleActions: {

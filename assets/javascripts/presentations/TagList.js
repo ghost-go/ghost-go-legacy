@@ -6,18 +6,21 @@ export default class TagList extends Component {
     tags: PropTypes.array.isRequired
   }
 
+  static defaultProps = {
+    tags: []
+  }
+
   render() {
     let tag_lists = []
-    if (!this.props.tags) return null
     this.props.tags.forEach((tag) => {
-      tag_lists = <a>{tag}</a>
+      tag_lists.push(<li className='tag' key={tag.id}>{`${tag.name} (${tag.taggings_count})`}</li>)
     })
     return (
       <div>
-        {tag_lists}
+        <ul className="tags">
+          { tag_lists }
+        </ul>
       </div>
     )
   }
 }
-
-
