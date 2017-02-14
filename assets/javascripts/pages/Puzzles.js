@@ -13,6 +13,9 @@ import Snackbar from 'material-ui/Snackbar'
 import IconButton from 'material-ui/IconButton'
 import Rating from 'react-rating'
 
+//
+import { Col} from 'react-bootstrap';
+
 //internal component
 import Layout from './Layout'
 import Navigation from '../presentations/Navigation'
@@ -87,29 +90,31 @@ class Puzzles extends Component {
           />
       puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
-          <Card key={i.id} className={css(styles.card)}>
-            <CardMedia
-              className={css(styles.puzzleImg)}
-            >
-              <Link to={`/puzzles/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
-              </Link>
-            </CardMedia>
-            {/*
-            <CardTitle
-              className={css(styles.puzzleTitle)}
-              title={i.whofirst}
-              subtitle={`Rank: ${i.rank}`}
-            />
-            <CardActions>
-              <Rating initialRate={parseFloat(i.score)} readonly={true}
-                empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
-                full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+          <Col key={i.id} xs={12} md={8}>
+            <Card  className={css(styles.card)}>
+              <CardMedia
+                className={css(styles.puzzleImg)}
+              >
+                <Link to={`/puzzles/${i.id}`}>
+                  <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
+                </Link>
+              </CardMedia>
+              {/*
+              <CardTitle
+                className={css(styles.puzzleTitle)}
+                title={i.whofirst}
+                subtitle={`Rank: ${i.rank}`}
               />
-              <span>{`${i.right_count} right / ${i.wrong_count} wrong`}</span>
-            </CardActions>
-            */}
-          </Card>
+              <CardActions>
+                <Rating initialRate={parseFloat(i.score)} readonly={true}
+                  empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
+                  full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+                />
+                <span>{`${i.right_count} right / ${i.wrong_count} wrong`}</span>
+              </CardActions>
+              */}
+            </Card>
+          </Col>
         )
       })
     }
@@ -133,17 +138,17 @@ class Puzzles extends Component {
     return (
       <div className={css(styles.puzzlesContainer)}>
         <div className={css(styles.puzzlesLeft)}>
-          <h1 className={css(styles.title)}>Tsumego Library</h1>
+          { puzzlesCards }
+        </div>
+        <div className={css(styles.puzzlesRight)}>
+          <span className={css(styles.title)}>Tags</span>
           <div className={css(styles.buttonGroup)}>
             {
               //<RaisedButton className={css(styles.button)} secondary={true} label="Tsumego Test" /> 
+              //<RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
             }
-            <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
           </div>
           { filter }
-        </div>
-        <div className={css(styles.puzzlesRight)}>
-          { puzzlesCards }
         </div>
         <Snackbar
           open={this.state.tipsOpen}
@@ -169,22 +174,16 @@ const styles = StyleSheet.create({
   },
 
   puzzlesLeft: {
+  },
+
+  puzzlesRight: {
     display: 'flex',
     flexFlow: 'column nowrap',
     flex: '0 0 230px'
   },
 
-  puzzlesRight: {
-    paddingTop: '10px',
-    marginLeft: '10px',
-  },
-
   title: {
-    fontSize: '26px',
-    lineHeight: '26px',
-    fontWeight: '300',
-    margin: '10px 0 35px',
-    padding: '0'
+    fontSize: '20px',
   },
 
   chooseLevel: {
@@ -204,9 +203,9 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    width: '130px',
-    height: '170px',
-    margin: '0px 5px 10px 5px',
+    width: '120px',
+    height: '150px',
+    margin: '5px',
     float: 'left',
   },
 
