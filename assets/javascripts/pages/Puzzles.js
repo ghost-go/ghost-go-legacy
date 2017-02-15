@@ -17,9 +17,6 @@ import Rating from 'react-rating'
 import { Col} from 'react-bootstrap';
 
 //internal component
-import Layout from './Layout'
-import Navigation from '../presentations/Navigation'
-import SVGIcon from '../presentations/SVGIcon'
 import FilterPanel from '../presentations/FilterPanel'
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions'
 import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'

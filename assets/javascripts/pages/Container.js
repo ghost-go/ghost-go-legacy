@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import AuthService from '../utils/AuthService'
-import Navigation from '../presentations/Navigation'
-import Sidebar from '../presentations/Sidebar'
+import Navigation from '../components/Navigation'
+import Sidebar from '../components/Sidebar'
 import Footer from '../presentations/Footer'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 //import lang from '../components/lang'
@@ -36,6 +35,7 @@ export default class Container extends Component {
             </defs>
           </svg>
           <Navigation auth={this.props.route.auth} />
+          <Sidebar />
           <div>
             { children }
           </div>

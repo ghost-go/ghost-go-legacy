@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import Navigation from '../presentations/Navigation'
-import Sidebar from '../presentations/Sidebar'
+import Navigation from '../components/Navigation'
+import Sidebar from '../components/Sidebar'
 import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 //import lang from '../components/lang'
 
@@ -22,15 +22,14 @@ export default class Layout extends Component {
         //auth: this.props.route.auth
       //})
     //}
-    console.log(this.props)
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
       {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
         <div>
           <Navigation />
+          <Sidebar />
           <section>
-            <Sidebar />
           </section>
           { this.props.children }
         </div>

@@ -46,6 +46,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 require('../stylesheets/base.scss')
 require('../stylesheets/home.scss')
 require('../stylesheets/navigation.scss')
+require('../stylesheets/sidebar.scss')
 
 class App extends React.Component {
   render() {
