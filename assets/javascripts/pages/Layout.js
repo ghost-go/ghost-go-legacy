@@ -27,7 +27,9 @@ export default class Layout extends Component {
       <MuiThemeProvider muiTheme={getMuiTheme()}>
       {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
         <div>
-          <Navigation />
+          {
+            //<Navigation />
+          }
           <Sidebar />
           <section>
           </section>

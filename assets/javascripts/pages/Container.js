@@ -34,7 +34,9 @@ export default class Container extends Component {
               </symbol>
             </defs>
           </svg>
+          {/*
           <Navigation auth={this.props.route.auth} />
+          */}
           <Sidebar />
           <div>
             { children }
