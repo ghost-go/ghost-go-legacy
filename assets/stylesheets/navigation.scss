@@ -1,83 +1,96 @@
-$nav-height: 50px;
-.nav-container {
+#page-header {
+  background: #fff;
+  position: relative;
+  height: 50px;
+  padding-left: 235px;
+}
 
-  width: 100%;
-  min-height: $nav-height;
-  background-color: rgba(255,255,255,.97);
-  box-shadow: 0 0 2px 0 rgba(0,0,0,.5);
-  display: flex;
-  flex: 1;
-  .nav-header {
-    flex: 0 0 180px;
-    order: -1;
-    .logo {
+#header-logo {
+  width: 235px;
+  font-size: 15px;
+  line-height: 50px;
+  float: left;
+  height: 50px;
+  margin-right: 10px;
+  padding: 0 0 0 15px;
+  position: fixed;
+  z-index: 7;
+  left: 0;
+  top: 0;
+  //text-transform: uppercase;
+  color: #fff;
+  background: #232323;
+
+  a {
+    float: right;
+    width: 50px;
+    text-align: center;
+  }
+
+}
+
+#sidebar-search {
+  position: relative;
+  float: left;
+  margin: 9px 0 0 10px;
+}
+
+#header-right {
+  float: right;
+  margin-right: 10px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.top-icon-bar {
+  float: right;
+
+  .dropdown > a {
+    line-height: 44px;
+    position: relative;
+    display: block;
+    float: left;
+    width: 44px;
+    height: 44px;
+    margin: 3px 0 0;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .fa {
+    font-size: 20px;
+  }
+}
+
+.user-profile {
+  float: right;
+
+  a {
+    line-height: 50px;
+    display: block;
+    height: 50px;
+    margin: 0;
+    padding: 0 0 0 15px;
+
+    img {
+      float: left;
+      width: 34px;
+      height: 34px;
+      margin: 7px 5px 0 0;
+      border-radius: 4px;
+    }
+
+    .fa {
+      line-height: 50px;
+      height: 50px;
       display: block;
       float: left;
-      width: inherit;
-      background-image: url('../images/logo.png');
-      background-repeat: no-repeat;
-      background-size: 98.4px 26px;
-      background-position: 0 12px;
-      margin: 0px 15px;
-      height: $nav-height;
     }
   }
+}
 
-  .nav-body {
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    font-size: 17px;
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    height: $nav-height;
-    a {
-      display: inline-block;
-      position: relative;
-      padding: 15px 20px;
-      margin: 0;
-      display: inline-block;
-      color: #383838;
-      text-align: center;
-      transition: all ease-in 350ms 128ms;
-    }
-    .active {
-      color: #03a9f4;
-    }
-    a:hover {
-      color: #03a9f4;
-    }
-  }
-
-  .nav-footer {
-    position: relative;
-    height: $nav-height;
-    flex: 0 0 auto;
-    .nav-footer-wrap {
-      position: relative;
-      padding: 0 5px;
-      display: inline-block;
-      border-left: 1px solid rgba(0,0,0,.05);
-      cursor: pointer;
-      a {
-        display: inline-block;
-        font-size: 20px;
-        padding: 15px 10px;
-        transition: all ease-in 150ms 128ms;
-      }
-      a:hover {
-        color: #03a9f4;
-      }
-    }
-    .nav-sign {
-      display: inline-block;
-      font-size: 16px;
-      .nav-signin, .nav-signup {
-        & > a {
-          font-size: inherit;
-        }
-      }
-    }
-  }
+.opacity-80 {
+  opacity: .8
 }

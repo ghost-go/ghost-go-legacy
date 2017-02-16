@@ -132,7 +132,7 @@ export default class Sidebar extends Component {
             <ul className="sf-js-enabled sf-arrows">
               <li>
                 <a href="index.html" title="Dashboard">
-                  <i className="fa fa-television"></i> <span>Dashboard</span>
+                  <i className="fa fa-tachometer"></i> <span>Dashboard</span>
                 </a>
               </li>
               <li className="divider"></li>

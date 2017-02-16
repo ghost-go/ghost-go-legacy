@@ -47,6 +47,8 @@ require('../stylesheets/base.scss')
 require('../stylesheets/home.scss')
 require('../stylesheets/navigation.scss')
 require('../stylesheets/sidebar.scss')
+require('../stylesheets/puzzle.scss')
+require('../stylesheets/kifu.scss')
 
 class App extends React.Component {
   render() {
