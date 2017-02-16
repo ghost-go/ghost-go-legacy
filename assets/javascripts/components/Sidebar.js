@@ -11,25 +11,11 @@ export default class Sidebar extends Component {
     expanded: false,
   }
 
-  state = { selectedIndex: 0 }
+  //state = { selectedIndex: 0 }
 
-  getTabClasses(index) {
-    let classes = ['tab-pane', 'clearfix', 'fade']
-    if (index === this.state.selectedIndex) {
-      classes.push('active', 'in')
-    }
-    return classes.join(' ')
-  }
-
-  getTabHeaderClasses(index) {
-    if (index === this.state.selectedIndex) {
-      return 'active'
-    }
-  }
-
-  handleTouchTap(index) {
-    this.setState({ selectedIndex: index })
-  }
+  //handleTouchTap(index) {
+  //this.setState({ selectedIndex: index })
+  //}
 
 
   render() {
@@ -41,23 +27,23 @@ export default class Sidebar extends Component {
               <div>
                 <Nav bsStyle="pills" justified="true" stacked>
                   <NavItem eventKey="first">
-                    <a href="#tab-example-1" onTouchTap={this.handleTouchTap.bind(this, 0)} data-toggle="tab">
+                    <a href="#tab-example-1" data-toggle="tab">
                       <i className="fa fa-users fa-lg"></i>
                     </a>
                   </NavItem>
                   <NavItem eventKey="second">
-                    <a href="#tab-example-2" onTouchTap={this.handleTouchTap.bind(this, 1)} data-toggle="tab">
+                    <a href="#tab-example-2" data-toggle="tab">
                       <i className="fa fa-bell fa-lg"></i>
                     </a>
                   </NavItem>
                   <NavItem eventKey="third">
-                    <a href="#tab-example-3" onTouchTap={this.handleTouchTap.bind(this, 2)} data-toggle="tab">
+                    <a href="#tab-example-3" data-toggle="tab">
                       <span className="small-badge bg-red"></span>
                       <i className="fa fa-bar-chart-o fa-lg"></i>
                     </a>
                   </NavItem>
                   <NavItem eventKey="fourth">
-                    <a href="#tab-example-4" onTouchTap={this.handleTouchTap.bind(this, 3)} data-toggle="tab">
+                    <a href="#tab-example-4" data-toggle="tab">
                       <i className="fa fa-cogs fa-lg"></i>
                     </a>
                   </NavItem>
@@ -71,30 +57,49 @@ export default class Sidebar extends Component {
                           Welcome back, <b>John Appleseed</b>
                         </div>
                         <a href="#" title="" className="btn btn-sm btn-black-opacity-alt">
-                          <i className="glyph-icon icon-cog"></i>
+                          <i className="fa fa-cog"></i>
                         </a>
                       </div>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <div className={this.getTabClasses(1)} id="tab-example-2">
+                    <div id="tab-example-2">
                       <ul className="notifications-box notifications-box-alt">
                         <li>
-                          <span className="bg-purple icon-notification glyph-icon icon-users"></span>
+                          <span className="bg-purple icon-notification fa fa-users"></span>
                           <span className="notification-text">This is an error notification</span>
-                          <div className="notification-time">a few seconds ago <span className="glyph-icon icon-clock-o"></span></div><a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details"><i className="glyph-icon icon-arrow-right"></i></a></li><li><span className="bg-warning icon-notification glyph-icon icon-ticket"></span> <span className="notification-text">This is a warning notification</span><div className="notification-time"><b>15</b> minutes ago <span className="glyph-icon icon-clock-o"></span></div><a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details"><i className="glyph-icon icon-arrow-right"></i></a></li><li><span className="bg-green icon-notification glyph-icon icon-random"></span> <span className="notification-text font-green">A success message example.</span>
                           <div className="notification-time">
-                            <b>2 hours</b> ago <span className="glyph-icon icon-clock-o"></span>
+                            a few seconds ago <span className="fa fa-clock-o"></span>
                           </div>
                           <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                            <i className="glyph-icon icon-arrow-right"></i>
+                            <i className="fa fa-arrow-right"></i>
+                          </a>
+                        </li>
+                        <li>
+                          <span className="bg-warning icon-notification fa fa-ticket"></span>
+                          <span className="notification-text">This is a warning notification</span>
+                          <div className="notification-time">
+                            <b>15</b> minutes ago <span className="fa fa-clock-o"></span>
+                          </div>
+                          <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                            <i className="fa fa-arrow-right"> </i>
+                          </a>
+                        </li>
+                        <li>
+                          <span className="bg-green icon-notification fa fa-random"></span> 
+                          <span className="notification-text font-green">A success message example.</span>
+                          <div className="notification-time">
+                            <b>2 hours</b> ago <span className="fa fa-clock-o"></span>
+                          </div>
+                          <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                            <i className="fa fa-arrow-right"></i>
                           </a>
                         </li>
                       </ul>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
-                    <div className={this.getTabClasses(2)} id="tab-example-3">
+                    <div id="tab-example-3">
                       <div className="info-box remove-border">
                         <div className="chart-icon">
                           <div className="infobox-sparkline">
@@ -102,13 +107,13 @@ export default class Sidebar extends Component {
                         </div>
                         <b>Exchange rate</b>
                         <span className="stats font-size-23">
-                          <i className="glyph-icon icon-chevron-down font-red"></i> 43.79 <span className="font-green">+0.9</span>
+                          <i className="fa fa-chevron-down font-red"></i> 43.79 <span className="font-green">+0.9</span>
                         </span>
                       </div>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="fourth">
-                    <div className={this.getTabClasses(3)} id="tab-example-4">
+                    <div id="tab-example-4">
                       <div className="complete-user-profile">
                         <h4>Complete your profile</h4>
                         <div className="progressbar-small progressbar" data-value="75">
@@ -121,6 +126,47 @@ export default class Sidebar extends Component {
                 </Tab.Content>
               </div>
             </Tab.Container>
+          </div>
+
+          <div id="sidebar-menu">
+            <ul className="sf-js-enabled sf-arrows">
+              <li>
+                <a href="index.html" title="Dashboard">
+                  <i className="fa fa-television"></i> <span>Dashboard</span>
+                </a>
+              </li>
+              <li className="divider"></li>
+              <div className="divider-header">Resources</div>
+              <li>
+                <a href="index.html" title="Tsumego Library">
+                  <i className="fa fa-television"></i> <span>Tsumego Library</span>
+                </a>
+              </li>
+              <li>
+                <a href="index.html" title="Kifu Library">
+                  <i className="fa fa-television"></i> <span>Kifu Library</span>
+                </a>
+              </li>
+              <li className="divider"></li>
+              <div className="divider-header">Practices</div>
+              <li>
+                <a href="index.html" title="Practices">
+                  <i className="fa fa-television"></i> <span>Practices</span>
+                </a>
+              </li>
+              <li className="divider"></li>
+              <div className="divider-header">Settings</div>
+              <li>
+                <a href="index.html" title="Profile">
+                  <i className="fa fa-television"></i> <span>Profile</span>
+                </a>
+              </li>
+              <li>
+                <a href="index.html" title="History">
+                  <i className="fa fa-television"></i> <span>History</span>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
