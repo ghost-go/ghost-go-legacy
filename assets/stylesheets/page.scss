@@ -6,5 +6,77 @@
 }
 
 .page-nav {
+  position: relative;
+  background: #fafafa;
+  height: 56px;
+  padding: 0 10px;
+
+  .filter {
+    .btn-default {
+      border-color: #db690c;
+      border-radius: 3px;
+      color: #fff;
+      background: #f87500;
+      &:hover, &:active, &:focus {
+        color: #fff;
+        border-color: #b45f1a;
+        background-color: #ff8e29;
+      }
+    }
+    .filter-icon {
+      margin-right: 5px;
+    }
+    .popover-title {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0;
+      text-align: center;
+      padding: 10px 15px;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+    }
+    .popover-content {
+      padding: 10px;
+      a {
+        font-size: 12px;
+        padding: 10px;
+      }
+    }
+
+  }
+
+  #page-subnav {
+    display: inline-block;
+    margin: 0;
+    margin-left: 50px;
+    padding: 0;
+    text-align: center;
+    ul {
+      width: 300px;
+      li {
+        line-height: 30px;
+        display: inline-block;
+        height: 30px;
+        a {
+          color: #888;
+          font-size: 14px;
+          line-height: 56px;
+          display: block;
+          height: 56px;
+          margin: 0 12px;
+          padding: 0 3px;
+          border-bottom: transparent solid 2px;
+        }
+      }
+    }
+  }
+}
+
+.btn.btn-primary {
+  color: #fff;
+  background: #f87500;
 }
 

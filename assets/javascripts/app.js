@@ -49,6 +49,7 @@ require('../stylesheets/navigation.scss')
 require('../stylesheets/sidebar.scss')
 require('../stylesheets/puzzle.scss')
 require('../stylesheets/kifu.scss')
+require('../stylesheets/page.scss')
 
 class App extends Component {
 

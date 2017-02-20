@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 //material-ui
+import {Dropdown, MenuItem, Glyphicon} from 'react-bootstrap'
 import {Card, CardMedia} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
 
@@ -72,19 +73,18 @@ class Puzzles extends Component {
     let filter
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
       filter =
-          <FilterPanel
-            handleSeeMore={this.handleSeeMore}
-            tags={tags.data}
-            range={range}
-            rank_18k_10k_count={puzzles.data.rank_18k_10k_count}
-            rank_9k_5k_count={puzzles.data.rank_9k_5k_count}
-            rank_4k_1k_count={puzzles.data.rank_4k_1k_count}
-            rank_1d_3d_count={puzzles.data.rank_1d_3d_count}
-            rank_4d_6d_count={puzzles.data.rank_4d_6d_count}
-          />
-      puzzles.data.puzzles.forEach((i) => {
-        puzzlesCards.push(
-          <Col key={i.id} xs={12} md={8}>
+        <FilterPanel
+          handleSeeMore={this.handleSeeMore}
+          tags={tags.data}
+          range={range}
+          rank_18k_10k_count={puzzles.data.rank_18k_10k_count}
+          rank_9k_5k_count={puzzles.data.rank_9k_5k_count}
+          rank_4k_1k_count={puzzles.data.rank_4k_1k_count}
+          rank_1d_3d_count={puzzles.data.rank_1d_3d_count}
+          rank_4d_6d_count={puzzles.data.rank_4d_6d_count}
+        />
+        puzzles.data.puzzles.forEach((i) => {
+          puzzlesCards.push(
             <Card  className={css(styles.card)}>
               <CardMedia
                 className={css(styles.puzzleImg)}
@@ -94,31 +94,51 @@ class Puzzles extends Component {
                 </Link>
               </CardMedia>
             </Card>
-          </Col>
-        )
-      })
+          )
+        })
     }
     else {
       puzzlesCards =
         <div className={css(styles.loading)}>
           <i className="fa fa-spinner fa-pulse fa-fw"></i>
         </div>
-      filter =
-          <FilterPanel
-            handleSeeMore={this.handleSeeMore}
-            tags={tags.data}
-            range={range}
-            rank_18k_10k_count={0}
-            rank_9k_5k_count={0}
-            rank_4k_1k_count={0}
-            rank_1d_3d_count={0}
-            rank_4d_6d_count={0}
-          />
+        filter =
+        <FilterPanel
+          handleSeeMore={this.handleSeeMore}
+          tags={tags.data}
+          range={range}
+          rank_18k_10k_count={0}
+          rank_9k_5k_count={0}
+          rank_4k_1k_count={0}
+          rank_1d_3d_count={0}
+          rank_4d_6d_count={0}
+        />
     }
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
         <div className="page-nav">
-
+          <Dropdown className="filter">
+            <Dropdown.Toggle>
+              <Glyphicon className="filter-icon" glyph="filter" />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="super-colors">
+              <div className="popover-title">Level</div>
+              <div className="popover-content">
+                <a href="">18-10k</a>
+                <a href="">9-5k</a>
+                <a href="">4-1k</a>
+                <a href="">1-3d</a>
+                <a href="">4-6d</a>
+              </div>
+              <div className="popover-title">Tags</div>
+              <div className="popover-content">
+              </div>
+            </Dropdown.Menu>
+          </Dropdown>
+          <ul id="page-subnav">
+            <li><a title="Rank: xxx"><span>Rank: 18k - 10k</span></a></li>
+            <li><a title="Tag: xxx"><span>Tags: xxx</span></a></li>
+          </ul>
         </div>
         <div className={css(styles.puzzlesLeft)}>
           { puzzlesCards }
