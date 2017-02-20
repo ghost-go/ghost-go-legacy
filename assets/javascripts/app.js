@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component, PropTypes as T} from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
@@ -50,14 +50,20 @@ require('../stylesheets/sidebar.scss')
 require('../stylesheets/puzzle.scss')
 require('../stylesheets/kifu.scss')
 
-class App extends React.Component {
+class App extends Component {
+
+  static propTypes = {
+    children: T.object
+  }
+
   render() {
     return (
       <div>
         {this.props.children}
       </div>
     )
-  } }
+  }
+}
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'

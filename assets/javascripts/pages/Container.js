@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
 import Footer from '../presentations/Footer'
@@ -11,11 +11,25 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 export default class Container extends Component {
 
+  static propTypes = {
+    route: T.object.isRequired,
+    children: T.object
+  }
+
+  state = {
+    expanded: true,
+  }
+
+  handleClick() {
+    this.setState({ expanded: !this.state.expanded })
+  }
+
   render() {
     let children = null
     if (this.props.children) {
       children = React.cloneElement(this.props.children, {
-        auth: this.props.route.auth //sends auth instance from route to children
+        auth: this.props.route.auth, //sends auth instance from route to children
+        expanded: this.state.expanded
       })
     }
     return (
@@ -34,8 +48,8 @@ export default class Container extends Component {
               </symbol>
             </defs>
           </svg>
-          <Navigation auth={this.props.route.auth} />
-          <Sidebar />
+          <Navigation expanded={this.state.expanded} onClick={::this.handleClick} auth={this.props.route.auth} />
+          <Sidebar expanded={this.state.expanded} />
           <div>
             { children }
           </div>

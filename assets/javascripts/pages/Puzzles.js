@@ -1,20 +1,11 @@
 //react
-import React, { Component, PropTypes } from 'react'
-import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
+import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import { Router, Route, hashHistory, browserHistory } from 'react-router'
 
 //material-ui
-import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import {Card, CardMedia} from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
-import IconButton from 'material-ui/IconButton'
-import Rating from 'react-rating'
-
-//
-import { Col} from 'react-bootstrap';
 
 //internal component
 import FilterPanel from '../presentations/FilterPanel'
@@ -24,10 +15,16 @@ import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'
 //external component
 import { StyleSheet, css } from 'aphrodite'
 
-//language
-//import lang from '../components/lang'
-
 class Puzzles extends Component {
+
+  static propTypes = {
+    expanded: T.bool.isRequired
+  }
+
+  static defaultProps = {
+    expanded: true
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -96,20 +93,6 @@ class Puzzles extends Component {
                   <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
                 </Link>
               </CardMedia>
-              {/*
-              <CardTitle
-                className={css(styles.puzzleTitle)}
-                title={i.whofirst}
-                subtitle={`Rank: ${i.rank}`}
-              />
-              <CardActions>
-                <Rating initialRate={parseFloat(i.score)} readonly={true}
-                  empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
-                  full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
-                />
-                <span>{`${i.right_count} right / ${i.wrong_count} wrong`}</span>
-              </CardActions>
-              */}
             </Card>
           </Col>
         )
@@ -133,7 +116,10 @@ class Puzzles extends Component {
           />
     }
     return (
-      <div className={css(styles.puzzlesContainer)}>
+      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
+        <div className="page-nav">
+
+        </div>
         <div className={css(styles.puzzlesLeft)}>
           { puzzlesCards }
         </div>

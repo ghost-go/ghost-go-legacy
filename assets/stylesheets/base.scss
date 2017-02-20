@@ -12,11 +12,6 @@ body {
   color: #383838;
   background-color: #eeeeee;
   box-sizing: border-box;
-  width: 100%;
-  min-height: 100vh;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 body.mac {
@@ -40,4 +35,13 @@ a {
 
 body, h4, h5, li {
   line-height: 20px;
+}
+
+
+.container {
+  display: 'flex';
+  margin-top: '20px';
+  background-color: '#fff';
+  padding: '20px';
+  transition: all .6s ease-in-out;
 }

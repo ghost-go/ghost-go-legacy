@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import { Link } from 'react-router'
 import {blue500, red500, greenA200} from 'material-ui/styles/colors';
 
@@ -19,7 +19,12 @@ import AuthService from '../utils/AuthService'
 export default class Navigation extends Component {
 
   static propTypes = {
-    auth: PropTypes.instanceOf(AuthService)
+    auth: T.instanceOf(AuthService),
+    expanded: T.bool.isRequired,
+  }
+
+  static defaultProps = {
+    expanded: false,
   }
 
   constructor(props) {
@@ -35,9 +40,9 @@ export default class Navigation extends Component {
   render() {
     return (
       <div id="page-header">
-        <div id="header-logo">
+        <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="header-logo">
           <span>GHOSTGO <i className="opacity-80">- beta v0.1</i></span>
-          <a id="collapse-sidebar" href="#" title="">
+          <a onClick={this.props.onClick} id="collapse-sidebar" href="#" title="">
             <i className="fa fa-chevron-left"></i>
           </a>
         </div>
@@ -48,6 +53,7 @@ export default class Navigation extends Component {
               <img width="36" src="assets/images/gravatar.jpg" alt="" />
               <i className="fa fa-chevron-down"></i>
             </a>
+            {/*
             <div class="dropdown-menu pad0B float-right">
               <div class="box-sm">
                 <div class="login-box clearfix">
@@ -63,6 +69,7 @@ export default class Navigation extends Component {
                 <div class="pad5A button-pane button-pane-alt text-center"><a href="#" class="btn display-block font-normal btn-danger"><i class="glyph-icon icon-power-off"></i> Logout</a></div>
               </div>
             </div>
+            */}
           </div>
           <div className="top-icon-bar">
             <div className="dropdown">
