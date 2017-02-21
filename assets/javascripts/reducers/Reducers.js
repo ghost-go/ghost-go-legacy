@@ -8,14 +8,14 @@ function updateObject(oldObject, newValues) {
 function updateItemInArray(array, itemId, updateItemCallback) {
   const updatedItems = array.map(item => {
     if(item.id !== itemId) {
-      return item;
+      return item
     }
 
-    const updatedItem = updateItemCallback(item);
-    return updatedItem;
-  });
+    const updatedItem = updateItemCallback(item)
+    return updatedItem
+  })
 
-  return updatedItems;
+  return updatedItems
 }
 
 function buildFetchReducer(initialState, name = '') {

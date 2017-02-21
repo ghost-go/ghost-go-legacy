@@ -2,6 +2,7 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import _ from 'lodash'
 
 //material-ui
 import {Dropdown, MenuItem, Glyphicon} from 'react-bootstrap'
@@ -19,11 +20,13 @@ import { StyleSheet, css } from 'aphrodite'
 class Puzzles extends Component {
 
   static propTypes = {
-    expanded: T.bool.isRequired
+    expanded: T.bool.isRequired,
+    tags: T.object.isRequired,
+    puzzles: T.object.isRequired,
   }
 
   static defaultProps = {
-    expanded: true
+    expanded: true,
   }
 
   constructor(props) {
@@ -66,7 +69,7 @@ class Puzzles extends Component {
 
   render() {
     const { puzzles, tags } = this.props
-    if (!puzzles || !tags) return null
+    if (_.isNil(puzzles) || _.isNil(tags) || _.isNil(tags.data)) return null
 
     let range = this.props.puzzleFilter['start'] + '-' + this.props.puzzleFilter['end']
     let puzzlesCards = []
@@ -124,18 +127,23 @@ class Puzzles extends Component {
             <Dropdown.Menu className="super-colors">
               <div className="popover-title">Level</div>
               <div className="popover-content">
-                <a href="">18-10k</a>
-                <a href="">9-5k</a>
-                <a href="">4-1k</a>
-                <a href="">1-3d</a>
-                <a href="">4-6d</a>
+                <ul className="tags">
+                  <li className="tag">18K-10K</li>
+                  <li className="tag">9K-5K</li>
+                  <li className="tag">4K-1K</li>
+                  <li className="tag">1D-3D</li>
+                  <li className="tag">4D-6D</li>
+                </ul>
               </div>
               <div className="popover-title">Tags</div>
               <div className="popover-content">
+                <ul className="tags">
+                  { tags.data.map((tag) => <li className="tag">{`${tag.name}(${tag.taggings_count})`}</li>)}
+                </ul>
               </div>
             </Dropdown.Menu>
           </Dropdown>
-          <ul id="page-subnav">
+          <ul className="page-subnav">
             <li><a title="Rank: xxx"><span>Rank: 18k - 10k</span></a></li>
             <li><a title="Tag: xxx"><span>Tags: xxx</span></a></li>
           </ul>
