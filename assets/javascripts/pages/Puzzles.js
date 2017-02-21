@@ -29,13 +29,21 @@ class Puzzles extends Component {
     expanded: true,
   }
 
+  state = {
+    tipsOpen: false,
+    isLoading: false,
+    filterOpen: false,
+  }
+
   constructor(props) {
     super(props)
-    this.state = {
-      tipsOpen: false,
-      isLoading: false,
-    }
+
     this.handleSeeMore = this.handleSeeMore.bind(this)
+  }
+
+  handleToggle() {
+    console.log('aa')
+    this.setState({filterOpen: !this.state.filterOpen})
   }
 
   handleSeeMore(rank) {
@@ -45,6 +53,7 @@ class Puzzles extends Component {
     } else {
       range = rank.split('-')
     }
+    this.setState({filterOpen: false})
     this.props.dispatch(setPuzzleFilter({start: range[0], end: range[1] }))
     this.props.dispatch(setRangeFilter({start: range[0], end: range[1] }))
     this.props.dispatch(fetchPuzzles({
@@ -73,54 +82,31 @@ class Puzzles extends Component {
 
     let range = this.props.puzzleFilter['start'] + '-' + this.props.puzzleFilter['end']
     let puzzlesCards = []
-    let filter
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
-      filter =
-        <FilterPanel
-          handleSeeMore={this.handleSeeMore}
-          tags={tags.data}
-          range={range}
-          rank_18k_10k_count={puzzles.data.rank_18k_10k_count}
-          rank_9k_5k_count={puzzles.data.rank_9k_5k_count}
-          rank_4k_1k_count={puzzles.data.rank_4k_1k_count}
-          rank_1d_3d_count={puzzles.data.rank_1d_3d_count}
-          rank_4d_6d_count={puzzles.data.rank_4d_6d_count}
-        />
-        puzzles.data.puzzles.forEach((i) => {
-          puzzlesCards.push(
-            <Card  className={css(styles.card)}>
-              <CardMedia
-                className={css(styles.puzzleImg)}
-              >
-                <Link to={`/puzzles/${i.id}`}>
-                  <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
-                </Link>
-              </CardMedia>
-            </Card>
-          )
-        })
+      puzzles.data.puzzles.forEach((i) => {
+        puzzlesCards.push(
+          <Card  className={css(styles.card)}>
+            <CardMedia
+              className={css(styles.puzzleImg)}
+            >
+              <Link to={`/puzzles/${i.id}`}>
+                <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
+              </Link>
+            </CardMedia>
+          </Card>
+        )
+      })
     }
     else {
       puzzlesCards =
         <div className={css(styles.loading)}>
           <i className="fa fa-spinner fa-pulse fa-fw"></i>
         </div>
-        filter =
-        <FilterPanel
-          handleSeeMore={this.handleSeeMore}
-          tags={tags.data}
-          range={range}
-          rank_18k_10k_count={0}
-          rank_9k_5k_count={0}
-          rank_4k_1k_count={0}
-          rank_1d_3d_count={0}
-          rank_4d_6d_count={0}
-        />
     }
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
         <div className="page-nav">
-          <Dropdown className="filter">
+          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>
               <Glyphicon className="filter-icon" glyph="filter" />
             </Dropdown.Toggle>
@@ -128,11 +114,12 @@ class Puzzles extends Component {
               <div className="popover-title">Level</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li className="tag">18K-10K</li>
-                  <li className="tag">9K-5K</li>
-                  <li className="tag">4K-1K</li>
-                  <li className="tag">1D-3D</li>
-                  <li className="tag">4D-6D</li>
+                  <li data-toggle="dropdown" onSelect={() => null} onClick={this.handleSeeMore.bind(this, 'all')} className="tag">ALL</li>
+                  <li onClick={this.handleSeeMore.bind(this, '18k-10k')} className="tag">18K-10K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '9k-5k')} className="tag">9K-5K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '4k-1k')} className="tag">4K-1K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '1d-3d')} className="tag">1D-3D</li>
+                  <li onClick={this.handleSeeMore.bind(this, '4d-6d')} className="tag">4D-6D</li>
                 </ul>
               </div>
               <div className="popover-title">Tags</div>
@@ -148,28 +135,9 @@ class Puzzles extends Component {
             <li><a title="Tag: xxx"><span>Tags: xxx</span></a></li>
           </ul>
         </div>
-        <div className={css(styles.puzzlesLeft)}>
+        <div className={css(styles.puzzleContent)}>
           { puzzlesCards }
         </div>
-        <div className={css(styles.puzzlesRight)}>
-          <span className={css(styles.title)}>Tags</span>
-          <div className={css(styles.buttonGroup)}>
-            {
-              //<RaisedButton className={css(styles.button)} secondary={true} label="Tsumego Test" /> 
-              //<RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
-            }
-          </div>
-          { filter }
-        </div>
-        <Snackbar
-          open={this.state.tipsOpen}
-          message={'This function is not OPEN'}
-          autoHideDuration={5000}
-          bodyStyle={{
-            backgroundColor: 'black',
-            fontSize: '20px'
-          }}
-        />
       </div>
     )
   }
@@ -177,40 +145,8 @@ class Puzzles extends Component {
 
 const styles = StyleSheet.create({
 
-  puzzlesContainer: {
-    display: 'flex',
-    marginTop: '20px',
-    backgroundColor: '#fff',
-    padding: '20px',
-  },
-
-  puzzlesLeft: {
-  },
-
-  puzzlesRight: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    flex: '0 0 230px'
-  },
-
-  title: {
-    fontSize: '20px',
-  },
-
-  chooseLevel: {
-    fontSize: '22px',
-    lineHeight: '22px',
-    fontWeight: '300',
-    marginTop: '10px',
-  },
-
-  buttonGroup: {
-    marginBottom: '30px'
-  },
-
-  button: {
-    width: '100%',
-    marginBottom: '15px',
+  puzzleContent: {
+    padding: '5px',
   },
 
   card: {
@@ -248,11 +184,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: '0 auto',
   },
-
-  ratingIcon: {
-    width: 28,
-    height: 28
-  }
 
 })
 

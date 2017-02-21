@@ -19,6 +19,7 @@ export default class Footer extends Component {
 const style = StyleSheet.create({
   footer: {
     backgroundColor: 'black',
+    clear: 'both',
     padding: '20px',
     color: '#999',
     textAlign: 'center'
