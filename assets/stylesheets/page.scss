@@ -75,7 +75,14 @@
 
 .btn.btn-primary {
   color: #fff;
+  border-color: #db690c;
   background: #f87500;
+}
+
+.btn.btn-primary:hover {
+  color: #fff;
+  border-color: #b45f1a;
+  background-color: #ff8e29;
 }
 
 .puzzle-card {

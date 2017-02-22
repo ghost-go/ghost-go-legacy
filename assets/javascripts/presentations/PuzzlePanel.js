@@ -6,6 +6,7 @@ import AnswerBar from '../presentations/AnswerBar'
 import { StyleSheet, css } from 'aphrodite'
 import RaisedButton from 'material-ui/RaisedButton'
 import RankRange from '../presentations/RankRange'
+import {Button} from 'react-bootstrap'
 
 export default class PuzzlePanel extends Component {
 
@@ -76,12 +77,14 @@ export default class PuzzlePanel extends Component {
     let wrongAnswers = []
     let nextPanel, nextBtn
     if (this.props.showNext === true) {
-      nextBtn = <RaisedButton
-        onClick={this.props.handleNext}
-        label="Next Tsumego"
-        secondary={true}
-      />
-        nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
+      nextBtn =
+        <Button
+          style={{marginRight: '10px'}}
+          onClick={this.props.handleReset}
+          bsStyle="success">
+          Next Tsumego
+        </Button>
+      nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
@@ -126,12 +129,12 @@ export default class PuzzlePanel extends Component {
         <div className='title'>{`${puzzle.whofirst} ${puzzle.rank}`}</div>
         <div><strong>Number:</strong>{`P-${puzzle.id}`}</div>
         <div className="button-container">
-          <RaisedButton
+          <Button
             style={{marginRight: '10px'}}
             onClick={this.props.handleReset}
-            label="Reset"
-            primary={true}
-          />
+            bsStyle="primary">
+            Reset
+          </Button>
           { nextBtn }
         </div>
         <div>
