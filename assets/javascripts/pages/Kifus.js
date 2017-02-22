@@ -152,7 +152,7 @@ class Kifus extends Component {
         </div>
     }
     return (
-      <div className={css(styles.kifusContainer)}>
+      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
         <div className={css(styles.kifusLeft)}>
           <h1 className={css(styles.title)}>Kifu Library</h1>
           <div className={css(styles.buttonGroup)}>

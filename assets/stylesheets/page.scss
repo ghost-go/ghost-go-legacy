@@ -85,6 +85,18 @@
   background-color: #ff8e29;
 }
 
+.btn.btn-success {
+  color: #fff;
+  background: #36be00;
+  border-color: #2fa11c
+}
+
+.btn.btn-success:hover {
+  color: #fff;
+  border-color: #46a51f;
+  background-color: #47b919;
+}
+
 .puzzle-card {
   position: relative;
   background-color: #FFF;

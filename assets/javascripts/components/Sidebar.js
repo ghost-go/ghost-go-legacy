@@ -132,9 +132,9 @@ export default class Sidebar extends Component {
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
                   <li>
-                    <a href="index.html" title="Dashboard">
+                    <Link to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="divider"></li>
                   <div className="divider-header">Resources</div>
@@ -144,28 +144,28 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li>
-                    <a href="index.html" title="Kifu Library">
+                    <Link to="/kifus">
                       <i className="fa fa-television"></i> <span>Kifu Library</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="divider"></li>
                   <div className="divider-header">Practices</div>
                   <li>
-                    <a href="index.html" title="Practices">
+                    <Link to="/users">
                       <i className="fa fa-television"></i> <span>Practices</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="divider"></li>
                   <div className="divider-header">Settings</div>
                   <li>
-                    <a href="index.html" title="Profile">
+                    <Link to="/users">
                       <i className="fa fa-television"></i> <span>Profile</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="index.html" title="History">
+                    <Link to="/practices">
                       <i className="fa fa-television"></i> <span>History</span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -175,9 +175,9 @@ export default class Sidebar extends Component {
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
                   <li>
-                    <a href="index.html" title="Dashboard">
+                    <Link to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="divider"></li>
                   <li>
@@ -186,26 +186,26 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li>
-                    <a href="index.html" title="Kifu Library">
+                    <Link to="/kifus">
                       <i className="fa fa-television"></i> <span>Kifu Library</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <a href="index.html" title="Practices">
+                    <Link to="/practices">
                       <i className="fa fa-television"></i> <span>Practices</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <a href="index.html" title="Profile">
+                    <Link to="/users">
                       <i className="fa fa-television"></i> <span>Profile</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="index.html" title="History">
+                    <Link to="/history">
                       <i className="fa fa-television"></i> <span>History</span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
