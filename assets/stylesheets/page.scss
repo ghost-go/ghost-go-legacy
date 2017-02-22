@@ -95,3 +95,29 @@
     width: 100%;
   }
 }
+
+.puzzle-board {
+  float: left;
+  background-color: #FFF;
+  margin: 0 10px 10px 10px;
+  width: calc(100vmin);
+  height: calc(100vmin);
+}
+
+.puzzle-panel {
+  overflow: hidden;
+  background-color: #FFF;
+  margin: 10px;
+  padding: 15px;
+  .title {
+    padding: 10px 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .research {
+    margin: 20px 0px;
+  }
+  .button-container {
+    margin-top: 20px;
+  }
+}

@@ -139,9 +139,9 @@ export default class Sidebar extends Component {
                   <li className="divider"></li>
                   <div className="divider-header">Resources</div>
                   <li>
-                    <a href="index.html" title="Tsumego Library">
+                    <Link to="/puzzles">
                       <i className="fa fa-television"></i> <span>Tsumego Library</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a href="index.html" title="Kifu Library">
@@ -181,9 +181,9 @@ export default class Sidebar extends Component {
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <a href="index.html" title="Tsumego Library">
+                    <Link to="/puzzles">
                       <i className="fa fa-television"></i> <span>Tsumego Library</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a href="index.html" title="Kifu Library">

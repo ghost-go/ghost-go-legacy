@@ -1,23 +1,14 @@
-import React, { Component, PropTypes } from 'react'
-import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
+import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import { push } from 'react-router-redux'
 import Helmet from 'react-helmet' //import lang from '../components/lang'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
-import ControlBar from '../presentations/ControlBar'
 import PuzzlePanel from '../presentations/PuzzlePanel'
-import SVGIcon from '../presentations/SVGIcon'
 import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import Layout from './Layout'
-import AnswerBar from '../presentations/AnswerBar'
-import Rating from 'react-rating'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
-import { postPuzzleRecord, postRating } from '../actions/PostActions'
+import { postPuzzleRecord } from '../actions/PostActions'
 import {
   setCurrentMode,
   setRangeFilter,
@@ -27,17 +18,8 @@ import {
 } from '../actions/Actions'
 
 //material-ui
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
-import Toggle from 'material-ui/Toggle'
 import Paper from 'material-ui/Paper'
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 import Dialog from 'material-ui/Dialog'
-import Snackbar from 'material-ui/Snackbar'
-import Drawer from 'material-ui/Drawer'
-import RankRange from '../presentations/RankRange'
-
-import * as config from '../constants/Config'
-import URI from 'urijs'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -202,23 +184,21 @@ class Puzzle extends Component {
             //]}
           ///>
         }
-        <div className={css(styles.puzzleContainer)}>
-          <Paper className={css(styles.puzzleBoard)}>
-            <PuzzleBoard
-              className="board"
-              steps={this.props.steps}
-              addSteps={::this.addSteps}
-              resetSteps={::this.resetSteps}
-              puzzle={puzzle.data}
-              handleRight={this.handleRightTipOpen}
-              handleWrong={this.handleWrongTipOpen}
-              currentMode={this.props.currentMode}
-              setCurrentMode={::this.setCurrentMode}
-              ref="board"
-            />
-          </Paper>
+        <div className='puzzle-board'>
+          <PuzzleBoard
+            className="board"
+            steps={this.props.steps}
+            addSteps={::this.addSteps}
+            resetSteps={::this.resetSteps}
+            puzzle={puzzle.data}
+            handleRight={this.handleRightTipOpen}
+            handleWrong={this.handleWrongTipOpen}
+            currentMode={this.props.currentMode}
+            setCurrentMode={::this.setCurrentMode}
+            ref="board"
+          />
         </div>
-        <div className={css(styles.puzzleInfo)}>
+        <div className='puzzle-panel'>
           <PuzzlePanel
             showNext={true}
             puzzle={this.props.puzzle.data}
@@ -245,31 +225,7 @@ const styles = StyleSheet.create({
     float: 'right'
   },
 
-  puzzlePage: {
-    padding: '10px',
-    display: 'flex',
-    '@media (max-width: 992px)': {
-      padding: '0px',
-      flexDirection: 'column',
-    }
-  },
-
-  puzzleContainer: {
-    display: 'flex',
-  },
-
   puzzleBoard: {
-    margin: '0 10px 0 10px',
-    flex: '1 1 auto',
-    width: 'calc(100vmin)',
-    height: 'calc(100vmin)',
-    '@media (max-width: 992px)': {
-      margin: '10px 0 10px 0',
-    },
-  },
-
-  puzzleInfo: {
-    flex: 'auto',
   },
 
   toggle: {

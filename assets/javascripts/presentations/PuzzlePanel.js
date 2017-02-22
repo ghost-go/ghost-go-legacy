@@ -1,7 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
-import Rating from 'react-rating'
-import SVGIcon from '../presentations/SVGIcon'
 import { postRating } from '../actions/PostActions'
 import Toggle from 'material-ui/Toggle'
 import AnswerBar from '../presentations/AnswerBar'
@@ -80,11 +77,11 @@ export default class PuzzlePanel extends Component {
     let nextPanel, nextBtn
     if (this.props.showNext === true) {
       nextBtn = <RaisedButton
-                  onClick={this.props.handleNext}
-                  label="Next Tsumego"
-                  secondary={true}
-                />
-      nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
+        onClick={this.props.handleNext}
+        label="Next Tsumego"
+        secondary={true}
+      />
+        nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
@@ -125,62 +122,35 @@ export default class PuzzlePanel extends Component {
       })
     }
     return (
-      <Card className={this.props.className}>
-        <CardTitle title={`${puzzle.whofirst} ${puzzle.rank}`} />
-        <CardText>
-          <div>
-            <strong>Number: </strong>
-            {`P-${puzzle.id}`}
-          </div>
-        </CardText>
-        <CardActions style={{padding: '14px'}}>
-          <Rating initialRate={parseFloat(puzzle.score)} onChange={::this.handleRatingChange}
-            empty={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-empty" />}
-            full={<SVGIcon className={css(styles.ratingIcon)} href="#icon-star-full" />}
+      <div className={this.props.className}>
+        <div className='title'>{`${puzzle.whofirst} ${puzzle.rank}`}</div>
+        <div><strong>Number:</strong>{`P-${puzzle.id}`}</div>
+        <div className="button-container">
+          <RaisedButton
+            style={{marginRight: '10px'}}
+            onClick={this.props.handleReset}
+            label="Reset"
+            primary={true}
           />
-        </CardActions>
-        <CardActions style={{padding: '14px'}}>
-          <div>
-            <RaisedButton
-              style={{marginRight: '10px'}}
-              onClick={this.props.handleReset}
-              label="Reset"
-              primary={true}
-            />
-            { nextBtn }
-          </div>
-          <div>
-            { nextPanel }
-          </div>
-        </CardActions>
-        <CardActions>
-          <div className="addthis_inline_share_toolbox"></div>
-          <CardText>
-            <Toggle
-              className={css(styles.toggle)}
-              label="Research Mode"
-              defaultToggled={this.props.currentMode === 'research'}
-              onToggle={::this.handleResearchMode}
-            />
-          </CardText>
-        </CardActions>
-        <div className={css(styles.answersContainer)}>
-          <CardText style={{padding: 0}} expandable={!this.state.answersExpanded}>
-            <CardHeader
-              title="Right Answers"
-              actAsExpander={true}
-              showExpandableButton={true}
-            />
-            { rightAnswers }
-            <CardHeader
-              title="Wrong Answers"
-              actAsExpander={true}
-              showExpandableButton={true}
-            />
-            { wrongAnswers }
-          </CardText>
+          { nextBtn }
         </div>
-      </Card>
+        <div>
+          { nextPanel }
+        </div>
+        <div className="addthis_inline_share_toolbox"></div>
+        <Toggle
+          className="research"
+          label="Research Mode"
+          defaultToggled={this.props.currentMode === 'research'}
+          onToggle={::this.handleResearchMode}
+        />
+        <div className={css(styles.answersContainer)}>
+          <div>Right Answers</div>
+          { rightAnswers }
+          <div>Wrong Answers</div>
+          { wrongAnswers }
+        </div>
+      </div>
     )
   }
 
@@ -193,16 +163,6 @@ const styles = StyleSheet.create({
     '@media screen and (max-aspect-ratio: 4/3)': {
       padding: '0px',
     },
-  },
-
-  toggle: {
-    fontSize: '14px',
-    maxWidth: '150'
-  },
-
-  ratingIcon: {
-    width: 28,
-    height: 28
   },
 
 })
