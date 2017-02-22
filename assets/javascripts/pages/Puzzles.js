@@ -5,12 +5,9 @@ import { Link } from 'react-router'
 import _ from 'lodash'
 
 //material-ui
-import {Dropdown, MenuItem, Glyphicon} from 'react-bootstrap'
-import {Card, CardMedia} from 'material-ui/Card'
-import Snackbar from 'material-ui/Snackbar'
+import {Dropdown, Glyphicon} from 'react-bootstrap'
 
 //internal component
-import FilterPanel from '../presentations/FilterPanel'
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions'
 import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'
 
@@ -23,6 +20,10 @@ class Puzzles extends Component {
     expanded: T.bool.isRequired,
     tags: T.object.isRequired,
     puzzles: T.object.isRequired,
+    rangeFilter: T.object.isRequired,
+    puzzleFilter: T.object.isRequired,
+    dispatch: T.object.isRequired,
+    location: T.object.isRequired,
   }
 
   static defaultProps = {
@@ -42,7 +43,6 @@ class Puzzles extends Component {
   }
 
   handleToggle() {
-    console.log('aa')
     this.setState({filterOpen: !this.state.filterOpen})
   }
 
@@ -80,20 +80,18 @@ class Puzzles extends Component {
     const { puzzles, tags } = this.props
     if (_.isNil(puzzles) || _.isNil(tags) || _.isNil(tags.data)) return null
 
-    let range = this.props.puzzleFilter['start'] + '-' + this.props.puzzleFilter['end']
     let puzzlesCards = []
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
       puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
-          <Card  className={css(styles.card)}>
-            <CardMedia
-              className={css(styles.puzzleImg)}
-            >
-              <Link to={`/puzzles/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img_r1.x300.url} />
-              </Link>
-            </CardMedia>
-          </Card>
+          <div className='puzzle-card'>
+            <Link to={`/puzzles/${i.id}`}>
+              <img src={i.preview_img_r1.x300.url} />
+            </Link>
+            <div className='puzzle-info'>
+              <span>Level: {i.rank}</span>
+            </div>
+          </div>
         )
       })
     }
@@ -114,25 +112,27 @@ class Puzzles extends Component {
               <div className="popover-title">Level</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li data-toggle="dropdown" onSelect={() => null} onClick={this.handleSeeMore.bind(this, 'all')} className="tag">ALL</li>
-                  <li onClick={this.handleSeeMore.bind(this, '18k-10k')} className="tag">18K-10K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '9k-5k')} className="tag">9K-5K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '4k-1k')} className="tag">4K-1K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '1d-3d')} className="tag">1D-3D</li>
-                  <li onClick={this.handleSeeMore.bind(this, '4d-6d')} className="tag">4D-6D</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'all')} className={`tag ${this.props.rangeFilter.text === 'all' ? 'active' : ''}`}>ALL</li>
+                  <li onClick={this.handleSeeMore.bind(this, '18k-10k')} className={`tag ${this.props.rangeFilter.text === '18k-10k' ? 'active' : ''}`}>18K-10K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '9k-5k')} className={`tag ${this.props.rangeFilter.text === '9k-5k' ? 'active' : ''}`}>9K-5K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '4k-1k')} className={`tag ${this.props.rangeFilter.text === '4k-1k' ? 'active' : ''}`}>4K-1K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '1d-3d')} className={`tag ${this.props.rangeFilter.text === '1d-3d' ? 'active' : ''}`}>1D-3D</li>
+                  <li onClick={this.handleSeeMore.bind(this, '4d-6d')} className={`tag ${this.props.rangeFilter.text === '4d-6d' ? 'active' : ''}`}>4D-6D</li>
                 </ul>
               </div>
               <div className="popover-title">Tags</div>
               <div className="popover-content">
                 <ul className="tags">
+                  <li className="tag">all</li>
                   { tags.data.map((tag) => <li className="tag">{`${tag.name}(${tag.taggings_count})`}</li>)}
                 </ul>
               </div>
             </Dropdown.Menu>
           </Dropdown>
           <ul className="page-subnav">
-            <li><a title="Rank: xxx"><span>Rank: 18k - 10k</span></a></li>
-            <li><a title="Tag: xxx"><span>Tags: xxx</span></a></li>
+            <li><a title="Level: xxx">{`Level: ${this.props.rangeFilter.text}`}</a></li>
+            <li><a title="Tag: xxx">Tags: xxx</a></li>
+            <li><a title="Total: xxx">Total: 100</a></li>
           </ul>
         </div>
         <div className={css(styles.puzzleContent)}>
@@ -144,37 +144,6 @@ class Puzzles extends Component {
 }
 
 const styles = StyleSheet.create({
-
-  puzzleContent: {
-    padding: '5px',
-  },
-
-  card: {
-    width: '120px',
-    height: '150px',
-    margin: '5px',
-    float: 'left',
-  },
-
-  puzzleImg: {
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-  },
-
-  puzzleTitle: {
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-  },
-
-  previewImg: {
-    width: '100%',
-  },
-
-  puzzleActions: {
-    height: '50px',
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-  },
 
   loading: {
     fontSize: '100px',

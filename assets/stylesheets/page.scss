@@ -78,3 +78,20 @@
   background: #f87500;
 }
 
+.puzzle-card {
+  position: relative;
+  background-color: #FFF;
+  width: 118px;
+  height: 150px;
+  margin: 5px;
+  float: left;
+
+  .puzzle-info {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+  }
+  img {
+    width: 100%;
+  }
+}
