@@ -109,6 +109,18 @@
   background-color: #3ca1ff;
 }
 
+.btn.btn-danger {
+  color: #fff;
+  border-color: #f33;
+  background: #ff5757;
+}
+
+.btn.btn-danger:hover {
+  color: #fff;
+  border-color: #ff1f1f;
+  background: #f33;
+}
+
 .puzzle-card {
   position: relative;
   background-color: #FFF;
@@ -152,3 +164,4 @@
     margin-top: 20px;
   }
 }
+

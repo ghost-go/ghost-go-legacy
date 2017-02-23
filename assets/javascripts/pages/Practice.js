@@ -31,7 +31,6 @@ import Dialog from 'material-ui/Dialog'
 import Favorite from 'material-ui/svg-icons/action/favorite'
 import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 
-
 class Practice extends Component {
 
   static propTypes = {
