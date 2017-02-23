@@ -2,14 +2,30 @@ import React, { Component, PropTypes as T } from 'react'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 import { Link } from 'react-router'
 
+import AuthService from '../utils/AuthService'
+
 export default class Sidebar extends Component {
 
   static propTypes = {
+    auth: T.instanceOf(AuthService),
     expanded: T.bool.isRequired,
   }
 
   static defaultProps = {
     expanded: true,
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      profile: props.auth.getProfile()
+    }
+
+    props.auth.on('profile_updated', (newProfile) => {
+      this.setState({profile: newProfile})
+    })
+
   }
 
   //state = {
@@ -26,6 +42,7 @@ export default class Sidebar extends Component {
 
 
   render() {
+    const { auth } = this.props
     return (
       <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="page-sidebar" className="rm-transition">
         {
@@ -51,17 +68,31 @@ export default class Sidebar extends Component {
                     </Nav>
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
-                        <div id="tab-example-1">
-                          <div className="user-profile-sm clearfix">
-                            <img width="45" className="img-rounded" src="assets/images/gravatar.jpg" alt="" />
-                            <div className="user-welcome">
-                              Welcome back, <b>John Appleseed</b>
+                        {
+                          auth.loggedIn() ? (
+                            <div id="tab-example-1">
+                              <div className="user-profile-sm clearfix">
+                                <img width="45" className="img-rounded" src={this.state.profile.picture} alt="" />
+                                <div className="user-welcome">
+                                  Welcome back, <b>{this.state.profile.nickname}</b>
+                                </div>
+                                <a href="#" title="" className="btn btn-sm btn-black-opacity-alt">
+                                  <i className="fa fa-cog"></i>
+                                </a>
+                              </div>
                             </div>
-                            <a href="#" title="" className="btn btn-sm btn-black-opacity-alt">
-                              <i className="fa fa-cog"></i>
-                            </a>
-                          </div>
-                        </div>
+                          ) : (
+                            <div id="tab-example-1">
+                              <div className="user-profile-sm clearfix">
+                                <div className="user-welcome">
+                                  <a onClick={auth.login.bind(this)} title="Login" className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
+                                    Login
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        }
                       </Tab.Pane>
                       <Tab.Pane eventKey="second">
                         <div id="tab-example-2">

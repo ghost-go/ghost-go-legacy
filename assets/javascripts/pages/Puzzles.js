@@ -22,7 +22,7 @@ class Puzzles extends Component {
     puzzles: T.object.isRequired,
     rangeFilter: T.object.isRequired,
     puzzleFilter: T.object.isRequired,
-    dispatch: T.object.isRequired,
+    dispatch: T.func.isRequired,
     location: T.object.isRequired,
   }
 
@@ -84,7 +84,7 @@ class Puzzles extends Component {
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
       puzzles.data.puzzles.forEach((i) => {
         puzzlesCards.push(
-          <div className='puzzle-card'>
+          <div key={i.id} className='puzzle-card'>
             <Link to={`/puzzles/${i.id}`}>
               <img src={i.preview_img_r1.x300.url} />
             </Link>
@@ -124,7 +124,7 @@ class Puzzles extends Component {
               <div className="popover-content">
                 <ul className="tags">
                   <li className="tag">all</li>
-                  { tags.data.map((tag) => <li className="tag">{`${tag.name}(${tag.taggings_count})`}</li>)}
+                  { tags.data.map((tag) => <li key={tag.id} className="tag">{`${tag.name}(${tag.taggings_count})`}</li>)}
                 </ul>
               </div>
             </Dropdown.Menu>

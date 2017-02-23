@@ -81,7 +81,7 @@ export default class PuzzlePanel extends Component {
         <Button
           style={{marginRight: '10px'}}
           onClick={this.props.handleReset}
-          bsStyle="success">
+          bsStyle="info">
           Next Tsumego
         </Button>
       nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />

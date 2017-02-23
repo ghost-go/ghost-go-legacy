@@ -48,8 +48,8 @@ export default class Container extends Component {
               </symbol>
             </defs>
           </svg>
-          <Navigation expanded={this.state.expanded} onClick={::this.handleClick} auth={this.props.route.auth} />
-          <Sidebar expanded={this.state.expanded} />
+          <Navigation expanded={this.state.expanded} collapseToggle={::this.handleClick} auth={this.props.route.auth} />
+          <Sidebar expanded={this.state.expanded} auth={this.props.route.auth} />
           <div>
             { children }
           </div>

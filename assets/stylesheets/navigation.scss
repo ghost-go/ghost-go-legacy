@@ -91,6 +91,11 @@
       float: left;
     }
   }
+
+  &.login {
+    margin-right: 30px;
+    cursor: pointer;
+  }
 }
 
 .opacity-80 {
