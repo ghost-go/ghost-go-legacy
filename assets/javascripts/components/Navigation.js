@@ -31,12 +31,28 @@ export default class Navigation extends Component {
 
   }
 
+  logout() {
+    console.log('aaa')
+    this.props.auth.logout()
+  }
+
   handleToggle() {
     this.setState({navOpen: !this.state.navOpen})
   }
 
+  mouseDownHandler() {
+    this.mouseIsDownOnCalendar = true;
+  }
+
+  mouseUpHandler() {
+    this.mouseIsDownOnCalendar = false;
+  }
+
   componentDidMount() {
     window.addEventListener('mousedown', () => {
+      if (this.mouseIsDownOnCalendar) {
+        return;
+      }
       this.setState({navOpen: false})
     }, false)
   }
@@ -52,12 +68,12 @@ export default class Navigation extends Component {
           </a>
         </div>
         <div id="sidebar-search"></div>
-        <div id="header-right">
+        <div id="header-right" onMouseDown={::this.mouseDownHandler} onMouseUp={::this.mouseUpHandler}>
           {
             auth.loggedIn() ? (
               <div>
                 <div className="user-profile dropdown">
-                  <a onClick={::this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
+                  <a onTouchTap={::this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
                     <img width="36" src={this.state.profile.picture} alt="" />
                     <i className="fa fa-chevron-down"></i>
                   </a>
@@ -73,7 +89,7 @@ export default class Navigation extends Component {
                         <li><a href="#">View lockscreen example <Glyphicon className="icon" glyph="menu-right" /></a></li>
                         <li><a href="#">View account details <Glyphicon className="icon" glyph="menu-right" /></a></li>
                       </ul>
-                      <div className="text-center button-pane">
+                      <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
                         <a href="#" className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
                       </div>
                     </div>
