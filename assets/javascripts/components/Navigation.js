@@ -35,6 +35,11 @@ export default class Navigation extends Component {
     this.setState({navOpen: !this.state.navOpen})
   }
 
+  componentDidMount() {
+    window.addEventListener('mousedown', () => {
+      this.setState({navOpen: false})
+    }, false)
+  }
 
   render() {
     const { auth } = this.props
