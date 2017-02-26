@@ -170,6 +170,9 @@ class Kifus extends Component {
         <div className={css(styles.puzzleContent)}>
           { kifuCards }
         </div>
+        <div>
+          { pagination }
+        </div>
       </div>
     )
   }
