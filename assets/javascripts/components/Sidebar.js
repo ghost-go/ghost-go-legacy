@@ -182,7 +182,7 @@ export default class Sidebar extends Component {
                   <li className="divider"></li>
                   <div className="divider-header">Practices</div>
                   <li>
-                    <Link to="/users">
+                    <Link to="/practices">
                       <i className="fa fa-television"></i> <span>Practices</span>
                     </Link>
                   </li>
@@ -194,7 +194,7 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/practices">
+                    <Link to="/history">
                       <i className="fa fa-television"></i> <span>History</span>
                     </Link>
                   </li>

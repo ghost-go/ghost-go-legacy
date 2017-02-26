@@ -88,15 +88,8 @@ class History extends Component {
       }
     }
     return (
-      <div className={css(mainStyles.mainContainer, styles.centerContainer)}>
-        <div className={css(styles.titleContainer)}>
-          <i className={`zmdi zmdi-alarm ${css(styles.icon)}`}></i>
-          <span className={css(styles.title)}>Recently Viewed</span>
-        </div>
+      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
         <div className={css(styles.historyContainer)}>
-          <Paper className={css(styles.leftMenu)}>
-            <LeftMenu />
-          </Paper>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>
               { recordList }
