@@ -32,8 +32,6 @@ class Kifu extends Component {
       board: null
     }
     this.props.dispatch(fetchKifu({id: id}))
-
-
     this.setBoard = this.setBoard.bind(this)
   }
 
