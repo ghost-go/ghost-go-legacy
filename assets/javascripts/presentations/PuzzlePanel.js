@@ -80,7 +80,7 @@ export default class PuzzlePanel extends Component {
       nextBtn =
         <Button
           style={{marginRight: '10px'}}
-          onClick={this.props.handleReset}
+          onClick={this.props.handleNext}
           bsStyle="info">
           Next Tsumego
         </Button>

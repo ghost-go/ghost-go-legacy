@@ -45,7 +45,7 @@ class Kifu extends Component {
     const { kifu } = this.props
     if (kifu.data == null) return null
     return (
-      <div className={css(styles.kifuContainer)}>
+      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)}>
         <div className={css(styles.kifuBoard)}>
           <Board className="board"
             editable="false" setBoard={this.setBoard}

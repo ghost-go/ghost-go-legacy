@@ -139,6 +139,24 @@
   }
 }
 
+.kifu-card {
+  position: relative;
+  background-color: #FFF;
+  width: 240px;
+  height: 330px;
+  margin: 5px;
+  float: left;
+
+  .kifu-info {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+  }
+  img {
+    width: 100%;
+  }
+}
+
 .puzzle-board {
   float: left;
   background-color: #FFF;

@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import ReactPaginate from 'react-paginate'
 import { push } from 'react-router-redux'
 import { Router, Route, hashHistory, browserHistory } from 'react-router'
+import {Dropdown, Glyphicon} from 'react-bootstrap'
 
 //material-ui
 import FlatButton from 'material-ui/FlatButton'
@@ -32,6 +33,7 @@ class Kifus extends Component {
 
   state = {
     isLoading: false,
+    filterOpen: false,
   }
 
   constructor(props) {
@@ -51,6 +53,10 @@ class Kifus extends Component {
     this.handleSeeMore = this.handleSeeMore.bind(this)
   }
 
+  handleToggle() {
+    this.setState({filterOpen: !this.state.filterOpen})
+  }
+
   getRecordData(page = 1) {
     this.props.dispatch(fetchKifus({ page: page}))
   }
@@ -68,6 +74,7 @@ class Kifus extends Component {
   }
 
   handleSeeMore(player) {
+    this.setState({filterOpen: false})
     this.props.dispatch(setKifuFilter(player || this.props.kifuFilter))
     this.props.dispatch(fetchKifus({
       player: player || this.props.kifuFilter
@@ -76,6 +83,7 @@ class Kifus extends Component {
 
   render() {
     const { kifus, players } = this.props
+    if (_.isNil(kifus) || _.isNil(players.data)) return null
     let playerItems = []
     let kifuCards = []
     let pagination, page = 0
@@ -115,33 +123,18 @@ class Kifus extends Component {
     if (!kifus.isFetching && kifus.data != null) {
       kifus.data.data.forEach((i) => {
         kifuCards.push(
-          <Card key={i.id} className={css(styles.card)}>
-            <CardMedia
-              className={css(styles.kifuImg)}
-            >
-              <Link to={`/kifus/${i.id}`}>
-                <img className={css(styles.previewImg)} src={i.preview_img.x500.url} />
-              </Link>
-            </CardMedia>
-            <CardActions className={css(styles.kifuIntro)}>
-              <span className={css(styles.kifuIntroSpan)}>{`${i.player_b.en_name}(${i.b_rank})`}</span>
-              <span className={css(styles.kifuIntroSpan, styles.versus)}>VS</span>
-              <span className={css(styles.kifuIntroSpan)}>{`${i.player_w.en_name}(${i.w_rank})`}</span>
-            </CardActions>
-            <CardActions>
+          <div key={i.id} className='kifu-card'>
+            <Link to={`/kifus/${i.id}`}>
+              <img src={i.preview_img.x300.url} />
+            </Link>
+            <div className='kifu-info'>
+              <span>{i.player_b.en_name} <b>VS</b> {i.player_w.en_name}</span>
+              <br />
               <span>{`Result: ${i.result}`}</span>
-            </CardActions>
-            <CardActions>
+              <br />
               <span>{`Date: ${i.short_date}`}</span>
-            </CardActions>
-            <CardActions
-              className={css(styles.kifuActions)}
-            >
-              <Link to={`/kifus/${i.id}`}>
-                <RaisedButton className={css(styles.button)} primary={true} label="Review" />
-              </Link>
-            </CardActions>
-          </Card>
+            </div>
+          </div>
         )
       })
     }
@@ -153,32 +146,29 @@ class Kifus extends Component {
     }
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
-        <div className={css(styles.kifusLeft)}>
-          <h1 className={css(styles.title)}>Kifu Library</h1>
-          <div className={css(styles.buttonGroup)}>
-            <RaisedButton onClick={this.handleSeeMore.bind(this, null)} className={css(styles.button)} primary={true} label="See More" />
-          </div>
-          <Card expanded={true}>
-            <CardHeader
-              title="PLAYER"
-              actAsExpander={true}
-              showExpandableButton={true}
-            />
-            <CardText expandable={true}>
-              <FlatButton
-                backgroundColor={ this.props.kifuFilter == 'all' ? 'rgb(235, 235, 235)' : '' }
-                onClick={this.handleSeeMore.bind(this, 'all')}
-                className={css(styles.button)}
-                style={{textAlign: 'left'}} label="all" />
-              { playerItems }
-            </CardText>
-          </Card>
-          <Card expanded={true}>
-          </Card>
+        <div className="page-nav">
+          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
+            <Dropdown.Toggle>
+              <Glyphicon className="filter-icon" glyph="filter" />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="super-colors">
+              <div className="popover-title">Player</div>
+              <div className="popover-content">
+                <ul className="tags">
+                  <li className="tag">all</li>
+                  {
+                    players.data.map((player) => <li key={player.id} className="tag" onClick={this.handleSeeMore.bind(this, player.en_name)}>{player.en_name}</li>)
+                  }
+                </ul>
+              </div>
+            </Dropdown.Menu>
+          </Dropdown>
+          <ul className="page-subnav">
+            <li><a title="Player: xxx">{`Player: ${this.props.kifuFilter}`}</a></li>
+          </ul>
         </div>
-        <div className={css(styles.kifusRight)}>
+        <div className={css(styles.puzzleContent)}>
           { kifuCards }
-          { pagination }
         </div>
       </div>
     )
@@ -187,95 +177,6 @@ class Kifus extends Component {
 }
 
 const styles = StyleSheet.create({
-  kifusContainer: {
-    display: 'flex',
-    marginTop: '20px',
-    backgroundColor: '#fff',
-    padding: '20px',
-  },
-
-  kifusLeft: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    flex: '0 0 230px'
-  },
-
-  kifusRight: {
-    display: 'flex',
-    flex: 'auto',
-    flexFlow: 'row wrap',
-    paddingTop: '10px',
-    marginLeft: '10px',
-  },
-
-  title: {
-    fontSize: '26px',
-    lineHeight: '26px',
-    fontWeight: '300',
-    margin: '10px 0 35px',
-    padding: '0'
-  },
-
-  chooseLevel: {
-    fontSize: '22px',
-    lineHeight: '22px',
-    fontWeight: '300',
-    marginTop: '10px',
-  },
-
-  buttonGroup: {
-    marginBottom: '20px'
-  },
-
-  button: {
-    width: '100%',
-    marginBottom: '15px',
-  },
-
-  card: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    width: '220px',
-    margin: '0px 10px 20px 10px',
-    float: 'left',
-  },
-
-  kifuImg: {
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-  },
-
-  kifuTitle: {
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-  },
-
-  kifuIntro: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-
-  kifuIntroSpan: {
-    flex: '0 1 45%',
-  },
-
-  versus: {
-    flex: '1 1 10%',
-    fontWeight: 'bold',
-    fontSize: '16px'
-  },
-
-  previewImg: {
-    width: '100%'
-  },
-
-  kifuActions: {
-    height: '50px',
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-  },
 
   loading: {
     fontSize: '100px',
@@ -285,22 +186,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: '0 auto',
   },
-
-  tip: {
-    position: 'absolute',
-    zIndex: '100',
-    padding: '20',
-    fontSize: '30px',
-    left: '50px',
-    top: '65px',
-    color: 'red'
-  },
-
-  ratingIcon: {
-    width: 28,
-    height: 28
-  },
-
 
 })
 
