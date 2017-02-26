@@ -332,31 +332,34 @@ export default class PuzzleBoard extends Component {
     //https://github.com/Khan/aphrodite/blame/master/README.md#L128
     setTimeout(() => {
 
-      this._boardCtx = this.boardLayer.getContext('2d')
-      this._pieceCtx = this.pieceLayer.getContext('2d')
-      this._crossCtx = this.crossLayer.getContext('2d')
+      if (this.boardLayer && this.pieceLayer && this.crossLayer) {
+        this._boardCtx = this.boardLayer.getContext('2d')
+        this._pieceCtx = this.pieceLayer.getContext('2d')
+        this._crossCtx = this.crossLayer.getContext('2d')
 
-      this.boardLayer.width = this.boardLayer.offsetWidth
-      this.boardLayer.height = this.boardLayer.offsetHeight
-      this.pieceLayer.width = this.pieceLayer.offsetWidth
-      this.pieceLayer.height = this.pieceLayer.offsetHeight
-      this.crossLayer.width = this.crossLayer.offsetWidth
-      this.crossLayer.height = this.crossLayer.offsetHeight
-      this.topLayer.width = this.topLayer.offsetWidth
-      this.topLayer.height = this.topLayer.offsetHeight
+        this.boardLayer.width = this.boardLayer.offsetWidth
+        this.boardLayer.height = this.boardLayer.offsetHeight
+        this.pieceLayer.width = this.pieceLayer.offsetWidth
+        this.pieceLayer.height = this.pieceLayer.offsetHeight
+        this.crossLayer.width = this.crossLayer.offsetWidth
+        this.crossLayer.height = this.crossLayer.offsetHeight
+        this.topLayer.width = this.topLayer.offsetWidth
+        this.topLayer.height = this.topLayer.offsetHeight
 
-      let mousemoveEvent = (e) => {
-        let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
-        let {x, y} = this._getOffsetPos(p.posX, p.posY)
-        this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
-        if (this._isPosInTheBoard(p.posX, p.posY)) {
-          this.showCross(x, y, '#ff0000')
+        let mousemoveEvent = (e) => {
+          let p = this._convertCtxposToPos(e.offsetX, e.offsetY)
+          let {x, y} = this._getOffsetPos(p.posX, p.posY)
+          this._crossCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
+          if (this._isPosInTheBoard(p.posX, p.posY)) {
+            this.showCross(x, y, '#ff0000')
+          }
         }
+
+        this.topLayer.onmousemove = mousemoveEvent
+
+        this.drawBoard()
       }
 
-      this.topLayer.onmousemove = mousemoveEvent
-
-      this.drawBoard()
     }, 0)
   }
 

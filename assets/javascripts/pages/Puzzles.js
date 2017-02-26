@@ -9,7 +9,7 @@ import {Dropdown, Glyphicon} from 'react-bootstrap'
 
 //internal component
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions'
-import { setPuzzleFilter, setRangeFilter } from '../actions/Actions'
+import { setPuzzleFilter, setRangeFilter, setTagFilter } from '../actions/Actions'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
@@ -46,18 +46,25 @@ class Puzzles extends Component {
     this.setState({filterOpen: !this.state.filterOpen})
   }
 
-  handleSeeMore(rank) {
+  handleSeeMore(rank, tag) {
     let range = []
     if (rank === 'all' || rank === null) {
       range = ['18k', '9d']
     } else {
       range = rank.split('-')
     }
+
+    if (tag === null) {
+      tag = 'all'
+    }
+
     this.setState({filterOpen: false})
     this.props.dispatch(setPuzzleFilter({start: range[0], end: range[1] }))
     this.props.dispatch(setRangeFilter({start: range[0], end: range[1] }))
+    this.props.dispatch(setTagFilter(tag))
     this.props.dispatch(fetchPuzzles({
-      rank: rank || this.props.puzzleFilter,
+      rank: rank || this.props.rankFilter,
+      tags: tag || this.props.tagFilter,
     }))
   }
 
@@ -112,27 +119,26 @@ class Puzzles extends Component {
               <div className="popover-title">Level</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, 'all')} className={`tag ${this.props.rangeFilter.text === 'all' ? 'active' : ''}`}>ALL</li>
-                  <li onClick={this.handleSeeMore.bind(this, '18k-10k')} className={`tag ${this.props.rangeFilter.text === '18k-10k' ? 'active' : ''}`}>18K-10K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '9k-5k')} className={`tag ${this.props.rangeFilter.text === '9k-5k' ? 'active' : ''}`}>9K-5K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '4k-1k')} className={`tag ${this.props.rangeFilter.text === '4k-1k' ? 'active' : ''}`}>4K-1K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '1d-3d')} className={`tag ${this.props.rangeFilter.text === '1d-3d' ? 'active' : ''}`}>1D-3D</li>
-                  <li onClick={this.handleSeeMore.bind(this, '4d-6d')} className={`tag ${this.props.rangeFilter.text === '4d-6d' ? 'active' : ''}`}>4D-6D</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'all', null)} className={`tag ${this.props.rangeFilter.text === 'all' ? 'active' : ''}`}>ALL</li>
+                  <li onClick={this.handleSeeMore.bind(this, '18k-10k', null)} className={`tag ${this.props.rangeFilter.text === '18k-10k' ? 'active' : ''}`}>18K-10K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '9k-5k', null)} className={`tag ${this.props.rangeFilter.text === '9k-5k' ? 'active' : ''}`}>9K-5K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '4k-1k', null)} className={`tag ${this.props.rangeFilter.text === '4k-1k' ? 'active' : ''}`}>4K-1K</li>
+                  <li onClick={this.handleSeeMore.bind(this, '1d-3d', null)} className={`tag ${this.props.rangeFilter.text === '1d-3d' ? 'active' : ''}`}>1D-3D</li>
+                  <li onClick={this.handleSeeMore.bind(this, '4d-6d', null)} className={`tag ${this.props.rangeFilter.text === '4d-6d' ? 'active' : ''}`}>4D-6D</li>
                 </ul>
               </div>
               <div className="popover-title">Tags</div>
               <div className="popover-content">
                 <ul className="tags">
                   <li className="tag">all</li>
-                  { tags.data.map((tag) => <li key={tag.id} className="tag">{`${tag.name}(${tag.taggings_count})`}</li>)}
+                  { tags.data.map((tag) => <li onClick={this.handleSeeMore.bind(this, null, tag.name)} key={tag.id} className="tag">{`${tag.name}(${tag.taggings_count})`}</li>)}
                 </ul>
               </div>
             </Dropdown.Menu>
           </Dropdown>
           <ul className="page-subnav">
             <li><a title="Level: xxx">{`Level: ${this.props.rangeFilter.text}`}</a></li>
-            <li><a title="Tag: xxx">Tags: xxx</a></li>
-            <li><a title="Total: xxx">Total: 100</a></li>
+            <li><a title="Tag: xxx">{`Tags: ${this.props.tagFilter}`}</a></li>
           </ul>
         </div>
         <div className={css(styles.puzzleContent)}>
@@ -161,6 +167,7 @@ function select(state) {
     puzzles: state.puzzles,
     puzzleFilter: state.puzzleFilter,
     rangeFilter: state.rangeFilter,
+    tagFilter: state.tagFilter,
     tags: state.tags,
   }
 }

@@ -31,11 +31,6 @@ export default class Navigation extends Component {
 
   }
 
-  logout() {
-    console.log('aaa')
-    this.props.auth.logout()
-  }
-
   handleToggle() {
     this.setState({navOpen: !this.state.navOpen})
   }

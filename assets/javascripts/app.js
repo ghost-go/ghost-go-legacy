@@ -28,6 +28,7 @@ import { puzzles,
   rangeFilter,
   steps,
   tags,
+  tagFilter,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -95,6 +96,7 @@ const reducer = combineReducers({
   currentAnswerId,
   currentMode,
   tags,
+  tagFilter,
 })
 
 
