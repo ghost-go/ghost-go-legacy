@@ -36,8 +36,8 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     //new webpack.DefinePlugin({
-      //__DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
-      //__PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'true'))
+    //__DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
+    //__PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'true'))
     //}),
     new webpack.DefinePlugin({
       'process.env': {

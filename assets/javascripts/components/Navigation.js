@@ -76,14 +76,22 @@ export default class Navigation extends Component {
                     <div className="box-sm">
                       <div className="login-box clearfix">
                         <div className="user-img"><img src={this.state.profile.picture} alt="" /></div>
-                        <div className="user-info"><span>{this.state.profile.nickname}<i>Front-end web developer</i></span> <a href="#" title="">Edit profile</a> <a href="#" title="">View notifications</a></div>
+                        <div className="user-info">
+                          <span>{this.state.profile.nickname}<i>Front-end web developer</i></span>
+                          <a href="#" title="">Edit profile</a>
+                          {/*
+                          <a href="#" title="">View notifications</a>
+                          */}
+                        </div>
                       </div>
+                      {/*
                       <div className="divider"></div>
                       <ul className="reset-ul mrg5B">
                         <li><a href="#">View login page example <Glyphicon className="icon" glyph="menu-right" /></a></li>
                         <li><a href="#">View lockscreen example <Glyphicon className="icon" glyph="menu-right" /></a></li>
                         <li><a href="#">View account details <Glyphicon className="icon" glyph="menu-right" /></a></li>
                       </ul>
+                      */}
                       <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
                         <a href="#" className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
                       </div>
@@ -91,6 +99,7 @@ export default class Navigation extends Component {
                   </div>
                 </div>
                 <div className="top-icon-bar">
+                  {/*
                   <div className="dropdown">
                     <a data-toggle="dropdown" href="#" title="">
                       <Glyphicon glyph="linecons-cog" />
@@ -106,6 +115,7 @@ export default class Navigation extends Component {
                       <i className="fa fa-cog"></i>
                     </a>
                   </div>
+                  */}
                 </div>
               </div>
             ) : (

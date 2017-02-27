@@ -51,6 +51,7 @@ export default class Sidebar extends Component {
               <div id="sidebar-top">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                   <div>
+                      {/*
                     <Nav bsStyle="pills" justified={true} stacked>
                       <NavItem eventKey="first">
                         <i className="fa fa-users fa-lg"></i>
@@ -66,6 +67,7 @@ export default class Sidebar extends Component {
                         <i className="fa fa-cogs fa-lg"></i>
                       </NavItem>
                     </Nav>
+                          */}
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
@@ -183,16 +185,18 @@ export default class Sidebar extends Component {
                   <div className="divider-header">Practices</div>
                   <li>
                     <Link to="/practices">
-                      <i className="fa fa-television"></i> <span>Practices</span>
+                      <i className="fa fa-television"></i> <span>Practices(beta)</span>
                     </Link>
                   </li>
                   <li className="divider"></li>
                   <div className="divider-header">Settings</div>
+                  {/*
                   <li>
                     <Link to="/users">
                       <i className="fa fa-television"></i> <span>Profile</span>
                     </Link>
                   </li>
+                  */}
                   <li>
                     <Link to="/history">
                       <i className="fa fa-television"></i> <span>History</span>
