@@ -155,7 +155,7 @@ class Kifus extends Component {
               <div className="popover-title">Player</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li className="tag">all</li>
+                  <li className="tag" onClick={this.handleSeeMore.bind(this, 'all')}>all</li>
                   {
                     players.data.map((player) => <li key={player.id} className="tag" onClick={this.handleSeeMore.bind(this, player.en_name)}>{player.en_name}</li>)
                   }

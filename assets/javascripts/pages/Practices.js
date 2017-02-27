@@ -254,7 +254,7 @@ class Practices extends Component {
       })
     }
     return (
-      <div className={css(mainStyles.mainContainer, styles.column)}>
+      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.column)}>
         <div>
           <FloatingActionButton className={css(styles.createBtn)} onClick={::this.handleTemplateOpen}>
             <ContentAdd />

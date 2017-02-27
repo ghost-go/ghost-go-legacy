@@ -24,23 +24,21 @@ export default class Board extends Component {
       sgf: new Sgf({}),
       currentCoord: 'None',
       currentKi: 1,
-      step: 0,
       size: this.props.size
     }
     this.currentKi = 1
   }
 
   initKifuArray() {
-    let steps = this.props.kifu.data.steps.split(';').slice(0, this.state.step)
+    let steps = this.props.kifu.data.steps.split(';').slice(0, this.props.step)
     let array = showKi(BLANK_ARRAY, steps)
     this.setState({ kifuArray: array })
   }
 
 
   nextStep(e) {
-    this.setState({ step: ++this.state.step}, () => {
-      this.drawBoardWithResize()
-    })
+    this.props.nextStep()
+    this.drawBoardWithResize()
   }
 
   moveTo(step) {
@@ -74,8 +72,8 @@ export default class Board extends Component {
     let lastStep, il, jl
 
     let steps = this.props.kifu.data.steps.split(';')
-    if (this.state.step > 0) {
-      lastStep = steps.slice(0, this.state.step)[this.state.step - 1]
+    if (this.props.step > 0) {
+      lastStep = steps.slice(0, this.props.step)[this.props.step - 1]
       il = LETTERS_SGF.indexOf(lastStep[2])
       jl = LETTERS_SGF.indexOf(lastStep[3])
     }
@@ -188,6 +186,12 @@ export default class Board extends Component {
     this._boardCtx.clearRect(0, 0, this.boardLayer.width, this.boardLayer.height)
     this.draw()
     this.markPiece()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.step !== this.props.step) {
+      this.drawBoardWithResize()
+    }
   }
 
   componentDidMount() {

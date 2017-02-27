@@ -5,7 +5,6 @@ import { Router, Route, hashHistory, browserHistory } from 'react-router'
 //import lang from '../components/lang'
 
 import Board from '../presentations/Board'
-import ControlBar from '../presentations/ControlBar'
 import Layout from './Layout'
 
 import { fetchKifu } from '../actions/FetchActions'
@@ -25,18 +24,43 @@ class Kifu extends Component {
     })
   }
 
+  state = {
+    step: 0
+  }
+
   constructor(props) {
     super(props)
     let { id } = this.props.params
-    this.state = {
-      board: null
-    }
     this.props.dispatch(fetchKifu({id: id}))
-    this.setBoard = this.setBoard.bind(this)
   }
 
-  setBoard(board) {
-    this.setState({board: board})
+  prevStep() {
+    this.setState({ step: --this.state.step})
+  }
+
+  nextStep() {
+    this.setState({ step: ++this.state.step})
+  }
+
+  firstStep() {
+    this.setState({ step: 1})
+  }
+
+  lastStep() {
+    let last = this.props.kifu.data.steps.split(';').length - 1
+    this.setState({ step: last})
+  }
+
+  next10Step() {
+    this.setState({ step: this.state.step + 10})
+  }
+
+  prev10Step() {
+    if (this.state.step < 10) {
+      this.firstStep()
+    } else {
+      this.setState({ step: this.state.step - 10})
+    }
   }
 
   render() {
@@ -45,9 +69,7 @@ class Kifu extends Component {
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)}>
         <div className={css(styles.kifuBoard)}>
-          <Board className="board"
-            editable="false" setBoard={this.setBoard}
-            kifu={kifu} />
+          <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
         </div>
         <div className={css(styles.kifuInfo)}>
           <Paper>
@@ -115,7 +137,26 @@ class Kifu extends Component {
                   </TableRow>
                   <TableRow>
                     <TableRowColumn colSpan={2}>
-                      <ControlBar board={this.state.board} />
+                      <div className="control-bar">
+                        <span className="move-control" onClick={::this.firstStep}>
+                          <i className="fa fa-fast-backward"></i>
+                        </span>
+                        <span className="move-control" onClick={::this.prev10Step}>
+                          <i className="fa fa-backward"></i>
+                        </span>
+                        <span className="move-control" onClick={::this.prevStep}>
+                          <i className="fa fa-play rotate"></i>
+                        </span>
+                        <span className="move-control" onClick={::this.nextStep}>
+                          <i className="fa fa-play"></i>
+                        </span>
+                        <span className="move-control" onClick={::this.next10Step}>
+                          <i className="fa fa-forward"></i>
+                        </span>
+                        <span className="move-control" onClick={::this.lastStep}>
+                          <i className="fa fa-fast-forward"></i>
+                        </span>
+                      </div>
                     </TableRowColumn>
                   </TableRow>
                 </TableBody>

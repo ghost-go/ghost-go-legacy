@@ -77,7 +77,7 @@ export default class Navigation extends Component {
                       <div className="login-box clearfix">
                         <div className="user-img"><img src={this.state.profile.picture} alt="" /></div>
                         <div className="user-info">
-                          <span>{this.state.profile.nickname}<i>Front-end web developer</i></span>
+                          <span>{this.state.profile.nickname}<i>Welcome back!</i></span>
                           <a href="#" title="">Edit profile</a>
                           {/*
                           <a href="#" title="">View notifications</a>
