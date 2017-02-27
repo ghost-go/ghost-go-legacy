@@ -52,11 +52,12 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+        use: [{loader: "babel-loader"}],
         query: {
           presets: ['react', 'es2015', 'es2017', 'stage-0']
         }

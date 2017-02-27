@@ -76,9 +76,6 @@ module.exports = {
     filename: '[name].js',
     publicPath: '/static/'
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
   devtool: 'eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
@@ -88,32 +85,45 @@ module.exports = {
     }),
     new webpack.DefinePlugin(defines),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [autoprefixer, precss]
+      }
+    }),
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015', 'es2016', 'es2017', 'stage-0']
-        }
-      },
-      {
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: ['react', 'es2015', 'es2016', 'es2017', 'stage-0']
+          },
+        }],
+      }, {
         test: /\.jsx$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel?presets[]=react,presets[]=es2015'
-      },
-      {
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: ['react', 'es2015']
+          }
+        }],
+      }, {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'postcss']
-      },
-      {
+        use: ['style-loader', 'css-loader', 'postcss-loader']
+      }, {
         test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
-        loader: 'url-loader?limit=100000'
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+          }
+        }],
       },
-      { test: /\.json$/, loader: 'json-loader' }
     ]
   },
   node: {
@@ -122,7 +132,4 @@ module.exports = {
     net: 'empty',
     tls: 'empty'
   },
-  postcss: function () {
-    return [autoprefixer, precss]
-  }
 }
