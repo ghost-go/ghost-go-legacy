@@ -78,7 +78,9 @@ export default class Navigation extends Component {
                         <div className="user-img"><img src={this.state.profile.picture} alt="" /></div>
                         <div className="user-info">
                           <span>{this.state.profile.nickname}<i>Welcome back!</i></span>
-                          <a href="#" title="">Edit profile</a>
+                          <Link to="/users">
+                            Edit profile
+                          </Link>
                           {/*
                           <a href="#" title="">View notifications</a>
                           */}

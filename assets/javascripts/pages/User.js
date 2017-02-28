@@ -18,25 +18,26 @@ import {Button, Col, HelpBlock, ControlLabel, FormControl, FormGroup, Dropdown, 
 
 import { StyleSheet, css } from 'aphrodite'
 
-let FieldGroup = ({ id, label, help, ...props }) => {
-  return (
-    <FormGroup controlId={id}>
-      <ControlLabel>{label}</ControlLabel>
-      <FormControl {...props} />
-      {help && <HelpBlock>{help}</HelpBlock>}
-    </FormGroup>
-  )
-}
-
 export default class User extends Component {
   constructor(props, context) {
     super(props, context)
     let profile = props.auth.getProfile()
+    let rank = '18k'
+    let bio = ''
+    let nickname = ''
+    if (!_.isNil(profile.user_metadata)) {
+      rank = profile.user_metadata.rank
+      bio = profile.user_metadata.bio
+      nickname = profile.user_metadata.nickname
+    }
+    console.log(profile)
     this.state = {
       tab: 'Basic Information',
       profile: profile,
-      rank: profile.user_metadata.rank,
-      tipsOpen: false
+      tipsOpen: false,
+      rank: rank,
+      bio: bio,
+      nickname: profile.nickname || nickname,
     }
 
     props.auth.on('profile_updated', (newProfile) => {
@@ -49,18 +50,19 @@ export default class User extends Component {
     this.props.auth.logout()
   }
 
-  handleChange(event, index, value) {
-    this.setState({rank: value}, () => {
-      const { auth } = this.props
-      const { profile } = this.state
-      auth.updateProfile(profile.user_id, {
-        user_metadata: {
-          rank: value
-        }
-      }).then(() => {
-        this.setState({
-          tipsOpen: true,
-        })
+  handleUpdateProfile() {
+    const { auth } = this.props
+    const { profile } = this.state
+    console.log(auth)
+    auth.updateProfile(profile.user_id, {
+      user_metadata: {
+        nickname: this.state.nickname,
+        rank: this.state.rank,
+        bio: this.state.bio,
+      }
+    }).then(() => {
+      this.setState({
+        tipsOpen: true,
       })
     })
   }
@@ -75,16 +77,19 @@ export default class User extends Component {
   //})
   //}
 
-  fillNotSet(val) {
-    if (val) {
-      return val
-    }
-    else {
-      return 'Not Set'
-    }
+  setNickName(e) {
+    console.log(e.target.value)
+    this.setState({nickname: e.target.value})
   }
 
-  handleChange() {
+  setBio(e) {
+    console.log(e.target.value)
+    this.setState({bio: e.target.value})
+  }
+
+  setRank(e) {
+    console.log(e.target.value)
+    this.setState({rank: e.target.value})
   }
 
   getValidationState() {
@@ -103,7 +108,7 @@ export default class User extends Component {
             >
               <ControlLabel>User Name</ControlLabel>
               <FormControl.Static>
-                { profile.name }
+                { profile.username }
               </FormControl.Static>
               <FormControl.Feedback />
             </FormGroup>
@@ -114,9 +119,9 @@ export default class User extends Component {
               <ControlLabel>Nick Name</ControlLabel>
               <FormControl
                 type="text"
-                value={profile.user_metadata.nickname}
+                value={this.state.nickname}
                 placeholder="Nick Name"
-                onChange={this.handleChange}
+                onChange={::this.setNickName}
               />
               <FormControl.Feedback />
             </FormGroup>
@@ -125,7 +130,7 @@ export default class User extends Component {
               validationState={this.getValidationState()}
             >
               <ControlLabel>Level</ControlLabel>
-              <FormControl componentClass="select" placeholder="select">
+              <FormControl onChange={::this.setRank} componentClass="select" placeholder="select" value={this.state.rank}>
                 <option value='18k'>18k</option>
                 <option value='17k'>17k</option>
                 <option value='16k'>16k</option>
@@ -163,16 +168,14 @@ export default class User extends Component {
             >
               <ControlLabel>Bio</ControlLabel>
               <FormControl
+                onChange={::this.setBio}
                 componentClass="textarea"
                 placeholder="Bio"
-                value={profile.user_metadata.bio}
-                onChange={this.handleChange}
+                value={this.state.bio}
               />
               <FormControl.Feedback />
             </FormGroup>
-            <Button
-              style={{marginRight: '10px'}}
-              bsStyle="primary">
+            <Button onClick={::this.handleUpdateProfile} style={{marginRight: '10px'}} bsStyle="primary">
               Update profile
             </Button>
           </div>
@@ -183,62 +186,10 @@ export default class User extends Component {
           <img className='avatar' src={profile.picture} alt="" />
           <br />
           <br />
-          <Button
-            style={{marginRight: '10px'}}
-            bsStyle="primary">
+          <Button style={{marginRight: '10px'}} bsStyle="primary">
             Upload new picture
           </Button>
         </Col>
-        {/*
-        <List>
-          <Subheader style={{fontSize: '20px'}}>Profile</Subheader>
-          <ListItem
-            primaryText='User Name'
-            secondaryText={profile.name}
-      />
-          <ListItem
-            primaryText='Nick Name'
-            secondaryText={profile.user_metadata.nickname}
-            ref='nickname'
-      />
-          <ListItem primaryText='Ranking' />
-          <SelectField
-            className={css(styles.offsetLeft)}
-            value={this.state.rank}
-            onChange={this.handleChange.bind(this)}
-            ref='rank'
-          >
-            <MenuItem value={'18k'} primaryText="18k" />
-            <MenuItem value={'17k'} primaryText="17k" />
-            <MenuItem value={'16k'} primaryText="16k" />
-            <MenuItem value={'16k'} primaryText="16k" />
-            <MenuItem value={'15k'} primaryText="15k" />
-            <MenuItem value={'14k'} primaryText="14k" />
-            <MenuItem value={'13k'} primaryText="13k" />
-            <MenuItem value={'12k'} primaryText="12k" />
-            <MenuItem value={'11k'} primaryText="11k" />
-            <MenuItem value={'10k'} primaryText="10k" />
-            <MenuItem value={'9k'} primaryText="9k" />
-            <MenuItem value={'8k'} primaryText="8k" />
-            <MenuItem value={'7k'} primaryText="7k" />
-            <MenuItem value={'6k'} primaryText="6k" />
-            <MenuItem value={'5k'} primaryText="5k" />
-            <MenuItem value={'4k'} primaryText="4k" />
-            <MenuItem value={'3k'} primaryText="3k" />
-            <MenuItem value={'2k'} primaryText="2k" />
-            <MenuItem value={'1k'} primaryText="1k" />
-            <MenuItem value={'1d'} primaryText="1d" />
-            <MenuItem value={'2d'} primaryText="2d" />
-            <MenuItem value={'3d'} primaryText="3d" />
-            <MenuItem value={'4d'} primaryText="4d" />
-            <MenuItem value={'5d'} primaryText="5d" />
-            <MenuItem value={'6d'} primaryText="6d" />
-            <MenuItem value={'7d'} primaryText="7d" />
-            <MenuItem value={'8d'} primaryText="8d" />
-            <MenuItem value={'9d'} primaryText="9d" />
-          </SelectField>
-        </List>
-        */}
         <Snackbar
           open={this.state.tipsOpen}
           bodyStyle={{backgroundColor: 'green'}}

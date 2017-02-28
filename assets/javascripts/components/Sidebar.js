@@ -78,9 +78,9 @@ export default class Sidebar extends Component {
                                 <div className="user-welcome">
                                   Welcome back, <b>{this.state.profile.nickname}</b>
                                 </div>
-                                <a href="#" title="" className="btn btn-sm btn-black-opacity-alt">
+                                <Link to="/users" className="btn btn-sm btn-black-opacity-alt">
                                   <i className="fa fa-cog"></i>
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           ) : (
