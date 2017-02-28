@@ -89,6 +89,11 @@ class History extends Component {
     }
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
+        <div className="page-nav">
+          <ul className="page-subnav">
+            <li><a title="Tsumego History">{`Tsumego History`}</a></li>
+          </ul>
+        </div>
         <div className={css(styles.historyContainer)}>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>

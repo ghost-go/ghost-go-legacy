@@ -144,6 +144,7 @@ class Puzzles extends Component {
         <div className={css(styles.puzzleContent)}>
           { puzzlesCards }
         </div>
+        <div className='clearfix'></div>
       </div>
     )
   }

@@ -1,8 +1,16 @@
 .page-container {
-  display: 'flex';
-  padding: '20px';
-  background-color: '#fff';
+  padding: 10px;
+  background-color: #fff;
   transition: all .6s ease-in-out;
+}
+
+.profile-container {
+  min-height: 530px;
+  padding: 20px;
+  .avatar {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 .page-nav {

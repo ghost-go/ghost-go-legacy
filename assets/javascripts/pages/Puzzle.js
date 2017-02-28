@@ -159,7 +159,7 @@ class Puzzle extends Component {
     ]
 
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={`${css(styles.puzzlePage)} page-container`}>
+      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className='page-container'>
         <Dialog
           actions={actions}
           modal={false}
