@@ -183,6 +183,7 @@ export default class Sidebar extends Component {
                       <i className="fa fa-television"></i> <span>Kifu Library</span>
                     </Link>
                   </li>
+                  {/*
                   <li className="divider"></li>
                   <div className="divider-header">Practices</div>
                   <li>
@@ -190,6 +191,7 @@ export default class Sidebar extends Component {
                       <i className="fa fa-television"></i> <span>Practices(beta)</span>
                     </Link>
                   </li>
+                  */}
                   <li className="divider"></li>
                   <div className="divider-header">Settings</div>
                   <li>
