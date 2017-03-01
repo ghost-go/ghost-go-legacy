@@ -1,20 +1,14 @@
 //react
-import React, { Component, PropTypes } from 'react'
-import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
+import React, { Component, PropTypes as T } from 'react'
+//import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import ReactPaginate from 'react-paginate'
 import { push } from 'react-router-redux'
-import { Router, Route, hashHistory, browserHistory } from 'react-router'
 import {Dropdown, Glyphicon} from 'react-bootstrap'
-
-//material-ui
-import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import _ from 'lodash'
 
 //internal component
-import Layout from './Layout'
 import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions'
 import { setKifuFilter } from '../actions/Actions'
 
@@ -27,8 +21,12 @@ import { StyleSheet, css } from 'aphrodite'
 class Kifus extends Component {
 
   static propTypes = {
-    kifus: React.PropTypes.object.isRequired,
-    players: React.PropTypes.object.isRequired,
+    kifus: T.object.isRequired,
+    players: T.object.isRequired,
+    location: T.object,
+    dispatch: T.func,
+    kifuFilter: T.string,
+    expanded: T.bool,
   }
 
   state = {
@@ -44,7 +42,7 @@ class Kifus extends Component {
     let { query } = this.props.location
     this.props.dispatch(fetchKifus({
       page: query.page,
-      player: this.state.playerFilter,
+      player: this.state.kifuFilter,
       per_page: 20,
     }))
     this.props.dispatch(fetchTopPlayers(10))
@@ -84,24 +82,11 @@ class Kifus extends Component {
   render() {
     const { kifus, players } = this.props
     if (_.isNil(kifus) || _.isNil(players.data)) return null
-    let playerItems = []
     let kifuCards = []
     let pagination, page = 0
     let { query } = this.props.location
     if (query && query.page) {
       page = parseInt(query.page - 1)
-    }
-    if (players.data !== undefined) {
-      players.data.forEach((i) => {
-        playerItems.push(
-          <FlatButton
-            key={i.id}
-            backgroundColor={ this.props.kifuFilter === i.en_name ? 'rgb(235, 235, 235)' : '' }
-            onClick={this.handleSeeMore.bind(this, i.en_name)}
-            className={css(styles.button)}
-            style={{textAlign: 'left'}} label={`${i.en_name}(${i.grading})`} />
-        )
-      })
     }
     if (this.props.kifus.data !== undefined) {
       let pageCount = this.props.kifus.data.total_pages
@@ -155,9 +140,9 @@ class Kifus extends Component {
               <div className="popover-title">Player</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li className="tag" onClick={this.handleSeeMore.bind(this, 'all')}>all</li>
+                  <li className={`tag ${this.props.kifuFilter === 'all' ? 'active' : ''}`} onClick={this.handleSeeMore.bind(this, 'all')}>all</li>
                   {
-                    players.data.map((player) => <li key={player.id} className="tag" onClick={this.handleSeeMore.bind(this, player.en_name)}>{player.en_name}</li>)
+                    players.data.map((player) => <li key={player.id} className={`tag ${this.props.kifuFilter === player.en_name ? 'active' : ''}`} onClick={this.handleSeeMore.bind(this, player.en_name)}>{player.en_name}</li>)
                   }
                 </ul>
               </div>

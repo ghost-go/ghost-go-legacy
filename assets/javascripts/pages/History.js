@@ -6,10 +6,7 @@ import { fetchPuzzleRecords } from '../actions/FetchActions'
 import mainStyles from '../styles/main'
 
 import RecordList from '../presentations/RecordList'
-import LeftMenu from '../presentations/LeftMenu'
 
-import Paper from 'material-ui/Paper'
-import MenuItem from 'material-ui/MenuItem'
 import {grey300} from 'material-ui/styles/colors'
 import ReactPaginate from 'react-paginate'
 

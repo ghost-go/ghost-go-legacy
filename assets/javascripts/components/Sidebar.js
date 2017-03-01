@@ -201,7 +201,7 @@ export default class Sidebar extends Component {
                   </li>
                   <li>
                     <Link to="/history">
-                      <i className="fa fa-television"></i> <span>History</span>
+                      <i className="fa fa-television"></i> <span>Visited</span>
                     </Link>
                   </li>
                 </ul>

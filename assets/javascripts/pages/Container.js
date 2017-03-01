@@ -2,12 +2,11 @@ import React, { Component, PropTypes as T } from 'react'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
 import Footer from '../presentations/Footer'
-import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
+//import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 //import lang from '../components/lang'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-
 
 export default class Container extends Component {
 

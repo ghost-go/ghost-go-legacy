@@ -102,7 +102,7 @@ const reducer = combineReducers({
 
 let middlewares = [thunkMiddleware, historyMiddleware]
 if (process.env.NODE_ENV === 'development') {
-  const createLogger = require('redux-logger')
+  //const createLogger = require('redux-logger')
   //middlewares.push(createLogger())
 }
 

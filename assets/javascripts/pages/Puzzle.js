@@ -18,10 +18,9 @@ import {
 } from '../actions/Actions'
 
 //material-ui
-import Paper from 'material-ui/Paper'
 import Dialog from 'material-ui/Dialog'
 
-import { StyleSheet, css } from 'aphrodite'
+import { StyleSheet } from 'aphrodite'
 
 class Puzzle extends Component {
 
