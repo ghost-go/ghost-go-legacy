@@ -1,30 +1,24 @@
-import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import { LETTERS, LETTERS_SGF, NUMBERS, BLANK_ARRAY, GRID } from '../constants/Go'
+import React, { Component, PropTypes as T } from 'react'
+import { LETTERS_SGF, BLANK_ARRAY, GRID } from '../constants/Go'
 import Piece from '../components/piece'
 import Sgf from '../components/sgf'
-import Cross from '../components/cross'
 import showKi from '../components/BoardCore'
 
 import Paper from 'material-ui/Paper'
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-
 export default class Board extends Component {
 
   static propTypes = {
-    steps: PropTypes.array,
+    kifu: T.object.isRequired,
+    nextStep: T.func.isRequired,
+    step: T.number.isRequired,
   }
 
   constructor(props) {
     super(props)
     this.state = {
       kifuArray: [],
-      grid: 19,
       sgf: new Sgf({}),
-      currentCoord: 'None',
-      currentKi: 1,
-      size: this.props.size
     }
     this.currentKi = 1
   }
@@ -36,7 +30,7 @@ export default class Board extends Component {
   }
 
 
-  nextStep(e) {
+  nextStep() {
     this.props.nextStep()
     this.drawBoardWithResize()
   }
@@ -98,15 +92,15 @@ export default class Board extends Component {
 
   draw() {
     this._boardCtx.beginPath()
-    for(let i = 1;i <= this.state.grid; i++) {
+    for(let i = 1;i <= GRID; i++) {
       this._boardCtx.moveTo(i * this.size, this.size)
-      this._boardCtx.lineTo(i * this.size, this.state.grid * this.size)
+      this._boardCtx.lineTo(i * this.size, GRID * this.size)
       this._boardCtx.moveTo(this.size, i * this.size)
-      this._boardCtx.lineTo(this.state.grid * this.size, i * this.size)
+      this._boardCtx.lineTo(GRID * this.size, i * this.size)
     }
     this._boardCtx.stroke()
     let dot_size = 3
-    if (this.state.grid == 19) {
+    if (GRID == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
           this._boardCtx.beginPath()
@@ -134,12 +128,12 @@ export default class Board extends Component {
         <div className="board" ref="board">
           <canvas id="board_layer" ref={(ref) => this.boardLayer = ref }></canvas>
           {(() => {
-            if (this.props.editable === 'true') {
-              return <canvas id= "cross_layer" ref={(ref) => this.crossLayer = ref}></canvas>
-            }
+            //if (this.props.editable === 'true') {
+              //return <canvas id= "cross_layer" ref={(ref) => this.crossLayer = ref}></canvas>
+            //}
           })()}
-          <canvas id="piece_layer" ref="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
-          <canvas id="top_layer" onClick={::this.nextStep} ref="top_layer" ref={(ref) => this.topLayer = ref }></canvas>
+          <canvas id="piece_layer" ref={(ref) => this.pieceLayer = ref}></canvas>
+          <canvas id="top_layer" onClick={::this.nextStep} ref={(ref) => this.topLayer = ref }></canvas>
         </div>
       </Paper>
     )

@@ -1,4 +1,4 @@
-import { LETTERS, LETTERS_SGF, NUMBERS } from '../constants/Go'
+import { LETTERS_SGF } from '../constants/Go'
 
 export function convertSGFCoordToPos(coord) {
   const ki = coord[0] === 'B' ? 1 : -1

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes as T } from 'react'
-import { Tab, Nav, NavItem } from 'react-bootstrap'
+import { Tab } from 'react-bootstrap'
 import { Link } from 'react-router'
 
 import AuthService from '../utils/AuthService'

@@ -182,7 +182,6 @@ export default class PuzzleBoard extends Component {
 
   canMove(array, i, j, ki) {
     if (array[i][j] !== 0) {
-      console.log('This place has been used')
       return false
     }
 

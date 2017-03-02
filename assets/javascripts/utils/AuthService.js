@@ -1,3 +1,5 @@
+/*eslint no-console: "log"*/
+
 import { EventEmitter } from 'events'
 import Auth0Lock from 'auth0-lock'
 import * as config from '../constants/Config'

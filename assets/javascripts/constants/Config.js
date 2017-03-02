@@ -2,8 +2,10 @@ export let PROTOCOL = 'http'
 
 export let API_DOMAIN = ''
 export let APP_DOMAIN = ''
+/* global process:true */
+export let ENV = process.env.NODE_ENV
 
-switch (process.env.NODE_ENV) {
+switch (ENV) {
 case 'development':
   API_DOMAIN = `${PROTOCOL}://localhost:3000`
   APP_DOMAIN = `${PROTOCOL}://localhost:5000`

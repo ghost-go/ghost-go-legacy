@@ -1,7 +1,7 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import Helmet from 'react-helmet' //import lang from '../components/lang'
+//import Helmet from 'react-helmet'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import PuzzlePanel from '../presentations/PuzzlePanel'
@@ -20,9 +20,19 @@ import {
 //material-ui
 import Dialog from 'material-ui/Dialog'
 
-import { StyleSheet } from 'aphrodite'
-
 class Puzzle extends Component {
+
+  static propTypes = {
+    puzzle: T.object.isRequired,
+    auth: T.object.isRequired,
+    dispatch: T.func.isRequired,
+    rangeFilter: T.object.isRequired,
+    params: T.object.isRequired,
+    expanded: T.bool.isRequired,
+    steps: T.array.isRequired,
+    currentMode: T.string.isRequired,
+    currentAnswerId: T.number.isRequired,
+  }
 
   constructor(props) {
     super(props)
@@ -131,10 +141,10 @@ class Puzzle extends Component {
     setTimeout(() => {
       let { id } = this.props.params
       this.props.dispatch(fetchPuzzle({id}))
-      let addthisScript = document.createElement('script');
+      let addthisScript = document.createElement('script')
       addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5818445a7b592e4c')
       if (document.body) document.body.appendChild(addthisScript)
-      let addthisConfig = document.createElement('script');
+      let addthisConfig = document.createElement('script')
       addthisConfig.innerHTML = `
         var addthis_config = addthis_config || {};
         addthis_config.data_track_addressbar = false;
@@ -217,45 +227,6 @@ class Puzzle extends Component {
       </div>)
   }
 }
-
-const styles = StyleSheet.create({
-
-  btnComments: {
-    float: 'right'
-  },
-
-  puzzleBoard: {
-  },
-
-  toggle: {
-    fontSize: '14px',
-    maxWidth: '150'
-  },
-
-  ratingIcon: {
-    width: 28,
-    height: 28
-  },
-
-  tipRight: {
-    position: 'absolute',
-    fontSize: '300px',
-    left: 250,
-    top: 180,
-    color: 'green',
-    textAlign: 'center'
-  },
-
-  tipWrong: {
-    position: 'absolute',
-    fontSize: '300px',
-    left: 250,
-    top: 180,
-    color: 'red',
-    textAlign: 'center'
-  }
-
-})
 
 function select(state) {
   return {

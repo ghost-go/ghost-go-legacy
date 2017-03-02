@@ -1,7 +1,7 @@
 import React, { Component, PropTypes as T } from 'react'
 import { Link } from 'react-router'
 
-import { Dropdown, Glyphicon } from 'react-bootstrap'
+//import { Dropdown, Glyphicon } from 'react-bootstrap'
 
 import AuthService from '../utils/AuthService'
 
@@ -36,17 +36,17 @@ export default class Navigation extends Component {
   }
 
   mouseDownHandler() {
-    this.mouseIsDownOnCalendar = true;
+    this.mouseIsDownOnCalendar = true
   }
 
   mouseUpHandler() {
-    this.mouseIsDownOnCalendar = false;
+    this.mouseIsDownOnCalendar = false
   }
 
   componentDidMount() {
     window.addEventListener('mousedown', () => {
       if (this.mouseIsDownOnCalendar) {
-        return;
+        return
       }
       this.setState({navOpen: false})
     }, false)

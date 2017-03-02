@@ -1,24 +1,17 @@
 import React, { Component, PropTypes as T } from 'react'
+import _ from 'lodash'
 
-import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
-import TextField from 'material-ui/TextField'
-import Paper from 'material-ui/Paper'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
-import Toggle from 'material-ui/Toggle'
-import Divider from 'material-ui/Divider'
-import Avatar from 'material-ui/Avatar'
-import Subheader from 'material-ui/Subheader'
-import {List, ListItem} from 'material-ui/List'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
 
-import {Button, Col, HelpBlock, ControlLabel, FormControl, FormGroup, Dropdown, Glyphicon} from 'react-bootstrap'
-
-import { StyleSheet, css } from 'aphrodite'
+import {Button, Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap'
 
 export default class User extends Component {
+
+  static propTypes = {
+    auth: T.object.isRequired,
+    expanded: T.bool.isRequired,
+  }
+
   constructor(props, context) {
     super(props, context)
     let profile = props.auth.getProfile()
@@ -30,7 +23,6 @@ export default class User extends Component {
       bio = profile.user_metadata.bio
       nickname = profile.user_metadata.nickname
     }
-    console.log(profile)
     this.state = {
       tab: 'Basic Information',
       profile: profile,
@@ -53,7 +45,6 @@ export default class User extends Component {
   handleUpdateProfile() {
     const { auth } = this.props
     const { profile } = this.state
-    console.log(auth)
     auth.updateProfile(profile.user_id, {
       user_metadata: {
         nickname: this.state.nickname,
@@ -67,28 +58,15 @@ export default class User extends Component {
     })
   }
 
-  //handleSave() {
-  //const { auth } = this.props
-  //const { profile } = this.state
-  //auth.updateProfile(profile.user_id, {
-  //user_metadata: {
-  //rank: this.state.rank
-  //}
-  //})
-  //}
-
   setNickName(e) {
-    console.log(e.target.value)
     this.setState({nickname: e.target.value})
   }
 
   setBio(e) {
-    console.log(e.target.value)
     this.setState({bio: e.target.value})
   }
 
   setRank(e) {
-    console.log(e.target.value)
     this.setState({rank: e.target.value})
   }
 

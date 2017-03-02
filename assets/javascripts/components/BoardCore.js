@@ -1,4 +1,5 @@
-import { SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID } from '../constants/Go'
+import { SGFToPosition, GRID } from '../constants/Go'
+import _ from 'lodash'
 
 let _liberty = 0
 let _recursionPath = []
@@ -96,7 +97,6 @@ function canPonnuki(array, i, j, ki) {
 
 function canMove(array, i, j, ki) {
   if (array[i][j] !== 0) {
-    console.log('This place has been used')
     return false
   }
 

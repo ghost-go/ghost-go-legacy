@@ -1,11 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { Router, Route, hashHistory, browserHistory } from 'react-router'
 //import lang from '../components/lang'
 
 import Board from '../presentations/Board'
-import Layout from './Layout'
 
 import { fetchKifu } from '../actions/FetchActions'
 
@@ -18,10 +15,10 @@ import { StyleSheet, css } from 'aphrodite'
 class Kifu extends Component {
 
   static propTypes = {
-    kifu: React.PropTypes.shape({
-      isFetching: React.PropTypes.bool.isRequired,
-      isFailure: React.PropTypes.bool.isRequired,
-    })
+    params: T.object.isRequired,
+    dispatch: T.func.isRequired,
+    kifu: T.object.isRequired,
+    expanded: T.bool.isRequired
   }
 
   state = {

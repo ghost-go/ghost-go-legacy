@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
@@ -18,6 +18,14 @@ class History extends Component {
   state = {
     filter: 'Kifu',
     page: 1,
+  }
+
+  static propTypes = {
+    location: T.object.isRequired,
+    auth: T.object.isRequired,
+    dispatch: T.func.isRequired,
+    records: T.object.isRequired,
+    expanded: T.bool.isRequired,
   }
 
   constructor(props) {
@@ -88,7 +96,7 @@ class History extends Component {
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
         <div className="page-nav">
           <ul className="page-subnav">
-            <li><a title="Tsumego History">{`Tsumego History`}</a></li>
+            <li><a title="Visited Tsumego">Visited Tsumego</a></li>
           </ul>
         </div>
         <div className={css(styles.historyContainer)}>

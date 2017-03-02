@@ -1,22 +1,21 @@
-import { combineReducers } from 'redux'
 import reduceReducers from 'reduce-reducers'
 
 function updateObject(oldObject, newValues) {
   return Object.assign({}, oldObject, newValues)
 }
 
-function updateItemInArray(array, itemId, updateItemCallback) {
-  const updatedItems = array.map(item => {
-    if(item.id !== itemId) {
-      return item
-    }
+//function updateItemInArray(array, itemId, updateItemCallback) {
+  //const updatedItems = array.map(item => {
+    //if(item.id !== itemId) {
+      //return item
+    //}
 
-    const updatedItem = updateItemCallback(item)
-    return updatedItem
-  })
+    //const updatedItem = updateItemCallback(item)
+    //return updatedItem
+  //})
 
-  return updatedItems
-}
+  //return updatedItems
+//}
 
 function buildFetchReducer(initialState, name = '') {
   initialState = {...initialState,
@@ -53,7 +52,7 @@ function createReducer(initialState, handlers) {
 }
 
 
-function fetchRequest(state, action) {
+function fetchRequest(state) {
   return {...state, isFetching: true, isFailure: false}
 }
 

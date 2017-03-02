@@ -1,7 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
-
-import { convertSGFCoordToPos } from '../components/Helper'
 
 import IconButton from 'material-ui/IconButton'
 import Paper from 'material-ui/Paper'
