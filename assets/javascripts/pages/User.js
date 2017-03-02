@@ -162,11 +162,13 @@ export default class User extends Component {
           <ControlLabel>Profile Picture</ControlLabel>
           <div className='clearfix'></div>
           <img className='avatar' src={profile.picture} alt="" />
+          {/*
           <br />
           <br />
           <Button style={{marginRight: '10px'}} bsStyle="primary">
             Upload new picture
           </Button>
+          */}
         </Col>
         <Snackbar
           open={this.state.tipsOpen}

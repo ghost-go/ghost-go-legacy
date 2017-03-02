@@ -1,31 +1,32 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import { postRating } from '../actions/PostActions'
 import Toggle from 'material-ui/Toggle'
 import AnswerBar from '../presentations/AnswerBar'
 
 import { StyleSheet, css } from 'aphrodite'
-import RaisedButton from 'material-ui/RaisedButton'
 import RankRange from '../presentations/RankRange'
 import {Button} from 'react-bootstrap'
 
 export default class PuzzlePanel extends Component {
 
   static propTypes = {
-    puzzle: PropTypes.object.isRequired,
-    rangeFilter: PropTypes.object.isRequired,
-    className: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    auth: PropTypes.object,
-    addSteps: PropTypes.func,
-    resetSteps: PropTypes.func,
-    handleReset: PropTypes.func,
-    steps: PropTypes.array,
-    setCurrentAnswerId: PropTypes.func,
-    setCurrentMode: PropTypes.func,
-    currentMode: PropTypes.string,
-    currentAnswerId: PropTypes.number,
-    showNext: PropTypes.bool,
+    puzzle: T.object.isRequired,
+    rangeFilter: T.object.isRequired,
+    className: T.object,
+    params: T.object,
+    dispatch: T.func,
+    auth: T.object,
+    addSteps: T.func,
+    resetSteps: T.func,
+    handleReset: T.func,
+    steps: T.array,
+    setCurrentAnswerId: T.func,
+    setCurrentMode: T.func,
+    currentMode: T.string,
+    currentAnswerId: T.number,
+    showNext: T.bool,
+    handleNext: T.func.isRequired,
+    handleRangeChange: T.func.isRequired,
   }
 
   constructor(props) {

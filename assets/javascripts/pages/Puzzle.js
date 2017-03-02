@@ -31,7 +31,7 @@ class Puzzle extends Component {
     expanded: T.bool.isRequired,
     steps: T.array.isRequired,
     currentMode: T.string.isRequired,
-    currentAnswerId: T.number.isRequired,
+    currentAnswerId: T.number,
   }
 
   constructor(props) {
