@@ -8,7 +8,7 @@ export const GRID = 19
 export const DOT_SIZE = 3
 export const EXPAND_H = 5
 export const EXPAND_V = 5
-export const RESPONSE_TIME = 400
+export const RESPONSE_TIME = 100
 
 export const SGFToPosition = (str) => {
   const ki = str[0] === 'B' ? 1 : -1

@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   },
 
   remove: {
+    height: '50px',
     margin: '0 15px',
   },
 
