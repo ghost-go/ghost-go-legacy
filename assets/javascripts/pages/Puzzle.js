@@ -224,6 +224,7 @@ class Puzzle extends Component {
             steps={this.props.steps}
           />
         </div>
+        <div className='clearfix'></div>
       </div>)
   }
 }

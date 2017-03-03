@@ -154,6 +154,10 @@
   float: right;
   margin-right: 20px;
 
+  .signin {
+    margin-top: 10px;
+  }
+
   & > a {
     line-height: 50px;
     display: block;
@@ -168,6 +172,7 @@
       margin: 7px 5px 0 0;
       border-radius: 4px;
     }
+
 
     .fa {
       line-height: 50px;

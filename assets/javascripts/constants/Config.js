@@ -1,8 +1,8 @@
+/* global process:true */
 export let PROTOCOL = 'http'
 
 export let API_DOMAIN = ''
 export let APP_DOMAIN = ''
-/* global process:true */
 export let ENV = process.env.NODE_ENV
 
 switch (ENV) {

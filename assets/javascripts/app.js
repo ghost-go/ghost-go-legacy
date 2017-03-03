@@ -1,3 +1,4 @@
+/* global process:true */
 import React, { Component, PropTypes as T} from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'

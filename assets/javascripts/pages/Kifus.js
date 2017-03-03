@@ -43,7 +43,7 @@ class Kifus extends Component {
     this.props.dispatch(fetchKifus({
       page: query.page,
       player: this.state.kifuFilter,
-      per_page: 20,
+      per_page: 24,
     }))
     this.props.dispatch(fetchTopPlayers(10))
     this.getRecordData()
@@ -155,9 +155,11 @@ class Kifus extends Component {
         <div className={css(styles.puzzleContent)}>
           { kifuCards }
         </div>
+        <div className='clearfix'></div>
         <div>
           { pagination }
         </div>
+        <div className='clearfix'></div>
       </div>
     )
   }

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes as T } from 'react'
 import { Link } from 'react-router'
-
-//import { Dropdown, Glyphicon } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 import AuthService from '../utils/AuthService'
 
@@ -122,9 +121,9 @@ export default class Navigation extends Component {
               </div>
             ) : (
               <div className="user-profile dropdown login">
-                <a href="#" onClick={auth.login.bind(this)} title="Login" className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
-                  Login
-                </a>
+                <Button onClick={auth.login.bind(this)} className="signin clearfix" bsStyle="primary">
+                  Sign in
+                </Button>
               </div>
             )
           }

@@ -15,8 +15,7 @@ export default class Sidebar extends Component {
     expanded: true,
   }
 
-  constructor(props) {
-    super(props)
+  constructor(props) { super(props)
 
     this.state = {
       profile: props.auth.getProfile()
@@ -87,8 +86,8 @@ export default class Sidebar extends Component {
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <div className="user-welcome">
-                                  <a onClick={auth.login.bind(this)} title="Login" className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
-                                    Login
+                                  <a onClick={auth.login.bind(this)} title="Login" className="user-ico clearfix">
+                                    With an account you will enjoy more features.
                                   </a>
                                 </div>
                               </div>

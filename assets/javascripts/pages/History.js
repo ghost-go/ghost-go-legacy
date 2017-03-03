@@ -91,6 +91,8 @@ class History extends Component {
                                     subContainerClassName={'pages pagination'}
                                     activeClassName={'active'} />
       }
+    } else {
+      recordList = <h3><b>You must login to access this page.</b></h3>
     }
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
