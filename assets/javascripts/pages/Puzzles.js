@@ -98,6 +98,7 @@ class Puzzles extends Component {
             </Link>
             <div className='puzzle-info'>
               <span>Level: {i.rank}</span>
+              { i.whofirst === 'Black First' ?  <div className="black-ki-shape"></div> : <div className="white-ki-shape"></div> }
             </div>
           </div>
         )
