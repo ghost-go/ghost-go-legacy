@@ -1,4 +1,5 @@
 require 'mina/git'
+require 'mina/deploy'
 
 # Basic settings:
 #   domain       - The hostname to SSH to.
@@ -21,6 +22,7 @@ set :nvm_path, '/home/happybai/.nvm/scripts/nvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
+set :shared_dirs, ['log']
 set :shared_paths, ['log']
 
 # Optional settings:
@@ -39,32 +41,32 @@ task :environment do
 
   # For those using RVM, use this to load an RVM version@gemset.
   # invoke :'rvm:use[ruby-2.3.0-p0@default]'
-  queue 'echo "-----> Loading nvm"'
-  queue %{
+  command 'echo "-----> Loading nvm"'
+  command %{
     source ~/.nvm/nvm.sh
   }
-  queue 'echo "-----> Now using nvm v.`nvm --version`"'
+  command 'echo "-----> Now using nvm v.`nvm --version`"'
 
-  queue 'export LANGUAGE=en_US.utf8'
-  queue 'export LANG=en_US.utf8'
-  queue 'export LC_ALL=en_US.utf8'
+  command 'export Lin_directoryANGUAGE=en_US.utf8'
+  command 'export LANG=en_US.utf8'
+  command 'export LC_ALL=en_US.utf8'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
 # For Rails apps, we'll make some of the shared paths that are shared between
 # all releases.
 task :setup => :environment do
-  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/log"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/log"]
+  command %[mkdir -p "#{fetch(:deploy_to)}/#{shared_path}/log"]
+  command %[chmod g+rx,u+rwx "#{fetch(:deploy_to)}/#{shared_path}/log"]
 
-  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/config"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/config"]
+  command %[mkdir -p "#{fetch(:deploy_to)}/#{shared_path}/config"]
+  command %[chmod g+rx,u+rwx "#{fetch(:deploy_to)}/#{shared_path}/config"]
 
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
     repo_port = /:([0-9]+)/.match(repository) && /:([0-9]+)/.match(repository)[1] || '22'
 
-    queue %[
+    command %[
       if ! ssh-keygen -H  -F #{repo_host} &>/dev/null; then
         ssh-keyscan -t rsa -p #{repo_port} -H #{repo_host} >> ~/.ssh/known_hosts
       fi
@@ -75,7 +77,7 @@ end
 desc "Deploys the current version to the server."
 
 task :deploy => :environment do
-  to :before_hook do
+  on :before_hook do
     # Put things to run locally before ssh
   end
 
@@ -85,14 +87,14 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
-    queue "cp ~/.node_env ./.env"
-    queue "nvm use node 5.7.0"
-    queue "npm install --production"
-    queue "./node_modules/.bin/webpack --config webpack.config.production.js"
+    command "cp ~/.node_env ./.env"
+    command "nvm use node 5.7.0"
+    command "npm install --production"
+    command "./node_modules/.bin/webpack --config webpack.config.production.js"
 
-    to :launch do
-      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
-      queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
+    on :launch do
+      command "mkdir -p #{fetch(:current_path)}/tmp/"
+      command "touch #{fetch(:current_path)}/tmp/restart.txt"
     end
   end
 end
