@@ -146,7 +146,7 @@ ReactDOM.render(
           <Route path="/practices/:id" component={Practice} />
           <Route path="/practice_records/:id" component={Practice} />
           <Route path="/users" component={User} />
-          <Route path="/History" component={History} />
+          <Route path="/history" component={History} />
         </Route>
       </Router>
       <App>
