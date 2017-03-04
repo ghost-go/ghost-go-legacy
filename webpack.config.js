@@ -104,15 +104,6 @@ module.exports = {
           },
         }],
       }, {
-        test: /\.jsx$/,
-        exclude: /(node_modules|bower_components)/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            presets: ['react', 'es2015']
-          }
-        }],
-      }, {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'postcss-loader']
       }, {

@@ -1,7 +1,7 @@
 var webpack = require('webpack')
 var path = require('path')
-var autoprefixer = require('autoprefixer')
 var precss = require('precss')
+const autoprefixer = require('autoprefixer')
 const dotenv = require('dotenv')
 const join = path.join
 const resolve = path.resolve
@@ -30,15 +30,8 @@ module.exports = {
     filename: '[name].[hash].js',
     publicPath: '/static/'
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
   devtool: 'source-map',
   plugins: [
-    //new webpack.DefinePlugin({
-    //__DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
-    //__PRO__: JSON.stringify(JSON.parse(process.env.BUILD_PRO || 'true'))
-    //}),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
@@ -49,33 +42,36 @@ module.exports = {
       compress: {
         warnings: false
       }
-    })
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [autoprefixer, precss]
+      }
+    }),
   ],
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        use: [{loader: "babel-loader"}],
-        query: {
-          presets: ['react', 'es2015', 'es2017', 'stage-0']
-        }
-      },
-      {
-        test: /\.jsx$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel?presets[]=react,presets[]=es2015'
-      },
-      {
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: ['react', 'es2015', 'es2016', 'es2017', 'stage-0']
+          },
+        }]
+      }, {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'postcss']
-      },
-      {
+        use: ['style-loader', 'css-loader', 'postcss-loader']
+      }, {
         test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
-        loader: 'url-loader?limit=100000'
-      },
-      { test: /\.json$/, loader: 'json-loader' }
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+          }
+        }],
+      }
     ]
   },
   node: {
@@ -83,8 +79,5 @@ module.exports = {
     fs: 'empty',
     net: 'empty',
     tls: 'empty'
-  },
-  postcss: function () {
-    return [autoprefixer, precss]
   }
 }
