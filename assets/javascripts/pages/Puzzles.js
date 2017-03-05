@@ -163,11 +163,10 @@ class Puzzles extends Component {
 const styles = StyleSheet.create({
 
   loading: {
+    width: '100px',
+    height: '100px',
+    paddingTop: '100px',
     fontSize: '100px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
     margin: '0 auto',
   },
 
