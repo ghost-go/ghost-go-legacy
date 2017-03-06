@@ -88,7 +88,7 @@ task :deploy => :environment do
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
     command "cp ~/.node_env ./.env"
-    command "nvm use node 5.7.0"
+    command "nvm use node 7.7.1"
     command "npm install --production"
     command "./node_modules/.bin/webpack --config webpack.config.production.js"
 
