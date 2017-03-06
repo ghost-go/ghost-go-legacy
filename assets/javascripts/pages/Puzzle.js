@@ -138,20 +138,9 @@ class Puzzle extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      let { id } = this.props.params
-      this.props.dispatch(fetchPuzzle({id}))
-      let addthisScript = document.createElement('script')
-      addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5818445a7b592e4c')
-      if (document.body) document.body.appendChild(addthisScript)
-      let addthisConfig = document.createElement('script')
-      addthisConfig.innerHTML = `
-        var addthis_config = addthis_config || {};
-        addthis_config.data_track_addressbar = false;
-        addthis_config.data_track_clickback = false;
-      `
-      if (document.body) document.body.appendChild(addthisConfig)
-    })
+    let { id } = this.props.params
+    this.props.dispatch(fetchPuzzle({id}))
+    window.addthis.layers.refresh()
   }
 
   render() {
@@ -169,6 +158,22 @@ class Puzzle extends Component {
 
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className='page-container'>
+
+        <Helmet
+          title={`Tsumego P-${puzzle.data.id}`}
+          meta={[
+            {'property': 'fb:app_id', 'content': '160543744369895'},
+            {'property': 'og:type', 'content': 'article'},
+            {'property': 'og:title', 'content': `Tsumego P-${puzzle.data.id}`},
+            {'property': 'og:description', 'content': ''},
+            {'property': 'og:image', 'content': puzzle.data.preview_img_r1.x500.url},
+            {'name': 'twitter:card', 'content': 'summary_large_image'},
+            {'name': 'twitter:site', 'content': '@happybyronbai'},
+            {'name': 'twitter:title', 'content': `Tsumego P-${puzzle.data.id}`},
+            {'name': 'twitter:description', 'content': ''},
+            {'name': 'twitter:image', 'content': puzzle.data.preview_img_r1.x500.url},
+          ]}
+        />
         <Dialog
           actions={actions}
           modal={false}
@@ -177,20 +182,6 @@ class Puzzle extends Component {
         >
           {this.state.ratingInfo}
         </Dialog>
-        <Helmet
-          meta={[
-              {'property': 'fb:app_id', 'content': '160543744369895'},
-              {'property': 'og:type', 'content': 'article'},
-              {'property': 'og:title', 'content': `Tsumego P-${puzzle.data.id}`},
-              {'property': 'og:description', 'content': ''},
-              {'property': 'og:image', 'content': puzzle.data.preview_img_r1.x500.url},
-              {'name': 'twitter:card', 'content': 'summary_large_image'},
-              {'name': 'twitter:site', 'content': '@happybyronbai'},
-              {'name': 'twitter:title', 'content': `Tsumego P-${puzzle.data.id}`},
-              {'name': 'twitter:description', 'content': ''},
-              {'name': 'twitter:image', 'content': puzzle.data.preview_img_r1.x500.url},
-          ]}
-        />
         <div className='puzzle-board'>
           <PuzzleBoard
             className="board"

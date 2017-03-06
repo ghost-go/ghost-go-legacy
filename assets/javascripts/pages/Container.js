@@ -7,6 +7,7 @@ import Footer from '../presentations/Footer'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Helmet from 'react-helmet'
 
 export default class Container extends Component {
 
@@ -35,6 +36,11 @@ export default class Container extends Component {
       <MuiThemeProvider muiTheme={getMuiTheme()}>
       {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
         <div>
+          <Helmet
+            htmlAttributes={{lang: 'en', amp: undefined}}
+            title="A modern website to learn Go,Weiqi,Baduk - beta"
+            titleTemplate="GhostGo - %s"
+          />
           <Navigation expanded={this.state.expanded} collapseToggle={::this.handleClick} auth={this.props.route.auth} />
           <Sidebar expanded={this.state.expanded} auth={this.props.route.auth} />
           <div>

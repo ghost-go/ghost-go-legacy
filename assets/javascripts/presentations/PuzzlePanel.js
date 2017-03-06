@@ -70,7 +70,6 @@ export default class PuzzlePanel extends Component {
     }
   }
 
-
   render() {
     let puzzle = this.props.puzzle
     if (puzzle === undefined) return null
