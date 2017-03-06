@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>GhostGo - A modern website to learn Go,Weiqi,Baduk - beta</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
@@ -23,7 +23,6 @@
     <!-- include the webpack-dev-server script so our scripts get reloaded when we make a change -->
     <!-- we'll run the webpack dev server on port 8090, so make sure it is correct -->
     <script src="/webpack-dev-server.js"></script>
-    <script type="text/javascript" src="/static/bundle.js"></script>
   </body>
 </html>
 

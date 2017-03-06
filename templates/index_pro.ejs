@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>GhostGo - A modern website to learn Go,Weiqi,Baduk - beta</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
     <meta name="keywords" content="GhostGo,Go,Weiqi,Baduk,Tsumego">
-    <meta name="description" content="Tsumego practice, Kifu review and other Go resources for free - alpha">
+    <meta name="description" content="A modern website to learn Go,Weiqi,Baduk - beta">
     <meta name="author" content="happybai">
 
     <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
@@ -23,7 +23,6 @@
     </div>
     <div id="coord"></div>
     <div id="turn"></div>
-    <script type="text/javascript" src="/dist/bundle.js"></script>
     <script>
       !function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
           arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
@@ -40,7 +39,7 @@
 
       ga('create', 'UA-81351513-1', 'auto');
       ga('send', 'pageview');
-
     </script>
   </body>
 </html>
+

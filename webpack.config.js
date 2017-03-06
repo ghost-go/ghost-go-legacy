@@ -42,12 +42,10 @@
 
 /* eslint-disable no-var */
 const webpack = require('webpack')
-const path = require('path')
 const autoprefixer = require('autoprefixer')
 const precss = require('precss')
 const dotenv = require('dotenv')
-const join = path.join
-const resolve = path.resolve
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 // ENV variables
 const dotEnvVars = dotenv.config()
@@ -72,7 +70,7 @@ module.exports = {
     //puzzle: './assets/javascripts/puzzle.js'
   },
   output: {
-    path: __dirname,
+    path: '/',
     filename: '[name].js',
     publicPath: '/static/'
   },
@@ -90,6 +88,11 @@ module.exports = {
       options: {
         postcss: [autoprefixer, precss]
       }
+    }),
+    new HtmlWebpackPlugin({
+      title: 'GhostGo - A modern website to learn Go,Weiqi,Baduk - beta',
+      filename: '../index.html',
+      template: 'templates/index.ejs',
     }),
   ],
   module: {

@@ -1,13 +1,11 @@
 var webpack = require('webpack')
-var path = require('path')
 var precss = require('precss')
 const autoprefixer = require('autoprefixer')
 const dotenv = require('dotenv')
-const join = path.join
-const resolve = path.resolve
 
 const dotEnvVars = dotenv.config()
 const envVariables = Object.assign({}, dotEnvVars)
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const defines =
   Object.keys(envVariables)
@@ -26,9 +24,9 @@ module.exports = {
     //puzzle: './assets/javascripts/puzzle.js'
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: 'dist',
     filename: '[name].[hash].js',
-    publicPath: '/static/'
+    publicPath: '/dist/'
   },
   devtool: 'source-map',
   plugins: [
@@ -47,6 +45,11 @@ module.exports = {
       options: {
         postcss: [autoprefixer, precss]
       }
+    }),
+    new HtmlWebpackPlugin({
+      title: 'GhostGo - A modern website to learn Go,Weiqi,Baduk - beta',
+      filename: 'index.html',
+      template: 'templates/index_pro.ejs',
     }),
   ],
   module: {
