@@ -7,14 +7,14 @@ export let ENV = process.env.NODE_ENV
 
 switch (ENV) {
 case 'development':
+  PROTOCOL = 'http'
   API_DOMAIN = `${PROTOCOL}://localhost:3000`
   APP_DOMAIN = `${PROTOCOL}://localhost:5000`
-  PROTOCOL = 'http'
   break
 case 'production':
+  PROTOCOL = 'https'
   API_DOMAIN = `${PROTOCOL}://api.ghost-go.com`
   APP_DOMAIN = `${PROTOCOL}://www.ghost-go.com`
-  PROTOCOL = 'https'
   break
 }
 
