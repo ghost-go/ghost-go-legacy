@@ -2,7 +2,6 @@ import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import Helmet from 'react-helmet'
-import _ from 'lodash'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import PuzzlePanel from '../presentations/PuzzlePanel'
@@ -141,11 +140,7 @@ class Puzzle extends Component {
   componentDidMount() {
     let { id } = this.props.params
     this.props.dispatch(fetchPuzzle({id}))
-    //this.is a workaround for fix share issue
-    try {
-      window.addthis.layers.refresh()
-    } catch (ex) {
-    }
+    if (window.addthis) window.addthis.layers.refresh()
   }
 
   render() {
