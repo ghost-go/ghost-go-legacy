@@ -91,7 +91,7 @@ task :deploy => :environment do
     command "nvm use node 7.7.1"
     command "npm install --production"
     command "./node_modules/.bin/webpack --config webpack.config.production.js"
-    command "sed -i -- 's/\<\/body\>/\<script type=\"text\/javascript\" src=\"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-5818445a7b592e4c\"\>\<\/script\>\<\/body\>/g' #{fetch(:current_path)}/dist/index.html"
+    #command 'sed -i -- "s/<\/body>/<script type=\"text\/javascript\" src=\"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-5818445a7b592e4c\"><\/script><\/body>/g" dist/index.html'
 
     on :launch do
       command "mkdir -p #{fetch(:current_path)}/tmp/"

@@ -140,7 +140,6 @@ class Puzzle extends Component {
   componentDidMount() {
     let { id } = this.props.params
     this.props.dispatch(fetchPuzzle({id}))
-    if (window.addthis) window.addthis.layers.refresh()
   }
 
   render() {

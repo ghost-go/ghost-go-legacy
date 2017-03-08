@@ -140,7 +140,7 @@ export default class PuzzlePanel extends Component {
         <div>
           { nextPanel }
         </div>
-        <div className="addthis_inline_share_toolbox"></div>
+        <div className="sharethis-inline-share-buttons"></div>
         <Toggle
           className="research"
           label="Research Mode"
