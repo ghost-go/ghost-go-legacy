@@ -7,7 +7,13 @@ import { StyleSheet, css } from 'aphrodite'
 import RankRange from '../presentations/RankRange'
 import {Button} from 'react-bootstrap'
 
+import {
+  ShareButtons,
+  generateShareIcon,
+} from 'react-share'
+
 export default class PuzzlePanel extends Component {
+
 
   static propTypes = {
     puzzle: T.object.isRequired,
@@ -71,19 +77,40 @@ export default class PuzzlePanel extends Component {
   }
 
   render() {
+
+
+    const {
+      FacebookShareButton,
+      GooglePlusShareButton,
+      LinkedinShareButton,
+      TwitterShareButton,
+      PinterestShareButton,
+      VKShareButton,
+      TelegramShareButton,
+      WhatsappShareButton,
+    } = ShareButtons
+
+    const FacebookIcon = generateShareIcon('facebook')
+    const TwitterIcon = generateShareIcon('twitter')
+    const GooglePlusIcon = generateShareIcon('google')
+    const LinkedinIcon = generateShareIcon('linkedin')
+    const PinterestIcon = generateShareIcon('pinterest')
+    const VKIcon = generateShareIcon('vk')
+    const TelegramIcon = generateShareIcon('telegram')
+    const WhatsappIcon = generateShareIcon('whatsapp')
+
     let puzzle = this.props.puzzle
     if (puzzle === undefined) return null
+
+    let shareUrl = `${location.protocol}//${location.host}${location.pathname}`
+    let title = `P-${puzzle.id}`
+    let exampleImage = puzzle.preview_img_r1.x400.url
+
     let rightAnswers = []
     let wrongAnswers = []
     let nextPanel, nextBtn
     if (this.props.showNext === true) {
-      nextBtn =
-        <Button
-          style={{marginRight: '10px'}}
-          onClick={this.props.handleNext}
-          bsStyle="info">
-          Next Tsumego
-        </Button>
+      nextBtn = <Button style={{marginRight: '10px'}} onClick={this.props.handleNext} bsStyle="info"> Next Tsumego </Button>
       nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
@@ -140,7 +167,97 @@ export default class PuzzlePanel extends Component {
         <div>
           { nextPanel }
         </div>
-        <div className="sharethis-inline-share-buttons"></div>
+        <div className="share-container">
+          <div className="share-box">
+            <FacebookShareButton
+              url={shareUrl}
+              title={title}
+              picture={`${exampleImage}`}
+              className="share-button">
+              <FacebookIcon
+                size={32}
+                round />
+            </FacebookShareButton>
+          </div>
+
+          <div className="share-box">
+            <TwitterShareButton
+              url={shareUrl}
+              title={title}
+              className="share-button">
+              <TwitterIcon
+                size={32}
+                round />
+            </TwitterShareButton>
+          </div>
+
+          <div className="share-box">
+            <TelegramShareButton
+              url={shareUrl}
+              title={title}
+              className="share-button">
+              <TelegramIcon size={32} round />
+            </TelegramShareButton>
+          </div>
+
+          <div className="share-box">
+            <WhatsappShareButton
+              url={shareUrl}
+              title={title}
+              separator=":: "
+              className="share-button">
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+          </div>
+
+          <div className="share-box">
+            <GooglePlusShareButton
+              url={shareUrl}
+              className="share-button">
+              <GooglePlusIcon
+                size={32}
+                round />
+            </GooglePlusShareButton>
+          </div>
+
+          <div className="share-box">
+            <LinkedinShareButton
+              url={shareUrl}
+              title={title}
+              windowWidth={750}
+              windowHeight={600}
+              className="share-button">
+              <LinkedinIcon
+                size={32}
+                round />
+            </LinkedinShareButton>
+          </div>
+
+          <div className="share-box">
+            <PinterestShareButton
+              url={String(window.location)}
+              media={`${exampleImage}`}
+              windowWidth={1000}
+              windowHeight={730}
+              className="share-button">
+              <PinterestIcon size={32} round />
+            </PinterestShareButton>
+          </div>
+
+          <div className="share-box">
+            <VKShareButton
+              url={shareUrl}
+              image={`${exampleImage}`}
+              windowWidth={660}
+              windowHeight={460}
+              className="share-button">
+              <VKIcon
+                size={32}
+                round />
+            </VKShareButton>
+          </div>
+        </div>
+        <div className="clearfix"></div>
         <Toggle
           className="research"
           label="Research Mode"
