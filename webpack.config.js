@@ -45,6 +45,7 @@ const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
 const precss = require('precss')
 const dotenv = require('dotenv')
+require('babel-polyfill')
 
 // ENV variables
 const dotEnvVars = dotenv.config()
@@ -64,6 +65,7 @@ module.exports = {
       'webpack-dev-server/client?http://localhost:5000',
       'webpack/hot/dev-server',
       'whatwg-fetch',
+      'babel-polyfill',
       './assets/javascripts/app.js'
     ]
     //puzzle: './assets/javascripts/puzzle.js'

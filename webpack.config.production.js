@@ -6,6 +6,7 @@ const dotenv = require('dotenv')
 const dotEnvVars = dotenv.config()
 const envVariables = Object.assign({}, dotEnvVars)
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+require('babel-polyfill')
 
 const defines =
   Object.keys(envVariables)
@@ -19,6 +20,7 @@ module.exports = {
   entry: {
     bundle: [
       'whatwg-fetch',
+      'babel-polyfill',
       './assets/javascripts/app.js'
     ]
     //puzzle: './assets/javascripts/puzzle.js'
