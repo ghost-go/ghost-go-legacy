@@ -227,3 +227,35 @@
   float: left;
 }
 
+.bg-blue {
+  color: #fff;
+  border-color: #3dc4f5;
+  background: #5bccf6;
+}
+
+.tile-box {
+  line-height: inherit;
+  display: block;
+  height: auto;
+  padding: 0;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  .tile-header {
+    padding: 10px;
+    text-align: center;
+  }
+  .tile-content-wrapper {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 10px 17px;
+  }
+  .tile-footer {
+    display: block;
+    margin: 0 -1px -1px;
+    padding: 5px 10px;
+    text-align: left;
+    color: inherit;
+    background: rgba(0,0,0,.1);
+  }
+}
