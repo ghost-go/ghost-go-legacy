@@ -32,6 +32,7 @@ class Dashboard extends Component {
   handleSeeMore(dateRange, userRange) {
     const { auth } = this.props
     let profile = auth.getProfile()
+    this.setState({filterOpen: false})
     this.props.dispatch(setDateRangeFilter(dateRange))
     this.props.dispatch(setUserRangeFilter(userRange))
     this.props.dispatch(fetchDashboard({
@@ -56,6 +57,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    let loading = <div><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
         <div className="page-nav">
@@ -88,44 +90,56 @@ class Dashboard extends Component {
             <li><a title="User: xxx">{`Users: ${this.props.userRangeFilter}`}</a></li>
           </ul>
         </div>
-        <Row style={{marginTop: '40px'}}>
-          <Col xs={8} md={4}>
-            <div className="tile-box tile-box-alt bg-blue">
-              <div className="tile-header">Total</div>
-              <div className="tile-content-wrapper">
-                <i className="fa fa-puzzle-piece"></i>
-                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> {this.props.dashboard.data.total}</div>
-                <small>Well done!</small>
-              </div>
-              <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
-              {/*
-              <a href="#" title="" className="tile-footer">view details <i className="glyph-icon icon-arrow-right"></i></a>
-              */}
-            </div>
-          </Col>
-          <Col xs={8} md={4}>
-            <div className="tile-box tile-box-alt bg-green">
-              <div className="tile-header">Right</div>
-              <div className="tile-content-wrapper">
-                <i className="fa fa-check"></i>
-                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> {this.props.dashboard.data.right}</div>
-                <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}& of all`}</small>
-              </div>
-              <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
-            </div>
-          </Col>
-          <Col xs={8} md={4}>
-            <div className="tile-box tile-box-alt bg-red">
-              <div className="tile-header">Wrong</div>
-              <div className="tile-content-wrapper">
-                <i className="fa fa-times"></i>
-                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> {this.props.dashboard.data.wrong}</div>
-                <small>{`take up ${(this.props.dashboard.data.wrong * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
-              </div>
-              <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
-            </div>
-          </Col>
-        </Row>
+        {
+          !this.props.auth.loggedIn() ? <div>You must login to access this page</div> :
+            <Row style={{marginTop: '40px'}}>
+              <Col xs={8} md={4}>
+                <div className="tile-box tile-box-alt bg-blue">
+                  <div className="tile-header">Total</div>
+                  <div className="tile-content-wrapper">
+                    <i className="fa fa-puzzle-piece"></i>
+                    <div className="tile-content">
+                      <i className="glyph-icon icon-caret-up font-red"></i>
+                      { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.total }
+                    </div>
+                    <small>Well done!</small>
+                  </div>
+                  <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
+                  {/*
+                  <a href="#" title="" className="tile-footer">view details <i className="glyph-icon icon-arrow-right"></i></a>
+                  */}
+                </div>
+              </Col>
+              <Col xs={8} md={4}>
+                <div className="tile-box tile-box-alt bg-green">
+                  <div className="tile-header">Right</div>
+                  <div className="tile-content-wrapper">
+                    <i className="fa fa-check"></i>
+                    <div className="tile-content">
+                      <i className="glyph-icon icon-caret-up font-red"></i>
+                      { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.right }
+                    </div>
+                    <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}& of all`}</small>
+                  </div>
+                  <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
+                </div>
+              </Col>
+              <Col xs={8} md={4}>
+                <div className="tile-box tile-box-alt bg-red">
+                  <div className="tile-header">Wrong</div>
+                  <div className="tile-content-wrapper">
+                    <i className="fa fa-times"></i>
+                    <div className="tile-content">
+                      <i className="glyph-icon icon-caret-up font-red"></i>
+                      { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.wrong }
+                    </div>
+                    <small>{`take up ${(this.props.dashboard.data.wrong * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
+                  </div>
+                  <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
+                </div>
+              </Col>
+            </Row>
+        }
       </div>
     )
   }

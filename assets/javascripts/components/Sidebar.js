@@ -163,6 +163,7 @@ export default class Sidebar extends Component {
 
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
+                  <div className="divider-header">Dashboard</div>
                   <li>
                     <Link to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
