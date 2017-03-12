@@ -30,6 +30,9 @@ import { puzzles,
   steps,
   tags,
   tagFilter,
+  userRangeFilter,
+  dateRangeFilter,
+  dashboard,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -41,6 +44,7 @@ import Practice from './pages/Practice'
 import User from './pages/User'
 import Container from './pages/Container'
 import History from './pages/History'
+import Dashboard from './pages/Dashboard'
 
 import AuthService from './utils/AuthService'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -98,6 +102,9 @@ const reducer = combineReducers({
   currentMode,
   tags,
   tagFilter,
+  userRangeFilter,
+  dateRangeFilter,
+  dashboard,
 })
 
 
@@ -147,6 +154,7 @@ ReactDOM.render(
           <Route path="/practice_records/:id" component={Practice} />
           <Route path="/users" component={User} />
           <Route path="/history" component={History} />
+          <Route path="/dashboard" component={Dashboard} />
         </Route>
       </Router>
       <App>

@@ -143,6 +143,8 @@ export const puzzleRecord = reduceReducers(
   buildPostReducer({}, 'PUZZLE_RECORD')
 )
 
+export const dashboard = buildFetchReducer({data: {total: 0, right: 0, wrong: 0}}, 'DASHBOARD')
+
 export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')
@@ -151,5 +153,7 @@ export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZ
 export const rangeFilter = createReducer({start: '18k', end: '9d', text: 'all'}, { 'SET_RANGE_FILTER': setRangeFilter })
 export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setGenernalFilter})
 export const tagFilter = createReducer('all', { 'SET_TAG_FILTER': setGenernalFilter})
+export const dateRangeFilter = createReducer('last7days', { 'SET_DATE_RANGE_FILTER': setGenernalFilter})
+export const userRangeFilter = createReducer('onlyme', { 'SET_USER_RANGE_FILTER': setGenernalFilter})
 export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
 export const tags = buildFetchReducer({}, 'TAGS')
