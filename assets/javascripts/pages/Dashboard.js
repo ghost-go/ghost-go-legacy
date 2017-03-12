@@ -119,7 +119,7 @@ class Dashboard extends Component {
                       <i className="glyph-icon icon-caret-up font-red"></i>
                       { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.right }
                     </div>
-                    <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}& of all`}</small>
+                    <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
                   </div>
                   <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
                 </div>
