@@ -233,6 +233,22 @@
   background: #5bccf6;
 }
 
+.bg-green {
+  color: #fff;
+  border-color: #8eca3f;
+  background: #9cd159;
+}
+
+.bg-red {
+  color: #fff;
+  border-color: #f33;
+  background: #ff5757;
+}
+
+.font-red, .parsley-required, .text-danger {
+    color: #ff5757!important;
+}
+
 .tile-box {
   line-height: inherit;
   display: block;
@@ -241,14 +257,40 @@
   text-align: center;
   border-width: 1px;
   border-style: solid;
+  margin-bottom: 25px;
   .tile-header {
     padding: 10px;
     text-align: center;
+    font-size: 14px;
+    text-transform: uppercase;
+    border: 0!important;
+    background: rgba(255,255,255,.2);
   }
   .tile-content-wrapper {
     position: relative;
     overflow: hidden;
-    padding: 10px 10px 17px;
+    padding: 30px 10px 17px;
+    .tile-content {
+      height: 35px;
+      font-size: 35px;
+      text-align: right;
+    }
+    .fa {
+      line-height: 70px;
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      height: 70px;
+      font-size: 65px;
+      margin-top: -32px;
+      opacity: .3;
+    }
+    small {
+      font-size: 14px;
+      display: block;
+      text-align: right;
+      opacity: .7;
+    }
   }
   .tile-footer {
     display: block;

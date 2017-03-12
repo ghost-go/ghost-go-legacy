@@ -4,6 +4,8 @@ export const setPuzzleFilter = createAction('SET_PUZZLE_FILTER')
 export const setKifuFilter = createAction('SET_KIFU_FILTER')
 export const setRangeFilter = createAction('SET_RANGE_FILTER')
 export const setTagFilter = createAction('SET_TAG_FILTER')
+export const setDateRangeFilter = createAction('SET_DATE_RANGE_FILTER')
+export const setUserRangeFilter = createAction('SET_USER_RANGE_FILTER')
 
 export const setPracticePuzzleId = createAction('SET_PRACTICE_PUZZLE_ID')
 
