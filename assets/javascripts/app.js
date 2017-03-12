@@ -32,6 +32,7 @@ import { puzzles,
   tagFilter,
   userRangeFilter,
   dateRangeFilter,
+  dashboard,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -103,6 +104,7 @@ const reducer = combineReducers({
   tagFilter,
   userRangeFilter,
   dateRangeFilter,
+  dashboard,
 })
 
 

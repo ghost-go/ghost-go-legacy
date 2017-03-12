@@ -34,6 +34,7 @@ function buildFetchData(name = '', api = '') {
 export const fetchKifus = buildFetchData('KIFUS', `${config.API_VERSION}/kifus`)
 export const fetchPuzzles = buildFetchData('PUZZLES', `${config.API_VERSION}/puzzles`)
 export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', `${config.API_VERSION}/puzzle_records`)
+export const fetchDashboard = buildFetchData('DASHBOARD', `${config.API_VERSION}/puzzle_records/dashboard`)
 export const fetchPractices = buildFetchData('PRACTICES', `${config.API_VERSION}/practices`)
 export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', `${config.API_VERSION}/practice_templates`)
 export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', `${config.API_VERSION}/practice_records/#{id}`)

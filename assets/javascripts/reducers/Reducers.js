@@ -143,6 +143,8 @@ export const puzzleRecord = reduceReducers(
   buildPostReducer({}, 'PUZZLE_RECORD')
 )
 
+export const dashboard = buildFetchReducer({data: {total: 0, right: 0, wrong: 0}}, 'DASHBOARD')
+
 export const rating = buildPostReducer({}, 'RATING')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')

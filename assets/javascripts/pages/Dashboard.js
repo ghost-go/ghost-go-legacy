@@ -1,6 +1,7 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions'
+import { fetchDashboard } from '../actions/FetchActions'
 
 import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
 
@@ -11,6 +12,8 @@ class Dashboard extends Component {
     dispatch: T.func.isRequired,
     dateRangeFilter: T.string.isRequired,
     userRangeFilter: T.string.isRequired,
+    auth: T.object.isRequired,
+    dashboard: T.object.isRequired,
   }
 
   static defaultProps = {
@@ -26,13 +29,26 @@ class Dashboard extends Component {
     this.setState({filterOpen: !this.state.filterOpen})
   }
 
-  handleSeeMore(dateRange, user) {
+  handleSeeMore(dateRange, userRange) {
+    const { auth } = this.props
+    let profile = auth.getProfile()
     this.props.dispatch(setDateRangeFilter(dateRange))
-    this.props.dispatch(setUserRangeFilter(user))
-    //this.props.dispatch(fetchPuzzles({
-      //rank: rank || this.props.rangeFilter,
-      //tags: tag || this.props.tagFilter,
-    //}))
+    this.props.dispatch(setUserRangeFilter(userRange))
+    this.props.dispatch(fetchDashboard({
+      date_range: dateRange,
+      user_range: userRange,
+      user_id: profile.user_id
+    }))
+  }
+
+  componentDidMount() {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    this.props.dispatch(fetchDashboard({
+      date_range: this.props.dateRangeFilter,
+      user_range: this.props.userRangeFilter,
+      user_id: profile.user_id
+    }))
   }
 
   constructor(props) {
@@ -48,7 +64,7 @@ class Dashboard extends Component {
               <Glyphicon className="filter-icon" glyph="filter" />
             </Dropdown.Toggle>
             <Dropdown.Menu className="super-colors">
-              <div className="popover-title">Date Range</div>
+              <div className="popover-title">Datesharklasers Range</div>
               <div className="popover-content">
                 <ul className="tags">
                   <li onClick={this.handleSeeMore.bind(this, 'today', this.props.userRangeFilter)} className={`tag ${this.props.dateRangeFilter === 'today' ? 'active' : ''}`}>Today</li>
@@ -72,16 +88,19 @@ class Dashboard extends Component {
             <li><a title="User: xxx">{`Users: ${this.props.userRangeFilter}`}</a></li>
           </ul>
         </div>
-        <Row>
+        <Row style={{marginTop: '40px'}}>
           <Col xs={8} md={4}>
             <div className="tile-box tile-box-alt bg-blue">
               <div className="tile-header">Total</div>
               <div className="tile-content-wrapper">
                 <i className="fa fa-puzzle-piece"></i>
-                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> 185</div>
-                <small>+7,6% email list penetration</small>
+                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> {this.props.dashboard.data.total}</div>
+                <small>Well done!</small>
               </div>
+              <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
+              {/*
               <a href="#" title="" className="tile-footer">view details <i className="glyph-icon icon-arrow-right"></i></a>
+              */}
             </div>
           </Col>
           <Col xs={8} md={4}>
@@ -89,10 +108,10 @@ class Dashboard extends Component {
               <div className="tile-header">Right</div>
               <div className="tile-content-wrapper">
                 <i className="fa fa-check"></i>
-                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> 185</div>
-                <small>+7,6% email list penetration</small>
+                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> {this.props.dashboard.data.right}</div>
+                <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}& of all`}</small>
               </div>
-              <a href="#" title="" className="tile-footer">view details <i className="glyph-icon icon-arrow-right"></i></a>
+              <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
             </div>
           </Col>
           <Col xs={8} md={4}>
@@ -100,10 +119,10 @@ class Dashboard extends Component {
               <div className="tile-header">Wrong</div>
               <div className="tile-content-wrapper">
                 <i className="fa fa-times"></i>
-                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> 185</div>
-                <small>+7,6% email list penetration</small>
+                <div className="tile-content"><i className="glyph-icon icon-caret-up font-red"></i> {this.props.dashboard.data.wrong}</div>
+                <small>{`take up ${(this.props.dashboard.data.wrong * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
               </div>
-              <a href="#" title="" className="tile-footer">view details <i className="glyph-icon icon-arrow-right"></i></a>
+              <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
             </div>
           </Col>
         </Row>
@@ -116,6 +135,7 @@ function select(state) {
   return {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
+    dashboard: state.dashboard,
   }
 }
 
