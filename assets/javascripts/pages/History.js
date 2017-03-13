@@ -3,21 +3,20 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
 import { fetchPuzzleRecords } from '../actions/FetchActions'
+import { setRecordTypeFilter } from '../actions/Actions'
 import mainStyles from '../styles/main'
 
 import RecordList from '../presentations/RecordList'
-
-import {grey300} from 'material-ui/styles/colors'
 import ReactPaginate from 'react-paginate'
 
+import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
 
 import { StyleSheet, css } from 'aphrodite'
 
 class History extends Component {
 
   state = {
-    filter: 'Kifu',
-    page: 1,
+    filterOpen: false,
   }
 
   static propTypes = {
@@ -26,46 +25,52 @@ class History extends Component {
     dispatch: T.func.isRequired,
     records: T.object.isRequired,
     expanded: T.bool.isRequired,
+    recordTypeFilter: T.string.isRequired,
   }
 
   constructor(props) {
     super(props)
-
-    let { query } = this.props.location
-    this.getRecordData(query.page)
-    this.handlePageClick = this.handlePageClick.bind(this)
   }
 
-  getRecordData(page = 1) {
+  handleToggle() {
+    this.setState({filterOpen: !this.state.filterOpen})
+  }
+
+  getRecordData(page = 1, recordType = 'all') {
     const { auth } = this.props
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       this.props.dispatch(fetchPuzzleRecords({
         page: page,
-        user_id: profile.user_id
+        user_id: profile.user_id,
+        record_type: recordType,
       }))
     }
   }
 
   handlePageClick(data) {
+    console.log(data)
+    let { query } = this.props.location
     let page = data.selected + 1
-    this.getRecordData(page)
-    this.props.dispatch(push(`/history?page=${page}`))
+    this.getRecordData(page, query.type)
+    this.props.dispatch(push(`/records?page=${page}&type=${query.type || 'all'}`))
   }
 
-  handleSelectedStyle(key) {
-    if (key === this.state.filter) {
-      return { backgroundColor: grey300 }
-    } else {
-      return { }
-    }
-  }
-
-  handleMenuClick(filter) {
-    this.setState({filter: filter})
+  handleSeeMore(recordType) {
+    console.log('see')
+    let { query } = this.props.location
+    this.setState({filterOpen: false})
+    this.props.dispatch(setRecordTypeFilter(recordType))
+    this.getRecordData(query.page, recordType)
+    this.props.dispatch(push(`/records?page=${query.page || 1}&type=${recordType}`))
   }
 
   componentWillMount() {
+    console.log('will')
+    let { query } = this.props.location
+    console.log(query)
+    this.props.dispatch(setRecordTypeFilter(query.type || 'all'))
+    this.getRecordData(query.page || 1, query.type || 'all')
   }
 
   render() {
@@ -78,7 +83,8 @@ class History extends Component {
       recordList = <RecordList recordList={this.props.records.data.data} />
       let pageCount = this.props.records.data.total_pages
       if (pageCount > 1) {
-        pagination = <ReactPaginate initialPage={page}
+        pagination = <ReactPaginate disableInitialCallback={true}
+                                    initialPage={page}
                                     previousLabel={'previous'}
                                     nextLabel={'next'}
                                     breakLabel={<a href="">...</a>}
@@ -86,7 +92,7 @@ class History extends Component {
                                     pageCount={pageCount}
                                     marginPagesDisplayed={2}
                                     pageRangeDisplayed={10}
-                                    onPageChange={this.handlePageClick}
+                                    onPageChange={::this.handlePageClick}
                                     containerClassName={'pagination'}
                                     subContainerClassName={'pages pagination'}
                                     activeClassName={'active'} />
@@ -97,8 +103,23 @@ class History extends Component {
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
         <div className="page-nav">
+          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
+            <Dropdown.Toggle>
+              <Glyphicon className="filter-icon" glyph="filter" />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="super-colors">
+              <div className="popover-title">Date Range</div>
+              <div className="popover-content">
+                <ul className="tags">
+                  <li onClick={this.handleSeeMore.bind(this, 'all')} className={`tag ${this.props.recordTypeFilter === 'all' ? 'active' : ''}`}>All</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'right')} className={`tag ${this.props.recordTypeFilter === 'right' ? 'active' : ''}`}>Right</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'wrong')} className={`tag ${this.props.recordTypeFilter === 'wrong' ? 'active' : ''}`}>Wrong</li>
+                </ul>
+              </div>
+            </Dropdown.Menu>
+          </Dropdown>
           <ul className="page-subnav">
-            <li><a title="Visited Tsumego">Visited Tsumego</a></li>
+            <li><a title="Record Type">{`Record Type: ${this.props.recordTypeFilter}`}</a></li>
           </ul>
         </div>
         <div className={css(styles.historyContainer)}>
@@ -166,7 +187,8 @@ const styles = StyleSheet.create({
 
 function select(state) {
   return {
-    records: state.puzzleRecords
+    records: state.puzzleRecords,
+    recordTypeFilter: state.recordTypeFilter,
   }
 }
 

@@ -6,6 +6,7 @@ export const setRangeFilter = createAction('SET_RANGE_FILTER')
 export const setTagFilter = createAction('SET_TAG_FILTER')
 export const setDateRangeFilter = createAction('SET_DATE_RANGE_FILTER')
 export const setUserRangeFilter = createAction('SET_USER_RANGE_FILTER')
+export const setRecordTypeFilter = createAction('SET_RECORD_TYPE_FILTER')
 
 export const setPracticePuzzleId = createAction('SET_PRACTICE_PUZZLE_ID')
 

@@ -91,7 +91,8 @@ class Kifus extends Component {
     if (this.props.kifus.data !== undefined) {
       let pageCount = this.props.kifus.data.total_pages
       if (pageCount > 1) {
-        pagination = <ReactPaginate initialPage={page}
+        pagination = <ReactPaginate disableInitialCallback={true}
+                                    initialPage={page}
                                     previousLabel={'previous'}
                                     nextLabel={'next'}
                                     breakLabel={<a href="">...</a>}

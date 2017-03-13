@@ -1,5 +1,6 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions'
 import { fetchDashboard } from '../actions/FetchActions'
 
@@ -99,15 +100,11 @@ class Dashboard extends Component {
                   <div className="tile-content-wrapper">
                     <i className="fa fa-puzzle-piece"></i>
                     <div className="tile-content">
-                      <i className="glyph-icon icon-caret-up font-red"></i>
                       { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.total }
                     </div>
                     <small>Well done!</small>
                   </div>
-                  <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
-                  {/*
-                  <a href="#" title="" className="tile-footer">view details <i className="glyph-icon icon-arrow-right"></i></a>
-                  */}
+                  <Link className="tile-footer" to={'/records?page=1&type=all'}>view details <i className="fa fa-arrow-right"></i></Link>
                 </div>
               </Col>
               <Col xs={8} md={4}>
@@ -116,12 +113,11 @@ class Dashboard extends Component {
                   <div className="tile-content-wrapper">
                     <i className="fa fa-check"></i>
                     <div className="tile-content">
-                      <i className="glyph-icon icon-caret-up font-red"></i>
                       { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.right }
                     </div>
                     <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
                   </div>
-                  <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
+                  <Link className="tile-footer" to={'/records?page=1&type=right'}>view details <i className="fa fa-arrow-right"></i></Link>
                 </div>
               </Col>
               <Col xs={8} md={4}>
@@ -130,12 +126,11 @@ class Dashboard extends Component {
                   <div className="tile-content-wrapper">
                     <i className="fa fa-times"></i>
                     <div className="tile-content">
-                      <i className="glyph-icon icon-caret-up font-red"></i>
                       { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.wrong }
                     </div>
                     <small>{`take up ${(this.props.dashboard.data.wrong * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
                   </div>
-                  <a href="#" title="" className="tile-footer">&nbsp;&nbsp;&nbsp;</a>
+                  <Link className="tile-footer" to={'/records?page=1&type=wrong'}>view details <i className="fa fa-arrow-right"></i></Link>
                 </div>
               </Col>
             </Row>
