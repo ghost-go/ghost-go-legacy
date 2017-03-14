@@ -155,5 +155,6 @@ export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setGenernalF
 export const tagFilter = createReducer('all', { 'SET_TAG_FILTER': setGenernalFilter})
 export const dateRangeFilter = createReducer('last7days', { 'SET_DATE_RANGE_FILTER': setGenernalFilter})
 export const userRangeFilter = createReducer('onlyme', { 'SET_USER_RANGE_FILTER': setGenernalFilter})
+export const recordTypeFilter = createReducer('all', { 'SET_RECORD_TYPE_FILTER': setGenernalFilter})
 export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
 export const tags = buildFetchReducer({}, 'TAGS')

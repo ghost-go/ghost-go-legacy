@@ -191,15 +191,15 @@ export default class Sidebar extends Component {
                   </li>
                   */}
                   <li className="divider"></li>
-                  <div className="divider-header">Settings</div>
+                  <div className="divider-header">Others</div>
                   <li>
                     <Link to="/users">
                       <i className="fa fa-users"></i> <span>Profile</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/history">
-                      <i className="fa fa-history"></i> <span>Visited</span>
+                    <Link to="/records">
+                      <i className="fa fa-history"></i> <span>Records</span>
                     </Link>
                   </li>
                 </ul>

@@ -32,6 +32,7 @@ import { puzzles,
   tagFilter,
   userRangeFilter,
   dateRangeFilter,
+  recordTypeFilter,
   dashboard,
 } from './reducers/Reducers'
 
@@ -104,6 +105,7 @@ const reducer = combineReducers({
   tagFilter,
   userRangeFilter,
   dateRangeFilter,
+  recordTypeFilter,
   dashboard,
 })
 
@@ -153,7 +155,7 @@ ReactDOM.render(
           <Route path="/practices/:id" component={Practice} />
           <Route path="/practice_records/:id" component={Practice} />
           <Route path="/users" component={User} />
-          <Route path="/history" component={History} />
+          <Route path="/records" component={History} />
           <Route path="/dashboard" component={Dashboard} />
         </Route>
       </Router>
