@@ -89,7 +89,7 @@ export default class User extends Component {
                   >
                     <ControlLabel>User Name</ControlLabel>
                     <FormControl.Static>
-                      { profile.username }
+                      { profile.username || profile.nickname }
                     </FormControl.Static>
                     <FormControl.Feedback />
                   </FormGroup>
