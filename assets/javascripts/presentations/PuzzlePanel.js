@@ -153,8 +153,12 @@ export default class PuzzlePanel extends Component {
     }
     return (
       <div className={this.props.className}>
-        <div className='title'>{`${puzzle.whofirst} ${puzzle.rank}`}</div>
-        <div><strong>Number:</strong>{`P-${puzzle.id}`}</div>
+        <div className='title'>{`${puzzle.whofirst} ${puzzle.rank}`} </div>
+        <div>
+          <strong>NO.:</strong>{`P-${puzzle.id}`}&nbsp;&nbsp;&nbsp;
+          <i className="fa fa-check" aria-hidden="true"></i><span>&nbsp;{puzzle.right_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-times" aria-hidden="true"></i><span>&nbsp;{puzzle.wrong_count}</span>&nbsp;&nbsp;
+        </div>
         <div className="button-container">
           <Button
             style={{marginRight: '10px'}}
