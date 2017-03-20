@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import RankList from './RankList'
 import { StyleSheet, css } from 'aphrodite'
-import { setRangeFilter } from '../actions/Actions'
 
 import Remove from 'material-ui/svg-icons/content/remove'
 
 export default class RankRange extends Component {
 
   static propTypes = {
-    rankRange: React.PropTypes.object.isRequired
+    rankRange: T.object.isRequired,
+    handleRangeChange: T.func.isRequired
   }
 
   constructor(props) {

@@ -61,10 +61,10 @@ class Kifu extends Component {
   }
 
   render() {
-    const { kifu } = this.props
+    const { kifu, expanded } = this.props
     if (kifu.data == null) return null
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)}>
+      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)}>
         <div className={css(styles.kifuBoard)}>
           <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
         </div>
@@ -77,8 +77,8 @@ class Kifu extends Component {
                     Black
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.player_b.en_name}
-                    ({ this.props.kifu.data.b_rank })
+                    { kifu.data.player_b.en_name}
+                    ({ kifu.data.b_rank })
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
@@ -86,8 +86,8 @@ class Kifu extends Component {
                     White
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.player_w.en_name}
-                    ({ this.props.kifu.data.w_rank })
+                    { kifu.data.player_w.en_name}
+                    ({ kifu.data.w_rank })
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
@@ -95,72 +95,54 @@ class Kifu extends Component {
                     Result
                   </TableRowColumn>
                   <TableRowColumn>
-                    { this.props.kifu.data.result }
+                    { kifu.data.result }
                   </TableRowColumn>
                 </TableRow>
-                {/*
-                  <TableRow>
-                  <TableRowColumn>
-                  Title
+                <TableRow>
+                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                    Komi
                   </TableRowColumn>
                   <TableRowColumn>
-                  { this.props.kifu.data.title }
+                    { kifu.data.komi }
                   </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn>
-                      Place
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.kifu.data.place }
-                    </TableRowColumn>
-                  </TableRow>
-                  */}
-                  <TableRow>
-                    <TableRowColumn className={css(styles.fixedColumnWidth)}>
-                      Komi
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.kifu.data.komi }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn className={css(styles.fixedColumnWidth)}>
-                      Date
-                    </TableRowColumn>
-                    <TableRowColumn>
-                      { this.props.kifu.data.short_date }
-                    </TableRowColumn>
-                  </TableRow>
-                  <TableRow>
-                    <TableRowColumn colSpan={2}>
-                      <div className="control-bar">
-                        <span className="move-control" onClick={::this.firstStep}>
-                          <i className="fa fa-fast-backward"></i>
-                        </span>
-                        <span className="move-control" onClick={::this.prev10Step}>
-                          <i className="fa fa-backward"></i>
-                        </span>
-                        <span className="move-control" onClick={::this.prevStep}>
-                          <i className="fa fa-play rotate"></i>
-                        </span>
-                        <span className="move-control" onClick={::this.nextStep}>
-                          <i className="fa fa-play"></i>
-                        </span>
-                        <span className="move-control" onClick={::this.next10Step}>
-                          <i className="fa fa-forward"></i>
-                        </span>
-                        <span className="move-control" onClick={::this.lastStep}>
-                          <i className="fa fa-fast-forward"></i>
-                        </span>
-                      </div>
-                    </TableRowColumn>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
-          </div>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                    Date
+                  </TableRowColumn>
+                  <TableRowColumn>
+                    { kifu.data.short_date }
+                  </TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn colSpan={2}>
+                    <div className="control-bar">
+                      <span className="move-control" onClick={::this.firstStep}>
+                        <i className="fa fa-fast-backward"></i>
+                      </span>
+                      <span className="move-control" onClick={::this.prev10Step}>
+                        <i className="fa fa-backward"></i>
+                      </span>
+                      <span className="move-control" onClick={::this.prevStep}>
+                        <i className="fa fa-play rotate"></i>
+                      </span>
+                      <span className="move-control" onClick={::this.nextStep}>
+                        <i className="fa fa-play"></i>
+                      </span>
+                      <span className="move-control" onClick={::this.next10Step}>
+                        <i className="fa fa-forward"></i>
+                      </span>
+                      <span className="move-control" onClick={::this.lastStep}>
+                        <i className="fa fa-fast-forward"></i>
+                      </span>
+                    </div>
+                  </TableRowColumn>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Paper>
         </div>
+      </div>
     )
   }
 }

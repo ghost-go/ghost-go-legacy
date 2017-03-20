@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes as T } from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import Clear from 'material-ui/svg-icons/content/clear'
@@ -10,8 +10,8 @@ export default class PuzzleList extends Component {
 
 
   static propTypes = {
-    puzzleList: React.PropTypes.array.isRequired,
-    record: React.PropTypes.array.isRequired
+    puzzleList: T.array.isRequired,
+    record: T.array.isRequired
   }
 
   static defaultProps = {

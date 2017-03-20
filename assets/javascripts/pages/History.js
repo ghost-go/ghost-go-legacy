@@ -9,7 +9,8 @@ import mainStyles from '../styles/main'
 import RecordList from '../presentations/RecordList'
 import ReactPaginate from 'react-paginate'
 
-import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
+//import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
+import {Dropdown, Glyphicon} from 'react-bootstrap'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -37,10 +38,10 @@ class History extends Component {
   }
 
   getRecordData(page = 1, recordType = 'all') {
-    const { auth } = this.props
+    const { auth, dispatch } = this.props
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
-      this.props.dispatch(fetchPuzzleRecords({
+      dispatch(fetchPuzzleRecords({
         page: page,
         user_id: profile.user_id,
         record_type: recordType,
@@ -49,7 +50,6 @@ class History extends Component {
   }
 
   handlePageClick(data) {
-    console.log(data)
     let { query } = this.props.location
     let page = data.selected + 1
     this.getRecordData(page, query.type)
@@ -57,7 +57,6 @@ class History extends Component {
   }
 
   handleSeeMore(recordType) {
-    console.log('see')
     let { query } = this.props.location
     this.setState({filterOpen: false})
     this.props.dispatch(setRecordTypeFilter(recordType))
@@ -66,9 +65,7 @@ class History extends Component {
   }
 
   componentWillMount() {
-    console.log('will')
     let { query } = this.props.location
-    console.log(query)
     this.props.dispatch(setRecordTypeFilter(query.type || 'all'))
     this.getRecordData(query.page || 1, query.type || 'all')
   }
@@ -76,12 +73,13 @@ class History extends Component {
   render() {
     let recordList, pagination, page = 0
     let { query } = this.props.location
+    let { expanded, records, recordTypeFilter } = this.props
     if (query && query.page) {
       page = parseInt(query.page - 1)
     }
-    if (this.props.records.data !== undefined) {
-      recordList = <RecordList recordList={this.props.records.data.data} />
-      let pageCount = this.props.records.data.total_pages
+    if (records.data !== undefined) {
+      recordList = <RecordList recordList={records.data.data} />
+      let pageCount = records.data.total_pages
       if (pageCount > 1) {
         pagination = <ReactPaginate disableInitialCallback={true}
                                     initialPage={page}
@@ -101,7 +99,7 @@ class History extends Component {
       recordList = <h3><b>You must login to access this page.</b></h3>
     }
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
+      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
         <div className="page-nav">
           <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>
@@ -111,15 +109,15 @@ class History extends Component {
               <div className="popover-title">Date Range</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, 'all')} className={`tag ${this.props.recordTypeFilter === 'all' ? 'active' : ''}`}>All</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'right')} className={`tag ${this.props.recordTypeFilter === 'right' ? 'active' : ''}`}>Right</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'wrong')} className={`tag ${this.props.recordTypeFilter === 'wrong' ? 'active' : ''}`}>Wrong</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'all')} className={`tag ${recordTypeFilter === 'all' ? 'active' : ''}`}>All</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'right')} className={`tag ${recordTypeFilter === 'right' ? 'active' : ''}`}>Right</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'wrong')} className={`tag ${recordTypeFilter === 'wrong' ? 'active' : ''}`}>Wrong</li>
                 </ul>
               </div>
             </Dropdown.Menu>
           </Dropdown>
           <ul className="page-subnav">
-            <li><a title="Record Type">{`Record Type: ${this.props.recordTypeFilter}`}</a></li>
+            <li><a title="Record Type">{`Record Type: ${recordTypeFilter}`}</a></li>
           </ul>
         </div>
         <div className={css(styles.historyContainer)}>

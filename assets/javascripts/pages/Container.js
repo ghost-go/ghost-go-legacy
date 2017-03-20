@@ -1,13 +1,18 @@
 import React, { Component, PropTypes as T } from 'react'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
-import Footer from '../presentations/Footer'
 //import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 //import lang from '../components/lang'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Helmet from 'react-helmet'
+
+const Footer = () => <div className='footer'>
+  Source Code:  <a href="https://github.com/happybai/ghost-go">
+    https://github.com/happybai/ghost-go
+  </a>
+</div>
 
 export default class Container extends Component {
 

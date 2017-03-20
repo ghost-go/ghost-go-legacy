@@ -31,12 +31,12 @@ class Dashboard extends Component {
   }
 
   handleSeeMore(dateRange, userRange) {
-    const { auth } = this.props
+    const { auth, dispatch } = this.props
     let profile = auth.getProfile()
     this.setState({filterOpen: false})
-    this.props.dispatch(setDateRangeFilter(dateRange))
-    this.props.dispatch(setUserRangeFilter(userRange))
-    this.props.dispatch(fetchDashboard({
+    dispatch(setDateRangeFilter(dateRange))
+    dispatch(setUserRangeFilter(userRange))
+    dispatch(fetchDashboard({
       date_range: dateRange,
       user_range: userRange,
       user_id: profile.user_id
@@ -44,11 +44,11 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const { auth } = this.props
+    const { auth, dispatch, dateRangeFilter, userRangeFilter } = this.props
     let profile = auth.getProfile()
-    this.props.dispatch(fetchDashboard({
-      date_range: this.props.dateRangeFilter,
-      user_range: this.props.userRangeFilter,
+    dispatch(fetchDashboard({
+      date_range: dateRangeFilter,
+      user_range: userRangeFilter,
       user_id: profile.user_id
     }))
   }
@@ -59,8 +59,9 @@ class Dashboard extends Component {
 
   render() {
     let loading = <div><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
+    let { auth, expanded, userRangeFilter, dateRangeFilter, dashboard } = this.props
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
+      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className="page-container">
         <div className="page-nav">
           <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>
@@ -70,29 +71,29 @@ class Dashboard extends Component {
               <div className="popover-title">Datesharklasers Range</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, 'today', this.props.userRangeFilter)} className={`tag ${this.props.dateRangeFilter === 'today' ? 'active' : ''}`}>Today</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'yesterday', this.props.userRangeFilter)} className={`tag ${this.props.dateRangeFilter === 'yesterday' ? 'active' : ''}`}>Yesterday</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'last7days', this.props.userRangeFilter)} className={`tag ${this.props.dateRangeFilter === 'last7days' ? 'active' : ''}`}>Last 7 days</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'last30days', this.props.userRangeFilter)} className={`tag ${this.props.dateRangeFilter === 'last30days' ? 'active' : ''}`}>Last 30 days</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'all', this.props.userRangeFilter)} className={`tag ${this.props.dateRangeFilter === 'all' ? 'active' : ''}`}>All</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'today', userRangeFilter)} className={`tag ${dateRangeFilter === 'today' ? 'active' : ''}`}>Today</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'yesterday', userRangeFilter)} className={`tag ${dateRangeFilter === 'yesterday' ? 'active' : ''}`}>Yesterday</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'last7days', userRangeFilter)} className={`tag ${dateRangeFilter === 'last7days' ? 'active' : ''}`}>Last 7 days</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'last30days', userRangeFilter)} className={`tag ${dateRangeFilter === 'last30days' ? 'active' : ''}`}>Last 30 days</li>
+                  <li onClick={this.handleSeeMore.bind(this, 'all', userRangeFilter)} className={`tag ${dateRangeFilter === 'all' ? 'active' : ''}`}>All</li>
                 </ul>
               </div>
               <div className="popover-title">Users</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, this.props.dateRangeFilter, 'onlyme')} className={`tag ${this.props.userRangeFilter === 'onlyme' ? 'active' : ''}`}>Only me</li>
-                  <li onClick={this.handleSeeMore.bind(this, this.props.dateRangeFilter, 'all')} className={`tag ${this.props.userRangeFilter === 'all' ? 'active' : ''}`}>All users</li>
+                  <li onClick={this.handleSeeMore.bind(this, dateRangeFilter, 'onlyme')} className={`tag ${userRangeFilter === 'onlyme' ? 'active' : ''}`}>Only me</li>
+                  <li onClick={this.handleSeeMore.bind(this, dateRangeFilter, 'all')} className={`tag ${userRangeFilter === 'all' ? 'active' : ''}`}>All users</li>
                 </ul>
               </div>
             </Dropdown.Menu>
           </Dropdown>
           <ul className="page-subnav">
-            <li><a title="Date Range: xxx">{`Date Range: ${this.props.dateRangeFilter}`}</a></li>
-            <li><a title="User: xxx">{`Users: ${this.props.userRangeFilter}`}</a></li>
+            <li><a title="Date Range: xxx">{`Date Range: ${dateRangeFilter}`}</a></li>
+            <li><a title="User: xxx">{`Users: ${userRangeFilter}`}</a></li>
           </ul>
         </div>
         {
-          !this.props.auth.loggedIn() ? <div>You must login to access this page</div> :
+          !auth.loggedIn() ? <div>You must login to access this page</div> :
             <Row style={{marginTop: '40px'}}>
               <Col xs={8} md={4}>
                 <div className="tile-box tile-box-alt bg-blue">
@@ -100,7 +101,7 @@ class Dashboard extends Component {
                   <div className="tile-content-wrapper">
                     <i className="fa fa-puzzle-piece"></i>
                     <div className="tile-content">
-                      { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.total }
+                      { dashboard.isFetching === true ? loading : dashboard.data.total }
                     </div>
                     <small>Well done!</small>
                   </div>
@@ -113,9 +114,9 @@ class Dashboard extends Component {
                   <div className="tile-content-wrapper">
                     <i className="fa fa-check"></i>
                     <div className="tile-content">
-                      { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.right }
+                      { dashboard.isFetching === true ? loading : dashboard.data.right }
                     </div>
-                    <small>{`take up ${(this.props.dashboard.data.right * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
+                    <small>{`take up ${(dashboard.data.right * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
                   </div>
                   <Link className="tile-footer" to={'/records?page=1&type=right'}>view details <i className="fa fa-arrow-right"></i></Link>
                 </div>
@@ -126,9 +127,9 @@ class Dashboard extends Component {
                   <div className="tile-content-wrapper">
                     <i className="fa fa-times"></i>
                     <div className="tile-content">
-                      { this.props.dashboard.isFetching === true ? loading : this.props.dashboard.data.wrong }
+                      { dashboard.isFetching === true ? loading : dashboard.data.wrong }
                     </div>
-                    <small>{`take up ${(this.props.dashboard.data.wrong * 100 / this.props.dashboard.data.total).toFixed(2)}% of all`}</small>
+                    <small>{`take up ${(dashboard.data.wrong * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
                   </div>
                   <Link className="tile-footer" to={'/records?page=1&type=wrong'}>view details <i className="fa fa-arrow-right"></i></Link>
                 </div>
@@ -140,7 +141,7 @@ class Dashboard extends Component {
   }
 }
 
-function select(state) {
+function mapStateToProps(state) {
   return {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
@@ -148,4 +149,4 @@ function select(state) {
   }
 }
 
-export default connect(select)(Dashboard)
+export default connect(mapStateToProps)(Dashboard)
