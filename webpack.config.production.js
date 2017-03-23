@@ -26,7 +26,7 @@ module.exports = {
     //puzzle: './assets/javascripts/puzzle.js'
   },
   output: {
-    path: 'dist',
+    path:  __dirname + '/dist',
     filename: '[name].[hash].js',
     publicPath: '/dist/'
   },
