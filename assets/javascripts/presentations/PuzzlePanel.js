@@ -1,5 +1,5 @@
 import React, { Component, PropTypes as T } from 'react'
-import { postRating } from '../actions/PostActions'
+import { postRating, postFavorite } from '../actions/PostActions'
 import Toggle from 'material-ui/Toggle'
 import AnswerBar from '../presentations/AnswerBar'
 
@@ -40,6 +40,7 @@ export default class PuzzlePanel extends Component {
 
     this.state = {
       answersExpanded: true,
+      favorite: this.props.puzzle.is_favorite,
     }
 
   }
@@ -49,6 +50,23 @@ export default class PuzzlePanel extends Component {
       this.props.setCurrentMode('research')
     } else {
       this.props.setCurrentMode('answer')
+    }
+  }
+
+  handleFavorite(id) {
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    if (auth.loggedIn()) {
+      this.setState({favorite: !this.state.favorite})
+      this.props.dispatch(postFavorite({
+        likable_id: id,
+        likable_type: 'Puzzle',
+        value: !this.state.favorite,
+        scope: 'favorite',
+        user_id: profile.user_id
+      }))
+    } else {
+      auth.login()
     }
   }
 
@@ -76,9 +94,11 @@ export default class PuzzlePanel extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({favorite: nextProps.puzzle.is_favorite})
+  }
+
   render() {
-
-
     const {
       FacebookShareButton,
       GooglePlusShareButton,
@@ -153,11 +173,19 @@ export default class PuzzlePanel extends Component {
     }
     return (
       <div className={this.props.className}>
-        <div className='title'>{`${puzzle.whofirst} ${puzzle.rank}`} </div>
+        <div className='title'>
+          {`${puzzle.whofirst} ${puzzle.rank}`}&nbsp;&nbsp;
+          <a onClick={this.handleFavorite.bind(this, puzzle.id)}
+            className={`favorite ${this.state.favorite === true ? 'active' : ''}`}
+            title={`${this.state.favorite === true ? 'Cancle Favorite' : 'Favorite'}`}>
+            <i className="fa fa-heart" aria-hidden="true"></i>
+          </a>
+        </div>
         <div>
           <strong>NO.:</strong>{`P-${puzzle.id}`}&nbsp;&nbsp;&nbsp;
           <i className="fa fa-check" aria-hidden="true"></i><span>&nbsp;{puzzle.right_count}</span>&nbsp;&nbsp;
           <i className="fa fa-times" aria-hidden="true"></i><span>&nbsp;{puzzle.wrong_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-heart" aria-hidden="true"></i><span>&nbsp;{puzzle.favorite_count}</span>&nbsp;&nbsp;
         </div>
         <div className="button-container">
           <Button

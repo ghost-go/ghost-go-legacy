@@ -301,3 +301,13 @@
     background: rgba(0,0,0,.1);
   }
 }
+
+.favorite {
+  cursor: pointer;
+  &:hover {
+    color: red;
+  }
+  &.active {
+    color: red;
+  }
+}

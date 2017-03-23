@@ -1,7 +1,6 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import Helmet from 'react-helmet'
 
 import PuzzleBoard from '../presentations/PuzzleBoard'
 import PuzzlePanel from '../presentations/PuzzlePanel'
@@ -139,7 +138,9 @@ class Puzzle extends Component {
 
   componentDidMount() {
     let { id } = this.props.params
-    this.props.dispatch(fetchPuzzle({id}))
+    const { auth } = this.props
+    let profile = auth.getProfile()
+    this.props.dispatch(fetchPuzzle({id, query: {user_id: profile.user_id}}))
   }
 
   render() {
@@ -158,21 +159,6 @@ class Puzzle extends Component {
     return (
       <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className='page-container'>
 
-        <Helmet
-          title={`Tsumego P-${puzzle.data.id}`}
-          meta={[
-            {'property': 'fb:app_id', 'content': '160543744369895'},
-            {'property': 'og:type', 'content': 'article'},
-            {'property': 'og:title', 'content': `Tsumego P-${puzzle.data.id}`},
-            {'property': 'og:description', 'content': ''},
-            {'property': 'og:image', 'content': puzzle.data.preview_img_r1.x500.url},
-            {'name': 'twitter:card', 'content': 'summary_large_image'},
-            {'name': 'twitter:site', 'content': '@happybyronbai'},
-            {'name': 'twitter:title', 'content': `Tsumego P-${puzzle.data.id}`},
-            {'name': 'twitter:description', 'content': ''},
-            {'name': 'twitter:image', 'content': puzzle.data.preview_img_r1.x500.url},
-          ]}
-        />
         <Dialog
           actions={actions}
           modal={false}
@@ -197,6 +183,7 @@ class Puzzle extends Component {
         </div>
         <div className='puzzle-panel'>
           <PuzzlePanel
+            {...this.props}
             showNext={true}
             puzzle={this.props.puzzle.data}
             handleRangeChange={this.handleRangeChange}

@@ -198,6 +198,11 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li>
+                    <Link to="/favorite">
+                      <i className="fa fa-heart"></i> <span>Favorite</span>
+                    </Link>
+                  </li>
+                  <li>
                     <Link to="/records">
                       <i className="fa fa-history"></i> <span>Records</span>
                     </Link>
@@ -237,6 +242,11 @@ export default class Sidebar extends Component {
                   <li>
                     <Link to="/users">
                       <i className="fa fa-users"></i> <span>Profile</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/favorite">
+                      <i className="fa fa-heart"></i> <span>Favorite</span>
                     </Link>
                   </li>
                   <li>
