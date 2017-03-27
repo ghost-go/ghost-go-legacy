@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-import {List, ListItem} from 'material-ui/List'
+import React, { Component, PropTypes as T } from 'react'
+import { List } from 'material-ui/List'
 import { Link } from 'react-router'
 import moment from 'moment'
 
@@ -9,7 +9,7 @@ export default class RecordList extends Component {
 
 
   static propTypes = {
-    recordList: React.PropTypes.array.isRequired
+    recordList: T.array.isRequired
   }
 
   static defaultProps = {

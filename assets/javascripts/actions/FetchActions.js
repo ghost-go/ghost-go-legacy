@@ -10,13 +10,13 @@ function buildFetchData(name = '', api = '') {
   return (params) => {
     return dispatch => {
       dispatch(fetchDataRequest(params))
-      let url = URI(`${config.API_DOMAIN}/${api}`)
-      let templates = api.match(/#{.*}/i)
+      let url = URI(`${config.API_DOMAIN}/${config.API_VERSION}/${api}`)
+      let templates = api.match(/:.*/i)
       if (templates === null) {
         url = url.query(params)
       } else {
         templates.forEach((t) => {
-          url = URI(url.toString().replace(t, params[t.match(/#{(.*)}/i)[1]]))
+          url = URI(url.toString().replace(t, params[t.match(/:(.*)/i)[1]]))
         })
         if (params['query'] !== undefined) {
           url = url.query(params['query'])
@@ -31,20 +31,21 @@ function buildFetchData(name = '', api = '') {
   }
 }
 
-export const fetchKifus = buildFetchData('KIFUS', `${config.API_VERSION}/kifus`)
-export const fetchPuzzles = buildFetchData('PUZZLES', `${config.API_VERSION}/puzzles`)
-export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', `${config.API_VERSION}/puzzle_records`)
-export const fetchDashboard = buildFetchData('DASHBOARD', `${config.API_VERSION}/puzzle_records/dashboard`)
-export const fetchPractices = buildFetchData('PRACTICES', `${config.API_VERSION}/practices`)
-export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', `${config.API_VERSION}/practice_templates`)
-export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', `${config.API_VERSION}/practice_records/#{id}`)
+export const fetchKifus = buildFetchData('KIFUS', 'kifus')
+export const fetchPuzzles = buildFetchData('PUZZLES', 'puzzles')
+export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', 'puzzle_records')
+export const fetchDashboard = buildFetchData('DASHBOARD', 'puzzle_records/dashboard')
+export const fetchPractices = buildFetchData('PRACTICES', 'practices')
+export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', 'practice_templates')
+export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', 'practice_records/:id')
 
-export const fetchKifu = buildFetchData('KIFU', `${config.API_VERSION}/kifus/#{id}`)
-export const fetchPuzzle = buildFetchData('PUZZLE', `${config.API_VERSION}/puzzles/#{id}`)
-export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', `${config.API_VERSION}/puzzles/next`)
+export const fetchKifu = buildFetchData('KIFU', 'kifus/:id')
+export const fetchPuzzle = buildFetchData('PUZZLE', 'puzzles/:id')
+export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', 'puzzles/next')
 
-export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', `${config.API_VERSION}/players/top`)
-export const fetchPractice = buildFetchData('PRACTICE', `${config.API_VERSION}/practices/#{id}`)
-export const fetchPracticeTemplate = buildFetchData('PRACTICE_TEMPLATE', `${config.API_VERSION}/practice_templates/#{id}`)
+export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', 'players/top')
+export const fetchPractice = buildFetchData('PRACTICE', 'practices/:id')
+export const fetchPracticeTemplate = buildFetchData('PRACTICE_TEMPLATE', 'practice_templates/:id')
 
-export const fetchTags = buildFetchData('TAGS', `${config.API_VERSION}/tags`)
+export const fetchTags = buildFetchData('TAGS', 'tags')
+export const fetchFavorites = buildFetchData('FAVORITES', 'favorites')

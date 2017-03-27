@@ -147,6 +147,7 @@ export const dashboard = buildFetchReducer({data: {total: 0, right: 0, wrong: 0}
 
 export const rating = buildPostReducer({}, 'RATING')
 export const favorite = buildPostReducer({}, 'FAVORITE')
+export const favorites = buildFetchReducer({}, 'FAVORITES')
 export const kifus = buildFetchReducer({}, 'KIFUS')
 export const kifu = buildFetchReducer({}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')

@@ -35,6 +35,7 @@ import { puzzles,
   dateRangeFilter,
   recordTypeFilter,
   dashboard,
+  favorites,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -47,6 +48,7 @@ import User from './pages/User'
 import Container from './pages/Container'
 import History from './pages/History'
 import Dashboard from './pages/Dashboard'
+import Favorite from './pages/Favorite'
 
 import AuthService from './utils/AuthService'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -109,6 +111,7 @@ const reducer = combineReducers({
   dateRangeFilter,
   recordTypeFilter,
   dashboard,
+  favorites,
 })
 
 
@@ -159,6 +162,7 @@ ReactDOM.render(
           <Route path="/users" component={User} />
           <Route path="/records" component={History} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/favorites" component={Favorite} />
         </Route>
       </Router>
       <App>
