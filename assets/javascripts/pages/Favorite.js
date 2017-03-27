@@ -75,35 +75,39 @@ class Favorite extends Component {
       page = parseInt(query.page - 1)
     }
     if (favorites.data !== undefined ) {
-      let pageCount = favorites.data.total_pages
-      recordList = favorites.data.data.map((i) =>
-        <Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
-          <div className={css(style.listBox)}>
-            <div className="list-preview-img">
-              <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} />
+      if (favorites.data.data.length == 0) {
+        recordList = <h3><b>No data.</b></h3>
+      } else {
+        let pageCount = favorites.data.total_pages
+        recordList = favorites.data.data.map((i) =>
+          <Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
+            <div className={css(style.listBox)}>
+              <div className="list-preview-img">
+                <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} />
+              </div>
+              <div className={css(style.listRight)}>
+                <span className={css(style.title)}>{`P-${i.id}(${i.rank})`}</span>
+                <span>{i.whofirst}</span>
+                <span className={css(style.date)}>{moment(i.created_at).format('YYYY-MM-DD')}</span>
+              </div>
             </div>
-            <div className={css(style.listRight)}>
-              <span className={css(style.title)}>{`P-${i.id}(${i.rank})`}</span>
-              <span>{i.whofirst}</span>
-              <span className={css(style.date)}>{moment(i.created_at).format('YYYY-MM-DD')}</span>
-            </div>
-          </div>
-        </Link>
-      )
-      if (pageCount > 1) {
-        pagination = <ReactPaginate disableInitialCallback={true}
-                                    initialPage={page}
-                                    previousLabel={'previous'}
-                                    nextLabel={'next'}
-                                    breakLabel={<a href="">...</a>}
-                                    breakClassName={'break-me'}
-                                    pageCount={pageCount}
-                                    marginPagesDisplayed={2}
-                                    pageRangeDisplayed={10}
-                                    onPageChange={::this.handlePageClick}
-                                    containerClassName={'pagination'}
-                                    subContainerClassName={'pages pagination'}
-                                    activeClassName={'active'} />
+          </Link>
+        )
+        if (pageCount > 1) {
+          pagination = <ReactPaginate disableInitialCallback={true}
+                                      initialPage={page}
+                                      previousLabel={'previous'}
+                                      nextLabel={'next'}
+                                      breakLabel={<a href="">...</a>}
+                                      breakClassName={'break-me'}
+                                      pageCount={pageCount}
+                                      marginPagesDisplayed={2}
+                                      pageRangeDisplayed={10}
+                                      onPageChange={::this.handlePageClick}
+                                      containerClassName={'pagination'}
+                                      subContainerClassName={'pages pagination'}
+                                      activeClassName={'active'} />
+        }
       }
     } else {
       recordList = <h3><b>You must login to access this page.</b></h3>
