@@ -1,6 +1,5 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
-//import lang from '../components/lang'
 
 import Board from '../presentations/Board'
 

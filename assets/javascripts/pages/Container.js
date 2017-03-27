@@ -1,9 +1,6 @@
 import React, { Component, PropTypes as T } from 'react'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
-//import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
-//import lang from '../components/lang'
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Helmet from 'react-helmet'
@@ -39,7 +36,6 @@ export default class Container extends Component {
     }
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-      {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
         <div>
           <Helmet
             htmlAttributes={{lang: 'en', amp: undefined}}
@@ -53,7 +49,6 @@ export default class Container extends Component {
           </div>
           <Footer />
         </div>
-      {/* </IntlProvider> */}
       </MuiThemeProvider>
     )
   }

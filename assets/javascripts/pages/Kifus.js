@@ -15,9 +15,6 @@ import { setKifuFilter } from '../actions/Actions'
 //external component
 import { StyleSheet, css } from 'aphrodite'
 
-//language
-//import lang from '../components/lang'
-
 class Kifus extends Component {
 
   static propTypes = {
