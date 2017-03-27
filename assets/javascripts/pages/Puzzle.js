@@ -112,6 +112,7 @@ class Puzzle extends Component {
     this.props.dispatch(fetchPuzzleNext({range: range})).then(() => {
       let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
       this.props.dispatch(push(nextUrl))
+      this.setCurrentMode('answer')
       this.handleReset()
     })
   }
