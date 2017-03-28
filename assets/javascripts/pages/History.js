@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 import { fetchPuzzleRecords } from '../actions/FetchActions'
 import { setRecordTypeFilter } from '../actions/Actions'
-import mainStyles from '../styles/main'
 
 import RecordList from '../presentations/RecordList'
 import ReactPaginate from 'react-paginate'

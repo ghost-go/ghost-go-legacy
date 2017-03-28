@@ -75,7 +75,7 @@ export default class User extends Component {
   render() {
     const { profile } = this.state
     return (
-      <div>
+      <div className="profile-container">
         <h3>Profile</h3>
         {
           !this.props.auth.loggedIn() ? <div>You must login to access this page</div> :

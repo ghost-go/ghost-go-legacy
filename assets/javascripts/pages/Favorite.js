@@ -3,7 +3,6 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
 import { fetchFavorites } from '../actions/FetchActions'
-import mainStyles from '../styles/main'
 
 import ReactPaginate from 'react-paginate'
 

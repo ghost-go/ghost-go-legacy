@@ -76,15 +76,15 @@ class Kifu extends Component {
     if (kifu.data == null) return null
     return (
       <div>
-        <div className={css(styles.kifuBoard)}>
+        <div className="kifu-board">
           <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
         </div>
-        <div className={css(styles.kifuInfo)}>
+        <div className="kifu-panel">
           <Paper>
             <Table selectable={false}>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Black
                   </TableRowColumn>
                   <TableRowColumn>
@@ -93,7 +93,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     White
                   </TableRowColumn>
                   <TableRowColumn>
@@ -102,7 +102,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Result
                   </TableRowColumn>
                   <TableRowColumn>
@@ -110,7 +110,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Komi
                   </TableRowColumn>
                   <TableRowColumn>
@@ -118,7 +118,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Date
                   </TableRowColumn>
                   <TableRowColumn>
@@ -160,39 +160,11 @@ class Kifu extends Component {
             </Table>
           </Paper>
         </div>
+        <div className="clearfix"></div>
       </div>
     )
   }
 }
-
-const styles = StyleSheet.create({
-
-  fixedColumnWidth: {
-    width: '20%'
-  },
-
-  kifuContainer: {
-    padding: '10px',
-    display: 'flex',
-    '@media (max-width: 992px)': {
-      padding: '0px',
-      flexDirection: 'column',
-    }
-  },
-
-  kifuBoard: {
-    margin: '0 10px 0 10px',
-    '@media (max-width: 992px)': {
-      margin: '10px 0 10px 0',
-    },
-    flex: 'auto',
-  },
-
-  kifuInfo: {
-    flex: 'auto',
-  },
-
-})
 
 function select(state) {
   return {
