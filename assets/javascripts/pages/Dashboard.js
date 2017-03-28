@@ -9,7 +9,6 @@ import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
 class Dashboard extends Component {
 
   static propTypes = {
-    expanded: T.bool.isRequired,
     dispatch: T.func.isRequired,
     dateRangeFilter: T.string.isRequired,
     userRangeFilter: T.string.isRequired,
@@ -18,7 +17,6 @@ class Dashboard extends Component {
   }
 
   static defaultProps = {
-    expanded: true,
     filterOpen: false,
   }
 
@@ -59,9 +57,9 @@ class Dashboard extends Component {
 
   render() {
     let loading = <div><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
-    let { auth, expanded, userRangeFilter, dateRangeFilter, dashboard } = this.props
+    let { auth, userRangeFilter, dateRangeFilter, dashboard } = this.props
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className="page-container">
+      <div>
         <div className="page-nav">
           <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>

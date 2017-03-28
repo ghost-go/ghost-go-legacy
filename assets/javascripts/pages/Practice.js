@@ -369,7 +369,7 @@ class Practice extends Component {
         />
     } else {
       panel =
-        <Paper style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(styles.panel)}>
+        <Paper>
           <div>
             <div>
               { whofirst }

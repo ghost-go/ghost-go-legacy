@@ -23,7 +23,6 @@ class Kifus extends Component {
     location: T.object,
     dispatch: T.func,
     kifuFilter: T.string,
-    expanded: T.bool,
   }
 
   state = {
@@ -128,7 +127,7 @@ class Kifus extends Component {
         </div>
     }
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
+      <div>
         <div className="page-nav">
           <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>

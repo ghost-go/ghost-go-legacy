@@ -17,7 +17,6 @@ import { StyleSheet, css } from 'aphrodite'
 class Puzzles extends Component {
 
   static propTypes = {
-    expanded: T.bool.isRequired,
     tags: T.object.isRequired,
     puzzles: T.object.isRequired,
     rangeFilter: T.object.isRequired,
@@ -25,10 +24,6 @@ class Puzzles extends Component {
     tagFilter: T.string.isRequired,
     dispatch: T.func.isRequired,
     location: T.object.isRequired,
-  }
-
-  static defaultProps = {
-    expanded: true,
   }
 
   state = {
@@ -111,7 +106,7 @@ class Puzzles extends Component {
         </div>
     }
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
+      <div>
         <div className="page-nav">
           <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>

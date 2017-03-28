@@ -27,7 +27,6 @@ class Favorite extends Component {
     auth: T.object.isRequired,
     dispatch: T.func.isRequired,
     favorites: T.object.isRequired,
-    expanded: T.bool.isRequired,
   }
 
   constructor(props) {
@@ -70,7 +69,7 @@ class Favorite extends Component {
   render() {
     let recordList, pagination, page = 0
     let { query } = this.props.location
-    let { expanded, favorites } = this.props
+    let { favorites } = this.props
     if (query && query.page) {
       page = parseInt(query.page - 1)
     }
@@ -113,7 +112,7 @@ class Favorite extends Component {
       recordList = <h3><b>You must login to access this page.</b></h3>
     }
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
+      <div>
         <div className={css(styles.favoriteContainer)}>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>

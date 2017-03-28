@@ -25,7 +25,6 @@ class History extends Component {
     auth: T.object.isRequired,
     dispatch: T.func.isRequired,
     records: T.object.isRequired,
-    expanded: T.bool.isRequired,
     recordTypeFilter: T.string.isRequired,
   }
 
@@ -73,7 +72,7 @@ class History extends Component {
   render() {
     let recordList, pagination, page = 0
     let { query } = this.props.location
-    let { expanded, records, recordTypeFilter } = this.props
+    let { records, recordTypeFilter } = this.props
     if (query && query.page) {
       page = parseInt(query.page - 1)
     }
@@ -99,7 +98,7 @@ class History extends Component {
       recordList = <h3><b>You must login to access this page.</b></h3>
     }
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
+      <div>
         <div className="page-nav">
           <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
             <Dropdown.Toggle>

@@ -44,7 +44,7 @@ export default class Container extends Component {
           />
           <Navigation expanded={this.state.expanded} collapseToggle={::this.handleClick} auth={this.props.route.auth} />
           <Sidebar expanded={this.state.expanded} auth={this.props.route.auth} />
-          <div>
+          <div style={{marginLeft: this.state.expanded === true ? '235px' : '50px'}} className="page-container">
             { children }
           </div>
           <Footer />

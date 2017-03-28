@@ -27,7 +27,6 @@ class Puzzle extends Component {
     dispatch: T.func.isRequired,
     rangeFilter: T.object.isRequired,
     params: T.object.isRequired,
-    expanded: T.bool.isRequired,
     steps: T.array.isRequired,
     currentMode: T.string.isRequired,
     currentAnswerId: T.number,
@@ -158,8 +157,7 @@ class Puzzle extends Component {
     ]
 
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className='page-container'>
-
+      <div>
         <Dialog
           actions={actions}
           modal={false}

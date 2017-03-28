@@ -20,7 +20,6 @@ class Kifu extends Component {
     params: T.object.isRequired,
     dispatch: T.func.isRequired,
     kifu: T.object.isRequired,
-    expanded: T.bool.isRequired
   }
 
   state = {
@@ -73,10 +72,10 @@ class Kifu extends Component {
   }
 
   render() {
-    const { kifu, expanded } = this.props
+    const { kifu } = this.props
     if (kifu.data == null) return null
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)} onKeyDown={::this.nextStep}>
+      <div>
         <div className={css(styles.kifuBoard)}>
           <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
         </div>
