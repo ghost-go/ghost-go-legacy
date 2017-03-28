@@ -21,10 +21,13 @@ class History extends Component {
 
   static propTypes = {
     location: T.object.isRequired,
-    auth: T.object.isRequired,
     dispatch: T.func.isRequired,
     records: T.object.isRequired,
     recordTypeFilter: T.string.isRequired,
+  }
+
+  static contextTypes = {
+    auth: T.object.isRequired,
   }
 
   constructor(props) {
@@ -36,7 +39,8 @@ class History extends Component {
   }
 
   getRecordData(page = 1, recordType = 'all') {
-    const { auth, dispatch } = this.props
+    const { dispatch } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       dispatch(fetchPuzzleRecords({

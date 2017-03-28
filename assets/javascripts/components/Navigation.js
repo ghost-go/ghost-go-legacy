@@ -57,7 +57,7 @@ export default class Navigation extends Component {
       <div id="page-header">
         <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="header-logo">
           <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta</i></span>
-          <a onClick={this.props.collapseToggle} id="collapse-sidebar" href="#" title="">
+          <a onClick={this.props.collapseToggle} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left"></i>
           </a>
         </div>
@@ -94,7 +94,7 @@ export default class Navigation extends Component {
                       </ul>
                       */}
                       <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
-                        <a href="#" className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
+                        <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
                       </div>
                     </div>
                   </div>

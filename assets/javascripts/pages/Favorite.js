@@ -23,9 +23,12 @@ class Favorite extends Component {
 
   static propTypes = {
     location: T.object.isRequired,
-    auth: T.object.isRequired,
     dispatch: T.func.isRequired,
     favorites: T.object.isRequired,
+  }
+
+  static contextTypes = {
+    auth: T.object.isRequired,
   }
 
   constructor(props) {
@@ -37,7 +40,8 @@ class Favorite extends Component {
   }
 
   getFavoriteData(page = 1) {
-    const { auth, dispatch } = this.props
+    const { dispatch } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       dispatch(fetchFavorites({

@@ -7,13 +7,14 @@ import {Button, Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap
 
 export default class User extends Component {
 
-  static propTypes = {
+  static contextTypes = {
     auth: T.object.isRequired,
   }
 
   constructor(props, context) {
     super(props, context)
-    let profile = props.auth.getProfile()
+    const { auth } = this.context
+    let profile = auth.getProfile()
     let rank = '18k'
     let bio = ''
     let nickname = ''
@@ -31,18 +32,18 @@ export default class User extends Component {
       nickname: profile.nickname || nickname,
     }
 
-    props.auth.on('profile_updated', (newProfile) => {
+    auth.on('profile_updated', (newProfile) => {
       this.setState({profile: newProfile})
     })
 
   }
 
   logout(){
-    this.props.auth.logout()
+    this.context.auth.logout()
   }
 
   handleUpdateProfile() {
-    const { auth } = this.props
+    const { auth } = this.context
     const { profile } = this.state
     auth.updateProfile(profile.user_id, {
       user_metadata: {
@@ -74,11 +75,12 @@ export default class User extends Component {
 
   render() {
     const { profile } = this.state
+    const { auth } = this.context
     return (
       <div className="profile-container">
         <h3>Profile</h3>
         {
-          !this.props.auth.loggedIn() ? <div>You must login to access this page</div> :
+          !auth.loggedIn() ? <div>You must login to access this page</div> :
             <div>
               <Col xs={8} md={8}>
                 <div>

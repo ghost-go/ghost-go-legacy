@@ -12,8 +12,11 @@ class Dashboard extends Component {
     dispatch: T.func.isRequired,
     dateRangeFilter: T.string.isRequired,
     userRangeFilter: T.string.isRequired,
-    auth: T.object.isRequired,
     dashboard: T.object.isRequired,
+  }
+
+  static contextTypes = {
+    auth: T.object.isRequired,
   }
 
   static defaultProps = {
@@ -29,7 +32,8 @@ class Dashboard extends Component {
   }
 
   handleSeeMore(dateRange, userRange) {
-    const { auth, dispatch } = this.props
+    const { dispatch } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.setState({filterOpen: false})
     dispatch(setDateRangeFilter(dateRange))
@@ -42,7 +46,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const { auth, dispatch, dateRangeFilter, userRangeFilter } = this.props
+    const { dispatch, dateRangeFilter, userRangeFilter } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
@@ -57,7 +62,8 @@ class Dashboard extends Component {
 
   render() {
     let loading = <div><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
-    let { auth, userRangeFilter, dateRangeFilter, dashboard } = this.props
+    const { userRangeFilter, dateRangeFilter, dashboard } = this.props
+    const { auth } = this.context
     return (
       <div>
         <div className="page-nav">

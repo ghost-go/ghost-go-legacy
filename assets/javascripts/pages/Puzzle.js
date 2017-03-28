@@ -23,13 +23,16 @@ class Puzzle extends Component {
 
   static propTypes = {
     puzzle: T.object.isRequired,
-    auth: T.object.isRequired,
     dispatch: T.func.isRequired,
     rangeFilter: T.object.isRequired,
     params: T.object.isRequired,
     steps: T.array.isRequired,
     currentMode: T.string.isRequired,
     currentAnswerId: T.number,
+  }
+
+  static contextTypes = {
+    auth: T.object.isRequired,
   }
 
   constructor(props) {
@@ -68,7 +71,7 @@ class Puzzle extends Component {
   }
 
   handleRightTipOpen() {
-    const { auth } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
@@ -80,7 +83,7 @@ class Puzzle extends Component {
   }
 
   handleWrongTipOpen() {
-    const { auth } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
@@ -138,7 +141,7 @@ class Puzzle extends Component {
 
   componentDidMount() {
     let { id } = this.props.params
-    const { auth } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(fetchPuzzle({id, query: {user_id: profile.user_id}}))
   }

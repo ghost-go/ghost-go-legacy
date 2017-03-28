@@ -104,7 +104,7 @@ export default class Sidebar extends Component {
                               <div className="notification-time">
                                 a few seconds ago <span className="fa fa-clock-o"></span>
                               </div>
-                              <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
                                 <i className="fa fa-arrow-right"></i>
                               </a>
                             </li>
@@ -114,7 +114,7 @@ export default class Sidebar extends Component {
                               <div className="notification-time">
                                 <b>15</b> minutes ago <span className="fa fa-clock-o"></span>
                               </div>
-                              <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
                                 <i className="fa fa-arrow-right"> </i>
                               </a>
                             </li>
@@ -124,7 +124,7 @@ export default class Sidebar extends Component {
                               <div className="notification-time">
                                 <b>2 hours</b> ago <span className="fa fa-clock-o"></span>
                               </div>
-                              <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
                                 <i className="fa fa-arrow-right"></i>
                               </a>
                             </li>
@@ -152,7 +152,7 @@ export default class Sidebar extends Component {
                             <div className="progressbar-small progressbar" data-value="75">
                               <div className="progressbar-value bg-azure tooltip-button" title="" data-original-title="45%">
                               </div>
-                            </div><b>Next step:</b> <a href="#" title="Verify identity">Verify identity</a>
+                            </div><b>Next step:</b> <a title="Verify identity">Verify identity</a>
                           </div>
                         </div>
                       </Tab.Pane>
