@@ -9,7 +9,7 @@ import RecordList from '../presentations/RecordList'
 import ReactPaginate from 'react-paginate'
 
 //import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
-import {Dropdown, Glyphicon} from 'react-bootstrap'
+import FilterBar from '../components/FilterBar'
 
 import { StyleSheet, css } from 'aphrodite'
 
@@ -32,6 +32,8 @@ class History extends Component {
 
   constructor(props) {
     super(props)
+
+    this.handleSeeMore = this.handleSeeMore.bind(this)
   }
 
   handleToggle() {
@@ -58,12 +60,12 @@ class History extends Component {
     this.props.dispatch(push(`/records?page=${page}&type=${query.type || 'all'}`))
   }
 
-  handleSeeMore(recordType) {
+  handleSeeMore(filter, val) {
     let { query } = this.props.location
     this.setState({filterOpen: false})
-    this.props.dispatch(setRecordTypeFilter(recordType))
-    this.getRecordData(query.page, recordType)
-    this.props.dispatch(push(`/records?page=${query.page || 1}&type=${recordType}`))
+    this.props.dispatch(setRecordTypeFilter(val))
+    this.getRecordData(query.page, val)
+    this.props.dispatch(push(`/records?page=${query.page || 1}&type=${val}`))
   }
 
   componentWillMount() {
@@ -102,26 +104,13 @@ class History extends Component {
     }
     return (
       <div>
-        <div className="page-nav">
-          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
-            <Dropdown.Toggle>
-              <Glyphicon className="filter-icon" glyph="filter" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="super-colors">
-              <div className="popover-title">Date Range</div>
-              <div className="popover-content">
-                <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, 'all')} className={`tag ${recordTypeFilter === 'all' ? 'active' : ''}`}>All</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'right')} className={`tag ${recordTypeFilter === 'right' ? 'active' : ''}`}>Right</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'wrong')} className={`tag ${recordTypeFilter === 'wrong' ? 'active' : ''}`}>Wrong</li>
-                </ul>
-              </div>
-            </Dropdown.Menu>
-          </Dropdown>
-          <ul className="page-subnav">
-            <li><a title="Record Type">{`Record Type: ${recordTypeFilter}`}</a></li>
-          </ul>
-        </div>
+        <FilterBar data={[{
+          name: 'Record Type',
+          tags: ['all', 'right', 'wrong'],
+          filterName: 'recordTypeFilter',
+          filterVal: recordTypeFilter,
+          handleSeeMore: this.handleSeeMore,
+        }]} />
         <div className={css(styles.historyContainer)}>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>
