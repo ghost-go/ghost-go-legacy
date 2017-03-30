@@ -1,8 +1,8 @@
 import React, { Component, PropTypes as T } from 'react'
 import { LETTERS_SGF, BLANK_ARRAY, GRID } from '../constants/Go'
-import Piece from '../components/Piece'
-import Sgf from '../components/Sgf'
-import showKi from '../components/BoardCore'
+import Piece from '../eboard/Piece'
+import Sgf from '../eboard/Sgf'
+import showKi from '../eboard/BoardCore'
 
 import Paper from 'material-ui/Paper'
 

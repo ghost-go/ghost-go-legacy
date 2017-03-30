@@ -1,9 +1,9 @@
 import React, {Component, PropTypes as T} from 'react'
 import _ from 'lodash'
 import { SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
-import Piece from '../components/Piece'
-import Sgf from '../components/Sgf'
-import Cross from '../components/Cross'
+import Piece from '../eboard/Piece'
+import Sgf from '../eboard/Sgf'
+import Cross from '../eboard/Cross'
 
 import { StyleSheet, css } from 'aphrodite'
 

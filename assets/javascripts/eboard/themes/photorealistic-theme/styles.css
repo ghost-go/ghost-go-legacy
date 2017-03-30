@@ -1,0 +1,14 @@
+/* This stylesheet is loaded when Sabaki starts up. */
+
+.goban li.sign_1 .stone img {
+    background-image: url('black.png');
+}
+
+.goban li.sign_-1 .stone img {
+    background-image: url('white.png');
+}
+
+.goban li.sign_1 .stone::before, .goban li.sign_-1 .stone::before {
+    
+    box-shadow: 2px 2px .18em rgba(20, 0, 15, 1);
+}
