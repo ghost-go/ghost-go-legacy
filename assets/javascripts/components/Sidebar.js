@@ -165,19 +165,19 @@ export default class Sidebar extends Component {
                 <ul className="sf-js-enabled sf-arrows">
                   <div className="divider-header">Dashboard</div>
                   <li>
-                    <Link to="/dashboard">
+                    <Link activeClassName="active" to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
                     </Link>
                   </li>
                   <li className="divider"></li>
                   <div className="divider-header">Resources</div>
                   <li>
-                    <Link to="/puzzles">
+                    <Link activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece"></i> <span>Tsumego Library</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/kifus">
+                    <Link activeClassName="active" to="/kifus">
                       <i className="fa fa-book"></i> <span>Kifu Library</span>
                     </Link>
                   </li>
@@ -193,17 +193,17 @@ export default class Sidebar extends Component {
                   <li className="divider"></li>
                   <div className="divider-header">Others</div>
                   <li>
-                    <Link to="/users">
+                    <Link activeClassName="active" to="/users">
                       <i className="fa fa-users"></i> <span>Profile</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/favorites">
+                    <Link activeClassName="active" to="/favorites">
                       <i className="fa fa-heart"></i> <span>Favorites</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/records">
+                    <Link activeClassName="active" to="/records">
                       <i className="fa fa-history"></i> <span>Records</span>
                     </Link>
                   </li>
@@ -215,18 +215,18 @@ export default class Sidebar extends Component {
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
                   <li>
-                    <Link to="/dashboard">
+                    <Link activeClassName="active" to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
                     </Link>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Link to="/puzzles">
+                    <Link activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece"></i> <span>Tsumego Library</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/kifus">
+                    <Link activeClassName="active" to="/kifus">
                       <i className="fa fa-book"></i> <span>Kifu Library</span>
                     </Link>
                   </li>
@@ -240,18 +240,18 @@ export default class Sidebar extends Component {
                   */}
                   <li className="divider"></li>
                   <li>
-                    <Link to="/users">
+                    <Link activeClassName="active" to="/users">
                       <i className="fa fa-users"></i> <span>Profile</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/favorites">
+                    <Link activeClassName="active" to="/favorites">
                       <i className="fa fa-heart"></i> <span>Favorites</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/history">
-                      <i className="fa fa-history"></i> <span>History</span>
+                    <Link activeClassName="active" to="/records">
+                      <i className="fa fa-history"></i> <span>Records</span>
                     </Link>
                   </li>
                 </ul>

@@ -201,7 +201,7 @@
         filter: alpha(opacity:30);
       }
     }
-    a:hover {
+    a:hover, a.active {
       color: rgba(255,255,255,.85);
     }
   }
