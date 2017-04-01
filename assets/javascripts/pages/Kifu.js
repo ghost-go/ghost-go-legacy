@@ -11,6 +11,9 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
+import keydown, { Keys } from 'react-keydown';
+
+const { LEFT, RIGHT, SPACE, ENTER, TAB } = Keys
 
 class Kifu extends Component {
 
@@ -29,6 +32,12 @@ class Kifu extends Component {
     super(props)
     let { id } = this.props.params
     this.props.dispatch(fetchKifu({id: id}))
+  }
+
+  @keydown( ENTER, SPACE, LEFT, RIGHT ) // could also be an array
+  handleKeyboardEvents( event ) {
+    if ( event.which === ENTER || event.which === RIGHT || event.which === SPACE) { this.nextStep() }
+    if ( event.which === LEFT) { this.prevStep() }
   }
 
   prevStep() {
@@ -64,7 +73,7 @@ class Kifu extends Component {
     const { kifu, expanded } = this.props
     if (kifu.data == null) return null
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)}>
+      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)} onKeyDown={::this.nextStep}>
         <div className={css(styles.kifuBoard)}>
           <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
         </div>
