@@ -1,18 +1,13 @@
 import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
-
-import Board from '../presentations/Board'
-
-import { fetchKifu } from '../actions/FetchActions'
-
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
+import keydown, { Keys } from 'react-keydown'
 
-//external component
-import { StyleSheet, css } from 'aphrodite'
-import keydown, { Keys } from 'react-keydown';
+import Board from '../eboard/Board'
+import { fetchKifu } from '../actions/FetchActions'
 
-const { LEFT, RIGHT, SPACE, ENTER, TAB } = Keys
+const { LEFT, RIGHT, SPACE, ENTER } = Keys
 
 class Kifu extends Component {
 
@@ -24,12 +19,6 @@ class Kifu extends Component {
 
   state = {
     step: 0
-  }
-
-  constructor(props) {
-    super(props)
-    let { id } = this.props.params
-    this.props.dispatch(fetchKifu({id: id}))
   }
 
   @keydown( ENTER, SPACE, LEFT, RIGHT )
@@ -45,7 +34,7 @@ class Kifu extends Component {
   }
 
   nextStep() {
-    if (this.state.step < this.props.kifu.data.steps.split(';').length) {
+    if (this.state.step < this.props.kifu.data.total) {
       this.setState({ step: ++this.state.step})
     }
   }
@@ -55,7 +44,7 @@ class Kifu extends Component {
   }
 
   lastStep() {
-    let last = this.props.kifu.data.steps.split(';').length - 1
+    let last = this.props.kifu.data.total - 1
     this.setState({ step: last})
   }
 
@@ -64,20 +53,35 @@ class Kifu extends Component {
   }
 
   prev10Step() {
-    if (this.state.step < 10) {
-      this.firstStep()
+    this.state.step < 10 ? this.firstStep() : this.setState({ step: this.state.step - 10})
+  }
+
+  componentDidMount() {
+    let { id } = this.props.params
+    this.props.dispatch(fetchKifu({id: id}))
+    let boardWidth = 0
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60
     } else {
-      this.setState({ step: this.state.step - 10})
+      boardWidth = window.innerWidth
     }
+    this.boardLayer.width = this.boardLayer.height = boardWidth
+  }
+
+  componentDidUpdate() {
+    const { kifu } = this.props
+    let steps = kifu.data.steps.split(';').slice(0, this.state.step)
+    let board = new Board(19, 19)
+    board.move(steps)
+    board.render(this.boardLayer)
   }
 
   render() {
     const { kifu } = this.props
-    if (kifu.data == null) return null
     return (
-      <div>
+      <div ref={input => this.textInput = input}>
         <div className="kifu-board">
-          <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
+          <canvas id="board_layer"ref={(elem) => { this.boardLayer = elem }} onClick={::this.nextStep}></canvas>
         </div>
         <div className="kifu-panel">
           <Paper>
@@ -147,8 +151,7 @@ class Kifu extends Component {
                         <i className="fa fa-fast-forward"></i>
                       </span>
                     </div>
-                  </TableRowColumn>
-                </TableRow>
+                  </TableRowColumn> </TableRow>
                 <TableRow>
                   <TableRowColumn colSpan={2}>
                     <div className="control-bar">

@@ -8,7 +8,7 @@ export default class Stone {
   }
 
   draw(ctx) {
-    if (this.type == 0) return;
+    if (this.type == 0) return
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true)
     ctx.lineWidth = 1

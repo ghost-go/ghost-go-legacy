@@ -11,20 +11,8 @@ export default class Board {
     }
   }
 
-  get([x, y]) {
-    return this.arragement[y] ? this.arrangement[y][x]: undefined
-  }
-
-  set([x, y], ki) {
-    this.arrangement[y][x] = ki
-  }
-
   move(steps) {
     this.arrangement = showKi(this.arrangement, steps)
-  }
-
-  isSquare() {
-    return this.width === this.height
   }
 
   render(canvas) {

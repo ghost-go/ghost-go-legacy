@@ -149,7 +149,16 @@ export const rating = buildPostReducer({}, 'RATING')
 export const favorite = buildPostReducer({}, 'FAVORITE')
 export const favorites = buildFetchReducer({}, 'FAVORITES')
 export const kifus = buildFetchReducer({}, 'KIFUS')
-export const kifu = buildFetchReducer({}, 'KIFU')
+export const kifu = buildFetchReducer({data: {
+  player_b: { en_name: 'John Doe'},
+  player_w: { en_name: 'Jane Doe'},
+  b_rank: 'None',
+  w_rank: 'None',
+  result: 'None',
+  komi: 'None',
+  short_date: 'None',
+  steps: '',
+}}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
 export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
 export const rangeFilter = createReducer({start: '18k', end: '9d', text: 'all'}, { 'SET_RANGE_FILTER': setRangeFilter })

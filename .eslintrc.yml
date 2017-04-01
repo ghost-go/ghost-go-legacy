@@ -38,4 +38,3 @@ rules:
     - always
   react/prefer-stateless-function:
     - 2
-    - false
