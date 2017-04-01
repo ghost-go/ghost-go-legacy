@@ -151,6 +151,13 @@ class Kifu extends Component {
                     </div>
                   </TableRowColumn>
                 </TableRow>
+                <TableRow>
+                  <TableRowColumn colSpan={2}>
+                    <div className="control-bar">
+                      You can use the keyboard keys to control game records.
+                    </div>
+                  </TableRowColumn>
+                </TableRow>
               </TableBody>
             </Table>
           </Paper>
