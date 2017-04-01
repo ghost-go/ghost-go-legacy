@@ -34,18 +34,22 @@ class Kifu extends Component {
     this.props.dispatch(fetchKifu({id: id}))
   }
 
-  @keydown( ENTER, SPACE, LEFT, RIGHT ) // could also be an array
+  @keydown( ENTER, SPACE, LEFT, RIGHT )
   handleKeyboardEvents( event ) {
     if ( event.which === ENTER || event.which === RIGHT || event.which === SPACE) { this.nextStep() }
     if ( event.which === LEFT) { this.prevStep() }
   }
 
   prevStep() {
-    this.setState({ step: --this.state.step})
+    if (this.state.step > 0) {
+      this.setState({ step: --this.state.step})
+    }
   }
 
   nextStep() {
-    this.setState({ step: ++this.state.step})
+    if (this.state.step < this.props.kifu.data.steps.split(';').length) {
+      this.setState({ step: ++this.state.step})
+    }
   }
 
   firstStep() {
