@@ -32,12 +32,12 @@ export default class Board {
       ctx.lineTo(this.width * size, i * size)
     }
     ctx.stroke()
-    let dot_size = 3
     if (this.width == 19) {
       [4, 16, 10].forEach((i) => {
         [4, 16, 10].forEach((j) => {
           ctx.beginPath()
-          ctx.arc(size * i, size * j, dot_size, 0, 2 * Math.PI, true)
+          ctx.arc(size * i, size * j, size / 10, 0, 2 * Math.PI, true)
+          ctx.fillStyle = 'black'
           ctx.fill()
         })
       })
