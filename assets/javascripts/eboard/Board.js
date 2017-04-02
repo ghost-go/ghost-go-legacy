@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import showKi from './BoardCore'
 import Stone from './Stone'
+import { LETTERS_SGF } from '../constants/Go'
 
 export default class Board {
   constructor(width = 19, height = 19, arrangement = []) {
@@ -13,6 +14,7 @@ export default class Board {
 
   move(steps) {
     this.arrangement = showKi(this.arrangement, steps)
+    this.lastStone = steps[steps.length - 1]
   }
 
   render(canvas) {
@@ -45,6 +47,11 @@ export default class Board {
   }
 
   renderStones(canvas, ctx) {
+    let il, jl
+    if (this.lastStone !== undefined) {
+      il = LETTERS_SGF.indexOf(this.lastStone[2])
+      jl = LETTERS_SGF.indexOf(this.lastStone[3])
+    }
     let size = canvas.width / (this.width + 1)
     for (let i = 0; i < this.width; i++) {
       for (let j = 0; j < this.height; j++) {
@@ -52,7 +59,8 @@ export default class Board {
           (i + 1) * size,
           (j + 1) * size,
           size / 2 - 2,
-          this.arrangement[i][j]
+          this.arrangement[i][j],
+          il === i && jl === j
         )
         piece.draw(ctx)
       }
