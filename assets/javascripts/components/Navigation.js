@@ -1,15 +1,18 @@
 import React, { Component, PropTypes as T } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Button } from 'react-bootstrap'
 
+import { setTheme } from '../actions/Actions'
 import AuthService from '../utils/AuthService'
 
-export default class Navigation extends Component {
+class Navigation extends Component {
 
   static propTypes = {
     auth: T.instanceOf(AuthService),
     expanded: T.bool.isRequired,
     collapseToggle: T.func.isRequired,
+    dispatch: T.func.isRequired,
   }
 
   static defaultProps = {
@@ -32,6 +35,10 @@ export default class Navigation extends Component {
 
   handleToggle() {
     this.setState({navOpen: !this.state.navOpen})
+  }
+
+  handleTheme(e) {
+    this.props.dispatch(setTheme(e.target.value))
   }
 
   mouseDownHandler() {
@@ -63,7 +70,7 @@ export default class Navigation extends Component {
         </div>
         <div id="sidebar-search"></div>
         <div className="theme">
-          <select className="form-control">
+          <select className="form-control" onChange={::this.handleTheme}>
             <option>blank-and-white</option>
             <option>flat-theme</option>
             <option>photorealistic-theme</option>
@@ -143,3 +150,10 @@ export default class Navigation extends Component {
     )
   }
 }
+
+function select(state) {
+  return {
+    theme: state.theme
+  }
+}
+export default connect(select)(Navigation)

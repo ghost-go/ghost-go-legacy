@@ -4,7 +4,7 @@ import Stone from './Stone'
 import { LETTERS_SGF } from '../constants/Go'
 
 export default class Board {
-  constructor(width = 19, height = 19, arrangement = [], theme = 'walnut-theme') {
+  constructor(width = 19, height = 19, theme = 'walnut-theme', arrangement = []) {
     this.width = width
     this.height = height
     this.theme = theme
