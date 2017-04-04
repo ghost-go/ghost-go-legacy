@@ -4,9 +4,10 @@ import Stone from './Stone'
 import { LETTERS_SGF } from '../constants/Go'
 
 export default class Board {
-  constructor(width = 19, height = 19, arrangement = []) {
+  constructor(width = 19, height = 19, arrangement = [], theme = 'walnut-theme') {
     this.width = width
     this.height = height
+    this.theme = theme
     if (arrangement == undefined || arrangement.length === 0) {
       this.arrangement = _.chunk(new Array(this.width * this.height).fill(0), this.width)
     }
@@ -26,6 +27,22 @@ export default class Board {
 
   renderBoard(canvas, ctx) {
     let size = canvas.width / (this.width + 1)
+    if (this.theme !== 'blank-and-white') {
+      let material = new Image()
+      material.src = `/assets/themes/${this.theme}/board.png`
+      material.onload = () => {}
+      let pattern = ctx.createPattern(material, 'repeat')
+      ctx.fillStyle = pattern
+      ctx.fillRect(0, 0, canvas.width, canvas.height) // context.fillRect(x, y, width, height);
+    }
+    if (this.theme === 'walnut-theme') {
+      let material = new Image()
+      material.src = `/assets/themes/${this.theme}/board.jpg`
+      material.onload = () => {}
+      let pattern = ctx.createPattern(material, 'repeat')
+      ctx.fillStyle = pattern
+      ctx.fillRect(0, 0, canvas.width, canvas.height) // context.fillRect(x, y, width, height);
+    }
     ctx.beginPath()
     for(let i = 1;i <= this.width; i++) {
       ctx.moveTo(i * size, size)
@@ -60,7 +77,9 @@ export default class Board {
           (j + 1) * size,
           size / 2 - 2,
           this.arrangement[i][j],
-          il === i && jl === j
+          il === i && jl === j,
+          this.theme,
+          i * j % 5
         )
         piece.draw(ctx)
       }
