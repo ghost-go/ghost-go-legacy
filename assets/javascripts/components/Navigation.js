@@ -62,6 +62,17 @@ export default class Navigation extends Component {
           </a>
         </div>
         <div id="sidebar-search"></div>
+        <div className="theme">
+          <select className="form-control">
+            <option>blank-and-white</option>
+            <option>flat-theme</option>
+            <option>photorealistic-theme</option>
+            <option>shell-stone</option>
+            <option>slate-and-shell-theme</option>
+            <option>subdued-theme</option>
+            <option>walnut-theme</option>
+          </select>
+        </div>
         <div id="header-right" onMouseDown={::this.mouseDownHandler} onMouseUp={::this.mouseUpHandler}>
           {
             auth.loggedIn() ? (

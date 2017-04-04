@@ -35,6 +35,7 @@ export default class Board {
       ctx.fillStyle = pattern
       ctx.fillRect(0, 0, canvas.width, canvas.height) // context.fillRect(x, y, width, height);
     }
+    //TODO: There need to be refactor
     if (this.theme === 'walnut-theme') {
       let material = new Image()
       material.src = `/assets/themes/${this.theme}/board.jpg`
