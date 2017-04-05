@@ -4,13 +4,14 @@ import Stone from './Stone'
 import { LETTERS_SGF } from '../constants/Go'
 
 export default class Board {
-  constructor(width = 19, height = 19, theme = 'walnut-theme', arrangement = []) {
+  constructor(width = 19, height = 19, theme = 'walnut-theme', material = {}, arrangement = []) {
     this.width = width
     this.height = height
     this.theme = theme
     if (arrangement == undefined || arrangement.length === 0) {
       this.arrangement = _.chunk(new Array(this.width * this.height).fill(0), this.width)
     }
+    this.material = material
   }
 
   move(steps) {
@@ -27,22 +28,18 @@ export default class Board {
 
   renderBoard(canvas, ctx) {
     let size = canvas.width / (this.width + 1)
-    if (this.theme !== 'blank-and-white') {
-      let material = new Image()
-      material.src = `/assets/themes/${this.theme}/board.png`
-      material.onload = () => {}
-      let pattern = ctx.createPattern(material, 'repeat')
+    if (this.theme === 'black-and-white') {
+    } else if (this.theme === 'walnut-theme') {
+      let pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.jpg`], 'repeat')
       ctx.fillStyle = pattern
-      ctx.fillRect(0, 0, canvas.width, canvas.height) // context.fillRect(x, y, width, height);
-    }
-    //TODO: There need to be refactor
-    if (this.theme === 'walnut-theme') {
-      let material = new Image()
-      material.src = `/assets/themes/${this.theme}/board.jpg`
-      material.onload = () => {}
-      let pattern = ctx.createPattern(material, 'repeat')
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+    } else if (this.theme === 'flat-theme') {
+      ctx.fillStyle = '#ECB55A'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+    } else {
+      let pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.png`], 'repeat')
       ctx.fillStyle = pattern
-      ctx.fillRect(0, 0, canvas.width, canvas.height) // context.fillRect(x, y, width, height);
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
     }
     ctx.beginPath()
     for(let i = 1;i <= this.width; i++) {

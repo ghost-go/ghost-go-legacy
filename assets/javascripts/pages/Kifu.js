@@ -16,6 +16,7 @@ class Kifu extends Component {
     dispatch: T.func.isRequired,
     kifu: T.object.isRequired,
     theme: T.string.isRequired,
+    themeMaterial: T.object.isRequired,
   }
 
   state = {
@@ -72,7 +73,7 @@ class Kifu extends Component {
   componentDidUpdate() {
     const { kifu } = this.props
     let steps = kifu.data.steps.split(';').slice(0, this.state.step)
-    let board = new Board(19, 19, this.props.theme)
+    let board = new Board(19, 19, this.props.theme, this.props.themeMaterial)
     board.move(steps)
     board.render(this.boardLayer)
   }
@@ -173,7 +174,8 @@ class Kifu extends Component {
 function select(state) {
   return {
     kifu: state.kifu,
-    theme: state.theme
+    theme: state.theme,
+    themeMaterial: state.themeMaterial,
   }
 }
 

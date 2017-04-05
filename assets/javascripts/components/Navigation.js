@@ -71,7 +71,7 @@ class Navigation extends Component {
         <div id="sidebar-search"></div>
         <div className="theme">
           <select className="form-control" onChange={::this.handleTheme}>
-            <option>blank-and-white</option>
+            <option>black-and-white</option>
             <option>flat-theme</option>
             <option>photorealistic-theme</option>
             <option>shell-stone</option>

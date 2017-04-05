@@ -37,6 +37,7 @@ import { puzzles,
   dashboard,
   favorites,
   theme,
+  themeMaterial,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -104,7 +105,9 @@ const reducer = combineReducers({
   dashboard,
   favorites,
   theme,
+  themeMaterial,
 })
+
 
 
 let middlewares = [thunkMiddleware, historyMiddleware]
