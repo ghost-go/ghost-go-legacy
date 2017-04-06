@@ -10,6 +10,20 @@ export default class Stone {
     this.seed = seed
   }
 
+  addShadow(ctx) {
+    ctx.shadowOffsetX = 2
+    ctx.shadowOffsetY = 2
+    ctx.shadowColor = '#555'
+    ctx.shadowBlur = 10
+  }
+
+  removeShadow(ctx) {
+    ctx.shadowOffsetX = 0
+    ctx.shadowOffsetY = 0
+    ctx.shadowColor = 'black'
+    ctx.shadowBlur = 0
+  }
+
   draw(ctx) {
     if (this.type == 0) return
     if (this.theme === 'flat-theme') {
@@ -17,17 +31,15 @@ export default class Stone {
       black.src = `/assets/themes/${this.theme}/black.svg`
       let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.svg`
-      black.onload = () => { }
-      white.onload = () => { }
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
     } else if (this.theme === 'photorealistic-theme') {
       let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.png`
       let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.png`
-      black.onload = () => { }
-      white.onload = () => { }
+      this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
+      this.removeShadow(ctx)
     } else if (this.theme === 'shell-stone'){
       let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.png`
@@ -41,13 +53,9 @@ export default class Stone {
       white3.src = `/assets/themes/${this.theme}/white3.png`
       let white4 = new Image()
       white4.src = `/assets/themes/${this.theme}/white4.png`
-      black.onload = () => { }
-      white0.onload = () => { }
-      white1.onload = () => { }
-      white2.onload = () => { }
-      white3.onload = () => { }
-      white4.onload = () => { }
+      this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white1, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
+      this.removeShadow(ctx)
     } else if (this.theme === 'slate-and-shell-theme'){
 
     } else if (this.theme === 'subdued-theme'){
@@ -55,17 +63,17 @@ export default class Stone {
       black.src = `/assets/themes/${this.theme}/black.png`
       let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.png`
-      black.onload = () => { }
-      white.onload = () => { }
+      this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
+      this.removeShadow(ctx)
     } else if (this.theme === 'walnut-theme'){
       let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.png`
       let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.png`
-      black.onload = () => { }
-      white.onload = () => { }
+      this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
+      this.removeShadow(ctx)
     } else {
       ctx.beginPath()
       ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true)
