@@ -26,16 +26,14 @@ export default class Stone {
 
   draw(ctx) {
     if (this.type == 0) return
+    let black = new Image()
+    let white = new Image()
     if (this.theme === 'flat-theme') {
-      let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.svg`
-      let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.svg`
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
     } else if (this.theme === 'photorealistic-theme') {
-      let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.png`
-      let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.png`
       this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
@@ -59,17 +57,13 @@ export default class Stone {
     } else if (this.theme === 'slate-and-shell-theme'){
 
     } else if (this.theme === 'subdued-theme'){
-      let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.png`
-      let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.png`
       this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
       this.removeShadow(ctx)
     } else if (this.theme === 'walnut-theme'){
-      let black = new Image()
       black.src = `/assets/themes/${this.theme}/black.png`
-      let white = new Image()
       white.src = `/assets/themes/${this.theme}/white.png`
       this.addShadow(ctx)
       ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2)
@@ -86,21 +80,20 @@ export default class Stone {
       }
       ctx.fill()
       ctx.stroke()
-
-      if (this.isMarked) {
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size * 0.6, 0, 2 * Math.PI, true)
-        ctx.lineWidth = 2
-        if (this.type == 1) {
-          ctx.strokeStyle = '#fff'
-        }
-        else {
-          ctx.strokeStyle = '#000'
-        }
-        ctx.stroke()
-        ctx.lineWidth = 1
+    }
+    if (this.isMarked) {
+      ctx.beginPath()
+      ctx.arc(this.x, this.y, this.size * 0.6, 0, 2 * Math.PI, true)
+      ctx.lineWidth = 2
+      if (this.type == 1) {
+        ctx.strokeStyle = '#fff'
+      }
+      else {
         ctx.strokeStyle = '#000'
       }
+      ctx.stroke()
+      ctx.lineWidth = 1
+      ctx.strokeStyle = '#000'
     }
   }
 
