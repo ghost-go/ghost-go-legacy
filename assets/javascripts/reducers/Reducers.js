@@ -157,7 +157,16 @@ export const currentAnswerId = createReducer(null, {
 
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
 export const puzzle = reduceReducers(
-  buildFetchReducer({}, 'PUZZLE'),
+  buildFetchReducer({
+    data: {
+      is_favorite: false,
+      right_answers: [],
+      wrong_answers: [],
+      steps: '',
+      rank: '18k',
+      id: 0,
+    }
+  }, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT')
 )
 

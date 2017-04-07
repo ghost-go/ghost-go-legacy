@@ -2,9 +2,11 @@ import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import PuzzleBoard from '../presentations/PuzzleBoard'
+import { SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
+
 import PuzzlePanel from '../presentations/PuzzlePanel'
 import FlatButton from 'material-ui/FlatButton'
+import Board from '../eboard/Board'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord } from '../actions/PostActions'
@@ -12,9 +14,7 @@ import {
   setCurrentMode,
   setRangeFilter,
   addSteps,
-  resetSteps,
-  setCurrentAnswerId
-} from '../actions/Actions'
+  resetSteps, setCurrentAnswerId } from '../actions/Actions'
 
 //material-ui
 import Dialog from 'material-ui/Dialog'
@@ -29,6 +29,8 @@ class Puzzle extends Component {
     steps: T.array.isRequired,
     currentMode: T.string.isRequired,
     currentAnswerId: T.number,
+    theme: T.string.isRequired,
+    themeMaterial: T.object.isRequired,
   }
 
   static contextTypes = {
@@ -144,11 +146,25 @@ class Puzzle extends Component {
     const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(fetchPuzzle({id, query: {user_id: profile.user_id}}))
+    let boardWidth = 0
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60
+    } else {
+      boardWidth = window.innerWidth
+    }
+    this.boardLayer.width = this.boardLayer.height = boardWidth
+  }
+
+  componentDidUpdate() {
+    const { puzzle } = this.props
+
+    let board = new Board(19, 19, true, this.props.theme, this.props.themeMaterial)
+    board.move(puzzle.data.steps.split(';'))
+    board.render(this.boardLayer)
   }
 
   render() {
     const { puzzle } = this.props
-    if (puzzle === undefined || puzzle['data'] === undefined) return null
 
     const actions = [
       <FlatButton
@@ -170,6 +186,8 @@ class Puzzle extends Component {
           {this.state.ratingInfo}
         </Dialog>
         <div className='puzzle-board'>
+          <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem }}></canvas>
+          {/*
           <PuzzleBoard
             className="board"
             steps={this.props.steps}
@@ -182,8 +200,10 @@ class Puzzle extends Component {
             setCurrentMode={::this.setCurrentMode}
             ref="board"
           />
+          */}
         </div>
         <div className='puzzle-panel'>
+          {/*
           <PuzzlePanel
             {...this.props}
             showNext={true}
@@ -200,6 +220,7 @@ class Puzzle extends Component {
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
           />
+          */}
         </div>
         <div className='clearfix'></div>
       </div>)
@@ -213,6 +234,8 @@ function select(state) {
     steps: state.steps,
     currentAnswerId: state.currentAnswerId,
     currentMode: state.currentMode,
+    theme: state.theme,
+    themeMaterial: state.themeMaterial,
   }
 }
 
