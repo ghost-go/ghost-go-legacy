@@ -43,6 +43,8 @@ export default class Board {
       this.maxhv = this.maxhv > 19 ? 19 : this.maxhv
       this.width =  this.maxhv
       this.height = this.maxhv
+      this.horizontal = this.rightmost - this.leftmost
+      this.verical = this.bottommost - this.topmost
       //this.width =  this.maxhv
       //k
       //this.height = this.maxhv
@@ -116,11 +118,19 @@ export default class Board {
     let size = canvas.width / (this.width + 1)
     console.log(this.leftmost)
     console.log(this.topmost)
+    console.log(this.maxhv)
+    console.log(this.horizontal)
+    console.log(this.verical)
+    console.log('maxhv', this.maxhv)
+    console.log('bottommost', this.bottommost)
+    let offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
+    let offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
+
     for (let i = 0; i < 19; i++) {
       for (let j = 0; j < 19; j++) {
         let piece = new Stone(
-          (i + 1 - this.leftmost) * size,
-          (j + 1 - this.topmost) * size,
+          ((i + 1) - offsetX) * size,
+          ((j + 1) - offsetY) * size,
           size / 2 - 2,
           this.arrangement[i][j],
           il === i && jl === j,
