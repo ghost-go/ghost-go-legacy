@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import showKi from './BoardCore'
 import Stone from './Stone'
+import Cross from './Cross'
 import { LETTERS_SGF } from '../constants/Go'
 
 export default class Board {
@@ -9,6 +10,7 @@ export default class Board {
     this.height = args.height || 19
     this.theme = args.theme || 'black-and-white'
     this.autofit = args.autofit || false
+    this.editable = args.editable || false
     if (args.arrangement == undefined || args.arrangement.length === 0) {
       this.arrangement = _.chunk(new Array(361).fill(0), 19)
     }
@@ -47,14 +49,17 @@ export default class Board {
   }
 
   render(canvas) {
+    this.size = canvas.width / (_.max([this.width, this.height]) + 1)
     let ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.renderBoard(canvas, ctx)
     this.renderStones(canvas, ctx)
+    if (this.editable) {
+      this.renderCursor(canvas, ctx)
+    }
   }
 
   renderBoard(canvas, ctx) {
-    let size = canvas.width / (_.max([this.width, this.height]) + 1)
     if (this.theme === 'black-and-white') {
       //TODO: blablabla
     } else if (this.theme === 'walnut-theme') {
@@ -71,21 +76,21 @@ export default class Board {
     }
     ctx.beginPath()
     for(let i = 1;i <= this.width; i++) {
-      ctx.moveTo(i * size, size)
-      ctx.lineTo(i * size, this.height * size)
+      ctx.moveTo(i * this.size, this.size)
+      ctx.lineTo(i * this.size, this.height * this.size)
     }
     for(let i = 1;i <= this.height; i++) {
-      ctx.moveTo(size, i * size)
-      ctx.lineTo(this.width * size, i * size)
+      ctx.moveTo(this.size, i * this.size)
+      ctx.lineTo(this.width * this.size, i * this.size)
     }
     ctx.stroke()
     ;[4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
         ctx.beginPath()
         if (this.autofit && ((i - this.offsetX) > 1 && (j - this.offsetY) > 1) && (i - this.offsetX) < this.maxhv && (j - this.offsetY) < this.maxhv) {
-          ctx.arc((i - this.offsetX) * size, (j - this.offsetY) * size, size / 10, 0, 2 * Math.PI, true)
+          ctx.arc((i - this.offsetX) * this.size, (j - this.offsetY) * this.size, this.size / 10, 0, 2 * Math.PI, true)
         } else if(!this.autofit) {
-          ctx.arc(i * size, j * size, size / 10, 0, 2 * Math.PI, true)
+          ctx.arc(i * this.size, j * this.size, this.size / 10, 0, 2 * Math.PI, true)
         }
         ctx.fillStyle = 'black'
         ctx.fill()
@@ -125,4 +130,17 @@ export default class Board {
     }
   }
 
+  renderCursor(canvas, ctx) {
+    canvas.onmousemove = (e) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      this.renderBoard(canvas, ctx)
+      let cross = new Cross()
+      cross.x = Math.round(e.offsetX / this.size) * this.size
+      cross.y = Math.round(e.offsetY / this.size) * this.size
+      cross.size = this.size / 4
+      cross.color = '#ff0000'
+      cross.draw(ctx)
+      this.renderStones(canvas, ctx)
+    }
+  }
 }

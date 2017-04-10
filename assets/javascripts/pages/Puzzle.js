@@ -162,6 +162,7 @@ class Puzzle extends Component {
       autofit: true,
       theme: this.props.theme,
       material: this.props.themeMaterial,
+      editable: true,
     })
     board.move(puzzle.data.steps.split(';'))
     board.render(this.boardLayer)
