@@ -43,22 +43,8 @@ export default class Board {
       this.maxhv = this.maxhv > 19 ? 19 : this.maxhv
       this.width =  this.maxhv
       this.height = this.maxhv
-      this.horizontal = this.rightmost - this.leftmost
-      this.verical = this.bottommost - this.topmost
-      //this.width =  this.maxhv
-      //k
-      //this.height = this.maxhv
-      //let medianH = (this.leftmost + this.rightmost) / 2
-      //let medianV = (this.topmost + this.bottommost) / 2
-      //if (medianH <= 10 && medianV <= 10) {
-        //this.quadrant = 1
-      //} else if (medianH > 10 && medianV <= 10) {
-        //this.quadrant = 2
-      //} else if (medianH > 10 && medianV > 10) {
-        //this.quadrant = 3
-      //} else if (medianH <= 10 && medianV > 10) { 
-        //this.quadrant = 4
-      //}
+      //this.horizontal = this.rightmost - this.leftmost
+      //this.verical = this.bottommost - this.topmost
     }
 
     this.lastStone = steps[steps.length - 1]
@@ -116,13 +102,6 @@ export default class Board {
       jl = LETTERS_SGF.indexOf(this.lastStone[3])
     }
     let size = canvas.width / (this.width + 1)
-    console.log(this.leftmost)
-    console.log(this.topmost)
-    console.log(this.maxhv)
-    console.log(this.horizontal)
-    console.log(this.verical)
-    console.log('maxhv', this.maxhv)
-    console.log('bottommost', this.bottommost)
     let offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
     let offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
 
