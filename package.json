@@ -82,6 +82,7 @@
     "redux-thunk": "^2.2.0",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
+    "tree-model": "^1.0.6",
     "urijs": "^1.18.10",
     "url-loader": "^0.5.8",
     "webpack": "^2.3.3",
