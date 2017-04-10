@@ -29,19 +29,14 @@ export default class Board {
         }
       }
       let expand = 3
-      this.leftmost = _.min(iArray)
-      this.rightmost = _.max(iArray)
-      this.topmost = _.min(jArray)
-      this.bottommost = _.max(jArray)
-      this.leftmost = this.leftmost - expand > 0 ? this.leftmost - expand : 0
-      this.rightmost = this.rightmost + expand > 19 ? 19 : this.rightmost + expand
-      this.topmost = this.topmost - expand > 0 ? this.leftmost - expand : 0
-      this.bottommost = this.bottommost + expand > 19 ? 19 : this.bottommost + expand
+      this.leftmost = _.min(iArray) - expand > 0 ? _.min(iArray) - expand : 0
+      this.rightmost = _.max(iArray) + expand > 19 ? 19 : _.max(iArray) + expand
+      this.topmost = _.min(jArray) - expand > 0 ? _.mn(jArray) - expand : 0
+      this.bottommost = _.max(jArray) + expand > 19 ? 19 : _.max(jArray) + expand
 
       this.maxhv = _.max([this.rightmost - this.leftmost, this.bottommost - this.topmost])
       this.maxhv = this.maxhv > 19 ? 19 : this.maxhv
-      this.width =  this.maxhv
-      this.height = this.maxhv
+      this.width = this.height = this.maxhv
       this.offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
       this.offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
       //this.horizontal = this.rightmost - this.leftmost

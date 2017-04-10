@@ -1,5 +1,4 @@
 export default class Stone {
-
   constructor(x, y, size, type, isMarked = false, theme = 'black-and-white', seed = 0.1) {
     this.x = x || 0
     this.y = y || 0
@@ -28,6 +27,7 @@ export default class Stone {
     if (this.type == 0) return
     let black = new Image()
     let white = new Image()
+    // TODO: Need refactor
     if (this.theme === 'flat-theme') {
       black.src = `/assets/themes/${this.theme}/black.svg`
       white.src = `/assets/themes/${this.theme}/white.svg`
@@ -100,6 +100,5 @@ export default class Stone {
   remove(ctx, size) {
     ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size)
   }
-
 }
 
