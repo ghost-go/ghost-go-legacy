@@ -9,7 +9,6 @@ export default class Board {
     this.height = height
     this.theme = theme
     this.autofit = autofit
-    this.quadrant = 0
     if (arrangement == undefined || arrangement.length === 0) {
       this.arrangement = _.chunk(new Array(361).fill(0), 19)
     }
@@ -43,6 +42,8 @@ export default class Board {
       this.maxhv = this.maxhv > 19 ? 19 : this.maxhv
       this.width =  this.maxhv
       this.height = this.maxhv
+      this.offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
+      this.offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
       //this.horizontal = this.rightmost - this.leftmost
       //this.verical = this.bottommost - this.topmost
     }
@@ -85,12 +86,14 @@ export default class Board {
     ctx.stroke()
     ;[4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
-        if (i < this.leftmost && i > this.rightmost && j > this.topmost && j < this.bottommost) {
-          ctx.beginPath()
-          ctx.arc(size * i, size * j, size / 10, 0, 2 * Math.PI, true)
-          ctx.fillStyle = 'black'
-          ctx.fill()
+        ctx.beginPath()
+        if (this.autofit && ((i - this.offsetX) > 1 && (j - this.offsetY) > 1) && (i - this.offsetX) < this.maxhv && (j - this.offsetY) < this.maxhv) {
+          ctx.arc((i - this.offsetX) * size, (j - this.offsetY) * size, size / 10, 0, 2 * Math.PI, true)
+        } else if(!this.autofit) {
+          ctx.arc(i * size, j * size, size / 10, 0, 2 * Math.PI, true)
         }
+        ctx.fillStyle = 'black'
+        ctx.fill()
       })
     })
   }
@@ -102,14 +105,20 @@ export default class Board {
       jl = LETTERS_SGF.indexOf(this.lastStone[3])
     }
     let size = canvas.width / (this.width + 1)
-    let offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
-    let offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
 
+    let coordX = 0, coordY = 0
     for (let i = 0; i < 19; i++) {
       for (let j = 0; j < 19; j++) {
+        if(this.autofit) {
+          coordX = ((i + 1) - this.offsetX) * size
+          coordY = ((j + 1) - this.offsetY) * size
+        } else {
+          coordX = (i + 1) * size
+          coordY = (j + 1) * size
+        }
         let piece = new Stone(
-          ((i + 1) - offsetX) * size,
-          ((j + 1) - offsetY) * size,
+          coordX,
+          coordY,
           size / 2 - 2,
           this.arrangement[i][j],
           il === i && jl === j,
