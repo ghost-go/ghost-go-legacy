@@ -73,7 +73,10 @@ class Kifu extends Component {
   componentDidUpdate() {
     const { kifu } = this.props
     let steps = kifu.data.steps.split(';').slice(0, this.state.step)
-    let board = new Board(19, 19, false, this.props.theme, this.props.themeMaterial)
+    let board = new Board({
+      theme: this.props.theme,
+      material: this.props.themeMaterial,
+    })
     board.move(steps)
     board.render(this.boardLayer)
   }

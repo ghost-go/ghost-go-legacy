@@ -158,7 +158,11 @@ class Puzzle extends Component {
   componentDidUpdate() {
     const { puzzle } = this.props
 
-    let board = new Board(19, 19, true, this.props.theme, this.props.themeMaterial)
+    let board = new Board({
+      autofit: true,
+      theme: this.props.theme,
+      material: this.props.themeMaterial,
+    })
     board.move(puzzle.data.steps.split(';'))
     board.render(this.boardLayer)
   }

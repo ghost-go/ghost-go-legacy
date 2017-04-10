@@ -4,15 +4,15 @@ import Stone from './Stone'
 import { LETTERS_SGF } from '../constants/Go'
 
 export default class Board {
-  constructor(width = 19, height = 19, autofit = false, theme = 'walnut-theme', material = {}, arrangement = []) {
-    this.width = width
-    this.height = height
-    this.theme = theme
-    this.autofit = autofit
-    if (arrangement == undefined || arrangement.length === 0) {
+  constructor(args) {
+    this.width = args.width || 19
+    this.height = args.height || 19
+    this.theme = args.theme || 'black-and-white'
+    this.autofit = args.autofit || false
+    if (args.arrangement == undefined || args.arrangement.length === 0) {
       this.arrangement = _.chunk(new Array(361).fill(0), 19)
     }
-    this.material = material
+    this.material = args.material
   }
 
   move(steps) {
@@ -31,7 +31,7 @@ export default class Board {
       let expand = 3
       this.leftmost = _.min(iArray) - expand > 0 ? _.min(iArray) - expand : 0
       this.rightmost = _.max(iArray) + expand > 19 ? 19 : _.max(iArray) + expand
-      this.topmost = _.min(jArray) - expand > 0 ? _.mn(jArray) - expand : 0
+      this.topmost = _.min(jArray) - expand > 0 ? _.min(jArray) - expand : 0
       this.bottommost = _.max(jArray) + expand > 19 ? 19 : _.max(jArray) + expand
 
       this.maxhv = _.max([this.rightmost - this.leftmost, this.bottommost - this.topmost])
