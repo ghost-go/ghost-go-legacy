@@ -2,7 +2,7 @@ import React, { Component, PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import { SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
+import { CoordsToTree, SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
 
 import PuzzlePanel from '../presentations/PuzzlePanel'
 import FlatButton from 'material-ui/FlatButton'
@@ -164,7 +164,8 @@ class Puzzle extends Component {
       material: this.props.themeMaterial,
       editable: true,
     })
-    board.move(puzzle.data.steps.split(';'))
+
+    board.setStones(CoordsToTree(puzzle.data.steps.split(';')))
     board.render(this.boardLayer)
   }
 

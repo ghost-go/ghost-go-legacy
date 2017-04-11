@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
 import keydown, { Keys } from 'react-keydown'
+import { CoordsToTree } from '../constants/Go'
 
 import Board from '../eboard/Board'
 import { fetchKifu } from '../actions/FetchActions'
@@ -77,7 +78,7 @@ class Kifu extends Component {
       theme: this.props.theme,
       material: this.props.themeMaterial,
     })
-    board.move(steps)
+    board.move(CoordsToTree(steps))
     board.render(this.boardLayer)
   }
 

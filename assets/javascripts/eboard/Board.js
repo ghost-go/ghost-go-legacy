@@ -2,7 +2,7 @@ import _ from 'lodash'
 import showKi from './BoardCore'
 import Stone from './Stone'
 import Cross from './Cross'
-import { LETTERS_SGF } from '../constants/Go'
+import { LETTERS_SGF, BLANK_ARRAY } from '../constants/Go'
 import TreeModel from 'tree-model'
 
 export default class Board {
@@ -13,54 +13,60 @@ export default class Board {
     this.autofit = args.autofit || false
     this.editable = args.editable || false
     if (args.arrangement == undefined || args.arrangement.length === 0) {
-      this.arrangement = _.chunk(new Array(361).fill(0), 19)
+      this.arrangement = BLANK_ARRAY
     }
     this.material = args.material
     this.tree = new TreeModel()
     this.root = this.tree.parse({id: 0, children: []})
   }
 
-  move(steps) {
-    let parentNode, node
-    steps.forEach((step, i) => {
-      node = this.tree.parse({id: i, coord: step})
-      if (parentNode === undefined) {
-        this.root.addChild(node)
-      } else {
-        parentNode.addChild(node)
-      }
-      parentNode = node
-    })
-    this.root.walk((node) => {
+  setStones(root) {
+    root.walk((node) => {
       if (node.model.coord) {
-        this.arrangement = showKi(this.arrangement, [node.model.coord])
+        this.arrangement = showKi(this.arrangement, [node.model.coord], false)
       }
     })
     if (this.autofit) {
-      let iArray = []
-      let jArray = []
-      for (let i = 0; i < 19; i++) {
-        for (let j = 0; j < 19; j++) {
-          if (this.arrangement[i][j] !== 0) {
-            iArray.push(i)
-            jArray.push(j)
-          }
+      this.fitBoard()
+    }
+  }
+
+  move(root) {
+    root.walk((node) => {
+      if (node.model.coord) {
+        this.arrangement = showKi(this.arrangement, [node.model.coord])
+        if (!node.hasChildren()) {
+          this.lastStone = node.model.coord
         }
       }
-      let expand = 3
-      this.leftmost = _.min(iArray) - expand > 0 ? _.min(iArray) - expand : 0
-      this.rightmost = _.max(iArray) + expand > 19 ? 19 : _.max(iArray) + expand
-      this.topmost = _.min(jArray) - expand > 0 ? _.min(jArray) - expand : 0
-      this.bottommost = _.max(jArray) + expand > 19 ? 19 : _.max(jArray) + expand
-
-      this.maxhv = _.max([this.rightmost - this.leftmost, this.bottommost - this.topmost])
-      this.maxhv = this.maxhv > 19 ? 19 : this.maxhv
-      this.width = this.height = this.maxhv
-      this.offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
-      this.offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
+    })
+    if (this.autofit) {
+      this.fitBoard()
     }
+  }
 
-    this.lastStone = steps[steps.length - 1]
+  fitBoard() {
+    let iArray = []
+    let jArray = []
+    for (let i = 0; i < 19; i++) {
+      for (let j = 0; j < 19; j++) {
+        if (this.arrangement[i][j] !== 0) {
+          iArray.push(i)
+          jArray.push(j)
+        }
+      }
+    }
+    let expand = 3
+    this.leftmost = _.min(iArray) - expand > 0 ? _.min(iArray) - expand : 0
+    this.rightmost = _.max(iArray) + expand > 19 ? 19 : _.max(iArray) + expand
+    this.topmost = _.min(jArray) - expand > 0 ? _.min(jArray) - expand : 0
+    this.bottommost = _.max(jArray) + expand > 19 ? 19 : _.max(jArray) + expand
+
+    this.maxhv = _.max([this.rightmost - this.leftmost, this.bottommost - this.topmost])
+    this.maxhv = this.maxhv > 19 ? 19 : this.maxhv
+    this.width = this.height = this.maxhv
+    this.offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
+    this.offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
   }
 
   render(canvas) {
@@ -99,13 +105,14 @@ export default class Board {
       ctx.lineTo(this.width * this.size, i * this.size)
     }
     ctx.stroke()
+    let dotSize = this.size / 12
     ;[4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
         ctx.beginPath()
         if (this.autofit && ((i - this.offsetX) > 1 && (j - this.offsetY) > 1) && (i - this.offsetX) < this.maxhv && (j - this.offsetY) < this.maxhv) {
-          ctx.arc((i - this.offsetX) * this.size, (j - this.offsetY) * this.size, this.size / 10, 0, 2 * Math.PI, true)
+          ctx.arc((i - this.offsetX) * this.size, (j - this.offsetY) * this.size, dotSize, 0, 2 * Math.PI, true)
         } else if(!this.autofit) {
-          ctx.arc(i * this.size, j * this.size, this.size / 10, 0, 2 * Math.PI, true)
+          ctx.arc(i * this.size, j * this.size, dotSize, 0, 2 * Math.PI, true)
         }
         ctx.fillStyle = 'black'
         ctx.fill()
