@@ -165,7 +165,7 @@ class Puzzle extends Component {
       editable: true,
     })
 
-    board.setStones(CoordsToTree(puzzle.data.steps.split(';')))
+    board.setStones(CoordsToTree(puzzle.data.steps.split(';')), false)
     board.render(this.boardLayer)
   }
 

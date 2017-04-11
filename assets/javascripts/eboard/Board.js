@@ -3,7 +3,6 @@ import showKi from './BoardCore'
 import Stone from './Stone'
 import Cross from './Cross'
 import { LETTERS_SGF, BLANK_ARRAY } from '../constants/Go'
-import TreeModel from 'tree-model'
 
 export default class Board {
   constructor(args) {
@@ -16,26 +15,14 @@ export default class Board {
       this.arrangement = BLANK_ARRAY
     }
     this.material = args.material
-    this.tree = new TreeModel()
-    this.root = this.tree.parse({id: 0, children: []})
   }
 
-  setStones(root) {
+  setStones(root, execPonnuki = true) {
+    this.root = root
     root.walk((node) => {
       if (node.model.coord) {
-        this.arrangement = showKi(this.arrangement, [node.model.coord], false)
-      }
-    })
-    if (this.autofit) {
-      this.fitBoard()
-    }
-  }
-
-  move(root) {
-    root.walk((node) => {
-      if (node.model.coord) {
-        this.arrangement = showKi(this.arrangement, [node.model.coord])
-        if (!node.hasChildren()) {
+        this.arrangement = showKi(this.arrangement, [node.model.coord], execPonnuki)
+        if (!node.hasChildren() && execPonnuki) {
           this.lastStone = node.model.coord
         }
       }

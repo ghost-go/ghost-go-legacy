@@ -78,7 +78,7 @@ class Kifu extends Component {
       theme: this.props.theme,
       material: this.props.themeMaterial,
     })
-    board.move(CoordsToTree(steps))
+    board.setStones(CoordsToTree(steps))
     board.render(this.boardLayer)
   }
 
