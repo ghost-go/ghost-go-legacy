@@ -5,11 +5,20 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Helmet from 'react-helmet'
 
-const Footer = () => <div className='footer'>
-  Source Code:  <a href="https://github.com/happybai/ghost-go">
-    https://github.com/happybai/ghost-go
-  </a>
-</div>
+const Footer = () => { 
+  return (
+    <div className='footer'>
+      <span>Source Code:</span>
+      <a href="https://github.com/happybai/ghost-go">
+        https://github.com/happybai/ghost-go
+      </a>
+      &nbsp;&nbsp;&nbsp;
+      <a href="http://www.w3.org/html/logo/">
+        <img src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png" width="24" height="25" alt="HTML5 Powered" title="HTML5 Powered" />
+      </a>
+    </div>
+  )
+}
 
 export default class Container extends Component {
 
@@ -55,5 +64,4 @@ export default class Container extends Component {
       </MuiThemeProvider>
     )
   }
-
 }

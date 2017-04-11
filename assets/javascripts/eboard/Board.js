@@ -3,6 +3,7 @@ import showKi from './BoardCore'
 import Stone from './Stone'
 import Cross from './Cross'
 import { LETTERS_SGF } from '../constants/Go'
+import TreeModel from 'tree-model'
 
 export default class Board {
   constructor(args) {
@@ -15,10 +16,26 @@ export default class Board {
       this.arrangement = _.chunk(new Array(361).fill(0), 19)
     }
     this.material = args.material
+    this.tree = new TreeModel()
+    this.root = this.tree.parse({id: 0, children: []})
   }
 
   move(steps) {
-    this.arrangement = showKi(this.arrangement, steps)
+    let parentNode, node
+    steps.forEach((step, i) => {
+      node = this.tree.parse({id: i, coord: step})
+      if (parentNode === undefined) {
+        this.root.addChild(node)
+      } else {
+        parentNode.addChild(node)
+      }
+      parentNode = node
+    })
+    this.root.walk((node) => {
+      if (node.model.coord) {
+        this.arrangement = showKi(this.arrangement, [node.model.coord])
+      }
+    })
     if (this.autofit) {
       let iArray = []
       let jArray = []
@@ -41,8 +58,6 @@ export default class Board {
       this.width = this.height = this.maxhv
       this.offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0
       this.offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0
-      //this.horizontal = this.rightmost - this.leftmost
-      //this.verical = this.bottommost - this.topmost
     }
 
     this.lastStone = steps[steps.length - 1]
@@ -137,7 +152,7 @@ export default class Board {
       let cross = new Cross()
       cross.x = Math.round(e.offsetX / this.size) * this.size
       cross.y = Math.round(e.offsetY / this.size) * this.size
-      cross.size = this.size / 4
+      cross.size = this.size / 6
       cross.color = '#ff0000'
       cross.draw(ctx)
       this.renderStones(canvas, ctx)
