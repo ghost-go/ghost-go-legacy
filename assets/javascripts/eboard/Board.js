@@ -2,7 +2,8 @@ import _ from 'lodash'
 import showKi from './BoardCore'
 import Stone from './Stone'
 import Cross from './Cross'
-import { LETTERS_SGF, BLANK_ARRAY } from '../constants/Go'
+import { CoordsToTree, LETTERS_SGF, BLANK_ARRAY } from '../constants/Go'
+import TreeModel from 'tree-model'
 
 export default class Board {
   constructor(args) {
@@ -15,21 +16,33 @@ export default class Board {
       this.arrangement = BLANK_ARRAY
     }
     this.material = args.material
+    this.nextStoneType = -1
   }
 
   setStones(root, execPonnuki = true) {
     this.root = root
+    let stones = []
     root.walk((node) => {
       if (node.model.coord) {
-        this.arrangement = showKi(this.arrangement, [node.model.coord], execPonnuki)
-        if (!node.hasChildren() && execPonnuki) {
-          this.lastStone = node.model.coord
+        stones.push(node.model.coord)
+        if (!node.hasChildren()) {
+          this.lastNode = node
         }
       }
     })
+    let { arrangement } = showKi(this.arrangement, stones, execPonnuki)
+    this.arrangement = arrangement
     if (this.autofit) {
       this.fitBoard()
     }
+  }
+
+  getArrangement() {
+    return this.arrangement
+  }
+
+  getTree() {
+    return this.root
   }
 
   fitBoard() {
@@ -64,6 +77,28 @@ export default class Board {
     this.renderStones(canvas, ctx)
     if (this.editable) {
       this.renderCursor(canvas, ctx)
+      canvas.onclick = (e) => {
+        let x = Math.round(e.offsetX / this.size) + this.offsetX - 1
+        let y = Math.round(e.offsetY / this.size) + this.offsetY - 1
+        let type = this.nextStoneType === 1 ? 'B' : 'W'
+        let step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`
+        let node = CoordsToTree([step])
+        let { hasMoved } = showKi(this.arrangement, [step])
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        console.log(this.lastNode.getPath())
+        console.log(step)
+        console.log(node)
+        console.log(hasMoved)
+        if (hasMoved) {
+          console.log('moved')
+          //this.lastNode.addChild(node.children[0])
+          this.nextStoneType = -this.nextStoneType
+        }
+        this.setStones(this.root)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        this.renderBoard(canvas, ctx)
+        this.renderStones(canvas, ctx)
+      }
     }
   }
 
@@ -109,32 +144,31 @@ export default class Board {
 
   renderStones(canvas, ctx) {
     let il, jl
-    if (this.lastStone !== undefined) {
-      il = LETTERS_SGF.indexOf(this.lastStone[2])
-      jl = LETTERS_SGF.indexOf(this.lastStone[3])
+    if (this.lastNode !== undefined) {
+      il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2])
+      jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3])
     }
-    let size = canvas.width / (this.width + 1)
 
     let coordX = 0, coordY = 0
     for (let i = 0; i < 19; i++) {
       for (let j = 0; j < 19; j++) {
         if(this.autofit) {
-          coordX = ((i + 1) - this.offsetX) * size
-          coordY = ((j + 1) - this.offsetY) * size
+          coordX = ((i + 1) - this.offsetX) * this.size
+          coordY = ((j + 1) - this.offsetY) * this.size
         } else {
-          coordX = (i + 1) * size
-          coordY = (j + 1) * size
+          coordX = (i + 1) * this.size
+          coordY = (j + 1) * this.size
         }
-        let piece = new Stone(
+        let stone = new Stone(
           coordX,
           coordY,
-          size / 2 - 2,
+          this.size / 2 - 2,
           this.arrangement[i][j],
           il === i && jl === j,
           this.theme,
           i * j % 5
         )
-        piece.draw(ctx)
+        stone.draw(ctx)
       }
     }
   }

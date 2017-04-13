@@ -21,10 +21,17 @@ export const SGFToPosition = (str) => {
 
 export const CoordsToTree = (steps) => {
   let tree = new TreeModel()
-  let root =  tree.parse({id: 0, children: []})
+  let root =  tree.parse({id: 0, index: 0, children: []})
   let parentNode, node
   steps.forEach((step, i) => {
-    node = tree.parse({id: i, coord: step})
+    node = tree.parse({
+      id: i,
+      index: i,
+      coord: step,
+      type: step[0] === 'B' ? 1 : -1,
+      posX: LETTERS_SGF.indexOf(step[1]),
+      posY: LETTERS_SGF.indexOf(step[2]),
+    })
     if (parentNode === undefined) {
       root.addChild(node)
     } else {

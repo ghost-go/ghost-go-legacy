@@ -117,16 +117,23 @@ function canMove(array, i, j, ki) {
 
 export default function showKi(array, steps, isPonnuki = true) {
   let newArray = _.cloneDeep(array)
+  let hasMoved = false
   steps.forEach((str) => {
     const {x, y, ki} = SGFToPosition(str)
     if (isPonnuki) {
       if (canMove(newArray, x, y, ki)) {
         newArray[x][y] = ki
         newArray = execPonnuki(newArray, x, y, -ki)
+        hasMoved = true
       }
     } else {
       newArray[x][y] = ki
+      hasMoved = true
     }
   })
-  return newArray
+
+  return {
+    arrangement: newArray,
+    hasMoved: hasMoved,
+  }
 }
