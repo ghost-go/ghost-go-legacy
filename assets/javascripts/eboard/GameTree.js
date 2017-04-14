@@ -6,5 +6,33 @@ export default class GameTree {
     this.current = Map()
     this.parent = Map()
   }
+
+  loadFromSgf() {
+    
+  }
+
+  getRoot(tree) {
+    while (tree.parent != null) tree = tree.parent
+    return tree
+  }
+
+  getHeight() {
+  }
+
+  getDepth() {
+  }
+
+  getLevel() {
+  }
+
+  getDegree() {
+  }
+
+  getSiblings() {
+  }
+
+  toSgf() {
+  }
+
 }
 
