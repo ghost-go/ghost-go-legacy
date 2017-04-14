@@ -8,7 +8,6 @@ export default class GameTree {
   }
 
   loadFromSgf() {
-    
   }
 
   getRoot(tree) {

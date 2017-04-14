@@ -63,7 +63,7 @@ class Navigation extends Component {
     return (
       <div id="page-header">
         <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="header-logo">
-          <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta</i></span>
+          <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.2</i></span>
           <a onClick={this.props.collapseToggle} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left"></i>
           </a>
