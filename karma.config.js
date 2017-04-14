@@ -29,27 +29,32 @@ module.exports = function (config) {
     },
     webpack: {
       module: {
-        loaders: [
+        rules: [
           {
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: "babel-loader",
-            query: {
-              presets: ['react', 'es2015']
-            }
-          },
-          {
-            test: /\.jsx$/,
-            exclude: /(node_modules|bower_components)/,
-            loader: 'babel?presets[]=react,presets[]=es2015'
+            use: [{
+              loader: 'babel-loader',
+              options: {
+                presets: ['es2015', 'react', 'es2017', 'stage-0'],
+                plugins: ['transform-decorators-legacy']
+              },
+            }],
+          }, {
+            test: /\.scss$/,
+            use: ['style-loader', 'css-loader', 'postcss-loader']
+          }, {
+            test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/,
+            use: [{
+              loader: 'url-loader',
+              options: {
+                limit: 100000,
+              }
+            }],
           },
         ],
-        postLoaders: [{
-          test: /\.(js|jsx)$/, exclude: /(node_modules|bower_components|tests)/,
-          loader: 'istanbul-instrumenter'
-        }]
       }
     },
     webpackMiddleware: { noInfo: true }
-  });
-};
+  })
+}
