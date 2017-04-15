@@ -3,7 +3,6 @@ import showKi from './BoardCore'
 import Stone from './Stone'
 import Cross from './Cross'
 import { CoordsToTree, LETTERS_SGF, BLANK_ARRAY } from '../constants/Go'
-import TreeModel from 'tree-model'
 
 export default class Board {
   constructor(args) {
@@ -25,17 +24,14 @@ export default class Board {
     this.root = root
     let stones = []
     root.walk((node) => {
-      //if (node.model.constructor.name === 'Map') {
       if (node.model.coord) {
         stones.push(node.model.coord)
-        //stones.push(node.model.get('coord'))
         if (!node.hasChildren()) {
           this.lastNode = node
         }
       }
     })
     stones = _.without(stones, '')
-    console.log(stones)
     let { arrangement } = showKi(this.arrangement, stones, execPonnuki)
     this.arrangement = arrangement
     if (this.autofit) {
@@ -91,7 +87,6 @@ export default class Board {
         let node = CoordsToTree([step])
         let { hasMoved } = showKi(this.arrangement, [step])
         if (hasMoved) {
-          console.log('moved')
           this.lastNode.addChild(node.children[0])
           this.nextStoneType = -this.nextStoneType
           this.setStones(this.root)
@@ -150,8 +145,6 @@ export default class Board {
     if (this.lastNode !== undefined) {
       il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2])
       jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3])
-      //il = LETTERS_SGF.indexOf(this.lastNode.model.get('coord')[2])
-      //jl = LETTERS_SGF.indexOf(this.lastNode.model.get('coord')[3])
     }
 
     let coordX = 0, coordY = 0
