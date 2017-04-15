@@ -11,11 +11,11 @@ export default class Board {
     this.theme = args.theme || 'black-and-white'
     this.autofit = args.autofit || false
     this.editable = args.editable || false
+    this.nextStoneType = args.nextStoneType || 1
     if (args.arrangement == undefined || args.arrangement.length === 0) {
       this.arrangement = BLANK_ARRAY
     }
     this.material = args.material
-    this.nextStoneType = -1
     this.initStones = []
   }
 
