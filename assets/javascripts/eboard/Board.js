@@ -104,6 +104,7 @@ export default class Board {
   }
 
   renderBoard(canvas, ctx) {
+    this.size = canvas.width / (_.max([this.width, this.height]) + 1)
     if (this.theme === 'black-and-white') {
       //TODO: blablabla
     } else if (this.theme === 'walnut-theme') {
@@ -145,6 +146,7 @@ export default class Board {
 
   renderStones(canvas, ctx) {
     let il, jl
+    this.size = canvas.width / (_.max([this.width, this.height]) + 1)
     if (this.lastNode !== undefined) {
       il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2])
       jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3])
