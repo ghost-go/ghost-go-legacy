@@ -17,19 +17,25 @@ export default class Board {
     }
     this.material = args.material
     this.nextStoneType = -1
+    this.initStones = []
   }
 
   setStones(root, execPonnuki = true) {
+    this.arrangement = BLANK_ARRAY
     this.root = root
     let stones = []
     root.walk((node) => {
+      //if (node.model.constructor.name === 'Map') {
       if (node.model.coord) {
         stones.push(node.model.coord)
+        //stones.push(node.model.get('coord'))
         if (!node.hasChildren()) {
           this.lastNode = node
         }
       }
     })
+    stones = _.without(stones, '')
+    console.log(stones)
     let { arrangement } = showKi(this.arrangement, stones, execPonnuki)
     this.arrangement = arrangement
     if (this.autofit) {
@@ -84,20 +90,15 @@ export default class Board {
         let step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`
         let node = CoordsToTree([step])
         let { hasMoved } = showKi(this.arrangement, [step])
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        console.log(this.lastNode.getPath())
-        console.log(step)
-        console.log(node)
-        console.log(hasMoved)
         if (hasMoved) {
           console.log('moved')
-          //this.lastNode.addChild(node.children[0])
+          this.lastNode.addChild(node.children[0])
           this.nextStoneType = -this.nextStoneType
+          this.setStones(this.root)
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          this.renderBoard(canvas, ctx)
+          this.renderStones(canvas, ctx)
         }
-        this.setStones(this.root)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        this.renderBoard(canvas, ctx)
-        this.renderStones(canvas, ctx)
       }
     }
   }
@@ -147,6 +148,8 @@ export default class Board {
     if (this.lastNode !== undefined) {
       il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2])
       jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3])
+      //il = LETTERS_SGF.indexOf(this.lastNode.model.get('coord')[2])
+      //jl = LETTERS_SGF.indexOf(this.lastNode.model.get('coord')[3])
     }
 
     let coordX = 0, coordY = 0
