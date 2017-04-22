@@ -165,6 +165,13 @@ export const puzzle = reduceReducers(
       steps: '',
       rank: '18k',
       id: 0,
+      preview_img_r1: {
+        x100: { url: '' },
+        x200: { url: '' },
+        x300: { url: '' },
+        x400: { url: '' },
+        x1000: { url: '' },
+      },
     }
   }, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT')

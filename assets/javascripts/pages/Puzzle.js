@@ -210,13 +210,12 @@ class Puzzle extends Component {
           */}
         </div>
         <div className='puzzle-panel'>
-          {/*
           <PuzzlePanel
             {...this.props}
             showNext={true}
             puzzle={this.props.puzzle.data}
             handleRangeChange={this.handleRangeChange}
-            handleNext={this.handleNext}
+            handleNext={::this.handleNext}
             rangeFilter={this.props.rangeFilter}
             handleReset={::this.handleReset}
             addSteps={::this.addSteps}
@@ -227,7 +226,6 @@ class Puzzle extends Component {
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
           />
-          */}
         </div>
         <div className='clearfix'></div>
       </div>)
@@ -235,6 +233,7 @@ class Puzzle extends Component {
 }
 
 function select(state) {
+  console.log(state)
   return {
     puzzle: state.puzzle,
     rangeFilter: state.rangeFilter,
