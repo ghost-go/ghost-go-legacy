@@ -40,8 +40,7 @@ class Puzzle extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      open: false,
+    this.state = { open: false,
       answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
@@ -166,11 +165,70 @@ class Puzzle extends Component {
       nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
       afterMove: (step) => {
         this.props.dispatch(addSteps(step))
+        setTimeout(() => {
+          if (this.props.currentMode !== 'research') {
+            this.response()
+          }
+        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME)
       },
     })
 
     board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true)
     board.render(this.boardLayer)
+  }
+
+  response() {
+    let rights = []
+    let wrongs = []
+    this.props.puzzle.data.right_answers.forEach((i) => {
+      if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
+        rights.push(i)
+      }
+    })
+    this.props.puzzle.data.wrong_answers.forEach((i) => {
+      if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
+        wrongs.push(i)
+      }
+    })
+
+    if (rights.length > 0) {
+      const i = Math.floor(Math.random() * rights.length)
+      let stepsStr = this.props.steps.join(';')
+      if (rights[i].steps === stepsStr) {
+        console.log('right')
+        //this.props.handleRight()
+      }
+      else {
+        const step = rights[i].steps.split(';')[this.props.steps.length]
+        this.props.dispatch(addSteps(step))
+        let stepsStr = this.props.steps.join(';')
+        if (rights[i].steps === stepsStr) {
+          //this.props.handleRight()
+          console.log('right')
+        }
+      }
+    }
+    else if (wrongs.length > 0) {
+      const i = Math.floor(Math.random() * wrongs.length)
+      let stepsStr = this.props.steps.join(';')
+      if (wrongs[i].steps === stepsStr) {
+        //this.props.handleWrong()
+        console.log('wrong')
+      }
+      else {
+        const step = wrongs[i].steps.split(';')[this.props.steps.length]
+        this.props.dispatch(addSteps(step))
+        let stepsStr = this.props.steps.join(';')
+        if (wrongs[i].steps === stepsStr) {
+          console.log('wrong')
+          //this.props.handleWrong()
+        }
+      }
+    }
+    else {
+      console.log('wrong')
+      //this.props.handleWrong()
+    }
   }
 
   render() {
