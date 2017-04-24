@@ -164,6 +164,9 @@ class Puzzle extends Component {
       material: this.props.themeMaterial,
       editable: true,
       nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
+      afterMove: (step) => {
+        this.props.dispatch(addSteps(step))
+      },
     })
 
     board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true)

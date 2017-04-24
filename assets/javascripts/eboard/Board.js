@@ -17,6 +17,7 @@ export default class Board {
     }
     this.material = args.material
     this.initStones = []
+    this.afterMove = args.afterMove
   }
 
   setStones(root, execPonnuki = true) {
@@ -93,6 +94,9 @@ export default class Board {
           ctx.clearRect(0, 0, canvas.width, canvas.height)
           this.renderBoard(canvas, ctx)
           this.renderStones(canvas, ctx)
+          if (this.afterMove) {
+            this.afterMove(step)
+          }
         }
       }
     }
