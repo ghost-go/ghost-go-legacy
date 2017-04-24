@@ -156,7 +156,7 @@ class Puzzle extends Component {
   }
 
   componentDidUpdate() {
-    const { puzzle } = this.props
+    const { puzzle, steps } = this.props
 
     let board = new Board({
       autofit: true,
@@ -166,7 +166,7 @@ class Puzzle extends Component {
       nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
     })
 
-    board.setStones(CoordsToTree(puzzle.data.steps.split(';')), false)
+    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true)
     board.render(this.boardLayer)
   }
 
@@ -194,6 +194,20 @@ class Puzzle extends Component {
         </Dialog>
         <div className='puzzle-board'>
           <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem }}></canvas>
+          {/*
+          <PuzzleBoard
+            className="board"
+            steps={this.props.steps}
+            addSteps={::this.addSteps}
+            resetSteps={::this.resetSteps}
+            puzzle={puzzle.data}
+            handleRight={this.handleRightTipOpen}
+            handleWrong={this.handleWrongTipOpen}
+            currentMode={this.props.currentMode}
+            setCurrentMode={::this.setCurrentMode}
+            ref="board"
+          />
+          */}
         </div>
         <div className='puzzle-panel'>
           <PuzzlePanel
@@ -219,7 +233,6 @@ class Puzzle extends Component {
 }
 
 function select(state) {
-  console.log(state)
   return {
     puzzle: state.puzzle,
     rangeFilter: state.rangeFilter,
