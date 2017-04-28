@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
@@ -20,14 +21,14 @@ class History extends Component {
   }
 
   static propTypes = {
-    location: T.object.isRequired,
-    dispatch: T.func.isRequired,
-    records: T.object.isRequired,
-    recordTypeFilter: T.string.isRequired,
+    location: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    records: PropTypes.object.isRequired,
+    recordTypeFilter: PropTypes.string.isRequired,
   }
 
   static contextTypes = {
-    auth: T.object.isRequired,
+    auth: PropTypes.object.isRequired,
   }
 
   constructor(props) {

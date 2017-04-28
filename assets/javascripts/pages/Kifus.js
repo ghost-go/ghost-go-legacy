@@ -1,5 +1,6 @@
 //react
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 //import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
@@ -18,11 +19,11 @@ import { StyleSheet, css } from 'aphrodite'
 class Kifus extends Component {
 
   static propTypes = {
-    kifus: T.object.isRequired,
-    players: T.object.isRequired,
-    location: T.object,
-    dispatch: T.func,
-    kifuFilter: T.string,
+    kifus: PropTypes.object.isRequired,
+    players: PropTypes.object.isRequired,
+    location: PropTypes.object,
+    dispatch: PropTypes.func,
+    kifuFilter: PropTypes.string,
   }
 
   state = {

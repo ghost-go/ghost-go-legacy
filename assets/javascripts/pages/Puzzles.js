@@ -1,5 +1,6 @@
 //react
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import _ from 'lodash'
@@ -18,13 +19,13 @@ import { StyleSheet, css } from 'aphrodite'
 class Puzzles extends Component {
 
   static propTypes = {
-    tags: T.object.isRequired,
-    puzzles: T.object.isRequired,
-    rangeFilter: T.object.isRequired,
-    puzzleFilter: T.object.isRequired,
-    tagFilter: T.string.isRequired,
-    dispatch: T.func.isRequired,
-    location: T.object.isRequired,
+    tags: PropTypes.object.isRequired,
+    puzzles: PropTypes.object.isRequired,
+    rangeFilter: PropTypes.object.isRequired,
+    puzzleFilter: PropTypes.object.isRequired,
+    tagFilter: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
   }
 
   state = {

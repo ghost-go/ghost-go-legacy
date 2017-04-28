@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 
 import Snackbar from 'material-ui/Snackbar'
@@ -8,7 +9,7 @@ import {Button, Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap
 export default class User extends Component {
 
   static contextTypes = {
-    auth: T.object.isRequired,
+    auth: PropTypes.object.isRequired,
   }
 
   constructor(props, context) {

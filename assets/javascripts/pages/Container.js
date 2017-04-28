@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -23,12 +24,12 @@ const Footer = () => {
 export default class Container extends Component {
 
   static childContextTypes = {
-    auth: T.object.isRequired,
+    auth: PropTypes.object.isRequired,
   }
 
   static propTypes = {
-    route: T.object.isRequired,
-    children: T.object
+    route: PropTypes.object.isRequired,
+    children: PropTypes.object
   }
 
   state = {

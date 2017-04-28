@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
@@ -13,11 +14,11 @@ const { LEFT, RIGHT, SPACE, ENTER } = Keys
 class Kifu extends Component {
 
   static propTypes = {
-    params: T.object.isRequired,
-    dispatch: T.func.isRequired,
-    kifu: T.object.isRequired,
-    theme: T.string.isRequired,
-    themeMaterial: T.object.isRequired,
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    kifu: PropTypes.object.isRequired,
+    theme: PropTypes.string.isRequired,
+    themeMaterial: PropTypes.object.isRequired,
   }
 
   state = {

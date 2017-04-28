@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
@@ -22,13 +23,13 @@ class Favorite extends Component {
   }
 
   static propTypes = {
-    location: T.object.isRequired,
-    dispatch: T.func.isRequired,
-    favorites: T.object.isRequired,
+    location: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    favorites: PropTypes.object.isRequired,
   }
 
   static contextTypes = {
-    auth: T.object.isRequired,
+    auth: PropTypes.object.isRequired,
   }
 
   constructor(props) {

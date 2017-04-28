@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions'
@@ -10,14 +11,14 @@ import {Row, Col } from 'react-bootstrap'
 class Dashboard extends Component {
 
   static propTypes = {
-    dispatch: T.func.isRequired,
-    dateRangeFilter: T.string.isRequired,
-    userRangeFilter: T.string.isRequired,
-    dashboard: T.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    dateRangeFilter: PropTypes.string.isRequired,
+    userRangeFilter: PropTypes.string.isRequired,
+    dashboard: PropTypes.object.isRequired,
   }
 
   static contextTypes = {
-    auth: T.object.isRequired,
+    auth: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
