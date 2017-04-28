@@ -110,6 +110,7 @@ class Puzzle extends Component {
 
   handleReset() {
     this.setState({ wrongTipOpen: false, rightTipOpen: false })
+    this.resetSteps()
   }
 
   handleNext() {
