@@ -267,20 +267,6 @@ class Puzzle extends Component {
                 : null
           }
           <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem }}></canvas>
-          {/*
-          <PuzzleBoard
-            className="board"
-            steps={this.props.steps}
-            addSteps={::this.addSteps}
-            resetSteps={::this.resetSteps}
-            puzzle={puzzle.data}
-            handleRight={this.handleRightTipOpen}
-            handleWrong={this.handleWrongTipOpen}
-            currentMode={this.props.currentMode}
-            setCurrentMode={::this.setCurrentMode}
-            ref="board"
-          />
-          */}
         </div>
         <div className='puzzle-panel'>
           <PuzzlePanel

@@ -10,7 +10,6 @@ import PuzzleList from '../presentations/PuzzleList'
 import { fetchPractice, fetchPracticeRecord } from '../actions/FetchActions'
 import { setPracticePuzzleId } from '../actions/Actions'
 import PuzzlePanel from '../presentations/PuzzlePanel'
-import PuzzleBoard from '../presentations/PuzzleBoard'
 
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -330,19 +329,19 @@ class Practice extends Component {
         record={this.state.record}
       />
 
-      puzzleBoard = <PuzzleBoard
-        className="board"
-        steps={this.props.steps}
-        addSteps={::this.addSteps}
-        resetSteps={::this.resetSteps}
-        puzzle={puzzle}
-        handleRight={::this.handleRight}
-        handleWrong={::this.handleWrong}
-        currentMode={this.props.currentMode}
-        setCurrentMode={::this.setCurrentMode}
-        ref="board"
-        afterClickEvent={::this.handleAfterClick}
-      />
+      //puzzleBoard = <PuzzleBoard
+        //className="board"
+        //steps={this.props.steps}
+        //addSteps={::this.addSteps}
+        //resetSteps={::this.resetSteps}
+        //puzzle={puzzle}
+        //handleRight={::this.handleRight}
+        //handleWrong={::this.handleWrong}
+        //currentMode={this.props.currentMode}
+        //setCurrentMode={::this.setCurrentMode}
+        //ref="board"
+        //afterClickEvent={::this.handleAfterClick}
+      ///>
 
       whofirst = <h1 className={css(styles.content)}>{puzzle.whofirst}</h1>
       rank = puzzle.rank
