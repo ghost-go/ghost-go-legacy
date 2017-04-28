@@ -1,24 +1,27 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions'
 import { fetchDashboard } from '../actions/FetchActions'
+import FilterBar from '../components/FilterBar'
 
-import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
+import {Row, Col } from 'react-bootstrap'
 
 class Dashboard extends Component {
 
   static propTypes = {
-    expanded: T.bool.isRequired,
-    dispatch: T.func.isRequired,
-    dateRangeFilter: T.string.isRequired,
-    userRangeFilter: T.string.isRequired,
-    auth: T.object.isRequired,
-    dashboard: T.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    dateRangeFilter: PropTypes.string.isRequired,
+    userRangeFilter: PropTypes.string.isRequired,
+    dashboard: PropTypes.object.isRequired,
+  }
+
+  static contextTypes = {
+    auth: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
-    expanded: true,
     filterOpen: false,
   }
 
@@ -26,25 +29,34 @@ class Dashboard extends Component {
     filterOpen: false,
   }
 
+  constructor(props) {
+    super(props)
+    this.handleSeeMore = this.handleSeeMore.bind(this)
+  }
+
   handleToggle() {
     this.setState({filterOpen: !this.state.filterOpen})
   }
 
-  handleSeeMore(dateRange, userRange) {
-    const { auth, dispatch } = this.props
+  handleSeeMore(filter, val) {
+    const { dispatch, dateRangeFilter, userRangeFilter } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
-    this.setState({filterOpen: false})
-    dispatch(setDateRangeFilter(dateRange))
-    dispatch(setUserRangeFilter(userRange))
+    if (filter === 'dateRangeFilter') {
+      dispatch(setDateRangeFilter(val))
+    } else if (filter === 'userRangeFilter') {
+      dispatch(setUserRangeFilter(val))
+    }
     dispatch(fetchDashboard({
-      date_range: dateRange,
-      user_range: userRange,
+      date_range: filter === 'dateRangeFilter' ? val : dateRangeFilter,
+      user_range: filter === 'userRangeFilter' ? val : userRangeFilter,
       user_id: profile.user_id
     }))
   }
 
   componentDidMount() {
-    const { auth, dispatch, dateRangeFilter, userRangeFilter } = this.props
+    const { dispatch, dateRangeFilter, userRangeFilter } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
@@ -53,45 +65,25 @@ class Dashboard extends Component {
     }))
   }
 
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     let loading = <div><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
-    let { auth, expanded, userRangeFilter, dateRangeFilter, dashboard } = this.props
+    const { userRangeFilter, dateRangeFilter, dashboard } = this.props
+    const { auth } = this.context
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className="page-container">
-        <div className="page-nav">
-          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
-            <Dropdown.Toggle>
-              <Glyphicon className="filter-icon" glyph="filter" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="super-colors">
-              <div className="popover-title">Datesharklasers Range</div>
-              <div className="popover-content">
-                <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, 'today', userRangeFilter)} className={`tag ${dateRangeFilter === 'today' ? 'active' : ''}`}>Today</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'yesterday', userRangeFilter)} className={`tag ${dateRangeFilter === 'yesterday' ? 'active' : ''}`}>Yesterday</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'last7days', userRangeFilter)} className={`tag ${dateRangeFilter === 'last7days' ? 'active' : ''}`}>Last 7 days</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'last30days', userRangeFilter)} className={`tag ${dateRangeFilter === 'last30days' ? 'active' : ''}`}>Last 30 days</li>
-                  <li onClick={this.handleSeeMore.bind(this, 'all', userRangeFilter)} className={`tag ${dateRangeFilter === 'all' ? 'active' : ''}`}>All</li>
-                </ul>
-              </div>
-              <div className="popover-title">Users</div>
-              <div className="popover-content">
-                <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, dateRangeFilter, 'onlyme')} className={`tag ${userRangeFilter === 'onlyme' ? 'active' : ''}`}>Only me</li>
-                  <li onClick={this.handleSeeMore.bind(this, dateRangeFilter, 'all')} className={`tag ${userRangeFilter === 'all' ? 'active' : ''}`}>All users</li>
-                </ul>
-              </div>
-            </Dropdown.Menu>
-          </Dropdown>
-          <ul className="page-subnav">
-            <li><a title="Date Range: xxx">{`Date Range: ${dateRangeFilter}`}</a></li>
-            <li><a title="User: xxx">{`Users: ${userRangeFilter}`}</a></li>
-          </ul>
-        </div>
+      <div>
+        <FilterBar data={[{
+          name: 'Date Range',
+          tags: ['today', 'yesterday', 'last7days', 'last30days', 'all'],
+          filterName: 'dateRangeFilter',
+          filterVal: dateRangeFilter,
+          handleSeeMore: this.handleSeeMore,
+        }, {
+          name: 'Users',
+          tags: ['onlyme', 'all'],
+          filterName: 'userRangeFilter',
+          filterVal: userRangeFilter,
+          handleSeeMore: this.handleSeeMore,
+        }]} />
         {
           !auth.loggedIn() ? <div>You must login to access this page</div> :
             <Row style={{marginTop: '40px'}}>

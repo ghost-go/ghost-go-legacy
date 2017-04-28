@@ -1,32 +1,29 @@
 //react
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 //import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import ReactPaginate from 'react-paginate'
 import { push } from 'react-router-redux'
-import {Dropdown, Glyphicon} from 'react-bootstrap'
 import _ from 'lodash'
 
 //internal component
 import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions'
 import { setKifuFilter } from '../actions/Actions'
+import FilterBar from '../components/FilterBar'
 
 //external component
 import { StyleSheet, css } from 'aphrodite'
 
-//language
-//import lang from '../components/lang'
-
 class Kifus extends Component {
 
   static propTypes = {
-    kifus: T.object.isRequired,
-    players: T.object.isRequired,
-    location: T.object,
-    dispatch: T.func,
-    kifuFilter: T.string,
-    expanded: T.bool,
+    kifus: PropTypes.object.isRequired,
+    players: PropTypes.object.isRequired,
+    location: PropTypes.object,
+    dispatch: PropTypes.func,
+    kifuFilter: PropTypes.string,
   }
 
   state = {
@@ -71,11 +68,11 @@ class Kifus extends Component {
     })
   }
 
-  handleSeeMore(player) {
+  handleSeeMore(filter, val) {
     this.setState({filterOpen: false})
-    this.props.dispatch(setKifuFilter(player || this.props.kifuFilter))
+    this.props.dispatch(setKifuFilter(val || this.props.kifuFilter))
     this.props.dispatch(fetchKifus({
-      player: player || this.props.kifuFilter
+      player: val|| this.props.kifuFilter
     }))
   }
 
@@ -131,28 +128,14 @@ class Kifus extends Component {
         </div>
     }
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
-        <div className="page-nav">
-          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
-            <Dropdown.Toggle>
-              <Glyphicon className="filter-icon" glyph="filter" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="super-colors">
-              <div className="popover-title">Player</div>
-              <div className="popover-content">
-                <ul className="tags">
-                  <li className={`tag ${this.props.kifuFilter === 'all' ? 'active' : ''}`} onClick={this.handleSeeMore.bind(this, 'all')}>all</li>
-                  {
-                    players.data.map((player) => <li key={player.id} className={`tag ${this.props.kifuFilter === player.en_name ? 'active' : ''}`} onClick={this.handleSeeMore.bind(this, player.en_name)}>{player.en_name}</li>)
-                  }
-                </ul>
-              </div>
-            </Dropdown.Menu>
-          </Dropdown>
-          <ul className="page-subnav">
-            <li><a title="Player: xxx">{`Player: ${this.props.kifuFilter}`}</a></li>
-          </ul>
-        </div>
+      <div>
+        <FilterBar data={[{
+          name: 'Player',
+          tags: ['all', ...players.data.map(player => player.en_name)],
+          filterName: 'playerFilter',
+          filterVal: this.props.kifuFilter,
+          handleSeeMore: this.handleSeeMore,
+        }]} />
         <div className={css(styles.puzzleContent)}>
           { kifuCards }
         </div>

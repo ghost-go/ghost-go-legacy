@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import SelectField from 'material-ui/SelectField'
-import { StyleSheet, css } from 'aphrodite'
 import MenuItem from 'material-ui/MenuItem'
 
 export default class RankingList extends Component {

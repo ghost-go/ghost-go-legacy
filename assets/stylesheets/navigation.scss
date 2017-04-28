@@ -3,6 +3,10 @@
   position: relative;
   height: 50px;
   padding-left: 235px;
+  a:hover {
+    cursor: pointer;
+    color: #f87500;
+  }
 }
 
 #header-logo {
@@ -28,7 +32,6 @@
     width: 50px;
     text-align: center;
   }
-
 }
 
 #sidebar-search {
@@ -191,4 +194,9 @@
 .opacity-80 {
   opacity: .8
 }
-    line-height: 16px;
+
+.theme {
+  margin-top: 10px;
+  float: left;
+  display: inline-block;
+}

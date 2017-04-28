@@ -104,7 +104,7 @@ export default class Sidebar extends Component {
                               <div className="notification-time">
                                 a few seconds ago <span className="fa fa-clock-o"></span>
                               </div>
-                              <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
                                 <i className="fa fa-arrow-right"></i>
                               </a>
                             </li>
@@ -114,7 +114,7 @@ export default class Sidebar extends Component {
                               <div className="notification-time">
                                 <b>15</b> minutes ago <span className="fa fa-clock-o"></span>
                               </div>
-                              <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
                                 <i className="fa fa-arrow-right"> </i>
                               </a>
                             </li>
@@ -124,7 +124,7 @@ export default class Sidebar extends Component {
                               <div className="notification-time">
                                 <b>2 hours</b> ago <span className="fa fa-clock-o"></span>
                               </div>
-                              <a href="#" className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
+                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
                                 <i className="fa fa-arrow-right"></i>
                               </a>
                             </li>
@@ -152,7 +152,7 @@ export default class Sidebar extends Component {
                             <div className="progressbar-small progressbar" data-value="75">
                               <div className="progressbar-value bg-azure tooltip-button" title="" data-original-title="45%">
                               </div>
-                            </div><b>Next step:</b> <a href="#" title="Verify identity">Verify identity</a>
+                            </div><b>Next step:</b> <a title="Verify identity">Verify identity</a>
                           </div>
                         </div>
                       </Tab.Pane>
@@ -165,19 +165,19 @@ export default class Sidebar extends Component {
                 <ul className="sf-js-enabled sf-arrows">
                   <div className="divider-header">Dashboard</div>
                   <li>
-                    <Link to="/dashboard">
+                    <Link activeClassName="active" to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
                     </Link>
                   </li>
                   <li className="divider"></li>
                   <div className="divider-header">Resources</div>
                   <li>
-                    <Link to="/puzzles">
+                    <Link activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece"></i> <span>Tsumego Library</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/kifus">
+                    <Link activeClassName="active" to="/kifus">
                       <i className="fa fa-book"></i> <span>Kifu Library</span>
                     </Link>
                   </li>
@@ -193,17 +193,17 @@ export default class Sidebar extends Component {
                   <li className="divider"></li>
                   <div className="divider-header">Others</div>
                   <li>
-                    <Link to="/users">
+                    <Link activeClassName="active" to="/users">
                       <i className="fa fa-users"></i> <span>Profile</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/favorites">
+                    <Link activeClassName="active" to="/favorites">
                       <i className="fa fa-heart"></i> <span>Favorites</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/records">
+                    <Link activeClassName="active" to="/records">
                       <i className="fa fa-history"></i> <span>Records</span>
                     </Link>
                   </li>
@@ -215,18 +215,18 @@ export default class Sidebar extends Component {
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
                   <li>
-                    <Link to="/dashboard">
+                    <Link activeClassName="active" to="/dashboard">
                       <i className="fa fa-tachometer"></i> <span>Dashboard</span>
                     </Link>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Link to="/puzzles">
+                    <Link activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece"></i> <span>Tsumego Library</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/kifus">
+                    <Link activeClassName="active" to="/kifus">
                       <i className="fa fa-book"></i> <span>Kifu Library</span>
                     </Link>
                   </li>
@@ -240,18 +240,18 @@ export default class Sidebar extends Component {
                   */}
                   <li className="divider"></li>
                   <li>
-                    <Link to="/users">
+                    <Link activeClassName="active" to="/users">
                       <i className="fa fa-users"></i> <span>Profile</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/favorites">
+                    <Link activeClassName="active" to="/favorites">
                       <i className="fa fa-heart"></i> <span>Favorites</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/history">
-                      <i className="fa fa-history"></i> <span>History</span>
+                    <Link activeClassName="active" to="/records">
+                      <i className="fa fa-history"></i> <span>Records</span>
                     </Link>
                   </li>
                 </ul>

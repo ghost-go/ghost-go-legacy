@@ -1,28 +1,29 @@
-import React, {Component, PropTypes as T} from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { SGFToPosition, BLANK_ARRAY, LETTERS_SGF, GRID, DOT_SIZE, EXPAND_H, EXPAND_V, RESPONSE_TIME } from '../constants/Go'
-import Piece from '../components/piece'
-import Sgf from '../components/sgf'
-import Cross from '../components/cross'
+import Piece from '../eboard/Piece'
+import Sgf from '../eboard/Sgf'
+import Cross from '../eboard/Cross'
 
 import { StyleSheet, css } from 'aphrodite'
 
 export default class PuzzleBoard extends Component {
 
   static propTypes = {
-    puzzle: T.object.isRequired,
-    currentMode: T.string.isRequired,
-    handleRight: T.func.isRequired,
-    handleWrong: T.func.isRequired,
-    afterClickEvent: T.func,
-    addSteps: T.func,
-    resetSteps: T.func,
-    setCurrentMode: T.func,
-    steps: T.array,
+    puzzle: PropTypes.object.isRequired,
+    currentMode: PropTypes.string.isRequired,
+    handleRight: PropTypes.func.isRequired,
+    handleWrong: PropTypes.func.isRequired,
+    afterClickEvent: PropTypes.func,
+    addSteps: PropTypes.func,
+    resetSteps: PropTypes.func,
+    setCurrentMode: PropTypes.func,
+    steps: PropTypes.array,
   }
 
   static childContextTypes = {
-    muiTheme: T.object.isRequired
+    muiTheme: PropTypes.object.isRequired
   }
 
   constructor(props) {

@@ -1,9 +1,9 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 
 import { fetchFavorites } from '../actions/FetchActions'
-import mainStyles from '../styles/main'
 
 import ReactPaginate from 'react-paginate'
 
@@ -23,11 +23,13 @@ class Favorite extends Component {
   }
 
   static propTypes = {
-    location: T.object.isRequired,
-    auth: T.object.isRequired,
-    dispatch: T.func.isRequired,
-    favorites: T.object.isRequired,
-    expanded: T.bool.isRequired,
+    location: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    favorites: PropTypes.object.isRequired,
+  }
+
+  static contextTypes = {
+    auth: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -39,7 +41,8 @@ class Favorite extends Component {
   }
 
   getFavoriteData(page = 1) {
-    const { auth, dispatch } = this.props
+    const { dispatch } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     if (auth.loggedIn()) {
       dispatch(fetchFavorites({
@@ -70,7 +73,7 @@ class Favorite extends Component {
   render() {
     let recordList, pagination, page = 0
     let { query } = this.props.location
-    let { expanded, favorites } = this.props
+    let { favorites } = this.props
     if (query && query.page) {
       page = parseInt(query.page - 1)
     }
@@ -113,7 +116,7 @@ class Favorite extends Component {
       recordList = <h3><b>You must login to access this page.</b></h3>
     }
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.centerContainer)}>
+      <div>
         <div className={css(styles.favoriteContainer)}>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>

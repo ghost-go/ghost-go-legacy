@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import TreeModel from 'tree-model'
 
 export const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
 export const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's']
@@ -16,4 +17,27 @@ export const SGFToPosition = (str) => {
   const x = LETTERS_SGF.indexOf(pos[0])
   const y = LETTERS_SGF.indexOf(pos[1])
   return {x, y, ki}
+}
+
+export const CoordsToTree = (steps) => {
+  let tree = new TreeModel()
+  let root =  tree.parse({id: 0, index: 0, children: []})
+  let parentNode, node
+  steps.forEach((step, i) => {
+    node = tree.parse({
+      id: i,
+      index: i,
+      coord: step,
+      type: step[0] === 'B' ? 1 : -1,
+      posX: LETTERS_SGF.indexOf(step[1]),
+      posY: LETTERS_SGF.indexOf(step[2]),
+    })
+    if (parentNode === undefined) {
+      root.addChild(node)
+    } else {
+      parentNode.addChild(node)
+    }
+    parentNode = node
+  })
+  return root
 }

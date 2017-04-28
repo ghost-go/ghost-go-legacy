@@ -1,37 +1,28 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-//import lang from '../components/lang'
-
-import Board from '../presentations/Board'
-
-import { fetchKifu } from '../actions/FetchActions'
-
 import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table'
+import keydown, { Keys } from 'react-keydown'
+import { CoordsToTree } from '../constants/Go'
 
-//external component
-import { StyleSheet, css } from 'aphrodite'
-import keydown, { Keys } from 'react-keydown';
+import Board from '../eboard/Board'
+import { fetchKifu } from '../actions/FetchActions'
 
-const { LEFT, RIGHT, SPACE, ENTER, TAB } = Keys
+const { LEFT, RIGHT, SPACE, ENTER } = Keys
 
 class Kifu extends Component {
 
   static propTypes = {
-    params: T.object.isRequired,
-    dispatch: T.func.isRequired,
-    kifu: T.object.isRequired,
-    expanded: T.bool.isRequired
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    kifu: PropTypes.object.isRequired,
+    theme: PropTypes.string.isRequired,
+    themeMaterial: PropTypes.object.isRequired,
   }
 
   state = {
     step: 0
-  }
-
-  constructor(props) {
-    super(props)
-    let { id } = this.props.params
-    this.props.dispatch(fetchKifu({id: id}))
   }
 
   @keydown( ENTER, SPACE, LEFT, RIGHT )
@@ -47,7 +38,7 @@ class Kifu extends Component {
   }
 
   nextStep() {
-    if (this.state.step < this.props.kifu.data.steps.split(';').length) {
+    if (this.state.step < this.props.kifu.data.total) {
       this.setState({ step: ++this.state.step})
     }
   }
@@ -57,7 +48,7 @@ class Kifu extends Component {
   }
 
   lastStep() {
-    let last = this.props.kifu.data.steps.split(';').length - 1
+    let last = this.props.kifu.data.total - 1
     this.setState({ step: last})
   }
 
@@ -66,27 +57,45 @@ class Kifu extends Component {
   }
 
   prev10Step() {
-    if (this.state.step < 10) {
-      this.firstStep()
+    this.state.step < 10 ? this.firstStep() : this.setState({ step: this.state.step - 10})
+  }
+
+  componentDidMount() {
+    let { id } = this.props.params
+    this.props.dispatch(fetchKifu({id: id}))
+    let boardWidth = 0
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60
     } else {
-      this.setState({ step: this.state.step - 10})
+      boardWidth = window.innerWidth
     }
+    this.boardLayer.width = this.boardLayer.height = boardWidth
+  }
+
+  componentDidUpdate() {
+    const { kifu } = this.props
+    let steps = kifu.data.steps.split(';').slice(0, this.state.step)
+    let board = new Board({
+      theme: this.props.theme,
+      material: this.props.themeMaterial,
+    })
+    board.setStones(CoordsToTree(steps))
+    board.render(this.boardLayer)
   }
 
   render() {
-    const { kifu, expanded } = this.props
-    if (kifu.data == null) return null
+    const { kifu } = this.props
     return (
-      <div style={{marginLeft: expanded === true ? '235px' : '50px'}} className={css(styles.kifuContainer)} onKeyDown={::this.nextStep}>
-        <div className={css(styles.kifuBoard)}>
-          <Board className="board" editable="false" kifu={kifu} step={this.state.step} nextStep={::this.nextStep} />
+      <div ref={input => this.textInput = input}>
+        <div className="kifu-board">
+          <canvas id="board_layer"ref={(elem) => { this.boardLayer = elem }} onClick={::this.nextStep}></canvas>
         </div>
-        <div className={css(styles.kifuInfo)}>
+        <div className="kifu-panel">
           <Paper>
             <Table selectable={false}>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Black
                   </TableRowColumn>
                   <TableRowColumn>
@@ -95,7 +104,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     White
                   </TableRowColumn>
                   <TableRowColumn>
@@ -104,7 +113,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Result
                   </TableRowColumn>
                   <TableRowColumn>
@@ -112,7 +121,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Komi
                   </TableRowColumn>
                   <TableRowColumn>
@@ -120,7 +129,7 @@ class Kifu extends Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn className={css(styles.fixedColumnWidth)}>
+                  <TableRowColumn className="fixed-width">
                     Date
                   </TableRowColumn>
                   <TableRowColumn>
@@ -149,8 +158,7 @@ class Kifu extends Component {
                         <i className="fa fa-fast-forward"></i>
                       </span>
                     </div>
-                  </TableRowColumn>
-                </TableRow>
+                  </TableRowColumn> </TableRow>
                 <TableRow>
                   <TableRowColumn colSpan={2}>
                     <div className="control-bar">
@@ -162,43 +170,17 @@ class Kifu extends Component {
             </Table>
           </Paper>
         </div>
+        <div className="clearfix"></div>
       </div>
     )
   }
 }
 
-const styles = StyleSheet.create({
-
-  fixedColumnWidth: {
-    width: '20%'
-  },
-
-  kifuContainer: {
-    padding: '10px',
-    display: 'flex',
-    '@media (max-width: 992px)': {
-      padding: '0px',
-      flexDirection: 'column',
-    }
-  },
-
-  kifuBoard: {
-    margin: '0 10px 0 10px',
-    '@media (max-width: 992px)': {
-      margin: '10px 0 10px 0',
-    },
-    flex: 'auto',
-  },
-
-  kifuInfo: {
-    flex: 'auto',
-  },
-
-})
-
 function select(state) {
   return {
-    kifu: state.kifu
+    kifu: state.kifu,
+    theme: state.theme,
+    themeMaterial: state.themeMaterial,
   }
 }
 

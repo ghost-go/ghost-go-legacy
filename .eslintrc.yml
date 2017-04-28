@@ -2,6 +2,7 @@ env:
   browser: true
   commonjs: true
   es6: true
+  jasmine: true
 parser: 'babel-eslint'
 extends:
   - 'plugin:jasmine/recommended'
@@ -33,3 +34,8 @@ rules:
   jasmine/no-suite-dupes:
     - 2
     - branch
+  react/prefer-es6-class:
+    - 2
+    - always
+  react/prefer-stateless-function:
+    - 2

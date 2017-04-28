@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import mainStyles from '../styles/main'
 import { connect } from 'react-redux'
@@ -36,9 +37,12 @@ class Practice extends Component {
   static propTypes = {
     practice: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     currentPuzzleId: PropTypes.number,
+  }
+
+  static contextTypes = {
+    auth: PropTypes.object.isRequired,
   }
 
   state = {
@@ -201,7 +205,7 @@ class Practice extends Component {
 
   handleSubmitRecord() {
     let puzzleCount = this.props.practice.data.puzzles.length
-    const { auth } = this.props
+    const { auth } = this.context
     let rightRecords = _.find(this.state.record, {isRight: true}) || []
     let rightCount = rightRecords.length
     let profile = auth.getProfile()
@@ -369,7 +373,7 @@ class Practice extends Component {
         />
     } else {
       panel =
-        <Paper style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(styles.panel)}>
+        <Paper>
           <div>
             <div>
               { whofirst }
@@ -445,7 +449,7 @@ class Practice extends Component {
   }
 
   _handlePuzzleRecord(type) {
-    const { auth } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     let puzzle = this._getCurrentPuzzle()
 

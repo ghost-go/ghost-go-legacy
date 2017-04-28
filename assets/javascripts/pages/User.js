@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 
 import Snackbar from 'material-ui/Snackbar'
@@ -7,14 +8,14 @@ import {Button, Col, ControlLabel, FormControl, FormGroup} from 'react-bootstrap
 
 export default class User extends Component {
 
-  static propTypes = {
-    auth: T.object.isRequired,
-    expanded: T.bool.isRequired,
+  static contextTypes = {
+    auth: PropTypes.object.isRequired,
   }
 
   constructor(props, context) {
     super(props, context)
-    let profile = props.auth.getProfile()
+    const { auth } = this.context
+    let profile = auth.getProfile()
     let rank = '18k'
     let bio = ''
     let nickname = ''
@@ -32,18 +33,18 @@ export default class User extends Component {
       nickname: profile.nickname || nickname,
     }
 
-    props.auth.on('profile_updated', (newProfile) => {
+    auth.on('profile_updated', (newProfile) => {
       this.setState({profile: newProfile})
     })
 
   }
 
   logout(){
-    this.props.auth.logout()
+    this.context.auth.logout()
   }
 
   handleUpdateProfile() {
-    const { auth } = this.props
+    const { auth } = this.context
     const { profile } = this.state
     auth.updateProfile(profile.user_id, {
       user_metadata: {
@@ -75,11 +76,12 @@ export default class User extends Component {
 
   render() {
     const { profile } = this.state
+    const { auth } = this.context
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className='page-container profile-container'>
+      <div className="profile-container">
         <h3>Profile</h3>
         {
-          !this.props.auth.loggedIn() ? <div>You must login to access this page</div> :
+          !auth.loggedIn() ? <div>You must login to access this page</div> :
             <div>
               <Col xs={8} md={8}>
                 <div>

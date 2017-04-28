@@ -1,5 +1,5 @@
 /* global process:true */
-import React, { Component, PropTypes as T} from 'react'
+import React, {PropTypes as T} from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
@@ -36,6 +36,8 @@ import { puzzles,
   recordTypeFilter,
   dashboard,
   favorites,
+  theme,
+  themeMaterial,
 } from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
@@ -61,19 +63,9 @@ require('../stylesheets/puzzle.scss')
 require('../stylesheets/kifu.scss')
 require('../stylesheets/page.scss')
 
-class App extends Component {
-
-  static propTypes = {
-    children: T.object
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    )
-  }
+const App = (props) => <div>{props.children}</div>
+App.propTypes = {
+  children: T.object
 }
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
@@ -112,7 +104,10 @@ const reducer = combineReducers({
   recordTypeFilter,
   dashboard,
   favorites,
+  theme,
+  themeMaterial,
 })
+
 
 
 let middlewares = [thunkMiddleware, historyMiddleware]

@@ -1,15 +1,18 @@
 import React, { Component, PropTypes as T } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Button } from 'react-bootstrap'
 
+import { setTheme } from '../actions/Actions'
 import AuthService from '../utils/AuthService'
 
-export default class Navigation extends Component {
+class Navigation extends Component {
 
   static propTypes = {
     auth: T.instanceOf(AuthService),
     expanded: T.bool.isRequired,
     collapseToggle: T.func.isRequired,
+    dispatch: T.func.isRequired,
   }
 
   static defaultProps = {
@@ -34,6 +37,10 @@ export default class Navigation extends Component {
     this.setState({navOpen: !this.state.navOpen})
   }
 
+  handleTheme(e) {
+    this.props.dispatch(setTheme(e.target.value))
+  }
+
   mouseDownHandler() {
     this.mouseIsDownOnCalendar = true
   }
@@ -56,12 +63,23 @@ export default class Navigation extends Component {
     return (
       <div id="page-header">
         <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="header-logo">
-          <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta</i></span>
-          <a onClick={this.props.collapseToggle} id="collapse-sidebar" href="#" title="">
+          <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.2</i></span>
+          <a onClick={this.props.collapseToggle} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left"></i>
           </a>
         </div>
         <div id="sidebar-search"></div>
+        <div className="theme">
+          <select className="form-control" onChange={::this.handleTheme}>
+            <option>black-and-white</option>
+            <option>flat-theme</option>
+            <option>photorealistic-theme</option>
+            <option>shell-stone</option>
+            <option>slate-and-shell-theme</option>
+            <option>subdued-theme</option>
+            <option>walnut-theme</option>
+          </select>
+        </div>
         <div id="header-right" onMouseDown={::this.mouseDownHandler} onMouseUp={::this.mouseUpHandler}>
           {
             auth.loggedIn() ? (
@@ -94,7 +112,7 @@ export default class Navigation extends Component {
                       </ul>
                       */}
                       <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
-                        <a href="#" className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
+                        <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
                       </div>
                     </div>
                   </div>
@@ -132,3 +150,10 @@ export default class Navigation extends Component {
     )
   }
 }
+
+function select(state) {
+  return {
+    theme: state.theme
+  }
+}
+export default connect(select)(Navigation)

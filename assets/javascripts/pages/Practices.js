@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { Link } from 'react-router'
@@ -254,7 +254,7 @@ class Practices extends Component {
       })
     }
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className={css(mainStyles.mainContainer, styles.column)}>
+      <div>
         <div>
           <FloatingActionButton className={css(styles.createBtn)} onClick={::this.handleTemplateOpen}>
             <ContentAdd />

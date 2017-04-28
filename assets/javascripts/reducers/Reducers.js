@@ -91,6 +91,49 @@ function setPracticePuzzleId(state, action) {
   return action.payload
 }
 
+// preload theme image
+let images = new Array()
+images = [
+  '/assets/themes/flat-theme/black.svg',
+  '/assets/themes/flat-theme/white.svg',
+  '/assets/themes/photorealistic-theme/black.png',
+  '/assets/themes/photorealistic-theme/board.png',
+  '/assets/themes/photorealistic-theme/white.png',
+  '/assets/themes/shell-stone/black.png',
+  '/assets/themes/shell-stone/board.png',
+  '/assets/themes/shell-stone/white0.png',
+  '/assets/themes/shell-stone/white1.png',
+  '/assets/themes/shell-stone/white2.png',
+  '/assets/themes/shell-stone/white3.png',
+  '/assets/themes/shell-stone/white4.png',
+  '/assets/themes/slate-and-shell-theme/board.png',
+  '/assets/themes/slate-and-shell-theme/shell1.png',
+  '/assets/themes/slate-and-shell-theme/shell2.png',
+  '/assets/themes/slate-and-shell-theme/shell3.png',
+  '/assets/themes/slate-and-shell-theme/shell4.png',
+  '/assets/themes/slate-and-shell-theme/shell5.png',
+  '/assets/themes/slate-and-shell-theme/slate1.png',
+  '/assets/themes/slate-and-shell-theme/slate2.png',
+  '/assets/themes/slate-and-shell-theme/slate3.png',
+  '/assets/themes/slate-and-shell-theme/slate4.png',
+  '/assets/themes/slate-and-shell-theme/slate5.png',
+  '/assets/themes/subdued-theme/black.png',
+  '/assets/themes/subdued-theme/white.png',
+  '/assets/themes/subdued-theme/board.png',
+  '/assets/themes/walnut-theme/black.png',
+  '/assets/themes/walnut-theme/white.png',
+  '/assets/themes/walnut-theme/board.jpg',
+]
+let imageData = {}
+function preload() {
+  for (let i = 0; i < images.length; i++) {
+    let img = new Image()
+    img.src = images[i]
+    imageData[images[i]] = img
+  }
+}
+preload()
+
 export const steps = createReducer([], {
   'ADD_STEPS': function(state, action) {
     if (typeof(action.payload) === 'string') {
@@ -114,7 +157,23 @@ export const currentAnswerId = createReducer(null, {
 
 export const puzzles = buildFetchReducer({}, 'PUZZLES')
 export const puzzle = reduceReducers(
-  buildFetchReducer({}, 'PUZZLE'),
+  buildFetchReducer({
+    data: {
+      is_favorite: false,
+      right_answers: [],
+      wrong_answers: [],
+      steps: '',
+      rank: '18k',
+      id: 0,
+      preview_img_r1: {
+        x100: { url: '' },
+        x200: { url: '' },
+        x300: { url: '' },
+        x400: { url: '' },
+        x1000: { url: '' },
+      },
+    }
+  }, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT')
 )
 
@@ -149,7 +208,16 @@ export const rating = buildPostReducer({}, 'RATING')
 export const favorite = buildPostReducer({}, 'FAVORITE')
 export const favorites = buildFetchReducer({}, 'FAVORITES')
 export const kifus = buildFetchReducer({}, 'KIFUS')
-export const kifu = buildFetchReducer({}, 'KIFU')
+export const kifu = buildFetchReducer({data: {
+  player_b: { en_name: 'John Doe'},
+  player_w: { en_name: 'Jane Doe'},
+  b_rank: 'None',
+  w_rank: 'None',
+  result: 'None',
+  komi: 'None',
+  short_date: 'None',
+  steps: '',
+}}, 'KIFU')
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
 export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
 export const rangeFilter = createReducer({start: '18k', end: '9d', text: 'all'}, { 'SET_RANGE_FILTER': setRangeFilter })
@@ -159,4 +227,6 @@ export const dateRangeFilter = createReducer('last7days', { 'SET_DATE_RANGE_FILT
 export const userRangeFilter = createReducer('onlyme', { 'SET_USER_RANGE_FILTER': setGenernalFilter})
 export const recordTypeFilter = createReducer('all', { 'SET_RECORD_TYPE_FILTER': setGenernalFilter})
 export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
+export const theme = createReducer('black-and-white', { 'SET_THEME': setGenernalFilter})
+export const themeMaterial = createReducer(imageData, { 'SET_THEME_MATERIAL': setGenernalFilter})
 export const tags = buildFetchReducer({}, 'TAGS')

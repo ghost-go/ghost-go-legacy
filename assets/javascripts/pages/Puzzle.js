@@ -1,10 +1,13 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import PuzzleBoard from '../presentations/PuzzleBoard'
+import { CoordsToTree, RESPONSE_TIME } from '../constants/Go'
+
 import PuzzlePanel from '../presentations/PuzzlePanel'
 import FlatButton from 'material-ui/FlatButton'
+import Board from '../eboard/Board'
 
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
 import { postPuzzleRecord } from '../actions/PostActions'
@@ -12,32 +15,35 @@ import {
   setCurrentMode,
   setRangeFilter,
   addSteps,
-  resetSteps,
-  setCurrentAnswerId
-} from '../actions/Actions'
+  resetSteps, setCurrentAnswerId } from '../actions/Actions'
 
 //material-ui
 import Dialog from 'material-ui/Dialog'
 
+import { StyleSheet, css } from 'aphrodite'
+
 class Puzzle extends Component {
 
   static propTypes = {
-    puzzle: T.object.isRequired,
-    auth: T.object.isRequired,
-    dispatch: T.func.isRequired,
-    rangeFilter: T.object.isRequired,
-    params: T.object.isRequired,
-    expanded: T.bool.isRequired,
-    steps: T.array.isRequired,
-    currentMode: T.string.isRequired,
-    currentAnswerId: T.number,
+    puzzle: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    rangeFilter: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    steps: PropTypes.array.isRequired,
+    currentMode: PropTypes.string.isRequired,
+    currentAnswerId: PropTypes.number,
+    theme: PropTypes.string.isRequired,
+    themeMaterial: PropTypes.object.isRequired,
+  }
+
+  static contextTypes = {
+    auth: PropTypes.object.isRequired,
   }
 
   constructor(props) {
     super(props)
 
-    this.state = {
-      open: false,
+    this.state = { open: false,
       answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
@@ -45,8 +51,8 @@ class Puzzle extends Component {
       researchMode: true,
     }
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
-    this.handleRightTipOpen = this.handleRightTipOpen.bind(this)
-    this.handleWrongTipOpen = this.handleWrongTipOpen.bind(this)
+    this.handleRight = this.handleRight.bind(this)
+    this.handleWrong = this.handleWrong.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
     this.handleResearchMode = this.handleResearchMode.bind(this)
@@ -68,8 +74,8 @@ class Puzzle extends Component {
     this.setState({researchMode: !this.state.researchMode})
   }
 
-  handleRightTipOpen() {
-    const { auth } = this.props
+  handleRight() {
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
@@ -77,11 +83,11 @@ class Puzzle extends Component {
       record_type: 'right'
     }))
 
-    this.refs.board.handleRightTipOpen()
+    this.setState({ rightTipOpen: true, wrongTipOpen: false })
   }
 
-  handleWrongTipOpen() {
-    const { auth } = this.props
+  handleWrong() {
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
@@ -89,7 +95,7 @@ class Puzzle extends Component {
       record_type: 'wrong'
     }))
 
-    this.refs.board.handleWrongTipOpen()
+    this.setState({ wrongTipOpen: true, rightTipOpen: false })
     setTimeout(() => { this.handleReset() }, 2000)
   }
 
@@ -99,13 +105,12 @@ class Puzzle extends Component {
 
   handleOpen() {
     this.setState({open: true})
+    this.resetSteps()
   }
 
   handleReset() {
-    this.refs.board.handleTipsReset()
-    this.refs.board.reset()
+    this.setState({ wrongTipOpen: false, rightTipOpen: false })
   }
-
 
   handleNext() {
     let range = this.props.rangeFilter.start + '-' + this.props.rangeFilter.end
@@ -139,14 +144,92 @@ class Puzzle extends Component {
 
   componentDidMount() {
     let { id } = this.props.params
-    const { auth } = this.props
+    const { auth } = this.context
     let profile = auth.getProfile()
     this.props.dispatch(fetchPuzzle({id, query: {user_id: profile.user_id}}))
+    let boardWidth = 0
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60
+    } else {
+      boardWidth = window.innerWidth
+    }
+    this.boardLayer.width = this.boardLayer.height = boardWidth
+  }
+
+  componentDidUpdate() {
+    const { puzzle, steps } = this.props
+
+    let board = new Board({
+      autofit: true,
+      theme: this.props.theme,
+      material: this.props.themeMaterial,
+      editable: true,
+      nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
+      afterMove: (step) => {
+        this.props.dispatch(addSteps(step))
+        setTimeout(() => {
+          if (this.props.currentMode !== 'research') {
+            this.response()
+          }
+        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME)
+      },
+    })
+
+    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true)
+    board.render(this.boardLayer)
+  }
+
+  response() {
+    let rights = []
+    let wrongs = []
+    this.props.puzzle.data.right_answers.forEach((i) => {
+      if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
+        rights.push(i)
+      }
+    })
+    this.props.puzzle.data.wrong_answers.forEach((i) => {
+      if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
+        wrongs.push(i)
+      }
+    })
+
+    if (rights.length > 0) {
+      const i = Math.floor(Math.random() * rights.length)
+      let stepsStr = this.props.steps.join(';')
+      if (rights[i].steps === stepsStr) {
+        this.handleRight()
+      }
+      else {
+        const step = rights[i].steps.split(';')[this.props.steps.length]
+        this.props.dispatch(addSteps(step))
+        let stepsStr = this.props.steps.join(';')
+        if (rights[i].steps === stepsStr) {
+          this.handleRight()
+        }
+      }
+    }
+    else if (wrongs.length > 0) {
+      const i = Math.floor(Math.random() * wrongs.length)
+      let stepsStr = this.props.steps.join(';')
+      if (wrongs[i].steps === stepsStr) {
+        this.handleWrong()
+      }
+      else {
+        const step = wrongs[i].steps.split(';')[this.props.steps.length]
+        this.props.dispatch(addSteps(step))
+        let stepsStr = this.props.steps.join(';')
+        if (wrongs[i].steps === stepsStr) {
+          this.handleWrong()
+        }
+      }
+    }
+    else {
+      this.handleWrong()
+    }
   }
 
   render() {
     const { puzzle } = this.props
-    if (puzzle === undefined || puzzle['data'] === undefined) return null
 
     const actions = [
       <FlatButton
@@ -158,8 +241,7 @@ class Puzzle extends Component {
     ]
 
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className='page-container'>
-
+      <div>
         <Dialog
           actions={actions}
           modal={false}
@@ -169,6 +251,22 @@ class Puzzle extends Component {
           {this.state.ratingInfo}
         </Dialog>
         <div className='puzzle-board'>
+          {
+            this.state.rightTipOpen ?
+              <div ref="tipRight" className={css(styles.tipRight)}>
+                <i className="zmdi zmdi-check"></i>
+              </div>
+            : null
+          }
+          {
+            this.state.wrongTipOpen ?
+              <div ref="tipWrong" className={css(styles.tipWrong)}>
+                <i className="zmdi zmdi-close"></i>
+              </div>
+                : null
+          }
+          <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem }}></canvas>
+          {/*
           <PuzzleBoard
             className="board"
             steps={this.props.steps}
@@ -181,14 +279,15 @@ class Puzzle extends Component {
             setCurrentMode={::this.setCurrentMode}
             ref="board"
           />
+          */}
         </div>
         <div className='puzzle-panel'>
           <PuzzlePanel
             {...this.props}
             showNext={true}
-            puzzle={this.props.puzzle.data}
+            puzzle={puzzle.data}
             handleRangeChange={this.handleRangeChange}
-            handleNext={this.handleNext}
+            handleNext={::this.handleNext}
             rangeFilter={this.props.rangeFilter}
             handleReset={::this.handleReset}
             addSteps={::this.addSteps}
@@ -212,7 +311,36 @@ function select(state) {
     steps: state.steps,
     currentAnswerId: state.currentAnswerId,
     currentMode: state.currentMode,
+    theme: state.theme,
+    themeMaterial: state.themeMaterial,
   }
 }
+
+const styles = StyleSheet.create({
+  tipRight: {
+    position: 'absolute',
+    width: '300px',
+    height: '300px', top: '50%',
+    left: '50%',
+    marginLeft: '-150px',
+    marginTop: '-150px',
+    fontSize: '300px',
+    color: 'green',
+    textAlign: 'center',
+  },
+
+  tipWrong: {
+    position: 'absolute',
+    width: '300px',
+    height: '300px',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-150px',
+    marginTop: '-150px',
+    fontSize: '300px',
+    color: 'red',
+    textAlign: 'center',
+  }
+})
 
 export default connect(select)(Puzzle)

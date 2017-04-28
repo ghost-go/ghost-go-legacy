@@ -1,11 +1,13 @@
 //react
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import _ from 'lodash'
+import FilterBar from '../components/FilterBar'
 
 //material-ui
-import {Button, Dropdown, Glyphicon} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 
 //internal component
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions'
@@ -17,18 +19,13 @@ import { StyleSheet, css } from 'aphrodite'
 class Puzzles extends Component {
 
   static propTypes = {
-    expanded: T.bool.isRequired,
-    tags: T.object.isRequired,
-    puzzles: T.object.isRequired,
-    rangeFilter: T.object.isRequired,
-    puzzleFilter: T.object.isRequired,
-    tagFilter: T.string.isRequired,
-    dispatch: T.func.isRequired,
-    location: T.object.isRequired,
-  }
-
-  static defaultProps = {
-    expanded: true,
+    tags: PropTypes.object.isRequired,
+    puzzles: PropTypes.object.isRequired,
+    rangeFilter: PropTypes.object.isRequired,
+    puzzleFilter: PropTypes.object.isRequired,
+    tagFilter: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
   }
 
   state = {
@@ -47,25 +44,28 @@ class Puzzles extends Component {
     this.setState({filterOpen: !this.state.filterOpen})
   }
 
-  handleSeeMore(rank, tag) {
+  handleSeeMore(filter, val) {
     let range = []
-    if (rank === 'all' || rank === null) {
-      range = ['18k', '9d']
-    } else {
-      range = rank.split('-')
-    }
-
-    if (tag === null) {
-      tag = 'all'
-    }
-
+    const { dispatch, rangeFilter, tagFilter } = this.props
     this.setState({filterOpen: false})
-    this.props.dispatch(setPuzzleFilter({start: range[0], end: range[1] }))
-    this.props.dispatch(setRangeFilter({start: range[0], end: range[1] }))
-    this.props.dispatch(setTagFilter(tag))
-    this.props.dispatch(fetchPuzzles({
-      rank: rank || this.props.rangeFilter,
-      tags: tag || this.props.tagFilter,
+    if (filter === 'rangeFilter') {
+      if (val === 'all' || val === null) {
+        range = ['18k', '9d']
+      } else {
+        range = val.split('-')
+      }
+      dispatch(setPuzzleFilter({start: range[0], end: range[1] }))
+      dispatch(setRangeFilter({start: range[0], end: range[1] }))
+    } else if (filter === 'tagFilter') {
+      if (val === null) {
+        val = 'all'
+      }
+      dispatch(setTagFilter(val))
+    }
+
+    dispatch(fetchPuzzles({
+      rank: filter === 'rangeFilter' ? val : rangeFilter.text,
+      tags: filter === 'tagFilter' ? val : tagFilter,
     }))
   }
 
@@ -111,46 +111,29 @@ class Puzzles extends Component {
         </div>
     }
     return (
-      <div style={{marginLeft: this.props.expanded === true ? '235px' : '50px'}} className="page-container">
-        <div className="page-nav">
-          <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
-            <Dropdown.Toggle>
-              <Glyphicon className="filter-icon" glyph="filter" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="super-colors">
-              <div className="popover-title">Level</div>
-              <div className="popover-content">
-                <ul className="tags">
-                  <li onClick={this.handleSeeMore.bind(this, 'all', this.props.tagFilter)} className={`tag ${this.props.rangeFilter.text === 'all' ? 'active' : ''}`}>ALL</li>
-                  <li onClick={this.handleSeeMore.bind(this, '18k-10k', this.props.tagFilter)} className={`tag ${this.props.rangeFilter.text === '18k-10k' ? 'active' : ''}`}>18K-10K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '9k-5k', this.props.tagFilter)} className={`tag ${this.props.rangeFilter.text === '9k-5k' ? 'active' : ''}`}>9K-5K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '4k-1k', this.props.tagFilter)} className={`tag ${this.props.rangeFilter.text === '4k-1k' ? 'active' : ''}`}>4K-1K</li>
-                  <li onClick={this.handleSeeMore.bind(this, '1d-3d', this.props.tagFilter)} className={`tag ${this.props.rangeFilter.text === '1d-3d' ? 'active' : ''}`}>1D-3D</li>
-                  <li onClick={this.handleSeeMore.bind(this, '4d-6d', this.props.tagFilter)} className={`tag ${this.props.rangeFilter.text === '4d-6d' ? 'active' : ''}`}>4D-6D</li>
-                </ul>
-              </div>
-              <div className="popover-title">Tags</div>
-              <div className="popover-content">
-                <ul className="tags">
-                  <li className={`tag ${this.props.tagFilter === 'all' ? 'active' : ''}`} onClick={this.handleSeeMore.bind(this, this.props.rangeFilter.text, 'all')}>all</li>
-                  { tags.data.map((tag) => <li onClick={this.handleSeeMore.bind(this, this.props.rangeFilter.text, tag.name)} key={tag.id} className={`tag ${this.props.tagFilter === tag.name ? 'active' : ''}`}>{`${tag.name}(${tag.taggings_count})`}</li>)}
-                </ul>
-              </div>
-            </Dropdown.Menu>
-          </Dropdown>
-          <ul className="page-subnav">
-            <li><a title="Level: xxx">{`Level: ${this.props.rangeFilter.text}`}</a></li>
-            <li><a title="Tag: xxx">{`Tags: ${this.props.tagFilter}`}</a></li>
-            <li>
-              <Button
-                className='seemore'
-                onClick={this.handleSeeMore.bind(this, this.props.rangeFilter.text, this.props.tagFilter)}
-                bsStyle="primary">
-                See More
-              </Button>
-            </li>
-          </ul>
-        </div>
+      <div>
+        <FilterBar data={[{
+          name: 'Level',
+          tags: ['all', '18k-10k', '9k-5K', '4k-1k', '1d-3d', '4d-6d'],
+          filterName: 'rangeFilter',
+          filterVal: this.props.rangeFilter.text,
+          handleSeeMore: this.handleSeeMore,
+        }, {
+          name: 'Tags',
+          tags: ['all', ...tags.data.map(tag => tag.name)],
+          filterName: 'tagFilter',
+          filterVal: this.props.tagFilter,
+          handleSeeMore: this.handleSeeMore,
+        }]}>
+          <li key="seemore">
+            <Button
+              className='seemore'
+              onClick={this.handleSeeMore.bind(this, this.props.rangeFilter.text, this.props.tagFilter)}
+              bsStyle="primary">
+              See More
+            </Button>
+          </li>
+        </FilterBar>
         <div className={css(styles.puzzleContent)}>
           { puzzlesCards }
         </div>

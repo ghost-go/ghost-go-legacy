@@ -1,28 +1,45 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
-//import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl'
-//import lang from '../components/lang'
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Helmet from 'react-helmet'
 
-const Footer = () => <div className='footer'>
-  Source Code:  <a href="https://github.com/happybai/ghost-go">
-    https://github.com/happybai/ghost-go
-  </a>
-</div>
+const Footer = () => { 
+  return (
+    <div className='footer'>
+      <span>Source Code:</span>
+      <a href="https://github.com/happybai/ghost-go">
+        https://github.com/happybai/ghost-go
+      </a>
+      &nbsp;&nbsp;&nbsp;
+      <a href="http://www.w3.org/html/logo/">
+        <img src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png" width="24" height="25" alt="HTML5 Powered" title="HTML5 Powered" />
+      </a>
+    </div>
+  )
+}
 
 export default class Container extends Component {
 
+  static childContextTypes = {
+    auth: PropTypes.object.isRequired,
+  }
+
   static propTypes = {
-    route: T.object.isRequired,
-    children: T.object
+    route: PropTypes.object.isRequired,
+    children: PropTypes.object
   }
 
   state = {
     expanded: true,
+  }
+
+  getChildContext() {
+    return {
+      auth: this.props.route.auth,
+    }
   }
 
   handleClick() {
@@ -30,16 +47,8 @@ export default class Container extends Component {
   }
 
   render() {
-    let children = null
-    if (this.props.children) {
-      children = React.cloneElement(this.props.children, {
-        auth: this.props.route.auth, //sends auth instance from route to children
-        expanded: this.state.expanded
-      })
-    }
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-      {/* <IntlProvider locale={lang.locale} messages={lang.messages}> */}
         <div>
           <Helmet
             htmlAttributes={{lang: 'en', amp: undefined}}
@@ -48,14 +57,12 @@ export default class Container extends Component {
           />
           <Navigation expanded={this.state.expanded} collapseToggle={::this.handleClick} auth={this.props.route.auth} />
           <Sidebar expanded={this.state.expanded} auth={this.props.route.auth} />
-          <div>
-            { children }
+          <div style={{marginLeft: this.state.expanded === true ? '235px' : '50px'}} className="page-container">
+            { this.props.children }
           </div>
           <Footer />
         </div>
-      {/* </IntlProvider> */}
       </MuiThemeProvider>
     )
   }
-
 }
