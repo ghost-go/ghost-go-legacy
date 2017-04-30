@@ -175,11 +175,13 @@ export default class PuzzlePanel extends Component {
       <div className={this.props.className}>
         <div className='title'>
           {`${puzzle.whofirst} ${puzzle.rank}`}&nbsp;&nbsp;
+          {/*
           <a onClick={this.handleFavorite.bind(this, puzzle.id)}
             className={`favorite ${this.state.favorite === true ? 'active' : ''}`}
             title={`${this.state.favorite === true ? 'Cancle Favorite' : 'Favorite'}`}>
             <i className="fa fa-heart" aria-hidden="true"></i>
           </a>
+          */}
         </div>
         <div>
           <strong>NO.:</strong>{`P-${puzzle.id}`}&nbsp;&nbsp;&nbsp;
