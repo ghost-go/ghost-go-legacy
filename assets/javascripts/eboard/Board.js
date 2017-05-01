@@ -177,15 +177,19 @@ export default class Board {
 
   renderCursor(canvas, ctx) {
     canvas.onmousemove = (e) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      this.renderBoard(canvas, ctx)
-      let cross = new Cross()
-      cross.x = Math.round(e.offsetX / this.size) * this.size
-      cross.y = Math.round(e.offsetY / this.size) * this.size
-      cross.size = this.size / 6
-      cross.color = '#ff0000'
-      cross.draw(ctx)
-      this.renderStones(canvas, ctx)
+      let roundedOffsetX = Math.round(e.offsetX / this.size)
+      let roundedOffsetY = Math.round(e.offsetY / this.size)
+      if (roundedOffsetX > 0 && roundedOffsetY > 0 && roundedOffsetX <= this.maxhv && roundedOffsetY <= this.maxhv) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        this.renderBoard(canvas, ctx)
+        let cross = new Cross()
+        cross.x = roundedOffsetX * this.size
+        cross.y = roundedOffsetY * this.size
+        cross.size = this.size / 6
+        cross.color = '#ff0000'
+        cross.draw(ctx)
+        this.renderStones(canvas, ctx)
+      }
     }
   }
 }
