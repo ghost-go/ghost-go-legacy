@@ -104,16 +104,21 @@ export default class Board {
 
   renderBoard(canvas, ctx) {
     this.size = canvas.width / (_.max([this.width, this.height]) + 1)
+
+    let shadowStyle = '5px 5px 5px #999999'
     if (this.theme === 'black-and-white') {
       //TODO: blablabla
     } else if (this.theme === 'walnut-theme') {
+      canvas.style['boxShadow'] = shadowStyle
       let pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.jpg`], 'repeat')
       ctx.fillStyle = pattern
       ctx.fillRect(0, 0, canvas.width, canvas.height)
     } else if (this.theme === 'flat-theme') {
+      canvas.style['boxShadow'] = shadowStyle
       ctx.fillStyle = '#ECB55A'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
     } else {
+      canvas.style['boxShadow'] = shadowStyle
       let pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.png`], 'repeat')
       ctx.fillStyle = pattern
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -127,6 +132,7 @@ export default class Board {
       ctx.moveTo(this.size, i * this.size)
       ctx.lineTo(this.width * this.size, i * this.size)
     }
+
     ctx.stroke()
     let dotSize = this.size / 12
     ;[4, 16, 10].forEach((i) => {
