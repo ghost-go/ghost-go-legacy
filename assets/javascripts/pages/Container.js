@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { PropTypes } from 'prop-types'
 import Navigation from '../components/Navigation'
 import Sidebar from '../components/Sidebar'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -29,7 +29,7 @@ export default class Container extends Component {
 
   static propTypes = {
     route: PropTypes.object.isRequired,
-    children: PropTypes.object
+    children: PropTypes.object,
   }
 
   state = {

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {Dropdown, Glyphicon} from 'react-bootstrap'
 
 export default class FilterBar extends Component {
@@ -8,8 +9,8 @@ export default class FilterBar extends Component {
   }
 
   static propTypes = {
-    data: T.array.isRequired,
-    children: T.object,
+    data: PropTypes.array.isRequired,
+    children: PropTypes.object,
   }
 
   state = {

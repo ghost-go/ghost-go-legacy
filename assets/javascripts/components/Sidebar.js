@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Tab } from 'react-bootstrap'
 import { Link } from 'react-router'
 
@@ -7,8 +8,8 @@ import AuthService from '../utils/AuthService'
 export default class Sidebar extends Component {
 
   static propTypes = {
-    auth: T.instanceOf(AuthService),
-    expanded: T.bool.isRequired,
+    auth: PropTypes.instanceOf(AuthService),
+    expanded: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { Button } from 'react-bootstrap'
@@ -9,10 +10,11 @@ import AuthService from '../utils/AuthService'
 class Navigation extends Component {
 
   static propTypes = {
-    auth: T.instanceOf(AuthService),
-    expanded: T.bool.isRequired,
-    collapseToggle: T.func.isRequired,
-    dispatch: T.func.isRequired,
+    auth: PropTypes.instanceOf(AuthService),
+    expanded: PropTypes.bool.isRequired,
+    collapseToggle: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    theme: PropTypes.string.isRequired,
   }
 
   static defaultProps = {
@@ -38,6 +40,7 @@ class Navigation extends Component {
   }
 
   handleTheme(e) {
+    localStorage.setItem('theme', e.target.value)
     this.props.dispatch(setTheme(e.target.value))
   }
 
@@ -59,7 +62,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { auth } = this.props
+    const { auth, theme } = this.props
     return (
       <div id="page-header">
         <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="header-logo">
@@ -70,7 +73,7 @@ class Navigation extends Component {
         </div>
         <div id="sidebar-search"></div>
         <div className="theme">
-          <select className="form-control" onChange={::this.handleTheme}>
+          <select className="form-control" onChange={::this.handleTheme} defaultValue={theme}>
             <option>black-and-white</option>
             <option>flat-theme</option>
             <option>photorealistic-theme</option>

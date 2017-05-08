@@ -227,6 +227,6 @@ export const dateRangeFilter = createReducer('last7days', { 'SET_DATE_RANGE_FILT
 export const userRangeFilter = createReducer('onlyme', { 'SET_USER_RANGE_FILTER': setGenernalFilter})
 export const recordTypeFilter = createReducer('all', { 'SET_RECORD_TYPE_FILTER': setGenernalFilter})
 export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
-export const theme = createReducer('black-and-white', { 'SET_THEME': setGenernalFilter})
+export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white', { 'SET_THEME': setGenernalFilter})
 export const themeMaterial = createReducer(imageData, { 'SET_THEME_MATERIAL': setGenernalFilter})
 export const tags = buildFetchReducer({}, 'TAGS')
