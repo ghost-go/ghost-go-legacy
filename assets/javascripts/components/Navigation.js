@@ -78,7 +78,9 @@ class Navigation extends Component {
             <option>flat-theme</option>
             <option>photorealistic-theme</option>
             <option>shell-stone</option>
+            {/*
             <option>slate-and-shell-theme</option>
+            */}
             <option>subdued-theme</option>
             <option>walnut-theme</option>
           </select>
