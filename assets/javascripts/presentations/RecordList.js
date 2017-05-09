@@ -7,7 +7,6 @@ import { StyleSheet, css } from 'aphrodite'
 
 export default class RecordList extends Component {
 
-
   static propTypes = {
     recordList: T.array.isRequired
   }

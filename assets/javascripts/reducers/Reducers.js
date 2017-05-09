@@ -218,6 +218,7 @@ export const kifu = buildFetchReducer({data: {
   short_date: 'None',
   steps: '',
 }}, 'KIFU')
+
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
 export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
 export const rangeFilter = createReducer({start: '18k', end: '9d', text: 'all'}, { 'SET_RANGE_FILTER': setRangeFilter })

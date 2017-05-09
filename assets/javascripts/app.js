@@ -1,44 +1,46 @@
 /* global process:true */
 import React, {PropTypes as T} from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
 import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
-import { puzzles,
-  puzzle,
-  currentAnswerId,
-  currentMode,
-  practice,
-  practices,
-  practicePuzzleId,
-  practiceRecord,
-  practiceRecords,
-  practiceTemplate,
-  practiceTemplates,
-  rating,
-  favorite,
-  puzzleRecord,
-  puzzleRecords,
-  kifus,
-  kifu,
-  topPlayers,
-  puzzleFilter,
-  kifuFilter,
-  rangeFilter,
-  steps,
-  tags,
-  tagFilter,
-  userRangeFilter,
-  dateRangeFilter,
-  recordTypeFilter,
-  dashboard,
-  favorites,
-  theme,
-  themeMaterial,
-} from './reducers/Reducers'
+//import { puzzles,
+  //puzzle,
+  //currentAnswerId,
+  //currentMode,
+  //practice,
+  //practices,
+  //practicePuzzleId,
+  //practiceRecord,
+  //practiceRecords,
+  //practiceTemplate,
+  //practiceTemplates,
+  //rating,
+  //favorite,
+  //puzzleRecord,
+  //puzzleRecords,
+  //kifus,
+  //kifu,
+  //topPlayers,
+  //puzzleFilter,
+  //kifuFilter,
+  //rangeFilter,
+  //steps,
+  //tags,
+  //tagFilter,
+  //userRangeFilter,
+  //dateRangeFilter,
+  //recordTypeFilter,
+  //dashboard,
+  //favorites,
+  //theme,
+  //themeMaterial,
+//} from './reducers/Reducers'
+
+import * as reducers from './reducers/Reducers'
 
 import Puzzles from './pages/Puzzles'
 import Puzzle from './pages/Puzzle'
@@ -75,37 +77,9 @@ const auth = new AuthService(__AUTH0_CLIENT_ID__, __AUTH0_DOMAIN__)
 // create your main reducer
 const historyMiddleware = routerMiddleware(browserHistory)
 const reducer = combineReducers({
-  // ... add your own reducers here
-  kifus, kifu,
-  puzzles, puzzle,
-  practice,
-  practices,
-  practiceRecord,
-  practiceRecords,
-  practiceTemplate,
-  practiceTemplates,
-  rating,
-  favorite,
-  puzzleRecord,
-  puzzleRecords,
-  puzzleFilter,
-  kifuFilter,
-  rangeFilter,
-  players: topPlayers,
+  ...reducers,
+  players: reducers.topPlayers,
   routing: routerReducer,
-  practicePuzzleId,
-  steps,
-  currentAnswerId,
-  currentMode,
-  tags,
-  tagFilter,
-  userRangeFilter,
-  dateRangeFilter,
-  recordTypeFilter,
-  dashboard,
-  favorites,
-  theme,
-  themeMaterial,
 })
 
 
