@@ -1,59 +1,23 @@
-import reduceReducers from 'reduce-reducers'
+import reduceReducers from 'reduce-reducers';
 
 function updateObject(oldObject, newValues) {
-  return Object.assign({}, oldObject, newValues)
+  return Object.assign({}, oldObject, newValues);
 }
 
-//function updateItemInArray(array, itemId, updateItemCallback) {
-  //const updatedItems = array.map(item => {
-    //if(item.id !== itemId) {
-      //return item
-    //}
+// function updateItemInArray(array, itemId, updateItemCallback) {
+  // const updatedItems = array.map(item => {
+    // if(item.id !== itemId) {
+      // return item
+    // }
 
-    //const updatedItem = updateItemCallback(item)
-    //return updatedItem
-  //})
+    // const updatedItem = updateItemCallback(item)
+    // return updatedItem
+  // })
 
-  //return updatedItems
-//}
-
-function buildFetchReducer(initialState, name = '') {
-  initialState = {...initialState,
-    isFetching: false,
-    isFailure: false,
-  }
-  let handlers = {}
-  handlers[`FETCH_${name}_REQUEST`] = fetchRequest
-  handlers[`FETCH_${name}_SUCCESS`] = fetchSuccess
-  handlers[`FETCH_${name}_FAILURE`] = fetchFailure
-  return createReducer(initialState, handlers)
-}
-
-function buildPostReducer(initialState, name = '') {
-  initialState = {...initialState,
-    isFetching: false,
-    isFailure: false,
-  }
-  let handlers = {}
-  handlers[`POST_${name}_REQUEST`] = fetchRequest
-  handlers[`POST_${name}_SUCCESS`] = fetchSuccess
-  handlers[`POST_${name}_FAILURE`] = fetchFailure
-  return createReducer(initialState, handlers)
-}
-
-function createReducer(initialState, handlers) {
-  return function reducer(state = initialState, action) {
-    if (handlers.hasOwnProperty(action.type)) {
-      return handlers[action.type](state, action)
-    } else {
-      return state
-    }
-  }
-}
-
-
+  // return updatedItems
+// }
 function fetchRequest(state) {
-  return {...state, isFetching: true, isFailure: false}
+  return { ...state, isFetching: true, isFailure: false };
 }
 
 function fetchSuccess(state, action) {
@@ -61,38 +25,74 @@ function fetchSuccess(state, action) {
     ...state,
     isFetching: false,
     isFailure: false,
-    data: action.payload.data
-  }
+    data: action.payload.data,
+  };
 }
 
 function fetchFailure(state, action) {
-  return {...state, isFetching: false, isFailure: true, errorInfo: action.payload}
+  return { ...state, isFetching: false, isFailure: true, errorInfo: action.payload };
+}
+
+function createReducer(initialState, handlers) {
+  return function reducer(state = initialState, action) {
+    if (Object.prototype.hasOwnProperty.call(handlers, action.type)) {
+      return handlers[action.type](state, action);
+    }
+    return state;
+  };
+}
+
+
+function buildFetchReducer(initialState, name = '') {
+  const newInitialState = {
+    ...initialState,
+    isFetching: false,
+    isFailure: false,
+  };
+  const handlers = {};
+  handlers[`FETCH_${name}_REQUEST`] = fetchRequest;
+  handlers[`FETCH_${name}_SUCCESS`] = fetchSuccess;
+  handlers[`FETCH_${name}_FAILURE`] = fetchFailure;
+  return createReducer(newInitialState, handlers);
+}
+
+function buildPostReducer(initialState, name = '') {
+  const newInitialState = {
+    ...initialState,
+    isFetching: false,
+    isFailure: false,
+  };
+  const handlers = {};
+  handlers[`POST_${name}_REQUEST`] = fetchRequest;
+  handlers[`POST_${name}_SUCCESS`] = fetchSuccess;
+  handlers[`POST_${name}_FAILURE`] = fetchFailure;
+  return createReducer(newInitialState, handlers);
 }
 
 function setGenernalFilter(state, action) {
-  return action.payload
+  return action.payload;
 }
 
 function setPuzzleFilter(state, action) {
-  return updateObject(state, action.payload)
+  return updateObject(state, action.payload);
 }
 
 function setRangeFilter(state, action) {
-  let text
+  let text;
   if (action.payload.start === '18k' && action.payload.end === '9d') {
-    text = 'all'
+    text = 'all';
   } else {
-    text = `${action.payload.start}-${action.payload.end}`
+    text = `${action.payload.start}-${action.payload.end}`;
   }
-  return updateObject(state, {...action.payload, text: text})
+  return updateObject(state, { ...action.payload, text });
 }
 
 function setPracticePuzzleId(state, action) {
-  return action.payload
+  return action.payload;
 }
 
 // preload theme image
-let images = new Array()
+let images = [];
 images = [
   '/assets/themes/flat-theme/black.svg',
   '/assets/themes/flat-theme/white.svg',
@@ -123,16 +123,17 @@ images = [
   '/assets/themes/walnut-theme/black.png',
   '/assets/themes/walnut-theme/white.png',
   '/assets/themes/walnut-theme/board.jpg',
-]
-let imageData = {}
+];
+
+const imageData = {};
 function preload() {
   for (let i = 0; i < images.length; i++) {
-    let img = new Image()
-    img.src = images[i]
-    imageData[images[i]] = img
+    const img = new Image();
+    img.src = images[i];
+    imageData[images[i]] = img;
   }
 }
-preload()
+preload();
 
 export const steps = createReducer([], {
   'ADD_STEPS': function(state, action) {

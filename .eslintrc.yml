@@ -1,19 +1,22 @@
-env:
-  browser: true
-  commonjs: true
-  es6: true
-  jasmine: true
-parser: 'babel-eslint'
-extends:
-  - 'airbnb'
-  - 'plugin:jasmine/recommended'
-  - 'plugin:react/recommended'
-parserOptions:
-  ecmaFeatures:
-    ecmaFeatures.classes: true
-    experimentalObjectRestSpread: true
-    jsx: true
-  sourceType: module
-plugins:
-  - react
-  - jasmine
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "jasmine": true
+  },
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [ 1, { "extensions": [ ".js", ".jsx" ] } ],
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "always-multiline",
+    }]
+  }
+}

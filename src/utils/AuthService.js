@@ -1,98 +1,98 @@
-import { EventEmitter } from 'events'
-import Auth0Lock from 'auth0-lock'
-import * as config from '../constants/Config'
+import { EventEmitter } from 'events';
+import Auth0Lock from 'auth0-lock';
+import * as config from '../constants/Config';
 
-export default class AuthService extends EventEmitter  {
+export default class AuthService extends EventEmitter {
   constructor(clientId, domain) {
     // Configure Auth0
-    super()
-    this.domain = domain
-    this.lock = new Auth0Lock(clientId, domain, config.AUTH0_CONFIG)
+    super();
+    this.domain = domain;
+    this.lock = new Auth0Lock(clientId, domain, config.AUTH0_CONFIG);
     // Add callback for lock `authenticated` event
-    this.lock.on('authenticated', this._doAuthentication.bind(this))
+    this.lock.on('authenticated', this.doAuthentication.bind(this));
     // binds login functions to keep this context
-    this.lock.on('authorization_error', this._authorizationError.bind(this))
-    this.login = this.login.bind(this)
+    this.lock.on('authorization_error', this.authorizationError.bind(this));
+    this.login = this.login.bind(this);
   }
 
-  _doAuthentication(authResult){
-    authResult.state = authResult.state || ''
-    if (authResult.state.includes('linking')){
-      this.linkAccount(authResult.idToken)
+  doAuthentication(authResult) {
+    const state = authResult.state || '';
+    if (state.includes('linking')) {
+      this.linkAccount(authResult.idToken);
     } else {
       // Saves the user token
-      this.setToken(authResult.idToken)
+      this.setToken(authResult.idToken);
       // Async loads the user profile data
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
-          console.log('Error loading the Profile', error)
+          console.log('Error loading the Profile', error);
         } else {
-          this.setProfile(profile)
+          this.setProfile(profile);
         }
-      })
+      });
     }
   }
 
-  _authorizationError(error){
+  static authorizationError(error) {
     // Unexpected authentication error
-    console.log('Authentication Error', error)
+    console.log('Authentication Error', error);
   }
 
   login() {
     // Call the show method to display the widget.
-    this.lock.show()
+    this.lock.show();
   }
 
-  loggedIn(){
+  loggedIn() {
     // Checks if there is a saved token and it's still valid
-    return !!this.getToken()
+    return !!this.getToken();
   }
 
-  setProfile(profile){
+  setProfile(profile) {
     // Saves profile data to localStorage
-    localStorage.setItem('profile', JSON.stringify(profile))
+    localStorage.setItem('profile', JSON.stringify(profile));
     // Triggers profile_updated event to update the UI
-    this.emit('profile_updated', profile)
+    this.emit('profile_updated', profile);
   }
 
-  getProfile(){
+  static getProfile() {
     // Retrieves the profile data from localStorage
-    const profile = localStorage.getItem('profile')
-    return profile ? JSON.parse(localStorage.profile) : {}
+    const profile = localStorage.getItem('profile');
+    return profile ? JSON.parse(localStorage.profile) : {};
   }
 
-  setToken(idToken){
+  static setToken(idToken) {
     // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken)
+    localStorage.setItem('id_token', idToken);
   }
 
-  getToken(){
+  static getToken() {
     // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token')
+    return localStorage.getItem('id_token');
   }
 
-  logout(){
+  static logout() {
     // Clear user token and profile data from localStorage
-    localStorage.removeItem('id_token')
-    localStorage.removeItem('profile')
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('profile');
   }
 
-  updateProfile(userId, data){
+  updateProfile(userId, data) {
     const headers = {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.getToken() //setting authorization header
-    }
+      Authorization: `Bearer ${this.getToken()}`, // setting authorization header
+    };
     // making the PATCH http request to auth0 api
     return fetch(`https://${this.domain}/api/v2/users/${userId}`, {
       method: 'PATCH',
-      headers: headers,
-      body: JSON.stringify(data)
+      headers,
+      body: JSON.stringify(data),
     }).then(
-      response => response.json()
+      response => response.json(),
     ).then(
-      newProfile => this.setProfile(newProfile)
-    ) //updating current profile
+      newProfile => this.setProfile(newProfile),
+    ); // updating current profile
   }
 
 }
