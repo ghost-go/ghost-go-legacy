@@ -5,8 +5,8 @@ env:
   jasmine: true
 parser: 'babel-eslint'
 extends:
+  - 'airbnb'
   - 'plugin:jasmine/recommended'
-  - 'eslint:recommended'
   - 'plugin:react/recommended'
 parserOptions:
   ecmaFeatures:
@@ -17,25 +17,3 @@ parserOptions:
 plugins:
   - react
   - jasmine
-rules:
-  indent:
-    - error
-    - 2
-  linebreak-style:
-    - error
-    - unix
-  quotes:
-    - error
-    - single
-  semi:
-    - error
-    - never
-  jasmine/no-focused-tests: 0
-  jasmine/no-suite-dupes:
-    - 2
-    - branch
-  react/prefer-es6-class:
-    - 2
-    - always
-  react/prefer-stateless-function:
-    - 2

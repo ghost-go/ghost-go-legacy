@@ -1,74 +1,31 @@
-/* global process:true */
-import React, {PropTypes as T} from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Router, Route, browserHistory, IndexRedirect} from 'react-router'
 import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
-
-//import { puzzles,
-  //puzzle,
-  //currentAnswerId,
-  //currentMode,
-  //practice,
-  //practices,
-  //practicePuzzleId,
-  //practiceRecord,
-  //practiceRecords,
-  //practiceTemplate,
-  //practiceTemplates,
-  //rating,
-  //favorite,
-  //puzzleRecord,
-  //puzzleRecords,
-  //kifus,
-  //kifu,
-  //topPlayers,
-  //puzzleFilter,
-  //kifuFilter,
-  //rangeFilter,
-  //steps,
-  //tags,
-  //tagFilter,
-  //userRangeFilter,
-  //dateRangeFilter,
-  //recordTypeFilter,
-  //dashboard,
-  //favorites,
-  //theme,
-  //themeMaterial,
-//} from './reducers/Reducers'
-
 import * as reducers from './reducers/Reducers'
 
-import Puzzles from './pages/Puzzles'
-import Puzzle from './pages/Puzzle'
-import Kifus from './pages/Kifus'
-import Kifu from './pages/Kifu'
-import Practices from './pages/Practices'
-import Practice from './pages/Practice'
-import User from './pages/User'
-import Container from './pages/Container'
-import History from './pages/History'
-import Dashboard from './pages/Dashboard'
-import Favorite from './pages/Favorite'
+//components
+import Puzzles from './containers/Puzzles'
+import Puzzle from './containers/Puzzle'
+import Kifus from './containers/Kifus'
+import Kifu from './containers/Kifu'
+import Practices from './containers/Practices'
+import Practice from './containers/Practice'
+import User from './containers/User'
+import Container from './containers/Container'
+import History from './containers/History'
+import Dashboard from './containers/Dashboard'
+import Favorite from './containers/Favorite'
 
 import AuthService from './utils/AuthService'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
-require('../stylesheets/base.scss')
-require('../stylesheets/home.scss')
-require('../stylesheets/navigation.scss')
-require('../stylesheets/sidebar.scss')
-require('../stylesheets/puzzle.scss')
-require('../stylesheets/kifu.scss')
-require('../stylesheets/page.scss')
+import App from './App';
 
-const App = (props) => <div>{props.children}</div>
-App.propTypes = {
-  children: T.object
-}
+import './index.js';
 
 const __AUTH0_CLIENT_ID__ = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5'
 const __AUTH0_DOMAIN__ = 'ghostgo.auth0.com'
@@ -134,9 +91,8 @@ ReactDOM.render(
           <Route path="/favorites" component={Favorite} />
         </Route>
       </Router>
-      <App>
-      </App>
+      <App />
     </div>
   </Provider>,
-  document.querySelector('.app')
-)
+  document.getElementById('root')
+);

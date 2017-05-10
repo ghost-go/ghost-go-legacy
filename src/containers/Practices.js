@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { Link } from 'react-router'
@@ -6,6 +7,7 @@ import { Link } from 'react-router'
 import mainStyles from '../styles/main'
 import { fetchPracticeTemplates, fetchPractices } from '../actions/FetchActions'
 import { postPractice, postPracticeTemplate } from '../actions/PostActions'
+import { setRangeFilter } from '../actions/Actions'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import IconButton from 'material-ui/IconButton'
 

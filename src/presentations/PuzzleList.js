@@ -3,6 +3,7 @@ import {List, ListItem} from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import Clear from 'material-ui/svg-icons/content/clear'
 import Done from 'material-ui/svg-icons/action/done'
+import _ from 'lodash'
 
 import { StyleSheet, css } from 'aphrodite'
 

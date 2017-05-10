@@ -198,7 +198,7 @@
         text-align: center;
         opacity: .3;
         -moz-opacity: .3;
-        filter: alpha(opacity:30);
+        filter: alpha(opacity=30);
       }
     }
     a:hover, a.active {
@@ -233,7 +233,7 @@
         text-align: center;
         opacity: .3;
         -moz-opacity: .3;
-        filter: alpha(opacity:30);
+        filter: alpha(opacity=30);
       }
     }
     a:hover {
