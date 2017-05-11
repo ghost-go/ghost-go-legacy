@@ -5,6 +5,7 @@
   "dependencies": {
     "aphrodite": "^1.2.1",
     "auth0-lock": "^10.16.0",
+    "lodash": "^4.17.4",
     "material-ui": "^0.18.0",
     "moment": "^2.18.1",
     "prop-types": "^15.5.9",
