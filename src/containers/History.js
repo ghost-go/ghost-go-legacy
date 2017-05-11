@@ -1,24 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
+import { StyleSheet, css } from 'aphrodite';
 
-import { fetchPuzzleRecords } from '../actions/FetchActions'
-import { setRecordTypeFilter } from '../actions/Actions'
-
-import RecordList from '../presentations/RecordList'
-import ReactPaginate from 'react-paginate'
-
-//import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
-import FilterBar from '../components/FilterBar'
-
-import { StyleSheet, css } from 'aphrodite'
+import { fetchPuzzleRecords } from '../actions/FetchActions';
+import { setRecordTypeFilter } from '../actions/Actions';
+import RecordList from '../presentations/RecordList';
+import FilterBar from '../components/FilterBar';
 
 class History extends Component {
-
-  state = {
-    filterOpen: false,
-  }
 
   static propTypes = {
     location: PropTypes.object.isRequired,
@@ -36,6 +28,11 @@ class History extends Component {
 
     this.handleSeeMore = this.handleSeeMore.bind(this)
   }
+
+  state = {
+    filterOpen: false,
+  }
+
 
   handleToggle() {
     this.setState({filterOpen: !this.state.filterOpen})

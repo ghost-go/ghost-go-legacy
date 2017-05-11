@@ -23,13 +23,20 @@ const styles = StyleSheet.create({
 class Puzzles extends Component {
 
   static propTypes = {
-    tags: PropTypes.object.isRequired,
-    puzzles: PropTypes.object.isRequired,
-    rangeFilter: PropTypes.object.isRequired,
-    puzzleFilter: PropTypes.object.isRequired,
+    tags: PropTypes.shape({}).isRequired,
+    puzzles: PropTypes.shape({}).isRequired,
+    rangeFilter: PropTypes.shape({
+      text: PropTypes.string,
+    }).isRequired,
+    // puzzleFilter: PropTypes.shape({}).isRequired,
     tagFilter: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      query: PropTypes.shape({
+        page: PropTypes.string,
+        rank: PropTypes.string,
+      }),
+    }).isRequired,
   }
 
 
@@ -97,7 +104,7 @@ class Puzzles extends Component {
         puzzlesCards.push(
           <div key={i.id} className="puzzle-card">
             <Link to={`/puzzles/${i.id}`}>
-              <img src={i.preview_img_r1.x300.url} />
+              <img src={i.preview_img_r1.x300.url} alt="" />
             </Link>
             <div className="puzzle-info">
               <span>Level: {i.rank}</span>
@@ -113,6 +120,7 @@ class Puzzles extends Component {
         </div>
       );
     }
+    // TODO: THERE IS A ISSUE ABOUT HANDLESEEMORE.BIND()
     return (
       <div>
         <FilterBar
@@ -133,8 +141,9 @@ class Puzzles extends Component {
           <li key="seemore">
             <Button
               className="seemore"
-              onClick={this.handleSeeMore.bind(this, this.props.rangeFilter.text, this.props.tagFilter)}
-              bsStyle="primary">
+              onClick={this.handleSeeMore}
+              bsStyle="primary"
+            >
               See More
             </Button>
           </li>
@@ -142,9 +151,9 @@ class Puzzles extends Component {
         <div className={css(styles.puzzleContent)}>
           { puzzlesCards }
         </div>
-        <div className='clearfix'></div>
+        <div className="clearfix" />
       </div>
-    )
+    );
   }
 }
 
@@ -156,7 +165,7 @@ function select(state) {
     rangeFilter: state.rangeFilter,
     tagFilter: state.tagFilter,
     tags: state.tags,
-  }
+  };
 }
 
-export default connect(select)(Puzzles)
+export default connect(select)(Puzzles);

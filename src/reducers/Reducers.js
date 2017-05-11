@@ -136,27 +136,26 @@ function preload() {
 preload();
 
 export const steps = createReducer([], {
-  'ADD_STEPS': function(state, action) {
-    if (typeof(action.payload) === 'string') {
-      return state.concat([action.payload])
-    } else {
-      return state.concat(action.payload)
+  ADD_STEPS(state, action) {
+    if (typeof (action.payload) === 'string') {
+      return state.concat([action.payload]);
     }
+    return state.concat(action.payload);
   },
-  'RESET_STEPS': function() {
-    return []
-  }
-})
+  RESET_STEPS() {
+    return [];
+  },
+});
 
 export const currentMode = createReducer('answer', {
-  'SET_CURRENT_MODE': (state, action) => { return action.payload }
-})
+  SET_CURRENT_MODE(state, action) { return action.payload; },
+});
 
 export const currentAnswerId = createReducer(null, {
-  'SET_CURRENT_ANSWER_ID': (state, action) => { return action.payload }
-})
+  SET_CURRENT_ANSWER_ID(state, action) { return action.payload; },
+});
 
-export const puzzles = buildFetchReducer({}, 'PUZZLES')
+export const puzzles = buildFetchReducer({}, 'PUZZLES');
 export const puzzle = reduceReducers(
   buildFetchReducer({
     data: {
@@ -173,62 +172,65 @@ export const puzzle = reduceReducers(
         x400: { url: '' },
         x1000: { url: '' },
       },
-    }
+    },
   }, 'PUZZLE'),
-  buildFetchReducer({}, 'PUZZLE_NEXT')
-)
+  buildFetchReducer({}, 'PUZZLE_NEXT'),
+);
 
-export const practices = buildFetchReducer({}, 'PRACTICES')
+export const practices = buildFetchReducer({}, 'PRACTICES');
 export const practice = reduceReducers(
   buildFetchReducer({}, 'PRACTICE'),
-  buildPostReducer({}, 'PRACTICE')
-)
+  buildPostReducer({}, 'PRACTICE'),
+);
 
 export const practiceRecord = reduceReducers(
   buildFetchReducer({}, 'PRACTICE_RECORD'),
-  buildPostReducer({}, 'PRACTICE_RECORDS')
-)
+  buildPostReducer({}, 'PRACTICE_RECORDS'),
+);
 
-export const practiceRecords = buildFetchReducer({}, 'PRACTICE_RECORDS')
+export const practiceRecords = buildFetchReducer({}, 'PRACTICE_RECORDS');
 
-export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES')
+export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES');
 export const practiceTemplate = reduceReducers(
   buildFetchReducer({}, 'PRACTICE_TEMPLATE'),
-  buildPostReducer({}, 'PRACTICE_TEMPLATE')
-)
+  buildPostReducer({}, 'PRACTICE_TEMPLATE'),
+);
 
-export const puzzleRecords = buildFetchReducer({}, 'PUZZLE_RECORDS')
+export const puzzleRecords = buildFetchReducer({}, 'PUZZLE_RECORDS');
 export const puzzleRecord = reduceReducers(
   buildFetchReducer({}, 'PUZZLE_RECORD'),
-  buildPostReducer({}, 'PUZZLE_RECORD')
-)
+  buildPostReducer({}, 'PUZZLE_RECORD'),
+);
 
-export const dashboard = buildFetchReducer({data: {total: 0, right: 0, wrong: 0}}, 'DASHBOARD')
+export const dashboard = buildFetchReducer({ data: { total: 0, right: 0, wrong: 0 } }, 'DASHBOARD');
 
-export const rating = buildPostReducer({}, 'RATING')
-export const favorite = buildPostReducer({}, 'FAVORITE')
-export const favorites = buildFetchReducer({}, 'FAVORITES')
-export const kifus = buildFetchReducer({}, 'KIFUS')
-export const kifu = buildFetchReducer({data: {
-  player_b: { en_name: 'John Doe'},
-  player_w: { en_name: 'Jane Doe'},
+export const rating = buildPostReducer({}, 'RATING');
+export const favorite = buildPostReducer({}, 'FAVORITE');
+export const favorites = buildFetchReducer({}, 'FAVORITES');
+export const kifus = buildFetchReducer({}, 'KIFUS');
+export const kifu = buildFetchReducer({ data: {
+  player_b: { en_name: 'John Doe' },
+  player_w: { en_name: 'Jane Doe' },
   b_rank: 'None',
   w_rank: 'None',
   result: 'None',
   komi: 'None',
   short_date: 'None',
   steps: '',
-}}, 'KIFU')
+} }, 'KIFU');
 
-export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS')
-export const puzzleFilter = createReducer({start: '18k', end: '9d'}, { 'SET_PUZZLE_FILTER': setPuzzleFilter })
-export const rangeFilter = createReducer({start: '18k', end: '9d', text: 'all'}, { 'SET_RANGE_FILTER': setRangeFilter })
-export const kifuFilter = createReducer('all', { 'SET_KIFU_FILTER': setGenernalFilter})
-export const tagFilter = createReducer('all', { 'SET_TAG_FILTER': setGenernalFilter})
-export const dateRangeFilter = createReducer('last7days', { 'SET_DATE_RANGE_FILTER': setGenernalFilter})
-export const userRangeFilter = createReducer('onlyme', { 'SET_USER_RANGE_FILTER': setGenernalFilter})
-export const recordTypeFilter = createReducer('all', { 'SET_RECORD_TYPE_FILTER': setGenernalFilter})
-export const practicePuzzleId = createReducer(null, { 'SET_PRACTICE_PUZZLE_ID': setPracticePuzzleId })
-export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white', { 'SET_THEME': setGenernalFilter})
-export const themeMaterial = createReducer(imageData, { 'SET_THEME_MATERIAL': setGenernalFilter})
-export const tags = buildFetchReducer({}, 'TAGS')
+export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS');
+export const puzzleFilter = createReducer({ start: '18k', end: '9d' }, { SET_PUZZLE_FILTER: setPuzzleFilter });
+export const rangeFilter = createReducer({ start: '18k', end: '9d', text: 'all' }, { SET_RANGE_FILTER: setRangeFilter });
+export const kifuFilter = createReducer('all', { SET_KIFU_FILTER: setGenernalFilter });
+export const tagFilter = createReducer('all', { SET_TAG_FILTER: setGenernalFilter });
+export const dateRangeFilter = createReducer('last7days', { SET_DATE_RANGE_FILTER: setGenernalFilter });
+export const userRangeFilter = createReducer('onlyme', { SET_USER_RANGE_FILTER: setGenernalFilter });
+export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: setGenernalFilter });
+export const practicePuzzleId = createReducer(null,
+  { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
+);
+export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white',
+  { SET_THEME: setGenernalFilter });
+export const themeMaterial = createReducer(imageData, { SET_THEME_MATERIAL: setGenernalFilter });
+export const tags = buildFetchReducer({}, 'TAGS');
