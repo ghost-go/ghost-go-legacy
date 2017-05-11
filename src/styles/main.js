@@ -1,4 +1,4 @@
-import { StyleSheet, css } from 'aphrodite'
+import { StyleSheet, css } from 'aphrodite';
 
 export default StyleSheet.create({
   mainContainer: {
@@ -11,7 +11,7 @@ export default StyleSheet.create({
   mainLeft: {
     display: 'flex',
     flexFlow: 'column nowrap',
-    flex: '0 0 230px'
+    flex: '0 0 230px',
   },
 
   mainRight: {
@@ -27,7 +27,7 @@ export default StyleSheet.create({
     lineHeight: '26px',
     fontWeight: '300',
     margin: '10px 0 35px',
-    padding: '0'
+    padding: '0',
   },
 
   chooseLevel: {
@@ -38,7 +38,7 @@ export default StyleSheet.create({
   },
 
   buttonGroup: {
-    marginBottom: '30px'
+    marginBottom: '30px',
   },
 
   button: {
@@ -66,7 +66,7 @@ export default StyleSheet.create({
   },
 
   previewImg: {
-    width: '100%'
+    width: '100%',
   },
 
   mainActions: {
@@ -86,7 +86,7 @@ export default StyleSheet.create({
 
   ratingIcon: {
     width: 28,
-    height: 28
-  }
-})
+    height: 28,
+  },
+});
 

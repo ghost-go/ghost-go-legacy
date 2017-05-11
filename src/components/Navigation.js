@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { Button } from 'react-bootstrap'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import { Button } from 'react-bootstrap';
 
-import { setTheme } from '../actions/Actions'
-import AuthService from '../utils/AuthService'
+import { setTheme } from '../actions/Actions';
+import AuthService from '../utils/AuthService';
 
 class Navigation extends Component {
 
@@ -22,56 +22,55 @@ class Navigation extends Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       profile: props.auth.getProfile(),
       navOpen: false,
-    }
+    };
 
     props.auth.on('profile_updated', (newProfile) => {
-      this.setState({profile: newProfile})
-    })
-
+      this.setState({ profile: newProfile });
+    });
   }
 
   handleToggle() {
-    this.setState({navOpen: !this.state.navOpen})
+    this.setState({ navOpen: !this.state.navOpen });
   }
 
   handleTheme(e) {
-    localStorage.setItem('theme', e.target.value)
-    this.props.dispatch(setTheme(e.target.value))
+    localStorage.setItem('theme', e.target.value);
+    this.props.dispatch(setTheme(e.target.value));
   }
 
   mouseDownHandler() {
-    this.mouseIsDownOnCalendar = true
+    this.mouseIsDownOnCalendar = true;
   }
 
   mouseUpHandler() {
-    this.mouseIsDownOnCalendar = false
+    this.mouseIsDownOnCalendar = false;
   }
 
   componentDidMount() {
     window.addEventListener('mousedown', () => {
       if (this.mouseIsDownOnCalendar) {
-        return
+        return;
       }
-      this.setState({navOpen: false})
-    }, false)
+      this.setState({ navOpen: false });
+    }, false);
   }
 
   render() {
-    const { auth, theme } = this.props
+    const { auth, theme } = this.props;
     return (
       <div id="page-header">
-        <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="header-logo">
+        <div style={{ marginLeft: this.props.expanded ? '0px' : '-185px' }} id="header-logo">
           <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.2</i></span>
           <a onClick={this.props.collapseToggle} id="collapse-sidebar" title="">
-            <i className="fa fa-chevron-left"></i>
+            <i className="fa fa-chevron-left" />
           </a>
         </div>
-        <div id="sidebar-search"></div>
+        <div id="sidebar-search" />
         <div className="theme">
           <select className="form-control" onChange={::this.handleTheme} defaultValue={theme}>
             <option>black-and-white</option>
@@ -92,9 +91,9 @@ class Navigation extends Component {
                 <div className="user-profile dropdown">
                   <a onTouchTap={::this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
                     <img width="36" src={this.state.profile.picture} alt="" />
-                    <i className="fa fa-chevron-down"></i>
+                    <i className="fa fa-chevron-down" />
                   </a>
-                  <div style={{display: this.state.navOpen ? 'block' : 'none'}} className="dropdown-menu account">
+                  <div style={{ display: this.state.navOpen ? 'block' : 'none' }} className="dropdown-menu account">
                     <div className="box-sm">
                       <div className="login-box clearfix">
                         <div className="user-img"><img src={this.state.profile.picture} alt="" /></div>
@@ -117,7 +116,7 @@ class Navigation extends Component {
                       </ul>
                       */}
                       <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
-                        <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off"></i>Logout</a>
+                        <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off" />Logout</a>
                       </div>
                     </div>
                   </div>
@@ -152,13 +151,13 @@ class Navigation extends Component {
           }
         </div>
       </div>
-    )
+    );
   }
 }
 
 function select(state) {
   return {
-    theme: state.theme
-  }
+    theme: state.theme,
+  };
 }
-export default connect(select)(Navigation)
+export default connect(select)(Navigation);

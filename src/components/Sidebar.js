@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Tab } from 'react-bootstrap'
-import { Link } from 'react-router'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Tab } from 'react-bootstrap';
+import { Link } from 'react-router';
 
-import AuthService from '../utils/AuthService'
+import AuthService from '../utils/AuthService';
 
 export default class Sidebar extends Component {
 
@@ -16,42 +16,42 @@ export default class Sidebar extends Component {
     expanded: true,
   }
 
-  constructor(props) { super(props)
+  constructor(props) {
+    super(props);
 
     this.state = {
-      profile: props.auth.getProfile()
-    }
+      profile: props.auth.getProfile(),
+    };
 
     props.auth.on('profile_updated', (newProfile) => {
-      this.setState({profile: newProfile})
-    })
-
+      this.setState({ profile: newProfile });
+    });
   }
 
-  //state = {
-  //expanded: true,
-  //}
+  // state = {
+  // expanded: true,
+  // }
 
-  //handleTouchTap(index) {
-  //this.setState({ selectedIndex: index })
-  //}
+  // handleTouchTap(index) {
+  // this.setState({ selectedIndex: index })
+  // }
   //
-  //handleClick() {
-  //this.setState({ expanded: !this.state.expanded })
-  //}
+  // handleClick() {
+  // this.setState({ expanded: !this.state.expanded })
+  // }
 
 
   render() {
-    const { auth } = this.props
+    const { auth } = this.props;
     return (
-      <div style={{marginLeft: this.props.expanded ? '0px' : '-185px'}} id="page-sidebar" className="rm-transition">
+      <div style={{ marginLeft: this.props.expanded ? '0px' : '-185px' }} id="page-sidebar" className="rm-transition">
         {
           this.props.expanded ? (
             <div className="page-sidebar-wrapper">
               <div id="sidebar-top">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                   <div>
-                      {/*
+                    {/*
                     <Nav bsStyle="pills" justified={true} stacked>
                       <NavItem eventKey="first">
                         <i className="fa fa-users fa-lg"></i>
@@ -79,7 +79,7 @@ export default class Sidebar extends Component {
                                   Welcome back, <b>{this.state.profile.nickname}</b>
                                 </div>
                                 <Link to="/users" className="btn btn-sm btn-black-opacity-alt">
-                                  <i className="fa fa-cog"></i>
+                                  <i className="fa fa-cog" />
                                 </Link>
                               </div>
                             </div>
@@ -100,33 +100,33 @@ export default class Sidebar extends Component {
                         <div id="tab-example-2">
                           <ul className="notifications-box notifications-box-alt">
                             <li>
-                              <span className="bg-purple icon-notification fa fa-users"></span>
+                              <span className="bg-purple icon-notification fa fa-users" />
                               <span className="notification-text">This is an error notification</span>
                               <div className="notification-time">
-                                a few seconds ago <span className="fa fa-clock-o"></span>
+                                a few seconds ago <span className="fa fa-clock-o" />
                               </div>
                               <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                                <i className="fa fa-arrow-right"></i>
+                                <i className="fa fa-arrow-right" />
                               </a>
                             </li>
                             <li>
-                              <span className="bg-warning icon-notification fa fa-ticket"></span>
+                              <span className="bg-warning icon-notification fa fa-ticket" />
                               <span className="notification-text">This is a warning notification</span>
                               <div className="notification-time">
-                                <b>15</b> minutes ago <span className="fa fa-clock-o"></span>
+                                <b>15</b> minutes ago <span className="fa fa-clock-o" />
                               </div>
                               <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                                <i className="fa fa-arrow-right"> </i>
+                                <i className="fa fa-arrow-right" />
                               </a>
                             </li>
                             <li>
-                              <span className="bg-green icon-notification fa fa-random"></span> 
+                              <span className="bg-green icon-notification fa fa-random" />
                               <span className="notification-text font-green">A success message example.</span>
                               <div className="notification-time">
-                                <b>2 hours</b> ago <span className="fa fa-clock-o"></span>
+                                <b>2 hours</b> ago <span className="fa fa-clock-o" />
                               </div>
                               <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                                <i className="fa fa-arrow-right"></i>
+                                <i className="fa fa-arrow-right" />
                               </a>
                             </li>
                           </ul>
@@ -136,12 +136,11 @@ export default class Sidebar extends Component {
                         <div id="tab-example-3">
                           <div className="info-box remove-border">
                             <div className="chart-icon">
-                              <div className="infobox-sparkline">
-                              </div>
+                              <div className="infobox-sparkline" />
                             </div>
                             <b>Exchange rate</b>
                             <span className="stats font-size-23">
-                              <i className="fa fa-chevron-down font-red"></i> 43.79 <span className="font-green">+0.9</span>
+                              <i className="fa fa-chevron-down font-red" /> 43.79 <span className="font-green">+0.9</span>
                             </span>
                           </div>
                         </div>
@@ -151,8 +150,7 @@ export default class Sidebar extends Component {
                           <div className="complete-user-profile">
                             <h4>Complete your profile</h4>
                             <div className="progressbar-small progressbar" data-value="75">
-                              <div className="progressbar-value bg-azure tooltip-button" title="" data-original-title="45%">
-                              </div>
+                              <div className="progressbar-value bg-azure tooltip-button" title="" data-original-title="45%" />
                             </div><b>Next step:</b> <a title="Verify identity">Verify identity</a>
                           </div>
                         </div>
@@ -167,19 +165,19 @@ export default class Sidebar extends Component {
                   <div className="divider-header">Dashboard</div>
                   <li>
                     <Link activeClassName="active" to="/dashboard">
-                      <i className="fa fa-tachometer"></i> <span>Dashboard</span>
+                      <i className="fa fa-tachometer" /> <span>Dashboard</span>
                     </Link>
                   </li>
-                  <li className="divider"></li>
+                  <li className="divider" />
                   <div className="divider-header">Resources</div>
                   <li>
                     <Link activeClassName="active" to="/puzzles">
-                      <i className="fa fa-puzzle-piece"></i> <span>Tsumego Library</span>
+                      <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
                     </Link>
                   </li>
                   <li>
                     <Link activeClassName="active" to="/kifus">
-                      <i className="fa fa-book"></i> <span>Kifu Library</span>
+                      <i className="fa fa-book" /> <span>Kifu Library</span>
                     </Link>
                   </li>
                   {/*
@@ -191,11 +189,11 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  <li className="divider"></li>
+                  <li className="divider" />
                   <div className="divider-header">Others</div>
                   <li>
                     <Link activeClassName="active" to="/users">
-                      <i className="fa fa-users"></i> <span>Profile</span>
+                      <i className="fa fa-users" /> <span>Profile</span>
                     </Link>
                   </li>
                   {/*
@@ -208,7 +206,7 @@ export default class Sidebar extends Component {
                   */}
                   <li>
                     <Link activeClassName="active" to="/records">
-                      <i className="fa fa-history"></i> <span>Records</span>
+                      <i className="fa fa-history" /> <span>Records</span>
                     </Link>
                   </li>
                 </ul>
@@ -220,18 +218,18 @@ export default class Sidebar extends Component {
                 <ul className="sf-js-enabled sf-arrows">
                   <li>
                     <Link activeClassName="active" to="/dashboard">
-                      <i className="fa fa-tachometer"></i> <span>Dashboard</span>
+                      <i className="fa fa-tachometer" /> <span>Dashboard</span>
                     </Link>
                   </li>
-                  <li className="divider"></li>
+                  <li className="divider" />
                   <li>
                     <Link activeClassName="active" to="/puzzles">
-                      <i className="fa fa-puzzle-piece"></i> <span>Tsumego Library</span>
+                      <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
                     </Link>
                   </li>
                   <li>
                     <Link activeClassName="active" to="/kifus">
-                      <i className="fa fa-book"></i> <span>Kifu Library</span>
+                      <i className="fa fa-book" /> <span>Kifu Library</span>
                     </Link>
                   </li>
                   {/*
@@ -242,10 +240,10 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  <li className="divider"></li>
+                  <li className="divider" />
                   <li>
                     <Link activeClassName="active" to="/users">
-                      <i className="fa fa-users"></i> <span>Profile</span>
+                      <i className="fa fa-users" /> <span>Profile</span>
                     </Link>
                   </li>
                   {/*
@@ -257,7 +255,7 @@ export default class Sidebar extends Component {
                   */}
                   <li>
                     <Link activeClassName="active" to="/records">
-                      <i className="fa fa-history"></i> <span>Records</span>
+                      <i className="fa fa-history" /> <span>Records</span>
                     </Link>
                   </li>
                 </ul>
@@ -266,6 +264,6 @@ export default class Sidebar extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }

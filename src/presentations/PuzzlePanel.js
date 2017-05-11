@@ -1,16 +1,16 @@
-import React, { Component, PropTypes as T } from 'react'
-import { postRating, postFavorite } from '../actions/PostActions'
-import Toggle from 'material-ui/Toggle'
-import AnswerBar from '../presentations/AnswerBar'
+import React, { Component, PropTypes as T } from 'react';
+import { postRating, postFavorite } from '../actions/PostActions';
+import Toggle from 'material-ui/Toggle';
+import AnswerBar from '../presentations/AnswerBar';
 
-import { StyleSheet, css } from 'aphrodite'
-import RankRange from '../presentations/RankRange'
-import {Button} from 'react-bootstrap'
+import { StyleSheet, css } from 'aphrodite';
+import RankRange from '../presentations/RankRange';
+import { Button } from 'react-bootstrap';
 
 import {
   ShareButtons,
   generateShareIcon,
-} from 'react-share'
+} from 'react-share';
 
 export default class PuzzlePanel extends Component {
 
@@ -36,66 +36,65 @@ export default class PuzzlePanel extends Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       answersExpanded: true,
       favorite: this.props.puzzle.is_favorite,
-    }
-
+    };
   }
 
   handleResearchMode() {
     if (this.props.currentMode === 'answer') {
-      this.props.setCurrentMode('research')
+      this.props.setCurrentMode('research');
     } else {
-      this.props.setCurrentMode('answer')
+      this.props.setCurrentMode('answer');
     }
   }
 
   handleFavorite(id) {
-    const { auth } = this.props
-    let profile = auth.getProfile()
+    const { auth } = this.props;
+    const profile = auth.getProfile();
     if (auth.loggedIn()) {
-      this.setState({favorite: !this.state.favorite})
+      this.setState({ favorite: !this.state.favorite });
       this.props.dispatch(postFavorite({
         likable_id: id,
         likable_type: 'Puzzle',
         value: !this.state.favorite,
         scope: 'favorite',
-        user_id: profile.user_id
-      }))
+        user_id: profile.user_id,
+      }));
     } else {
-      auth.login()
+      auth.login();
     }
   }
 
   handleRatingChange(rate) {
-    const { auth } = this.props
-    let profile = auth.getProfile()
+    const { auth } = this.props;
+    const profile = auth.getProfile();
     if (auth.loggedIn()) {
-      let { id } = this.props.params
+      const { id } = this.props.params;
       this.props.dispatch(postRating({
         ratable_id: id,
         ratable_type: 'Puzzle',
         score: rate,
-        user_id: profile.user_id
+        user_id: profile.user_id,
       })).then((promise) => {
         if (promise.type === 'POST_RATING_SUCCESS') {
           this.setState({
             open: true,
             score: rate,
-            ratingInfo: promise.payload.data.message || 'Thanks for you rating!'
-          })
+            ratingInfo: promise.payload.data.message || 'Thanks for you rating!',
+          });
         }
-      })
+      });
     } else {
-      auth.login()
+      auth.login();
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({favorite: nextProps.puzzle.is_favorite})
+    this.setState({ favorite: nextProps.puzzle.is_favorite });
   }
 
   render() {
@@ -108,30 +107,31 @@ export default class PuzzlePanel extends Component {
       VKShareButton,
       TelegramShareButton,
       WhatsappShareButton,
-    } = ShareButtons
+    } = ShareButtons;
 
-    const FacebookIcon = generateShareIcon('facebook')
-    const TwitterIcon = generateShareIcon('twitter')
-    const GooglePlusIcon = generateShareIcon('google')
-    const LinkedinIcon = generateShareIcon('linkedin')
-    const PinterestIcon = generateShareIcon('pinterest')
-    const VKIcon = generateShareIcon('vk')
-    const TelegramIcon = generateShareIcon('telegram')
-    const WhatsappIcon = generateShareIcon('whatsapp')
+    const FacebookIcon = generateShareIcon('facebook');
+    const TwitterIcon = generateShareIcon('twitter');
+    const GooglePlusIcon = generateShareIcon('google');
+    const LinkedinIcon = generateShareIcon('linkedin');
+    const PinterestIcon = generateShareIcon('pinterest');
+    const VKIcon = generateShareIcon('vk');
+    const TelegramIcon = generateShareIcon('telegram');
+    const WhatsappIcon = generateShareIcon('whatsapp');
 
-    let puzzle = this.props.puzzle
-    if (puzzle === undefined) return null
+    const puzzle = this.props.puzzle;
+    if (puzzle === undefined) return null;
 
-    let shareUrl = `${location.protocol}//${location.host}${location.pathname}`
-    let title = `P-${puzzle.id}`
-    let exampleImage = puzzle.preview_img_r1.x400.url
+    const shareUrl = `${location.protocol}//${location.host}${location.pathname}`;
+    const title = `P-${puzzle.id}`;
+    const exampleImage = puzzle.preview_img_r1.x400.url;
 
-    let rightAnswers = []
-    let wrongAnswers = []
-    let nextPanel, nextBtn
+    const rightAnswers = [];
+    const wrongAnswers = [];
+    let nextPanel,
+      nextBtn;
     if (this.props.showNext === true) {
-      nextBtn = <Button style={{marginRight: '10px'}} onClick={this.props.handleNext} bsStyle="info"> Next Tsumego </Button>
-      nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref='range' />
+      nextBtn = <Button style={{ marginRight: '10px' }} onClick={this.props.handleNext} bsStyle="info"> Next Tsumego </Button>;
+      nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref="range" />;
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
@@ -149,9 +149,9 @@ export default class PuzzlePanel extends Component {
             current={0}
             up={0}
             down={0}
-          />
-        )
-      })
+          />,
+        );
+      });
       puzzle.wrong_answers.forEach((i) => {
         wrongAnswers.push(
           <AnswerBar
@@ -167,13 +167,13 @@ export default class PuzzlePanel extends Component {
             current={0}
             up={0}
             down={0}
-          />
-        )
-      })
+          />,
+        );
+      });
     }
     return (
       <div className={this.props.className}>
-        <div className='title'>
+        <div className="title">
           {`${puzzle.whofirst} ${puzzle.rank}`}&nbsp;&nbsp;
           {/*
           <a onClick={this.handleFavorite.bind(this, puzzle.id)}
@@ -185,15 +185,16 @@ export default class PuzzlePanel extends Component {
         </div>
         <div>
           <strong>NO.:</strong>{`P-${puzzle.id}`}&nbsp;&nbsp;&nbsp;
-          <i className="fa fa-check" aria-hidden="true"></i><span>&nbsp;{puzzle.right_count}</span>&nbsp;&nbsp;
-          <i className="fa fa-times" aria-hidden="true"></i><span>&nbsp;{puzzle.wrong_count}</span>&nbsp;&nbsp;
-          <i className="fa fa-heart" aria-hidden="true"></i><span>&nbsp;{puzzle.favorite_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-check" aria-hidden="true" /><span>&nbsp;{puzzle.right_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-times" aria-hidden="true" /><span>&nbsp;{puzzle.wrong_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-heart" aria-hidden="true" /><span>&nbsp;{puzzle.favorite_count}</span>&nbsp;&nbsp;
         </div>
         <div className="button-container">
           <Button
-            style={{marginRight: '10px'}}
+            style={{ marginRight: '10px' }}
             onClick={this.props.handleReset}
-            bsStyle="primary">
+            bsStyle="primary"
+          >
             Reset
           </Button>
           { nextBtn }
@@ -207,10 +208,12 @@ export default class PuzzlePanel extends Component {
               url={shareUrl}
               title={title}
               picture={`${exampleImage}`}
-              className="share-button">
+              className="share-button"
+            >
               <FacebookIcon
                 size={32}
-                round />
+                round
+              />
             </FacebookShareButton>
           </div>
 
@@ -218,10 +221,12 @@ export default class PuzzlePanel extends Component {
             <TwitterShareButton
               url={shareUrl}
               title={title}
-              className="share-button">
+              className="share-button"
+            >
               <TwitterIcon
                 size={32}
-                round />
+                round
+              />
             </TwitterShareButton>
           </div>
 
@@ -229,7 +234,8 @@ export default class PuzzlePanel extends Component {
             <TelegramShareButton
               url={shareUrl}
               title={title}
-              className="share-button">
+              className="share-button"
+            >
               <TelegramIcon size={32} round />
             </TelegramShareButton>
           </div>
@@ -239,7 +245,8 @@ export default class PuzzlePanel extends Component {
               url={shareUrl}
               title={title}
               separator=":: "
-              className="share-button">
+              className="share-button"
+            >
               <WhatsappIcon size={32} round />
             </WhatsappShareButton>
           </div>
@@ -247,10 +254,12 @@ export default class PuzzlePanel extends Component {
           <div className="share-box">
             <GooglePlusShareButton
               url={shareUrl}
-              className="share-button">
+              className="share-button"
+            >
               <GooglePlusIcon
                 size={32}
-                round />
+                round
+              />
             </GooglePlusShareButton>
           </div>
 
@@ -260,10 +269,12 @@ export default class PuzzlePanel extends Component {
               title={title}
               windowWidth={750}
               windowHeight={600}
-              className="share-button">
+              className="share-button"
+            >
               <LinkedinIcon
                 size={32}
-                round />
+                round
+              />
             </LinkedinShareButton>
           </div>
 
@@ -273,7 +284,8 @@ export default class PuzzlePanel extends Component {
               media={`${exampleImage}`}
               windowWidth={1000}
               windowHeight={730}
-              className="share-button">
+              className="share-button"
+            >
               <PinterestIcon size={32} round />
             </PinterestShareButton>
           </div>
@@ -284,14 +296,16 @@ export default class PuzzlePanel extends Component {
               image={`${exampleImage}`}
               windowWidth={660}
               windowHeight={460}
-              className="share-button">
+              className="share-button"
+            >
               <VKIcon
                 size={32}
-                round />
+                round
+              />
             </VKShareButton>
           </div>
         </div>
-        <div className="clearfix"></div>
+        <div className="clearfix" />
         <Toggle
           className="research"
           label="Research Mode"
@@ -305,7 +319,7 @@ export default class PuzzlePanel extends Component {
           { wrongAnswers }
         </div>
       </div>
-    )
+    );
   }
 
 }
@@ -319,4 +333,4 @@ const styles = StyleSheet.create({
     },
   },
 
-})
+});

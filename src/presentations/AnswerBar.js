@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 
-import IconButton from 'material-ui/IconButton'
-import Paper from 'material-ui/Paper'
+import IconButton from 'material-ui/IconButton';
+import Paper from 'material-ui/Paper';
 
 export default class AnswerBar extends Component {
 
@@ -17,64 +17,64 @@ export default class AnswerBar extends Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      current: 0
-    }
+      current: 0,
+    };
   }
 
   firstStep() {
-    let steps = this.props.answer.split(';')
-    this.props.setCurrentMode('research')
-    this.props.setCurrentAnswerId(this.props.id)
-    this.props.resetSteps()
-    this.props.addSteps(steps[0])
+    const steps = this.props.answer.split(';');
+    this.props.setCurrentMode('research');
+    this.props.setCurrentAnswerId(this.props.id);
+    this.props.resetSteps();
+    this.props.addSteps(steps[0]);
   }
 
   prevStep() {
-    let steps = this.props.answer.split(';')
-    this.props.setCurrentMode('research')
-    this.props.resetSteps()
-    this.props.addSteps(steps.slice(0, this.props.steps.length - 1))
+    const steps = this.props.answer.split(';');
+    this.props.setCurrentMode('research');
+    this.props.resetSteps();
+    this.props.addSteps(steps.slice(0, this.props.steps.length - 1));
   }
 
   nextStep() {
-    let steps = this.props.answer.split(';')
-    this.props.setCurrentMode('research')
+    const steps = this.props.answer.split(';');
+    this.props.setCurrentMode('research');
     if (this.props.currentAnswerId !== this.props.id) {
-      this.firstStep()
+      this.firstStep();
     } else {
-      this.props.resetSteps()
-      this.props.addSteps(steps.slice(0, this.props.steps.length + 1))
+      this.props.resetSteps();
+      this.props.addSteps(steps.slice(0, this.props.steps.length + 1));
     }
   }
 
   lastStep() {
-    let steps = this.props.answer.split(';')
-    this.props.setCurrentMode('research')
-    this.props.resetSteps()
-    this.props.addSteps(steps)
+    const steps = this.props.answer.split(';');
+    this.props.setCurrentMode('research');
+    this.props.resetSteps();
+    this.props.addSteps(steps);
   }
 
   render() {
-    let current = this.props.currentAnswerId === this.props.id ? this.props.steps.length : 0
-    return(
+    const current = this.props.currentAnswerId === this.props.id ? this.props.steps.length : 0;
+    return (
       <Paper style={styles.answerContainer} zDepth={0}>
         <div style={styles.noInfo}>{`No.${this.props.id}`}</div>
         <div style={styles.stepInfo}>{`${current}/${this.props.answer.split(';').length}`}</div>
         <IconButton onClick={::this.firstStep} ref="firstStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-backward" />
-        <IconButton onClick={::this.prevStep} ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward"  />
+        <IconButton onClick={::this.prevStep} ref="prevStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-backward" />
         <IconButton onClick={::this.nextStep} ref="nextStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-play" />
         <IconButton onClick={::this.lastStep} ref="lastStep" iconStyle={styles.smallIcon} style={styles.small} iconClassName="fa fa-step-forward" />
         {
-          //<div style={styles.voteInfo}>Vote</div>
-          //<IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-up" />
-          //<span>{this.props.up}</span>
-          //<IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-down" />
-          //<span>{this.props.down}</span>
+          // <div style={styles.voteInfo}>Vote</div>
+          // <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-up" />
+          // <span>{this.props.up}</span>
+          // <IconButton iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-down" />
+          // <span>{this.props.down}</span>
         }
       </Paper>
-    )
+    );
   }
 }
 
@@ -82,7 +82,7 @@ const styles = {
 
   answerContainer: {
     display: 'flex',
-    flex: '1 1 auto'
+    flex: '1 1 auto',
   },
 
   noInfo: {
@@ -114,7 +114,7 @@ const styles = {
   },
 
   smallIcon: {
-    fontSize: '16px'
+    fontSize: '16px',
   },
 
   small: {
@@ -122,4 +122,4 @@ const styles = {
     height: 32,
     padding: 5,
   },
-}
+};

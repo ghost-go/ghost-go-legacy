@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
+import React, { Component } from 'react';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class RankingList extends Component {
 
@@ -9,21 +9,21 @@ export default class RankingList extends Component {
   }
 
   static propType = {
-    rank: React.PropTypes.string.required
+    rank: React.PropTypes.string.required,
   }
 
   handleChange = (event, index, value) => {
-    this.setState({rank: value}, () => {
-      this.props.onChange(value)
-    })
+    this.setState({ rank: value }, () => {
+      this.props.onChange(value);
+    });
   }
 
   render() {
     return (
       <SelectField
-         floatingLabelText={this.props.floatingLabelText}
-         style={{width: 85}} value={this.state.rank}
-         onChange={this.handleChange}
+        floatingLabelText={this.props.floatingLabelText}
+        style={{ width: 85 }} value={this.state.rank}
+        onChange={this.handleChange}
       >
         <MenuItem value={'18k'} primaryText="18k" />
         <MenuItem value={'17k'} primaryText="17k" />
@@ -54,8 +54,7 @@ export default class RankingList extends Component {
         <MenuItem value={'8d'} primaryText="8d" />
         <MenuItem value={'9d'} primaryText="9d" />
       </SelectField>
-    )
+    );
   }
 }
-
 

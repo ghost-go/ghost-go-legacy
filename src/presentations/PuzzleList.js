@@ -1,40 +1,40 @@
-import React, { Component, PropTypes as T } from 'react'
-import {List, ListItem} from 'material-ui/List'
-import Divider from 'material-ui/Divider'
-import Clear from 'material-ui/svg-icons/content/clear'
-import Done from 'material-ui/svg-icons/action/done'
-import _ from 'lodash'
+import React, { Component, PropTypes as T } from 'react';
+import { List, ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Clear from 'material-ui/svg-icons/content/clear';
+import Done from 'material-ui/svg-icons/action/done';
+import _ from 'lodash';
 
-import { StyleSheet, css } from 'aphrodite'
+import { StyleSheet, css } from 'aphrodite';
 
 export default class PuzzleList extends Component {
 
 
   static propTypes = {
     puzzleList: T.array.isRequired,
-    record: T.array.isRequired
+    record: T.array.isRequired,
   }
 
   static defaultProps = {
-    puzzleList: []
+    puzzleList: [],
   }
 
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    let list = []
+    const list = [];
 
     this.props.puzzleList.forEach((i) => {
-      let record = _.find(this.props.record, {puzzle_id: i.id})
-      let result
+      const record = _.find(this.props.record, { puzzle_id: i.id });
+      let result;
       if (record === undefined || record === null) {
-        result = null
+        result = null;
       } else if (record.isRight) {
-        result = <Done className={css(style.symbol, style.colorGreen)} />
+        result = <Done className={css(style.symbol, style.colorGreen)} />;
       } else {
-        result = <Clear className={css(style.symbol, style.colorRed)} />
+        result = <Clear className={css(style.symbol, style.colorRed)} />;
       }
 
       list.push(
@@ -51,16 +51,15 @@ export default class PuzzleList extends Component {
             </div>
           </div>
           <Divider />
-        </div>
-      )
-    })
+        </div>,
+      );
+    });
 
     return (
       <List>
         { list }
       </List>
-    )
-
+    );
   }
 }
 
@@ -72,8 +71,8 @@ const style = StyleSheet.create({
     cursor: 'pointer',
     display: 'flex',
     ':hover': {
-      backgroundColor: '#eee'
-    }
+      backgroundColor: '#eee',
+    },
   },
 
   symbol: {
@@ -93,7 +92,7 @@ const style = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
   },
 
   previewImg: {
@@ -105,7 +104,7 @@ const style = StyleSheet.create({
   },
 
   listRight: {
-    padding: '10px'
-  }
+    padding: '10px',
+  },
 
-})
+});

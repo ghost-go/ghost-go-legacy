@@ -1,26 +1,26 @@
-import React, { Component, PropTypes as T } from 'react'
-import { List } from 'material-ui/List'
-import { Link } from 'react-router'
-import moment from 'moment'
+import React, { Component, PropTypes as T } from 'react';
+import { List } from 'material-ui/List';
+import { Link } from 'react-router';
+import moment from 'moment';
 
-import { StyleSheet, css } from 'aphrodite'
+import { StyleSheet, css } from 'aphrodite';
 
 export default class RecordList extends Component {
 
   static propTypes = {
-    recordList: T.array.isRequired
+    recordList: T.array.isRequired,
   }
 
   static defaultProps = {
-    recordList: []
+    recordList: [],
   }
 
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    let list = []
+    const list = [];
     this.props.recordList.forEach((i) => {
       list.push(
         <Link key={`${i.puzzle.id}`} to={`/puzzles/${i.puzzle.id}`}>
@@ -34,16 +34,15 @@ export default class RecordList extends Component {
               <span className={css(style.date)}>{moment(i.puzzle.created_at).format('YYYY-MM-DD')}</span>
             </div>
           </div>
-        </Link>
-      )
-    })
+        </Link>,
+      );
+    });
 
     return (
       <List>
         { list }
       </List>
-    )
-
+    );
   }
 }
 
@@ -66,12 +65,12 @@ const style = StyleSheet.create({
   listRight: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '8px'
+    padding: '8px',
   },
 
   date: {
     marginTop: 'auto',
     marginBottom: '20px',
-  }
+  },
 
-})
+});

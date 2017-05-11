@@ -1,21 +1,21 @@
 /* global process:true */
-export let PROTOCOL = 'http'
+export let PROTOCOL = 'http';
 
-export let API_DOMAIN = ''
-export let APP_DOMAIN = ''
-export let ENV = process.env.NODE_ENV
+export let API_DOMAIN = '';
+export let APP_DOMAIN = '';
+export const ENV = process.env.NODE_ENV;
 
 switch (ENV) {
-case 'development':
-  PROTOCOL = 'http'
-  API_DOMAIN = `${PROTOCOL}://localhost:3000`
-  APP_DOMAIN = `${PROTOCOL}://localhost:5000`
-  break
-case 'production':
-  PROTOCOL = 'https'
-  API_DOMAIN = `${PROTOCOL}://api.ghost-go.com`
-  APP_DOMAIN = `${PROTOCOL}://www.ghost-go.com`
-  break
+  case 'development':
+    PROTOCOL = 'http';
+    API_DOMAIN = `${PROTOCOL}://localhost:3000`;
+    APP_DOMAIN = `${PROTOCOL}://localhost:5000`;
+    break;
+  case 'production':
+    PROTOCOL = 'https';
+    API_DOMAIN = `${PROTOCOL}://api.ghost-go.com`;
+    APP_DOMAIN = `${PROTOCOL}://www.ghost-go.com`;
+    break;
 }
 
 export const AUTH0_CONFIG = {
@@ -23,16 +23,16 @@ export const AUTH0_CONFIG = {
     redirectUrl: APP_DOMAIN,
     responseType: 'token',
     authParams: {
-      scope: 'openid profile'
-    }
+      scope: 'openid profile',
+    },
   },
   languageDictionary: {
-    title: ''
+    title: '',
   },
   theme: {
     primaryColor: 'black',
-    logo: `${PROTOCOL}://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png`
-  }
-}
+    logo: `${PROTOCOL}://s3-ap-northeast-1.amazonaws.com/ghost-go/logo2x.png`,
+  },
+};
 
-export const API_VERSION = 'v1'
+export const API_VERSION = 'v1';

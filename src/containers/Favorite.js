@@ -1,20 +1,20 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { push } from 'react-router-redux'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 
-import { fetchFavorites } from '../actions/FetchActions'
+import { fetchFavorites } from '../actions/FetchActions';
 
-import ReactPaginate from 'react-paginate'
+import ReactPaginate from 'react-paginate';
 
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 
-import { StyleSheet, css } from 'aphrodite'
-import { List } from 'material-ui/List'
+import { StyleSheet, css } from 'aphrodite';
+import { List } from 'material-ui/List';
 
-import moment from 'moment'
+import moment from 'moment';
 
-//import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
+// import {Row, Col, Dropdown, Glyphicon} from 'react-bootstrap'
 
 class Favorite extends Component {
 
@@ -33,56 +33,58 @@ class Favorite extends Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   handleToggle() {
-    this.setState({filterOpen: !this.state.filterOpen})
+    this.setState({ filterOpen: !this.state.filterOpen });
   }
 
   getFavoriteData(page = 1) {
-    const { dispatch } = this.props
-    const { auth } = this.context
-    let profile = auth.getProfile()
+    const { dispatch } = this.props;
+    const { auth } = this.context;
+    const profile = auth.getProfile();
     if (auth.loggedIn()) {
       dispatch(fetchFavorites({
-        page: page,
+        page,
         user_id: profile.user_id,
-      }))
+      }));
     }
   }
 
   handlePageClick(data) {
-    let page = data.selected + 1
-    this.getFavoriteData(page)
-    this.props.dispatch(push(`/favorites?page=${page}`))
+    const page = data.selected + 1;
+    this.getFavoriteData(page);
+    this.props.dispatch(push(`/favorites?page=${page}`));
   }
 
   handleSeeMore() {
-    let { query } = this.props.location
-    this.setState({filterOpen: false})
-    this.getFavoriteData(query.page)
-    this.props.dispatch(push(`/favorites?page=${query.page || 1}`))
+    const { query } = this.props.location;
+    this.setState({ filterOpen: false });
+    this.getFavoriteData(query.page);
+    this.props.dispatch(push(`/favorites?page=${query.page || 1}`));
   }
 
   componentWillMount() {
-    let { query } = this.props.location
-    this.getFavoriteData(query.page || 1)
+    const { query } = this.props.location;
+    this.getFavoriteData(query.page || 1);
   }
 
   render() {
-    let recordList, pagination, page = 0
-    let { query } = this.props.location
-    let { favorites } = this.props
+    let recordList,
+      pagination,
+      page = 0;
+    const { query } = this.props.location;
+    const { favorites } = this.props;
     if (query && query.page) {
-      page = parseInt(query.page - 1)
+      page = parseInt(query.page - 1);
     }
-    if (favorites.data !== undefined ) {
+    if (favorites.data !== undefined) {
       if (favorites.data.data.length == 0) {
-        recordList = <h3><b>No data.</b></h3>
+        recordList = <h3><b>No data.</b></h3>;
       } else {
-        let pageCount = favorites.data.total_pages
-        recordList = favorites.data.data.map((i) =>
+        const pageCount = favorites.data.total_pages;
+        recordList = favorites.data.data.map(i =>
           <Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
             <div className={css(style.listBox)}>
               <div className="list-preview-img">
@@ -94,26 +96,28 @@ class Favorite extends Component {
                 <span className={css(style.date)}>{moment(i.created_at).format('YYYY-MM-DD')}</span>
               </div>
             </div>
-          </Link>
-        )
+          </Link>,
+        );
         if (pageCount > 1) {
-          pagination = <ReactPaginate disableInitialCallback={true}
-                                      initialPage={page}
-                                      previousLabel={'previous'}
-                                      nextLabel={'next'}
-                                      breakLabel={<a href="">...</a>}
-                                      breakClassName={'break-me'}
-                                      pageCount={pageCount}
-                                      marginPagesDisplayed={2}
-                                      pageRangeDisplayed={10}
-                                      onPageChange={::this.handlePageClick}
-                                      containerClassName={'pagination'}
-                                      subContainerClassName={'pages pagination'}
-                                      activeClassName={'active'} />
+          pagination = (<ReactPaginate
+            disableInitialCallback
+            initialPage={page}
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={<a href="">...</a>}
+            breakClassName={'break-me'}
+            pageCount={pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={10}
+            onPageChange={::this.handlePageClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+          />);
         }
       }
     } else {
-      recordList = <h3><b>You must login to access this page.</b></h3>
+      recordList = <h3><b>You must login to access this page.</b></h3>;
     }
     return (
       <div>
@@ -121,16 +125,16 @@ class Favorite extends Component {
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>
               <List>
-              { recordList }
+                { recordList }
               </List>
             </div>
             <div className={css(styles.pageContainer)}>
-               { pagination }
+              { pagination }
             </div>
           </div>
         </div>
-			</div>
-    )
+      </div>
+    );
   }
 }
 
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
   leftMenu: {
     marginTop: '10px',
     flex: '0 0 250px',
-    height: '600px'
+    height: '600px',
   },
 
   right: {
@@ -178,9 +182,9 @@ const styles = StyleSheet.create({
   pageContainer: {
     display: 'flex',
     justifyContent: 'center',
-  }
+  },
 
-})
+});
 
 const style = StyleSheet.create({
   listBox: {
@@ -201,20 +205,20 @@ const style = StyleSheet.create({
   listRight: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '8px'
+    padding: '8px',
   },
 
   date: {
     marginTop: 'auto',
     marginBottom: '20px',
-  }
+  },
 
-})
+});
 
 function select(state) {
   return {
     favorites: state.favorites,
-  }
+  };
 }
 
-export default connect(select)(Favorite)
+export default connect(select)(Favorite);

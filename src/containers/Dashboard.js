@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions'
-import { fetchDashboard } from '../actions/FetchActions'
-import FilterBar from '../components/FilterBar'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import { Row, Col } from 'react-bootstrap';
 
-import {Row, Col } from 'react-bootstrap'
+import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions';
+import { fetchDashboard } from '../actions/FetchActions';
+import FilterBar from '../components/FilterBar';
+
 
 class Dashboard extends Component {
 
@@ -25,111 +26,114 @@ class Dashboard extends Component {
     filterOpen: false,
   }
 
+  constructor(props) {
+    super(props);
+    this.handleSeeMore = this.handleSeeMore.bind(this);
+  }
+
   state = {
     filterOpen: false,
   }
 
-  constructor(props) {
-    super(props)
-    this.handleSeeMore = this.handleSeeMore.bind(this)
+  componentDidMount() {
+    const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
+    const { auth } = this.context;
+    const profile = auth.getProfile();
+    dispatch(fetchDashboard({
+      date_range: dateRangeFilter,
+      user_range: userRangeFilter,
+      user_id: profile.user_id,
+    }));
   }
 
   handleToggle() {
-    this.setState({filterOpen: !this.state.filterOpen})
+    this.setState({ filterOpen: !this.state.filterOpen });
   }
 
   handleSeeMore(filter, val) {
-    const { dispatch, dateRangeFilter, userRangeFilter } = this.props
-    const { auth } = this.context
-    let profile = auth.getProfile()
+    const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
+    const { auth } = this.context;
+    const profile = auth.getProfile();
     if (filter === 'dateRangeFilter') {
-      dispatch(setDateRangeFilter(val))
+      dispatch(setDateRangeFilter(val));
     } else if (filter === 'userRangeFilter') {
-      dispatch(setUserRangeFilter(val))
+      dispatch(setUserRangeFilter(val));
     }
     dispatch(fetchDashboard({
       date_range: filter === 'dateRangeFilter' ? val : dateRangeFilter,
       user_range: filter === 'userRangeFilter' ? val : userRangeFilter,
-      user_id: profile.user_id
-    }))
+      user_id: profile.user_id,
+    }));
   }
 
-  componentDidMount() {
-    const { dispatch, dateRangeFilter, userRangeFilter } = this.props
-    const { auth } = this.context
-    let profile = auth.getProfile()
-    dispatch(fetchDashboard({
-      date_range: dateRangeFilter,
-      user_range: userRangeFilter,
-      user_id: profile.user_id
-    }))
-  }
 
   render() {
-    let loading = <div><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
-    const { userRangeFilter, dateRangeFilter, dashboard } = this.props
-    const { auth } = this.context
+    const loading = <div><i className="fa fa-spinner fa-pulse fa-fw" /></div>;
+    const { userRangeFilter, dateRangeFilter, dashboard } = this.props;
+    const { auth } = this.context;
     return (
       <div>
-        <FilterBar data={[{
-          name: 'Date Range',
-          tags: ['today', 'yesterday', 'last7days', 'last30days', 'all'],
-          filterName: 'dateRangeFilter',
-          filterVal: dateRangeFilter,
-          handleSeeMore: this.handleSeeMore,
-        }, {
-          name: 'Users',
-          tags: ['onlyme', 'all'],
-          filterName: 'userRangeFilter',
-          filterVal: userRangeFilter,
-          handleSeeMore: this.handleSeeMore,
-        }]} />
+        <FilterBar
+          data={[{
+            name: 'Date Range',
+            tags: ['today', 'yesterday', 'last7days', 'last30days', 'all'],
+            filterName: 'dateRangeFilter',
+            filterVal: dateRangeFilter,
+            handleSeeMore: this.handleSeeMore,
+          }, {
+            name: 'Users',
+            tags: ['onlyme', 'all'],
+            filterName: 'userRangeFilter',
+            filterVal: userRangeFilter,
+            handleSeeMore: this.handleSeeMore,
+          }]}
+        />
         {
           !auth.loggedIn() ? <div>You must login to access this page</div> :
-            <Row style={{marginTop: '40px'}}>
-              <Col xs={8} md={4}>
-                <div className="tile-box tile-box-alt bg-blue">
-                  <div className="tile-header">Total</div>
-                  <div className="tile-content-wrapper">
-                    <i className="fa fa-puzzle-piece"></i>
-                    <div className="tile-content">
-                      { dashboard.isFetching === true ? loading : dashboard.data.total }
-                    </div>
-                    <small>Well done!</small>
+          <Row style={{ marginTop: '40px' }}>
+            <Col xs={8} md={4}>
+              <div className="tile-box tile-box-alt bg-blue">
+                <div className="tile-header">Total</div>
+                <div className="tile-content-wrapper">
+                  <i className="fa fa-puzzle-piece" />
+                  <div className="tile-content">
+                    { dashboard.isFetching === true ? loading : dashboard.data.total }
                   </div>
-                  <Link className="tile-footer" to={'/records?page=1&type=all'}>view details <i className="fa fa-arrow-right"></i></Link>
+                  <small>Well done!</small>
                 </div>
-              </Col>
-              <Col xs={8} md={4}>
-                <div className="tile-box tile-box-alt bg-green">
-                  <div className="tile-header">Right</div>
-                  <div className="tile-content-wrapper">
-                    <i className="fa fa-check"></i>
-                    <div className="tile-content">
-                      { dashboard.isFetching === true ? loading : dashboard.data.right }
-                    </div>
-                    <small>{`take up ${(dashboard.data.right * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
+                <Link className="tile-footer" to={'/records?page=1&type=all'}>view details <i className="fa fa-arrow-right" /></Link>
+              </div>
+            </Col>
+            <Col xs={8} md={4}>
+              <div className="tile-box tile-box-alt bg-green">
+                <div className="tile-header">Right</div>
+                <div className="tile-content-wrapper">
+                  <i className="fa fa-check" />
+                  <div className="tile-content">
+                    { dashboard.isFetching === true ? loading : dashboard.data.right }
                   </div>
-                  <Link className="tile-footer" to={'/records?page=1&type=right'}>view details <i className="fa fa-arrow-right"></i></Link>
+                  <small>{`take up ${(dashboard.data.right * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
                 </div>
-              </Col>
-              <Col xs={8} md={4}>
-                <div className="tile-box tile-box-alt bg-red">
-                  <div className="tile-header">Wrong</div>
-                  <div className="tile-content-wrapper">
-                    <i className="fa fa-times"></i>
-                    <div className="tile-content">
-                      { dashboard.isFetching === true ? loading : dashboard.data.wrong }
-                    </div>
-                    <small>{`take up ${(dashboard.data.wrong * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
+                <Link className="tile-footer" to={'/records?page=1&type=right'}>view details <i className="fa fa-arrow-right" /></Link>
+              </div>
+            </Col>
+            <Col xs={8} md={4}>
+              <div className="tile-box tile-box-alt bg-red">
+                <div className="tile-header">Wrong</div>
+                <div className="tile-content-wrapper">
+                  <i className="fa fa-times" />
+                  <div className="tile-content">
+                    { dashboard.isFetching === true ? loading : dashboard.data.wrong }
                   </div>
-                  <Link className="tile-footer" to={'/records?page=1&type=wrong'}>view details <i className="fa fa-arrow-right"></i></Link>
+                  <small>{`take up ${(dashboard.data.wrong * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
                 </div>
-              </Col>
-            </Row>
+                <Link className="tile-footer" to={'/records?page=1&type=wrong'}>view details <i className="fa fa-arrow-right" /></Link>
+              </div>
+            </Col>
+          </Row>
         }
       </div>
-    )
+    );
   }
 }
 
@@ -138,7 +142,7 @@ function mapStateToProps(state) {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
     dashboard: state.dashboard,
-  }
+  };
 }
 
-export default connect(mapStateToProps)(Dashboard)
+export default connect(mapStateToProps)(Dashboard);

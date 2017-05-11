@@ -1,26 +1,26 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
-import { CoordsToTree, RESPONSE_TIME } from '../constants/Go'
+import { CoordsToTree, RESPONSE_TIME } from '../constants/Go';
 
-import PuzzlePanel from '../presentations/PuzzlePanel'
-import FlatButton from 'material-ui/FlatButton'
-import Board from '../eboard/Board'
+import PuzzlePanel from '../presentations/PuzzlePanel';
+import FlatButton from 'material-ui/FlatButton';
+import Board from '../eboard/Board';
 
-import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions'
-import { postPuzzleRecord } from '../actions/PostActions'
+import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions';
+import { postPuzzleRecord } from '../actions/PostActions';
 import {
   setCurrentMode,
   setRangeFilter,
   addSteps,
-  resetSteps, setCurrentAnswerId } from '../actions/Actions'
+  resetSteps, setCurrentAnswerId } from '../actions/Actions';
 
-//material-ui
-import Dialog from 'material-ui/Dialog'
+// material-ui
+import Dialog from 'material-ui/Dialog';
 
-import { StyleSheet, css } from 'aphrodite'
+import { StyleSheet, css } from 'aphrodite';
 
 class Puzzle extends Component {
 
@@ -41,7 +41,7 @@ class Puzzle extends Component {
   }
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = { open: false,
       answersExpanded: true,
@@ -49,197 +49,193 @@ class Puzzle extends Component {
       rightTipOpen: false,
       wrongTipOpen: false,
       researchMode: true,
-    }
-    this.handleCommentsToggle = this.handleCommentsToggle.bind(this)
-    this.handleRight = this.handleRight.bind(this)
-    this.handleWrong = this.handleWrong.bind(this)
-    this.handleReset = this.handleReset.bind(this)
-    this.handleAnswersToggle = this.handleAnswersToggle.bind(this)
-    this.handleResearchMode = this.handleResearchMode.bind(this)
-    this.handleNext = this.handleNext.bind(this)
-    this.handleRangeChange = this.handleRangeChange.bind(this)
-    this.handleOpen = this.handleOpen.bind(this)
-    this.handleClose = this.handleClose.bind(this)
+    };
+    this.handleCommentsToggle = this.handleCommentsToggle.bind(this);
+    this.handleRight = this.handleRight.bind(this);
+    this.handleWrong = this.handleWrong.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+    this.handleAnswersToggle = this.handleAnswersToggle.bind(this);
+    this.handleResearchMode = this.handleResearchMode.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handleRangeChange = this.handleRangeChange.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleAnswersToggle(event, toggle) {
-    this.setState({answersExpanded: toggle})
+    this.setState({ answersExpanded: toggle });
   }
 
   handleCommentsToggle() {
-    this.setState({commentsOpen: !this.state.commentsOpen})
+    this.setState({ commentsOpen: !this.state.commentsOpen });
   }
 
   handleResearchMode() {
-    this.setState({researchMode: !this.state.researchMode})
+    this.setState({ researchMode: !this.state.researchMode });
   }
 
   handleRight() {
-    const { auth } = this.context
-    let profile = auth.getProfile()
+    const { auth } = this.context;
+    const profile = auth.getProfile();
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
-      record_type: 'right'
-    }))
+      record_type: 'right',
+    }));
 
-    this.setState({ rightTipOpen: true, wrongTipOpen: false })
+    this.setState({ rightTipOpen: true, wrongTipOpen: false });
   }
 
   handleWrong() {
-    const { auth } = this.context
-    let profile = auth.getProfile()
+    const { auth } = this.context;
+    const profile = auth.getProfile();
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
-      record_type: 'wrong'
-    }))
+      record_type: 'wrong',
+    }));
 
-    this.setState({ wrongTipOpen: true, rightTipOpen: false })
-    setTimeout(() => { this.handleReset() }, 2000)
+    this.setState({ wrongTipOpen: true, rightTipOpen: false });
+    setTimeout(() => { this.handleReset(); }, 2000);
   }
 
   handleClose() {
-    this.setState({open: false})
+    this.setState({ open: false });
   }
 
   handleOpen() {
-    this.setState({open: true})
-    this.resetSteps()
+    this.setState({ open: true });
+    this.resetSteps();
   }
 
   handleReset() {
-    this.setState({ wrongTipOpen: false, rightTipOpen: false })
-    this.resetSteps()
+    this.setState({ wrongTipOpen: false, rightTipOpen: false });
+    this.resetSteps();
   }
 
   handleNext() {
-    let range = this.props.rangeFilter.start + '-' + this.props.rangeFilter.end
-    this.props.dispatch(fetchPuzzleNext({range: range})).then(() => {
-      let nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`
-      this.props.dispatch(push(nextUrl))
-      this.setCurrentMode('answer')
-      this.handleReset()
-    })
+    const range = `${this.props.rangeFilter.start}-${this.props.rangeFilter.end}`;
+    this.props.dispatch(fetchPuzzleNext({ range })).then(() => {
+      const nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`;
+      this.props.dispatch(push(nextUrl));
+      this.setCurrentMode('answer');
+      this.handleReset();
+    });
   }
 
   handleRangeChange(range) {
-    this.props.dispatch(setRangeFilter(range))
+    this.props.dispatch(setRangeFilter(range));
   }
 
   addSteps(step) {
-    this.props.dispatch(addSteps(step))
+    this.props.dispatch(addSteps(step));
   }
 
   setCurrentMode(mode) {
-    this.props.dispatch(setCurrentMode(mode))
+    this.props.dispatch(setCurrentMode(mode));
   }
 
   resetSteps() {
-    this.props.dispatch(resetSteps())
+    this.props.dispatch(resetSteps());
   }
 
   setCurrentAnswerId(id) {
-    this.props.dispatch(setCurrentAnswerId(id))
+    this.props.dispatch(setCurrentAnswerId(id));
   }
 
   componentDidMount() {
-    let { id } = this.props.params
-    const { auth } = this.context
-    let profile = auth.getProfile()
-    this.props.dispatch(fetchPuzzle({id, query: {user_id: profile.user_id}}))
-    let boardWidth = 0
+    const { id } = this.props.params;
+    const { auth } = this.context;
+    const profile = auth.getProfile();
+    this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
+    let boardWidth = 0;
     if (screen.width > screen.height) {
-      boardWidth = window.innerHeight - 60
+      boardWidth = window.innerHeight - 60;
     } else {
-      boardWidth = window.innerWidth
+      boardWidth = window.innerWidth;
     }
-    this.boardLayer.width = this.boardLayer.height = boardWidth
+    this.boardLayer.width = this.boardLayer.height = boardWidth;
   }
 
   componentDidUpdate() {
-    const { puzzle, steps } = this.props
+    const { puzzle, steps } = this.props;
 
-    let board = new Board({
+    const board = new Board({
       autofit: true,
       theme: this.props.theme,
       material: this.props.themeMaterial,
       editable: true,
       nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
       afterMove: (step) => {
-        this.props.dispatch(addSteps(step))
+        this.props.dispatch(addSteps(step));
         setTimeout(() => {
           if (this.props.currentMode !== 'research') {
-            this.response()
+            this.response();
           }
-        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME)
+        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME);
       },
-    })
+    });
 
-    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true)
-    board.render(this.boardLayer)
+    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true);
+    board.render(this.boardLayer);
   }
 
   response() {
-    let rights = []
-    let wrongs = []
+    const rights = [];
+    const wrongs = [];
     this.props.puzzle.data.right_answers.forEach((i) => {
       if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
-        rights.push(i)
+        rights.push(i);
       }
-    })
+    });
     this.props.puzzle.data.wrong_answers.forEach((i) => {
       if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
-        wrongs.push(i)
+        wrongs.push(i);
       }
-    })
+    });
 
     if (rights.length > 0) {
-      const i = Math.floor(Math.random() * rights.length)
-      let stepsStr = this.props.steps.join(';')
+      const i = Math.floor(Math.random() * rights.length);
+      const stepsStr = this.props.steps.join(';');
       if (rights[i].steps === stepsStr) {
-        this.handleRight()
-      }
-      else {
-        const step = rights[i].steps.split(';')[this.props.steps.length]
-        this.props.dispatch(addSteps(step))
-        let stepsStr = this.props.steps.join(';')
+        this.handleRight();
+      } else {
+        const step = rights[i].steps.split(';')[this.props.steps.length];
+        this.props.dispatch(addSteps(step));
+        const stepsStr = this.props.steps.join(';');
         if (rights[i].steps === stepsStr) {
-          this.handleRight()
+          this.handleRight();
         }
       }
-    }
-    else if (wrongs.length > 0) {
-      const i = Math.floor(Math.random() * wrongs.length)
-      let stepsStr = this.props.steps.join(';')
+    } else if (wrongs.length > 0) {
+      const i = Math.floor(Math.random() * wrongs.length);
+      const stepsStr = this.props.steps.join(';');
       if (wrongs[i].steps === stepsStr) {
-        this.handleWrong()
-      }
-      else {
-        const step = wrongs[i].steps.split(';')[this.props.steps.length]
-        this.props.dispatch(addSteps(step))
-        let stepsStr = this.props.steps.join(';')
+        this.handleWrong();
+      } else {
+        const step = wrongs[i].steps.split(';')[this.props.steps.length];
+        this.props.dispatch(addSteps(step));
+        const stepsStr = this.props.steps.join(';');
         if (wrongs[i].steps === stepsStr) {
-          this.handleWrong()
+          this.handleWrong();
         }
       }
-    }
-    else {
-      this.handleWrong()
+    } else {
+      this.handleWrong();
     }
   }
 
   render() {
-    const { puzzle } = this.props
+    const { puzzle } = this.props;
 
     const actions = [
       <FlatButton
         label="OK"
-        primary={true}
-        keyboardFocused={true}
+        primary
+        keyboardFocused
         onTouchTap={this.handleClose}
-      />
-    ]
+      />,
+    ];
 
     return (
       <div>
@@ -251,27 +247,27 @@ class Puzzle extends Component {
         >
           {this.state.ratingInfo}
         </Dialog>
-        <div className='puzzle-board'>
+        <div className="puzzle-board">
           {
             this.state.rightTipOpen ?
               <div ref="tipRight" className={css(styles.tipRight)}>
-                <i className="zmdi zmdi-check"></i>
+                <i className="zmdi zmdi-check" />
               </div>
             : null
           }
           {
             this.state.wrongTipOpen ?
               <div ref="tipWrong" className={css(styles.tipWrong)}>
-                <i className="zmdi zmdi-close"></i>
+                <i className="zmdi zmdi-close" />
               </div>
                 : null
           }
-          <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem }}></canvas>
+          <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem; }} />
         </div>
-        <div className='puzzle-panel'>
+        <div className="puzzle-panel">
           <PuzzlePanel
             {...this.props}
-            showNext={true}
+            showNext
             puzzle={puzzle.data}
             handleRangeChange={this.handleRangeChange}
             handleNext={::this.handleNext}
@@ -286,8 +282,8 @@ class Puzzle extends Component {
             steps={this.props.steps}
           />
         </div>
-        <div className='clearfix'></div>
-      </div>)
+        <div className="clearfix" />
+      </div>);
   }
 }
 
@@ -300,14 +296,15 @@ function select(state) {
     currentMode: state.currentMode,
     theme: state.theme,
     themeMaterial: state.themeMaterial,
-  }
+  };
 }
 
 const styles = StyleSheet.create({
   tipRight: {
     position: 'absolute',
     width: '300px',
-    height: '300px', top: '50%',
+    height: '300px',
+    top: '50%',
     left: '50%',
     marginLeft: '-150px',
     marginTop: '-150px',
@@ -327,7 +324,7 @@ const styles = StyleSheet.create({
     fontSize: '300px',
     color: 'red',
     textAlign: 'center',
-  }
-})
+  },
+});
 
-export default connect(select)(Puzzle)
+export default connect(select)(Puzzle);
