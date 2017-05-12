@@ -4,13 +4,15 @@ import { Dropdown, Glyphicon } from 'react-bootstrap';
 
 export default class FilterBar extends Component {
 
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    data: PropTypes.arrayOf({}).isRequired,
+    children: PropTypes.shape({}).isRequired,
   }
 
-  static propTypes = {
-    data: PropTypes.array.isRequired,
-    children: PropTypes.object,
+  constructor(props) {
+    super(props);
+
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
   state = {
@@ -30,7 +32,7 @@ export default class FilterBar extends Component {
     const { data } = this.props;
     return (
       <div className="page-nav">
-        <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={::this.handleToggle}>
+        <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={this.handleToggle}>
           <Dropdown.Toggle>
             <Glyphicon className="filter-icon" glyph="filter" />
           </Dropdown.Toggle>

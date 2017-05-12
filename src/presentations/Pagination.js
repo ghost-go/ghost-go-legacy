@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 
 /**
  * ## Constants
@@ -17,7 +16,42 @@ const TITLES = {
   last: 'Next',
 };
 
+function range(start, end) {
+  const res = [];
+  for (let i = start; i < end; i++) {
+    res.push(i);
+  }
+  return res;
+}
+
+const Page = (props) => {
+  if (props.isHidden) return null;
+  const baseCss = props.className ? `${props.className} ` : '';
+  const css = baseCss + (props.isActive ? 'active' : '') + (props.isDisabled ? 'disabled' : '');
+  return (
+    <li key={this.props.key} className={css}>
+      <a onClick={this.props.onClick}>{this.props.children}</a>
+    </li>
+  );
+};
+Page.propTypes = {
+  isHidden: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired,
+};
+
 export default class Pagination extends Component {
+  static propTypes = {
+    current: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+    titles: PropTypes.arrayOf({}).isRequired,
+    // visiblePages: PropTypes.number.isRequired,
+
+    onPageChanged: PropTypes.func.isRequired,
+    // onPageSizeChanged: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
 
@@ -31,6 +65,11 @@ export default class Pagination extends Component {
     this.calcBlocks = this.calcBlocks.bind(this);
     this.handlePageChanged = this.handlePageChanged.bind(this);
     this.getTitles = this.getTitles.bind(this);
+  }
+
+  getTitles(key) {
+    const pTitles = this.props.titles || {};
+    return pTitles[key] || TITLES[key];
   }
 
   /**
@@ -59,7 +98,7 @@ export default class Pagination extends Component {
 
   handleMorePrevPages() {
     const blocks = this.calcBlocks();
-    this.handlePageChanged(blocks.current * blocks.size - TITLE_SHIFT);
+    this.handlePageChanged((blocks.current * blocks.size) - TITLE_SHIFT);
   }
 
   handleMoreNextPages() {
@@ -115,11 +154,28 @@ export default class Pagination extends Component {
     return [start + TITLE_SHIFT, end + TITLE_SHIFT];
   }
 
-  getTitles(key) {
-    const pTitles = this.props.titles || {};
-    return pTitles[key] || TITLES[key];
-  }
+   /**
+     * ### renderPages()
+     * Renders block of pages' buttons with numbers.
+     * @param {Number[]} range - pair of [start, from], `from` - not inclusive.
+     * @return {React.Element[]} - array of React nodes.
+     */
+  renderPages(pair) {
+    const self = this;
+    return range(pair[0], pair[1]).map((el) => {
+      const current = el - TITLE_SHIFT;
+      const onClick = self.handlePageChanged.bind(null, current);
+      const isActive = (self.props.current === current);
 
+      return (
+        <Page
+          key={`page-${current}`} isActive={isActive}
+          className="btn-numbered-page"
+          onClick={onClick}
+        >{el}</Page>
+      );
+    });
+  }
 
   render() {
     const titles = this.getTitles;
@@ -174,61 +230,5 @@ export default class Pagination extends Component {
       </nav>
     );
   }
-
-   /**
-     * ### renderPages()
-     * Renders block of pages' buttons with numbers.
-     * @param {Number[]} range - pair of [start, from], `from` - not inclusive.
-     * @return {React.Element[]} - array of React nodes.
-     */
-  renderPages(pair) {
-    const self = this;
-    return range(pair[0], pair[1]).map((el, idx) => {
-      const current = el - TITLE_SHIFT;
-      const onClick = self.handlePageChanged.bind(null, current);
-      const isActive = (self.props.current === current);
-
-      return (
-        <Page
-          key={idx} isActive={isActive}
-          className="btn-numbered-page"
-          onClick={onClick}
-        >{el}</Page>
-      );
-    });
-  }
 }
 
-Pagination.propTypes = {
-  current: React.PropTypes.number.isRequired,
-  total: React.PropTypes.number.isRequired,
-  visiblePages: React.PropTypes.number.isRequired,
-  titles: React.PropTypes.object,
-
-  onPageChanged: React.PropTypes.func,
-  onPageSizeChanged: React.PropTypes.func,
-};
-
-
-function range(start, end) {
-  const res = [];
-  for (let i = start; i < end; i++) {
-    res.push(i);
-  }
-  return res;
-}
-
-class Page extends Component {
-  render() {
-    const props = this.props;
-    if (props.isHidden) return null;
-    const baseCss = props.className ? `${props.className} ` : '';
-    const css = baseCss + (props.isActive ? 'active' : '') + (props.isDisabled ? 'disabled' : '');
-
-    return (
-      <li key={this.props.key} className={css}>
-        <a onClick={this.props.onClick}>{this.props.children}</a>
-      </li>
-    );
-  }
-}

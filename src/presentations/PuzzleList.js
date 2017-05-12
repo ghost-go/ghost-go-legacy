@@ -1,5 +1,6 @@
-import React, { Component, PropTypes as T } from 'react';
-import { List, ListItem } from 'material-ui/List';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { List } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Clear from 'material-ui/svg-icons/content/clear';
 import Done from 'material-ui/svg-icons/action/done';
@@ -7,12 +8,57 @@ import _ from 'lodash';
 
 import { StyleSheet, css } from 'aphrodite';
 
+const style = StyleSheet.create({
+
+  listBox: {
+    position: 'relative',
+    padding: '5px',
+    cursor: 'pointer',
+    display: 'flex',
+    ':hover': {
+      backgroundColor: '#eee',
+    },
+  },
+
+  symbol: {
+    position: 'absolute',
+    right: '5px',
+    bottom: '10px',
+    width: '50px',
+    height: '50px',
+  },
+
+  colorRed: {
+    color: 'red',
+  },
+
+  colorGreen: {
+    color: 'green',
+  },
+
+  selected: {
+    backgroundColor: '#eee',
+  },
+
+  previewImg: {
+    width: '100px',
+  },
+
+  title: {
+    fontSize: '18px',
+  },
+
+  listRight: {
+    padding: '10px',
+  },
+
+});
+
 export default class PuzzleList extends Component {
 
-
   static propTypes = {
-    puzzleList: T.array.isRequired,
-    record: T.array.isRequired,
+    puzzleList: PropTypes.arrayOf({}).isRequired,
+    record: PropTypes.arrayOf({}).isRequired,
   }
 
   static defaultProps = {
@@ -63,48 +109,3 @@ export default class PuzzleList extends Component {
   }
 }
 
-const style = StyleSheet.create({
-
-  listBox: {
-    position: 'relative',
-    padding: '5px',
-    cursor: 'pointer',
-    display: 'flex',
-    ':hover': {
-      backgroundColor: '#eee',
-    },
-  },
-
-  symbol: {
-    position: 'absolute',
-    right: '5px',
-    bottom: '10px',
-    width: '50px',
-    height: '50px',
-  },
-
-  colorRed: {
-    color: 'red',
-  },
-
-  colorGreen: {
-    color: 'green',
-  },
-
-  selected: {
-    backgroundColor: '#eee',
-  },
-
-  previewImg: {
-    width: '100px',
-  },
-
-  title: {
-    fontSize: '18px',
-  },
-
-  listRight: {
-    padding: '10px',
-  },
-
-});

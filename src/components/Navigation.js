@@ -10,7 +10,7 @@ import AuthService from '../utils/AuthService';
 class Navigation extends Component {
 
   static propTypes = {
-    auth: PropTypes.instanceOf(AuthService),
+    auth: PropTypes.instanceOf(AuthService).isRequired,
     expanded: PropTypes.bool.isRequired,
     collapseToggle: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -32,6 +32,20 @@ class Navigation extends Component {
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
+
+    this.handleTheme = this.handleTheme.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.mouseDownHandler = this.mouseDownHandler.bind(this);
+    this.mouseUpHandler = this.mouseUpHandler.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousedown', () => {
+      if (this.mouseIsDownOnCalendar) {
+        return;
+      }
+      this.setState({ navOpen: false });
+    }, false);
   }
 
   handleToggle() {
@@ -51,15 +65,6 @@ class Navigation extends Component {
     this.mouseIsDownOnCalendar = false;
   }
 
-  componentDidMount() {
-    window.addEventListener('mousedown', () => {
-      if (this.mouseIsDownOnCalendar) {
-        return;
-      }
-      this.setState({ navOpen: false });
-    }, false);
-  }
-
   render() {
     const { auth, theme } = this.props;
     return (
@@ -72,7 +77,7 @@ class Navigation extends Component {
         </div>
         <div id="sidebar-search" />
         <div className="theme">
-          <select className="form-control" onChange={::this.handleTheme} defaultValue={theme}>
+          <select className="form-control" onChange={this.handleTheme} defaultValue={theme}>
             <option>black-and-white</option>
             <option>flat-theme</option>
             <option>photorealistic-theme</option>
@@ -84,7 +89,7 @@ class Navigation extends Component {
             <option>walnut-theme</option>
           </select>
         </div>
-        <div id="header-right" onMouseDown={::this.mouseDownHandler} onMouseUp={::this.mouseUpHandler}>
+        <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
             auth.loggedIn() ? (
               <div>
@@ -110,9 +115,24 @@ class Navigation extends Component {
                       {/*
                       <div className="divider"></div>
                       <ul className="reset-ul mrg5B">
-                        <li><a href="#">View login page example <Glyphicon className="icon" glyph="menu-right" /></a></li>
-                        <li><a href="#">View lockscreen example <Glyphicon className="icon" glyph="menu-right" /></a></li>
-                        <li><a href="#">View account details <Glyphicon className="icon" glyph="menu-right" /></a></li>
+                        <li>
+                          <a href="#">
+                            View login page example
+                            <Glyphicon className="icon" glyph="menu-right" />
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#">
+                            View lockscreen example
+                            <Glyphicon className="icon" glyph="menu-right" />
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#">
+                            View account details
+                            <Glyphicon className="icon" glyph="menu-right" />
+                          </a>
+                        </li>
                       </ul>
                       */}
                       <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
@@ -143,7 +163,7 @@ class Navigation extends Component {
               </div>
             ) : (
               <div className="user-profile dropdown login">
-                <Button onClick={auth.login.bind(this)} className="signin clearfix" bsStyle="primary">
+                <Button onClick={auth.login} className="signin clearfix" bsStyle="primary">
                   Sign in
                 </Button>
               </div>

@@ -8,7 +8,7 @@ import AuthService from '../utils/AuthService';
 export default class Sidebar extends Component {
 
   static propTypes = {
-    auth: PropTypes.instanceOf(AuthService),
+    auth: PropTypes.instanceOf(AuthService).isRequired,
     expanded: PropTypes.bool.isRequired,
   }
 
@@ -64,8 +64,7 @@ export default class Sidebar extends Component {
                         <i className="fa fa-bar-chart-o fa-lg"></i>
                       </NavItem>
                       <NavItem eventKey="fourth">
-                        <i className="fa fa-cogs fa-lg"></i>
-                      </NavItem>
+                        <i className="fa fa-cogs fa-lg"></i> </NavItem>
                     </Nav>
                           */}
                     <Tab.Content animation>

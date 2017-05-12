@@ -1,6 +1,6 @@
-import * as config from '../constants/Config';
 import { createAction } from 'redux-actions';
 import URI from 'urijs';
+import * as config from '../constants/Config';
 
 function buildFetchData(name = '', api = '') {
   const fetchDataRequest = createAction(`FETCH_${name}_REQUEST`);
