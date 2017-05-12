@@ -2,38 +2,73 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
+import { StyleSheet, css } from 'aphrodite';
 
 import { CoordsToTree, RESPONSE_TIME } from '../constants/Go';
-
 import PuzzlePanel from '../presentations/PuzzlePanel';
-import FlatButton from 'material-ui/FlatButton';
 import Board from '../eboard/Board';
-
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions';
 import { postPuzzleRecord } from '../actions/PostActions';
 import {
   setCurrentMode,
   setRangeFilter,
   addSteps,
-  resetSteps, setCurrentAnswerId } from '../actions/Actions';
+  resetSteps, setCurrentAnswerId,
+} from '../actions/Actions';
 
-// material-ui
-import Dialog from 'material-ui/Dialog';
+const styles = StyleSheet.create({
+  tipRight: {
+    position: 'absolute',
+    width: '300px',
+    height: '300px',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-150px',
+    marginTop: '-150px',
+    fontSize: '300px',
+    color: 'green',
+    textAlign: 'center',
+  },
 
-import { StyleSheet, css } from 'aphrodite';
+  tipWrong: {
+    position: 'absolute',
+    width: '300px',
+    height: '300px',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-150px',
+    marginTop: '-150px',
+    fontSize: '300px',
+    color: 'red',
+    textAlign: 'center',
+  },
+});
 
 class Puzzle extends Component {
 
   static propTypes = {
-    puzzle: PropTypes.object.isRequired,
+    puzzle: PropTypes.shape({
+      data: PropTypes.shape({
+        right_answers: PropTypes.arrayOf({}).isRequired,
+        wrong_answers: PropTypes.arrayOf({}).isRequired,
+        id: PropTypes.number.isRequired,
+      }).isRequired,
+    }).isRequired,
     dispatch: PropTypes.func.isRequired,
-    rangeFilter: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
-    steps: PropTypes.array.isRequired,
+    rangeFilter: PropTypes.shape({
+      start: PropTypes.string.isRequired,
+      end: PropTypes.string.isRequired,
+    }).isRequired,
+    params: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+    steps: PropTypes.arrayOf({}).isRequired,
     currentMode: PropTypes.string.isRequired,
-    currentAnswerId: PropTypes.number,
+    currentAnswerId: PropTypes.number.isRequired,
     theme: PropTypes.string.isRequired,
-    themeMaterial: PropTypes.object.isRequired,
+    themeMaterial: PropTypes.shape({}).isRequired,
   }
 
   static contextTypes = {
@@ -60,6 +95,52 @@ class Puzzle extends Component {
     this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  componentDidMount() {
+    const { id } = this.props.params;
+    const { auth } = this.context;
+    const profile = auth.getProfile();
+    this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
+    let boardWidth = 0;
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60;
+    } else {
+      boardWidth = window.innerWidth;
+    }
+    this.boardLayer.width = boardWidth;
+    this.boardLayer.height = boardWidth;
+  }
+
+  componentDidUpdate() {
+    const { puzzle, steps } = this.props;
+
+    const board = new Board({
+      autofit: true,
+      theme: this.props.theme,
+      material: this.props.themeMaterial,
+      editable: true,
+      nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
+      afterMove: (step) => {
+        this.props.dispatch(addSteps(step));
+        setTimeout(() => {
+          if (this.props.currentMode !== 'research') {
+            this.response();
+          }
+        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME);
+      },
+    });
+
+    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true);
+    board.render(this.boardLayer);
+  }
+
+  setCurrentMode(mode) {
+    this.props.dispatch(setCurrentMode(mode));
+  }
+
+  setCurrentAnswerId(id) {
+    this.props.dispatch(setCurrentAnswerId(id));
   }
 
   handleAnswersToggle(event, toggle) {
@@ -131,91 +212,47 @@ class Puzzle extends Component {
     this.props.dispatch(addSteps(step));
   }
 
-  setCurrentMode(mode) {
-    this.props.dispatch(setCurrentMode(mode));
-  }
 
   resetSteps() {
     this.props.dispatch(resetSteps());
-  }
-
-  setCurrentAnswerId(id) {
-    this.props.dispatch(setCurrentAnswerId(id));
-  }
-
-  componentDidMount() {
-    const { id } = this.props.params;
-    const { auth } = this.context;
-    const profile = auth.getProfile();
-    this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
-    let boardWidth = 0;
-    if (screen.width > screen.height) {
-      boardWidth = window.innerHeight - 60;
-    } else {
-      boardWidth = window.innerWidth;
-    }
-    this.boardLayer.width = this.boardLayer.height = boardWidth;
-  }
-
-  componentDidUpdate() {
-    const { puzzle, steps } = this.props;
-
-    const board = new Board({
-      autofit: true,
-      theme: this.props.theme,
-      material: this.props.themeMaterial,
-      editable: true,
-      nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
-      afterMove: (step) => {
-        this.props.dispatch(addSteps(step));
-        setTimeout(() => {
-          if (this.props.currentMode !== 'research') {
-            this.response();
-          }
-        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME);
-      },
-    });
-
-    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true);
-    board.render(this.boardLayer);
   }
 
   response() {
     const rights = [];
     const wrongs = [];
     this.props.puzzle.data.right_answers.forEach((i) => {
-      if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
+      if (i.steps.indexOf(this.props.steps.join(';')) === 0) {
         rights.push(i);
       }
     });
     this.props.puzzle.data.wrong_answers.forEach((i) => {
-      if (i.steps.indexOf(this.props.steps.join(';')) == 0) {
+      if (i.steps.indexOf(this.props.steps.join(';')) === 0) {
         wrongs.push(i);
       }
     });
 
     if (rights.length > 0) {
       const i = Math.floor(Math.random() * rights.length);
-      const stepsStr = this.props.steps.join(';');
+      let stepsStr = this.props.steps.join(';');
       if (rights[i].steps === stepsStr) {
         this.handleRight();
       } else {
         const step = rights[i].steps.split(';')[this.props.steps.length];
         this.props.dispatch(addSteps(step));
-        const stepsStr = this.props.steps.join(';');
+        stepsStr = this.props.steps.join(';');
         if (rights[i].steps === stepsStr) {
           this.handleRight();
         }
       }
     } else if (wrongs.length > 0) {
       const i = Math.floor(Math.random() * wrongs.length);
-      const stepsStr = this.props.steps.join(';');
+      let stepsStr = this.props.steps.join(';');
       if (wrongs[i].steps === stepsStr) {
         this.handleWrong();
       } else {
         const step = wrongs[i].steps.split(';')[this.props.steps.length];
         this.props.dispatch(addSteps(step));
-        const stepsStr = this.props.steps.join(';');
+        stepsStr = this.props.steps.join(';');
         if (wrongs[i].steps === stepsStr) {
           this.handleWrong();
         }
@@ -250,14 +287,14 @@ class Puzzle extends Component {
         <div className="puzzle-board">
           {
             this.state.rightTipOpen ?
-              <div ref="tipRight" className={css(styles.tipRight)}>
+              <div className={css(styles.tipRight)}>
                 <i className="zmdi zmdi-check" />
               </div>
             : null
           }
           {
             this.state.wrongTipOpen ?
-              <div ref="tipWrong" className={css(styles.tipWrong)}>
+              <div className={css(styles.tipWrong)}>
                 <i className="zmdi zmdi-close" />
               </div>
                 : null
@@ -270,13 +307,13 @@ class Puzzle extends Component {
             showNext
             puzzle={puzzle.data}
             handleRangeChange={this.handleRangeChange}
-            handleNext={::this.handleNext}
+            handleNext={this.handleNext}
             rangeFilter={this.props.rangeFilter}
-            handleReset={::this.handleReset}
-            addSteps={::this.addSteps}
-            resetSteps={::this.resetSteps}
-            setCurrentAnswerId={::this.setCurrentAnswerId}
-            setCurrentMode={::this.setCurrentMode}
+            handleReset={this.handleReset}
+            addSteps={this.addSteps}
+            resetSteps={this.resetSteps}
+            setCurrentAnswerId={this.setCurrentAnswerId}
+            setCurrentMode={this.setCurrentMode}
             currentMode={this.props.currentMode}
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
@@ -298,33 +335,5 @@ function select(state) {
     themeMaterial: state.themeMaterial,
   };
 }
-
-const styles = StyleSheet.create({
-  tipRight: {
-    position: 'absolute',
-    width: '300px',
-    height: '300px',
-    top: '50%',
-    left: '50%',
-    marginLeft: '-150px',
-    marginTop: '-150px',
-    fontSize: '300px',
-    color: 'green',
-    textAlign: 'center',
-  },
-
-  tipWrong: {
-    position: 'absolute',
-    width: '300px',
-    height: '300px',
-    top: '50%',
-    left: '50%',
-    marginLeft: '-150px',
-    marginTop: '-150px',
-    fontSize: '300px',
-    color: 'red',
-    textAlign: 'center',
-  },
-});
 
 export default connect(select)(Puzzle);

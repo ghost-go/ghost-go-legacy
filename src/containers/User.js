@@ -36,6 +36,22 @@ export default class User extends Component {
     auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
+
+    this.setRank = this.setRank.bind(this);
+    this.setBio = this.setBio.bind(this);
+    this.handleUpdateProfile = this.handleUpdateProfile.bind(this);
+  }
+
+  setNickName(e) {
+    this.setState({ nickname: e.target.value });
+  }
+
+  setBio(e) {
+    this.setState({ bio: e.target.value });
+  }
+
+  setRank(e) {
+    this.setState({ rank: e.target.value });
   }
 
   logout() {
@@ -56,21 +72,6 @@ export default class User extends Component {
         tipsOpen: true,
       });
     });
-  }
-
-  setNickName(e) {
-    this.setState({ nickname: e.target.value });
-  }
-
-  setBio(e) {
-    this.setState({ bio: e.target.value });
-  }
-
-  setRank(e) {
-    this.setState({ rank: e.target.value });
-  }
-
-  getValidationState() {
   }
 
   render() {
@@ -114,7 +115,7 @@ export default class User extends Component {
                   validationState={this.getValidationState()}
                 >
                   <ControlLabel>Level</ControlLabel>
-                  <FormControl onChange={::this.setRank} componentClass="select" placeholder="select" value={this.state.rank}>
+                  <FormControl onChange={this.setRank} componentClass="select" placeholder="select" value={this.state.rank}>
                     <option value="18k">18k</option>
                     <option value="17k">17k</option>
                     <option value="16k">16k</option>
@@ -152,14 +153,14 @@ export default class User extends Component {
                 >
                   <ControlLabel>Bio</ControlLabel>
                   <FormControl
-                    onChange={::this.setBio}
+                    onChange={this.setBio}
                     componentClass="textarea"
                     placeholder="Bio"
                     value={this.state.bio}
                   />
                   <FormControl.Feedback />
                 </FormGroup>
-                <Button onClick={::this.handleUpdateProfile} style={{ marginRight: '10px' }} bsStyle="primary">
+                <Button onClick={this.handleUpdateProfile} style={{ marginRight: '10px' }} bsStyle="primary">
                   Update profile
                 </Button>
               </div>

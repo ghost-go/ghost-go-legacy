@@ -127,11 +127,11 @@ images = [
 
 const imageData = {};
 function preload() {
-  for (let i = 0; i < images.length; i++) {
+  images.forEach((src, i) => {
     const img = new Image();
-    img.src = images[i];
-    imageData[images[i]] = img;
-  }
+    img.src = src;
+    imageData[i] = img;
+  });
 }
 preload();
 

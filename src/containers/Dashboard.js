@@ -15,7 +15,7 @@ class Dashboard extends Component {
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
-    dashboard: PropTypes.object.isRequired,
+    dashboard: PropTypes.shape({}).isRequired,
   }
 
   static contextTypes = {
@@ -112,7 +112,7 @@ class Dashboard extends Component {
                   <div className="tile-content">
                     { dashboard.isFetching === true ? loading : dashboard.data.right }
                   </div>
-                  <small>{`take up ${(dashboard.data.right * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
+                  <small>{`take up ${((dashboard.data.right * 100) / dashboard.data.total).toFixed(2)}% of all`}</small>
                 </div>
                 <Link className="tile-footer" to={'/records?page=1&type=right'}>view details <i className="fa fa-arrow-right" /></Link>
               </div>
@@ -125,7 +125,7 @@ class Dashboard extends Component {
                   <div className="tile-content">
                     { dashboard.isFetching === true ? loading : dashboard.data.wrong }
                   </div>
-                  <small>{`take up ${(dashboard.data.wrong * 100 / dashboard.data.total).toFixed(2)}% of all`}</small>
+                  <small>{`take up ${((dashboard.data.wrong * 100) / dashboard.data.total).toFixed(2)}% of all`}</small>
                 </div>
                 <Link className="tile-footer" to={'/records?page=1&type=wrong'}>view details <i className="fa fa-arrow-right" /></Link>
               </div>

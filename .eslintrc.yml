@@ -17,6 +17,9 @@
       "imports": "always-multiline",
       "exports": "always-multiline",
       "functions": "always-multiline",
+    }],
+    "no-plusplus": ["error", {
+      "allowForLoopAfterthoughts": true
     }]
   }
 }

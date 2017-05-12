@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import mainStyles from '../styles/main';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-
-import { StyleSheet, css } from 'aphrodite';
-import PuzzleList from '../presentations/PuzzleList';
-import { fetchPractice, fetchPracticeRecord } from '../actions/FetchActions';
-import { setPracticePuzzleId } from '../actions/Actions';
-import PuzzlePanel from '../presentations/PuzzlePanel';
-
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
+import Favorite from 'material-ui/svg-icons/action/favorite';
+import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+
+import { StyleSheet, css } from 'aphrodite';
+import PuzzleList from '../presentations/PuzzleList';
+import mainStyles from '../styles/main';
+import { fetchPractice, fetchPracticeRecord } from '../actions/FetchActions';
+import PuzzlePanel from '../presentations/PuzzlePanel';
+
 import {
   postPuzzleRecord,
   postPracticeRecord,
@@ -23,25 +26,100 @@ import {
   addSteps,
   resetSteps,
   setCurrentAnswerId,
+  setPracticePuzzleId,
 } from '../actions/Actions';
 
-import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
+const styles = StyleSheet.create({
 
-import Favorite from 'material-ui/svg-icons/action/favorite';
-import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+  list: {
+    display: 'flex',
+    height: 'calc(100vmin - 100px)',
+    overflow: 'hidden',
+    overflowY: 'visible',
+  },
+
+  board: {
+    flex: '1 1 auto',
+    width: 'calc(100vmin - 100px)',
+    height: 'calc(100vmin - 100px)',
+    marginLeft: '20px',
+  },
+
+  panel: {
+    padding: '20px',
+    flex: '0 0 270px',
+    height: 'calc(100vmin - 100px)',
+    marginLeft: '20px',
+  },
+
+  resultPanel: {
+    marginLeft: '20px',
+  },
+
+  favorite: {
+    width: '30px',
+    height: '30px',
+    color: 'red',
+  },
+
+  title: {
+    padding: '15px 0px',
+    fontSize: '16px',
+  },
+
+  content: {
+    fontSize: '22px',
+    fontWeight: 'bold',
+  },
+
+  alert: {
+    marginTop: '20px',
+    marginRight: '10px',
+  },
+
+});
 
 class Practice extends Component {
 
   static propTypes = {
-    practice: PropTypes.object.isRequired,
+    practice: PropTypes.shape({
+      data: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        life: PropTypes.number.isRequired,
+        time: PropTypes.number.isRequired,
+        puzzles: PropTypes.arrayOf({}).isRequired,
+      }).isRequired,
+    }).isRequired,
     dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    currentPuzzleId: PropTypes.number,
+    params: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+    currentPuzzleId: PropTypes.number.isRequired,
+    route: PropTypes.shape({
+      path: PropTypes.string.isRequired,
+    }).isRequired,
+    rangeFilter: PropTypes.string.isRequired,
+    currentMode: PropTypes.string.isRequired,
+    currentAnswerId: PropTypes.string.isRequired,
+    steps: PropTypes.string.isRequired,
   }
 
   static contextTypes = {
     auth: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.handlePause = this.handlePause.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleGo = this.handleGo.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+    this.handleNo = this.handleNo.bind(this);
+    this.handleSubmitRecorda = this.handleSubmitRecord.bind(this);
+    this.handleScoreClose = this.handleScoreClose.bind(this);
+    this.handleScore = this.handleScore.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   state = {
@@ -60,8 +138,56 @@ class Practice extends Component {
     record: [],
   }
 
-  constructor(props) {
-    super(props);
+
+  componentDidMount() {
+    const { id } = this.props.params;
+    if (this.props.route.path === '/practice_records/:id') {
+      this.props.dispatch(fetchPracticeRecord({ id })).then((data) => {
+        const pid = data.payload.data.practice_id;
+        this.props.dispatch(fetchPractice({ id: pid })).then(() => {
+          this.setState({
+            life: this.props.practice.data.life,
+            time: this.props.practice.data.time,
+          });
+        }).then(() => {
+          this.setState({ resultMode: true });
+        });
+      });
+    } else {
+      this.props.dispatch(fetchPractice({ id })).then(() => {
+        this.setState({
+          alert: true,
+          life: this.props.practice.data.life,
+          time: this.props.practice.data.time,
+        });
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
+
+  setCurrentMode(mode) {
+    this.props.dispatch(setCurrentMode(mode));
+  }
+
+  setCurrentAnswerId(id) {
+    this.props.dispatch(setCurrentAnswerId(id));
+  }
+
+  getCurrentPuzzleIndex() {
+    return _.findIndex(this.props.practice.data.puzzles,
+      { id: this.props.currentPuzzleId || this.props.practice.data.puzzles[0].id });
+  }
+
+  getCurrentPuzzle() {
+    return _.find(this.props.practice.data.puzzles,
+      { id: this.props.currentPuzzleId || this.props.practice.data.puzzles[0].id });
+  }
+
+  componentUnmount() {
+    clearInterval(this.state.intervalId);
   }
 
   nextPuzzle() {
@@ -82,10 +208,10 @@ class Practice extends Component {
   }
 
   buildPracticeRecord(isRight) {
-    const puzzle = this._getCurrentPuzzle();
+    const puzzle = this.getCurrentPuzzle();
     this.state.record.push({
       puzzle_id: puzzle.id,
-      index: this._getCurrentPuzzleIndex(),
+      index: this.getCurrentPuzzleIndex(),
       isRight,
     });
   }
@@ -94,16 +220,8 @@ class Practice extends Component {
     this.props.dispatch(addSteps(step));
   }
 
-  setCurrentMode(mode) {
-    this.props.dispatch(setCurrentMode(mode));
-  }
-
   resetSteps() {
     this.props.dispatch(resetSteps());
-  }
-
-  setCurrentAnswerId(id) {
-    this.props.dispatch(setCurrentAnswerId(id));
   }
 
   handleAfterClick() {
@@ -117,9 +235,10 @@ class Practice extends Component {
 
   handleRight() {
     this.buildPracticeRecord(true);
-    this._handlePuzzleRecord('right');
+    this.handlePuzzleRecord('right');
     clearInterval(this.state.intervalId);
-    this.refs.board.handleRightTipOpen();
+    // TODO: refs is deprecated
+    // this.refs.board.handleRightTipOpen();
     setTimeout(() => {
       this.handleTimeReset();
       this.handleReset();
@@ -129,10 +248,11 @@ class Practice extends Component {
 
   handleWrong(isRecord = true) {
     if (isRecord) {
-      this._handlePuzzleRecord('wrong');
+      this.handlePuzzleRecord('wrong');
     }
     clearInterval(this.state.intervalId);
-    this.refs.board.handleWrongTipOpen();
+    // TODO: refs is deprecated
+    // this.refs.board.handleWrongTipOpen();
     this.minusLife();
     setTimeout(() => {
       this.handleTimeReset();
@@ -148,10 +268,11 @@ class Practice extends Component {
     }, 2000);
   }
 
-  handleReset() {
-    this.refs.board.handleTipsReset();
-    this.refs.board.reset();
-  }
+  // handleReset() {
+    // TODO: refs is deprecated
+    // this.refs.board.handleTipsReset();
+    // this.refs.board.reset();
+  // }
 
   handleTimeReset() {
     this.setState({ time: this.props.practice.data.time });
@@ -239,6 +360,7 @@ class Practice extends Component {
       if (prevState.life > 0) {
         return { life: prevState.life - 1 };
       }
+      return { left: 0 };
     });
   }
 
@@ -246,7 +368,7 @@ class Practice extends Component {
     this.setState((prevState) => {
       let time = prevState.time;
       if (time > 0) {
-        time--;
+        time -= 1;
       } else {
         this.handleWrong(false);
       }
@@ -254,82 +376,59 @@ class Practice extends Component {
     });
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId);
-  }
+  handlePuzzleRecord(type) {
+    const { auth } = this.context;
+    const profile = auth.getProfile();
+    const puzzle = this.getCurrentPuzzle();
 
-  componentUnmount() {
-    clearInterval(this.state.intervalId);
+    this.props.dispatch(postPuzzleRecord({
+      puzzle_id: puzzle.id,
+      user_id: profile.user_id,
+      record_type: type,
+    }));
   }
-
-  componentDidMount() {
-    const { id } = this.props.params;
-    if (this.props.route.path === '/practice_records/:id') {
-      this.props.dispatch(fetchPracticeRecord({ id })).then((data) => {
-        const pid = data.payload.data.practice_id;
-        this.props.dispatch(fetchPractice({ id: pid })).then(() => {
-          this.setState({
-            life: this.props.practice.data.life,
-            time: this.props.practice.data.time,
-          });
-        }).then(() => {
-          this.setState({ resultMode: true });
-        });
-      });
-    } else {
-      const { id } = this.props.params;
-      this.props.dispatch(fetchPractice({ id })).then(() => {
-        this.setState({
-          alert: true,
-          life: this.props.practice.data.life,
-          time: this.props.practice.data.time,
-        });
-      });
-    }
-  }
-
 
   render() {
     const actions = [
       <FlatButton
         label={this.state.alertButtonText}
         primary
-        onTouchTap={::this.handleGo}
+        onTouchTap={this.handleGo}
       />,
     ];
     const submitActions = [
       <FlatButton
         label="No"
-        onTouchTap={::this.handleNo}
+        onTouchTap={this.handleNo}
       />,
       <FlatButton
         label="Yes"
         primary
-        onTouchTap={::this.handleSubmitRecord}
+        onTouchTap={this.handleSubmitRecord}
       />,
     ];
     const scoreActions = [
       <FlatButton
         label="Close"
-        onTouchTap={::this.handleScoreClose}
+        onTouchTap={this.handleScoreClose}
       />,
       <FlatButton
         label="Details"
         primary
-        onTouchTap={::this.handleScore}
+        onTouchTap={this.handleScore}
       />,
     ];
-    let puzzleList,
-      puzzle,
-      puzzleBoard,
-      whofirst,
-      rank,
-      favorite,
-      panel;
+    let puzzleList;
+    let puzzle;
+    let puzzleBoard;
+    let whofirst;
+    let rank;
+    let favorite;
+    let panel;
     if (this.props.practice.data !== undefined) {
-      puzzle = this._getCurrentPuzzle();
+      puzzle = this.getCurrentPuzzle();
       puzzleList = (<PuzzleList
-        puzzleListOnClick={::this.handleClick}
+        puzzleListOnClick={this.handleClick}
         puzzleList={this.props.practice.data.puzzles}
         currentPuzzleId={puzzle.id}
         record={this.state.record}
@@ -359,7 +458,7 @@ class Practice extends Component {
         favorite.push(<FavoriteBorder key={`fav-b-${i}`} className={css(styles.favorite)} />);
       }
     }
-    if (this.state.resultMode == true) {
+    if (this.state.resultMode === true) {
       panel =
         (<PuzzlePanel
           className={css(styles.resultPanel)}
@@ -367,11 +466,11 @@ class Practice extends Component {
           handleRangeChange={this.handleRangeChange}
           handleNext={this.handleNext}
           rangeFilter={this.props.rangeFilter}
-          handleReset={::this.handleReset}
-          addSteps={::this.addSteps}
-          resetSteps={::this.resetSteps}
-          setCurrentAnswerId={::this.setCurrentAnswerId}
-          setCurrentMode={::this.setCurrentMode}
+          handleReset={this.handleReset}
+          addSteps={this.addSteps}
+          resetSteps={this.resetSteps}
+          setCurrentAnswerId={this.setCurrentAnswerId}
+          setCurrentMode={this.setCurrentMode}
           currentMode={this.props.currentMode}
           currentAnswerId={this.props.currentAnswerId}
           steps={this.props.steps}
@@ -399,13 +498,13 @@ class Practice extends Component {
             <div>
               <RaisedButton
                 className={css(styles.alert)}
-                onClick={::this.handlePause}
+                onClick={this.handlePause}
                 label="Pause"
                 primary
               />
               <RaisedButton
                 className={css(styles.alert)}
-                onClick={::this.handleSubmit}
+                onClick={this.handleSubmit}
                 label="Submit"
                 secondary
               />
@@ -452,78 +551,7 @@ class Practice extends Component {
       </div>
     );
   }
-
-  _handlePuzzleRecord(type) {
-    const { auth } = this.context;
-    const profile = auth.getProfile();
-    const puzzle = this._getCurrentPuzzle();
-
-    this.props.dispatch(postPuzzleRecord({
-      puzzle_id: puzzle.id,
-      user_id: profile.user_id,
-      record_type: type,
-    }));
-  }
-
-  _getCurrentPuzzleIndex() {
-    return _.findIndex(this.props.practice.data.puzzles, { id: this.props.currentPuzzleId || this.props.practice.data.puzzles[0].id });
-  }
-
-  _getCurrentPuzzle() {
-    return _.find(this.props.practice.data.puzzles, { id: this.props.currentPuzzleId || this.props.practice.data.puzzles[0].id });
-  }
-
 }
-
-const styles = StyleSheet.create({
-
-  list: {
-    display: 'flex',
-    height: 'calc(100vmin - 100px)',
-    overflow: 'hidden',
-    overflowY: 'visible',
-  },
-
-  board: {
-    flex: '1 1 auto',
-    width: 'calc(100vmin - 100px)',
-    height: 'calc(100vmin - 100px)',
-    marginLeft: '20px',
-  },
-
-  panel: {
-    padding: '20px',
-    flex: '0 0 270px',
-    height: 'calc(100vmin - 100px)',
-    marginLeft: '20px',
-  },
-
-  resultPanel: {
-    marginLeft: '20px',
-  },
-
-  favorite: {
-    width: '30px',
-    height: '30px',
-    color: 'red',
-  },
-
-  title: {
-    padding: '15px 0px',
-    fontSize: '16px',
-  },
-
-  content: {
-    fontSize: '22px',
-    fontWeight: 'bold',
-  },
-
-  alert: {
-    marginTop: '20px',
-    marginRight: '10px',
-  },
-
-});
 
 function select(state) {
   return {

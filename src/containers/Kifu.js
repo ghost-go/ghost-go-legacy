@@ -14,32 +14,75 @@ const { LEFT, RIGHT, SPACE, ENTER } = Keys;
 class Kifu extends Component {
 
   static propTypes = {
-    params: PropTypes.object.isRequired,
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
     dispatch: PropTypes.func.isRequired,
-    kifu: PropTypes.object.isRequired,
+    kifu: PropTypes.shape({
+      data: PropTypes.shape({
+        total: PropTypes.number.isRequired,
+      }),
+    }).isRequired,
     theme: PropTypes.string.isRequired,
-    themeMaterial: PropTypes.object.isRequired,
+    themeMaterial: PropTypes.shape({}).isRequired,
+  }
+
+  constructor() {
+    super();
+
+    this.prevStep = this.prevStep.bind(this);
+    this.nextStep = this.nextStep.bind(this);
+    this.firstStep = this.firstStep.bind(this);
+    this.lastStep = this.lastStep.bind(this);
+    this.prev10Step = this.prevStep.bind(this);
+    this.next10Step = this.nextStep.bind(this);
   }
 
   state = {
     step: 0,
   }
 
+  componentDidMount() {
+    const { id } = this.props.params;
+    this.props.dispatch(fetchKifu({ id }));
+    let boardWidth = 0;
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60;
+    } else {
+      boardWidth = window.innerWidth;
+    }
+    this.boardLayer.width = boardWidth;
+    this.boardLayer.height = boardWidth;
+  }
+
+  componentDidUpdate() {
+    const { kifu } = this.props;
+    const steps = kifu.data.steps.split(';').slice(0, this.state.step);
+    const board = new Board({
+      theme: this.props.theme,
+      material: this.props.themeMaterial,
+    });
+    board.setStones(CoordsToTree(steps));
+    board.render(this.boardLayer);
+  }
+
   @keydown(ENTER, SPACE, LEFT, RIGHT)
   handleKeyboardEvents(event) {
-    if (event.which === ENTER || event.which === RIGHT || event.which === SPACE) { this.nextStep(); }
+    if (event.which === ENTER || event.which === RIGHT || event.which === SPACE) {
+      this.nextStep();
+    }
     if (event.which === LEFT) { this.prevStep(); }
   }
 
   prevStep() {
     if (this.state.step > 0) {
-      this.setState({ step: --this.state.step });
+      this.setState({ step: this.state.step - 1 });
     }
   }
 
   nextStep() {
     if (this.state.step < this.props.kifu.data.total) {
-      this.setState({ step: ++this.state.step });
+      this.setState({ step: this.state.step + 1 });
     }
   }
 
@@ -57,38 +100,20 @@ class Kifu extends Component {
   }
 
   prev10Step() {
-    this.state.step < 10 ? this.firstStep() : this.setState({ step: this.state.step - 10 });
-  }
-
-  componentDidMount() {
-    const { id } = this.props.params;
-    this.props.dispatch(fetchKifu({ id }));
-    let boardWidth = 0;
-    if (screen.width > screen.height) {
-      boardWidth = window.innerHeight - 60;
+    if (this.state.step < 10) {
+      this.firstStep();
     } else {
-      boardWidth = window.innerWidth;
+      this.setState({ step: this.state.step - 10 });
     }
-    this.boardLayer.width = this.boardLayer.height = boardWidth;
   }
 
-  componentDidUpdate() {
-    const { kifu } = this.props;
-    const steps = kifu.data.steps.split(';').slice(0, this.state.step);
-    const board = new Board({
-      theme: this.props.theme,
-      material: this.props.themeMaterial,
-    });
-    board.setStones(CoordsToTree(steps));
-    board.render(this.boardLayer);
-  }
 
   render() {
     const { kifu } = this.props;
     return (
-      <div ref={input => this.textInput = input}>
+      <div ref={input => (this.textInput = input)}>
         <div className="kifu-board">
-          <canvas id="board_layer"ref={(elem) => { this.boardLayer = elem; }} onClick={::this.nextStep} />
+          <canvas role="button" id="board_layer"ref={(elem) => { this.boardLayer = elem; }} onClick={this.nextStep} />
         </div>
         <div className="kifu-panel">
           <Paper>
@@ -139,22 +164,22 @@ class Kifu extends Component {
                 <TableRow>
                   <TableRowColumn colSpan={2}>
                     <div className="control-bar">
-                      <span className="move-control" onClick={::this.firstStep}>
+                      <span role="button" className="move-control" onClick={this.firstStep}>
                         <i className="fa fa-fast-backward" />
                       </span>
-                      <span className="move-control" onClick={::this.prev10Step}>
+                      <span role="button" className="move-control" onClick={this.prev10Step}>
                         <i className="fa fa-backward" />
                       </span>
-                      <span className="move-control" onClick={::this.prevStep}>
+                      <span role="button" className="move-control" onClick={this.prevStep}>
                         <i className="fa fa-play rotate" />
                       </span>
-                      <span className="move-control" onClick={::this.nextStep}>
+                      <span role="button" className="move-control" onClick={this.nextStep}>
                         <i className="fa fa-play" />
                       </span>
-                      <span className="move-control" onClick={::this.next10Step}>
+                      <span role="button" className="move-control" onClick={this.next10Step}>
                         <i className="fa fa-forward" />
                       </span>
-                      <span className="move-control" onClick={::this.lastStep}>
+                      <span role="button" className="move-control" onClick={this.lastStep}>
                         <i className="fa fa-fast-forward" />
                       </span>
                     </div>
