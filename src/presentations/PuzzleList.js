@@ -87,7 +87,7 @@ export default class PuzzleList extends Component {
         <div key={`P-${i.id}`}>
           <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={this.props.currentPuzzleId === i.id ? css(style.listBox, style.selected) : css(style.listBox)}>
             <div className="list-preview-img">
-              <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} />
+              <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} alt="" />
             </div>
             <div className={css(style.listRight)}>
               <span className={css(style.title)}>{`${i.number}(${i.rank})`}</span>
