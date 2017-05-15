@@ -2,6 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, Glyphicon } from 'react-bootstrap';
 
+const ListItem = (props) => {
+  const onClick = () => {
+    this.props.handleClick(props.handleSeeMore, props.filterName, props.tag);
+  };
+  return (
+    <li
+      role="button"
+      key={props.tag}
+      className={`tag ${props.active ? 'active' : ''}`}
+      onClick={onClick}
+    >
+      {props.tag}
+    </li>
+  );
+};
+ListItem.propTypes = {
+  tag: PropTypes.string.isRequired,
+  handleSeeMore: PropTypes.func.isRequired,
+  filterName: PropTypes.string.isRequired,
+  active: PropTypes.bool.isRequired,
+};
+
 export default class FilterBar extends Component {
 
   static propTypes = {
@@ -43,7 +65,16 @@ export default class FilterBar extends Component {
                   <div className="popover-title">{item.name}</div>
                   <div className="popover-content">
                     <ul className="tags">
-                      { item.tags.map(tag => <li role="button" key={tag} className={`tag ${item.filterVal === tag ? 'active' : ''}`} onClick={this.handleClick.bind(this, item.handleSeeMore, item.filterName, tag)}>{tag}</li>) }
+                      {
+                        item.tags.map(tag => (
+                          <ListItem
+                            tag={tag}
+                            active={item.filterVal === tag}
+                            filterName={item.filterName}
+                            handleSeeMore={item.handleSeeMore}
+                          />
+                        ))
+                      }
                     </ul>
                   </div>
                 </div>,

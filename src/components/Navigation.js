@@ -94,7 +94,7 @@ class Navigation extends Component {
             auth.loggedIn() ? (
               <div>
                 <div className="user-profile dropdown">
-                  <a onTouchTap={::this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
+                  <a onTouchTap={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
                     <img width="36" src={this.state.profile.picture} alt="" />
                     <i className="fa fa-chevron-down" />
                   </a>

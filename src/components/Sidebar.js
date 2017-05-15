@@ -86,14 +86,13 @@ export default class Sidebar extends Component {
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <div className="user-welcome">
-                                  <a onClick={auth.login.bind(this)} title="Login" className="user-ico clearfix">
+                                  <a onClick={auth.login} title="Login" className="user-ico clearfix">
                                     With an account you will enjoy more features.
                                   </a>
                                 </div>
                               </div>
                             </div>
-                          )
-                        }
+                          ) }
                       </Tab.Pane>
                       <Tab.Pane eventKey="second">
                         <div id="tab-example-2">

@@ -78,7 +78,7 @@ export default class Board {
     this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
     const ctx = this.canvas.getContext('2d');
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.renderBoard(this.canvas, ctx);
+    this.renderBoard(ctx);
     this.renderStones(this.canvas, ctx);
     if (this.editable) {
       this.renderCursor(this.canvas, ctx);
@@ -94,7 +94,7 @@ export default class Board {
           this.nextStoneType = -this.nextStoneType;
           this.setStones(this.root);
           ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-          this.renderBoard(this.canvas, ctx);
+          this.renderBoard(ctx);
           this.renderStones(this.canvas, ctx);
           if (this.afterMove) {
             this.afterMove(step);
@@ -105,25 +105,25 @@ export default class Board {
   }
 
   renderBoard(canvas, ctx) {
-    this.size = canvas.width / (_.max([this.width, this.height]) + 1);
+    this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
 
     const shadowStyle = '5px 5px 5px #999999';
     if (this.theme === 'black-and-white') {
       // TODO: blablabla
     } else if (this.theme === 'walnut-theme') {
-      canvas.style.boxShadow = shadowStyle;
+      this.canvas.style.boxShadow = shadowStyle;
       const pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.jpg`], 'repeat');
       ctx.fillStyle = pattern;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     } else if (this.theme === 'flat-theme') {
-      canvas.style.boxShadow = shadowStyle;
+      this.canvas.style.boxShadow = shadowStyle;
       ctx.fillStyle = '#ECB55A';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     } else {
-      canvas.style.boxShadow = shadowStyle;
+      this.canvas.style.boxShadow = shadowStyle;
       const pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.png`], 'repeat');
       ctx.fillStyle = pattern;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
     ctx.beginPath();
     for (let i = 1; i <= this.width; i++) {
@@ -140,8 +140,18 @@ export default class Board {
     ;[4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
         ctx.beginPath();
-        if (this.autofit && ((i - this.offsetX) > 1 && (j - this.offsetY) > 1) && (i - this.offsetX) < this.maxhv && (j - this.offsetY) < this.maxhv) {
-          ctx.arc((i - this.offsetX) * this.size, (j - this.offsetY) * this.size, dotSize, 0, 2 * Math.PI, true);
+        if (this.autofit && ((i - this.offsetX) > 1 &&
+          (j - this.offsetY) > 1) &&
+          (i - this.offsetX) < this.maxhv &&
+          (j - this.offsetY) < this.maxhv) {
+          ctx.arc(
+            (i - this.offsetX) * this.size,
+            (j - this.offsetY) * this.size,
+            dotSize,
+            0,
+            2 * Math.PI,
+            true,
+          );
         } else if (!this.autofit) {
           ctx.arc(i * this.size, j * this.size, dotSize, 0, 2 * Math.PI, true);
         }
@@ -152,8 +162,8 @@ export default class Board {
   }
 
   renderStones(canvas, ctx) {
-    let il,
-      jl;
+    let il;
+    let jl;
     this.size = canvas.width / (_.max([this.width, this.height]) + 1);
     if (this.lastNode !== undefined) {
       il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2]);
@@ -195,7 +205,7 @@ export default class Board {
         roundedOffsetY <= this.maxhv
       ) {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.renderBoard(this.canvas, ctx);
+        this.renderBoard(ctx);
         const cross = new Cross();
         cross.x = roundedOffsetX * this.size;
         cross.y = roundedOffsetY * this.size;

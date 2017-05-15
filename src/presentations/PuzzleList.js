@@ -54,19 +54,57 @@ const style = StyleSheet.create({
 
 });
 
+const PuzzleListItem = (props) => {
+  const onClick = () => {
+    props.puzzleListOnClick(props.puzzle.id);
+  };
+
+  return (
+    <div
+      onClick={onClick}
+      className={props.selected ? css(style.listBox, style.selected) : css(style.listBox)}
+    >
+      <div className="list-preview-img">
+        <img className={css(style.previewImg)} src={props.puzzle.preview_img_r1.x200.url} alt="" />
+      </div>
+      <div className={css(style.listRight)}>
+        <span className={css(style.title)}>{`${props.puzzle.number}(${props.puzzle.rank})`}</span>
+        <br />
+        <span>{props.puzzle.whofirst}</span>
+        <div>{props.result}</div>
+      </div>
+    </div>
+  );
+};
+
+PuzzleListItem.propTypes = {
+  selected: PropTypes.bool.isRequired,
+  puzzle: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    number: PropTypes.string.isRequired,
+    rank: PropTypes.string.isRequired,
+    whofirst: PropTypes.string.isRequired,
+    preview_img_r1: PropTypes.shape({
+      x200: PropTypes.shape({
+        url: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+  puzzleListOnClick: PropTypes.func.isRequired,
+  result: PropTypes.string.isRequired,
+};
+
 export default class PuzzleList extends Component {
 
   static propTypes = {
     puzzleList: PropTypes.arrayOf({}).isRequired,
     record: PropTypes.arrayOf({}).isRequired,
+    puzzleListOnClick: PropTypes.func.isRequired,
+    currentPuzzleId: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
     puzzleList: [],
-  }
-
-  constructor(props) {
-    super(props);
   }
 
   render() {
@@ -85,17 +123,11 @@ export default class PuzzleList extends Component {
 
       list.push(
         <div key={`P-${i.id}`}>
-          <div onClick={this.props.puzzleListOnClick.bind(this, i.id)} className={this.props.currentPuzzleId === i.id ? css(style.listBox, style.selected) : css(style.listBox)}>
-            <div className="list-preview-img">
-              <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} alt="" />
-            </div>
-            <div className={css(style.listRight)}>
-              <span className={css(style.title)}>{`${i.number}(${i.rank})`}</span>
-              <br />
-              <span>{i.whofirst}</span>
-              <div>{result}</div>
-            </div>
-          </div>
+          <PuzzleListItem
+            selected={this.props.currentPuzzleId === i.id}
+            puzzle={i} puzzleListOnClick={this.props.puzzleListOnClick}
+            result={result}
+          />
           <Divider />
         </div>,
       );
@@ -108,4 +140,3 @@ export default class PuzzleList extends Component {
     );
   }
 }
-

@@ -9,14 +9,14 @@ export default class Stone {
     this.seed = seed;
   }
 
-  addShadow(ctx) {
+  static addShadow(ctx) {
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
     ctx.shadowColor = '#555';
     ctx.shadowBlur = 10;
   }
 
-  removeShadow(ctx) {
+  static removeShadow(ctx) {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
     ctx.shadowColor = 'black';
@@ -24,22 +24,33 @@ export default class Stone {
   }
 
   draw(ctx) {
-    if (this.type == 0) return;
+    if (this.type === 0) return;
     const black = new Image();
     const white = new Image();
     // TODO: Need refactor
     if (this.theme === 'flat-theme') {
       black.src = `/assets/themes/${this.theme}/black.svg`;
       white.src = `/assets/themes/${this.theme}/white.svg`;
-      ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+      ctx.drawImage(
+        this.type === 1 ? black : white,
+        this.x - this.size,
+        this.y - this.size,
+        this.size * 2,
+        this.size * 2,
+      );
     } else if (this.theme === 'photorealistic-theme') {
       black.src = `/assets/themes/${this.theme}/black.png`;
       white.src = `/assets/themes/${this.theme}/white.png`;
       this.addShadow(ctx);
-      ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+      ctx.drawImage(
+        this.type === 1 ? black : white,
+        this.x - this.size,
+        this.y - this.size,
+        this.size * 2,
+        this.size * 2,
+      );
       this.removeShadow(ctx);
     } else if (this.theme === 'shell-stone') {
-      const black = new Image();
       black.src = `/assets/themes/${this.theme}/black.png`;
       const white0 = new Image();
       white0.src = `/assets/themes/${this.theme}/white0.png`;
@@ -52,28 +63,45 @@ export default class Stone {
       const white4 = new Image();
       white4.src = `/assets/themes/${this.theme}/white4.png`;
       this.addShadow(ctx);
-      ctx.drawImage(this.type === 1 ? black : white1, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+      ctx.drawImage(
+        this.type === 1 ? black : white1,
+        this.x - this.size,
+        this.y - this.size,
+        this.size * 2,
+        this.size * 2,
+      );
       this.removeShadow(ctx);
     } else if (this.theme === 'slate-and-shell-theme') {
-
+      // TODO: TBD
     } else if (this.theme === 'subdued-theme') {
       black.src = `/assets/themes/${this.theme}/black.png`;
       white.src = `/assets/themes/${this.theme}/white.png`;
       this.addShadow(ctx);
-      ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+      ctx.drawImage(
+        this.type === 1 ? black : white,
+        this.x - this.size,
+        this.y - this.size,
+        this.size * 2,
+        this.size * 2,
+      );
       this.removeShadow(ctx);
     } else if (this.theme === 'walnut-theme') {
       black.src = `/assets/themes/${this.theme}/black.png`;
       white.src = `/assets/themes/${this.theme}/white.png`;
       this.addShadow(ctx);
-      ctx.drawImage(this.type === 1 ? black : white, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
+      ctx.drawImage(
+        this.type === 1 ? black : white,
+        this.x - this.size,
+        this.y - this.size,
+        this.size * 2, this.size * 2,
+      );
       this.removeShadow(ctx);
     } else {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true);
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#000';
-      if (this.type == 1) {
+      if (this.type === 1) {
         ctx.fillStyle = '#000';
       } else {
         ctx.fillStyle = '#fff';
@@ -85,7 +113,7 @@ export default class Stone {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size * 0.6, 0, 2 * Math.PI, true);
       ctx.lineWidth = 2;
-      if (this.type == 1) {
+      if (this.type === 1) {
         ctx.strokeStyle = '#fff';
       } else {
         ctx.strokeStyle = '#000';
@@ -97,7 +125,7 @@ export default class Stone {
   }
 
   remove(ctx, size) {
-    ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size);
+    ctx.clearRect(this.x - (size / 2), this.y - (size / 2), size, size);
   }
 }
 
