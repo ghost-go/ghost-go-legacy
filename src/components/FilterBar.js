@@ -43,7 +43,7 @@ export default class FilterBar extends Component {
                   <div className="popover-title">{item.name}</div>
                   <div className="popover-content">
                     <ul className="tags">
-                      { item.tags.map(tag => <li key={tag} className={`tag ${item.filterVal === tag ? 'active' : ''}`} onClick={this.handleClick.bind(this, item.handleSeeMore, item.filterName, tag)}>{tag}</li>) }
+                      { item.tags.map(tag => <li role="button" key={tag} className={`tag ${item.filterVal === tag ? 'active' : ''}`} onClick={this.handleClick.bind(this, item.handleSeeMore, item.filterName, tag)}>{tag}</li>) }
                     </ul>
                   </div>
                 </div>,

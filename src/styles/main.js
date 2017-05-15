@@ -1,4 +1,4 @@
-import { StyleSheet, css } from 'aphrodite';
+import { StyleSheet } from 'aphrodite';
 
 export default StyleSheet.create({
   mainContainer: {

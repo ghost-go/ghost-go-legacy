@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 export default class RankingList extends Component {
 
-  state = {
-    rank: this.props.rank || '18k',
+  static propTypes = {
+    rank: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    floatingLabelText: PropTypes.string.isRequired,
   }
 
-  static propType = {
-    rank: React.PropTypes.string.required,
+  state = {
+    rank: this.props.rank || '18k',
   }
 
   handleChange = (event, index, value) => {

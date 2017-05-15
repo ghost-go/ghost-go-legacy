@@ -12,12 +12,13 @@ export default class Board {
     this.autofit = args.autofit || false;
     this.editable = args.editable || false;
     this.nextStoneType = args.nextStoneType || 1;
-    if (args.arrangement == undefined || args.arrangement.length === 0) {
+    if (args.arrangement === undefined || args.arrangement.length === 0) {
       this.arrangement = BLANK_ARRAY;
     }
     this.material = args.material;
     this.initStones = [];
     this.afterMove = args.afterMove;
+    this.canvas = args.canvas;
   }
 
   setStones(root, execPonnuki = true) {
@@ -67,22 +68,23 @@ export default class Board {
 
     this.maxhv = _.max([this.rightmost - this.leftmost, this.bottommost - this.topmost]);
     this.maxhv = this.maxhv > 19 ? 19 : this.maxhv;
-    this.width = this.height = this.maxhv;
+    this.width = this.maxhv;
+    this.height = this.maxhv;
     this.offsetX = this.rightmost > this.maxhv ? this.rightmost - this.maxhv : 0;
     this.offsetY = this.bottommost > this.maxhv ? this.bottommost - this.maxhv : 0;
   }
 
-  render(canvas) {
-    this.size = canvas.width / (_.max([this.width, this.height]) + 1);
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.renderBoard(canvas, ctx);
-    this.renderStones(canvas, ctx);
+  render() {
+    this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
+    const ctx = this.canvas.getContext('2d');
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.renderBoard(this.canvas, ctx);
+    this.renderStones(this.canvas, ctx);
     if (this.editable) {
-      this.renderCursor(canvas, ctx);
-      canvas.onclick = (e) => {
-        const x = Math.round(e.offsetX / this.size) + this.offsetX - 1;
-        const y = Math.round(e.offsetY / this.size) + this.offsetY - 1;
+      this.renderCursor(this.canvas, ctx);
+      this.canvas.onclick = (e) => {
+        const x = (Math.round(e.offsetX / this.size) + this.offsetX) - 1;
+        const y = (Math.round(e.offsetY / this.size) + this.offsetY) - 1;
         const type = this.nextStoneType === 1 ? 'B' : 'W';
         const step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
         const node = CoordsToTree([step]);
@@ -91,9 +93,9 @@ export default class Board {
           this.lastNode.addChild(node.children[0]);
           this.nextStoneType = -this.nextStoneType;
           this.setStones(this.root);
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          this.renderBoard(canvas, ctx);
-          this.renderStones(canvas, ctx);
+          ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.renderBoard(this.canvas, ctx);
+          this.renderStones(this.canvas, ctx);
           if (this.afterMove) {
             this.afterMove(step);
           }
@@ -158,8 +160,8 @@ export default class Board {
       jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3]);
     }
 
-    let coordX = 0,
-      coordY = 0;
+    let coordX = 0;
+    let coordY = 0;
     for (let i = 0; i < 19; i++) {
       for (let j = 0; j < 19; j++) {
         if (this.autofit) {
@@ -172,31 +174,35 @@ export default class Board {
         const stone = new Stone(
           coordX,
           coordY,
-          this.size / 2 - 2,
+          (this.size / 2) - 2,
           this.arrangement[i][j],
           il === i && jl === j,
           this.theme,
-          i * j % 5,
+          (i * j) % 5,
         );
         stone.draw(ctx);
       }
     }
   }
 
-  renderCursor(canvas, ctx) {
-    canvas.onmousemove = (e) => {
+  renderCursor(ctx) {
+    this.canvas.onmousemove = (e) => {
       const roundedOffsetX = Math.round(e.offsetX / this.size);
       const roundedOffsetY = Math.round(e.offsetY / this.size);
-      if (roundedOffsetX > 0 && roundedOffsetY > 0 && roundedOffsetX <= this.maxhv && roundedOffsetY <= this.maxhv) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.renderBoard(canvas, ctx);
+      if (roundedOffsetX > 0 &&
+        roundedOffsetY > 0 &&
+        roundedOffsetX <= this.maxhv &&
+        roundedOffsetY <= this.maxhv
+      ) {
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.renderBoard(this.canvas, ctx);
         const cross = new Cross();
         cross.x = roundedOffsetX * this.size;
         cross.y = roundedOffsetY * this.size;
         cross.size = this.size / 6;
         cross.color = '#ff0000';
         cross.draw(ctx);
-        this.renderStones(canvas, ctx);
+        this.renderStones(this.canvas, ctx);
       }
     };
   }

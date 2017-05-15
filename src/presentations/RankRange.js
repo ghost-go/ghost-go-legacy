@@ -1,14 +1,34 @@
-import React, { Component, PropTypes as T } from 'react';
-import RankList from './RankList';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
-
 import Remove from 'material-ui/svg-icons/content/remove';
+
+import RankList from './RankList';
+
+const styles = StyleSheet.create({
+
+  rangeContainer: {
+    alignItems: 'center',
+  },
+
+  remove: {
+    height: '50px',
+    margin: '0 15px',
+  },
+
+  customWidth: {
+    width: 60,
+  },
+});
 
 export default class RankRange extends Component {
 
   static propTypes = {
-    rankRange: T.object.isRequired,
-    handleRangeChange: T.func.isRequired,
+    rankRange: PropTypes.shape({
+      start: PropTypes.string.isRequired,
+      end: PropTypes.string.isRequired,
+    }).isRequired,
+    handleRangeChange: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -46,19 +66,3 @@ export default class RankRange extends Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-
-  rangeContainer: {
-    alignItems: 'center',
-  },
-
-  remove: {
-    height: '50px',
-    margin: '0 15px',
-  },
-
-  customWidth: {
-    width: 60,
-  },
-});

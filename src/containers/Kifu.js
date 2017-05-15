@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import Paper from 'material-ui/Paper';
+import { connect } from 'react-redux'; import Paper from 'material-ui/Paper';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import keydown, { Keys } from 'react-keydown';
 import { CoordsToTree } from '../constants/Go';
@@ -61,9 +60,10 @@ class Kifu extends Component {
     const board = new Board({
       theme: this.props.theme,
       material: this.props.themeMaterial,
+      canvas: this.boardLayer,
     });
     board.setStones(CoordsToTree(steps));
-    board.render(this.boardLayer);
+    board.render();
   }
 
   @keydown(ENTER, SPACE, LEFT, RIGHT)

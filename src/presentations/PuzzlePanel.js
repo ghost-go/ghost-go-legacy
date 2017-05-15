@@ -1,38 +1,49 @@
-import React, { Component, PropTypes as T } from 'react';
-import { postRating, postFavorite } from '../actions/PostActions';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Toggle from 'material-ui/Toggle';
-import AnswerBar from '../presentations/AnswerBar';
-
 import { StyleSheet, css } from 'aphrodite';
-import RankRange from '../presentations/RankRange';
 import { Button } from 'react-bootstrap';
+import { ShareButtons, generateShareIcon } from 'react-share';
 
-import {
-  ShareButtons,
-  generateShareIcon,
-} from 'react-share';
+import AnswerBar from '../presentations/AnswerBar';
+import RankRange from '../presentations/RankRange';
+import { postRating, postFavorite } from '../actions/PostActions';
+
+const styles = StyleSheet.create({
+
+  answersContainer: {
+    padding: '0px',
+    '@media screen and (max-aspect-ratio: 4/3)': {
+      padding: '0px',
+    },
+  },
+
+});
 
 export default class PuzzlePanel extends Component {
 
-
   static propTypes = {
-    puzzle: T.object.isRequired,
-    rangeFilter: T.object.isRequired,
-    className: T.object,
-    params: T.object,
-    dispatch: T.func,
-    auth: T.object,
-    addSteps: T.func,
-    resetSteps: T.func,
-    handleReset: T.func,
-    steps: T.array,
-    setCurrentAnswerId: T.func,
-    setCurrentMode: T.func,
-    currentMode: T.string,
-    currentAnswerId: T.number,
-    showNext: T.bool,
-    handleNext: T.func.isRequired,
-    handleRangeChange: T.func.isRequired,
+    puzzle: PropTypes.shape({
+      is_favorite: PropTypes.bool.isRequired,
+    }).isRequired,
+    rangeFilter: PropTypes.shape({}).isRequired,
+    className: PropTypes.shape({}).isRequired,
+    params: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+    dispatch: PropTypes.func.isRequired,
+    auth: PropTypes.shape({}).isRequired,
+    addSteps: PropTypes.func.isRequired,
+    resetSteps: PropTypes.func.isRequired,
+    handleReset: PropTypes.func.isRequired,
+    steps: PropTypes.arrayOf({}).isRequired,
+    setCurrentAnswerId: PropTypes.func.isRequired,
+    setCurrentMode: PropTypes.func.isRequired,
+    currentMode: PropTypes.string.isRequired,
+    currentAnswerId: PropTypes.number.isRequired,
+    showNext: PropTypes.bool.isRequired,
+    handleNext: PropTypes.func.isRequired,
+    handleRangeChange: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -42,6 +53,12 @@ export default class PuzzlePanel extends Component {
       answersExpanded: true,
       favorite: this.props.puzzle.is_favorite,
     };
+
+    this.handleResearchMode = this.handleResearchMode.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ favorite: nextProps.puzzle.is_favorite });
   }
 
   handleResearchMode() {
@@ -93,10 +110,6 @@ export default class PuzzlePanel extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ favorite: nextProps.puzzle.is_favorite });
-  }
-
   render() {
     const {
       FacebookShareButton,
@@ -127,11 +140,16 @@ export default class PuzzlePanel extends Component {
 
     const rightAnswers = [];
     const wrongAnswers = [];
-    let nextPanel,
-      nextBtn;
+    let nextPanel;
+    let nextBtn;
     if (this.props.showNext === true) {
       nextBtn = <Button style={{ marginRight: '10px' }} onClick={this.props.handleNext} bsStyle="info"> Next Tsumego </Button>;
-      nextPanel = <RankRange rankRange={this.props.rangeFilter} handleRangeChange={this.props.handleRangeChange} ref="range" />;
+      nextPanel = (
+        <RankRange
+          rankRange={this.props.rangeFilter}
+          handleRangeChange={this.props.handleRangeChange}
+        />
+      );
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
@@ -310,7 +328,7 @@ export default class PuzzlePanel extends Component {
           className="research"
           label="Research Mode"
           defaultToggled={this.props.currentMode === 'research'}
-          onToggle={::this.handleResearchMode}
+          onToggle={this.handleResearchMode}
         />
         <div className={css(styles.answersContainer)}>
           <div>Right Answers</div>
@@ -323,14 +341,3 @@ export default class PuzzlePanel extends Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-
-  answersContainer: {
-    padding: '0px',
-    '@media screen and (max-aspect-ratio: 4/3)': {
-      padding: '0px',
-    },
-  },
-
-});

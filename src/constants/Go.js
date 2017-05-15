@@ -3,7 +3,8 @@ import TreeModel from 'tree-model';
 
 export const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
 export const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
-export const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19].reverse();
+export const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19].reverse();
 export const BLANK_ARRAY = _.chunk(new Array(361).fill(0), 19);
 export const GRID = 19;
 export const DOT_SIZE = 3;
@@ -22,8 +23,8 @@ export const SGFToPosition = (str) => {
 export const CoordsToTree = (steps) => {
   const tree = new TreeModel();
   const root = tree.parse({ id: 0, index: 0, children: [] });
-  let parentNode,
-    node;
+  let parentNode;
+  let node;
   steps.forEach((step, i) => {
     node = tree.parse({
       id: i,

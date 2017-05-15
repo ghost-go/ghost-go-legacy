@@ -117,6 +117,7 @@ class Puzzle extends Component {
 
     const board = new Board({
       autofit: true,
+      canvas: this.boardLayer,
       theme: this.props.theme,
       material: this.props.themeMaterial,
       editable: true,
@@ -132,7 +133,7 @@ class Puzzle extends Component {
     });
 
     board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true);
-    board.render(this.boardLayer);
+    board.render();
   }
 
   setCurrentMode(mode) {

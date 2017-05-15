@@ -5,47 +5,6 @@ import moment from 'moment';
 
 import { StyleSheet, css } from 'aphrodite';
 
-export default class RecordList extends Component {
-
-  static propTypes = {
-    recordList: T.array.isRequired,
-  }
-
-  static defaultProps = {
-    recordList: [],
-  }
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const list = [];
-    this.props.recordList.forEach((i) => {
-      list.push(
-        <Link key={`${i.puzzle.id}`} to={`/puzzles/${i.puzzle.id}`}>
-          <div className={css(style.listBox)}>
-            <div className="list-preview-img">
-              <img className={css(style.previewImg)} src={i.puzzle.preview_img_r1.x200.url} />
-            </div>
-            <div className={css(style.listRight)}>
-              <span className={css(style.title)}>{`P-${i.puzzle.id}(${i.puzzle.rank})`}</span>
-              <span>{i.puzzle.whofirst}</span>
-              <span className={css(style.date)}>{moment(i.puzzle.created_at).format('YYYY-MM-DD')}</span>
-            </div>
-          </div>
-        </Link>,
-      );
-    });
-
-    return (
-      <List>
-        { list }
-      </List>
-    );
-  }
-}
-
 const style = StyleSheet.create({
   listBox: {
     display: 'flex',
@@ -72,5 +31,42 @@ const style = StyleSheet.create({
     marginTop: 'auto',
     marginBottom: '20px',
   },
-
 });
+
+export default class RecordList extends Component {
+
+  static propTypes = {
+    recordList: T.arrayOf({}).isRequired,
+  }
+
+  static defaultProps = {
+    recordList: [],
+  }
+
+  render() {
+    const list = [];
+    this.props.recordList.forEach((i) => {
+      list.push(
+        <Link key={`${i.puzzle.id}`} to={`/puzzles/${i.puzzle.id}`}>
+          <div className={css(style.listBox)}>
+            <div className="list-preview-img">
+              <img className={css(style.previewImg)} src={i.puzzle.preview_img_r1.x200.url} alt="" />
+            </div>
+            <div className={css(style.listRight)}>
+              <span className={css(style.title)}>{`P-${i.puzzle.id}(${i.puzzle.rank})`}</span>
+              <span>{i.puzzle.whofirst}</span>
+              <span className={css(style.date)}>{moment(i.puzzle.created_at).format('YYYY-MM-DD')}</span>
+            </div>
+          </div>
+        </Link>,
+      );
+    });
+
+    return (
+      <List>
+        { list }
+      </List>
+    );
+  }
+}
+
