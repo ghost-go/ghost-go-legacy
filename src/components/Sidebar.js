@@ -20,7 +20,7 @@ export default class Sidebar extends Component {
     super(props);
 
     this.state = {
-      profile: props.auth.getProfile(),
+      profile: AuthService.getProfile(),
     };
 
     props.auth.on('profile_updated', (newProfile) => {
@@ -70,7 +70,7 @@ export default class Sidebar extends Component {
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
-                          auth.loggedIn() ? (
+                          AuthService.loggedIn() ? (
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <img width="45" className="img-rounded" src={this.state.profile.picture} alt="" />

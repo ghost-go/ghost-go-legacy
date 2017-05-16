@@ -67,7 +67,7 @@ if (hashString) {
   const lastIndex = hashString.indexOf('&token_type=');
   const idToken = hashString.substring(firstIndex, lastIndex);
   auth.setToken(idToken);
-  auth._doAuthentication({
+  auth.doAuthentication({
     idToken,
   });
 }

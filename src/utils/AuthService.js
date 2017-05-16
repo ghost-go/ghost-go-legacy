@@ -9,9 +9,13 @@ export default class AuthService extends EventEmitter {
     this.domain = domain;
     this.lock = new Auth0Lock(clientId, domain, config.AUTH0_CONFIG);
     // Add callback for lock `authenticated` event
-    this.lock.on('authenticated', this.doAuthentication.bind(this));
+    console.log(this);
+    this.doAuthentication = this.doAuthentication.bind(this);
+    this.lock.on('authenticated', this.doAuthentication);
     // binds login functions to keep this context
-    this.lock.on('authorization_error', this.authorizationError.bind(this));
+    this.lock.on('authorization_error', (error) => {
+      console.log('Authentication Error', error);
+    });
     this.login = this.login.bind(this);
   }
 
@@ -33,19 +37,14 @@ export default class AuthService extends EventEmitter {
     }
   }
 
-  static authorizationError(error) {
-    // Unexpected authentication error
-    console.log('Authentication Error', error);
-  }
-
   login() {
     // Call the show method to display the widget.
     this.lock.show();
   }
 
-  loggedIn() {
+  static loggedIn() {
     // Checks if there is a saved token and it's still valid
-    return !!this.getToken();
+    return !!AuthService.getToken();
   }
 
   setProfile(profile) {

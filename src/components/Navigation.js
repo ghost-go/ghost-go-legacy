@@ -24,8 +24,9 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props.auth);
     this.state = {
-      profile: props.auth.getProfile(),
+      profile: AuthService.getProfile(),
       navOpen: false,
     };
 
@@ -91,7 +92,7 @@ class Navigation extends Component {
         </div>
         <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
-            auth.loggedIn() ? (
+            AuthService.loggedIn() ? (
               <div>
                 <div className="user-profile dropdown">
                   <a onTouchTap={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
