@@ -17,6 +17,7 @@ import {
   addSteps,
   resetSteps, setCurrentAnswerId,
 } from '../actions/Actions';
+import AuthService from '../utils/AuthService';
 
 const styles = StyleSheet.create({
   tipRight: {
@@ -62,7 +63,7 @@ class Puzzle extends Component {
       end: PropTypes.string.isRequired,
     }).isRequired,
     params: PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     }).isRequired,
     steps: PropTypes.arrayOf({}).isRequired,
     currentMode: PropTypes.string.isRequired,
@@ -99,8 +100,7 @@ class Puzzle extends Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    const { auth } = this.context;
-    const profile = auth.getProfile();
+    const profile = AuthService.getProfile();
     this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
     let boardWidth = 0;
     if (screen.width > screen.height) {
@@ -157,8 +157,7 @@ class Puzzle extends Component {
   }
 
   handleRight() {
-    const { auth } = this.context;
-    const profile = auth.getProfile();
+    const profile = AuthService.getProfile();
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
@@ -169,8 +168,7 @@ class Puzzle extends Component {
   }
 
   handleWrong() {
-    const { auth } = this.context;
-    const profile = auth.getProfile();
+    const profile = AuthService.getProfile();
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: profile.user_id,
@@ -221,6 +219,7 @@ class Puzzle extends Component {
   response() {
     const rights = [];
     const wrongs = [];
+    console.log(this.props.puzzle.data.right_answers);
     this.props.puzzle.data.right_answers.forEach((i) => {
       if (i.steps.indexOf(this.props.steps.join(';')) === 0) {
         rights.push(i);

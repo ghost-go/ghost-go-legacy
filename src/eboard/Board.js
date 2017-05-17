@@ -104,7 +104,7 @@ export default class Board {
     }
   }
 
-  renderBoard(canvas, ctx) {
+  renderBoard(ctx) {
     this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
 
     const shadowStyle = '5px 5px 5px #999999';

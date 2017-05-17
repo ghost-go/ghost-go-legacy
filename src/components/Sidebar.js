@@ -40,7 +40,6 @@ export default class Sidebar extends Component {
   // this.setState({ expanded: !this.state.expanded })
   // }
 
-
   render() {
     const { auth } = this.props;
     return (
