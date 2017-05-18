@@ -9,7 +9,6 @@ export default class AuthService extends EventEmitter {
     this.domain = domain;
     this.lock = new Auth0Lock(clientId, domain, config.AUTH0_CONFIG);
     // Add callback for lock `authenticated` event
-    console.log(this);
     this.doAuthentication = this.doAuthentication.bind(this);
     this.lock.on('authenticated', this.doAuthentication);
     // binds login functions to keep this context
