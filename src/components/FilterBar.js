@@ -27,7 +27,13 @@ ListItem.propTypes = {
 export default class FilterBar extends Component {
 
   static propTypes = {
-    data: PropTypes.arrayOf({}).isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape({
+      filterName: PropTypes.string.isRequired,
+      filterVal: PropTypes.string.isRequired,
+      handleSeeMore: PropTypes.func.isRequired,
+      name: PropTypes.string.isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    })).isRequired,
     children: PropTypes.shape({}).isRequired,
   }
 
@@ -52,6 +58,7 @@ export default class FilterBar extends Component {
 
   render() {
     const { data } = this.props;
+    console.log(data);
     return (
       <div className="page-nav">
         <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={this.handleToggle}>
@@ -68,6 +75,7 @@ export default class FilterBar extends Component {
                       {
                         item.tags.map(tag => (
                           <ListItem
+                            key={tag}
                             tag={tag}
                             active={item.filterVal === tag}
                             filterName={item.filterName}

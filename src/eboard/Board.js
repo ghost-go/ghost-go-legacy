@@ -81,7 +81,7 @@ export default class Board {
     this.renderBoard(ctx);
     this.renderStones(this.canvas, ctx);
     if (this.editable) {
-      this.renderCursor(this.canvas, ctx);
+      this.renderCursor(ctx);
       this.canvas.onclick = (e) => {
         const x = (Math.round(e.offsetX / this.size) + this.offsetX) - 1;
         const y = (Math.round(e.offsetY / this.size) + this.offsetY) - 1;

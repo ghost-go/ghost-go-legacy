@@ -8,6 +8,7 @@ import { ShareButtons, generateShareIcon } from 'react-share';
 import AnswerBar from '../presentations/AnswerBar';
 import RankRange from '../presentations/RankRange';
 import { postRating, postFavorite } from '../actions/PostActions';
+import AuthService from '../utils/AuthService';
 
 const styles = StyleSheet.create({
 
@@ -27,9 +28,9 @@ export default class PuzzlePanel extends Component {
       is_favorite: PropTypes.bool.isRequired,
     }).isRequired,
     rangeFilter: PropTypes.shape({}).isRequired,
-    className: PropTypes.shape({}).isRequired,
+    className: PropTypes.string,
     params: PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
     auth: PropTypes.shape({}).isRequired,
@@ -44,6 +45,10 @@ export default class PuzzlePanel extends Component {
     showNext: PropTypes.bool.isRequired,
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    className: '',
   }
 
   constructor(props) {
@@ -71,8 +76,8 @@ export default class PuzzlePanel extends Component {
 
   handleFavorite(id) {
     const { auth } = this.props;
-    const profile = auth.getProfile();
-    if (auth.loggedIn()) {
+    const profile = AuthService.getProfile();
+    if (AuthService.loggedIn()) {
       this.setState({ favorite: !this.state.favorite });
       this.props.dispatch(postFavorite({
         likable_id: id,
@@ -88,8 +93,8 @@ export default class PuzzlePanel extends Component {
 
   handleRatingChange(rate) {
     const { auth } = this.props;
-    const profile = auth.getProfile();
-    if (auth.loggedIn()) {
+    const profile = AuthService.getProfile();
+    if (AuthService.loggedIn()) {
       const { id } = this.props.params;
       this.props.dispatch(postRating({
         ratable_id: id,

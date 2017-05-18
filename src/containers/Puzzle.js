@@ -52,8 +52,28 @@ class Puzzle extends Component {
   static propTypes = {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
-        right_answers: PropTypes.arrayOf({}).isRequired,
-        wrong_answers: PropTypes.arrayOf({}).isRequired,
+        right_answers: PropTypes.arrayOf(PropTypes.shape({
+          answer_type: PropTypes.number.isRequired,
+          created_at: PropTypes.string.isRequired,
+          descriptions: PropTypes.string.isRequired,
+          id: PropTypes.number.isRequired,
+          provider: PropTypes.string.isRequired,
+          puzzle_id: PropTypes.number.isRequired,
+          steps: PropTypes.string.isRequired,
+          updated_at: PropTypes.string.isRequired,
+          user_id: PropTypes.number.isRequired,
+        })).isRequired,
+        wrong_answers: PropTypes.arrayOf(PropTypes.shape({
+          answer_type: PropTypes.number.isRequired,
+          created_at: PropTypes.string.isRequired,
+          descriptions: PropTypes.string.isRequired,
+          id: PropTypes.number.isRequired,
+          provider: PropTypes.string.isRequired,
+          puzzle_id: PropTypes.number.isRequired,
+          steps: PropTypes.string.isRequired,
+          updated_at: PropTypes.string.isRequired,
+          user_id: PropTypes.number.isRequired,
+        })).isRequired,
         id: PropTypes.number.isRequired,
       }).isRequired,
     }).isRequired,
@@ -65,15 +85,19 @@ class Puzzle extends Component {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    steps: PropTypes.arrayOf({}).isRequired,
+    steps: PropTypes.arrayOf(PropTypes.string).isRequired,
     currentMode: PropTypes.string.isRequired,
-    currentAnswerId: PropTypes.number.isRequired,
+    currentAnswerId: PropTypes.number,
     theme: PropTypes.string.isRequired,
     themeMaterial: PropTypes.shape({}).isRequired,
   }
 
   static contextTypes = {
     auth: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    currentAnswerId: 0,
   }
 
   constructor(props) {
