@@ -37,11 +37,11 @@ export default class PuzzlePanel extends Component {
     addSteps: PropTypes.func.isRequired,
     resetSteps: PropTypes.func.isRequired,
     handleReset: PropTypes.func.isRequired,
-    steps: PropTypes.arrayOf({}).isRequired,
+    steps: PropTypes.arrayOf(PropTypes.string).isRequired,
     setCurrentAnswerId: PropTypes.func.isRequired,
     setCurrentMode: PropTypes.func.isRequired,
     currentMode: PropTypes.string.isRequired,
-    currentAnswerId: PropTypes.number.isRequired,
+    currentAnswerId: PropTypes.number,
     showNext: PropTypes.bool.isRequired,
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
@@ -49,6 +49,7 @@ export default class PuzzlePanel extends Component {
 
   static defaultProps = {
     className: '',
+    currentAnswerId: 0,
   }
 
   constructor(props) {

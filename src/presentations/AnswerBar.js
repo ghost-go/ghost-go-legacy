@@ -53,12 +53,16 @@ export default class AnswerBar extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     answer: PropTypes.string.isRequired,
-    steps: PropTypes.arrayOf({}).isRequired,
+    steps: PropTypes.arrayOf(PropTypes.string).isRequired,
     addSteps: PropTypes.func.isRequired,
     resetSteps: PropTypes.func.isRequired,
     setCurrentAnswerId: PropTypes.func.isRequired,
-    currentAnswerId: PropTypes.number.isRequired,
+    currentAnswerId: PropTypes.number,
     setCurrentMode: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    currentAnswerId: 0,
   }
 
   constructor(props) {

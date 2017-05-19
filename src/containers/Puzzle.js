@@ -57,7 +57,7 @@ class Puzzle extends Component {
           created_at: PropTypes.string.isRequired,
           descriptions: PropTypes.string.isRequired,
           id: PropTypes.number.isRequired,
-          provider: PropTypes.string.isRequired,
+          provider: PropTypes.string,
           puzzle_id: PropTypes.number.isRequired,
           steps: PropTypes.string.isRequired,
           updated_at: PropTypes.string.isRequired,
@@ -68,7 +68,7 @@ class Puzzle extends Component {
           created_at: PropTypes.string.isRequired,
           descriptions: PropTypes.string.isRequired,
           id: PropTypes.number.isRequired,
-          provider: PropTypes.string.isRequired,
+          provider: PropTypes.string,
           puzzle_id: PropTypes.number.isRequired,
           steps: PropTypes.string.isRequired,
           updated_at: PropTypes.string.isRequired,
@@ -329,6 +329,7 @@ class Puzzle extends Component {
           <PuzzlePanel
             {...this.props}
             showNext
+            auth={this.context.auth}
             puzzle={puzzle.data}
             handleRangeChange={this.handleRangeChange}
             handleNext={this.handleNext}
