@@ -7,7 +7,7 @@ import { Row, Col } from 'react-bootstrap';
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions';
 import { fetchDashboard } from '../actions/FetchActions';
 import FilterBar from '../components/FilterBar';
-
+import AuthService from '../utils/AuthService';
 
 class Dashboard extends Component {
 
@@ -37,8 +37,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
-    const { auth } = this.context;
-    const profile = auth.getProfile();
+    const profile = AuthService.getProfile();
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
       user_range: userRangeFilter,
@@ -70,7 +69,6 @@ class Dashboard extends Component {
   render() {
     const loading = <div><i className="fa fa-spinner fa-pulse fa-fw" /></div>;
     const { userRangeFilter, dateRangeFilter, dashboard } = this.props;
-    const { auth } = this.context;
     return (
       <div>
         <FilterBar
@@ -89,7 +87,7 @@ class Dashboard extends Component {
           }]}
         />
         {
-          !auth.loggedIn() ? <div>You must login to access this page</div> :
+          !AuthService.loggedIn() ? <div>You must login to access this page</div> :
           <Row style={{ marginTop: '40px' }}>
             <Col xs={8} md={4}>
               <div className="tile-box tile-box-alt bg-blue">

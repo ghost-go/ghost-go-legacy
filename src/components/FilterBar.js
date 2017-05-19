@@ -4,7 +4,7 @@ import { Dropdown, Glyphicon } from 'react-bootstrap';
 
 const ListItem = (props) => {
   const onClick = () => {
-    this.props.handleClick(props.handleSeeMore, props.filterName, props.tag);
+    props.handleSeeMore(props.filterName, props.tag);
   };
   return (
     <li
@@ -34,7 +34,11 @@ export default class FilterBar extends Component {
       name: PropTypes.string.isRequired,
       tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     })).isRequired,
-    children: PropTypes.shape({}).isRequired,
+    children: PropTypes.shape({}),
+  }
+
+  static defaultProps = {
+    children: null,
   }
 
   constructor(props) {

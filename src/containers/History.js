@@ -9,6 +9,7 @@ import { fetchPuzzleRecords } from '../actions/FetchActions';
 import { setRecordTypeFilter } from '../actions/Actions';
 import RecordList from '../presentations/RecordList';
 import FilterBar from '../components/FilterBar';
+import AuthService from '../utils/AuthService';
 
 const styles = StyleSheet.create({
   centerContainer: {
@@ -62,7 +63,7 @@ class History extends Component {
 
   static propTypes = {
     location: PropTypes.shape({
-      query: PropTypes.string.isRequired,
+      query: PropTypes.shape({}).isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
     records: PropTypes.shape({}).isRequired,
@@ -93,9 +94,8 @@ class History extends Component {
 
   getRecordData(page = 1, recordType = 'all') {
     const { dispatch } = this.props;
-    const { auth } = this.context;
-    const profile = auth.getProfile();
-    if (auth.loggedIn()) {
+    const profile = AuthService.getProfile();
+    if (AuthService.loggedIn()) {
       dispatch(fetchPuzzleRecords({
         page,
         user_id: profile.user_id,

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes as T } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List } from 'material-ui/List';
 import { Link } from 'react-router';
 import moment from 'moment';
@@ -36,7 +37,7 @@ const style = StyleSheet.create({
 export default class RecordList extends Component {
 
   static propTypes = {
-    recordList: T.arrayOf({}).isRequired,
+    recordList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }
 
   static defaultProps = {
