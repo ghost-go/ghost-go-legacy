@@ -41,7 +41,7 @@ export default class Stone {
     } else if (this.theme === 'photorealistic-theme') {
       black.src = `/themes/${this.theme}/black.png`;
       white.src = `/themes/${this.theme}/white.png`;
-      this.addShadow(ctx);
+      Stone.addShadow(ctx);
       ctx.drawImage(
         this.type === 1 ? black : white,
         this.x - this.size,
@@ -49,7 +49,7 @@ export default class Stone {
         this.size * 2,
         this.size * 2,
       );
-      this.removeShadow(ctx);
+      Stone.removeShadow(ctx);
     } else if (this.theme === 'shell-stone') {
       black.src = `/themes/${this.theme}/black.png`;
       const white0 = new Image();
@@ -62,7 +62,7 @@ export default class Stone {
       white3.src = `/themes/${this.theme}/white3.png`;
       const white4 = new Image();
       white4.src = `/themes/${this.theme}/white4.png`;
-      this.addShadow(ctx);
+      Stone.addShadow(ctx);
       ctx.drawImage(
         this.type === 1 ? black : white1,
         this.x - this.size,
@@ -70,13 +70,13 @@ export default class Stone {
         this.size * 2,
         this.size * 2,
       );
-      this.removeShadow(ctx);
+      Stone.removeShadow(ctx);
     } else if (this.theme === 'slate-and-shell-theme') {
       // TODO: TBD
     } else if (this.theme === 'subdued-theme') {
       black.src = `/themes/${this.theme}/black.png`;
       white.src = `/themes/${this.theme}/white.png`;
-      this.addShadow(ctx);
+      Stone.addShadow(ctx);
       ctx.drawImage(
         this.type === 1 ? black : white,
         this.x - this.size,
@@ -84,18 +84,18 @@ export default class Stone {
         this.size * 2,
         this.size * 2,
       );
-      this.removeShadow(ctx);
+      Stone.removeShadow(ctx);
     } else if (this.theme === 'walnut-theme') {
       black.src = `/themes/${this.theme}/black.png`;
       white.src = `/themes/${this.theme}/white.png`;
-      this.addShadow(ctx);
+      Stone.addShadow(ctx);
       ctx.drawImage(
         this.type === 1 ? black : white,
         this.x - this.size,
         this.y - this.size,
         this.size * 2, this.size * 2,
       );
-      this.removeShadow(ctx);
+      Stone.removeShadow(ctx);
     } else {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true);

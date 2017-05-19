@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
 import Snackbar from 'material-ui/Snackbar';
-
 import { Button, Col, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+
+import AuthService from '../utils/AuthService';
 
 export default class User extends Component {
 
@@ -15,7 +15,7 @@ export default class User extends Component {
   constructor(props, context) {
     super(props, context);
     const { auth } = this.context;
-    const profile = auth.getProfile();
+    const profile = AuthService.getProfile();
     let rank = '18k';
     let bio = '';
     let nickname = '';
@@ -54,10 +54,6 @@ export default class User extends Component {
     this.setState({ rank: e.target.value });
   }
 
-  logout() {
-    this.context.auth.logout();
-  }
-
   handleUpdateProfile() {
     const { auth } = this.context;
     const { profile } = this.state;
@@ -74,21 +70,21 @@ export default class User extends Component {
     });
   }
 
+  logout() {
+    this.context.auth.logout();
+  }
+
   render() {
     const { profile } = this.state;
-    const { auth } = this.context;
     return (
       <div className="profile-container">
         <h3>Profile</h3>
         {
-          !auth.loggedIn() ? <div>You must login to access this page</div> :
+          !AuthService.loggedIn() ? <div>You must login to access this page</div> :
           <div>
             <Col xs={8} md={8}>
               <div>
-                <FormGroup
-                  controlId="formUserName"
-                  validationState={this.getValidationState()}
-                >
+                <FormGroup controlId="formUserName">
                   <ControlLabel>User Name</ControlLabel>
                   <FormControl.Static>
                     { profile.username || profile.nickname }
@@ -110,10 +106,7 @@ export default class User extends Component {
                   <FormControl.Feedback />
                 </FormGroup>
                 */}
-                <FormGroup
-                  controlId="Level"
-                  validationState={this.getValidationState()}
-                >
+                <FormGroup controlId="Level" >
                   <ControlLabel>Level</ControlLabel>
                   <FormControl onChange={this.setRank} componentClass="select" placeholder="select" value={this.state.rank}>
                     <option value="18k">18k</option>
@@ -147,10 +140,7 @@ export default class User extends Component {
                   </FormControl>
                   <FormControl.Feedback />
                 </FormGroup>
-                <FormGroup
-                  controlId="formBio"
-                  validationState={this.getValidationState()}
-                >
+                <FormGroup controlId="formBio">
                   <ControlLabel>Bio</ControlLabel>
                   <FormControl
                     onChange={this.setBio}

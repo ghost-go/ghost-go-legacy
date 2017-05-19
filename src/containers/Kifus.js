@@ -27,7 +27,7 @@ class Kifus extends Component {
   static propTypes = {
     kifus: PropTypes.shape({
       data: PropTypes.shape({
-        total_pages: PropTypes.string,
+        total_pages: PropTypes.number,
       }),
     }).isRequired,
     players: PropTypes.shape({}).isRequired,

@@ -19,7 +19,7 @@ class Kifu extends Component {
     dispatch: PropTypes.func.isRequired,
     kifu: PropTypes.shape({
       data: PropTypes.shape({
-        total: PropTypes.number.isRequired,
+        total: PropTypes.number,
       }),
     }).isRequired,
     theme: PropTypes.string.isRequired,
