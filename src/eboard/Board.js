@@ -112,7 +112,7 @@ export default class Board {
       // TODO: blablabla
     } else if (this.theme === 'walnut-theme') {
       this.canvas.style.boxShadow = shadowStyle;
-      const pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.jpg`], 'repeat');
+      const pattern = ctx.createPattern(this.material[`/themes/${this.theme}/board.jpg`], 'repeat');
       ctx.fillStyle = pattern;
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     } else if (this.theme === 'flat-theme') {
@@ -121,7 +121,7 @@ export default class Board {
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     } else {
       this.canvas.style.boxShadow = shadowStyle;
-      const pattern = ctx.createPattern(this.material[`/assets/themes/${this.theme}/board.png`], 'repeat');
+      const pattern = ctx.createPattern(this.material[`/themes/${this.theme}/board.png`], 'repeat');
       ctx.fillStyle = pattern;
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
