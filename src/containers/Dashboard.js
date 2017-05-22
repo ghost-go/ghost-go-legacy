@@ -51,8 +51,7 @@ class Dashboard extends Component {
 
   handleSeeMore(filter, val) {
     const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
-    const { auth } = this.context;
-    const profile = auth.getProfile();
+    const profile = AuthService.getProfile();
     if (filter === 'dateRangeFilter') {
       dispatch(setDateRangeFilter(val));
     } else if (filter === 'userRangeFilter') {

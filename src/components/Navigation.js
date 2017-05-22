@@ -80,14 +80,14 @@ class Navigation extends Component {
         <div className="theme">
           <select className="form-control" onChange={this.handleTheme} defaultValue={theme}>
             <option>black-and-white</option>
-            <option>flat-theme</option>
+            <option>subdued-theme</option>
             <option>photorealistic-theme</option>
             <option>shell-stone</option>
             {/*
             <option>slate-and-shell-theme</option>
             */}
-            <option>subdued-theme</option>
             <option>walnut-theme</option>
+            <option>flat-theme</option>
           </select>
         </div>
         <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>

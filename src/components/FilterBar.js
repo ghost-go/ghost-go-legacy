@@ -4,7 +4,7 @@ import { Dropdown, Glyphicon } from 'react-bootstrap';
 
 const ListItem = (props) => {
   const onClick = () => {
-    props.handleSeeMore(props.filterName, props.tag);
+    props.handleClick(props.handleSeeMore, props.filterName, props.tag);
   };
   return (
     <li
@@ -19,6 +19,7 @@ const ListItem = (props) => {
 };
 ListItem.propTypes = {
   tag: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired,
   handleSeeMore: PropTypes.func.isRequired,
   filterName: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
@@ -45,6 +46,7 @@ export default class FilterBar extends Component {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   state = {
@@ -62,7 +64,6 @@ export default class FilterBar extends Component {
 
   render() {
     const { data } = this.props;
-    console.log(data);
     return (
       <div className="page-nav">
         <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={this.handleToggle}>
@@ -84,6 +85,7 @@ export default class FilterBar extends Component {
                             active={item.filterVal === tag}
                             filterName={item.filterName}
                             handleSeeMore={item.handleSeeMore}
+                            handleClick={this.handleClick}
                           />
                         ))
                       }
