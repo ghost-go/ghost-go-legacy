@@ -80,7 +80,7 @@
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start": "npm-run-all -p watch-css start-js",
     "start-js": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "npm run build-css && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {

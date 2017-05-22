@@ -50,6 +50,8 @@ task :environment do
   command 'export Lin_directoryANGUAGE=en_US.utf8'
   command 'export LANG=en_US.utf8'
   command 'export LC_ALL=en_US.utf8'
+  # yarn
+  command 'export PATH="$HOME/.yarn/bin:$PATH"'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
@@ -87,10 +89,8 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
-    command "cp ~/.node_env ./.env"
     command "nvm use node 7.7.1"
     command "yarn install"
-    command "yarn build"
     #command 'sed -i -- "s/<\/body>/<script type=\"text\/javascript\" src=\"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-5818445a7b592e4c\"><\/script><\/body>/g" dist/index.html'
 
     on :launch do
