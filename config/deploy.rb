@@ -89,8 +89,8 @@ task :deploy => :environment do
     invoke :'deploy:cleanup'
     command "cp ~/.node_env ./.env"
     command "nvm use node 7.7.1"
-    command "npm install --production"
-    command "./node_modules/.bin/webpack --config webpack.config.production.js"
+    command "yarn install"
+    command "yarn build"
     #command 'sed -i -- "s/<\/body>/<script type=\"text\/javascript\" src=\"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-5818445a7b592e4c\"><\/script><\/body>/g" dist/index.html'
 
     on :launch do
