@@ -16,6 +16,7 @@ import {
   setRangeFilter,
   addSteps,
   resetSteps, setCurrentAnswerId,
+  setNextStoneType,
 } from '../actions/Actions';
 import AuthService from '../utils/AuthService';
 
@@ -52,6 +53,7 @@ class Puzzle extends Component {
   static propTypes = {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
+        whofirst: PropTypes.string.isRequired,
         right_answers: PropTypes.arrayOf(PropTypes.shape({
           answer_type: PropTypes.number.isRequired,
           created_at: PropTypes.string.isRequired,
@@ -90,6 +92,7 @@ class Puzzle extends Component {
     currentAnswerId: PropTypes.number,
     theme: PropTypes.string.isRequired,
     themeMaterial: PropTypes.shape({}).isRequired,
+    nextStoneType: PropTypes.number.isRequired,
   }
 
   static contextTypes = {
@@ -120,12 +123,18 @@ class Puzzle extends Component {
     this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.setCurrentMode = this.setCurrentMode.bind(this);
+    this.setCurrentAnswerId = this.setCurrentAnswerId.bind(this);
+    this.resetSteps = this.resetSteps.bind(this);
+    this.addSteps = this.addSteps.bind(this);
+    this.setNextStoneType = this.setNextStoneType.bind(this);
   }
 
   componentDidMount() {
     const { id } = this.props.params;
     const profile = AuthService.getProfile();
     this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
+    this.props.dispatch(setNextStoneType(this.props.puzzle.data.whofirst === 'Black First' ? 1 : -1));
     let boardWidth = 0;
     if (screen.width > screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -145,7 +154,8 @@ class Puzzle extends Component {
       theme: this.props.theme,
       material: this.props.themeMaterial,
       editable: true,
-      nextStoneType: puzzle.data.whofirst === 'Black First' ? 1 : -1,
+      nextStoneType: this.props.nextStoneType,
+      setNextStoneType: this.setNextStoneType,
       afterMove: (step) => {
         this.props.dispatch(addSteps(step));
         setTimeout(() => {
@@ -158,6 +168,10 @@ class Puzzle extends Component {
 
     board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true);
     board.render();
+  }
+
+  setNextStoneType(type) {
+    this.props.dispatch(setNextStoneType(type));
   }
 
   setCurrentMode(mode) {
@@ -238,6 +252,7 @@ class Puzzle extends Component {
 
   resetSteps() {
     this.props.dispatch(resetSteps());
+    this.props.dispatch(setNextStoneType(this.props.puzzle.data.whofirst === 'Black First' ? 1 : -1));
   }
 
   response() {
@@ -358,6 +373,7 @@ function select(state) {
     currentMode: state.currentMode,
     theme: state.theme,
     themeMaterial: state.themeMaterial,
+    nextStoneType: state.nextStoneType,
   };
 }
 

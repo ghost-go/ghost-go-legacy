@@ -19,6 +19,7 @@ export default class Board {
     this.initStones = [];
     this.afterMove = args.afterMove;
     this.canvas = args.canvas;
+    this.setNextStoneType = args.setNextStoneType;
   }
 
   setStones(root, execPonnuki = true) {
@@ -91,7 +92,7 @@ export default class Board {
         const { hasMoved } = showKi(this.arrangement, [step]);
         if (hasMoved) {
           this.lastNode.addChild(node.children[0]);
-          this.nextStoneType = -this.nextStoneType;
+          this.setNextStoneType(-this.nextStoneType);
           this.setStones(this.root);
           ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
           this.renderBoard(ctx);

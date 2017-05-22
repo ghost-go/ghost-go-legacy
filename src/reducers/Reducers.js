@@ -165,6 +165,7 @@ export const puzzle = reduceReducers(
       steps: '',
       rank: '18k',
       id: 0,
+      whofirst: 'Black First',
       preview_img_r1: {
         x100: { url: '' },
         x200: { url: '' },
@@ -227,6 +228,7 @@ export const tagFilter = createReducer('all', { SET_TAG_FILTER: setGenernalFilte
 export const dateRangeFilter = createReducer('last7days', { SET_DATE_RANGE_FILTER: setGenernalFilter });
 export const userRangeFilter = createReducer('onlyme', { SET_USER_RANGE_FILTER: setGenernalFilter });
 export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: setGenernalFilter });
+export const nextStoneType = createReducer(0, { SET_NEXT_STONE_TYPE_FILTER: setGenernalFilter });
 export const practicePuzzleId = createReducer(null,
   { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
 );

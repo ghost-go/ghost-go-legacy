@@ -19,3 +19,4 @@ export const setCurrentAnswerId = createAction('SET_CURRENT_ANSWER_ID');
 export const setCurrentMode = createAction('SET_CURRENT_MODE');
 export const setTheme = createAction('SET_THEME');
 export const setThemeMaterial = createAction('SET_THEME_MATERIAL');
+export const setNextStoneType = createAction('SET_NEXT_STONE_TYPE_FILTER');

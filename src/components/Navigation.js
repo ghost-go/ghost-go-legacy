@@ -24,7 +24,6 @@ class Navigation extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props.auth);
     this.state = {
       profile: AuthService.getProfile(),
       navOpen: false,
