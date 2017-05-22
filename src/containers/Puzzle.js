@@ -111,7 +111,7 @@ class Puzzle extends Component {
       commentsOpen: false,
       rightTipOpen: false,
       wrongTipOpen: false,
-      researchMode: true,
+      researchMode: false,
     };
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this);
     this.handleRight = this.handleRight.bind(this);
@@ -128,13 +128,15 @@ class Puzzle extends Component {
     this.resetSteps = this.resetSteps.bind(this);
     this.addSteps = this.addSteps.bind(this);
     this.setNextStoneType = this.setNextStoneType.bind(this);
+    this.getInitNextStoneType = this.getInitNextStoneType.bind(this);
   }
 
   componentDidMount() {
     const { id } = this.props.params;
     const profile = AuthService.getProfile();
+    this.handleReset();
     this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
-    this.props.dispatch(setNextStoneType(this.props.puzzle.data.whofirst === 'Black First' ? 1 : -1));
+    this.props.dispatch(setNextStoneType(this.getInitNextStoneType()));
     let boardWidth = 0;
     if (screen.width > screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -166,8 +168,14 @@ class Puzzle extends Component {
       },
     });
 
-    board.setStones(CoordsToTree(puzzle.data.steps.split(';').concat(steps)), true);
+    this.props.dispatch(setNextStoneType(this.getInitNextStoneType() * ((-1) ** steps.length)));
+    const totalSteps = puzzle.data.steps.split(';').concat(steps);
+    board.setStones(CoordsToTree(totalSteps), true);
     board.render();
+  }
+
+  getInitNextStoneType() {
+    return (this.props.puzzle.data.whofirst === 'Black First' ? 1 : -1);
   }
 
   setNextStoneType(type) {
@@ -258,7 +266,7 @@ class Puzzle extends Component {
   response() {
     const rights = [];
     const wrongs = [];
-    console.log(this.props.puzzle.data.right_answers);
+
     this.props.puzzle.data.right_answers.forEach((i) => {
       if (i.steps.indexOf(this.props.steps.join(';')) === 0) {
         rights.push(i);
