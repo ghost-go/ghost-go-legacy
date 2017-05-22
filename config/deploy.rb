@@ -91,6 +91,7 @@ task :deploy => :environment do
     invoke :'deploy:cleanup'
     command "nvm use node 7.7.1"
     command "yarn install"
+    command "yarn build"
     #command 'sed -i -- "s/<\/body>/<script type=\"text\/javascript\" src=\"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-5818445a7b592e4c\"><\/script><\/body>/g" dist/index.html'
 
     on :launch do
