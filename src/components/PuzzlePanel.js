@@ -5,8 +5,8 @@ import { StyleSheet, css } from 'aphrodite';
 import { Button } from 'react-bootstrap';
 import { ShareButtons, generateShareIcon } from 'react-share';
 
-import AnswerBar from '../presentations/AnswerBar';
-import RankRange from '../presentations/RankRange';
+import AnswerBar from '../components/AnswerBar';
+import RankRange from '../components/RankRange';
 import { postRating, postFavorite } from '../actions/PostActions';
 import AuthService from '../utils/AuthService';
 

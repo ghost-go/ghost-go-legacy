@@ -7,7 +7,7 @@ import { StyleSheet, css } from 'aphrodite';
 
 import { fetchPuzzleRecords } from '../actions/FetchActions';
 import { setRecordTypeFilter } from '../actions/Actions';
-import RecordList from '../presentations/RecordList';
+import RecordList from '../components/RecordList';
 import FilterBar from '../components/FilterBar';
 import AuthService from '../utils/AuthService';
 

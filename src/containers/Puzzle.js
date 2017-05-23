@@ -7,7 +7,7 @@ import Dialog from 'material-ui/Dialog';
 import { StyleSheet, css } from 'aphrodite';
 
 import { CoordsToTree, RESPONSE_TIME } from '../constants/Go';
-import PuzzlePanel from '../presentations/PuzzlePanel';
+import PuzzlePanel from '../components/PuzzlePanel';
 import Board from '../eboard/Board';
 import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions';
 import { postPuzzleRecord } from '../actions/PostActions';

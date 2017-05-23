@@ -17,7 +17,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 // import List from 'material-ui/svg-icons/action/list';
 import { orange500, red500, blue500, grey200, green500 } from 'material-ui/styles/colors';
 
-import RankRange from '../presentations/RankRange';
+import RankRange from '../components/RankRange';
 // import mainStyles from '../styles/main';
 import { fetchPracticeTemplates, fetchPractices } from '../actions/FetchActions';
 import { postPractice, postPracticeTemplate } from '../actions/PostActions';

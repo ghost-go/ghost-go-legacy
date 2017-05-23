@@ -12,10 +12,10 @@ import Favorite from 'material-ui/svg-icons/action/favorite';
 import FavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 
 import { StyleSheet, css } from 'aphrodite';
-import PuzzleList from '../presentations/PuzzleList';
+import PuzzleList from '../components/PuzzleList';
 import mainStyles from '../styles/main';
 import { fetchPractice, fetchPracticeRecord } from '../actions/FetchActions';
-import PuzzlePanel from '../presentations/PuzzlePanel';
+import PuzzlePanel from '../components/PuzzlePanel';
 
 import {
   postPuzzleRecord,
@@ -120,6 +120,7 @@ class Practice extends Component {
     this.handleScoreClose = this.handleScoreClose.bind(this);
     this.handleScore = this.handleScore.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.timer = this.timer.bind(this);
   }
 
   state = {
@@ -262,7 +263,7 @@ class Practice extends Component {
         this.nextPuzzle();
       } else {
         this.setState({
-          intervalId: setInterval(::this.timer, 1000),
+          intervalId: setInterval(this.timer, 1000),
         });
       }
     }, 2000);
@@ -282,7 +283,7 @@ class Practice extends Component {
     this.setState({
       time: this.props.practice.data.time,
       life: this.props.practice.data.life,
-      intervalId: setInterval(::this.timer, 1000),
+      intervalId: setInterval(this.timer, 1000),
     });
   }
 
@@ -304,7 +305,7 @@ class Practice extends Component {
   handleNo() {
     this.setState({
       submit: false,
-      intervalId: setInterval(::this.timer, 1000),
+      intervalId: setInterval(this.timer, 1000),
     });
   }
 
@@ -350,7 +351,7 @@ class Practice extends Component {
   handleGo() {
     this.setState({
       alert: false,
-      intervalId: setInterval(::this.timer, 1000),
+      intervalId: setInterval(this.timer, 1000),
     });
   }
 
@@ -437,15 +438,15 @@ class Practice extends Component {
       // puzzleBoard = <PuzzleBoard
         // className="board"
         // steps={this.props.steps}
-        // addSteps={::this.addSteps}
-        // resetSteps={::this.resetSteps}
+        // addSteps={this.addSteps}
+        // resetSteps={this.resetSteps}
         // puzzle={puzzle}
-        // handleRight={::this.handleRight}
-        // handleWrong={::this.handleWrong}
+        // handleRight={this.handleRight}
+        // handleWrong={this.handleWrong}
         // currentMode={this.props.currentMode}
-        // setCurrentMode={::this.setCurrentMode}
+        // setCurrentMode={this.setCurrentMode}
         // ref="board"
-        // afterClickEvent={::this.handleAfterClick}
+        // afterClickEvent={this.handleAfterClick}
       // />
 
       whofirst = <h1 className={css(styles.content)}>{puzzle.whofirst}</h1>;
