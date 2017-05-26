@@ -204,6 +204,13 @@ export const puzzleRecord = reduceReducers(
 );
 
 export const dashboard = buildFetchReducer({ data: { total: 0, right: 0, wrong: 0 } }, 'DASHBOARD');
+export const scoreboard = buildFetchReducer({
+  data: {
+    today: [],
+    last7days: [],
+    total: [],
+  },
+}, 'SCOREBOARD');
 
 export const rating = buildPostReducer({}, 'RATING');
 export const favorite = buildPostReducer({}, 'FAVORITE');

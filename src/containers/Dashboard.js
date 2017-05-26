@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { Row, Col } from 'react-bootstrap';
 
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions';
-import { fetchDashboard } from '../actions/FetchActions';
+import { fetchDashboard, fetchScoreboard } from '../actions/FetchActions';
 import FilterBar from '../components/FilterBar';
 import AuthService from '../utils/AuthService';
 
@@ -16,6 +16,7 @@ class Dashboard extends Component {
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
     dashboard: PropTypes.shape({}).isRequired,
+    scoreboard: PropTypes.shape({}).isRequired,
   }
 
   static contextTypes = {
@@ -24,6 +25,16 @@ class Dashboard extends Component {
 
   static defaultProps = {
     filterOpen: false,
+  }
+
+  static buildScoreboardItem(userId, index, picture, nickname, count) {
+    return (
+      <tr key={userId}>
+        <td>{index + 1}</td>
+        <td><img width="24" height="24" src={picture} alt="" />&nbsp;&nbsp;{nickname}</td>
+        <td>{count}</td>
+      </tr>
+    );
   }
 
   constructor(props) {
@@ -43,6 +54,7 @@ class Dashboard extends Component {
       user_range: userRangeFilter,
       user_id: profile.user_id,
     }));
+    dispatch(fetchScoreboard({}));
   }
 
   handleToggle() {
@@ -64,10 +76,34 @@ class Dashboard extends Component {
     }));
   }
 
-
   render() {
     const loading = <div><i className="fa fa-spinner fa-pulse fa-fw" /></div>;
-    const { userRangeFilter, dateRangeFilter, dashboard } = this.props;
+    const { userRangeFilter, dateRangeFilter, dashboard, scoreboard } = this.props;
+
+    let todayList = [];
+    let last7daysList = [];
+    let totalList = [];
+    scoreboard.data.today.forEach((obj, index) => (
+      todayList.push(Dashboard.buildScoreboardItem(
+          obj.user_id, index, obj.picture, obj.nickname, obj.count,
+        ),
+      )
+    ));
+    scoreboard.data.last7days.forEach((obj, index) => (
+      last7daysList.push(Dashboard.buildScoreboardItem(
+          obj.user_id, index, obj.picture, obj.nickname, obj.count,
+        ),
+      )
+    ));
+    scoreboard.data.total.forEach((obj, index) => (
+      totalList.push(Dashboard.buildScoreboardItem(
+          obj.user_id, index, obj.picture, obj.nickname, obj.count,
+        ),
+      )
+    ));
+    if (totalList.length === 0) { totalList = <div>No Data</div>; }
+    if (todayList.length === 0) { todayList = <div>No Data</div>; }
+    if (last7daysList.length === 0) { last7daysList = <div>No Data</div>; }
     return (
       <div>
         <FilterBar
@@ -129,6 +165,65 @@ class Dashboard extends Component {
             </Col>
           </Row>
         }
+        <Row style={{ marginTop: '10px' }}>
+          <Col xs={8} md={4}>
+            <table className="table scoreboard">
+              <caption>Today Scoreboard</caption>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Right</th>
+                  {/*
+                  <th>Total</th>
+                  <th>Right Rate</th>
+                  */}
+                </tr>
+              </thead>
+              <tbody>
+                { todayList }
+              </tbody>
+            </table>
+          </Col>
+          <Col xs={8} md={4}>
+            <table className="table">
+              <caption>Last 7 Days Scoreboard</caption>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Right</th>
+                  {/*
+                  <th>Total</th>
+                  <th>Rate</th>
+                  */}
+                </tr>
+              </thead>
+              <tbody>
+                { last7daysList }
+              </tbody>
+            </table>
+          </Col>
+          <Col xs={8} md={4}>
+            <table className="table">
+              <caption>Total Scoreboard</caption>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Right</th>
+                  {/*
+                  <th>Total</th>
+                  <th>Rate</th>
+                  */}
+                </tr>
+              </thead>
+              <tbody>
+                { totalList }
+              </tbody>
+            </table>
+          </Col>
+        </Row>
       </div>
     );
   }
@@ -139,6 +234,7 @@ function mapStateToProps(state) {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
     dashboard: state.dashboard,
+    scoreboard: state.scoreboard,
   };
 }
 

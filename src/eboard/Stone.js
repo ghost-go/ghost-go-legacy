@@ -1,12 +1,11 @@
 export default class Stone {
-  constructor(x, y, size, type, isMarked = false, theme = 'black-and-white', seed = 0.1) {
+  constructor(x, y, size, type, isMarked = false, theme = 'black-and-white') {
     this.x = x || 0;
     this.y = y || 0;
     this.size = size;
     this.type = type;
     this.isMarked = isMarked;
     this.theme = theme;
-    this.seed = seed;
   }
 
   static addShadow(ctx) {
