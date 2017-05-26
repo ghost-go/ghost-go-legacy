@@ -37,6 +37,7 @@ class Navigation extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +51,11 @@ class Navigation extends Component {
 
   handleToggle() {
     this.setState({ navOpen: !this.state.navOpen });
+  }
+
+  handleLogout() {
+    this.setState({ navOpen: false });
+    AuthService.logout();
   }
 
   handleTheme(e) {
@@ -135,7 +141,7 @@ class Navigation extends Component {
                         </li>
                       </ul>
                       */}
-                      <div onTouchTap={this.props.auth.logout} className="text-center button-pane">
+                      <div onTouchTap={this.handleLogout} className="text-center button-pane">
                         <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off" />Logout</a>
                       </div>
                     </div>

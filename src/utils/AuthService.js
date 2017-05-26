@@ -24,7 +24,7 @@ export default class AuthService extends EventEmitter {
       this.linkAccount(authResult.idToken);
     } else {
       // Saves the user token
-      this.setToken(authResult.idToken);
+      AuthService.setToken(authResult.idToken);
       // Async loads the user profile data
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
