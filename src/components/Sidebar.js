@@ -223,12 +223,17 @@ export default class Sidebar extends Component {
             <div>
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  <li>
-                    <Link activeClassName="active" to="/dashboard">
-                      <i className="fa fa-tachometer" /> <span>Dashboard</span>
-                    </Link>
-                  </li>
-                  <li className="divider" />
+                  { AuthService.loggedIn() ? (
+                    <div>
+                      <li>
+                        <Link activeClassName="active" to="/dashboard">
+                          <i className="fa fa-tachometer" /> <span>Dashboard</span>
+                        </Link>
+                      </li>
+                      <li className="divider" />
+                    </div>
+                    ) : null
+                  }
                   <li>
                     <Link activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
@@ -247,24 +252,29 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  <li className="divider" />
-                  <li>
-                    <Link activeClassName="active" to="/users">
-                      <i className="fa fa-users" /> <span>Profile</span>
-                    </Link>
-                  </li>
-                  {/*
-                  <li>
-                    <Link activeClassName="active" to="/favorites">
-                      <i className="fa fa-heart"></i> <span>Favorites</span>
-                    </Link>
-                  </li>
-                  */}
-                  <li>
-                    <Link activeClassName="active" to="/records">
-                      <i className="fa fa-history" /> <span>Records</span>
-                    </Link>
-                  </li>
+                  { AuthService.loggedIn() ? (
+                    <div>
+                      <li className="divider" />
+                      <li>
+                        <Link activeClassName="active" to="/users">
+                          <i className="fa fa-users" /> <span>Profile</span>
+                        </Link>
+                      </li>
+                      {/*
+                      <li>
+                        <Link activeClassName="active" to="/favorites">
+                          <i className="fa fa-heart"></i> <span>Favorites</span>
+                        </Link>
+                      </li>
+                      */}
+                      <li>
+                        <Link activeClassName="active" to="/records">
+                          <i className="fa fa-history" /> <span>Records</span>
+                        </Link>
+                      </li>
+                    </div>
+                  ) : null
+                  }
                 </ul>
               </div>
             </div>
