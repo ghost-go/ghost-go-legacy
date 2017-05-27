@@ -82,7 +82,7 @@ class Navigation extends Component {
           </a>
         </div>
         <div id="sidebar-search" />
-        <div className="theme">
+        <div style={{ paddingLeft: this.props.expanded ? '235px' : '50px' }} className="theme">
           <select className="form-control" onChange={this.handleTheme} defaultValue={theme}>
             <option>black-and-white</option>
             <option>subdued-theme</option>
