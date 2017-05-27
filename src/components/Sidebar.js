@@ -159,13 +159,18 @@ export default class Sidebar extends Component {
 
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  <div className="divider-header">Dashboard</div>
-                  <li>
-                    <Link activeClassName="active" to="/dashboard">
-                      <i className="fa fa-tachometer" /> <span>Dashboard</span>
-                    </Link>
-                  </li>
-                  <li className="divider" />
+                  { AuthService.loggedIn() ? (
+                    <div>
+                      <div className="divider-header">Dashboard</div>
+                      <li>
+                        <Link activeClassName="active" to="/dashboard">
+                          <i className="fa fa-tachometer" /> <span>Dashboard</span>
+                        </Link>
+                      </li>
+                      <li className="divider" />
+                    </div>
+                    ) : null
+                  }
                   <div className="divider-header">Resources</div>
                   <li>
                     <Link activeClassName="active" to="/puzzles">
@@ -185,27 +190,32 @@ export default class Sidebar extends Component {
                       <i className="fa fa-television"></i> <span>Practices(beta)</span>
                     </Link>
                   </li>
-                  */}
-                  <li className="divider" />
-                  <div className="divider-header">Others</div>
-                  <li>
-                    <Link activeClassName="active" to="/users">
-                      <i className="fa fa-users" /> <span>Profile</span>
-                    </Link>
-                  </li>
-                  {/*
+                  /*
                   <li>
                     <Link activeClassName="active" to="/favorites">
                       <i className="fa fa-heart"></i> <span>Favorites</span>
                     </Link>
                   </li>
                   <li className="divider"></li>
-                  */}
-                  <li>
-                    <Link activeClassName="active" to="/records">
-                      <i className="fa fa-history" /> <span>Records</span>
-                    </Link>
-                  </li>
+                  */
+                  }
+                  { AuthService.loggedIn() ? (
+                    <div>
+                      <li className="divider" />
+                      <div className="divider-header">Others</div>
+                      <li>
+                        <Link activeClassName="active" to="/users">
+                          <i className="fa fa-users" /> <span>Profile</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link activeClassName="active" to="/records">
+                          <i className="fa fa-history" /> <span>Records</span>
+                        </Link>
+                      </li>
+                    </div>
+                    ) : null
+                  }
                 </ul>
               </div>
             </div>
