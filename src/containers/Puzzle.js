@@ -91,7 +91,6 @@ class Puzzle extends Component {
     currentMode: PropTypes.string.isRequired,
     currentAnswerId: PropTypes.number,
     theme: PropTypes.string.isRequired,
-    themeMaterial: PropTypes.shape({}).isRequired,
     nextStoneType: PropTypes.number.isRequired,
   }
 
@@ -154,7 +153,6 @@ class Puzzle extends Component {
       autofit: true,
       canvas: this.boardLayer,
       theme: this.props.theme,
-      material: this.props.themeMaterial,
       editable: true,
       nextStoneType: this.props.nextStoneType,
       setNextStoneType: this.setNextStoneType,
@@ -380,7 +378,6 @@ function select(state) {
     currentAnswerId: state.currentAnswerId,
     currentMode: state.currentMode,
     theme: state.theme,
-    themeMaterial: state.themeMaterial,
     nextStoneType: state.nextStoneType,
   };
 }

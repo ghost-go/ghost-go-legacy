@@ -43,3 +43,90 @@ export const CoordsToTree = (steps) => {
   });
   return root;
 };
+
+export const BASE_THEME_PATH = '/themes';
+export const THEME = {
+  blackAndWhite: {
+    board: [],
+    black: [],
+    white: [],
+    stoneShadow: false,
+  },
+  flatTheme: {
+    board: ['/flat-theme/board.png'],
+    black: ['/flat-theme/black.svg'],
+    white: ['/flat-theme/white.svg'],
+    stoneShadow: false,
+  },
+  photorealisticTheme: {
+    board: ['/photorealistic-theme/board.png'],
+    black: ['/photorealistic-theme/black.png'],
+    white: ['/photorealistic-theme/white.png'],
+    stoneShadow: true,
+  },
+  shellStone: {
+    board: ['/shell-stone/board.png'],
+    black: ['/shell-stone/black.png'],
+    white: [
+      '/shell-stone/white0.png',
+      '/shell-stone/white1.png',
+      '/shell-stone/white2.png',
+      '/shell-stone/white3.png',
+      '/shell-stone/white4.png',
+    ],
+    stoneShadow: true,
+  },
+  slateAndShell: {
+    board: ['/slate-and-shell-theme/board.png'],
+    black: [
+      '/slate-and-shell-theme/slate1.png',
+      '/slate-and-shell-theme/slate2.png',
+      '/slate-and-shell-theme/slate3.png',
+      '/slate-and-shell-theme/slate4.png',
+      '/slate-and-shell-theme/slate5.png',
+    ],
+    white: [
+      '/slate-and-shell-theme/shell1.png',
+      '/slate-and-shell-theme/shell2.png',
+      '/slate-and-shell-theme/shell3.png',
+      '/slate-and-shell-theme/shell4.png',
+      '/slate-and-shell-theme/shell5.png',
+    ],
+    stoneShadow: true,
+  },
+  subduedTheme: {
+    board: ['/subdued-theme/board.png'],
+    black: ['/subdued-theme/black.png'],
+    white: ['/subdued-theme/white.png'],
+    stoneShadow: true,
+  },
+  walnutTheme: {
+    board: ['/walnut-theme/board.png'],
+    black: ['/walnut-theme/black.png'],
+    white: ['/walnut-theme/white.png'],
+    stoneShadow: true,
+  },
+};
+
+export function preloadTheme(theme) {
+  const materials = {};
+  materials.board = [];
+  materials.black = [];
+  materials.white = [];
+  THEME[_.camelCase(theme)].board.forEach((src) => {
+    const img = new Image();
+    img.src = BASE_THEME_PATH + src;
+    materials.board.push(img);
+  });
+  THEME[_.camelCase(theme)].black.forEach((src) => {
+    const img = new Image();
+    img.src = BASE_THEME_PATH + src;
+    materials.black.push(img);
+  });
+  THEME[_.camelCase(theme)].white.forEach((src) => {
+    const img = new Image();
+    img.src = BASE_THEME_PATH + src;
+    materials.white.push(img);
+  });
+  return materials;
+}

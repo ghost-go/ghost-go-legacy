@@ -23,7 +23,6 @@ class Kifu extends Component {
       }),
     }).isRequired,
     theme: PropTypes.string.isRequired,
-    themeMaterial: PropTypes.shape({}).isRequired,
   }
 
   constructor() {
@@ -59,7 +58,6 @@ class Kifu extends Component {
     const steps = kifu.data.steps.split(';').slice(0, this.state.step);
     const board = new Board({
       theme: this.props.theme,
-      material: this.props.themeMaterial,
       canvas: this.boardLayer,
     });
     board.setStones(CoordsToTree(steps));
@@ -205,7 +203,6 @@ function select(state) {
   return {
     kifu: state.kifu,
     theme: state.theme,
-    themeMaterial: state.themeMaterial,
   };
 }
 

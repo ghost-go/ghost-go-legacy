@@ -91,50 +91,6 @@ function setPracticePuzzleId(state, action) {
   return action.payload;
 }
 
-// preload theme image
-let images = [];
-images = [
-  '/themes/flat-theme/black.svg',
-  '/themes/flat-theme/white.svg',
-  '/themes/photorealistic-theme/black.png',
-  '/themes/photorealistic-theme/board.png',
-  '/themes/photorealistic-theme/white.png',
-  '/themes/shell-stone/black.png',
-  '/themes/shell-stone/board.png',
-  '/themes/shell-stone/white0.png',
-  '/themes/shell-stone/white1.png',
-  '/themes/shell-stone/white2.png',
-  '/themes/shell-stone/white3.png',
-  '/themes/shell-stone/white4.png',
-  '/themes/slate-and-shell-theme/board.png',
-  '/themes/slate-and-shell-theme/shell1.png',
-  '/themes/slate-and-shell-theme/shell2.png',
-  '/themes/slate-and-shell-theme/shell3.png',
-  '/themes/slate-and-shell-theme/shell4.png',
-  '/themes/slate-and-shell-theme/shell5.png',
-  '/themes/slate-and-shell-theme/slate1.png',
-  '/themes/slate-and-shell-theme/slate2.png',
-  '/themes/slate-and-shell-theme/slate3.png',
-  '/themes/slate-and-shell-theme/slate4.png',
-  '/themes/slate-and-shell-theme/slate5.png',
-  '/themes/subdued-theme/black.png',
-  '/themes/subdued-theme/white.png',
-  '/themes/subdued-theme/board.png',
-  '/themes/walnut-theme/black.png',
-  '/themes/walnut-theme/white.png',
-  '/themes/walnut-theme/board.jpg',
-];
-
-const imageData = {};
-function preload() {
-  images.forEach((src) => {
-    const img = new Image();
-    img.src = src;
-    imageData[src] = img;
-  });
-}
-preload();
-
 export const steps = createReducer([], {
   ADD_STEPS(state, action) {
     if (typeof (action.payload) === 'string') {
@@ -241,5 +197,4 @@ export const practicePuzzleId = createReducer(null,
 );
 export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white',
   { SET_THEME: setGenernalFilter });
-export const themeMaterial = createReducer(imageData, { SET_THEME_MATERIAL: setGenernalFilter });
 export const tags = buildFetchReducer({}, 'TAGS');

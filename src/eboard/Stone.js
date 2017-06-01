@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import { preloadTheme, THEME } from '../constants/Go';
+
 export default class Stone {
   constructor(x, y, size, type, isMarked = false, theme = 'black-and-white') {
     this.x = x || 0;
@@ -6,6 +9,7 @@ export default class Stone {
     this.type = type;
     this.isMarked = isMarked;
     this.theme = theme;
+    this.materials = preloadTheme(theme);
   }
 
   static addShadow(ctx) {
@@ -24,77 +28,16 @@ export default class Stone {
 
   draw(ctx) {
     if (this.type === 0) return;
-    const black = new Image();
-    const white = new Image();
-    // TODO: Need refactor
-    if (this.theme === 'flat-theme') {
-      black.src = `/themes/${this.theme}/black.svg`;
-      white.src = `/themes/${this.theme}/white.svg`;
+
+    if (THEME[_.camelCase(this.theme)].stoneShadow) Stone.addShadow(ctx);
+    if (this.materials.black.length > 0 || this.materials.white.length > 0) {
       ctx.drawImage(
-        this.type === 1 ? black : white,
+        this.type === 1 ? this.materials.black[0] : this.materials.white[0],
         this.x - this.size,
         this.y - this.size,
         this.size * 2,
         this.size * 2,
       );
-    } else if (this.theme === 'photorealistic-theme') {
-      black.src = `/themes/${this.theme}/black.png`;
-      white.src = `/themes/${this.theme}/white.png`;
-      Stone.addShadow(ctx);
-      ctx.drawImage(
-        this.type === 1 ? black : white,
-        this.x - this.size,
-        this.y - this.size,
-        this.size * 2,
-        this.size * 2,
-      );
-      Stone.removeShadow(ctx);
-    } else if (this.theme === 'shell-stone') {
-      black.src = `/themes/${this.theme}/black.png`;
-      const white0 = new Image();
-      white0.src = `/themes/${this.theme}/white0.png`;
-      const white1 = new Image();
-      white1.src = `/themes/${this.theme}/white1.png`;
-      const white2 = new Image();
-      white2.src = `/themes/${this.theme}/white2.png`;
-      const white3 = new Image();
-      white3.src = `/themes/${this.theme}/white3.png`;
-      const white4 = new Image();
-      white4.src = `/themes/${this.theme}/white4.png`;
-      Stone.addShadow(ctx);
-      ctx.drawImage(
-        this.type === 1 ? black : white1,
-        this.x - this.size,
-        this.y - this.size,
-        this.size * 2,
-        this.size * 2,
-      );
-      Stone.removeShadow(ctx);
-    } else if (this.theme === 'slate-and-shell-theme') {
-      // TODO: TBD
-    } else if (this.theme === 'subdued-theme') {
-      black.src = `/themes/${this.theme}/black.png`;
-      white.src = `/themes/${this.theme}/white.png`;
-      Stone.addShadow(ctx);
-      ctx.drawImage(
-        this.type === 1 ? black : white,
-        this.x - this.size,
-        this.y - this.size,
-        this.size * 2,
-        this.size * 2,
-      );
-      Stone.removeShadow(ctx);
-    } else if (this.theme === 'walnut-theme') {
-      black.src = `/themes/${this.theme}/black.png`;
-      white.src = `/themes/${this.theme}/white.png`;
-      Stone.addShadow(ctx);
-      ctx.drawImage(
-        this.type === 1 ? black : white,
-        this.x - this.size,
-        this.y - this.size,
-        this.size * 2, this.size * 2,
-      );
-      Stone.removeShadow(ctx);
     } else {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true);
@@ -108,6 +51,8 @@ export default class Stone {
       ctx.fill();
       ctx.stroke();
     }
+    if (THEME[_.camelCase(this.theme)].stoneShadow) Stone.removeShadow(ctx);
+
     if (this.isMarked) {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size * 0.6, 0, 2 * Math.PI, true);
