@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { preloadTheme, THEME } from '../constants/Go';
+import { THEME, MATERIALS } from '../constants/Go';
 
 export default class Stone {
   constructor(x, y, size, type, isMarked = false, theme = 'black-and-white') {
@@ -9,7 +9,7 @@ export default class Stone {
     this.type = type;
     this.isMarked = isMarked;
     this.theme = theme;
-    this.materials = preloadTheme(theme);
+    this.materials = MATERIALS[_.camelCase(this.theme)];
   }
 
   static addShadow(ctx) {

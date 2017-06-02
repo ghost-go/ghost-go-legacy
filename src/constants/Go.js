@@ -51,18 +51,21 @@ export const THEME = {
     black: [],
     white: [],
     stoneShadow: false,
+    boardShadow: false,
   },
   flatTheme: {
     board: ['/flat-theme/board.png'],
     black: ['/flat-theme/black.svg'],
     white: ['/flat-theme/white.svg'],
     stoneShadow: false,
+    boardShadow: true,
   },
   photorealisticTheme: {
     board: ['/photorealistic-theme/board.png'],
     black: ['/photorealistic-theme/black.png'],
     white: ['/photorealistic-theme/white.png'],
     stoneShadow: true,
+    boardShadow: true,
   },
   shellStone: {
     board: ['/shell-stone/board.png'],
@@ -75,6 +78,7 @@ export const THEME = {
       '/shell-stone/white4.png',
     ],
     stoneShadow: true,
+    boardShadow: true,
   },
   slateAndShell: {
     board: ['/slate-and-shell-theme/board.png'],
@@ -93,40 +97,45 @@ export const THEME = {
       '/slate-and-shell-theme/shell5.png',
     ],
     stoneShadow: true,
+    boardShadow: true,
   },
   subduedTheme: {
     board: ['/subdued-theme/board.png'],
     black: ['/subdued-theme/black.png'],
     white: ['/subdued-theme/white.png'],
     stoneShadow: true,
+    boardShadow: true,
   },
   walnutTheme: {
-    board: ['/walnut-theme/board.png'],
+    board: ['/walnut-theme/board.jpg'],
     black: ['/walnut-theme/black.png'],
     white: ['/walnut-theme/white.png'],
     stoneShadow: true,
+    boardShadow: true,
   },
 };
 
-export function preloadTheme(theme) {
-  const materials = {};
-  materials.board = [];
-  materials.black = [];
-  materials.white = [];
-  THEME[_.camelCase(theme)].board.forEach((src) => {
+const materials = {};
+Object.keys(THEME).forEach((key) => {
+  materials[key] = {};
+  materials[key].board = [];
+  materials[key].black = [];
+  materials[key].white = [];
+  THEME[key].board.forEach((src) => {
     const img = new Image();
     img.src = BASE_THEME_PATH + src;
-    materials.board.push(img);
+    materials[key].board.push(img);
   });
-  THEME[_.camelCase(theme)].black.forEach((src) => {
+  THEME[key].black.forEach((src) => {
     const img = new Image();
     img.src = BASE_THEME_PATH + src;
-    materials.black.push(img);
+    materials[key].black.push(img);
   });
-  THEME[_.camelCase(theme)].white.forEach((src) => {
+  THEME[key].white.forEach((src) => {
     const img = new Image();
     img.src = BASE_THEME_PATH + src;
-    materials.white.push(img);
+    materials[key].white.push(img);
   });
-  return materials;
-}
+});
+
+export const MATERIALS = materials;

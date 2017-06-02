@@ -2,7 +2,12 @@ import _ from 'lodash';
 import showKi from './BoardCore';
 import Stone from './Stone';
 import Cross from './Cross';
-import { CoordsToTree, preloadTheme, LETTERS_SGF, BLANK_ARRAY } from '../constants/Go';
+import {
+  CoordsToTree,
+  LETTERS_SGF,
+  BLANK_ARRAY,
+  MATERIALS,
+} from '../constants/Go';
 
 export default class Board {
   constructor(args) {
@@ -19,7 +24,7 @@ export default class Board {
     this.afterMove = args.afterMove;
     this.canvas = args.canvas;
     this.setNextStoneType = args.setNextStoneType;
-    this.materials = preloadTheme(this.theme);
+    this.materials = MATERIALS[_.camelCase(this.theme)];
   }
 
   setStones(root, execPonnuki = true) {
@@ -108,9 +113,10 @@ export default class Board {
   renderBoard(ctx) {
     this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
 
+    // TODO: blablabla
     const shadowStyle = '5px 5px 5px #999999';
     if (this.theme === 'black-and-white') {
-      // TODO: blablabla
+      this.canvas.style.boxShadow = '0px 0px 0px #000000';
     } else if (this.theme === 'flat-theme') {
       this.canvas.style.boxShadow = shadowStyle;
       ctx.fillStyle = '#ECB55A';
