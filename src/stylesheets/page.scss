@@ -312,3 +312,12 @@
     color: red;
   }
 }
+
+.board-toolbar {
+  width: 100%;
+  & > .section {
+    margin: 2px 5px;
+    padding: 2px 5px;
+    float: left;
+  }
+}

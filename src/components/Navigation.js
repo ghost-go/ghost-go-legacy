@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 
 import { setTheme } from '../actions/Actions';
 import AuthService from '../utils/AuthService';
+import BoardControlPanel from './BoardControlPanel';
 
 class Navigation extends Component {
 
@@ -13,8 +14,8 @@ class Navigation extends Component {
     auth: PropTypes.instanceOf(AuthService).isRequired,
     expanded: PropTypes.bool.isRequired,
     collapseToggle: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
     theme: PropTypes.string.isRequired,
+    setTheme: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -33,7 +34,6 @@ class Navigation extends Component {
       this.setState({ profile: newProfile });
     });
 
-    this.handleTheme = this.handleTheme.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
@@ -58,11 +58,6 @@ class Navigation extends Component {
     AuthService.logout();
   }
 
-  handleTheme(e) {
-    localStorage.setItem('theme', e.target.value);
-    this.props.dispatch(setTheme(e.target.value));
-  }
-
   mouseDownHandler() {
     this.mouseIsDownOnCalendar = true;
   }
@@ -83,17 +78,7 @@ class Navigation extends Component {
         </div>
         <div id="sidebar-search" />
         <div style={{ paddingLeft: this.props.expanded ? '235px' : '50px' }} className="theme">
-          <select className="form-control" onChange={this.handleTheme} defaultValue={theme}>
-            <option>black-and-white</option>
-            <option>subdued-theme</option>
-            <option>photorealistic-theme</option>
-            <option>shell-stone</option>
-            {/*
-            <option>slate-and-shell-theme</option>
-            */}
-            <option>walnut-theme</option>
-            <option>flat-theme</option>
-          </select>
+          <BoardControlPanel setTheme={this.props.setTheme} theme={theme} />
         </div>
         <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
@@ -186,4 +171,11 @@ function select(state) {
     theme: state.theme,
   };
 }
-export default connect(select)(Navigation);
+
+const mapDispatchToProps = dispatch => ({
+  setTheme: (theme) => {
+    dispatch(setTheme(theme));
+  },
+});
+
+export default connect(select, mapDispatchToProps)(Navigation);
