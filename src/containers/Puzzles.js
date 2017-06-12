@@ -8,7 +8,12 @@ import { StyleSheet, css } from 'aphrodite';
 
 import FilterBar from '../components/FilterBar';
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions';
-import { setPuzzleFilter, setRangeFilter, setTagFilter } from '../actions/Actions';
+import {
+  setPuzzleFilter,
+  setRangeFilter,
+  setTagFilter,
+  setToolbarHidden,
+} from '../actions/Actions';
 
 const styles = StyleSheet.create({
   loading: {
@@ -44,6 +49,8 @@ class Puzzles extends Component {
     super(props);
     this.handleSeeMore = this.handleSeeMore.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+
+    this.props.dispatch(setToolbarHidden(true));
   }
 
   state = {

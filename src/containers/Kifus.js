@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { StyleSheet, css } from 'aphrodite';
 
 import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions';
-import { setKifuFilter } from '../actions/Actions';
+import { setKifuFilter, setToolbarHidden } from '../actions/Actions';
 import FilterBar from '../components/FilterBar';
 
 const styles = StyleSheet.create({
@@ -52,6 +52,7 @@ class Kifus extends Component {
       per_page: 24,
     }));
     this.props.dispatch(fetchTopPlayers(10));
+    this.props.dispatch(setToolbarHidden(true));
     this.getRecordData();
 
     this.handleSeeMore = this.handleSeeMore.bind(this);

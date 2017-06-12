@@ -7,6 +7,7 @@ import { CoordsToTree } from '../constants/Go';
 
 import Board from '../eboard/Board';
 import { fetchKifu } from '../actions/FetchActions';
+import { setToolbarHidden } from '../actions/Actions';
 
 const { LEFT, RIGHT, SPACE, ENTER } = Keys;
 
@@ -25,8 +26,8 @@ class Kifu extends Component {
     theme: PropTypes.string.isRequired,
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.prevStep = this.prevStep.bind(this);
     this.nextStep = this.nextStep.bind(this);
@@ -34,6 +35,8 @@ class Kifu extends Component {
     this.lastStep = this.lastStep.bind(this);
     this.prev10Step = this.prevStep.bind(this);
     this.next10Step = this.nextStep.bind(this);
+
+    this.props.dispatch(setToolbarHidden(false));
   }
 
   state = {

@@ -19,3 +19,4 @@ export const setCurrentAnswerId = createAction('SET_CURRENT_ANSWER_ID');
 export const setCurrentMode = createAction('SET_CURRENT_MODE');
 export const setTheme = createAction('SET_THEME');
 export const setNextStoneType = createAction('SET_NEXT_STONE_TYPE_FILTER');
+export const setToolbarHidden = createAction('SET_TOOLBAR_HIDDEN');

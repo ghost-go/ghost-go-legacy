@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 
 import { setTheme } from '../actions/Actions';
 import AuthService from '../utils/AuthService';
-import BoardControlPanel from './BoardControlPanel';
+import BoardToolbar from './BoardToolbar';
 
 class Navigation extends Component {
 
@@ -16,6 +16,7 @@ class Navigation extends Component {
     collapseToggle: PropTypes.func.isRequired,
     theme: PropTypes.string.isRequired,
     setTheme: PropTypes.func.isRequired,
+    toolbarHidden: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
@@ -78,7 +79,11 @@ class Navigation extends Component {
         </div>
         <div id="sidebar-search" />
         <div style={{ paddingLeft: this.props.expanded ? '235px' : '50px' }} className="theme">
-          <BoardControlPanel setTheme={this.props.setTheme} theme={theme} />
+          <BoardToolbar
+            setTheme={this.props.setTheme}
+            theme={theme}
+            hidden={this.props.toolbarHidden}
+          />
         </div>
         <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
@@ -169,6 +174,7 @@ class Navigation extends Component {
 function select(state) {
   return {
     theme: state.theme,
+    toolbarHidden: state.toolbarHidden,
   };
 }
 

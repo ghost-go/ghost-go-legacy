@@ -17,6 +17,7 @@ import {
   addSteps,
   resetSteps, setCurrentAnswerId,
   setNextStoneType,
+  setToolbarHidden,
 } from '../actions/Actions';
 import AuthService from '../utils/AuthService';
 
@@ -128,6 +129,8 @@ class Puzzle extends Component {
     this.addSteps = this.addSteps.bind(this);
     this.setNextStoneType = this.setNextStoneType.bind(this);
     this.getInitNextStoneType = this.getInitNextStoneType.bind(this);
+
+    this.props.dispatch(setToolbarHidden(false));
   }
 
   componentDidMount() {

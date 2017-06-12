@@ -25,6 +25,7 @@ export default class Board {
     this.canvas = args.canvas;
     this.setNextStoneType = args.setNextStoneType;
     this.materials = MATERIALS[_.camelCase(this.theme)];
+    this.showCoordinate = args.showCoordinate || false;
   }
 
   setStones(root, execPonnuki = true) {

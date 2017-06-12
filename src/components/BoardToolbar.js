@@ -8,11 +8,12 @@ import {
   // MenuItem,
 } from 'react-bootstrap';
 
-export default class BoardControlPanel extends Component {
+export default class BoardToolbar extends Component {
 
   static propTypes = {
     setTheme: PropTypes.func.isRequired,
     theme: PropTypes.string.isRequired,
+    hidden: PropTypes.bool.isRequired,
   }
 
   constructor() {
@@ -27,7 +28,7 @@ export default class BoardControlPanel extends Component {
 
   render() {
     return (
-      <div className="board-toolbar">
+      <div className={`board-toolbar ${this.props.hidden ? 'hidden' : ''}`}>
         <div className="section">
           <select className="form-control" onChange={this.handleTheme} defaultValue={this.props.theme}>
             <option>black-and-white</option>
@@ -78,5 +79,4 @@ export default class BoardControlPanel extends Component {
       </div>
     );
   }
-
 }
