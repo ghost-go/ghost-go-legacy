@@ -45,7 +45,7 @@ export default class BoardToolbar extends Component {
         <div className="section">
           <ButtonToolbar>
             <ButtonGroup>
-              <Button><b>XY</b></Button>
+              <Button active><b>XY</b></Button>
             </ButtonGroup>
             <ButtonGroup>
               <Button>

@@ -16,6 +16,7 @@ function updateObject(oldObject, newValues) {
 
   // return updatedItems
 // }
+
 function fetchRequest(state) {
   return { ...state, isFetching: true, isFailure: false };
 }
@@ -193,6 +194,10 @@ export const userRangeFilter = createReducer('onlyme', { SET_USER_RANGE_FILTER: 
 export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: setGenernalFilter });
 export const nextStoneType = createReducer(0, { SET_NEXT_STONE_TYPE_FILTER: setGenernalFilter });
 export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setGenernalFilter });
+export const boardStates = createReducer({
+  showCoordinate: false,
+  mark: 'None',
+}, { SET_BOARD_STATES: setGenernalFilter });
 
 export const practicePuzzleId = createReducer(null,
   { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
