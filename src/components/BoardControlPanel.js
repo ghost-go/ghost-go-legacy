@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
+import {
+  // DropdownButton,
+  ButtonToolbar,
+  ButtonGroup,
+  Button,
+  // MenuItem,
+} from 'react-bootstrap';
 
 export default class BoardControlPanel extends Component {
 
@@ -38,34 +44,34 @@ export default class BoardControlPanel extends Component {
         <div className="section">
           <ButtonToolbar>
             <ButtonGroup>
-              <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
-              </Button>
-              <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
-              </Button>
-              <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
-              </Button>
-              <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
-              </Button>
+              <Button><b>XY</b></Button>
             </ButtonGroup>
             <ButtonGroup>
               <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
+                <span className="fa fa-circle" aria-hidden="true" />
               </Button>
               <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
+                <span className="fa fa-square" aria-hidden="true" />
               </Button>
               <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
+                <span className="glyphicon glyphicon-remove" aria-hidden="true" />
               </Button>
+              <Button><b>A</b></Button>
+              <Button><b>B</b></Button>
+              <Button><b>C</b></Button>
+              <Button><b>D</b></Button>
+              <Button><b>E</b></Button>
+              <Button><b>F</b></Button>
+              <Button><b>G</b></Button>
             </ButtonGroup>
             <ButtonGroup>
-              <Button>
-                <span className="glyphicon glyphicon-align-left" aria-hidden="true" />
-              </Button>
+              <Button>Clear</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button>AI Help</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button><div className="black-ki-shape" /></Button>
             </ButtonGroup>
           </ButtonToolbar>
         </div>
