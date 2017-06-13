@@ -70,11 +70,11 @@ function buildPostReducer(initialState, name = '') {
   return createReducer(newInitialState, handlers);
 }
 
-function setGenernalFilter(state, action) {
+function setPlainTextFilter(state, action) {
   return action.payload;
 }
 
-function setPuzzleFilter(state, action) {
+function setObjectFilter(state, action) {
   return updateObject(state, action.payload);
 }
 
@@ -185,23 +185,23 @@ export const kifu = buildFetchReducer({ data: {
 } }, 'KIFU');
 
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS');
-export const puzzleFilter = createReducer({ start: '18k', end: '9d' }, { SET_PUZZLE_FILTER: setPuzzleFilter });
+export const puzzleFilter = createReducer({ start: '18k', end: '9d' }, { SET_PUZZLE_FILTER: setObjectFilter });
 export const rangeFilter = createReducer({ start: '18k', end: '9d', text: 'all' }, { SET_RANGE_FILTER: setRangeFilter });
-export const kifuFilter = createReducer('all', { SET_KIFU_FILTER: setGenernalFilter });
-export const tagFilter = createReducer('all', { SET_TAG_FILTER: setGenernalFilter });
-export const dateRangeFilter = createReducer('last7days', { SET_DATE_RANGE_FILTER: setGenernalFilter });
-export const userRangeFilter = createReducer('onlyme', { SET_USER_RANGE_FILTER: setGenernalFilter });
-export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: setGenernalFilter });
-export const nextStoneType = createReducer(0, { SET_NEXT_STONE_TYPE_FILTER: setGenernalFilter });
-export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setGenernalFilter });
+export const kifuFilter = createReducer('all', { SET_KIFU_FILTER: setPlainTextFilter });
+export const tagFilter = createReducer('all', { SET_TAG_FILTER: setPlainTextFilter });
+export const dateRangeFilter = createReducer('last7days', { SET_DATE_RANGE_FILTER: setPlainTextFilter });
+export const userRangeFilter = createReducer('onlyme', { SET_USER_RANGE_FILTER: setPlainTextFilter });
+export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: setPlainTextFilter });
+export const nextStoneType = createReducer(0, { SET_NEXT_STONE_TYPE_FILTER: setPlainTextFilter });
+export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setPlainTextFilter });
 export const boardStates = createReducer({
   showCoordinate: false,
   mark: 'None',
-}, { SET_BOARD_STATES: setGenernalFilter });
+}, { SET_BOARD_STATES: setObjectFilter });
 
 export const practicePuzzleId = createReducer(null,
   { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
 );
 export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white',
-  { SET_THEME: setGenernalFilter });
+  { SET_THEME: setPlainTextFilter });
 export const tags = buildFetchReducer({}, 'TAGS');

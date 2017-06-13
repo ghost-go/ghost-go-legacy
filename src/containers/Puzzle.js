@@ -93,6 +93,10 @@ class Puzzle extends Component {
     currentAnswerId: PropTypes.number,
     theme: PropTypes.string.isRequired,
     nextStoneType: PropTypes.number.isRequired,
+    boardStates: PropTypes.shape({
+      showCoordinate: PropTypes.bool.isRequired,
+      mark: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
   static contextTypes = {
@@ -159,6 +163,7 @@ class Puzzle extends Component {
       editable: true,
       nextStoneType: this.props.nextStoneType,
       setNextStoneType: this.setNextStoneType,
+      showCoordinate: this.props.boardStates.showCoordinate,
       afterMove: (step) => {
         this.props.dispatch(addSteps(step));
         setTimeout(() => {
@@ -382,6 +387,7 @@ function select(state) {
     currentMode: state.currentMode,
     theme: state.theme,
     nextStoneType: state.nextStoneType,
+    boardStates: state.boardStates,
   };
 }
 

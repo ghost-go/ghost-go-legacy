@@ -12,18 +12,31 @@ export default class BoardToolbar extends Component {
 
   static propTypes = {
     setTheme: PropTypes.func.isRequired,
+    setBoardStates: PropTypes.func.isRequired,
     theme: PropTypes.string.isRequired,
     hidden: PropTypes.bool.isRequired,
+    boardStates: PropTypes.shape({
+      showCoordinate: PropTypes.bool.isRequired,
+      mark: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
   constructor() {
     super();
+
     this.handleTheme = this.handleTheme.bind(this);
+    this.handleShowCoordinate = this.handleShowCoordinate.bind(this);
   }
 
   handleTheme(e) {
     localStorage.setItem('theme', e.target.value);
     this.props.setTheme(e.target.value);
+  }
+
+  handleShowCoordinate() {
+    this.props.setBoardStates({
+      showCoordinate: !this.props.boardStates.showCoordinate,
+    });
   }
 
   render() {
@@ -45,7 +58,12 @@ export default class BoardToolbar extends Component {
         <div className="section">
           <ButtonToolbar>
             <ButtonGroup>
-              <Button active><b>XY</b></Button>
+              <Button
+                onClick={this.handleShowCoordinate}
+                active={this.props.boardStates.showCoordinate}
+              >
+                <b>XY</b>
+              </Button>
             </ButtonGroup>
             <ButtonGroup>
               <Button>

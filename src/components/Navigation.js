@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 
-import { setTheme } from '../actions/Actions';
+import { setTheme, setBoardStates } from '../actions/Actions';
 import AuthService from '../utils/AuthService';
 import BoardToolbar from './BoardToolbar';
 
@@ -16,7 +16,12 @@ class Navigation extends Component {
     collapseToggle: PropTypes.func.isRequired,
     theme: PropTypes.string.isRequired,
     setTheme: PropTypes.func.isRequired,
+    setBoardStates: PropTypes.func.isRequired,
     toolbarHidden: PropTypes.bool.isRequired,
+    boardStates: PropTypes.shape({
+      showCoordinate: PropTypes.bool.isRequired,
+      mark: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
   static defaultProps = {
@@ -68,7 +73,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { auth, theme } = this.props;
+    const { auth, theme, boardStates, toolbarHidden } = this.props;
     return (
       <div id="page-header">
         <div style={{ marginLeft: this.props.expanded ? '0px' : '-185px' }} id="header-logo">
@@ -80,9 +85,11 @@ class Navigation extends Component {
         <div id="sidebar-search" />
         <div style={{ paddingLeft: this.props.expanded ? '235px' : '50px' }} className="theme">
           <BoardToolbar
+            setBoardStates={this.props.setBoardStates}
             setTheme={this.props.setTheme}
             theme={theme}
-            hidden={this.props.toolbarHidden}
+            hidden={toolbarHidden}
+            boardStates={boardStates}
           />
         </div>
         <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
@@ -175,12 +182,16 @@ function select(state) {
   return {
     theme: state.theme,
     toolbarHidden: state.toolbarHidden,
+    boardStates: state.boardStates,
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   setTheme: (theme) => {
     dispatch(setTheme(theme));
+  },
+  setBoardStates: (state) => {
+    dispatch(setBoardStates(state));
   },
 });
 

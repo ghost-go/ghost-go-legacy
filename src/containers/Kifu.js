@@ -206,6 +206,7 @@ function select(state) {
   return {
     kifu: state.kifu,
     theme: state.theme,
+    boardStates: state.boardStates,
   };
 }
 

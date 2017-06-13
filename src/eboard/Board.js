@@ -27,7 +27,8 @@ export default class Board {
     this.canvas = args.canvas;
     this.setNextStoneType = args.setNextStoneType;
     this.materials = MATERIALS[_.camelCase(this.theme)];
-    this.showCoordinate = args.showCoordinate || true;
+    console.log(args);
+    this.showCoordinate = args.showCoordinate || false;
   }
 
   setStones(root, execPonnuki = true) {
@@ -89,9 +90,7 @@ export default class Board {
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.renderBoard(ctx);
     this.renderStones(this.canvas, ctx);
-    if (this.showCoordinate) {
-      this.renderCoordinate(ctx);
-    }
+    this.renderCoordinate(ctx);
     if (this.editable) {
       this.renderCursor(ctx);
       this.canvas.onclick = (e) => {
@@ -227,43 +226,45 @@ export default class Board {
   }
 
   renderCoordinate(ctx) {
-    ctx.font = `bold ${this.size / 2.8}px Helvetica`;
-    let letters = [];
-    let numbers = [];
-    if (this.leftmost + this.rightmost < 10 && this.topmost + this.bottommost < 10) {
-      letters = LETTERS.slice(0, this.maxhv);
-      numbers = NUMBERS.slice(0, this.maxhv);
-    } else if (this.leftmost + this.rightmost >= 10 && this.topmost + this.bottommost < 10) {
-      letters = LETTERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
-      numbers = NUMBERS.slice(0, this.maxhv);
-    } else if (this.leftmost + this.rightmost < 10 && this.topmost + this.bottommost >= 10) {
-      letters = LETTERS.slice(0, this.maxhv);
-      numbers = NUMBERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
-    } else {
-      letters = LETTERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
-      numbers = NUMBERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
-    }
-
-    letters.forEach((l, index) => {
-      ctx.fillText(l,
-        (this.size * (index + 1)) - (this.size / 8),
-        this.size / 2,
-      );
-    });
-    numbers.forEach((l, index) => {
-      if (index < this.maxhv) {
-        if (l >= 10) {
-          ctx.fillText(l,
-            this.size / 6,
-            (this.size * (index + 1)) + (this.size / 5),
-          );
-        } else {
-          ctx.fillText(l,
-            this.size / 4,
-            (this.size * (index + 1)) + (this.size / 5),
-          );
-        }
+    if (this.showCoordinate) {
+      ctx.font = `bold ${this.size / 2.8}px Helvetica`;
+      let letters = [];
+      let numbers = [];
+      if (this.leftmost + this.rightmost < 10 && this.topmost + this.bottommost < 10) {
+        letters = LETTERS.slice(0, this.maxhv);
+        numbers = NUMBERS.slice(0, this.maxhv);
+      } else if (this.leftmost + this.rightmost >= 10 && this.topmost + this.bottommost < 10) {
+        letters = LETTERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
+        numbers = NUMBERS.slice(0, this.maxhv);
+      } else if (this.leftmost + this.rightmost < 10 && this.topmost + this.bottommost >= 10) {
+        letters = LETTERS.slice(0, this.maxhv);
+        numbers = NUMBERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
+      } else {
+        letters = LETTERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
+        numbers = NUMBERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
       }
-    });
+
+      letters.forEach((l, index) => {
+        ctx.fillText(l,
+          (this.size * (index + 1)) - (this.size / 8),
+          this.size / 2,
+        );
+      });
+      numbers.forEach((l, index) => {
+        if (index < this.maxhv) {
+          if (l >= 10) {
+            ctx.fillText(l,
+              this.size / 6,
+              (this.size * (index + 1)) + (this.size / 5),
+            );
+          } else {
+            ctx.fillText(l,
+              this.size / 4,
+              (this.size * (index + 1)) + (this.size / 5),
+            );
+          }
+        }
+      });
+    }
   }
 }
