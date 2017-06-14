@@ -195,7 +195,7 @@ export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: s
 export const nextStoneType = createReducer(0, { SET_NEXT_STONE_TYPE_FILTER: setPlainTextFilter });
 export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setPlainTextFilter });
 export const boardStates = createReducer({
-  showCoordinate: false,
+  showCoordinate: true,
   mark: 'None',
 }, { SET_BOARD_STATES: setObjectFilter });
 
