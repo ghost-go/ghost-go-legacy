@@ -27,7 +27,6 @@ export default class Board {
     this.canvas = args.canvas;
     this.setNextStoneType = args.setNextStoneType;
     this.materials = MATERIALS[_.camelCase(this.theme)];
-    console.log(args);
     this.showCoordinate = args.showCoordinate || false;
   }
 

@@ -13,6 +13,7 @@ export default class AuthService extends EventEmitter {
     this.lock.on('authenticated', this.doAuthentication);
     // binds login functions to keep this context
     this.lock.on('authorization_error', (error) => {
+      // eslint-disable-next-line
       console.log('Authentication Error', error);
     });
     this.login = this.login.bind(this);
@@ -28,6 +29,7 @@ export default class AuthService extends EventEmitter {
       // Async loads the user profile data
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
+          // eslint-disable-next-line
           console.log('Error loading the Profile', error);
         } else {
           this.setProfile(profile);

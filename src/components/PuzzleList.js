@@ -60,7 +60,7 @@ const PuzzleListItem = (props) => {
   };
 
   return (
-    <div
+    <button
       onClick={onClick}
       className={props.selected ? css(style.listBox, style.selected) : css(style.listBox)}
     >
@@ -73,7 +73,7 @@ const PuzzleListItem = (props) => {
         <span>{props.puzzle.whofirst}</span>
         <div>{props.result}</div>
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -125,7 +125,8 @@ export default class PuzzleList extends Component {
         <div key={`P-${i.id}`}>
           <PuzzleListItem
             selected={this.props.currentPuzzleId === i.id}
-            puzzle={i} puzzleListOnClick={this.props.puzzleListOnClick}
+            puzzle={i}
+            puzzleListOnClick={this.props.puzzleListOnClick}
             result={result}
           />
           <Divider />

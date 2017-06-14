@@ -25,7 +25,8 @@ export default class RankingList extends Component {
     return (
       <SelectField
         floatingLabelText={this.props.floatingLabelText}
-        style={{ width: 85 }} value={this.state.rank}
+        style={{ width: 85 }}
+        value={this.state.rank}
         onChange={this.handleChange}
       >
         <MenuItem value={'18k'} primaryText="18k" />

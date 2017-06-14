@@ -8,12 +8,10 @@ const ListItem = (props) => {
   };
   return (
     <li
-      role="button"
       key={props.tag}
       className={`tag ${props.active ? 'active' : ''}`}
-      onClick={onClick}
     >
-      {props.tag}
+      <a tabIndex={0} role="button" onClick={onClick}>{props.tag}</a>
     </li>
   );
 };
@@ -73,7 +71,7 @@ export default class FilterBar extends Component {
           <Dropdown.Menu className="super-colors">
             {
               data.map(item =>
-                <div key={item.name}>
+                (<div key={item.name}>
                   <div className="popover-title">{item.name}</div>
                   <div className="popover-content">
                     <ul className="tags">
@@ -91,7 +89,7 @@ export default class FilterBar extends Component {
                       }
                     </ul>
                   </div>
-                </div>,
+                </div>),
               )
             }
           </Dropdown.Menu>
