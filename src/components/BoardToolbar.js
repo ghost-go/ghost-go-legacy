@@ -65,6 +65,7 @@ export default class BoardToolbar extends Component {
                 <b>XY</b>
               </Button>
             </ButtonGroup>
+            {/*
             <ButtonGroup>
               <Button>
                 <span className="fa fa-circle" aria-hidden="true" />
@@ -92,6 +93,7 @@ export default class BoardToolbar extends Component {
             <ButtonGroup>
               <Button><div className="black-ki-shape" /></Button>
             </ButtonGroup>
+            */}
           </ButtonToolbar>
         </div>
       </div>
