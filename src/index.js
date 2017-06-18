@@ -21,6 +21,8 @@ import User from './containers/User';
 import Container from './containers/Container';
 import History from './containers/History';
 import Dashboard from './containers/Dashboard';
+import Rooms from './containers/Rooms';
+import Room from './containers/Room';
 import Favorite from './containers/Favorite';
 import AuthService from './utils/AuthService';
 import App from './App';
@@ -89,6 +91,8 @@ ReactDOM.render(
           <Route path="/records" component={History} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/favorites" component={Favorite} />
+          <Route path="/rooms" component={Rooms} />
+          <Route path="/rooms/:id" component={Room} />
         </Route>
       </Router>
       <App />
