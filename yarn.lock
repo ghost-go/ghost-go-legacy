@@ -54,6 +54,10 @@ acorn@^5.0.0, acorn@^5.0.1:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.0.3.tgz#c460df08491463f028ccb82eab3730bf01087b3d"
 
+actioncable@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/actioncable/-/actioncable-5.1.1.tgz#6bb9fa96ad52e163ba8e1ed824bee84c98537cd8"
+
 address@1.0.1, address@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.1.tgz#363f5d3f2be26d0655d8afd5a9562e4fc2194537"
