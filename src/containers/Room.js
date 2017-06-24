@@ -5,21 +5,24 @@ import { connect } from 'react-redux';
 import ActionCable from 'actioncable';
 
 import {
-   // Button,
-   // FieldGroup,
-   // Checkbox,
-   // Radio,
-   FormGroup,
-   ControlLabel,
-   FormControl,
-   HelpBlock,
- } from 'react-bootstrap';
+  // Button,
+  // FieldGroup,
+  // Checkbox,
+  // Radio,
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  HelpBlock,
+} from 'react-bootstrap';
+
+import Board from '../eboard/Board';
 
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
 class Room extends Component {
 
   static propTypes = {
+    theme: PropTypes.string.isRequired,
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
@@ -51,6 +54,24 @@ class Room extends Component {
       },
     });
     room.send('aaa');
+
+    let boardWidth = 0;
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60;
+    } else {
+      boardWidth = window.innerWidth;
+    }
+    this.boardLayer.width = boardWidth;
+    this.boardLayer.height = boardWidth;
+
+    const board = new Board({
+      autofit: true,
+      canvas: this.boardLayer,
+      theme: this.props.theme,
+      editable: true,
+      setNextStoneType: this.setNextStoneType,
+    });
+    board.render();
   }
 
 
@@ -58,6 +79,9 @@ class Room extends Component {
     return (
       <div>
         <h1>{this.state.roomId}</h1>
+        <div className="puzzle-board">
+          <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem; }} />
+        </div>
         <FormGroup controlId="topic">
           <ControlLabel>Topic</ControlLabel>
           <FormControl

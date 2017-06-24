@@ -28,6 +28,9 @@ export default class BoardToolbar extends Component {
     this.handleShowCoordinate = this.handleShowCoordinate.bind(this);
   }
 
+  componentDidMount() {
+  }
+
   handleTheme(e) {
     localStorage.setItem('theme', e.target.value);
     this.props.setTheme(e.target.value);
