@@ -96,7 +96,6 @@ class Puzzles extends Component {
     this.setState({ tipsOpen: true });
   }
 
-
   handleToggle() {
     this.setState({ filterOpen: !this.state.filterOpen });
   }

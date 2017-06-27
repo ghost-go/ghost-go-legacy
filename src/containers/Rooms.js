@@ -34,22 +34,22 @@ class Rooms extends Component {
   render() {
     return (
       <div>
-        <FormGroup controlId="topic">
-          <ControlLabel>Topic</ControlLabel>
+        <FormGroup controlId="host_name">
+          <ControlLabel>Your Name</ControlLabel>
           <FormControl
             type="text"
-            value={'Guest\'s Room'}
-            placeholder="Guest's Room"
+            value={'Your Name'}
+            placeholder="Your Name"
           />
           <FormControl.Feedback />
           <HelpBlock>Validation is based on string length.</HelpBlock>
         </FormGroup>
-        <FormGroup controlId="host_name">
-          <ControlLabel>Host Name</ControlLabel>
+        <FormGroup controlId="topic">
+          <ControlLabel>Topic</ControlLabel>
           <FormControl
             type="text"
-            value={'Guest'}
-            placeholder="Guest"
+            value={'Bai'}
+            placeholder="Guest's Room"
           />
           <FormControl.Feedback />
           <HelpBlock>Validation is based on string length.</HelpBlock>

@@ -36,11 +36,12 @@ export default class Container extends Component {
 
   constructor() {
     super();
-    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      expanded: true,
+      expanded: false,
     };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   getChildContext() {
