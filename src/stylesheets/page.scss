@@ -344,6 +344,7 @@
 .chatbox {
   width: 100%;
   overflow: scroll;
+  flex-grow: 1;
 
   span {
     float: right;
@@ -354,17 +355,29 @@
   display: flex;
 }
 .room-container {
+  justify-content: space-between;
+  height: calc(100vmin - 50px);
   .room-board {
     position: relative;
     background-color: #FFF;
-    margin: 0 10px 10px 10px;
-    width: calc(100vmin);
-    height: calc(100vmin);
+    margin: 0 10px 0px 5px;
   }
   .room-panel {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    margin: 0 5px 20px 5px;
     width: 100%;
+    .sendbox {
+      input, button {
+        float: left;
+      }
+      input {
+        width: 84%;
+      }
+      button {
+        margin-left: 1%;
+        width: 15%;
+      }
+    }
   }
 }

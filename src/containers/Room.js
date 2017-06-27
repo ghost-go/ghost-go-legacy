@@ -155,13 +155,15 @@ class Room extends Component {
           <div className="chatbox">
             { messages }
           </div>
-          <FormControl
-            type="text"
-            value={this.state.text}
-            placeholder=""
-            onChange={this.handleTextChange}
-          />
-          <Button autoFocus bsStyle="primary" onClick={this.handleSend}>Send</Button>
+          <div className="sendbox">
+            <FormControl
+              type="text"
+              value={this.state.text}
+              placeholder=""
+              onChange={this.handleTextChange}
+            />
+            <Button autoFocus bsStyle="primary" onClick={this.handleSend}>Send</Button>
+          </div>
         </div>
       </div>
     );
