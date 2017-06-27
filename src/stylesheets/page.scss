@@ -343,7 +343,6 @@
 
 .chatbox {
   width: 100%;
-  height: 300px;
   overflow: scroll;
 
   span {
@@ -361,5 +360,11 @@
     margin: 0 10px 10px 10px;
     width: calc(100vmin);
     height: calc(100vmin);
+  }
+  .room-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 100%;
   }
 }

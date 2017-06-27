@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 import ActionCable from 'actioncable';
 import moment from 'moment';
-
 import {
   // Button,
   // FieldGroup,
@@ -17,10 +16,11 @@ import {
   FormGroup,
   ControlLabel,
   FormControl,
-  HelpBlock,
+  // HelpBlock,
 } from 'react-bootstrap';
-
 import Board from '../eboard/Board';
+
+import { APP_DOMAIN } from '../constants/Config';
 
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
@@ -71,7 +71,6 @@ class Room extends Component {
       },
     });
     this.room = room;
-
     let boardWidth = 0;
     if (screen.width > screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -125,37 +124,33 @@ class Room extends Component {
         <div className="room-board">
           <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem; }} />
         </div>
-        <div>
-          <h1>{this.state.roomId}</h1>
+        <div className="room-panel">
           <FormGroup controlId="topic">
             <ControlLabel>Topic</ControlLabel>
             <FormControl
               type="text"
+              bsSize="small"
               value={'Guest\'s Room'}
               placeholder="Guest's Room"
             />
-            <FormControl.Feedback />
-            <HelpBlock>Validation is based on string length.</HelpBlock>
           </FormGroup>
           <FormGroup controlId="host_name">
             <ControlLabel>Your Name</ControlLabel>
             <FormControl
               type="text"
+              bsSize="small"
               value={'Guest'}
               placeholder="Guest"
             />
-            <FormControl.Feedback />
-            <HelpBlock>Validation is based on string length.</HelpBlock>
           </FormGroup>
           <FormGroup controlId="invitation">
             <ControlLabel>Invitation URL</ControlLabel>
             <FormControl
               type="text"
-              value={'aaa'}
-              placeholder="aaa"
+              bsSize="small"
+              value={`${APP_DOMAIN}/rooms/${this.state.roomId}?from=invitation`}
+              placeholder={APP_DOMAIN}
             />
-            <FormControl.Feedback />
-            <HelpBlock>Validation is based on string length.</HelpBlock>
           </FormGroup>
           <div className="chatbox">
             { messages }
