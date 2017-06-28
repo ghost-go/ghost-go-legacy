@@ -41,10 +41,12 @@ class Room extends Component {
       roomId: id,
       text: '',
       messages: [],
+      name: 'Guest',
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSend = this.handleSend.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   state = {
@@ -93,7 +95,7 @@ class Room extends Component {
   handleSend() {
     const msg = {
       type: 'msg',
-      fromId: 'Bai',
+      fromId: this.state.name,
       text: this.state.text,
       createdAt: Date.now(),
     };
@@ -104,6 +106,9 @@ class Room extends Component {
     this.setState({ text: e.target.value });
   }
 
+  handleNameChange(e) {
+    this.setState({ name: e.target.value });
+  }
 
   render() {
     const messages = this.state.messages.map(msg =>
@@ -139,8 +144,9 @@ class Room extends Component {
             <FormControl
               type="text"
               bsSize="small"
-              value={'Guest'}
+              value={this.state.name}
               placeholder="Guest"
+              onChange={this.handleNameChange}
             />
           </FormGroup>
           <FormGroup controlId="invitation">
