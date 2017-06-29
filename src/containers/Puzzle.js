@@ -180,6 +180,7 @@ class Puzzle extends Component {
     board.render();
   }
 
+
   getInitNextStoneType() {
     return (this.props.puzzle.data.whofirst === 'Black First' ? 1 : -1);
   }
