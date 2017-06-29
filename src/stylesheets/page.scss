@@ -370,6 +370,9 @@
     flex-direction: column;
     margin: 0 5px 20px 5px;
     width: 100%;
+    .room-info {
+      flex-direction: row;
+    }
     .sendbox {
       input, button {
         float: left;

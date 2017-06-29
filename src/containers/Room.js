@@ -11,8 +11,8 @@ import {
   // Checkbox,
   // Radio,
   Button,
-  // Col,
-  // Row,
+  Col,
+  Row,
   FormGroup,
   ControlLabel,
   FormControl,
@@ -168,34 +168,44 @@ class Room extends Component {
           <canvas id="puzzle_layer" ref={(elem) => { this.boardLayer = elem; }} />
         </div>
         <div className="room-panel">
-          <FormGroup controlId="topic">
-            <ControlLabel>Topic</ControlLabel>
-            <FormControl
-              type="text"
-              bsSize="small"
-              value={'Guest\'s Room'}
-              placeholder="Guest's Room"
-            />
-          </FormGroup>
-          <FormGroup controlId="host_name">
-            <ControlLabel>Your Name</ControlLabel>
-            <FormControl
-              type="text"
-              bsSize="small"
-              value={this.state.name}
-              placeholder="Guest"
-              onChange={this.handleNameChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="invitation">
-            <ControlLabel>Invitation URL</ControlLabel>
-            <FormControl
-              type="text"
-              bsSize="small"
-              value={`${APP_DOMAIN}/rooms/${this.state.roomId}?from=invitation`}
-              placeholder={APP_DOMAIN}
-            />
-          </FormGroup>
+          <div className="room-info">
+            <Row>
+              <Col xs={12} md={8}>
+                <FormGroup controlId="topic">
+                  <ControlLabel>Topic</ControlLabel>
+                  <FormControl
+                    type="text"
+                    bsSize="small"
+                    value={'Guest\'s Room'}
+                    placeholder="Guest's Room"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs={12} md={4}>
+                <FormGroup controlId="host_name">
+                  <ControlLabel>Your Name</ControlLabel>
+                  <FormControl
+                    type="text"
+                    bsSize="small"
+                    value={this.state.name}
+                    placeholder="Guest"
+                    onChange={this.handleNameChange}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </div>
+          <div className="room-invitation">
+            <FormGroup controlId="invitation">
+              <ControlLabel>Invitation URL</ControlLabel>
+              <FormControl
+                type="text"
+                bsSize="small"
+                value={`${APP_DOMAIN}/rooms/${this.state.roomId}?from=invitation`}
+                placeholder={APP_DOMAIN}
+              />
+            </FormGroup>
+          </div>
           <div className="chatbox">
             { messages }
           </div>
