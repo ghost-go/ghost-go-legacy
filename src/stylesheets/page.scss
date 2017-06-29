@@ -341,15 +341,6 @@
   vertical-align: middle;
 }
 
-.chatbox {
-  width: 100%;
-  overflow: scroll;
-  flex-grow: 1;
-
-  span {
-    float: right;
-  }
-}
 
 .flex {
   display: flex;
@@ -357,6 +348,18 @@
 .room-container {
   justify-content: space-between;
   height: calc(100vmin - 50px);
+  .chatbox {
+    width: 100%;
+    overflow: scroll;
+    flex-grow: 1;
+
+    span {
+      float: right;
+    }
+    .notice {
+      color: #999;
+    }
+  }
   .room-board {
     position: relative;
     background-color: #FFF;

@@ -59,13 +59,25 @@ class Room extends Component {
       roomId: this.state.roomId,
       type: 'temp',
       topic: `Topic ${this.state.roomId}`,
-      ownerId: 'Bai',
+      ownerId: this.state.name,
     }, {
       connected: () => {
-        console.log('connected');
+        const msg = {
+          type: 'msg',
+          fromId: this.state.name,
+          text: `${this.state.name} entered this room`,
+          createdAt: Date.now(),
+        };
+        this.room.send(msg);
       },
       disconnected: () => {
-        console.log('disconnected');
+        const msg = {
+          type: 'msg',
+          fromId: this.state.name,
+          text: `${this.state.name} disconnection`,
+          createdAt: Date.now(),
+        };
+        this.room.send(msg);
       },
       received: (data) => {
         const messages = this.state.messages.concat([data]);
@@ -90,6 +102,26 @@ class Room extends Component {
       setNextStoneType: this.setNextStoneType,
     });
     board.render();
+    window.addEventListener('beforeunload', (ev) => {
+      ev.preventDefault();
+      const msg = {
+        type: 'msg',
+        fromId: this.state.name,
+        text: `${this.state.name} leaved this room`,
+        createdAt: Date.now(),
+      };
+      this.room.send(msg);
+    });
+  }
+
+  componentWillUnmount() {
+    const msg = {
+      type: 'msg',
+      fromId: this.state.name,
+      text: `${this.state.name} leaved this room`,
+      createdAt: Date.now(),
+    };
+    this.room.send(msg);
   }
 
   handleSend() {
@@ -111,19 +143,25 @@ class Room extends Component {
   }
 
   render() {
-    const messages = this.state.messages.map(msg =>
-      (
-        <div key={`${msg.fromId}_${msg.createdAt}`}>
-          <div>
-            <b>{msg.fromId}</b>
-            <span>{moment(msg.createdAt).format('LT')}</span>
+    const messages = this.state.messages.map((msg) => {
+      let result;
+      if (msg.message_type === 'notice') {
+        result = <div className="notice" key={`${msg.fromId}_${msg.createdAt}`}>{msg.text}</div>;
+      } else {
+        result = (
+          <div key={`${msg.fromId}_${msg.createdAt}`}>
+            <div>
+              <b>{msg.fromId}</b>
+              <span>{moment(msg.createdAt).format('LT')}</span>
+            </div>
+            <div>
+              <div>{msg.text}</div>
+            </div>
           </div>
-          <div>
-            <div>{msg.text}</div>
-          </div>
-        </div>
-      ),
-    );
+        );
+      }
+      return result;
+    });
     return (
       <div className="flex room-container">
         <div className="room-board">
