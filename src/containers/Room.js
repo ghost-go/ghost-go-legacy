@@ -187,6 +187,7 @@ class Room extends Component {
                     bsSize="small"
                     value={'Guest\'s Room'}
                     placeholder="Guest's Room"
+                    readOnly
                   />
                 </FormGroup>
               </Col>
@@ -212,6 +213,7 @@ class Room extends Component {
                 bsSize="small"
                 value={`${APP_DOMAIN}/rooms/${this.state.roomId}?from=invitation`}
                 placeholder={APP_DOMAIN}
+                readOnly
               />
             </FormGroup>
           </div>

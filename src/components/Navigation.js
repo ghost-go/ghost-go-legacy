@@ -92,7 +92,7 @@ class Navigation extends Component {
             boardStates={boardStates}
           />
         </div>
-        <div id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
+        <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
             AuthService.loggedIn() ? (
               <div>
