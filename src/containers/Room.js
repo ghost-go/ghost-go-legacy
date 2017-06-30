@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import _ from 'lodash';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 import ActionCable from 'actioncable';
@@ -124,6 +124,9 @@ class Room extends Component {
     this.room.send(msg);
   }
 
+  // isOwner() {
+  // }
+
   handleSend() {
     const msg = {
       type: 'msg',
@@ -131,7 +134,13 @@ class Room extends Component {
       text: this.state.text,
       createdAt: Date.now(),
     };
-    this.room.send(msg);
+    if (_.isEmpty(this.state.text)) {
+      alert('Cannot send empty message');
+    } else if (_.isEmpty(this.state.name)) {
+      alert('Cannot send message without name');
+    } else {
+      this.room.send(msg);
+    }
   }
 
   handleTextChange(e) {
