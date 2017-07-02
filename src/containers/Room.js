@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 import ActionCable from 'actioncable';
+import keydown, { Keys } from 'react-keydown';
 import moment from 'moment';
 import {
   // Button,
@@ -22,6 +23,7 @@ import Board from '../eboard/Board';
 
 import { APP_DOMAIN } from '../constants/Config';
 
+const { ENTER } = Keys;
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
 class Room extends Component {
@@ -47,6 +49,7 @@ class Room extends Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSend = this.handleSend.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   state = {
@@ -124,6 +127,13 @@ class Room extends Component {
     this.room.send(msg);
   }
 
+  @keydown(ENTER)
+  handleKeyboardEvents(event) {
+    if (event.which === ENTER) {
+      this.handleSend();
+    }
+  }
+
   // isOwner() {
   // }
 
@@ -141,9 +151,19 @@ class Room extends Component {
     } else {
       this.room.send(msg);
     }
+    this.setState({
+      text: '',
+    });
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSend();
+    }
   }
 
   handleTextChange(e) {
+    console.log(e);
     this.setState({ text: e.target.value });
   }
 
@@ -226,8 +246,9 @@ class Room extends Component {
               value={this.state.text}
               placeholder=""
               onChange={this.handleTextChange}
+              onKeyPress={this.handleKeyPress}
             />
-            <Button autoFocus bsStyle="primary" onClick={this.handleSend}>Send</Button>
+            <Button bsStyle="primary" tabIndex={0} onClick={this.handleSend}>Send</Button>
           </div>
         </div>
       </div>
