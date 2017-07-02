@@ -117,6 +117,10 @@ class Room extends Component {
     });
   }
 
+  componentDidUpdate() {
+    this.chatbox.scrollTop = this.chatbox.scrollHeight;
+  }
+
   componentWillUnmount() {
     const msg = {
       type: 'msg',
@@ -163,7 +167,6 @@ class Room extends Component {
   }
 
   handleTextChange(e) {
-    console.log(e);
     this.setState({ text: e.target.value });
   }
 
@@ -237,7 +240,7 @@ class Room extends Component {
               />
             </FormGroup>
           </div>
-          <div className="chatbox">
+          <div ref={(el) => { this.chatbox = el; }} className="chatbox">
             { messages }
           </div>
           <div className="sendbox">
