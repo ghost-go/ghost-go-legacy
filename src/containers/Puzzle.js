@@ -133,7 +133,9 @@ class Puzzle extends Component {
     this.addSteps = this.addSteps.bind(this);
     this.setNextStoneType = this.setNextStoneType.bind(this);
     this.getInitNextStoneType = this.getInitNextStoneType.bind(this);
+  }
 
+  componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
   }
 

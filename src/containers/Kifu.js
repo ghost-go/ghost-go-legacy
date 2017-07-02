@@ -24,6 +24,10 @@ class Kifu extends Component {
       }),
     }).isRequired,
     theme: PropTypes.string.isRequired,
+    boardStates: PropTypes.shape({
+      showCoordinate: PropTypes.bool.isRequired,
+      mark: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -35,17 +39,19 @@ class Kifu extends Component {
     this.lastStep = this.lastStep.bind(this);
     this.prev10Step = this.prevStep.bind(this);
     this.next10Step = this.nextStep.bind(this);
-
-    this.props.dispatch(setToolbarHidden(false));
   }
 
   state = {
     step: 0,
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { id } = this.props.params;
     this.props.dispatch(fetchKifu({ id }));
+    this.props.dispatch(setToolbarHidden(false));
+  }
+
+  componentDidMount() {
     let boardWidth = 0;
     if (screen.width > screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -62,6 +68,7 @@ class Kifu extends Component {
     const board = new Board({
       theme: this.props.theme,
       canvas: this.boardLayer,
+      showCoordinate: this.props.boardStates.showCoordinate,
     });
     board.setStones(CoordsToTree(steps));
     board.render();

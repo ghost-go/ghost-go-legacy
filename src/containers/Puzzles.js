@@ -49,8 +49,6 @@ class Puzzles extends Component {
     super(props);
     this.handleSeeMore = this.handleSeeMore.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
-
-    this.props.dispatch(setToolbarHidden(true));
   }
 
   state = {
@@ -59,15 +57,18 @@ class Puzzles extends Component {
     filterOpen: false,
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { query } = this.props.location;
     this.props.dispatch(fetchTags({}));
     this.props.dispatch(fetchPuzzles({
       page: query.page,
       rank: query.rank,
     }));
+    this.props.dispatch(setToolbarHidden(true));
   }
 
+  componentDidMount() {
+  }
 
   handleSeeMore(filter, val) {
     let range = [];

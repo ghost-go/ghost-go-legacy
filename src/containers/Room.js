@@ -22,6 +22,7 @@ import {
 import Board from '../eboard/Board';
 
 import { APP_DOMAIN } from '../constants/Config';
+import { setToolbarHidden } from '../actions/Actions';
 
 const { ENTER } = Keys;
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
@@ -33,6 +34,7 @@ class Room extends Component {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
+    dispatch: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -50,6 +52,8 @@ class Room extends Component {
     this.handleSend = this.handleSend.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+
+    this.props.dispatch(setToolbarHidden(false));
   }
 
   state = {
@@ -97,14 +101,6 @@ class Room extends Component {
     this.boardLayer.width = boardWidth;
     this.boardLayer.height = boardWidth;
 
-    const board = new Board({
-      autofit: true,
-      canvas: this.boardLayer,
-      theme: this.props.theme,
-      editable: true,
-      setNextStoneType: this.setNextStoneType,
-    });
-    board.render();
     window.addEventListener('beforeunload', (ev) => {
       ev.preventDefault();
       const msg = {
@@ -119,6 +115,15 @@ class Room extends Component {
 
   componentDidUpdate() {
     this.chatbox.scrollTop = this.chatbox.scrollHeight;
+
+    const board = new Board({
+      autofit: false,
+      canvas: this.boardLayer,
+      theme: this.props.theme,
+      editable: true,
+      setNextStoneType: this.setNextStoneType,
+    });
+    board.render();
   }
 
   componentWillUnmount() {

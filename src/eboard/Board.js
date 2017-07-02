@@ -28,6 +28,11 @@ export default class Board {
     this.setNextStoneType = args.setNextStoneType;
     this.materials = MATERIALS[_.camelCase(this.theme)];
     this.showCoordinate = args.showCoordinate || false;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.root = CoordsToTree([]);
+    this.lastNode = this.root;
+    this.maxhv = 19;
   }
 
   setStones(root, execPonnuki = true) {
@@ -55,7 +60,7 @@ export default class Board {
   }
 
   getTree() {
-    return this.root;
+    return this.root || null;
   }
 
   fitBoard() {
@@ -101,7 +106,11 @@ export default class Board {
         const { hasMoved } = showKi(this.arrangement, [step]);
         if (hasMoved) {
           this.lastNode.addChild(node.children[0]);
-          this.setNextStoneType(-this.nextStoneType);
+          if (this.setNextStoneType !== undefined) {
+            this.setNextStoneType(-this.nextStoneType);
+          } else {
+            this.nextStoneType = -this.nextStoneType;
+          }
           this.setStones(this.root);
           ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
           this.renderBoard(ctx);
@@ -171,7 +180,7 @@ export default class Board {
     let il;
     let jl;
     this.size = canvas.width / (_.max([this.width, this.height]) + 1);
-    if (this.lastNode !== undefined) {
+    if (this.lastNode !== undefined && this.lastNode.model.index !== 0) {
       il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2]);
       jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3]);
     }
@@ -226,6 +235,7 @@ export default class Board {
 
   renderCoordinate(ctx) {
     if (this.showCoordinate) {
+      ctx.fillStyle = '#000000';
       ctx.font = `bold ${this.size / 2.8}px Helvetica`;
       let letters = [];
       let numbers = [];

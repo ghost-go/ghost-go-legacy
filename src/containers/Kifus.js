@@ -45,15 +45,6 @@ class Kifus extends Component {
     this.state = {
       isLoading: false,
     };
-    const { query } = this.props.location;
-    this.props.dispatch(fetchKifus({
-      page: query.page,
-      player: this.state.kifuFilter,
-      per_page: 24,
-    }));
-    this.props.dispatch(fetchTopPlayers(10));
-    this.props.dispatch(setToolbarHidden(true));
-    this.getRecordData();
 
     this.handleSeeMore = this.handleSeeMore.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
@@ -64,6 +55,18 @@ class Kifus extends Component {
     filterOpen: false,
   }
 
+  componentWillMount() {
+    const { query } = this.props.location;
+    this.props.dispatch(fetchKifus({
+      page: query.page,
+      player: this.state.kifuFilter,
+      per_page: 24,
+    }));
+
+    this.props.dispatch(fetchTopPlayers(10));
+    this.props.dispatch(setToolbarHidden(true));
+    this.getRecordData();
+  }
 
   getRecordData(page = 1) {
     this.props.dispatch(fetchKifus({ page }));
