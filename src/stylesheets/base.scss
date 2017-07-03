@@ -30,6 +30,7 @@ body.mac {
 
 a:focus, a:hover {
   text-decoration: none;
+  outline: 0 !important;
 }
 
 a {
@@ -40,3 +41,9 @@ a {
 body, h4, h5, li {
   line-height: 20px;
 }
+
+button:focus, div:focus {
+  outline:0 !important;
+}
+
+

@@ -95,6 +95,9 @@ class BoardToolbar extends Component {
               <Button onClick={this.handleTurn}>
                 { turnIcon }
               </Button>
+              <Button onClick={this.handleTurn}>
+                <i className="fa fa-eraser" aria-hidden="true" />
+              </Button>
             </ButtonGroup>
             {/*
             <ButtonGroup>
