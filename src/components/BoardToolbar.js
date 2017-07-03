@@ -87,15 +87,16 @@ class BoardToolbar extends Component {
           <ButtonToolbar>
             <ButtonGroup>
               <Button
+                bsStyle="default"
                 onClick={this.handleShowCoordinate}
                 active={this.props.boardStates.showCoordinate}
               >
                 <b>XY</b>
               </Button>
-              <Button onClick={this.handleTurn}>
+              <Button bsStyle="default" onClick={this.handleTurn}>
                 { turnIcon }
               </Button>
-              <Button onClick={this.handleTurn}>
+              <Button bsStyle="default" onClick={this.handleTurn}>
                 <i className="fa fa-eraser" aria-hidden="true" />
               </Button>
             </ButtonGroup>

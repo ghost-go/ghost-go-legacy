@@ -85,6 +85,22 @@
   }
 }
 
+.btn {
+  border-radius: 0;
+}
+
+.btn.btn-default {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+
+.btn.btn-primary {
+  color: #fff;
+  border-color: #db690c;
+  background: #f87500;
+}
+
 .btn.btn-primary {
   color: #fff;
   border-color: #db690c;
