@@ -55,14 +55,19 @@ class BoardToolbar extends Component {
       nextState = 'B-W';
     } else if (this.props.boardStates.turn === 'B-W') {
       nextState = 'B';
-      // nextState = 'W-B';
-    // } else if (this.props.boardStates.turn === 'W-B') {
-      // nextState = 'B';
     }
     this.props.setBoardStates({ turn: nextState });
   }
 
   render() {
+    let turnIcon;
+    if (this.props.boardStates.turn === 'B') {
+      turnIcon = <i className="fa fa-circle" aria-hidden="true" />;
+    } else if (this.props.boardStates.turn === 'W') {
+      turnIcon = <i className="fa fa-circle-thin" aria-hidden="true" />;
+    } else {
+      turnIcon = <i className="fa fa-adjust fa-rotate-180" aria-hidden="true" />;
+    }
     return (
       <div className={`board-toolbar ${this.props.toolbarHidden ? 'hidden' : ''}`}>
         <div className="section">
@@ -88,13 +93,13 @@ class BoardToolbar extends Component {
                 <b>XY</b>
               </Button>
               <Button onClick={this.handleTurn}>
-                <b>{this.props.boardStates.turn}</b>
+                { turnIcon }
               </Button>
             </ButtonGroup>
             {/*
             <ButtonGroup>
               <Button>
-                <span className="fa fa-circle" aria-hidden="true" />
+                <i className="fa fa-circle" aria-hidden="true" />
               </Button>
               <Button>
                 <span className="fa fa-square" aria-hidden="true" />
