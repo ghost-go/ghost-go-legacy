@@ -13,7 +13,8 @@ export default class Sidebar extends Component {
   }
 
   static defaultProps = {
-    expanded: true,
+    // expanded: true,
+    expanded: false,
   }
 
   constructor(props) {

@@ -38,7 +38,7 @@ export default class Container extends Component {
     super();
 
     this.state = {
-      expanded: true,
+      expanded: false,
     };
 
     this.handleClick = this.handleClick.bind(this);

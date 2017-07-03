@@ -192,7 +192,7 @@ export const tagFilter = createReducer('all', { SET_TAG_FILTER: setPlainTextFilt
 export const dateRangeFilter = createReducer('last7days', { SET_DATE_RANGE_FILTER: setPlainTextFilter });
 export const userRangeFilter = createReducer('onlyme', { SET_USER_RANGE_FILTER: setPlainTextFilter });
 export const recordTypeFilter = createReducer('all', { SET_RECORD_TYPE_FILTER: setPlainTextFilter });
-export const nextStoneType = createReducer(0, { SET_NEXT_STONE_TYPE_FILTER: setPlainTextFilter });
+export const nextStoneType = createReducer(1, { SET_NEXT_STONE_TYPE_FILTER: setPlainTextFilter });
 export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setPlainTextFilter });
 export const boardStates = createReducer({
   showCoordinate: true,

@@ -1,6 +1,6 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 import ActionCable from 'actioncable';
@@ -19,10 +19,15 @@ import {
   FormControl,
   // HelpBlock,
 } from 'react-bootstrap';
+import { CoordsToTree } from '../constants/Go';
 import Board from '../eboard/Board';
 
 import { APP_DOMAIN } from '../constants/Config';
-import { setToolbarHidden } from '../actions/Actions';
+import {
+  setToolbarHidden,
+  setNextStoneType,
+  addSteps,
+} from '../actions/Actions';
 
 const { ENTER } = Keys;
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
@@ -35,6 +40,12 @@ class Room extends Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
+    steps: PropTypes.arrayOf(PropTypes.string).isRequired,
+    boardStates: PropTypes.shape({
+      showCoordinate: PropTypes.bool.isRequired,
+      mark: PropTypes.string.isRequired,
+    }).isRequired,
+    nextStoneType: PropTypes.number.isRequired,
   }
 
   constructor(props, context) {
@@ -52,12 +63,14 @@ class Room extends Component {
     this.handleSend = this.handleSend.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-
-    this.props.dispatch(setToolbarHidden(false));
   }
 
   state = {
     roomId: '',
+  }
+
+  componentWillMount() {
+    this.props.dispatch(setToolbarHidden(false));
   }
 
   componentDidMount() {
@@ -87,8 +100,12 @@ class Room extends Component {
         this.room.send(msg);
       },
       received: (data) => {
-        const messages = this.state.messages.concat([data]);
-        this.setState({ messages });
+        if (data.type === 'msg') {
+          const messages = this.state.messages.concat([data]);
+          this.setState({ messages });
+        } else if (data.type === 'op') {
+          this.props.dispatch(addSteps(data.text));
+        }
       },
     });
     this.room = room;
@@ -121,8 +138,21 @@ class Room extends Component {
       canvas: this.boardLayer,
       theme: this.props.theme,
       editable: true,
-      setNextStoneType: this.setNextStoneType,
+      showCoordinate: this.props.boardStates.showCoordinate,
+      nextStoneType: this.props.nextStoneType,
+      afterMove: (step) => {
+        this.props.dispatch(addSteps(step));
+        this.props.dispatch(setNextStoneType(-this.props.nextStoneType));
+        const msg = {
+          type: 'op',
+          fromId: this.state.name,
+          text: step,
+          createdAt: Date.now(),
+        };
+        this.room.send(msg);
+      },
     });
+    board.setStones(CoordsToTree(this.props.steps), true);
     board.render();
   }
 

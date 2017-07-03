@@ -108,8 +108,6 @@ export default class Board {
           this.lastNode.addChild(node.children[0]);
           if (this.setNextStoneType !== undefined) {
             this.setNextStoneType(-this.nextStoneType);
-          } else {
-            this.nextStoneType = -this.nextStoneType;
           }
           this.setStones(this.root);
           ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
