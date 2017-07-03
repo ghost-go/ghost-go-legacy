@@ -197,6 +197,7 @@ export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setPlainT
 export const boardStates = createReducer({
   showCoordinate: true,
   mark: 'None',
+  turn: 'B-W',
 }, { SET_BOARD_STATES: setObjectFilter });
 
 export const practicePuzzleId = createReducer(null,

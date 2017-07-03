@@ -25,7 +25,7 @@ import Board from '../eboard/Board';
 import { APP_DOMAIN } from '../constants/Config';
 import {
   setToolbarHidden,
-  setNextStoneType,
+  // setNextStoneType,
   addSteps,
 } from '../actions/Actions';
 
@@ -44,8 +44,9 @@ class Room extends Component {
     boardStates: PropTypes.shape({
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
+      turn: PropTypes.string.isRequired,
     }).isRequired,
-    nextStoneType: PropTypes.number.isRequired,
+    // nextStoneType: PropTypes.number.isRequired,
   }
 
   constructor(props, context) {
@@ -133,16 +134,25 @@ class Room extends Component {
   componentDidUpdate() {
     this.chatbox.scrollTop = this.chatbox.scrollHeight;
 
+    let nextStoneType = 'B';
+    if (this.props.boardStates.turn === 'B') {
+      nextStoneType = 1;
+    } else if (this.props.boardStates.turn === 'W') {
+      nextStoneType = -1;
+    } else if (this.getLastStone() === 'B') {
+      nextStoneType = -1;
+    } else {
+      nextStoneType = 1;
+    }
     const board = new Board({
       autofit: false,
       canvas: this.boardLayer,
       theme: this.props.theme,
       editable: true,
       showCoordinate: this.props.boardStates.showCoordinate,
-      nextStoneType: this.props.nextStoneType,
+      nextStoneType,
       afterMove: (step) => {
         this.props.dispatch(addSteps(step));
-        this.props.dispatch(setNextStoneType(-this.props.nextStoneType));
         const msg = {
           type: 'op',
           fromId: this.state.name,
@@ -164,6 +174,14 @@ class Room extends Component {
       createdAt: Date.now(),
     };
     this.room.send(msg);
+  }
+
+  getLastStone() {
+    const lastStone = this.props.steps.slice(-1)[0];
+    if (lastStone) {
+      return lastStone[0];
+    }
+    return '';
   }
 
   @keydown(ENTER)

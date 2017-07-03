@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
   // DropdownButton,
   ButtonToolbar,
@@ -8,16 +9,19 @@ import {
   // MenuItem,
 } from 'react-bootstrap';
 
-export default class BoardToolbar extends Component {
+import { setTheme, setBoardStates } from '../actions/Actions';
+
+class BoardToolbar extends Component {
 
   static propTypes = {
     setTheme: PropTypes.func.isRequired,
     setBoardStates: PropTypes.func.isRequired,
     theme: PropTypes.string.isRequired,
-    hidden: PropTypes.bool.isRequired,
+    toolbarHidden: PropTypes.bool.isRequired,
     boardStates: PropTypes.shape({
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
+      turn: PropTypes.string.isRequired,
     }).isRequired,
   }
 
@@ -26,6 +30,7 @@ export default class BoardToolbar extends Component {
 
     this.handleTheme = this.handleTheme.bind(this);
     this.handleShowCoordinate = this.handleShowCoordinate.bind(this);
+    this.handleTurn = this.handleTurn.bind(this);
   }
 
   componentDidMount() {
@@ -42,9 +47,24 @@ export default class BoardToolbar extends Component {
     });
   }
 
+  handleTurn() {
+    let nextState = 'B';
+    if (this.props.boardStates.turn === 'B') {
+      nextState = 'W';
+    } else if (this.props.boardStates.turn === 'W') {
+      nextState = 'B-W';
+    } else if (this.props.boardStates.turn === 'B-W') {
+      nextState = 'B';
+      // nextState = 'W-B';
+    // } else if (this.props.boardStates.turn === 'W-B') {
+      // nextState = 'B';
+    }
+    this.props.setBoardStates({ turn: nextState });
+  }
+
   render() {
     return (
-      <div className={`board-toolbar ${this.props.hidden ? 'hidden' : ''}`}>
+      <div className={`board-toolbar ${this.props.toolbarHidden ? 'hidden' : ''}`}>
         <div className="section">
           <select className="form-control" onChange={this.handleTheme} defaultValue={this.props.theme}>
             <option>black-and-white</option>
@@ -66,6 +86,9 @@ export default class BoardToolbar extends Component {
                 active={this.props.boardStates.showCoordinate}
               >
                 <b>XY</b>
+              </Button>
+              <Button onClick={this.handleTurn}>
+                <b>{this.props.boardStates.turn}</b>
               </Button>
             </ButtonGroup>
             {/*
@@ -103,3 +126,25 @@ export default class BoardToolbar extends Component {
     );
   }
 }
+
+function select(state) {
+  return {
+    steps: state.steps,
+    currentAnswerId: state.currentAnswerId,
+    currentMode: state.currentMode,
+    toolbarHidden: state.toolbarHidden,
+    theme: state.theme,
+    boardStates: state.boardStates,
+  };
+}
+
+const mapDispatchToProps = dispatch => ({
+  setTheme: (theme) => {
+    dispatch(setTheme(theme));
+  },
+  setBoardStates: (state) => {
+    dispatch(setBoardStates(state));
+  },
+});
+
+export default connect(select, mapDispatchToProps)(BoardToolbar);

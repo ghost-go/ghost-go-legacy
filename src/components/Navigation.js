@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 
-import { setTheme, setBoardStates } from '../actions/Actions';
 import AuthService from '../utils/AuthService';
 import BoardToolbar from './BoardToolbar';
 
@@ -14,14 +13,6 @@ class Navigation extends Component {
     auth: PropTypes.instanceOf(AuthService).isRequired,
     expanded: PropTypes.bool.isRequired,
     collapseToggle: PropTypes.func.isRequired,
-    theme: PropTypes.string.isRequired,
-    setTheme: PropTypes.func.isRequired,
-    setBoardStates: PropTypes.func.isRequired,
-    toolbarHidden: PropTypes.bool.isRequired,
-    boardStates: PropTypes.shape({
-      showCoordinate: PropTypes.bool.isRequired,
-      mark: PropTypes.string.isRequired,
-    }).isRequired,
   }
 
   static defaultProps = {
@@ -73,7 +64,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { auth, theme, boardStates, toolbarHidden } = this.props;
+    const { auth } = this.props;
     return (
       <div id="page-header">
         <div style={{ marginLeft: this.props.expanded ? '0px' : '-185px' }} id="header-logo">
@@ -84,13 +75,7 @@ class Navigation extends Component {
         </div>
         <div id="sidebar-search" />
         <div style={{ paddingLeft: this.props.expanded ? '235px' : '50px' }} className="theme">
-          <BoardToolbar
-            setBoardStates={this.props.setBoardStates}
-            setTheme={this.props.setTheme}
-            theme={theme}
-            hidden={toolbarHidden}
-            boardStates={boardStates}
-          />
+          <BoardToolbar />
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
@@ -178,21 +163,8 @@ class Navigation extends Component {
   }
 }
 
-function select(state) {
-  return {
-    theme: state.theme,
-    toolbarHidden: state.toolbarHidden,
-    boardStates: state.boardStates,
-  };
+function select() {
+  return { };
 }
 
-const mapDispatchToProps = dispatch => ({
-  setTheme: (theme) => {
-    dispatch(setTheme(theme));
-  },
-  setBoardStates: (state) => {
-    dispatch(setBoardStates(state));
-  },
-});
-
-export default connect(select, mapDispatchToProps)(Navigation);
+export default connect(select)(Navigation);
