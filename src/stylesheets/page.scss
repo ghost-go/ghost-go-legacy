@@ -361,20 +361,30 @@
 .flex {
   display: flex;
 }
+
+$online-list-width: 130px;
 .room-container {
   justify-content: space-between;
   height: calc(100vmin - 50px);
   .chatbox {
+    position: relative;
     width: 100%;
     overflow: scroll;
     flex-grow: 1;
-    padding: 0px 5px 20px 5px;
+    padding: 0px $online-list-width 20px 5px;
 
     span {
       float: right;
     }
     .notice {
       color: #999;
+    }
+    .online-list {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: $online-list-width;
+      padding-left: 10px;
     }
   }
   .room-board {

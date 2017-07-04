@@ -32,7 +32,21 @@ import {
 const { ENTER } = Keys;
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
-class Room extends Component {
+function mapStateToProps(state) {
+  return {
+    puzzle: state.puzzle,
+    rangeFilter: state.rangeFilter,
+    steps: state.steps,
+    currentAnswerId: state.currentAnswerId,
+    currentMode: state.currentMode,
+    theme: state.theme,
+    nextStoneType: state.nextStoneType,
+    boardStates: state.boardStates,
+  };
+}
+
+@connect(mapStateToProps)
+export default class Room extends Component {
 
   static propTypes = {
     theme: PropTypes.string.isRequired,
@@ -294,7 +308,17 @@ class Room extends Component {
             </FormGroup>
           </div>
           <div ref={(el) => { this.chatbox = el; }} className="chatbox">
-            { messages }
+            <div>
+              { messages }
+            </div>
+            <div className="online-list">
+              <b>ONLINE LIST</b>
+              <div>List</div>
+              <div>List</div>
+              <div>List</div>
+              <div>List</div>
+              <div>List</div>
+            </div>
           </div>
           <div className="sendbox">
             <FormControl
@@ -311,18 +335,3 @@ class Room extends Component {
     );
   }
 }
-
-function select(state) {
-  return {
-    puzzle: state.puzzle,
-    rangeFilter: state.rangeFilter,
-    steps: state.steps,
-    currentAnswerId: state.currentAnswerId,
-    currentMode: state.currentMode,
-    theme: state.theme,
-    nextStoneType: state.nextStoneType,
-    boardStates: state.boardStates,
-  };
-}
-
-export default connect(select)(Room);
