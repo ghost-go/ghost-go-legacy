@@ -2,6 +2,7 @@ let protocol = 'http';
 let apiDomain = '';
 let appDomain = '';
 export const ENV = process.env.NODE_ENV;
+export const TOTAL_VERSION = process.env.TOTAL_VERSION;
 
 switch (ENV) {
   case 'development':
