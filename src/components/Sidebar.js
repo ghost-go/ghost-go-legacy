@@ -183,13 +183,11 @@ export default class Sidebar extends Component {
                       <i className="fa fa-book" /> <span>Kifu Library</span>
                     </Link>
                   </li>
-                  {/*
                   <li>
                     <Link activeClassName="active" to="/rooms">
-                      <i className="fa fa-book" /> <span>Create Room</span>
+                      <i className="fa fa-home" /> <span>Create Room(beta)</span>
                     </Link>
                   </li>
-                  */}
                   {/*
                   <li className="divider"></li>
                   <div className="divider-header">Practices</div>
@@ -252,13 +250,11 @@ export default class Sidebar extends Component {
                       <i className="fa fa-book" /> <span>Kifu Library</span>
                     </Link>
                   </li>
-                  {/*
                   <li>
                     <Link activeClassName="active" to="/rooms">
-                      <i className="fa fa-book" /> <span>Create Room</span>
+                      <i className="fa fa-home" /> <span>Create Room(beta)</span>
                     </Link>
                   </li>
-                  */}
                   {/*
                   <li className="divider"></li>
                   <li>

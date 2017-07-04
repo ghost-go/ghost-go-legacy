@@ -7,10 +7,10 @@ import {
    // FieldGroup,
    // Checkbox,
    // Radio,
-   FormGroup,
-   ControlLabel,
-   FormControl,
-   HelpBlock,
+   // FormGroup,
+   // ControlLabel,
+   // FormControl,
+   // HelpBlock,
  } from 'react-bootstrap';
 
 class Rooms extends Component {
@@ -33,28 +33,37 @@ class Rooms extends Component {
 
   render() {
     return (
-      <div>
-        <FormGroup controlId="host_name">
-          <ControlLabel>Your Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={'Your Name'}
-            placeholder="Your Name"
-          />
-          <FormControl.Feedback />
-          <HelpBlock>Validation is based on string length.</HelpBlock>
-        </FormGroup>
-        <FormGroup controlId="topic">
-          <ControlLabel>Topic</ControlLabel>
-          <FormControl
-            type="text"
-            value={'Bai'}
-            placeholder="Guest's Room"
-          />
-          <FormControl.Feedback />
-          <HelpBlock>Validation is based on string length.</HelpBlock>
-        </FormGroup>
-        <Button onClick={this.handleClick}>Create Room</Button>
+      <div className="rooms-container">
+        <div className="rooms-wrapper">
+          <Button
+            bsStyle="primary"
+            className="rooms-btn"
+            onClick={this.handleClick}
+          >
+            19x19
+          </Button>
+          <span>Start with 19x19</span>
+        </div>
+        <div className="rooms-wrapper">
+          <Button
+            bsStyle="primary"
+            className="rooms-btn"
+            onClick={this.handleClick}
+          >
+            13x13
+          </Button>
+          <span>Start with 13x13</span>
+        </div>
+        <div className="rooms-wrapper">
+          <Button
+            bsStyle="primary"
+            className="rooms-btn"
+            onClick={this.handleClick}
+          >
+            9x9
+          </Button>
+          <span>Start with 9x9</span>
+        </div>
       </div>
     );
   }
