@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ActionCable from 'actioncable';
 import keydown, { Keys } from 'react-keydown';
 import moment from 'moment';
+import faker from 'faker';
 import {
   // Button,
   // FieldGroup,
@@ -72,7 +73,7 @@ export default class Room extends Component {
       text: '',
       messages: [],
       onlineList: [],
-      name: 'Guest',
+      name: faker.name.findName(),
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -108,7 +109,7 @@ export default class Room extends Component {
       },
       disconnected: () => {
         const msg = {
-          type: 'msg',
+          type: 'notification#leave',
           fromId: this.state.name,
           text: `${this.state.name} disconnection`,
           createdAt: Date.now(),
@@ -117,13 +118,13 @@ export default class Room extends Component {
       },
       received: (data) => {
         console.log(data);
-        if (data.type === 'msg') {
+        if (data.type === 'msg' || data.type === 'notification#enter' || data.type === 'notification#leave') {
           const messages = this.state.messages.concat([data]);
           this.setState({ messages });
-        } else if (data.type === 'notification#enter' || data.type === 'notification#leave') {
-          const onlineList = this.state.onlineList.concat([data.fromId]);
-          const messages = this.state.messages.concat([data]);
-          this.setState({ messages, onlineList });
+        // } else if (data.type === 'notification#enter' || data.type === 'notification#leave') {
+          // const onlineList = this.state.onlineList.concat([data.fromId]);
+          // const messages = this.state.messages.concat([data]);
+          // this.setState({ messages, onlineList });
         } else if (data.type === 'notification#refresh_online_list') {
           console.log(data.text);
           this.setState({ onlineList: data.text });
@@ -323,7 +324,7 @@ export default class Room extends Component {
               { messages }
             </div>
             <div className="online-list">
-              <b>ONLINE LIST</b>
+              <b>{`ONLINE LIST (${onlineList.length})`}</b>
               { onlineList }
             </div>
           </div>
