@@ -6,6 +6,7 @@
     "actioncable": "^5.1.2",
     "aphrodite": "^1.2.1",
     "auth0-lock": "^10.18.0",
+    "faker": "^4.1.0",
     "lodash": "^4.17.4",
     "material-ui": "^0.18.5",
     "moment": "^2.18.1",

@@ -71,6 +71,7 @@ export default class Room extends Component {
       roomId: id,
       text: '',
       messages: [],
+      onlineList: [],
       name: 'Guest',
     };
 
@@ -98,7 +99,7 @@ export default class Room extends Component {
     }, {
       connected: () => {
         const msg = {
-          type: 'msg',
+          type: 'notification#enter',
           fromId: this.state.name,
           text: `${this.state.name} entered this room`,
           createdAt: Date.now(),
@@ -115,9 +116,17 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       received: (data) => {
+        console.log(data);
         if (data.type === 'msg') {
           const messages = this.state.messages.concat([data]);
           this.setState({ messages });
+        } else if (data.type === 'notification#enter' || data.type === 'notification#leave') {
+          const onlineList = this.state.onlineList.concat([data.fromId]);
+          const messages = this.state.messages.concat([data]);
+          this.setState({ messages, onlineList });
+        } else if (data.type === 'notification#refresh_online_list') {
+          console.log(data.text);
+          this.setState({ onlineList: data.text });
         } else if (data.type === 'op') {
           this.props.dispatch(addSteps(data.text));
         }
@@ -136,7 +145,7 @@ export default class Room extends Component {
     window.addEventListener('beforeunload', (ev) => {
       ev.preventDefault();
       const msg = {
-        type: 'msg',
+        type: 'notification#leave',
         fromId: this.state.name,
         text: `${this.state.name} leaved this room`,
         createdAt: Date.now(),
@@ -182,7 +191,7 @@ export default class Room extends Component {
 
   componentWillUnmount() {
     const msg = {
-      type: 'msg',
+      type: 'notification#leave',
       fromId: this.state.name,
       text: `${this.state.name} leaved this room`,
       createdAt: Date.now(),
@@ -244,8 +253,8 @@ export default class Room extends Component {
   render() {
     const messages = this.state.messages.map((msg) => {
       let result;
-      if (msg.message_type === 'notice') {
-        result = <div className="notice" key={`${msg.fromId}_${msg.createdAt}`}>{msg.text}</div>;
+      if (msg.message_type === 'notification') {
+        result = <div className="notification" key={`${msg}`}>{msg}</div>;
       } else {
         result = (
           <div key={`${msg.fromId}_${msg.createdAt}`}>
@@ -261,6 +270,8 @@ export default class Room extends Component {
       }
       return result;
     });
+
+    const onlineList = this.state.onlineList.map(msg => <div key={`${msg}_${Math.random()}`}>{msg}</div>);
     return (
       <div className="flex room-container">
         <div className="room-board">
@@ -313,11 +324,7 @@ export default class Room extends Component {
             </div>
             <div className="online-list">
               <b>ONLINE LIST</b>
-              <div>List</div>
-              <div>List</div>
-              <div>List</div>
-              <div>List</div>
-              <div>List</div>
+              { onlineList }
             </div>
           </div>
           <div className="sendbox">
