@@ -78,6 +78,9 @@ export default class Room extends Component {
     if (!sessionStorage.currentName) {
       sessionStorage.currentName = faker.name.findName();
     }
+    if (!sessionStorage.currentTopic) {
+      sessionStorage.currentTopic = `${sessionStorage.currentName}'s Room`;
+    }
     this.state = {
       nameIsEditable: false,
       topicIsEditable: false,
@@ -88,7 +91,7 @@ export default class Room extends Component {
       name: sessionStorage.currentName,
       hostId: sessionStorage.currentName,
       hostName: sessionStorage.currentName,
-      topic: `${sessionStorage.currentName}'s Room`,
+      topic: sessionStorage.currentTopic,
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -250,9 +253,7 @@ export default class Room extends Component {
     } else {
       this.room.send(msg);
     }
-    this.setState({
-      text: '',
-    });
+    this.setState({ text: '' });
   }
 
   handleKeyPress(e) {
@@ -274,11 +275,32 @@ export default class Room extends Component {
   }
 
   handleTopicEdit() {
-    this.setState(prevState => ({ topicIsEditable: !prevState.topicIsEditable }));
+    this.setState(prevState => ({ topicIsEditable: !prevState.topicIsEditable }), () => {
+      if (!this.state.topicIsEditable) {
+        this.sendRefreshRoomInfoMessage();
+      }
+    });
   }
 
   handleNameEdit() {
-    this.setState(prevState => ({ nameIsEditable: !prevState.nameIsEditable }));
+    this.setState(prevState => ({ nameIsEditable: !prevState.nameIsEditable }), () => {
+      if (!this.state.nameIsEditable) {
+        this.sendRefreshRoomInfoMessage();
+      }
+    });
+  }
+
+  sendRefreshRoomInfoMessage() {
+    sessionStorage.currentName = this.state.name;
+    sessionStorage.currentTopic = this.state.topic;
+    const msg = {
+      type: 'notification#room_info_change',
+      hostId: this.state.name,
+      hostName: this.state.name,
+      topic: this.state.topic,
+      createdAt: Date.now(),
+    };
+    this.room.send(msg);
   }
 
   render() {
