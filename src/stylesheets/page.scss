@@ -399,6 +399,12 @@ $online-list-width: 150px;
     width: 100%;
     .room-info {
       flex-direction: row;
+      .edit {
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        cursor: pointer;
+      }
     }
     .sendbox {
       input, button {

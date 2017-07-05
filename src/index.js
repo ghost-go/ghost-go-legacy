@@ -8,6 +8,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
 import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import { reducer as uiReducer } from 'redux-ui';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import * as reducers from './reducers/Reducers';
@@ -36,6 +37,7 @@ const auth = new AuthService(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
 const historyMiddleware = routerMiddleware(browserHistory);
 const reducer = combineReducers({
   ...reducers,
+  ui: uiReducer,
   players: reducers.topPlayers,
   routing: routerReducer,
 });

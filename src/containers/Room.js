@@ -7,6 +7,7 @@ import ActionCable from 'actioncable';
 import keydown, { Keys } from 'react-keydown';
 import moment from 'moment';
 import faker from 'faker';
+// import ui from 'redux-ui';
 import {
   // Button,
   // FieldGroup,
@@ -46,6 +47,12 @@ function mapStateToProps(state) {
   };
 }
 
+// @ui({
+  // state: {
+    // isHost: false,
+    // filters: [],
+  // },
+// })
 @connect(mapStateToProps)
 export default class Room extends Component {
 
@@ -72,6 +79,8 @@ export default class Room extends Component {
       sessionStorage.currentName = faker.name.findName();
     }
     this.state = {
+      nameIsEditable: false,
+      topicIsEditable: false,
       roomId: id,
       text: '',
       messages: [],
@@ -84,7 +93,7 @@ export default class Room extends Component {
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSend = this.handleSend.bind(this);
-    // this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
@@ -253,9 +262,9 @@ export default class Room extends Component {
     this.setState({ text: e.target.value });
   }
 
-  // handleNameChange(e) {
-    // this.setState({ name: e.target.value });
-  // }
+  handleNameChange(e) {
+    this.setState({ name: e.target.value });
+  }
 
   // handleNameSubmit() {
   // }
@@ -298,8 +307,9 @@ export default class Room extends Component {
                     bsSize="small"
                     value={this.state.topic}
                     placeholder={this.state.topic}
-                    readOnly
+                    readOnly={!this.state.topicIsEditable || !this.isHost()}
                   />
+                  { this.isHost() && <a className="edit"><i className="fa fa-pencil" /></a> }
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
@@ -310,8 +320,10 @@ export default class Room extends Component {
                     bsSize="small"
                     value={this.state.name}
                     placeholder="Guest"
+                    readOnly={!this.state.nameIsEditable || !this.isHost()}
+                    onChange={this.handleNameChange}
                   />
-                  <a>Edit</a>
+                  { this.isHost() && <a className="edit"><i className="fa fa-pencil" /></a> }
                 </FormGroup>
               </Col>
             </Row>
