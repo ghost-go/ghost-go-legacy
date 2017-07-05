@@ -92,9 +92,12 @@ export default class Room extends Component {
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleSend = this.handleSend.bind(this);
+    this.handleTopicChange = this.handleTopicChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleTopicEdit = this.handleTopicEdit.bind(this);
+    this.handleNameEdit = this.handleNameEdit.bind(this);
+    this.handleSend = this.handleSend.bind(this);
   }
 
   state = {
@@ -258,6 +261,10 @@ export default class Room extends Component {
     }
   }
 
+  handleTopicChange(e) {
+    this.setState({ topic: e.target.value });
+  }
+
   handleTextChange(e) {
     this.setState({ text: e.target.value });
   }
@@ -266,8 +273,13 @@ export default class Room extends Component {
     this.setState({ name: e.target.value });
   }
 
-  // handleNameSubmit() {
-  // }
+  handleTopicEdit() {
+    this.setState(prevState => ({ topicIsEditable: !prevState.topicIsEditable }));
+  }
+
+  handleNameEdit() {
+    this.setState(prevState => ({ nameIsEditable: !prevState.nameIsEditable }));
+  }
 
   render() {
     const messages = this.state.messages.map((msg) => {
@@ -308,8 +320,9 @@ export default class Room extends Component {
                     value={this.state.topic}
                     placeholder={this.state.topic}
                     readOnly={!this.state.topicIsEditable || !this.isHost()}
+                    onChange={this.handleTopicChange}
                   />
-                  { this.isHost() && <a className="edit"><i className="fa fa-pencil" /></a> }
+                  { this.isHost() && <a role="button" tabIndex={-1} onClick={this.handleTopicEdit} className="edit"><i className={`fa ${this.state.topicIsEditable ? 'fa-floppy-o' : 'fa-pencil'}`} /></a> }
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
@@ -323,7 +336,7 @@ export default class Room extends Component {
                     readOnly={!this.state.nameIsEditable || !this.isHost()}
                     onChange={this.handleNameChange}
                   />
-                  { this.isHost() && <a className="edit"><i className="fa fa-pencil" /></a> }
+                  { this.isHost() && <a role="button" tabIndex={-2} onClick={this.handleNameEdit} className="edit"><i className={`fa ${this.state.nameIsEditable ? 'fa-floppy-o' : 'fa-pencil'}`} /></a> }
                 </FormGroup>
               </Col>
             </Row>
