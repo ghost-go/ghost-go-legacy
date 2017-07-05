@@ -68,17 +68,23 @@ export default class Room extends Component {
     super(props, context);
 
     const { id } = this.props.params;
+    if (!sessionStorage.currentName) {
+      sessionStorage.currentName = faker.name.findName();
+    }
     this.state = {
       roomId: id,
       text: '',
       messages: [],
       onlineList: [],
-      name: faker.name.findName(),
+      name: sessionStorage.currentName,
+      hostId: sessionStorage.currentName,
+      hostName: sessionStorage.currentName,
+      topic: `${sessionStorage.currentName}'s Room`,
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSend = this.handleSend.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
+    // this.handleNameChange = this.handleNameChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
@@ -95,8 +101,11 @@ export default class Room extends Component {
       channel: 'GamesChannel',
       roomId: this.state.roomId,
       type: 'temp',
-      topic: `Topic ${this.state.roomId}`,
+      topic: this.state.topic,
+      fromId: this.state.name,
       ownerId: this.state.name,
+      hostId: this.state.name,
+      hostName: this.state.name,
     }, {
       connected: () => {
         const msg = {
@@ -117,17 +126,13 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       received: (data) => {
-        console.log(data);
         if (data.type === 'msg' || data.type === 'notification#enter' || data.type === 'notification#leave') {
           const messages = this.state.messages.concat([data]);
           this.setState({ messages });
-        // } else if (data.type === 'notification#enter' || data.type === 'notification#leave') {
-          // const onlineList = this.state.onlineList.concat([data.fromId]);
-          // const messages = this.state.messages.concat([data]);
-          // this.setState({ messages, onlineList });
         } else if (data.type === 'notification#refresh_online_list') {
-          console.log(data.text);
           this.setState({ onlineList: data.text });
+        } else if (data.type === 'notification#refresh_host') {
+          this.setState({ hostId: data.hostId, hostName: data.hostName, topic: data.topic });
         } else if (data.type === 'op') {
           this.props.dispatch(addSteps(data.text));
         }
@@ -215,8 +220,9 @@ export default class Room extends Component {
     }
   }
 
-  // isOwner() {
-  // }
+  isHost() {
+    return this.state.hostName === sessionStorage.currentName;
+  }
 
   handleSend() {
     const msg = {
@@ -247,9 +253,12 @@ export default class Room extends Component {
     this.setState({ text: e.target.value });
   }
 
-  handleNameChange(e) {
-    this.setState({ name: e.target.value });
-  }
+  // handleNameChange(e) {
+    // this.setState({ name: e.target.value });
+  // }
+
+  // handleNameSubmit() {
+  // }
 
   render() {
     const messages = this.state.messages.map((msg) => {
@@ -287,22 +296,22 @@ export default class Room extends Component {
                   <FormControl
                     type="text"
                     bsSize="small"
-                    value={'Guest\'s Room'}
-                    placeholder="Guest's Room"
+                    value={this.state.topic}
+                    placeholder={this.state.topic}
                     readOnly
                   />
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
-                <FormGroup controlId="host_name">
-                  <ControlLabel>Your Name</ControlLabel>
+                <FormGroup controlId="name">
+                  <ControlLabel>{this.isHost() ? 'Host Name' : 'Your Name'}</ControlLabel>
                   <FormControl
                     type="text"
                     bsSize="small"
                     value={this.state.name}
                     placeholder="Guest"
-                    onChange={this.handleNameChange}
                   />
+                  <a>Edit</a>
                 </FormGroup>
               </Col>
             </Row>

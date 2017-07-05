@@ -2,18 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+// import ActionCable from 'actioncable';
 import {
-   Button,
-   // FieldGroup,
-   // Checkbox,
-   // Radio,
-   // FormGroup,
-   // ControlLabel,
-   // FormControl,
-   // HelpBlock,
- } from 'react-bootstrap';
+ Button,
+ // FieldGroup,
+ // Checkbox,
+ // Radio,
+ // FormGroup,
+ // ControlLabel,
+ // FormControl,
+ // HelpBlock,
+} from 'react-bootstrap';
 
-class Rooms extends Component {
+// const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+
+function mapStateToProps(state) {
+  return {
+    puzzle: state.puzzle,
+    rangeFilter: state.rangeFilter,
+    steps: state.steps,
+    currentAnswerId: state.currentAnswerId,
+    currentMode: state.currentMode,
+    theme: state.theme,
+    nextStoneType: state.nextStoneType,
+    boardStates: state.boardStates,
+  };
+}
+
+@connect(mapStateToProps)
+export default class Rooms extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -68,18 +85,3 @@ class Rooms extends Component {
     );
   }
 }
-
-function select(state) {
-  return {
-    puzzle: state.puzzle,
-    rangeFilter: state.rangeFilter,
-    steps: state.steps,
-    currentAnswerId: state.currentAnswerId,
-    currentMode: state.currentMode,
-    theme: state.theme,
-    nextStoneType: state.nextStoneType,
-    boardStates: state.boardStates,
-  };
-}
-
-export default connect(select)(Rooms);
