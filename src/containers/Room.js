@@ -47,6 +47,15 @@ function mapStateToProps(state) {
   };
 }
 
+const ALLOW_OUTPUT_MESSAGR_TYPE_LIST = [
+  'msg',
+  'notification#enter',
+  'notification#leave',
+  'notification#change_topic',
+  'notification#change_host_name',
+  'notification#room_info_change',
+];
+
 // @ui({
   // state: {
     // isHost: false,
@@ -92,6 +101,7 @@ export default class Room extends Component {
       hostId: sessionStorage.currentName,
       hostName: sessionStorage.currentName,
       topic: sessionStorage.currentTopic,
+      hostTopic: sessionStorage.currentTopic,
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -117,6 +127,7 @@ export default class Room extends Component {
       roomId: this.state.roomId,
       type: 'temp',
       topic: this.state.topic,
+      hostTopic: this.state.topic,
       fromId: this.state.name,
       ownerId: this.state.name,
       hostId: this.state.name,
@@ -141,9 +152,11 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       received: (data) => {
-        if (data.type === 'msg' || data.type === 'notification#enter' || data.type === 'notification#leave') {
-          const messages = this.state.messages.concat([data]);
-          this.setState({ messages });
+        if (ALLOW_OUTPUT_MESSAGR_TYPE_LIST.includes(data.type)) {
+          if (!_.isEmpty(data.text)) {
+            const messages = this.state.messages.concat([data]);
+            this.setState({ messages });
+          }
         } else if (data.type === 'notification#refresh_online_list') {
           this.setState({ onlineList: data.text });
         } else if (data.type === 'notification#refresh_host') {
@@ -275,52 +288,102 @@ export default class Room extends Component {
   }
 
   handleTopicEdit() {
+    const prevName = this.state.hostName;
+    const prevTopic = this.state.hostTopic;
     this.setState(prevState => ({ topicIsEditable: !prevState.topicIsEditable }), () => {
       if (!this.state.topicIsEditable) {
-        this.sendRefreshRoomInfoMessage();
+        this.sendRefreshRoomInfoMessage({ prevName, prevTopic });
+      } else {
+        this.topicBox.focus();
+        this.topicBox.select();
       }
     });
   }
 
   handleNameEdit() {
+    const prevName = this.state.hostName;
+    const prevTopic = this.state.hostTopic;
     this.setState(prevState => ({ nameIsEditable: !prevState.nameIsEditable }), () => {
       if (!this.state.nameIsEditable) {
-        this.sendRefreshRoomInfoMessage();
+        this.sendRefreshRoomInfoMessage({ prevName, prevTopic });
+      } else {
+        this.nameBox.focus();
+        this.nameBox.select();
       }
     });
   }
 
-  sendRefreshRoomInfoMessage() {
+  sendRefreshRoomInfoMessage(args) {
     sessionStorage.currentName = this.state.name;
     sessionStorage.currentTopic = this.state.topic;
+    let text = '';
+    if (args.prevName && args.prevName !== this.state.name) {
+      text = `${args.prevName} renamed to ${this.state.name}`;
+      // const msgChangeName = {
+        // fromId: 'system',
+        // type: 'notification#change_host_name',
+        // text: `${args.prevName} renamed to ${this.state.name}`,
+        // prevName: args.prevName,
+        // createdAt: Date.now(),
+      // };
+      // this.room.send(msgChangeName);
+    }
+    if (args.prevTopic && args.prevTopic !== this.state.topic) {
+      text = `${this.state.name} change topic to ${this.state.topic}`;
+      // const msgChangeTopic = {
+        // fromId: 'system',
+        // type: 'notification#change_topic',
+        // text: `${this.state.name} change topic to ${this.state.topic}`,
+        // prevName: args.prevName,
+        // createdAt: Date.now(),
+      // };
+      // this.room.send(msgChangeTopic);
+    }
     const msg = {
       type: 'notification#room_info_change',
+      fromId: 'system',
       hostId: this.state.name,
       hostName: this.state.name,
+      text,
       topic: this.state.topic,
       createdAt: Date.now(),
     };
     this.room.send(msg);
+    // if (args.prevName && args.prevName !== this.state.name) {
+      // const msgChangeName = {
+        // fromId: 'system',
+        // type: 'notification#change_host_name',
+        // text: `${args.prevName} renamed to ${this.state.name}`,
+        // prevName: args.prevName,
+        // createdAt: Date.now(),
+      // };
+      // this.room.send(msgChangeName);
+    // }
+    // if (args.prevTopic && args.prevTopic !== this.state.topic) {
+      // const msgChangeTopic = {
+        // fromId: 'system',
+        // type: 'notification#change_topic',
+        // text: `${this.state.name} change topic to ${this.state.topic}`,
+        // prevName: args.prevName,
+        // createdAt: Date.now(),
+      // };
+      // this.room.send(msgChangeTopic);
+    // }
   }
 
   render() {
     const messages = this.state.messages.map((msg) => {
-      let result;
-      if (msg.message_type === 'notification') {
-        result = <div className="notification" key={`${msg}`}>{msg}</div>;
-      } else {
-        result = (
-          <div key={`${msg.fromId}_${msg.createdAt}`}>
-            <div>
-              <b>{msg.fromId}</b>
-              <span>{moment(msg.createdAt).format('LT')}</span>
-            </div>
-            <div>
-              <div>{msg.text}</div>
-            </div>
+      const result = (
+        <div key={`${msg.fromId}_${msg.createdAt}`}>
+          <div>
+            <b>{msg.fromId}</b>
+            <span>{moment(msg.createdAt).format('LT')}</span>
           </div>
-        );
-      }
+          <div>
+            <div>{msg.text}</div>
+          </div>
+        </div>
+      );
       return result;
     });
 
@@ -337,6 +400,7 @@ export default class Room extends Component {
                 <FormGroup controlId="topic">
                   <ControlLabel>Topic</ControlLabel>
                   <FormControl
+                    inputRef={(el) => { this.topicBox = el; }}
                     type="text"
                     bsSize="small"
                     value={this.state.topic}
@@ -351,6 +415,7 @@ export default class Room extends Component {
                 <FormGroup controlId="name">
                   <ControlLabel>{this.isHost() ? 'Host Name' : 'Your Name'}</ControlLabel>
                   <FormControl
+                    inputRef={(el) => { this.nameBox = el; }}
                     type="text"
                     bsSize="small"
                     value={this.state.name}
