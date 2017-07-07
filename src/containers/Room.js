@@ -341,7 +341,7 @@ export default class Room extends Component {
     }
     const msg = {
       type: 'notification#room_info_change',
-      fromId: 'system',
+      fromId: this.state.name,
       hostId: this.state.name,
       hostName: this.state.name,
       text,
