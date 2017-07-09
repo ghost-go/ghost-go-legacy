@@ -319,25 +319,9 @@ export default class Room extends Component {
     let text = '';
     if (args.prevName && args.prevName !== this.state.name) {
       text = `${args.prevName} renamed to ${this.state.name}`;
-      // const msgChangeName = {
-        // fromId: 'system',
-        // type: 'notification#change_host_name',
-        // text: `${args.prevName} renamed to ${this.state.name}`,
-        // prevName: args.prevName,
-        // createdAt: Date.now(),
-      // };
-      // this.room.send(msgChangeName);
     }
     if (args.prevTopic && args.prevTopic !== this.state.topic) {
       text = `${this.state.name} change topic to ${this.state.topic}`;
-      // const msgChangeTopic = {
-        // fromId: 'system',
-        // type: 'notification#change_topic',
-        // text: `${this.state.name} change topic to ${this.state.topic}`,
-        // prevName: args.prevName,
-        // createdAt: Date.now(),
-      // };
-      // this.room.send(msgChangeTopic);
     }
     const msg = {
       type: 'notification#room_info_change',
@@ -349,26 +333,6 @@ export default class Room extends Component {
       createdAt: Date.now(),
     };
     this.room.send(msg);
-    // if (args.prevName && args.prevName !== this.state.name) {
-      // const msgChangeName = {
-        // fromId: 'system',
-        // type: 'notification#change_host_name',
-        // text: `${args.prevName} renamed to ${this.state.name}`,
-        // prevName: args.prevName,
-        // createdAt: Date.now(),
-      // };
-      // this.room.send(msgChangeName);
-    // }
-    // if (args.prevTopic && args.prevTopic !== this.state.topic) {
-      // const msgChangeTopic = {
-        // fromId: 'system',
-        // type: 'notification#change_topic',
-        // text: `${this.state.name} change topic to ${this.state.topic}`,
-        // prevName: args.prevName,
-        // createdAt: Date.now(),
-      // };
-      // this.room.send(msgChangeTopic);
-    // }
   }
 
   render() {
