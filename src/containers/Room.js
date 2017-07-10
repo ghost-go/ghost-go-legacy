@@ -86,7 +86,7 @@ export default class Room extends Component {
 
     const { id } = this.props.params;
     if (!sessionStorage.currentName) {
-      sessionStorage.currentName = faker.name.findName();
+      sessionStorage.currentName = faker.name.firstName();
     }
     if (!sessionStorage.currentTopic) {
       sessionStorage.currentTopic = `${sessionStorage.currentName}'s Room`;
