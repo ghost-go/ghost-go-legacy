@@ -134,6 +134,7 @@ export default class Room extends Component {
       hostName: this.state.name,
     }, {
       connected: () => {
+        console.log('enter');
         const msg = {
           type: 'notification#enter',
           fromId: this.state.name,
@@ -143,6 +144,7 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       disconnected: () => {
+        console.log('leave');
         const msg = {
           type: 'notification#leave',
           fromId: this.state.name,
@@ -354,7 +356,7 @@ export default class Room extends Component {
       return result;
     });
 
-    const onlineList = this.state.onlineList.map(msg => <div key={`${msg}_${Math.random()}`}>{msg}</div>);
+    const onlineList = this.state.onlineList.map(msg => <div key={`${msg}`}>{msg === this.state.hostName ? `${msg}(Host)` : msg}</div>);
     return (
       <div className="flex room-container">
         <div className="room-board">
