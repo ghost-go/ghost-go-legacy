@@ -51,9 +51,10 @@ const ALLOW_OUTPUT_MESSAGR_TYPE_LIST = [
   'msg',
   'notification#enter',
   'notification#leave',
-  'notification#change_topic',
-  'notification#change_host_name',
   'notification#room_info_change',
+  'notification#host_name_changed',
+  'notification#name_changed',
+  'notification#topic_changed',
 ];
 
 // @ui({
@@ -127,7 +128,6 @@ export default class Room extends Component {
       roomId: this.state.roomId,
       type: 'temp',
       topic: this.state.topic,
-      hostTopic: this.state.topic,
       fromId: this.state.name,
       ownerId: this.state.name,
       hostId: this.state.name,
@@ -157,10 +157,14 @@ export default class Room extends Component {
             const messages = this.state.messages.concat([data]);
             this.setState({ messages });
           }
-        } else if (data.type === 'notification#refresh_online_list') {
-          this.setState({ onlineList: data.text });
-        } else if (data.type === 'notification#refresh_host') {
-          this.setState({ hostId: data.hostId, hostName: data.hostName, topic: data.topic });
+        }
+        if (data.type === 'notification#refresh_room_info') {
+          this.setState({
+            hostId: data.hostId,
+            hostName: data.hostName,
+            onlineList: data.text,
+            topic: data.topic,
+          });
         } else if (data.type === 'op') {
           this.props.dispatch(addSteps(data.text));
         }
@@ -288,11 +292,9 @@ export default class Room extends Component {
   }
 
   handleTopicEdit() {
-    const prevName = this.state.hostName;
-    const prevTopic = this.state.hostTopic;
     this.setState(prevState => ({ topicIsEditable: !prevState.topicIsEditable }), () => {
       if (!this.state.topicIsEditable) {
-        this.sendRefreshRoomInfoMessage({ prevName, prevTopic });
+        this.sendTopicChangedNotification();
       } else {
         this.topicBox.focus();
         this.topicBox.select();
@@ -301,11 +303,9 @@ export default class Room extends Component {
   }
 
   handleNameEdit() {
-    const prevName = this.state.hostName;
-    const prevTopic = this.state.hostTopic;
     this.setState(prevState => ({ nameIsEditable: !prevState.nameIsEditable }), () => {
       if (!this.state.nameIsEditable) {
-        this.sendRefreshRoomInfoMessage({ prevName, prevTopic });
+        this.sendNameChangedNotification();
       } else {
         this.nameBox.focus();
         this.nameBox.select();
@@ -313,26 +313,29 @@ export default class Room extends Component {
     });
   }
 
-  sendRefreshRoomInfoMessage(args) {
-    sessionStorage.currentName = this.state.name;
-    sessionStorage.currentTopic = this.state.topic;
-    let text = '';
-    if (args.prevName && args.prevName !== this.state.name) {
-      text = `${args.prevName} renamed to ${this.state.name}`;
-    }
-    if (args.prevTopic && args.prevTopic !== this.state.topic) {
-      text = `${this.state.name} change topic to ${this.state.topic}`;
-    }
+  sendTopicChangedNotification() {
     const msg = {
-      type: 'notification#room_info_change',
+      type: 'notification#topic_changed',
       fromId: this.state.name,
-      hostId: this.state.name,
-      hostName: this.state.name,
-      text,
       topic: this.state.topic,
       createdAt: Date.now(),
     };
+    sessionStorage.currentTopic = this.state.topic;
     this.room.send(msg);
+  }
+
+  sendNameChangedNotification() {
+    if (this.state.name !== sessionStorage.currentName) {
+      const msg = {
+        type: 'notification#name_changed',
+        fromId: sessionStorage.currentName,
+        originalName: sessionStorage.currentName,
+        newName: this.state.name,
+        createdAt: Date.now(),
+      };
+      this.room.send(msg);
+      sessionStorage.currentName = this.state.name;
+    }
   }
 
   render() {
@@ -384,10 +387,10 @@ export default class Room extends Component {
                     bsSize="small"
                     value={this.state.name}
                     placeholder="Guest"
-                    readOnly={!this.state.nameIsEditable || !this.isHost()}
+                    readOnly={!this.state.nameIsEditable}
                     onChange={this.handleNameChange}
                   />
-                  { this.isHost() && <a role="button" tabIndex={-2} onClick={this.handleNameEdit} className="edit"><i className={`fa ${this.state.nameIsEditable ? 'fa-floppy-o' : 'fa-pencil'}`} /></a> }
+                  <a role="button" tabIndex={-2} onClick={this.handleNameEdit} className="edit"><i className={`fa ${this.state.nameIsEditable ? 'fa-floppy-o' : 'fa-pencil'}`} /></a>
                 </FormGroup>
               </Col>
             </Row>
