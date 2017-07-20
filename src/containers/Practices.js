@@ -247,7 +247,7 @@ class Practices extends Component {
         pagination = (<ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
-          breakLabel={<a href="">...</a>}
+          breakLabel={<span>...</span>}
           breakClassName={'break-me'}
           pageCount={pageCount}
           marginPagesDisplayed={2}

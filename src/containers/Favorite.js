@@ -179,7 +179,7 @@ class Favorite extends Component {
             initialPage={page}
             previousLabel={'previous'}
             nextLabel={'next'}
-            breakLabel={<a href="">...</a>}
+            breakLabel={<span>...</span>}
             breakClassName={'break-me'}
             pageCount={pageCount}
             marginPagesDisplayed={2}

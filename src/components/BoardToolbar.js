@@ -11,7 +11,28 @@ import {
 
 import { setTheme, setBoardStates } from '../actions/Actions';
 
-class BoardToolbar extends Component {
+function mapStateToProps(state) {
+  return {
+    steps: state.steps,
+    currentAnswerId: state.currentAnswerId,
+    currentMode: state.currentMode,
+    toolbarHidden: state.toolbarHidden,
+    theme: state.theme,
+    boardStates: state.boardStates,
+  };
+}
+
+const mapDispatchToProps = dispatch => ({
+  setTheme: (theme) => {
+    dispatch(setTheme(theme));
+  },
+  setBoardStates: (state) => {
+    dispatch(setBoardStates(state));
+  },
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class BoardToolbar extends Component {
 
   static propTypes = {
     setTheme: PropTypes.func.isRequired,
@@ -22,6 +43,7 @@ class BoardToolbar extends Component {
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
       turn: PropTypes.string.isRequired,
+      clear: PropTypes.bool.isRequired,
     }).isRequired,
   }
 
@@ -31,6 +53,7 @@ class BoardToolbar extends Component {
     this.handleTheme = this.handleTheme.bind(this);
     this.handleShowCoordinate = this.handleShowCoordinate.bind(this);
     this.handleTurn = this.handleTurn.bind(this);
+    this.handleClear = this.handleClear.bind(this);
   }
 
   componentDidMount() {
@@ -57,6 +80,10 @@ class BoardToolbar extends Component {
       nextState = 'B';
     }
     this.props.setBoardStates({ turn: nextState });
+  }
+
+  handleClear() {
+    this.props.setBoardStates({ clear: !this.props.boardStates.clear });
   }
 
   render() {
@@ -104,7 +131,8 @@ class BoardToolbar extends Component {
               <Button
                 title="clear"
                 bsStyle="default"
-                onClick={this.handleTurn}
+                onClick={this.handleClear}
+                active={this.props.boardStates.clear}
               >
                 <i className="fa fa-eraser" aria-hidden="true" />
               </Button>
@@ -144,25 +172,3 @@ class BoardToolbar extends Component {
     );
   }
 }
-
-function select(state) {
-  return {
-    steps: state.steps,
-    currentAnswerId: state.currentAnswerId,
-    currentMode: state.currentMode,
-    toolbarHidden: state.toolbarHidden,
-    theme: state.theme,
-    boardStates: state.boardStates,
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  setTheme: (theme) => {
-    dispatch(setTheme(theme));
-  },
-  setBoardStates: (state) => {
-    dispatch(setBoardStates(state));
-  },
-});
-
-export default connect(select, mapDispatchToProps)(BoardToolbar);

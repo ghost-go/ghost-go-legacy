@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import showKi from './BoardCore';
 import Stone from './Stone';
-import Cross from './Cross';
+import Cursor from './Cursor';
 import {
   CoordsToTree,
   LETTERS_SGF,
@@ -19,6 +19,7 @@ export default class Board {
     this.autofit = args.autofit || false;
     this.editable = args.editable || false;
     this.nextStoneType = args.nextStoneType || 1;
+    this.boardStates = args.boardStates || {};
     if (args.arrangement === undefined || args.arrangement.length === 0) {
       this.arrangement = BLANK_ARRAY;
     }
@@ -104,7 +105,12 @@ export default class Board {
         const step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
         const node = CoordsToTree([step]);
         const { hasMoved } = showKi(this.arrangement, [step]);
-        if (hasMoved) {
+        if (this.boardStates.clear && !hasMoved) {
+          console.log(this.root);
+          const nodeTemp = this.root.first(step);
+          console.log(nodeTemp);
+          console.log('clear');
+        } else if (hasMoved) {
           this.lastNode.addChild(node.children[0]);
           if (this.setNextStoneType !== undefined) {
             this.setNextStoneType(-this.nextStoneType);
@@ -219,12 +225,16 @@ export default class Board {
       ) {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.renderBoard(ctx);
-        const cross = new Cross();
-        cross.x = roundedOffsetX * this.size;
-        cross.y = roundedOffsetY * this.size;
-        cross.size = this.size / 6;
-        cross.color = '#ff0000';
-        cross.draw(ctx);
+        const cursor = new Cursor();
+        cursor.x = roundedOffsetX * this.size;
+        cursor.y = roundedOffsetY * this.size;
+        if (this.boardStates.clear) {
+          cursor.type = 0;
+        } else {
+          cursor.type = this.nextStoneType;
+        }
+        cursor.size = this.size / 3;
+        cursor.draw(ctx);
         this.renderStones(this.canvas, ctx);
         this.renderCoordinate(ctx);
       }

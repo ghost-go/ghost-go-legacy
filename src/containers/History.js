@@ -141,7 +141,7 @@ class History extends Component {
           initialPage={page}
           previousLabel={'previous'}
           nextLabel={'next'}
-          breakLabel={<a href="">...</a>}
+          breakLabel={<div>...</div>}
           breakClassName={'break-me'}
           pageCount={pageCount}
           marginPagesDisplayed={2}

@@ -120,9 +120,6 @@ export default class Room extends Component {
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
-  }
-
-  componentDidMount() {
     const room = cable.subscriptions.create({
       channel: 'GamesChannel',
       roomId: this.state.roomId,
@@ -173,14 +170,6 @@ export default class Room extends Component {
       },
     });
     this.room = room;
-    let boardWidth = 0;
-    if (screen.width > screen.height) {
-      boardWidth = window.innerHeight - 60;
-    } else {
-      boardWidth = window.innerWidth;
-    }
-    this.boardLayer.width = boardWidth;
-    this.boardLayer.height = boardWidth;
 
     window.addEventListener('beforeunload', (ev) => {
       ev.preventDefault();
@@ -192,6 +181,17 @@ export default class Room extends Component {
       };
       this.room.send(msg);
     });
+  }
+
+  componentDidMount() {
+    let boardWidth = 0;
+    if (screen.width > screen.height) {
+      boardWidth = window.innerHeight - 60;
+    } else {
+      boardWidth = window.innerWidth;
+    }
+    this.boardLayer.width = boardWidth;
+    this.boardLayer.height = boardWidth;
   }
 
   componentDidUpdate() {
@@ -212,6 +212,7 @@ export default class Room extends Component {
       canvas: this.boardLayer,
       theme: this.props.theme,
       editable: true,
+      boardStates: this.props.boardStates,
       showCoordinate: this.props.boardStates.showCoordinate,
       nextStoneType,
       afterMove: (step) => {

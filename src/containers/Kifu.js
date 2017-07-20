@@ -115,7 +115,6 @@ class Kifu extends Component {
     }
   }
 
-
   render() {
     const { kifu } = this.props;
     return (

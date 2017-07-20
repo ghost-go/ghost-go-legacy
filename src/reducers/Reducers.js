@@ -198,6 +198,7 @@ export const boardStates = createReducer({
   showCoordinate: true,
   mark: 'None',
   turn: 'B-W',
+  clear: false,
 }, { SET_BOARD_STATES: setObjectFilter });
 
 export const practicePuzzleId = createReducer(null,
