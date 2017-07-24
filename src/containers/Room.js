@@ -131,7 +131,6 @@ export default class Room extends Component {
       hostName: this.state.name,
     }, {
       connected: () => {
-        console.log('enter');
         const msg = {
           type: 'notification#enter',
           fromId: this.state.name,
@@ -141,7 +140,6 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       disconnected: () => {
-        console.log('leave');
         const msg = {
           type: 'notification#leave',
           fromId: this.state.name,
@@ -267,9 +265,9 @@ export default class Room extends Component {
       createdAt: Date.now(),
     };
     if (_.isEmpty(this.state.text)) {
-      alert('Cannot send empty message');
+      // alert('Cannot send empty message');
     } else if (_.isEmpty(this.state.name)) {
-      alert('Cannot send message without name');
+      // alert('Cannot send message without name');
     } else {
       this.room.send(msg);
     }

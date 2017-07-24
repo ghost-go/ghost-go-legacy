@@ -106,10 +106,9 @@ export default class Board {
         const node = CoordsToTree([step]);
         const { hasMoved } = showKi(this.arrangement, [step]);
         if (this.boardStates.clear && !hasMoved) {
-          console.log(this.root);
-          const nodeTemp = this.root.first(step);
+          const nodeTemp = this.root.all(n => n.model.step === step);
           console.log(nodeTemp);
-          console.log('clear');
+          // nodeTemp.drop();
         } else if (hasMoved) {
           this.lastNode.addChild(node.children[0]);
           if (this.setNextStoneType !== undefined) {

@@ -22,13 +22,12 @@ export const SGFToPosition = (str) => {
 
 export const CoordsToTree = (steps) => {
   const tree = new TreeModel();
-  const root = tree.parse({ id: 0, index: 0, children: [] });
+  const root = tree.parse({ id: 'root', index: 0, children: [] });
   let parentNode;
   let node;
   steps.forEach((step, i) => {
     node = tree.parse({
-      id: i,
-      index: i,
+      id: `${step}-${i + 1}`,
       coord: step,
       type: step[0] === 'B' ? 1 : -1,
       posX: LETTERS_SGF.indexOf(step[1]),
