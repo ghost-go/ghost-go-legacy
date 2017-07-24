@@ -22,7 +22,7 @@ import {
   // HelpBlock,
 } from 'react-bootstrap';
 import { CoordsToTree } from '../constants/Go';
-import Board from '../eboard/Board';
+import SgfBoard from '../eboard/Board';
 
 import { APP_DOMAIN } from '../constants/Config';
 import {
@@ -205,7 +205,7 @@ export default class Room extends Component {
     } else {
       nextStoneType = 1;
     }
-    const board = new Board({
+    const sgfBoard = new SgfBoard({
       autofit: false,
       canvas: this.boardLayer,
       theme: this.props.theme,
@@ -224,8 +224,8 @@ export default class Room extends Component {
         this.room.send(msg);
       },
     });
-    board.setStones(CoordsToTree(this.props.steps), true);
-    board.render();
+    sgfBoard.setStones(CoordsToTree(this.props.steps), true);
+    sgfBoard.render();
   }
 
   componentWillUnmount() {
