@@ -3,7 +3,6 @@ import showKi from './BoardCore';
 import Stone from './Stone';
 import Cursor from './Cursor';
 import {
-  CoordsToTree,
   LETTERS_SGF,
   LETTERS,
   BLANK_ARRAY,
@@ -52,6 +51,7 @@ export default class SgfBoard {
     `;
     this.setNextStoneType = args.setNextStoneType;
     this.showCoordinate = args.showCoordinate || false;
+    this.movedStones = args.movedStones || [];
 
     this.materials = MATERIALS[_.camelCase(this.theme)];
     this.offsetX = 0;
@@ -75,12 +75,13 @@ export default class SgfBoard {
     }
   }
 
-  getArrangement() {
-    return this.arrangement;
-  }
-
-  getTree() {
-    return this.root || null;
+  moveStones() {
+    console.log(this.movedStones);
+    const { arrangement } = showKi(this.arrangement, this.movedStones, true);
+    this.arrangement = arrangement;
+    if (this.autofit) {
+      this.fitBoard();
+    }
   }
 
   fitBoard() {
@@ -118,29 +119,24 @@ export default class SgfBoard {
     if (this.editable) {
       this.renderCursor(ctx);
       this.canvas.onclick = (e) => {
-        // const x = (Math.round(e.offsetX / this.size) + this.offsetX) - 1;
-        // const y = (Math.round(e.offsetY / this.size) + this.offsetY) - 1;
-        // const type = this.nextStoneType === 1 ? 'B' : 'W';
-        // const step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
-        // const node = CoordsToTree([step]);
-        // const { hasMoved } = showKi(this.arrangement, [step]);
-        // if (this.boardStates.clear && !hasMoved) {
-          // const nodeTemp = this.root.all(n => n.model.step === step);
-          // console.log(nodeTemp);
-          // // nodeTemp.drop();
-        // } else if (hasMoved) {
-          // this.lastNode.addChild(node.children[0]);
-          // if (this.setNextStoneType !== undefined) {
-            // this.setNextStoneType(-this.nextStoneType);
-          // }
-          // this.addStones(this.root);
-          // ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-          // this.renderBoard(ctx);
-          // this.renderStones(this.canvas, ctx);
-          // if (this.afterMove) {
-            // this.afterMove(step);
-          // }
-        // }
+        const x = (Math.round(e.offsetX / this.size) + this.offsetX) - 1;
+        const y = (Math.round(e.offsetY / this.size) + this.offsetY) - 1;
+        const type = this.nextStoneType === 1 ? 'B' : 'W';
+        const step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
+        const { hasMoved } = showKi(this.arrangement, [step]);
+        if (this.boardStates.clear && !hasMoved) {
+          // nodeTemp.drop();
+        } else if (hasMoved) {
+          if (this.setNextStoneType !== undefined) {
+            this.setNextStoneType(-this.nextStoneType);
+          }
+          ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.renderBoard(ctx);
+          this.renderStones(this.canvas, ctx);
+          if (this.afterMove) {
+            this.afterMove(step);
+          }
+        }
       };
     }
   }
@@ -148,7 +144,6 @@ export default class SgfBoard {
   renderBoard(ctx) {
     this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
 
-    // TODO: blablabla
     const shadowStyle = '5px 5px 5px #999999';
     if (this.theme === 'black-and-white') {
       this.canvas.style.boxShadow = '0px 0px 0px #000000';
@@ -199,13 +194,9 @@ export default class SgfBoard {
   }
 
   renderStones(canvas, ctx) {
-    let il;
-    let jl;
+    this.addStones();
+    this.moveStones();
     this.size = canvas.width / (_.max([this.width, this.height]) + 1);
-    if (this.lastNode !== undefined && this.lastNode.model.index !== 0) {
-      il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2]);
-      jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3]);
-    }
 
     let coordX = 0;
     let coordY = 0;
@@ -223,7 +214,7 @@ export default class SgfBoard {
           coordY,
           (this.size / 2) - 2,
           this.arrangement[i][j],
-          il === i && jl === j,
+          false,
           this.theme,
           (i * j) % 5,
         );

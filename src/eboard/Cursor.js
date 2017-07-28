@@ -37,5 +37,8 @@ export default class Cursor {
       ctx.lineTo(this.x + this.size, this.y - this.size);
       ctx.stroke();
     }
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#000';
+    ctx.fillStyle = '#000';
   }
 }

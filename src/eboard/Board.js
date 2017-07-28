@@ -144,6 +144,7 @@ export default class Board {
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
     ctx.beginPath();
+    ctx.strokeStyle = '#FF0000';
     for (let i = 1; i <= this.width; i++) {
       ctx.moveTo(i * this.size, this.size);
       ctx.lineTo(i * this.size, this.height * this.size);
@@ -173,7 +174,7 @@ export default class Board {
         } else if (!this.autofit) {
           ctx.arc(i * this.size, j * this.size, dotSize, 0, 2 * Math.PI, true);
         }
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = '#000000';
         ctx.fill();
       });
     });
