@@ -76,7 +76,6 @@ export default class SgfBoard {
   }
 
   moveStones() {
-    console.log(this.movedStones);
     const { arrangement } = showKi(this.arrangement, this.movedStones, true);
     this.arrangement = arrangement;
     if (this.autofit) {
@@ -110,6 +109,7 @@ export default class SgfBoard {
   }
 
   render() {
+    console.log('render');
     this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
     const ctx = this.canvas.getContext('2d');
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -127,12 +127,6 @@ export default class SgfBoard {
         if (this.boardStates.clear && !hasMoved) {
           // nodeTemp.drop();
         } else if (hasMoved) {
-          if (this.setNextStoneType !== undefined) {
-            this.setNextStoneType(-this.nextStoneType);
-          }
-          ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-          this.renderBoard(ctx);
-          this.renderStones(this.canvas, ctx);
           if (this.afterMove) {
             this.afterMove(step);
           }
@@ -194,6 +188,7 @@ export default class SgfBoard {
   }
 
   renderStones(canvas, ctx) {
+    this.arrangement = BLANK_ARRAY;
     this.addStones();
     this.moveStones();
     this.size = canvas.width / (_.max([this.width, this.height]) + 1);

@@ -215,7 +215,6 @@ export default class Room extends Component {
       nextStoneType,
       movedStones: this.props.steps,
       afterMove: (step) => {
-        this.props.dispatch(addSteps(step));
         const msg = {
           type: 'op',
           fromId: this.state.name,
