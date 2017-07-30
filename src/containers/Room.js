@@ -29,6 +29,7 @@ import {
   setToolbarHidden,
   // setNextStoneType,
   addSteps,
+  removeSteps,
 } from '../actions/Actions';
 
 const { ENTER } = Keys;
@@ -105,6 +106,30 @@ export default class Room extends Component {
       hostTopic: sessionStorage.currentTopic,
     };
 
+    this.sgf = `
+       (;FF[4]GM[1]SZ[19]
+       GN[Copyright goproblems.com]
+       PB[Black]
+       HA[0]
+       PW[White]
+       KM[5.5]
+       DT[1999-07-21]
+       TM[1800]
+       RU[Japanese]
+       ;AW[bb][cb][cc][cd][de][df][cg][ch][dh][ai][bi][ci]
+       AB[ba][ab][ac][bc][bd][be][cf][bg][bh]
+       C[Black to play and live.]
+       (;B[af];W[ah]
+       (;B[ce];W[ag]C[only one eye this way])
+       (;B[ag];W[ce]))
+       (;B[ah];W[af]
+       (;B[ae];W[bf];B[ag];W[bf]
+       (;B[af];W[ce]C[oops! you can't take this stone])
+       (;B[ce];W[af];B[bg]C[RIGHT black plays under the stones and lives]))
+       (;B[bf];W[ae]))
+       (;B[ae];W[ag]))
+    `;
+
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleTopicChange = this.handleTopicChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -162,8 +187,24 @@ export default class Room extends Component {
             onlineList: data.text,
             topic: data.topic,
           });
-        } else if (data.type === 'op') {
+        } else if (data.type === 'op#add') {
           this.props.dispatch(addSteps(data.text));
+        } else if (data.type === 'op#rm') {
+          // this.props.dispatch(addSteps(data.text));
+          const AB = /\[.*\]/.exec(/(AB.*?)[A-Z|\n|\r]/mg.exec(this.sgf)[1])[0]
+            .split('][')
+            .map(n => `B[${n.replace('[', '').replace(']', '')}]`);
+          const AW = /\[.*\]/.exec(/(AW.*?)[A-Z|\n|\r]/mg.exec(this.sgf)[1])[0]
+            .split('][')
+            .map(n => `W[${n.replace('[', '').replace(']', '')}]`);
+
+          const ABAW = AB.concat(AW);
+          if (ABAW.includes(data.text)) {
+            this.sgf = this.sgf.replace(/AW.*(\[cc\])/gi, '');
+            console.log('lalala');
+          } else {
+            this.props.dispatch(removeSteps(data.text));
+          }
         }
       },
     });
@@ -193,6 +234,7 @@ export default class Room extends Component {
   }
 
   componentDidUpdate() {
+    console.log('didupdate');
     this.chatbox.scrollTop = this.chatbox.scrollHeight;
 
     let nextStoneType = 'B';
@@ -214,9 +256,18 @@ export default class Room extends Component {
       showCoordinate: this.props.boardStates.showCoordinate,
       nextStoneType,
       movedStones: this.props.steps,
-      afterMove: (step) => {
+      addStep: (step) => {
         const msg = {
-          type: 'op',
+          type: 'op#add',
+          fromId: this.state.name,
+          text: step,
+          createdAt: Date.now(),
+        };
+        this.room.send(msg);
+      },
+      removeStep: (step) => {
+        const msg = {
+          type: 'op#rm',
           fromId: this.state.name,
           text: step,
           createdAt: Date.now(),

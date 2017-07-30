@@ -14,6 +14,7 @@ export const setPracticeLife = createAction('SET_PRACTICE_LIFE');
 export const setPracticeTimeLeft = createAction('SET_PRACTICE_TIME_LEFT');
 
 export const addSteps = createAction('ADD_STEPS');
+export const removeSteps = createAction('REMOVE_STEPS');
 export const resetSteps = createAction('RESET_STEPS');
 export const setCurrentAnswerId = createAction('SET_CURRENT_ANSWER_ID');
 export const setCurrentMode = createAction('SET_CURRENT_MODE');

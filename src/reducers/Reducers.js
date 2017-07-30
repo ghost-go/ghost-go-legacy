@@ -1,4 +1,5 @@
 import reduceReducers from 'reduce-reducers';
+import _ from 'lodash';
 
 function updateObject(oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
@@ -98,6 +99,14 @@ export const steps = createReducer([], {
       return state.concat([action.payload]);
     }
     return state.concat(action.payload);
+  },
+  REMOVE_STEPS(state, action) {
+    // immutable
+    if (typeof (action.payload) === 'string') {
+      _.remove(state, item => item === action.payload);
+      return _.clone(state);
+    }
+    return _.clone(state);
   },
   RESET_STEPS() {
     return [];

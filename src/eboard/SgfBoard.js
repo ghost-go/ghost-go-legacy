@@ -23,10 +23,10 @@ export default class SgfBoard {
       this.arrangement = BLANK_ARRAY;
     }
     this.initStones = [];
-    this.afterMove = args.afterMove;
+    this.addStep = args.addStep;
+    this.removeStep = args.removeStep;
     this.canvas = args.canvas;
-    // this.sgf = args.sgf || `
-    this.sgf = `
+    this.sgf = args.sgf || `
        (;FF[4]GM[1]SZ[19]
        GN[Copyright goproblems.com]
        PB[Black]
@@ -121,15 +121,16 @@ export default class SgfBoard {
       this.canvas.onclick = (e) => {
         const x = (Math.round(e.offsetX / this.size) + this.offsetX) - 1;
         const y = (Math.round(e.offsetY / this.size) + this.offsetY) - 1;
+        const currentStone = this.arrangement[x][y];
         const type = this.nextStoneType === 1 ? 'B' : 'W';
+        const currentType = currentStone === 1 ? 'B' : 'W';
         const step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
+        const currentStep = `${currentType}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
         const { hasMoved } = showKi(this.arrangement, [step]);
         if (this.boardStates.clear && !hasMoved) {
-          // nodeTemp.drop();
+          this.removeStep(currentStep);
         } else if (hasMoved) {
-          if (this.afterMove) {
-            this.afterMove(step);
-          }
+          this.addStep(step);
         }
       };
     }
