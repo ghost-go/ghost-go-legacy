@@ -61,12 +61,24 @@ export default class SgfBoard {
   }
 
   addStones() {
-    const AB = /\[.*\]/.exec(/(AB.*?)[A-Z|\n|\r]/mg.exec(this.sgf)[1])[0]
-      .split('][')
-      .map(n => `B[${n.replace('[', '').replace(']', '')}]`);
-    const AW = /\[.*\]/.exec(/(AW.*?)[A-Z|\n|\r]/mg.exec(this.sgf)[1])[0]
-      .split('][')
-      .map(n => `W[${n.replace('[', '').replace(']', '')}]`);
+    let AB = [];
+    let AW = [];
+    AB = /\[.*\]/.exec(/(AB.*?)[A-Z|\n|\r]/mg.exec(this.sgf)[1]);
+    if (AB) {
+      AB = AB[0]
+        .split('][')
+        .map(n => `B[${n.replace('[', '').replace(']', '')}]`);
+    } else {
+      AB = [];
+    }
+    AW = /\[.*\]/.exec(/(AW.*?)[A-Z|\n|\r]/mg.exec(this.sgf)[1]);
+    if (AW) {
+      AW = AW[0]
+        .split('][')
+        .map(n => `W[${n.replace('[', '').replace(']', '')}]`);
+    } else {
+      AW = [];
+    }
 
     const { arrangement } = showKi(this.arrangement, AB.concat(AW), false);
     this.arrangement = arrangement;
