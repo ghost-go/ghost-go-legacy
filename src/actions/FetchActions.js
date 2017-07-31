@@ -10,10 +10,11 @@ function buildFetchData(name = '', api = '') {
   return params => (dispatch) => {
     dispatch(fetchDataRequest(params));
     let url = URI(`${config.API_DOMAIN}/${config.API_VERSION}/${api}`);
-    const templates = api.match(/:.*/i);
+    const templates = api.match(/:[A-Za-z0-9]*/g);
     if (templates === null) {
       url = url.query(params);
     } else {
+      console.log(templates);
       templates.forEach((t) => {
         url = URI(url.toString().replace(t, params[t.match(/:(.*)/i)[1]]));
       });
@@ -48,3 +49,6 @@ export const fetchPracticeTemplate = buildFetchData('PRACTICE_TEMPLATE', 'practi
 
 export const fetchTags = buildFetchData('TAGS', 'tags');
 export const fetchFavorites = buildFetchData('FAVORITES', 'favorites');
+
+export const fetchRoom = buildFetchData('ROOM', 'rooms/:id');
+export const fetchRoomMessages = buildFetchData('ROOM_MESSAGES', 'rooms/:identifier/messages');

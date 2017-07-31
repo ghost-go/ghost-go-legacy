@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 import ActionCable from 'actioncable';
 import keydown, { Keys } from 'react-keydown';
-import moment from 'moment';
-import faker from 'faker';
+import moment from 'moment'; import faker from 'faker';
 // import ui from 'redux-ui';
 import {
   // Button,
@@ -32,6 +31,8 @@ import {
   removeSteps,
 } from '../actions/Actions';
 
+import { fetchRoomMessages } from '../actions/FetchActions';
+
 const { ENTER } = Keys;
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
@@ -45,6 +46,7 @@ function mapStateToProps(state) {
     theme: state.theme,
     nextStoneType: state.nextStoneType,
     boardStates: state.boardStates,
+    roomMessages: state.roomMessages,
   };
 }
 
@@ -144,6 +146,9 @@ export default class Room extends Component {
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
+    this.props.dispatch(fetchRoomMessages({
+      identifier: this.state.roomId,
+    }));
     const room = cable.subscriptions.create({
       channel: 'GamesChannel',
       roomId: this.state.roomId,

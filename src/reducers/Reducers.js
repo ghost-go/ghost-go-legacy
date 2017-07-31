@@ -216,3 +216,6 @@ export const practicePuzzleId = createReducer(null,
 export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white',
   { SET_THEME: setPlainTextFilter });
 export const tags = buildFetchReducer({}, 'TAGS');
+
+export const room = buildFetchReducer({}, 'ROOM');
+export const roomMessage = buildFetchReducer({}, 'ROOM_MESSAGES');
