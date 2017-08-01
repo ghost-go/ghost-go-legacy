@@ -37,13 +37,16 @@ class Navigation extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     window.addEventListener('mousedown', () => {
       if (this.mouseIsDownOnCalendar) {
         return;
       }
       this.setState({ navOpen: false });
     }, false);
+  }
+
+  componentDidMount() {
   }
 
   handleToggle() {

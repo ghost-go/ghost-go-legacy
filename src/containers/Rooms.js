@@ -15,7 +15,6 @@ import {
 } from 'react-bootstrap';
 
 // const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
-
 function mapStateToProps(state) {
   return {
     puzzle: state.puzzle,

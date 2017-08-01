@@ -14,7 +14,6 @@ function buildFetchData(name = '', api = '') {
     if (templates === null) {
       url = url.query(params);
     } else {
-      console.log(templates);
       templates.forEach((t) => {
         url = URI(url.toString().replace(t, params[t.match(/:(.*)/i)[1]]));
       });
