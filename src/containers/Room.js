@@ -81,6 +81,7 @@ export default class Room extends Component {
       mark: PropTypes.string.isRequired,
       turn: PropTypes.string.isRequired,
     }).isRequired,
+    roomMessages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     // nextStoneType: PropTypes.number.isRequired,
   }
 
@@ -146,9 +147,9 @@ export default class Room extends Component {
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
-    this.props.dispatch(fetchRoomMessages({
-      identifier: this.state.roomId,
-    }));
+    this.props.dispatch(fetchRoomMessages({ identifier: this.state.roomId }));
+    // this.handleReceviedMessage(this.props.roomMessages);
+
     const room = cable.subscriptions.create({
       channel: 'GamesChannel',
       roomId: this.state.roomId,
@@ -178,53 +179,7 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       received: (data) => {
-        if (ALLOW_OUTPUT_MESSAGR_TYPE_LIST.includes(data.type)) {
-          if (!_.isEmpty(data.text)) {
-            const messages = this.state.messages.concat([data]);
-            this.setState({ messages });
-          }
-        }
-        if (data.type === 'notification#refresh_room_info') {
-          this.setState({
-            hostId: data.hostId,
-            hostName: data.hostName,
-            onlineList: data.text,
-            topic: data.topic,
-          });
-        } else if (data.type === 'op#add') {
-          this.props.dispatch(addSteps(data.text));
-        } else if (data.type === 'op#rm') {
-          // this.props.dispatch(addSteps(data.text));
-          let AB = [];
-          let AW = [];
-          AB = /\[.*\]/.exec(/(AB.*?)[A-Z|\n|\r]/mg.exec(this.state.sgf)[1]);
-          if (AB) {
-            AB = AB[0]
-              .split('][')
-              .map(n => `B[${n.replace('[', '').replace(']', '')}]`);
-          } else {
-            AB = [];
-          }
-          AW = /\[.*\]/.exec(/(AW.*?)[A-Z|\n|\r]/mg.exec(this.state.sgf)[1]);
-          if (AW) {
-            AW = AW[0]
-              .split('][')
-              .map(n => `W[${n.replace('[', '').replace(']', '')}]`);
-          } else {
-            AW = [];
-          }
-          const ABAW = AB.concat(AW);
-          if (ABAW.includes(data.text)) {
-            console.log(data.text);
-            const re = new RegExp(`(.*A${data.text[0]}.*)\\[${data.text.substr(2, 2)}\\](.*)`, 'gm');
-            this.setState({
-              // sgf: this.state.sgf.replace(/(.*AW.*)\[cc\](.*)/gm, '$1$2'),
-              sgf: this.state.sgf.replace(re, '$1$2'),
-            });
-          } else {
-            this.props.dispatch(removeSteps(data.text));
-          }
-        }
+        this.handleReceviedMessage(data);
       },
     });
     this.room = room;
@@ -252,8 +207,7 @@ export default class Room extends Component {
     this.boardLayer.height = boardWidth;
   }
 
-  componentDidUpdate() {
-    console.log('didupdate');
+  componentWillUpdate() {
     this.chatbox.scrollTop = this.chatbox.scrollHeight;
 
     let nextStoneType = 'B';
@@ -315,6 +269,65 @@ export default class Room extends Component {
     }
     return '';
   }
+
+  handleReceviedNotifications(notifications) {
+    let notificationList = [];
+    if (notifications.constructor === Array) {
+      notificationList = notifications;
+    } else if (notifications.constructor === Object) {
+      notificationList = [notifications];
+    }
+
+    notificationList.forEach((data) => {
+      if (ALLOW_OUTPUT_MESSAGR_TYPE_LIST.includes(data.type)) {
+        if (!_.isEmpty(data.text)) {
+          const messages = this.state.messages.concat([data]);
+          this.setState({ messages });
+        }
+      }
+      if (data.type === 'notification#refresh_room_info') {
+        this.setState({
+          hostId: data.hostId,
+          hostName: data.hostName,
+          onlineList: data.text,
+          topic: data.topic,
+        });
+      } else if (data.type === 'op#add') {
+        this.props.dispatch(addSteps(data.text));
+      } else if (data.type === 'op#rm') {
+        // this.props.dispatch(addSteps(data.text));
+        let AB = [];
+        let AW = [];
+        AB = /\[.*\]/.exec(/(AB.*?)[A-Z|\n|\r]/mg.exec(this.state.sgf)[1]);
+        if (AB) {
+          AB = AB[0]
+            .split('][')
+            .map(n => `B[${n.replace('[', '').replace(']', '')}]`);
+        } else {
+          AB = [];
+        }
+        AW = /\[.*\]/.exec(/(AW.*?)[A-Z|\n|\r]/mg.exec(this.state.sgf)[1]);
+        if (AW) {
+          AW = AW[0]
+            .split('][')
+            .map(n => `W[${n.replace('[', '').replace(']', '')}]`);
+        } else {
+          AW = [];
+        }
+        const ABAW = AB.concat(AW);
+        if (ABAW.includes(data.text)) {
+          console.log(data.text);
+          const re = new RegExp(`(.*A${data.text[0]}.*)\\[${data.text.substr(2, 2)}\\](.*)`, 'gm');
+          this.setState((prevState, props) => ({
+            sgf: prevState.sgf.replace(re, '$1$2'),
+          }));
+        } else {
+          this.props.dispatch(removeSteps(data.text));
+        }
+      }
+    });
+  }
+
 
   @keydown(ENTER)
   handleKeyboardEvents(event) {
