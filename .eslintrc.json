@@ -21,6 +21,7 @@
     }],
     "no-debugger": [1],
     "no-unused-vars": [1],
+    "react/no-unused-prop-types": [1],
     "semi": [1],
     "jsx-a11y/no-static-element-interactions": [
       1,

@@ -218,4 +218,4 @@ export const theme = createReducer(localStorage.getItem('theme') || 'black-and-w
 export const tags = buildFetchReducer({}, 'TAGS');
 
 export const room = buildFetchReducer({}, 'ROOM');
-export const roomMessage = buildFetchReducer({}, 'ROOM_MESSAGES');
+export const roomMessages = buildFetchReducer({}, 'ROOM_MESSAGES');

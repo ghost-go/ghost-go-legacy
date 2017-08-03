@@ -81,8 +81,9 @@ export default class Room extends Component {
       mark: PropTypes.string.isRequired,
       turn: PropTypes.string.isRequired,
     }).isRequired,
-    roomMessages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    // nextStoneType: PropTypes.number.isRequired,
+    roomMessages: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({})),
+    }).isRequired,
   }
 
   constructor(props, context) {
@@ -147,8 +148,10 @@ export default class Room extends Component {
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
-    this.props.dispatch(fetchRoomMessages({ identifier: this.state.roomId }));
-    // this.handleReceviedMessage(this.props.roomMessages);
+    this.props.dispatch(fetchRoomMessages({ identifier: this.state.roomId })).then((data) => {
+      console.log('payload', data.payload.data);
+      this.handleReceivedNotifications(data.payload.data);
+    });
 
     const room = cable.subscriptions.create({
       channel: 'GamesChannel',
@@ -162,7 +165,7 @@ export default class Room extends Component {
     }, {
       connected: () => {
         const msg = {
-          type: 'notification#enter',
+          message_type: 'notification#enter',
           fromId: this.state.name,
           text: `${this.state.name} entered this room`,
           createdAt: Date.now(),
@@ -171,7 +174,7 @@ export default class Room extends Component {
       },
       disconnected: () => {
         const msg = {
-          type: 'notification#leave',
+          message_type: 'notification#leave',
           fromId: this.state.name,
           text: `${this.state.name} disconnection`,
           createdAt: Date.now(),
@@ -179,7 +182,7 @@ export default class Room extends Component {
         this.room.send(msg);
       },
       received: (data) => {
-        this.handleReceviedMessage(data);
+        this.handleReceivedNotifications(data);
       },
     });
     this.room = room;
@@ -187,7 +190,7 @@ export default class Room extends Component {
     window.addEventListener('beforeunload', (ev) => {
       ev.preventDefault();
       const msg = {
-        type: 'notification#leave',
+        message_type: 'notification#leave',
         fromId: this.state.name,
         text: `${this.state.name} leaved this room`,
         createdAt: Date.now(),
@@ -207,7 +210,7 @@ export default class Room extends Component {
     this.boardLayer.height = boardWidth;
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.chatbox.scrollTop = this.chatbox.scrollHeight;
 
     let nextStoneType = 'B';
@@ -232,7 +235,7 @@ export default class Room extends Component {
       movedStones: this.props.steps,
       addStep: (step) => {
         const msg = {
-          type: 'op#add',
+          message_type: 'op#add',
           fromId: this.state.name,
           text: step,
           createdAt: Date.now(),
@@ -241,7 +244,7 @@ export default class Room extends Component {
       },
       removeStep: (step) => {
         const msg = {
-          type: 'op#rm',
+          message_type: 'op#rm',
           fromId: this.state.name,
           text: step,
           createdAt: Date.now(),
@@ -254,7 +257,7 @@ export default class Room extends Component {
 
   componentWillUnmount() {
     const msg = {
-      type: 'notification#leave',
+      message_type: 'notification#leave',
       fromId: this.state.name,
       text: `${this.state.name} leaved this room`,
       createdAt: Date.now(),
@@ -270,7 +273,9 @@ export default class Room extends Component {
     return '';
   }
 
-  handleReceviedNotifications(notifications) {
+  handleReceivedNotifications(notifications) {
+    console.log(notifications);
+    if (!notifications) return;
     let notificationList = [];
     if (notifications.constructor === Array) {
       notificationList = notifications;
@@ -279,22 +284,23 @@ export default class Room extends Component {
     }
 
     notificationList.forEach((data) => {
-      if (ALLOW_OUTPUT_MESSAGR_TYPE_LIST.includes(data.type)) {
+      console.log(data);
+      if (ALLOW_OUTPUT_MESSAGR_TYPE_LIST.includes(data.message_type)) {
         if (!_.isEmpty(data.text)) {
           const messages = this.state.messages.concat([data]);
           this.setState({ messages });
         }
       }
-      if (data.type === 'notification#refresh_room_info') {
+      if (data.message_type === 'notification#refresh_room_info') {
         this.setState({
           hostId: data.hostId,
           hostName: data.hostName,
           onlineList: data.text,
           topic: data.topic,
         });
-      } else if (data.type === 'op#add') {
+      } else if (data.message_type === 'op#add') {
         this.props.dispatch(addSteps(data.text));
-      } else if (data.type === 'op#rm') {
+      } else if (data.message_type === 'op#rm') {
         // this.props.dispatch(addSteps(data.text));
         let AB = [];
         let AW = [];
@@ -342,7 +348,7 @@ export default class Room extends Component {
 
   handleSend() {
     const msg = {
-      type: 'msg',
+      message_type: 'msg',
       fromId: this.state.name,
       text: this.state.text,
       createdAt: Date.now(),
@@ -399,7 +405,7 @@ export default class Room extends Component {
 
   sendTopicChangedNotification() {
     const msg = {
-      type: 'notification#topic_changed',
+      message_type: 'notification#topic_changed',
       fromId: this.state.name,
       topic: this.state.topic,
       createdAt: Date.now(),
@@ -411,7 +417,7 @@ export default class Room extends Component {
   sendNameChangedNotification() {
     if (this.state.name !== sessionStorage.currentName) {
       const msg = {
-        type: 'notification#name_changed',
+        message_type: 'notification#name_changed',
         fromId: sessionStorage.currentName,
         originalName: sessionStorage.currentName,
         newName: this.state.name,
