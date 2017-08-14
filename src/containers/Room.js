@@ -21,7 +21,7 @@ import {
   Modal,
   // HelpBlock,
 } from 'react-bootstrap';
-import { CoordsToTree } from '../constants/Go';
+import { GoBanDetection } from '../constants/Go';
 import SgfBoard from '../eboard/SgfBoard';
 
 import { APP_DOMAIN } from '../constants/Config';
@@ -229,6 +229,9 @@ export default class Room extends Component {
                 canvas.width = image.width;
                 canvas.height = image.height;
                 ctx.drawImage(image, 0, 0);
+                const imageData = ctx.getImageData(0, 0, image.width, image.height);
+                const results = GoBanDetection(imageData);
+                console.log(results);
               };
               image.src = reader.result;
             };
