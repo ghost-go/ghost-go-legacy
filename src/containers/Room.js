@@ -18,6 +18,7 @@ import {
   FormGroup,
   ControlLabel,
   FormControl,
+  Modal,
   // HelpBlock,
 } from 'react-bootstrap';
 import { CoordsToTree } from '../constants/Go';
@@ -26,6 +27,7 @@ import SgfBoard from '../eboard/SgfBoard';
 import { APP_DOMAIN } from '../constants/Config';
 import {
   setToolbarHidden,
+  setBoardStates,
   // setNextStoneType,
   addSteps,
   removeSteps,
@@ -46,9 +48,16 @@ function mapStateToProps(state) {
     theme: state.theme,
     nextStoneType: state.nextStoneType,
     boardStates: state.boardStates,
-    roomMessages: state.roomMessages,
   };
 }
+
+const mapDispatchToProps = dispatch => ({
+  setBoardStates: state => dispatch(setBoardStates(state)),
+  addSteps: state => dispatch(addSteps(state)),
+  removeSteps: state => dispatch(removeSteps(state)),
+  setToolbarHidden: state => dispatch(setToolbarHidden(state)),
+  fetchRoomMessages: state => dispatch(fetchRoomMessages(state)),
+});
 
 const ALLOW_OUTPUT_MESSAGR_TYPE_LIST = [
   'msg',
@@ -66,7 +75,7 @@ const ALLOW_OUTPUT_MESSAGR_TYPE_LIST = [
     // filters: [],
   // },
 // })
-@connect(mapStateToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 export default class Room extends Component {
 
   static propTypes = {
@@ -74,15 +83,17 @@ export default class Room extends Component {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    dispatch: PropTypes.func.isRequired,
+    setBoardStates: PropTypes.func.isRequired,
+    setToolbarHidden: PropTypes.func.isRequired,
+    addSteps: PropTypes.func.isRequired,
+    removeSteps: PropTypes.func.isRequired,
+    fetchRoomMessages: PropTypes.func.isRequired,
     steps: PropTypes.arrayOf(PropTypes.string).isRequired,
     boardStates: PropTypes.shape({
       showCoordinate: PropTypes.bool.isRequired,
+      showAnalysisModal: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
       turn: PropTypes.string.isRequired,
-    }).isRequired,
-    roomMessages: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape({})),
     }).isRequired,
   }
 
@@ -140,6 +151,7 @@ export default class Room extends Component {
     this.handleTopicEdit = this.handleTopicEdit.bind(this);
     this.handleNameEdit = this.handleNameEdit.bind(this);
     this.handleSend = this.handleSend.bind(this);
+    this.handleCloseAnalysisModal = this.handleCloseAnalysisModal.bind(this);
   }
 
   state = {
@@ -147,9 +159,8 @@ export default class Room extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(setToolbarHidden(false));
-    this.props.dispatch(fetchRoomMessages({ identifier: this.state.roomId })).then((data) => {
-      console.log('payload', data.payload.data);
+    this.props.setToolbarHidden(false);
+    this.props.fetchRoomMessages({ identifier: this.state.roomId }).then((data) => {
       this.handleReceivedNotifications(data.payload.data);
     });
 
@@ -200,6 +211,35 @@ export default class Room extends Component {
   }
 
   componentDidMount() {
+    document.addEventListener('paste', (e) => {
+      // if (e.clipboardData.types.indexOf('text/html') > -1) {
+      console.log(e.clipboardData.types);
+      if (e.clipboardData.types.indexOf('Files') > -1) {
+        if (this.props.boardStates.showAnalysisModal) {
+          // console.log(e.clipboardData.getData('image/png'));
+          if (e.clipboardData.files.length > 0) {
+            const file = e.clipboardData.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+              const canvas = document.getElementById('preview');
+              const ctx = canvas.getContext('2d');
+              const image = new Image();
+              image.onload = () => {
+                canvas.width = image.width;
+                canvas.height = image.height;
+                ctx.drawImage(image, 0, 0);
+              };
+              image.src = reader.result;
+            };
+            reader.onerror = function (error) {
+              console.log('Error: ', error);
+            };
+          }
+        }
+        e.preventDefault();
+      }
+    });
     let boardWidth = 0;
     if (screen.width > screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -284,7 +324,6 @@ export default class Room extends Component {
     }
 
     notificationList.forEach((data) => {
-      console.log(data);
       if (ALLOW_OUTPUT_MESSAGR_TYPE_LIST.includes(data.message_type)) {
         if (!_.isEmpty(data.text)) {
           const messages = this.state.messages.concat([data]);
@@ -299,7 +338,7 @@ export default class Room extends Component {
           topic: data.topic,
         });
       } else if (data.message_type === 'op#add') {
-        this.props.dispatch(addSteps(data.text));
+        this.props.addSteps(data.text);
       } else if (data.message_type === 'op#rm') {
         // this.props.dispatch(addSteps(data.text));
         let AB = [];
@@ -322,13 +361,10 @@ export default class Room extends Component {
         }
         const ABAW = AB.concat(AW);
         if (ABAW.includes(data.text)) {
-          console.log(data.text);
           const re = new RegExp(`(.*A${data.text[0]}.*)\\[${data.text.substr(2, 2)}\\](.*)`, 'gm');
-          this.setState((prevState, props) => ({
-            sgf: prevState.sgf.replace(re, '$1$2'),
-          }));
+          this.setState(prevState => ({ sgf: prevState.sgf.replace(re, '$1$2') }));
         } else {
-          this.props.dispatch(removeSteps(data.text));
+          this.props.removeSteps(data.text);
         }
       }
     });
@@ -401,6 +437,10 @@ export default class Room extends Component {
         this.nameBox.select();
       }
     });
+  }
+
+  handleCloseAnalysisModal() {
+    this.props.setBoardStates({ showAnalysisModal: false });
   }
 
   sendTopicChangedNotification() {
@@ -497,6 +537,21 @@ export default class Room extends Component {
               />
             </FormGroup>
           </div>
+          <Modal
+            show={this.props.boardStates.showAnalysisModal}
+            onHide={this.handleCloseAnalysisModal}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Modal heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <canvas id="preview" width="320px" height="240px" />
+              <h4>Text in a modal</h4>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.handleCloseAnalysisModal}>Close</Button>
+            </Modal.Footer>
+          </Modal>
           <div ref={(el) => { this.chatbox = el; }} className="chatbox">
             <div>
               { messages }

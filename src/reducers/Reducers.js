@@ -205,6 +205,7 @@ export const nextStoneType = createReducer(1, { SET_NEXT_STONE_TYPE_FILTER: setP
 export const toolbarHidden = createReducer(true, { SET_TOOLBAR_HIDDEN: setPlainTextFilter });
 export const boardStates = createReducer({
   showCoordinate: true,
+  showAnalysisModal: false,
   mark: 'None',
   turn: 'B-W',
   clear: false,

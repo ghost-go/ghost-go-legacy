@@ -23,12 +23,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setTheme: (theme) => {
-    dispatch(setTheme(theme));
-  },
-  setBoardStates: (state) => {
-    dispatch(setBoardStates(state));
-  },
+  setTheme: theme => dispatch(setTheme(theme)),
+  setBoardStates: state => dispatch(setBoardStates(state)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -41,6 +37,7 @@ export default class BoardToolbar extends Component {
     toolbarHidden: PropTypes.bool.isRequired,
     boardStates: PropTypes.shape({
       showCoordinate: PropTypes.bool.isRequired,
+      showAnalysisModal: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
       turn: PropTypes.string.isRequired,
       clear: PropTypes.bool.isRequired,
@@ -52,6 +49,7 @@ export default class BoardToolbar extends Component {
 
     this.handleTheme = this.handleTheme.bind(this);
     this.handleShowCoordinate = this.handleShowCoordinate.bind(this);
+    this.handleShowAnalysisModal = this.handleShowAnalysisModal.bind(this);
     this.handleTurn = this.handleTurn.bind(this);
     this.handleClear = this.handleClear.bind(this);
   }
@@ -67,6 +65,12 @@ export default class BoardToolbar extends Component {
   handleShowCoordinate() {
     this.props.setBoardStates({
       showCoordinate: !this.props.boardStates.showCoordinate,
+    });
+  }
+
+  handleShowAnalysisModal() {
+    this.props.setBoardStates({
+      showAnalysisModal: !this.props.boardStates.showAnalysisModal,
     });
   }
 
@@ -120,6 +124,14 @@ export default class BoardToolbar extends Component {
                 active={this.props.boardStates.showCoordinate}
               >
                 <b>XY</b>
+              </Button>
+              <Button
+                title="analysis"
+                bsStyle="default"
+                onClick={this.handleShowAnalysisModal}
+                active={this.props.boardStates.showAnalysisModal}
+              >
+                <i className="fa fa-picture-o" aria-hidden="true" />
               </Button>
               <Button
                 title="turn"
