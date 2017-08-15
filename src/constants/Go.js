@@ -142,7 +142,7 @@ export const GoBanDetection = (pixelData) => {
   console.log(pixelData);
   for (let y = 0; y < pixelData.height; y++) {
     for (let x = 0; x < pixelData.width; x++) {
-      console.log(pixelData[x][y]);
+      // console.log(pixelData[x][y]);
     }
   }
   const results = [pixelData];
