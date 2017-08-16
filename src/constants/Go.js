@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import TreeModel from 'tree-model';
+import JsFeat from 'jsfeat';
 
 export const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
 export const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
@@ -138,13 +139,23 @@ Object.keys(THEME).forEach((key) => {
 });
 
 export const MATERIALS = materials;
-export const GoBanDetection = (pixelData) => {
+export const GoBanDetection = (pixelData, canvas) => {
+  const columns = canvas.width;
+  const rows = canvas.height;
+  const dataType = JsFeat.U8_t | JsFeat.C4_t;
+  const distMatrixT = new JsFeat.matrix_t(columns, rows, dataType);
   console.log(pixelData);
-  for (let y = 0; y < pixelData.height; y++) {
-    for (let x = 0; x < pixelData.width; x++) {
-      // console.log(pixelData[x][y]);
+  JsFeat.imgproc.canny(pixelData, distMatrixT, 1, 1);
+  console.log(distMatrixT);
+  distMatrixT.data.forEach((i) => {
+    if (i !== 0) {
+      console.log(i);
     }
-  }
-  const results = [pixelData];
-  return results;
+  });
+
+  const result = new ImageData(
+    Uint8ClampedArray.from(distMatrixT.data), canvas.width, canvas.height,
+    // Uint8ClampedArray.from(pixelData.data), canvas.width, canvas.height,
+  );
+  return result;
 };

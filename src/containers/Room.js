@@ -230,8 +230,8 @@ export default class Room extends Component {
                 canvas.height = image.height;
                 ctx.drawImage(image, 0, 0);
                 const imageData = ctx.getImageData(0, 0, image.width, image.height);
-                const results = GoBanDetection(imageData);
-                console.log(results);
+                const results = GoBanDetection(imageData.data, canvas);
+                ctx.putImageData(results, 0, 0);
               };
               image.src = reader.result;
             };
