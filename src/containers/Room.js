@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ActionCable from 'actioncable';
 import keydown, { Keys } from 'react-keydown';
 import moment from 'moment'; import faker from 'faker';
+import tracking from 'tracking';
 // import ui from 'redux-ui';
 import {
   // Button,
@@ -229,12 +230,13 @@ export default class Room extends Component {
                 canvas.width = image.width;
                 canvas.height = image.height;
                 ctx.drawImage(image, 0, 0);
-                const imageData = ctx.getImageData(0, 0, image.width, image.height);
+                // const imageData = ctx.getImageData(0, 0, image.width, image.height);
                 // const results = GoBanDetection(imageData.data, canvas);
-                GoBanDetection(imageData.data, canvas);
-                ctx.putImageData(imageData, 0, 0);
+                // GoBanDetection(imageData.data, canvas);
+                // ctx.putImageData(imageData, 0, 0);
               };
               image.src = reader.result;
+              let tracker = new tracking.ColorTracker(['black', 'white']);
             };
             reader.onerror = function (error) {
               console.log('Error: ', error);

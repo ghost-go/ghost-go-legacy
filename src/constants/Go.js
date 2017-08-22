@@ -140,21 +140,21 @@ Object.keys(THEME).forEach((key) => {
 
 export const MATERIALS = materials;
 export const GoBanDetection = (pixelData, canvas) => {
-  const columns = canvas.width;
-  const rows = canvas.height;
-  const dataType = JsFeat.U8C1_t;
-  const distMatrixT = new JsFeat.matrix_t(columns, rows, dataType);
-  JsFeat.imgproc.grayscale(pixelData, columns, rows, distMatrixT);
-  JsFeat.imgproc.gaussian_blur(distMatrixT, distMatrixT, 2, 0);
-  JsFeat.imgproc.canny(distMatrixT, distMatrixT, 50, 50);
+  // const columns = canvas.width;
+  // const rows = canvas.height;
+  // const dataType = JsFeat.U8C1_t;
+  // const distMatrixT = new JsFeat.matrix_t(columns, rows, dataType);
+  // JsFeat.imgproc.grayscale(pixelData, columns, rows, distMatrixT);
+  // JsFeat.imgproc.gaussian_blur(distMatrixT, distMatrixT, 2, 0);
+  // JsFeat.imgproc.canny(distMatrixT, distMatrixT, 50, 50);
 
-  const newPixelData = new Uint32Array(pixelData.buffer);
-  const alpha = (0xff << 24);
-  let i = distMatrixT.cols * distMatrixT.rows;
-  let pix = 0;
-  while (i >= 0) {
-    pix = distMatrixT.data[i];
-    newPixelData[i] = alpha | (pix << 16) | (pix << 8) | pix;
-    i -= 1;
-  }
+  // const newPixelData = new Uint32Array(pixelData.buffer);
+  // const alpha = (0xff << 24);
+  // let i = distMatrixT.cols * distMatrixT.rows;
+  // let pix = 0;
+  // while (i >= 0) {
+    // pix = distMatrixT.data[i];
+    // newPixelData[i] = alpha | (pix << 16) | (pix << 8) | pix;
+    // i -= 1;
+  // }
 };

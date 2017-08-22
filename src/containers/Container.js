@@ -30,7 +30,7 @@ export default class Container extends Component {
     route: PropTypes.shape({
       auth: PropTypes.shape({}),
     }).isRequired,
-    children: PropTypes.shape({}),
+    children: PropTypes.shape({}).isRequired,
   }
 
 
