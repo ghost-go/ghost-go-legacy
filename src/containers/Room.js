@@ -1,3 +1,5 @@
+/* global tracking */
+
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -6,7 +8,6 @@ import { connect } from 'react-redux';
 import ActionCable from 'actioncable';
 import keydown, { Keys } from 'react-keydown';
 import moment from 'moment'; import faker from 'faker';
-import tracking from 'tracking';
 // import ui from 'redux-ui';
 import {
   // Button,
@@ -236,7 +237,35 @@ export default class Room extends Component {
                 // ctx.putImageData(imageData, 0, 0);
               };
               image.src = reader.result;
-              let tracker = new tracking.ColorTracker(['black', 'white']);
+
+              // debugger;
+
+              // const tracker = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
+              //
+              tracking.ColorTracker.registerColor('black', (r, g, b) => {
+                if (r < 50 && g < 50 && b < 50) {
+                  return true;
+                }
+                return false;
+              });
+
+              tracking.ColorTracker.registerColor('white', (r, g, b) => {
+                if (r > 100 && g > 100 && b > 100) {
+                  return true;
+                }
+                return false;
+              });
+
+              const tracker = new tracking.ColorTracker(['black', 'white']);
+
+              tracker.on('track', (event) => {
+                event.data.forEach((rect) => {
+                  console.log(rect);
+                  // window.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
+                });
+              });
+
+              tracking.track('#preview', tracker);
             };
             reader.onerror = function (error) {
               console.log('Error: ', error);
@@ -551,7 +580,7 @@ export default class Room extends Component {
               <Modal.Title>Modal heading</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <canvas id="preview" width="320px" height="240px" />
+              <canvas id="preview" width="320px" height="240px" is="canvas-color-tracking" target="magenta cyan yellow" />
               <h4>Text in a modal</h4>
             </Modal.Body>
             <Modal.Footer>
