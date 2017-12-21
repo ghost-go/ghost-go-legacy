@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
@@ -49,7 +50,6 @@ const styles = {
 };
 
 export default class AnswerBar extends Component {
-
   static propTypes = {
     id: PropTypes.number.isRequired,
     answer: PropTypes.string.isRequired,
@@ -68,7 +68,7 @@ export default class AnswerBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: 0,
+      // current: 0,
     };
 
     this.firstStep = this.firstStep.bind(this);

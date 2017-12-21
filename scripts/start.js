@@ -1,3 +1,11 @@
+// @remove-on-eject-begin
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+// @remove-on-eject-end
 'use strict';
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -40,11 +48,11 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 }
 
 // Tools like Cloud9 rely on this.
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 5000;
+const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 5001;
 const HOST = process.env.HOST || '0.0.0.0';
 
 // We attempt to use the default port but if it is busy, we offer the user to
-// run on a different port. `detect()` Promise resolves to the next free port.
+// run on a different port. `choosePort()` Promise resolves to the next free port.
 choosePort(HOST, DEFAULT_PORT)
   .then(port => {
     if (port == null) {
@@ -90,4 +98,3 @@ choosePort(HOST, DEFAULT_PORT)
     }
     process.exit(1);
   });
-

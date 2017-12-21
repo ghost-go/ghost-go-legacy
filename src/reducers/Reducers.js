@@ -6,16 +6,16 @@ function updateObject(oldObject, newValues) {
 }
 
 // function updateItemInArray(array, itemId, updateItemCallback) {
-  // const updatedItems = array.map(item => {
-    // if(item.id !== itemId) {
-      // return item
-    // }
+//   const updatedItems = array.map(item => {
+//     if(item.id !== itemId) {
+//       return item
+//     }
 
-    // const updatedItem = updateItemCallback(item)
-    // return updatedItem
-  // })
+//     const updatedItem = updateItemCallback(item)
+//     return updatedItem
+//   })
 
-  // return updatedItems
+//   return updatedItems
 // }
 
 function fetchRequest(state) {
@@ -32,7 +32,9 @@ function fetchSuccess(state, action) {
 }
 
 function fetchFailure(state, action) {
-  return { ...state, isFetching: false, isFailure: true, errorInfo: action.payload };
+  return {
+    ...state, isFetching: false, isFailure: true, errorInfo: action.payload,
+  };
 }
 
 function createReducer(initialState, handlers) {
@@ -182,16 +184,18 @@ export const rating = buildPostReducer({}, 'RATING');
 export const favorite = buildPostReducer({}, 'FAVORITE');
 export const favorites = buildFetchReducer({}, 'FAVORITES');
 export const kifus = buildFetchReducer({}, 'KIFUS');
-export const kifu = buildFetchReducer({ data: {
-  player_b: { en_name: 'John Doe' },
-  player_w: { en_name: 'Jane Doe' },
-  b_rank: 'None',
-  w_rank: 'None',
-  result: 'None',
-  komi: 'None',
-  short_date: 'None',
-  steps: '',
-} }, 'KIFU');
+export const kifu = buildFetchReducer({
+  data: {
+    player_b: { en_name: 'John Doe' },
+    player_w: { en_name: 'Jane Doe' },
+    b_rank: 'None',
+    w_rank: 'None',
+    result: 'None',
+    komi: 'None',
+    short_date: 'None',
+    steps: '',
+  },
+}, 'KIFU');
 
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS');
 export const puzzleFilter = createReducer({ start: '18k', end: '9d' }, { SET_PUZZLE_FILTER: setObjectFilter });

@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 });
 
 class Puzzles extends Component {
-
   static propTypes = {
     tags: PropTypes.shape({}).isRequired,
     puzzles: PropTypes.shape({}).isRequired,
@@ -52,8 +51,8 @@ class Puzzles extends Component {
   }
 
   state = {
-    tipsOpen: false,
-    isLoading: false,
+    // tipsOpen: false,
+    // isLoading: false,
     filterOpen: false,
   }
 
@@ -93,9 +92,9 @@ class Puzzles extends Component {
     }));
   }
 
-  handleTips() {
-    this.setState({ tipsOpen: true });
-  }
+  // handleTips() {
+  //   this.setState({ tipsOpen: true });
+  // }
 
   handleToggle() {
     this.setState({ filterOpen: !this.state.filterOpen });

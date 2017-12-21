@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 });
 
 export default class RankRange extends Component {
-
   static propTypes = {
     rankRange: PropTypes.shape({
       start: PropTypes.string.isRequired,
@@ -64,5 +63,4 @@ export default class RankRange extends Component {
       </div>
     );
   }
-
 }

@@ -95,7 +95,6 @@ PuzzleListItem.propTypes = {
 };
 
 export default class PuzzleList extends Component {
-
   static propTypes = {
     puzzleList: PropTypes.arrayOf({}).isRequired,
     record: PropTypes.arrayOf({}).isRequired,

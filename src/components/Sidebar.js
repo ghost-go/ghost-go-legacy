@@ -6,10 +6,9 @@ import { Link } from 'react-router';
 import AuthService from '../utils/AuthService';
 
 export default class Sidebar extends Component {
-
   static propTypes = {
     auth: PropTypes.instanceOf(AuthService).isRequired,
-    expanded: PropTypes.bool.isRequired,
+    expanded: PropTypes.bool,
   }
 
   static defaultProps = {

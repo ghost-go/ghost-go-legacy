@@ -94,5 +94,4 @@ export default class AuthService extends EventEmitter {
       newProfile => this.setProfile(newProfile),
     ); // updating current profile
   }
-
 }

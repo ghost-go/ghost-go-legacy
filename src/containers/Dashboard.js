@@ -10,13 +10,13 @@ import FilterBar from '../components/FilterBar';
 import AuthService from '../utils/AuthService';
 
 class Dashboard extends Component {
-
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
     dashboard: PropTypes.shape({}).isRequired,
     scoreboard: PropTypes.shape({}).isRequired,
+    filterOpen: PropTypes.bool,
   }
 
   static contextTypes = {
@@ -78,25 +78,30 @@ class Dashboard extends Component {
 
   render() {
     const loading = <div><i className="fa fa-spinner fa-pulse fa-fw" /></div>;
-    const { userRangeFilter, dateRangeFilter, dashboard, scoreboard } = this.props;
+    const {
+      userRangeFilter, dateRangeFilter, dashboard, scoreboard,
+    } = this.props;
 
     let todayList = [];
     let last7daysList = [];
     let totalList = [];
     scoreboard.data.today.forEach((obj, index) => (
-      todayList.push(Dashboard.buildScoreboardItem(
+      todayList.push(
+        Dashboard.buildScoreboardItem(
           obj.user_id, index, obj.picture, obj.nickname, obj.count,
         ),
       )
     ));
     scoreboard.data.last7days.forEach((obj, index) => (
-      last7daysList.push(Dashboard.buildScoreboardItem(
+      last7daysList.push(
+        Dashboard.buildScoreboardItem(
           obj.user_id, index, obj.picture, obj.nickname, obj.count,
         ),
       )
     ));
     scoreboard.data.total.forEach((obj, index) => (
-      totalList.push(Dashboard.buildScoreboardItem(
+      totalList.push(
+        Dashboard.buildScoreboardItem(
           obj.user_id, index, obj.picture, obj.nickname, obj.count,
         ),
       )

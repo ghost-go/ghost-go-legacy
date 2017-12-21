@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 });
 
 export default class PuzzlePanel extends Component {
-
   static propTypes = {
     puzzle: PropTypes.shape({
       is_favorite: PropTypes.bool.isRequired,
@@ -56,7 +55,7 @@ export default class PuzzlePanel extends Component {
     super(props);
 
     this.state = {
-      answersExpanded: true,
+      // answersExpanded: true,
       favorite: this.props.puzzle.is_favorite,
     };
 
@@ -105,9 +104,9 @@ export default class PuzzlePanel extends Component {
       })).then((promise) => {
         if (promise.type === 'POST_RATING_SUCCESS') {
           this.setState({
-            open: true,
-            score: rate,
-            ratingInfo: promise.payload.data.message || 'Thanks for you rating!',
+            // open: true,
+            // score: rate,
+            // ratingInfo: promise.payload.data.message || 'Thanks for you rating!',
           });
         }
       });
@@ -345,5 +344,4 @@ export default class PuzzlePanel extends Component {
       </div>
     );
   }
-
 }

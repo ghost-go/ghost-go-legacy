@@ -35,9 +35,8 @@ const style = StyleSheet.create({
 });
 
 export default class RecordList extends Component {
-
   static propTypes = {
-    recordList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    recordList: PropTypes.arrayOf(PropTypes.shape({})),
   }
 
   static defaultProps = {

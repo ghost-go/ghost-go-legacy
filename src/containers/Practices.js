@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
 });
 
 class Practices extends Component {
-
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     templates: PropTypes.shape({
@@ -245,17 +245,17 @@ class Practices extends Component {
       const pageCount = this.props.practices.data.total_pages;
       if (pageCount > 1) {
         pagination = (<ReactPaginate
-          previousLabel={'previous'}
-          nextLabel={'next'}
+          previousLabel={"previous"}
+          nextLabel={"next"}
           breakLabel={<span>...</span>}
-          breakClassName={'break-me'}
+          breakClassName={"break-me"}
           pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"}
         />);
       }
     }
@@ -289,62 +289,62 @@ class Practices extends Component {
     const practiceList = [];
     // TODO: handlePracticeOpen need be refactored
     // if (this.props.templates.data !== undefined && this.props.templates.data !== null) {
-      // this.props.templates.data.forEach((i) => {
-        // templateList.push(
-          // <Card
-            // key={i.id} className={css(styles.card)}
-            // onClick={this.handlePracticeOpen.bind(this, i.id)}
-          // >
-            // <CardMedia className={css(mainStyles.mainImg)} />
-            // <CardActions className={css(styles.practiceInfo)}>
-              // <div className={css(styles.name)}>{i.name}</div>
-              // <Grade className={css(styles.icon, styles.grade)} />
-              // <span className={css(styles.range)}>{i.rank_range}</span>
-              // <Favorite className={css(styles.icon, styles.favorite)} />
-              // <span className={css(styles.life)}>{i.life}</span>
-              // <Schedule className={css(styles.icon, styles.schedule)} />
-              // <span className={css(styles.time)}>{i.time}</span>
-              // <List className={css(styles.icon, styles.list)} />
-              // <span className={css(styles.puzzleCount)}>{i.puzzle_count}</span>
-            // </CardActions>
-          // </Card>,
-        // );
-      // });
+    //   this.props.templates.data.forEach((i) => {
+    //     templateList.push(
+    //       <Card
+    //         key={i.id} className={css(styles.card)}
+    //         onClick={this.handlePracticeOpen.bind(this, i.id)}
+    //       >
+    //         <CardMedia className={css(mainStyles.mainImg)} />
+    //         <CardActions className={css(styles.practiceInfo)}>
+    //           <div className={css(styles.name)}>{i.name}</div>
+    //           <Grade className={css(styles.icon, styles.grade)} />
+    //           <span className={css(styles.range)}>{i.rank_range}</span>
+    //           <Favorite className={css(styles.icon, styles.favorite)} />
+    //           <span className={css(styles.life)}>{i.life}</span>
+    //           <Schedule className={css(styles.icon, styles.schedule)} />
+    //           <span className={css(styles.time)}>{i.time}</span>
+    //           <List className={css(styles.icon, styles.list)} />
+    //           <span className={css(styles.puzzleCount)}>{i.puzzle_count}</span>
+    //         </CardActions>
+    //       </Card>,
+    //     );
+    //   });
     // }
     // if (this.props.practices.data !== undefined && this.props.practices.data !== null) {
-      // this.props.practices.data.data.forEach((i) => {
-        // const imgList = [];
-        // i.puzzles.forEach((j, index) => {
-          // if (index < 6) {
-            // imgList.push(
-            // <img key={j.id} className={css(styles.img)}
-            // alt={j.id} src={j.preview_img_r1.x200.url}
-            // />);
-          // }
-        // });
+    //   this.props.practices.data.data.forEach((i) => {
+    //     const imgList = [];
+    //     i.puzzles.forEach((j, index) => {
+    //       if (index < 6) {
+    //         imgList.push(
+    //         <img key={j.id} className={css(styles.img)}
+    //         alt={j.id} src={j.preview_img_r1.x200.url}
+    //         />);
+    //       }
+    //     });
 
-        // practiceList.push(
-          // <Card
-            // key={i.id} className={css(styles.card)}
-            // onClick={this.handlePractice.bind(this, i.id)}
-          // >
-            // <CardActions>
-              // { imgList }
-            // </CardActions>
-            // <CardActions className={css(styles.practiceInfo)}>
-              // <div className={css(styles.name)}>{i.practice_template.name}</div>
-              // <Grade className={css(styles.icon, styles.grade)} />
-              // <span className={css(styles.range)}>{i.rank_range}</span>
-              // <Favorite className={css(styles.icon, styles.favorite)} />
-              // <span className={css(styles.life)}>{i.life}</span>
-              // <Schedule className={css(styles.icon, styles.schedule)} />
-              // <span className={css(styles.time)}>{i.time}</span>
-              // <List className={css(styles.icon, styles.list)} />
-              // <span className={css(styles.puzzleCount)}>{i.puzzle_count}</span>
-            // </CardActions>
-          // </Card>,
-        // );
-      // });
+    //     practiceList.push(
+    //       <Card
+    //         key={i.id} className={css(styles.card)}
+    //         onClick={this.handlePractice.bind(this, i.id)}
+    //       >
+    //         <CardActions>
+    //           { imgList }
+    //         </CardActions>
+    //         <CardActions className={css(styles.practiceInfo)}>
+    //           <div className={css(styles.name)}>{i.practice_template.name}</div>
+    //           <Grade className={css(styles.icon, styles.grade)} />
+    //           <span className={css(styles.range)}>{i.rank_range}</span>
+    //           <Favorite className={css(styles.icon, styles.favorite)} />
+    //           <span className={css(styles.life)}>{i.life}</span>
+    //           <Schedule className={css(styles.icon, styles.schedule)} />
+    //           <span className={css(styles.time)}>{i.time}</span>
+    //           <List className={css(styles.icon, styles.list)} />
+    //           <span className={css(styles.puzzleCount)}>{i.puzzle_count}</span>
+    //         </CardActions>
+    //       </Card>,
+    //     );
+    //   });
     // }
     return (
       <div>

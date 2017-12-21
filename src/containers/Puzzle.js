@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
 });
 
 class Puzzle extends Component {
-
   static propTypes = {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
@@ -110,8 +109,9 @@ class Puzzle extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { open: false,
-      answersExpanded: true,
+    this.state = {
+      open: false,
+      // answersExpanded: true,
       commentsOpen: false,
       rightTipOpen: false,
       wrongTipOpen: false,
@@ -121,7 +121,7 @@ class Puzzle extends Component {
     this.handleRight = this.handleRight.bind(this);
     this.handleWrong = this.handleWrong.bind(this);
     this.handleReset = this.handleReset.bind(this);
-    this.handleAnswersToggle = this.handleAnswersToggle.bind(this);
+    // this.handleAnswersToggle = this.handleAnswersToggle.bind(this);
     this.handleResearchMode = this.handleResearchMode.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handleRangeChange = this.handleRangeChange.bind(this);
@@ -199,9 +199,9 @@ class Puzzle extends Component {
     this.props.dispatch(setCurrentAnswerId(id));
   }
 
-  handleAnswersToggle(event, toggle) {
-    this.setState({ answersExpanded: toggle });
-  }
+  // handleAnswersToggle(event, toggle) {
+  //   this.setState({ answersExpanded: toggle });
+  // }
 
   handleCommentsToggle() {
     this.setState({ commentsOpen: !this.state.commentsOpen });

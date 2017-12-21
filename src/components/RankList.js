@@ -4,7 +4,6 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 export default class RankingList extends Component {
-
   static propTypes = {
     rank: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,

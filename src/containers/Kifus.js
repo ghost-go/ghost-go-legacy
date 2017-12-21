@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 });
 
 class Kifus extends Component {
-
   static propTypes = {
     kifus: PropTypes.shape({
       data: PropTypes.shape({
@@ -42,16 +41,13 @@ class Kifus extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: false,
-    };
 
     this.handleSeeMore = this.handleSeeMore.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
   }
 
   state = {
-    isLoading: false,
+    // isLoading: false,
     filterOpen: false,
   }
 
@@ -113,17 +109,17 @@ class Kifus extends Component {
           <ReactPaginate
             disableInitialCallback
             initialPage={page}
-            previousLabel={'previous'}
-            nextLabel={'next'}
+            previousLabel="previous"
+            nextLabel="next"
             breakLabel={<span>...</span>}
-            breakClassName={'break-me'}
+            breakClassName="break-me"
             pageCount={pageCount}
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={this.handlePageClick}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            activeClassName={'active'}
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            activeClassName="active"
           />
         );
       }

@@ -47,13 +47,11 @@ if (process.env.NODE_ENV === 'development') {
   // const createLogger = require('redux-logger')
   // middlewares.push(createLogger())
 }
-
 const createStoreWithMiddleware = applyMiddleware(
   ...middlewares,
   // thunkMiddleware,
   // historyMiddleware,
 )(createStore);
-
 const store = createStoreWithMiddleware(
   reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 // const store = createStoreWithMiddleware(

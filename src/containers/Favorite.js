@@ -88,7 +88,6 @@ const style = StyleSheet.create({
 });
 
 class Favorite extends Component {
-
   static propTypes = {
     location: PropTypes.shape({
       query: PropTypes.string.isRequired,
@@ -159,8 +158,8 @@ class Favorite extends Component {
         recordList = <h3><b>No data.</b></h3>;
       } else {
         const pageCount = favorites.data.total_pages;
-        recordList = favorites.data.data.map(i =>
-          (<Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
+        recordList = favorites.data.data.map(i => (
+          <Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
             <div className={css(style.listBox)}>
               <div className="list-preview-img">
                 <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} alt="" />

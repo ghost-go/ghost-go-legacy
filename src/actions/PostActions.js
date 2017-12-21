@@ -19,8 +19,8 @@ function buildPostData(name = '', api = '') {
       },
       body: JSON.stringify(params),
     }).then(res => res.json())
-        .then(data => dispatch(postDataSuccess({ data })))
-        .catch(ex => dispatch(postDataFailure(ex)));
+      .then(data => dispatch(postDataSuccess({ data })))
+      .catch(ex => dispatch(postDataFailure(ex)));
   };
 }
 

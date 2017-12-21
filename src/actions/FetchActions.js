@@ -23,9 +23,9 @@ function buildFetchData(name = '', api = '') {
     }
 
     return fetch(url)
-        .then(res => res.json())
-        .then(data => dispatch(fetchDataSuccess({ data })))
-        .catch(ex => dispatch(fetchDataFailure(ex)));
+      .then(res => res.json())
+      .then(data => dispatch(fetchDataSuccess({ data })))
+      .catch(ex => dispatch(fetchDataFailure(ex)));
   };
 }
 

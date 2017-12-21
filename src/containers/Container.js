@@ -21,7 +21,6 @@ const Footer = () => (
 );
 
 export default class Container extends Component {
-
   static childContextTypes = {
     auth: PropTypes.object.isRequired,
   }

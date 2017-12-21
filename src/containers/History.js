@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
 });
 
 class History extends Component {
-
   static propTypes = {
     location: PropTypes.shape({
       query: PropTypes.shape({}).isRequired,

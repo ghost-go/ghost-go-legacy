@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -30,7 +31,6 @@ import {
 } from '../actions/Actions';
 
 const styles = StyleSheet.create({
-
   list: {
     display: 'flex',
     height: 'calc(100vmin - 100px)',
@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
 });
 
 class Practice extends Component {
-
   static propTypes = {
     practice: PropTypes.shape({
       data: PropTypes.shape({
@@ -270,9 +269,9 @@ class Practice extends Component {
   }
 
   // handleReset() {
-    // TODO: refs is deprecated
-    // this.refs.board.handleTipsReset();
-    // this.refs.board.reset();
+  //   TODO: refs is deprecated
+  //   this.refs.board.handleTipsReset();
+  //   this.refs.board.reset();
   // }
 
   handleTimeReset() {
@@ -436,17 +435,17 @@ class Practice extends Component {
       />);
 
       // puzzleBoard = <PuzzleBoard
-        // className="board"
-        // steps={this.props.steps}
-        // addSteps={this.addSteps}
-        // resetSteps={this.resetSteps}
-        // puzzle={puzzle}
-        // handleRight={this.handleRight}
-        // handleWrong={this.handleWrong}
-        // currentMode={this.props.currentMode}
-        // setCurrentMode={this.setCurrentMode}
-        // ref="board"
-        // afterClickEvent={this.handleAfterClick}
+      //   className="board"
+      //   steps={this.props.steps}
+      //   addSteps={this.addSteps}
+      //   resetSteps={this.resetSteps}
+      //   puzzle={puzzle}
+      //   handleRight={this.handleRight}
+      //   handleWrong={this.handleWrong}
+      //   currentMode={this.props.currentMode}
+      //   setCurrentMode={this.setCurrentMode}
+      //   ref="board"
+      //   afterClickEvent={this.handleAfterClick}
       // />
 
       whofirst = <h1 className={css(styles.content)}>{puzzle.whofirst}</h1>;

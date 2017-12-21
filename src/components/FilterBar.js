@@ -24,7 +24,6 @@ ListItem.propTypes = {
 };
 
 export default class FilterBar extends Component {
-
   static propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
       filterName: PropTypes.string.isRequired,
@@ -70,8 +69,8 @@ export default class FilterBar extends Component {
           </Dropdown.Toggle>
           <Dropdown.Menu className="super-colors">
             {
-              data.map(item =>
-                (<div key={item.name}>
+              data.map(item => (
+                <div key={item.name}>
                   <div className="popover-title">{item.name}</div>
                   <div className="popover-content">
                     <ul className="tags">

@@ -153,8 +153,8 @@ export const GoBanDetection = (pixelData, canvas) => {
   // let i = distMatrixT.cols * distMatrixT.rows;
   // let pix = 0;
   // while (i >= 0) {
-    // pix = distMatrixT.data[i];
-    // newPixelData[i] = alpha | (pix << 16) | (pix << 8) | pix;
-    // i -= 1;
+  //   pix = distMatrixT.data[i];
+  //   newPixelData[i] = alpha | (pix << 16) | (pix << 8) | pix;
+  //   i -= 1;
   // }
 };

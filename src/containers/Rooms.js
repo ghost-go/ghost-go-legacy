@@ -1,17 +1,19 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 // import ActionCable from 'actioncable';
 import {
- Button,
- // FieldGroup,
- // Checkbox,
- // Radio,
- // FormGroup,
- // ControlLabel,
- // FormControl,
- // HelpBlock,
+  Button,
+  // FieldGroup,
+  // Checkbox,
+  // Radio,
+  // FormGroup,
+  // ControlLabel,
+  // FormControl,
+  // HelpBlock,
 } from 'react-bootstrap';
 
 // const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
@@ -30,7 +32,6 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 export default class Rooms extends Component {
-
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
   }

@@ -9,10 +9,11 @@ import Board from '../eboard/Board';
 import { fetchKifu } from '../actions/FetchActions';
 import { setToolbarHidden } from '../actions/Actions';
 
-const { LEFT, RIGHT, SPACE, ENTER } = Keys;
+const {
+  LEFT, RIGHT, SPACE, ENTER,
+} = Keys;
 
 class Kifu extends Component {
-
   static propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -118,9 +119,9 @@ class Kifu extends Component {
   render() {
     const { kifu } = this.props;
     return (
-      <div ref={input => (this.textInput = input)}>
+      <div ref={(input) => { this.textInput = input; }}>
         <div className="kifu-board">
-          <canvas role="button" id="board_layer"ref={(elem) => { this.boardLayer = elem; }} onClick={this.nextStep} />
+          <canvas role="button" id="board_layer" ref={(elem) => { this.boardLayer = elem; }} onClick={this.nextStep} />
         </div>
         <div className="kifu-panel">
           <Paper>
@@ -190,7 +191,8 @@ class Kifu extends Component {
                         <i className="fa fa-fast-forward" />
                       </span>
                     </div>
-                  </TableRowColumn> </TableRow>
+                  </TableRowColumn>
+                </TableRow>
                 <TableRow>
                   <TableRowColumn colSpan={2}>
                     <div className="control-bar">

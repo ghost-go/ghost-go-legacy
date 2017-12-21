@@ -29,7 +29,6 @@ const mapDispatchToProps = dispatch => ({
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class BoardToolbar extends Component {
-
   static propTypes = {
     setTheme: PropTypes.func.isRequired,
     setBoardStates: PropTypes.func.isRequired,

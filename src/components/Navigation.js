@@ -8,10 +8,9 @@ import AuthService from '../utils/AuthService';
 import BoardToolbar from './BoardToolbar';
 
 class Navigation extends Component {
-
   static propTypes = {
     auth: PropTypes.instanceOf(AuthService).isRequired,
-    expanded: PropTypes.bool.isRequired,
+    expanded: PropTypes.bool,
     collapseToggle: PropTypes.func.isRequired,
   }
 

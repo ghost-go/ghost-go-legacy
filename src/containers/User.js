@@ -7,7 +7,6 @@ import { Button, Col, ControlLabel, FormControl, FormGroup } from 'react-bootstr
 import AuthService from '../utils/AuthService';
 
 export default class User extends Component {
-
   static contextTypes = {
     auth: PropTypes.object.isRequired,
   }
@@ -18,19 +17,19 @@ export default class User extends Component {
     const profile = AuthService.getProfile();
     let rank = '18k';
     let bio = '';
-    let nickname = '';
+    // let nickname = '';
     if (!_.isNil(profile.user_metadata)) {
       rank = profile.user_metadata.rank;
       bio = profile.user_metadata.bio;
-      nickname = profile.user_metadata.nickname;
+      // nickname = profile.user_metadata.nickname;
     }
     this.state = {
-      tab: 'Basic Information',
+      // tab: 'Basic Information',
       profile,
       tipsOpen: false,
       rank,
       bio,
-      nickname: profile.nickname || nickname,
+      // nickname: profile.nickname || nickname,
     };
 
     auth.on('profile_updated', (newProfile) => {
@@ -42,9 +41,9 @@ export default class User extends Component {
     this.handleUpdateProfile = this.handleUpdateProfile.bind(this);
   }
 
-  setNickName(e) {
-    this.setState({ nickname: e.target.value });
-  }
+  // setNickName(e) {
+  //   this.setState({ nickname: e.target.value });
+  // }
 
   setBio(e) {
     this.setState({ bio: e.target.value });

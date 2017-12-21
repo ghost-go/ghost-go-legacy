@@ -39,6 +39,12 @@
       }
     ],
     "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
+    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }],
+    "react/prefer-stateless-function": "warn",
+    "function-paren-newline": "warn",
+    "no-restricted-globals": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "prefer-destructuring": "warn",
+    "react/jsx-curly-brace-presence": "warn"
   }
 }

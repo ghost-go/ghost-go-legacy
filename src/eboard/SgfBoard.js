@@ -175,8 +175,8 @@ export default class SgfBoard {
     }
 
     ctx.stroke();
-    const dotSize = this.size / 12
-    ;[4, 16, 10].forEach((i) => {
+    const dotSize = this.size / 12;
+    [4, 16, 10].forEach((i) => {
       [4, 16, 10].forEach((j) => {
         ctx.beginPath();
         if (this.autofit && ((i - this.offsetX) > 1 &&
