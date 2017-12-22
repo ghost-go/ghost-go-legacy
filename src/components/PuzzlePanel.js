@@ -44,6 +44,7 @@ export default class PuzzlePanel extends Component {
     showNext: PropTypes.bool.isRequired,
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
+    aiAnswers: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -221,6 +222,13 @@ export default class PuzzlePanel extends Component {
             Reset
           </Button>
           { nextBtn }
+          <Button
+            style={{ marginRight: '10px' }}
+            onClick={this.props.aiAnswers}
+            bsStyle="primary"
+          >
+            AI Answers
+          </Button>
         </div>
         <div>
           { nextPanel }

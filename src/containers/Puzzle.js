@@ -9,7 +9,11 @@ import { StyleSheet, css } from 'aphrodite';
 import { CoordsToTree, RESPONSE_TIME } from '../constants/Go';
 import PuzzlePanel from '../components/PuzzlePanel';
 import Board from '../eboard/Board';
-import { fetchPuzzle, fetchPuzzleNext } from '../actions/FetchActions';
+import {
+  fetchPuzzle,
+  fetchPuzzleNext,
+  fetchAiAnswers,
+} from '../actions/FetchActions';
 import { postPuzzleRecord } from '../actions/PostActions';
 import {
   setCurrentMode,
@@ -127,6 +131,7 @@ class Puzzle extends Component {
     this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleAiAnswers = this.handleAiAnswers.bind(this);
     this.setCurrentMode = this.setCurrentMode.bind(this);
     this.setCurrentAnswerId = this.setCurrentAnswerId.bind(this);
     this.resetSteps = this.resetSteps.bind(this);
@@ -202,6 +207,10 @@ class Puzzle extends Component {
   // handleAnswersToggle(event, toggle) {
   //   this.setState({ answersExpanded: toggle });
   // }
+
+  handleAiAnswers() {
+    this.props.dispatch(fetchAiAnswers({ id: 22 }));
+  }
 
   handleCommentsToggle() {
     this.setState({ commentsOpen: !this.state.commentsOpen });
@@ -374,6 +383,7 @@ class Puzzle extends Component {
             currentMode={this.props.currentMode}
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
+            aiAnswers={this.handleAiAnswers}
           />
         </div>
         <div className="clearfix" />

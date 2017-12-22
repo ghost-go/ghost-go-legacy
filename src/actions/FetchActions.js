@@ -51,3 +51,5 @@ export const fetchFavorites = buildFetchData('FAVORITES', 'favorites');
 
 export const fetchRoom = buildFetchData('ROOM', 'rooms/:id');
 export const fetchRoomMessages = buildFetchData('ROOM_MESSAGES', 'rooms/:identifier/messages');
+
+export const fetchAiAnswers = buildFetchData('AI_ANSWERS', 'ai/answers/:id');
