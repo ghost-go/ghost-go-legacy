@@ -9,7 +9,7 @@ import { fetchPuzzleRecords } from '../actions/FetchActions';
 import { setRecordTypeFilter } from '../actions/Actions';
 import RecordList from '../components/RecordList';
 import FilterBar from '../components/FilterBar';
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 
 const styles = StyleSheet.create({
   centerContainer: {

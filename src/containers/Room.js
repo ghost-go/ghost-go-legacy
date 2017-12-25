@@ -24,10 +24,10 @@ import {
   Modal,
   // HelpBlock,
 } from 'react-bootstrap';
-import { GoBanDetection } from '../constants/Go';
+import { GoBanDetection } from '../common/Go';
 import SgfBoard from '../eboard/SgfBoard';
 
-import { APP_DOMAIN } from '../constants/Config';
+import { APP_DOMAIN } from '../common/Config';
 import {
   setToolbarHidden,
   setBoardStates,

@@ -9,7 +9,7 @@ import {
   BLANK_ARRAY,
   MATERIALS,
   NUMBERS,
-} from '../constants/Go';
+} from '../common/Go';
 
 export default class Board {
   constructor(args) {

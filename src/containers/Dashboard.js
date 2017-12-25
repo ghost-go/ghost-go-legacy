@@ -7,7 +7,7 @@ import { Row, Col } from 'react-bootstrap';
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions';
 import { fetchDashboard, fetchScoreboard } from '../actions/FetchActions';
 import FilterBar from '../components/FilterBar';
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 
 class Dashboard extends Component {
   static propTypes = {

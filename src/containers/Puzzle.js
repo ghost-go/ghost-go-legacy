@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { StyleSheet, css } from 'aphrodite';
 
-import { CoordsToTree, RESPONSE_TIME } from '../constants/Go';
+import { CoordsToTree, RESPONSE_TIME } from '../common/Go';
 import PuzzlePanel from '../components/PuzzlePanel';
 import Board from '../eboard/Board';
 import {
@@ -23,7 +23,7 @@ import {
   setNextStoneType,
   setToolbarHidden,
 } from '../actions/Actions';
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 
 const styles = StyleSheet.create({
   tipRight: {
@@ -96,6 +96,12 @@ class Puzzle extends Component {
     currentAnswerId: PropTypes.number,
     theme: PropTypes.string.isRequired,
     nextStoneType: PropTypes.number.isRequired,
+    aiAnswers: PropTypes.shape({
+      isFetching: PropTypes.bool.isRequired,
+      data: PropTypes.shape({
+        genmove: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
     boardStates: PropTypes.shape({
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
@@ -209,7 +215,10 @@ class Puzzle extends Component {
   // }
 
   handleAiAnswers() {
-    this.props.dispatch(fetchAiAnswers({ id: 22 }));
+    this.props.dispatch(fetchAiAnswers({ id: 22 })).then(() => {
+      // this.props.dispatch(addSteps(this.props.aiAnswers.data.genmove));
+      this.props.dispatch(addSteps('B[lb]'));
+    });
   }
 
   handleCommentsToggle() {
@@ -384,6 +393,7 @@ class Puzzle extends Component {
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
             aiAnswers={this.handleAiAnswers}
+            aiFetching={this.props.aiAnswers.isFetching}
           />
         </div>
         <div className="clearfix" />
@@ -401,6 +411,7 @@ function select(state) {
     theme: state.theme,
     nextStoneType: state.nextStoneType,
     boardStates: state.boardStates,
+    aiAnswers: state.aiAnswers,
   };
 }
 

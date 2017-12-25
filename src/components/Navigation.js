@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 import BoardToolbar from './BoardToolbar';
 
 class Navigation extends Component {

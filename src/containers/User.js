@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Snackbar from 'material-ui/Snackbar';
 import { Button, Col, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 
 export default class User extends Component {
   static contextTypes = {

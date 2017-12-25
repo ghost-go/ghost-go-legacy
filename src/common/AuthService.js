@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import Auth0Lock from 'auth0-lock';
-import * as config from '../constants/Config';
+import * as config from '../common/Config';
 
 export default class AuthService extends EventEmitter {
   constructor(clientId, domain) {

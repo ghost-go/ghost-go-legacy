@@ -25,7 +25,7 @@ import Dashboard from './containers/Dashboard';
 import Rooms from './containers/Rooms';
 import Room from './containers/Room';
 import Favorite from './containers/Favorite';
-import AuthService from './utils/AuthService';
+import AuthService from './common/AuthService';
 import App from './App';
 import './index.css';
 

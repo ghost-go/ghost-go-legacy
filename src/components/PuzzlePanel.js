@@ -8,7 +8,7 @@ import { ShareButtons, generateShareIcon } from 'react-share';
 import AnswerBar from '../components/AnswerBar';
 import RankRange from '../components/RankRange';
 import { postRating, postFavorite } from '../actions/PostActions';
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 
 const styles = StyleSheet.create({
 
@@ -45,6 +45,7 @@ export default class PuzzlePanel extends Component {
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
     aiAnswers: PropTypes.func.isRequired,
+    aiFetching: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
@@ -226,8 +227,9 @@ export default class PuzzlePanel extends Component {
             style={{ marginRight: '10px' }}
             onClick={this.props.aiAnswers}
             bsStyle="primary"
+            disabled={this.props.aiFetching}
           >
-            AI Answers
+            { this.props.aiFetching ? 'AI Moving(beta)' : 'AI Move(beta)' }
           </Button>
         </div>
         <div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tab } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import AuthService from '../utils/AuthService';
+import AuthService from '../common/AuthService';
 
 export default class Sidebar extends Component {
   static propTypes = {
