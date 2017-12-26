@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { THEME, MATERIALS } from '../common/Go';
+import { THEME, MATERIALS } from '../common/Constants';
 
 export default class Stone {
   constructor(x, y, size, type, isMarked = false, theme = 'black-and-white') {

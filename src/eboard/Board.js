@@ -2,14 +2,14 @@ import _ from 'lodash';
 import showKi from './BoardCore';
 import Stone from './Stone';
 import Cursor from './Cursor';
+import { CoordsToTree } from '../common/Helper';
 import {
-  CoordsToTree,
-  LETTERS_SGF,
-  LETTERS,
+  SGF_LETTERS,
+  A1_LETTERS,
+  A1_NUMBERS,
   BLANK_ARRAY,
   MATERIALS,
-  NUMBERS,
-} from '../common/Go';
+} from '../common/Constants';
 
 export default class Board {
   constructor(args) {
@@ -102,7 +102,7 @@ export default class Board {
         const x = (Math.round(e.offsetX / this.size) + this.offsetX) - 1;
         const y = (Math.round(e.offsetY / this.size) + this.offsetY) - 1;
         const type = this.nextStoneType === 1 ? 'B' : 'W';
-        const step = `${type}[${LETTERS_SGF[x]}${LETTERS_SGF[y]}]`;
+        const step = `${type}[${SGF_LETTERS[x]}${SGF_LETTERS[y]}]`;
         const node = CoordsToTree([step]);
         const { hasMoved } = showKi(this.arrangement, [step]);
         if (this.boardStates.clear && !hasMoved) {
@@ -184,8 +184,8 @@ export default class Board {
     let jl;
     this.size = canvas.width / (_.max([this.width, this.height]) + 1);
     if (this.lastNode !== undefined && this.lastNode.model.index !== 0) {
-      il = LETTERS_SGF.indexOf(this.lastNode.model.coord[2]);
-      jl = LETTERS_SGF.indexOf(this.lastNode.model.coord[3]);
+      il = SGF_LETTERS.indexOf(this.lastNode.model.coord[2]);
+      jl = SGF_LETTERS.indexOf(this.lastNode.model.coord[3]);
     }
 
     let coordX = 0;
@@ -247,17 +247,17 @@ export default class Board {
       let letters = [];
       let numbers = [];
       if (this.leftmost + this.rightmost < 10 && this.topmost + this.bottommost < 10) {
-        letters = LETTERS.slice(0, this.maxhv);
-        numbers = NUMBERS.slice(0, this.maxhv);
+        letters = A1_LETTERS.slice(0, this.maxhv);
+        numbers = A1_NUMBERS.slice(0, this.maxhv);
       } else if (this.leftmost + this.rightmost >= 10 && this.topmost + this.bottommost < 10) {
-        letters = LETTERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
-        numbers = NUMBERS.slice(0, this.maxhv);
+        letters = A1_LETTERS.slice(A1_LETTERS.length - this.maxhv, A1_LETTERS.length);
+        numbers = A1_NUMBERS.slice(0, this.maxhv);
       } else if (this.leftmost + this.rightmost < 10 && this.topmost + this.bottommost >= 10) {
-        letters = LETTERS.slice(0, this.maxhv);
-        numbers = NUMBERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
+        letters = A1_LETTERS.slice(0, this.maxhv);
+        numbers = A1_NUMBERS.slice(A1_LETTERS.length - this.maxhv, A1_LETTERS.length);
       } else {
-        letters = LETTERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
-        numbers = NUMBERS.slice(LETTERS.length - this.maxhv, LETTERS.length);
+        letters = A1_LETTERS.slice(A1_LETTERS.length - this.maxhv, A1_LETTERS.length);
+        numbers = A1_NUMBERS.slice(A1_LETTERS.length - this.maxhv, A1_LETTERS.length);
       }
 
       letters.forEach((l, index) => {

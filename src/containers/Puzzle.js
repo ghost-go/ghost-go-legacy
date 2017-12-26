@@ -6,7 +6,8 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { StyleSheet, css } from 'aphrodite';
 
-import { CoordsToTree, RESPONSE_TIME } from '../common/Helper';
+import * as Helper from '../common/Helper';
+import * as Const from '../common/Constants';
 import PuzzlePanel from '../components/PuzzlePanel';
 import Board from '../eboard/Board';
 import {
@@ -183,13 +184,13 @@ class Puzzle extends Component {
           if (this.props.currentMode !== 'research') {
             this.response();
           }
-        }, this.props.currentMode === 'research' ? 0 : RESPONSE_TIME);
+        }, this.props.currentMode === 'research' ? 0 : Const.RESPONSE_TIME);
       },
     });
 
     this.props.dispatch(setNextStoneType(this.getInitNextStoneType() * ((-1) ** steps.length)));
     const totalSteps = puzzle.data.steps.split(';').concat(steps);
-    board.setStones(CoordsToTree(totalSteps), true);
+    board.setStones(Helper.CoordsToTree(totalSteps), true);
     board.render();
   }
 
@@ -216,8 +217,9 @@ class Puzzle extends Component {
 
   handleAiAnswers() {
     this.props.dispatch(fetchAiAnswers({ id: 22 })).then(() => {
-      // this.props.dispatch(addSteps(this.props.aiAnswers.data.genmove));
-      this.props.dispatch(addSteps('B[lb]'));
+      this.props.dispatch(addSteps(Helper.A1ToSGF(this.props.aiAnswers.data.genmove,
+        Helper.ConvertStoneTypeToString(this.props.nextStoneType),
+      )));
     });
   }
 

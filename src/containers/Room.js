@@ -24,7 +24,7 @@ import {
   Modal,
   // HelpBlock,
 } from 'react-bootstrap';
-import { GoBanDetection } from '../common/Go';
+import { GoBanDetection } from '../common/Helper';
 import SgfBoard from '../eboard/SgfBoard';
 
 import { APP_DOMAIN } from '../common/Config';

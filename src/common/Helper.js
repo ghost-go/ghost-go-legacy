@@ -17,6 +17,8 @@ export const A1ToSGF = (str, type = 'B') => {
   return `${type}[${Const.SGF_LETTERS[inx]}${Const.SGF_LETTERS[iny]}]`;
 };
 
+export const ConvertStoneTypeToString = type => (type === 1 ? 'B' : 'W');
+
 export const CoordsToTree = (steps) => {
   const tree = new TreeModel();
   const root = tree.parse({ id: 'root', index: 0, children: [] });

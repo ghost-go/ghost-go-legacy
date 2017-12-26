@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { SGFToPosition, GRID } from '../common/Go';
+import { GRID } from '../common/Constants';
+import { SGFToPosition } from '../common/Helper';
 
 let liberties = 0;
 let recursionPath = [];

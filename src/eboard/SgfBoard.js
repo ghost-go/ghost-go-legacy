@@ -8,7 +8,7 @@ import {
   BLANK_ARRAY,
   MATERIALS,
   NUMBERS,
-} from '../common/Go';
+} from '../common/Constants';
 
 export default class SgfBoard {
   constructor(args) {
