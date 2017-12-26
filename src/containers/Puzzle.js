@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { StyleSheet, css } from 'aphrodite';
 
-import { CoordsToTree, RESPONSE_TIME } from '../common/Go';
+import { CoordsToTree, RESPONSE_TIME } from '../common/Helper';
 import PuzzlePanel from '../components/PuzzlePanel';
 import Board from '../eboard/Board';
 import {

@@ -1,11 +1,8 @@
 import _ from 'lodash';
-import TreeModel from 'tree-model';
-import JsFeat from 'jsfeat';
 
-export const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
-export const LETTERS_SGF = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
-export const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19].reverse();
+export const A1_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
+export const A1_NUMBERS = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+export const SGF_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
 export const BLANK_ARRAY = _.chunk(new Array(361).fill(0), 19);
 export const GRID = 19;
 export const DOT_SIZE = 3;
@@ -13,37 +10,7 @@ export const EXPAND_H = 5;
 export const EXPAND_V = 5;
 export const RESPONSE_TIME = 100;
 
-export const SGFToPosition = (str) => {
-  const ki = str[0] === 'B' ? 1 : -1;
-  const pos = /\[(.*)\]/.exec(str)[1];
-  const x = LETTERS_SGF.indexOf(pos[0]);
-  const y = LETTERS_SGF.indexOf(pos[1]);
-  return { x, y, ki };
-};
-
-export const CoordsToTree = (steps) => {
-  const tree = new TreeModel();
-  const root = tree.parse({ id: 'root', index: 0, children: [] });
-  let parentNode;
-  let node;
-  steps.forEach((step, i) => {
-    node = tree.parse({
-      id: `${step}-${i + 1}`,
-      coord: step,
-      type: step[0] === 'B' ? 1 : -1,
-      posX: LETTERS_SGF.indexOf(step[1]),
-      posY: LETTERS_SGF.indexOf(step[2]),
-    });
-    if (parentNode === undefined) {
-      root.addChild(node);
-    } else {
-      parentNode.addChild(node);
-    }
-    parentNode = node;
-  });
-  return root;
-};
-
+// Themes
 export const BASE_THEME_PATH = '/themes';
 export const THEME = {
   blackAndWhite: {
@@ -139,22 +106,3 @@ Object.keys(THEME).forEach((key) => {
 });
 
 export const MATERIALS = materials;
-export const GoBanDetection = (pixelData, canvas) => {
-  // const columns = canvas.width;
-  // const rows = canvas.height;
-  // const dataType = JsFeat.U8C1_t;
-  // const distMatrixT = new JsFeat.matrix_t(columns, rows, dataType);
-  // JsFeat.imgproc.grayscale(pixelData, columns, rows, distMatrixT);
-  // JsFeat.imgproc.gaussian_blur(distMatrixT, distMatrixT, 2, 0);
-  // JsFeat.imgproc.canny(distMatrixT, distMatrixT, 50, 50);
-
-  // const newPixelData = new Uint32Array(pixelData.buffer);
-  // const alpha = (0xff << 24);
-  // let i = distMatrixT.cols * distMatrixT.rows;
-  // let pix = 0;
-  // while (i >= 0) {
-  //   pix = distMatrixT.data[i];
-  //   newPixelData[i] = alpha | (pix << 16) | (pix << 8) | pix;
-  //   i -= 1;
-  // }
-};

@@ -3,11 +3,18 @@
     "browser": true,
     "commonjs": true,
     "es6": true,
-    "jasmine": true
+    "jasmine": true,
+    "jest/globals": true
   },
   "parser": "babel-eslint",
-  "extends": ["airbnb"],
+  "extends": ["airbnb", "plugin:jest/recommended"],
+  "plugins": ["jest"],
   "rules": {
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
     "react/jsx-filename-extension": [ 1, { "extensions": [ ".js", ".jsx" ] } ],
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
