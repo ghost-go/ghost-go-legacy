@@ -19,6 +19,26 @@ export const A1ToSGF = (str, type = 'B') => {
 
 export const ConvertStoneTypeToString = type => (type === 1 ? 'B' : 'W');
 
+export const ConvertStepsForAI = (steps) => {
+  const res = _.clone(steps);
+  const header = '(;FF[4]GM[1]SZ[19]GN[226]PB[Black]HA[0]PW[White]KM[7.5]DT[2017-08-01]TM[1800]RU[Chinese]CP[Copyright ghost-go.com]AP[ghost-go.com]PL[Black];';
+  let count = 0;
+  let prev = '';
+  steps.forEach((step, index) => {
+    if (step[0] === prev[0]) {
+      if (step[0] === 'B') {
+        res.splice(index + count, 0, 'W[tt]');
+        count += 1;
+      } else {
+        res.splice(index + count, 0, 'B[tt]');
+        count += 1;
+      }
+    }
+    prev = step;
+  });
+  return `${header}${res.join(';')})`;
+};
+
 export const CoordsToTree = (steps) => {
   const tree = new TreeModel();
   const root = tree.parse({ id: 'root', index: 0, children: [] });

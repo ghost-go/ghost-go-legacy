@@ -58,6 +58,7 @@ class Puzzle extends Component {
   static propTypes = {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
+        steps: PropTypes.string.isRequired,
         whofirst: PropTypes.string.isRequired,
         right_answers: PropTypes.arrayOf(PropTypes.shape({
           answer_type: PropTypes.number.isRequired,
@@ -216,7 +217,13 @@ class Puzzle extends Component {
   // }
 
   handleAiAnswers() {
-    this.props.dispatch(fetchAiAnswers({ id: 22 })).then(() => {
+    this.props.dispatch(fetchAiAnswers({
+      id: 22,
+      query: {
+        sgf: Helper.ConvertStepsForAI(this.props.puzzle.data.steps.split(';').concat(this.props.steps)),
+        type: this.props.nextStoneType === 1 ? 'black' : 'white',
+      },
+    })).then(() => {
       this.props.dispatch(addSteps(Helper.A1ToSGF(this.props.aiAnswers.data.genmove,
         Helper.ConvertStoneTypeToString(this.props.nextStoneType),
       )));
