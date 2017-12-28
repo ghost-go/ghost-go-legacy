@@ -212,10 +212,6 @@ class Puzzle extends Component {
     this.props.dispatch(setCurrentAnswerId(id));
   }
 
-  // handleAnswersToggle(event, toggle) {
-  //   this.setState({ answersExpanded: toggle });
-  // }
-
   handleAiAnswers() {
     this.props.dispatch(fetchAiAnswers({
       id: 22,
