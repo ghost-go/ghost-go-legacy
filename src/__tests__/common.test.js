@@ -26,6 +26,7 @@ test('ConvertSgfForAI', () => {
 
 test('sgfOffset', () => {
   expect(Helper.sgfOffset('B[rb]', 2, 1)).toBe('B[pb]');
+  expect(Helper.sgfOffset('B[pb]', -2, 1)).toBe('B[rb]');
 });
 
 // test('SGFToA1', () => {

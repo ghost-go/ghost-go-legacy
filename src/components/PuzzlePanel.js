@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'material-ui/Toggle';
 import { StyleSheet, css } from 'aphrodite';
-import { Button } from 'react-bootstrap';
+import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { ShareButtons, generateShareIcon } from 'react-share';
 
 import AnswerBar from '../components/AnswerBar';
@@ -137,6 +137,9 @@ export default class PuzzlePanel extends Component {
     const VKIcon = generateShareIcon('vk');
     const TelegramIcon = generateShareIcon('telegram');
     const WhatsappIcon = generateShareIcon('whatsapp');
+    const tooltip = (
+      <Tooltip id="tooltip">Although this AI is storng enough. But its actual effect is very very poor in solving partial problems.<strong>The result just for reference only</strong></Tooltip>
+    );
 
     const puzzle = this.props.puzzle;
     if (puzzle === undefined) return null;
@@ -223,14 +226,17 @@ export default class PuzzlePanel extends Component {
             Reset
           </Button>
           { nextBtn }
-          <Button
-            style={{ marginRight: '10px' }}
-            onClick={this.props.aiAnswers}
-            bsStyle="primary"
-            disabled={this.props.aiFetching}
-          >
-            { this.props.aiFetching ? 'AI Moving(beta)' : 'AI Move(beta)' }
-          </Button>
+          <OverlayTrigger placement="bottom" overlay={tooltip}>
+            <Button
+              style={{ marginRight: '10px' }}
+              onClick={this.props.aiAnswers}
+              bsStyle="primary"
+              tooltip="Notifications"
+              disabled={this.props.aiFetching}
+            >
+              { this.props.aiFetching ? 'AI Moving(beta)...' : 'AI Move(beta)' }
+            </Button>
+          </OverlayTrigger>
         </div>
         <div>
           { nextPanel }

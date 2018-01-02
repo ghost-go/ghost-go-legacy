@@ -102,6 +102,7 @@ class Puzzle extends Component {
       isFetching: PropTypes.bool.isRequired,
       data: PropTypes.shape({
         genmove: PropTypes.string.isRequired,
+        board_size: PropTypes.number.isRequired,
       }).isRequired,
     }).isRequired,
     boardStates: PropTypes.shape({
@@ -192,6 +193,7 @@ class Puzzle extends Component {
     this.props.dispatch(setNextStoneType(this.getInitNextStoneType() * ((-1) ** steps.length)));
     const totalSteps = puzzle.data.steps.split(';').concat(steps);
     board.setStones(Helper.CoordsToTree(totalSteps), true);
+    this.boardSize = board.maxhv;
     board.render();
   }
 
@@ -214,16 +216,23 @@ class Puzzle extends Component {
 
   handleAiAnswers() {
     // if (this.props.aiAnswers.data.genmove === '') return;
-    const offset = 9;
+    const offset = (19 - this.boardSize) + 1;
     const type = this.props.nextStoneType === 1 ? 'black' : 'white';
     const sgf = Helper.convertStepsForAI(this.props.puzzle.data.steps.split(';').concat(this.props.steps), offset);
     this.props.dispatch(fetchAiAnswers({
       id: 22,
       query: { sgf, type, offset },
     })).then(() => {
-      this.props.dispatch(addSteps(Helper.a1ToSGF(this.props.aiAnswers.data.genmove,
-        Helper.convertStoneTypeToString(this.props.nextStoneType),
-      )));
+      if (this.props.aiAnswers.data.genmove === 'resign') {
+        alert('AI resign!');
+      } else {
+        const step = Helper.a1ToSGF(
+          this.props.aiAnswers.data.genmove,
+          Helper.convertStoneTypeToString(this.props.nextStoneType),
+          19 - this.props.aiAnswers.data.board_size,
+        );
+        this.props.dispatch(addSteps(step));
+      }
     });
   }
 

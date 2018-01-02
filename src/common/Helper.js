@@ -11,17 +11,18 @@ export const sgfToPosition = (str) => {
   return { x, y, ki };
 };
 
-export const a1ToSGF = (str, type = 'B') => {
-  const inx = Const.A1_LETTERS.indexOf(str[0]);
-  const iny = Const.A1_NUMBERS.indexOf(parseInt(str.substr(1), 0));
-  return `${type}[${Const.SGF_LETTERS[inx]}${Const.SGF_LETTERS[iny]}]`;
-};
-
 export const sgfOffset = (sgf, offset = 0, quadrant = 1) => {
   if (offset === 0) return sgf;
   const res = _.clone(sgf);
   const charIndex = Const.SGF_LETTERS.indexOf(sgf[2]) - offset;
   return res.substr(0, 2) + Const.SGF_LETTERS[charIndex] + res.substr(2 + 1);
+};
+
+export const a1ToSGF = (str, type = 'B', offset = 0) => {
+  const inx = Const.A1_LETTERS.indexOf(str[0]) + offset;
+  const iny = Const.A1_NUMBERS.indexOf(parseInt(str.substr(1), 0)) - offset;
+  const sgf = `${type}[${Const.SGF_LETTERS[inx]}${Const.SGF_LETTERS[iny]}]`;
+  return sgf;
 };
 
 export const convertStoneTypeToString = type => (type === 1 ? 'B' : 'W');
