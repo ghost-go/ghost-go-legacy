@@ -213,15 +213,16 @@ class Puzzle extends Component {
   }
 
   handleAiAnswers() {
+    // if (this.props.aiAnswers.data.genmove === '') return;
+    const offset = 9;
+    const type = this.props.nextStoneType === 1 ? 'black' : 'white';
+    const sgf = Helper.convertStepsForAI(this.props.puzzle.data.steps.split(';').concat(this.props.steps), offset);
     this.props.dispatch(fetchAiAnswers({
       id: 22,
-      query: {
-        sgf: Helper.ConvertStepsForAI(this.props.puzzle.data.steps.split(';').concat(this.props.steps)),
-        type: this.props.nextStoneType === 1 ? 'black' : 'white',
-      },
+      query: { sgf, type, offset },
     })).then(() => {
-      this.props.dispatch(addSteps(Helper.A1ToSGF(this.props.aiAnswers.data.genmove,
-        Helper.ConvertStoneTypeToString(this.props.nextStoneType),
+      this.props.dispatch(addSteps(Helper.a1ToSGF(this.props.aiAnswers.data.genmove,
+        Helper.convertStoneTypeToString(this.props.nextStoneType),
       )));
     });
   }

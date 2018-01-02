@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { GRID } from '../common/Constants';
-import { SGFToPosition } from '../common/Helper';
+import { sgfToPosition } from '../common/Helper';
 
 let liberties = 0;
 let recursionPath = [];
@@ -131,7 +131,7 @@ export default function showKi(array, steps, isPonnuki = true) {
   let newArray = _.cloneDeep(array);
   let hasMoved = false;
   steps.forEach((str) => {
-    const { x, y, ki } = SGFToPosition(str);
+    const { x, y, ki } = sgfToPosition(str);
     if (isPonnuki) {
       if (canMove(newArray, x, y, ki)) {
         newArray[x][y] = ki;

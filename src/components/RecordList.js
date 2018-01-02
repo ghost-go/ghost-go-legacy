@@ -55,7 +55,7 @@ export default class RecordList extends Component {
             <div className={css(style.listRight)}>
               <span className={css(style.title)}>{`P-${i.puzzle.id}(${i.puzzle.rank})`}</span>
               <span>{i.puzzle.whofirst}</span>
-              <span className={css(style.date)}>{moment(i.puzzle.created_at).format('YYYY-MM-DD')}</span>
+              <span className={css(style.date)}>{moment(i.updated_at).format('YYYY-MM-DD')}</span>
             </div>
           </div>
         </Link>,

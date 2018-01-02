@@ -224,4 +224,8 @@ export const tags = buildFetchReducer({}, 'TAGS');
 
 export const room = buildFetchReducer({}, 'ROOM');
 export const roomMessages = buildFetchReducer({}, 'ROOM_MESSAGES');
-export const aiAnswers = buildFetchReducer({}, 'AI_ANSWERS')
+export const aiAnswers = buildFetchReducer({
+  data: {
+    genmove: null,
+  },
+}, 'AI_ANSWERS')
