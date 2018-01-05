@@ -85,7 +85,7 @@ export default class Sidebar extends Component {
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <div className="user-welcome">
-                                  <a role="button" tabIndex={0} onClick={auth.login} title="Login" className="user-ico clearfix">
+                                  <a role="button" onKeyPress={() => {}} tabIndex={0} onClick={auth.login} title="Login" className="user-ico clearfix">
                                     With an account you will enjoy more features.
                                   </a>
                                 </div>

@@ -85,7 +85,7 @@ export default class Navigation extends Component {
       <div id="page-header">
         <div style={{ marginLeft: this.props.ui.sidebar.collpase ? '0px' : '-185px' }} id="header-logo">
           <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.3</i></span>
-          <a role="button" tabIndex={0} onClick={this.handleSidebar} id="collapse-sidebar" title="">
+          <a role="button" tabIndex={0} onKeyPress={() => {}} onClick={this.handleSidebar} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left" />
           </a>
         </div>

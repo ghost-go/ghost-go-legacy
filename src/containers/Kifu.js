@@ -54,7 +54,7 @@ class Kifu extends Component {
 
   componentDidMount() {
     let boardWidth = 0;
-    if (screen.width > screen.height) {
+    if (window.screen.width > window.screen.height) {
       boardWidth = window.innerHeight - 60;
     } else {
       boardWidth = window.innerWidth;
@@ -172,22 +172,22 @@ class Kifu extends Component {
                 <TableRow>
                   <TableRowColumn colSpan={2}>
                     <div className="control-bar">
-                      <span role="button" tabIndex={0} className="move-control" onClick={this.firstStep}>
+                      <span role="button" tabIndex={0} className="move-control" onKeyPress={() => {}} onClick={this.firstStep}>
                         <i className="fa fa-fast-backward" />
                       </span>
-                      <span role="button" tabIndex={-1} className="move-control" onClick={this.prev10Step}>
+                      <span role="button" tabIndex={-1} className="move-control" onKeyPress={() => {}} onClick={this.prev10Step}>
                         <i className="fa fa-backward" />
                       </span>
-                      <span role="button" tabIndex={-2} className="move-control" onClick={this.prevStep}>
+                      <span role="button" tabIndex={-2} className="move-control" onKeyPress={() => {}} onClick={this.prevStep}>
                         <i className="fa fa-play rotate" />
                       </span>
-                      <span role="button" tabIndex={-3} className="move-control" onClick={this.nextStep}>
+                      <span role="button" tabIndex={-3} className="move-control" onKeyPress={() => {}} onClick={this.nextStep}>
                         <i className="fa fa-play" />
                       </span>
-                      <span role="button" tabIndex={-4} className="move-control" onClick={this.next10Step}>
+                      <span role="button" tabIndex={-4} className="move-control" onKeyPress={() => {}} onClick={this.next10Step}>
                         <i className="fa fa-forward" />
                       </span>
-                      <span role="button" tabIndex={-5} className="move-control" onClick={this.lastStep}>
+                      <span role="button" tabIndex={-5} className="move-control" onKeyPress={() => {}} onClick={this.lastStep}>
                         <i className="fa fa-fast-forward" />
                       </span>
                     </div>

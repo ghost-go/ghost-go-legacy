@@ -126,7 +126,7 @@ class Kifus extends Component {
     }
     if (!kifus.isFetching && kifus.data != null) {
       kifus.data.data.forEach((i) => {
-        kifuCards.push(
+        const kifuCard = (
           <div key={i.id} className="kifu-card">
             <Link to={`/kifus/${i.id}`}>
               <img src={i.preview_img.x300.url} alt="" />
@@ -138,8 +138,9 @@ class Kifus extends Component {
               <br />
               <span>{`Date: ${i.short_date}`}</span>
             </div>
-          </div>,
+          </div>
         );
+        kifuCards.push(kifuCard);
       });
     } else {
       kifuCards = (

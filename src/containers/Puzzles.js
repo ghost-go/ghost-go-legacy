@@ -115,7 +115,7 @@ export default class Puzzles extends Component {
     let puzzlesCards = [];
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
       puzzles.data.puzzles.forEach((i) => {
-        puzzlesCards.push(
+        const puzzleCard = (
           <div key={i.id} className="puzzle-card">
             <Link to={`/puzzles/${i.id}`}>
               <img src={i.preview_img_r1.x300.url} alt="" />
@@ -124,8 +124,9 @@ export default class Puzzles extends Component {
               <span>Level: {i.rank}</span>
               { i.whofirst === 'Black First' ? <div className="black-ki-shape" /> : <div className="white-ki-shape" /> }
             </div>
-          </div>,
+          </div>
         );
+        puzzlesCards.push(puzzleCard);
       });
     } else {
       puzzlesCards = (
@@ -170,3 +171,4 @@ export default class Puzzles extends Component {
     );
   }
 }
+

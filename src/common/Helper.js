@@ -11,7 +11,8 @@ export const sgfToPosition = (str) => {
   return { x, y, ki };
 };
 
-export const sgfOffset = (sgf, offset = 0, quadrant = 1) => {
+// export const sgfOffset = (sgf, offset = 0, quadrant = 1) => {
+export const sgfOffset = (sgf, offset = 0) => {
   if (offset === 0) return sgf;
   const res = _.clone(sgf);
   const charIndex = Const.SGF_LETTERS.indexOf(sgf[2]) - offset;
@@ -71,7 +72,7 @@ export const CoordsToTree = (steps) => {
   return root;
 };
 
-export const GoBanDetection = (pixelData, canvas) => {
+// export const GoBanDetection = (pixelData, canvas) => {
   // const columns = canvas.width;
   // const rows = canvas.height;
   // const dataType = JsFeat.U8C1_t;
@@ -89,4 +90,4 @@ export const GoBanDetection = (pixelData, canvas) => {
   //   newPixelData[i] = alpha | (pix << 16) | (pix << 8) | pix;
   //   i -= 1;
   // }
-};
+// };

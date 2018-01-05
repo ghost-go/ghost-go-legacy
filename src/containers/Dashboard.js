@@ -16,15 +16,10 @@ class Dashboard extends Component {
     userRangeFilter: PropTypes.string.isRequired,
     dashboard: PropTypes.shape({}).isRequired,
     scoreboard: PropTypes.shape({}).isRequired,
-    filterOpen: PropTypes.bool,
   }
 
   static contextTypes = {
     auth: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = {
-    filterOpen: false,
   }
 
   static buildScoreboardItem(userId, index, picture, nickname, count) {
@@ -86,25 +81,31 @@ class Dashboard extends Component {
     let last7daysList = [];
     let totalList = [];
     scoreboard.data.today.forEach((obj, index) => (
-      todayList.push(
-        Dashboard.buildScoreboardItem(
-          obj.user_id, index, obj.picture, obj.nickname, obj.count,
-        ),
-      )
+      todayList.push(Dashboard.buildScoreboardItem(
+        obj.user_id,
+        index,
+        obj.picture,
+        obj.nickname,
+        obj.count,
+      ))
     ));
     scoreboard.data.last7days.forEach((obj, index) => (
-      last7daysList.push(
-        Dashboard.buildScoreboardItem(
-          obj.user_id, index, obj.picture, obj.nickname, obj.count,
-        ),
-      )
+      last7daysList.push(Dashboard.buildScoreboardItem(
+        obj.user_id,
+        index,
+        obj.picture,
+        obj.nickname,
+        obj.count,
+      ))
     ));
     scoreboard.data.total.forEach((obj, index) => (
-      totalList.push(
-        Dashboard.buildScoreboardItem(
-          obj.user_id, index, obj.picture, obj.nickname, obj.count,
-        ),
-      )
+      totalList.push(Dashboard.buildScoreboardItem(
+        obj.user_id,
+        index,
+        obj.picture,
+        obj.nickname,
+        obj.count,
+      ))
     ));
     if (totalList.length === 0) { totalList = <div>No Data</div>; }
     if (todayList.length === 0) { todayList = <div>No Data</div>; }
@@ -139,7 +140,7 @@ class Dashboard extends Component {
                   </div>
                   <small>Well done!</small>
                 </div>
-                <Link className="tile-footer" to={'/records?page=1&type=all'}>view details <i className="fa fa-arrow-right" /></Link>
+                <Link className="tile-footer" to="/records?page=1&type=all">view details <i className="fa fa-arrow-right" /></Link>
               </div>
             </Col>
             <Col xs={8} md={4}>
@@ -152,7 +153,7 @@ class Dashboard extends Component {
                   </div>
                   <small>{`take up ${((dashboard.data.right * 100) / dashboard.data.total).toFixed(2)}% of all`}</small>
                 </div>
-                <Link className="tile-footer" to={'/records?page=1&type=right'}>view details <i className="fa fa-arrow-right" /></Link>
+                <Link className="tile-footer" to="/records?page=1&type=right">view details <i className="fa fa-arrow-right" /></Link>
               </div>
             </Col>
             <Col xs={8} md={4}>
@@ -165,7 +166,7 @@ class Dashboard extends Component {
                   </div>
                   <small>{`take up ${((dashboard.data.wrong * 100) / dashboard.data.total).toFixed(2)}% of all`}</small>
                 </div>
-                <Link className="tile-footer" to={'/records?page=1&type=wrong'}>view details <i className="fa fa-arrow-right" /></Link>
+                <Link className="tile-footer" to="/records?page=1&type=wrong">view details <i className="fa fa-arrow-right" /></Link>
               </div>
             </Col>
           </Row>

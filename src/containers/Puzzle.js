@@ -162,7 +162,7 @@ class Puzzle extends Component {
     this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
     this.props.dispatch(setNextStoneType(this.getInitNextStoneType()));
     let boardWidth = 0;
-    if (screen.width > screen.height) {
+    if (window.screen.width > window.screen.height) {
       boardWidth = window.innerHeight - 60;
     } else {
       boardWidth = window.innerWidth;
@@ -226,6 +226,7 @@ class Puzzle extends Component {
       query: { sgf, type, offset },
     })).then(() => {
       if (this.props.aiAnswers.data.genmove === 'resign') {
+        // eslint-disable-next-line
         alert('AI resign!');
       } else {
         const step = Helper.a1ToSGF(

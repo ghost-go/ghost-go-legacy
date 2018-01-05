@@ -1,9 +1,4 @@
 import reduceReducers from 'reduce-reducers';
-import _ from 'lodash';
-
-function updateObject(oldObject, newValues) {
-  return Object.assign({}, oldObject, newValues);
-}
 
 function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {

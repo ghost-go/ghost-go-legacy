@@ -11,7 +11,7 @@ const ListItem = (props) => {
       key={props.tag}
       className={`tag ${props.active ? 'active' : ''}`}
     >
-      <a tabIndex={0} role="button" onClick={onClick}>{props.tag}</a>
+      <a tabIndex={0} onKeyPress={() => {}} role="button" onClick={onClick}>{props.tag}</a>
     </li>
   );
 };
@@ -88,16 +88,16 @@ export default class FilterBar extends Component {
                       }
                     </ul>
                   </div>
-                </div>),
-              )
+                </div>
+              ))
             }
           </Dropdown.Menu>
         </Dropdown>
         <ul className="page-subnav">
           {
-            data.map(item =>
-              <li key={item.name}><a title={`${item.name}: ${item.filterVal}`}>{`${item.name}: ${item.filterVal}`}</a></li>,
-            )
+            data.map(item => (
+              <li key={item.name}><a title={`${item.name}: ${item.filterVal}`}>{`${item.name}: ${item.filterVal}`}</a></li>
+            ))
           }
           { this.props.children }
         </ul>

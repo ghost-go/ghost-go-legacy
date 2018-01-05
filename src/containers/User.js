@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+// import _ from 'lodash';
 import Snackbar from 'material-ui/Snackbar';
 import { Button, Col, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 
@@ -15,14 +15,15 @@ export default class User extends Component {
     super(props, context);
     const { auth } = this.context;
     const profile = AuthService.getProfile();
-    let rank = '18k';
-    let bio = '';
+    // Be careful for following code.
+    // profile.user_metadata might be undefiend.
+    const { rank = '18k', bio = '' } = profile.user_metadata;
     // let nickname = '';
-    if (!_.isNil(profile.user_metadata)) {
-      rank = profile.user_metadata.rank;
-      bio = profile.user_metadata.bio;
-      // nickname = profile.user_metadata.nickname;
-    }
+    // if (!_.isNil(profile.user_metadata)) {
+    //   rank = profile.user_metadata.rank;
+    //   bio = profile.user_metadata.bio;
+    //   // nickname = profile.user_metadata.nickname;
+    // }
     this.state = {
       // tab: 'Basic Information',
       profile,

@@ -88,10 +88,6 @@ export default class AuthService extends EventEmitter {
       method: 'PATCH',
       headers,
       body: JSON.stringify(data),
-    }).then(
-      response => response.json(),
-    ).then(
-      newProfile => this.setProfile(newProfile),
-    ); // updating current profile
+    }).then(response => response.json()).then(newProfile => this.setProfile(newProfile));
   }
 }

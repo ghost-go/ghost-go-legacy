@@ -141,10 +141,10 @@ export default class PuzzlePanel extends Component {
       <Tooltip id="tooltip">Although this AI is storng enough. But its actual effect is very very poor in solving partial problems.<strong>The result just for reference only</strong></Tooltip>
     );
 
-    const puzzle = this.props.puzzle;
+    const { puzzle } = this.props;
     if (puzzle === undefined) return null;
 
-    const shareUrl = `${location.protocol}//${location.host}${location.pathname}`;
+    const shareUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
     const title = `P-${puzzle.id}`;
     const exampleImage = puzzle.preview_img_r1.x400.url;
 
@@ -163,7 +163,7 @@ export default class PuzzlePanel extends Component {
     }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
-        rightAnswers.push(
+        const answer = (
           <AnswerBar
             setCurrentAnswerId={this.props.setCurrentAnswerId}
             addSteps={this.props.addSteps}
@@ -177,11 +177,12 @@ export default class PuzzlePanel extends Component {
             current={0}
             up={0}
             down={0}
-          />,
+          />
         );
+        rightAnswers.push(answer);
       });
       puzzle.wrong_answers.forEach((i) => {
-        wrongAnswers.push(
+        const answer = (
           <AnswerBar
             setCurrentAnswerId={this.props.setCurrentAnswerId}
             addSteps={this.props.addSteps}
@@ -195,8 +196,9 @@ export default class PuzzlePanel extends Component {
             current={0}
             up={0}
             down={0}
-          />,
+          />
         );
+        wrongAnswers.push(answer);
       });
     }
     return (

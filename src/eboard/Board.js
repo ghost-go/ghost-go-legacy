@@ -106,8 +106,8 @@ export default class Board {
         const node = CoordsToTree([step]);
         const { hasMoved } = showKi(this.arrangement, [step]);
         if (this.boardStates.clear && !hasMoved) {
-          const nodeTemp = this.root.all(n => n.model.step === step);
-          console.log(nodeTemp);
+          // const nodeTemp = this.root.all(n => n.model.step === step);
+          // console.log(nodeTemp);
           // nodeTemp.drop();
         } else if (hasMoved) {
           this.lastNode.addChild(node.children[0]);
@@ -261,7 +261,8 @@ export default class Board {
       }
 
       letters.forEach((l, index) => {
-        ctx.fillText(l,
+        ctx.fillText(
+          l,
           (this.size * (index + 1)) - (this.size / 8),
           this.size / 2,
         );
@@ -269,12 +270,14 @@ export default class Board {
       numbers.forEach((l, index) => {
         if (index < this.maxhv) {
           if (l >= 10) {
-            ctx.fillText(l,
+            ctx.fillText(
+              l,
               this.size / 6,
               (this.size * (index + 1)) + (this.size / 5),
             );
           } else {
-            ctx.fillText(l,
+            ctx.fillText(
+              l,
               this.size / 4,
               (this.size * (index + 1)) + (this.size / 5),
             );

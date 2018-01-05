@@ -138,17 +138,17 @@ class History extends Component {
         pagination = (<ReactPaginate
           disableInitialCallback
           initialPage={page}
-          previousLabel={'previous'}
-          nextLabel={'next'}
+          previousLabel="previous"
+          nextLabel="next"
           breakLabel={<div>...</div>}
-          breakClassName={'break-me'}
+          breakClassName="break-me"
           pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={10}
           onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+          activeClassName="active"
         />);
       }
     } else {

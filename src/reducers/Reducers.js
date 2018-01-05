@@ -215,11 +215,14 @@ export const boardStates = createReducer({
   clear: false,
 }, { SET_BOARD_STATES: setObjectFilter });
 
-export const practicePuzzleId = createReducer(null,
+export const practicePuzzleId = createReducer(
+  null,
   { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
 );
-export const theme = createReducer(localStorage.getItem('theme') || 'black-and-white',
-  { SET_THEME: setPlainTextFilter });
+export const theme = createReducer(
+  localStorage.getItem('theme') || 'black-and-white',
+  { SET_THEME: setPlainTextFilter },
+);
 export const tags = buildFetchReducer({}, 'TAGS');
 
 export const room = buildFetchReducer({}, 'ROOM');
@@ -228,4 +231,4 @@ export const aiAnswers = buildFetchReducer({
   data: {
     genmove: null,
   },
-}, 'AI_ANSWERS')
+}, 'AI_ANSWERS');
