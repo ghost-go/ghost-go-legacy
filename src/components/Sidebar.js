@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Tab } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import AuthService from '../common/AuthService';
 
+function mapStateToProps(state) {
+  return {
+    ui: state.ui,
+  };
+}
+
+@connect(mapStateToProps)
 export default class Sidebar extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(AuthService).isRequired,
-    expanded: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    // expanded: true,
-    expanded: false,
+    ui: PropTypes.shape({
+      sidebar: PropTypes.shape({
+        collpase: PropTypes.bool.isRequired,
+      }).isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -28,24 +35,17 @@ export default class Sidebar extends Component {
     });
   }
 
-  // state = {
-  // expanded: true,
-  // }
-
   // handleTouchTap(index) {
   // this.setState({ selectedIndex: index })
   // }
   //
-  // handleClick() {
-  // this.setState({ expanded: !this.state.expanded })
-  // }
 
   render() {
     const { auth } = this.props;
     return (
-      <div style={{ marginLeft: this.props.expanded ? '0px' : '-185px' }} id="page-sidebar" className="rm-transition">
+      <div style={{ marginLeft: this.props.ui.sidebar.collpase ? '0px' : '-185px' }} id="page-sidebar" className="rm-transition">
         {
-          this.props.expanded ? (
+          this.props.ui.sidebar.collpase ? (
             <div className="page-sidebar-wrapper">
               <div id="sidebar-top">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first">

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Button } from 'react-bootstrap';
 import { StyleSheet, css } from 'aphrodite';
@@ -25,14 +25,23 @@ const styles = StyleSheet.create({
   },
 });
 
-class Puzzles extends Component {
+function mapStateToProps(state) {
+  return {
+    puzzles: state.puzzles,
+    rangeFilter: state.rangeFilter,
+    tagFilter: state.tagFilter,
+    tags: state.tags,
+  };
+}
+
+@connect(mapStateToProps)
+export default class Puzzles extends Component {
   static propTypes = {
     tags: PropTypes.shape({}).isRequired,
     puzzles: PropTypes.shape({}).isRequired,
     rangeFilter: PropTypes.shape({
       text: PropTypes.string,
     }).isRequired,
-    // puzzleFilter: PropTypes.shape({}).isRequired,
     tagFilter: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     location: PropTypes.shape({
@@ -42,7 +51,6 @@ class Puzzles extends Component {
       }),
     }).isRequired,
   }
-
 
   constructor(props) {
     super(props);
@@ -57,11 +65,11 @@ class Puzzles extends Component {
   }
 
   componentWillMount() {
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location);
     this.props.dispatch(fetchTags({}));
     this.props.dispatch(fetchPuzzles({
-      page: query.page,
-      rank: query.rank,
+      page: query.get('page'),
+      rank: query.get('rank'),
     }));
     this.props.dispatch(setToolbarHidden(true));
   }
@@ -162,16 +170,3 @@ class Puzzles extends Component {
     );
   }
 }
-
-
-function select(state) {
-  return {
-    puzzles: state.puzzles,
-    puzzleFilter: state.puzzleFilter,
-    rangeFilter: state.rangeFilter,
-    tagFilter: state.tagFilter,
-    tags: state.tags,
-  };
-}
-
-export default connect(select)(Puzzles);

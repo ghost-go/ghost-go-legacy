@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 import AuthService from '../common/AuthService';
 import BoardToolbar from './BoardToolbar';
 
-class Navigation extends Component {
+import { toggleSidebar } from '../actions/Actions';
+
+function mapStateToProps(state) {
+  return {
+    ui: state.ui,
+  };
+}
+
+@connect(mapStateToProps)
+export default class Navigation extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(AuthService).isRequired,
-    expanded: PropTypes.bool,
-    collapseToggle: PropTypes.func.isRequired,
-  }
-
-  static defaultProps = {
-    expanded: false,
+    dispatch: PropTypes.func.isRequired,
+    ui: PropTypes.shape({
+      sidebar: PropTypes.shape({
+        collpase: PropTypes.bool.isRequired,
+      }).isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -34,6 +43,7 @@ class Navigation extends Component {
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleSidebar = this.handleSidebar.bind(this);
   }
 
   componentWillMount() {
@@ -50,6 +60,10 @@ class Navigation extends Component {
 
   handleToggle() {
     this.setState({ navOpen: !this.state.navOpen });
+  }
+
+  handleSidebar() {
+    this.props.dispatch(toggleSidebar());
   }
 
   handleLogout() {
@@ -69,14 +83,14 @@ class Navigation extends Component {
     const { auth } = this.props;
     return (
       <div id="page-header">
-        <div style={{ marginLeft: this.props.expanded ? '0px' : '-185px' }} id="header-logo">
+        <div style={{ marginLeft: this.props.ui.sidebar.collpase ? '0px' : '-185px' }} id="header-logo">
           <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.3</i></span>
-          <a role="button" tabIndex={0} onClick={this.props.collapseToggle} id="collapse-sidebar" title="">
+          <a role="button" tabIndex={0} onClick={this.handleSidebar} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left" />
           </a>
         </div>
         <div id="sidebar-search" />
-        <div style={{ paddingLeft: this.props.expanded ? '235px' : '50px' }} className="theme">
+        <div style={{ paddingLeft: this.props.ui.sidebar.collpase ? '235px' : '50px' }} className="theme">
           <BoardToolbar />
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
@@ -164,9 +178,3 @@ class Navigation extends Component {
     );
   }
 }
-
-function select() {
-  return { };
-}
-
-export default connect(select)(Navigation);

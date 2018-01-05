@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { push } from 'react-router-redux';
 import _ from 'lodash';
@@ -52,9 +52,9 @@ class Kifus extends Component {
   }
 
   componentWillMount() {
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location);
     this.props.dispatch(fetchKifus({
-      page: query.page,
+      page: query.get('page'),
       player: this.state.kifuFilter,
       per_page: 24,
     }));
@@ -98,8 +98,8 @@ class Kifus extends Component {
     let kifuCards = [];
     let pagination;
     let page = 0;
-    const { query } = this.props.location;
-    if (query && query.page) {
+    const query = new URLSearchParams(this.props.location);
+    if (query && query.get('page')) {
       page = parseInt(query.page - 1, 10);
     }
     if (this.props.kifus.data !== undefined) {

@@ -18,4 +18,7 @@ yarn-debug.log*
 yarn-error.log*
 
 src/**/*.css
+# for ctags
 tags
+# for vscode js plugin
+jsconfig.json

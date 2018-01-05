@@ -90,8 +90,10 @@ class Puzzle extends Component {
       start: PropTypes.string.isRequired,
       end: PropTypes.string.isRequired,
     }).isRequired,
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired,
     steps: PropTypes.arrayOf(PropTypes.string).isRequired,
     currentMode: PropTypes.string.isRequired,
@@ -154,7 +156,7 @@ class Puzzle extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.params;
+    const { id } = this.props.match.params;
     const profile = AuthService.getProfile();
     this.handleReset();
     this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));

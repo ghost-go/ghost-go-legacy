@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import ActionCable from 'actioncable';
 import keydown, { Keys } from 'react-keydown';
 import moment from 'moment'; import faker from 'faker';
-// import ui from 'redux-ui';
 import {
   // Button,
   // FieldGroup,
@@ -72,12 +71,6 @@ const ALLOW_OUTPUT_MESSAGR_TYPE_LIST = [
   'notification#topic_changed',
 ];
 
-// @ui({
-  // state: {
-    // isHost: false,
-    // filters: [],
-  // },
-// })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Room extends Component {
 

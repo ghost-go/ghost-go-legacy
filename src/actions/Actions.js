@@ -18,8 +18,12 @@ export const removeSteps = createAction('REMOVE_STEPS');
 export const resetSteps = createAction('RESET_STEPS');
 export const setCurrentAnswerId = createAction('SET_CURRENT_ANSWER_ID');
 export const setCurrentMode = createAction('SET_CURRENT_MODE');
-export const setTheme = createAction('SET_THEME');
 export const setNextStoneType = createAction('SET_NEXT_STONE_TYPE_FILTER');
 export const setToolbarHidden = createAction('SET_TOOLBAR_HIDDEN');
 export const setBoardStates = createAction('SET_BOARD_STATES');
-// export const setSidebarCollapse = createAction('SET_SIDEBAR_COLLAPSE');
+
+// UI actions
+export const openSidebar = createAction('OPEN_SIDEBAR');
+export const closeSidebar = createAction('CLOSE_SIDEBAR');
+export const toggleSidebar = createAction('TOGGLE_SIDEBAR');
+export const setTheme = createAction('SET_THEME');
