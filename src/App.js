@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -78,7 +79,7 @@ function select(state) {
   };
 }
 
-export default connect(select)(App);
+export default withRouter(connect(select)(App));
 
 // style={{ marginLeft: this.state.expanded === true ? '235px' : '50px' }}
 // <Route path="/practices" component={Practices} />
