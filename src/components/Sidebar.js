@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tab } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import AuthService from '../common/AuthService';
 
@@ -163,9 +163,9 @@ export default class Sidebar extends Component {
                     <div>
                       <div className="divider-header">Dashboard</div>
                       <li>
-                        <Link activeClassName="active" to="/dashboard">
+                        <NavLink activeClassName="active" to="/dashboard">
                           <i className="fa fa-tachometer" /> <span>Dashboard</span>
-                        </Link>
+                        </NavLink>
                       </li>
                       <li className="divider" />
                     </div>
@@ -173,19 +173,19 @@ export default class Sidebar extends Component {
                   }
                   <div className="divider-header">Resources</div>
                   <li>
-                    <Link activeClassName="active" to="/puzzles">
+                    <NavLink activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link activeClassName="active" to="/kifus">
+                    <NavLink activeClassName="active" to="/kifus">
                       <i className="fa fa-book" /> <span>Kifu Library</span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link activeClassName="active" to="/rooms">
+                    <NavLink activeClassName="active" to="/rooms">
                       <i className="fa fa-home" /> <span>Create Room(beta)</span>
-                    </Link>
+                    </NavLink>
                   </li>
                   {/*
                   <li className="divider"></li>
@@ -209,14 +209,14 @@ export default class Sidebar extends Component {
                       <li className="divider" />
                       <div className="divider-header">Others</div>
                       <li>
-                        <Link activeClassName="active" to="/users">
+                        <NavLink activeClassName="active" to="/users">
                           <i className="fa fa-users" /> <span>Profile</span>
-                        </Link>
+                        </NavLink>
                       </li>
                       <li>
-                        <Link activeClassName="active" to="/records">
+                        <NavLink activeClassName="active" to="/records">
                           <i className="fa fa-history" /> <span>Records</span>
-                        </Link>
+                        </NavLink>
                       </li>
                     </div>
                     ) : null
@@ -231,28 +231,28 @@ export default class Sidebar extends Component {
                   { AuthService.loggedIn() ? (
                     <div>
                       <li>
-                        <Link activeClassName="active" to="/dashboard">
+                        <NavLink activeClassName="active" to="/dashboard">
                           <i className="fa fa-tachometer" /> <span>Dashboard</span>
-                        </Link>
+                        </NavLink>
                       </li>
                       <li className="divider" />
                     </div>
                     ) : null
                   }
                   <li>
-                    <Link activeClassName="active" to="/puzzles">
+                    <NavLink activeClassName="active" to="/puzzles">
                       <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link activeClassName="active" to="/kifus">
+                    <NavLink activeClassName="active" to="/kifus">
                       <i className="fa fa-book" /> <span>Kifu Library</span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link activeClassName="active" to="/rooms">
+                    <NavLink activeClassName="active" to="/rooms">
                       <i className="fa fa-home" /> <span>Create Room(beta)</span>
-                    </Link>
+                    </NavLink>
                   </li>
                   {/*
                   <li className="divider"></li>
@@ -266,9 +266,9 @@ export default class Sidebar extends Component {
                     <div>
                       <li className="divider" />
                       <li>
-                        <Link activeClassName="active" to="/users">
+                        <NavLink activeClassName="active" to="/users">
                           <i className="fa fa-users" /> <span>Profile</span>
-                        </Link>
+                        </NavLink>
                       </li>
                       {/*
                       <li>
@@ -278,9 +278,9 @@ export default class Sidebar extends Component {
                       </li>
                       */}
                       <li>
-                        <Link activeClassName="active" to="/records">
+                        <NavLink activeClassName="active" to="/records">
                           <i className="fa fa-history" /> <span>Records</span>
-                        </Link>
+                        </NavLink>
                       </li>
                     </div>
                   ) : null
