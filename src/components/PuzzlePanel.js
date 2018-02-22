@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'material-ui/Toggle';
 import { StyleSheet, css } from 'aphrodite';
-import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { ShareButtons, generateShareIcon } from 'react-share';
 
 import AnswerBar from '../components/AnswerBar';
@@ -44,8 +44,6 @@ export default class PuzzlePanel extends Component {
     showNext: PropTypes.bool.isRequired,
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
-    aiAnswers: PropTypes.func.isRequired,
-    aiFetching: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
@@ -137,9 +135,6 @@ export default class PuzzlePanel extends Component {
     const VKIcon = generateShareIcon('vk');
     const TelegramIcon = generateShareIcon('telegram');
     const WhatsappIcon = generateShareIcon('whatsapp');
-    const tooltip = (
-      <Tooltip id="tooltip">Although this AI is storng enough. But its actual effect is very very poor in solving partial problems.<strong>The result just for reference only</strong></Tooltip>
-    );
 
     const { puzzle } = this.props;
     if (puzzle === undefined) return null;
