@@ -22,7 +22,7 @@ export default class Navigation extends Component {
     dispatch: PropTypes.func.isRequired,
     ui: PropTypes.shape({
       sidebar: PropTypes.shape({
-        collpase: PropTypes.bool.isRequired,
+        collpased: PropTypes.bool.isRequired,
       }).isRequired,
     }).isRequired,
   }
@@ -83,14 +83,14 @@ export default class Navigation extends Component {
     const { auth } = this.props;
     return (
       <div id="page-header">
-        <div style={{ marginLeft: this.props.ui.sidebar.collpase ? '0px' : '-185px' }} id="header-logo">
+        <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="header-logo">
           <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.3</i></span>
           <a role="button" tabIndex={0} onKeyPress={() => {}} onClick={this.handleSidebar} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left" />
           </a>
         </div>
         <div id="sidebar-search" />
-        <div style={{ paddingLeft: this.props.ui.sidebar.collpase ? '235px' : '50px' }} className="theme">
+        <div style={{ paddingLeft: this.props.ui.sidebar.collpased ? '50px' : '235px' }} className="theme">
           <BoardToolbar />
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>

@@ -228,17 +228,6 @@ export default class PuzzlePanel extends Component {
             Reset
           </Button>
           { nextBtn }
-          <OverlayTrigger placement="bottom" overlay={tooltip}>
-            <Button
-              style={{ marginRight: '10px' }}
-              onClick={this.props.aiAnswers}
-              bsStyle="primary"
-              tooltip="Notifications"
-              disabled={this.props.aiFetching}
-            >
-              { this.props.aiFetching ? 'AI Moving(beta)...' : 'AI Move(beta)' }
-            </Button>
-          </OverlayTrigger>
         </div>
         <div>
           { nextPanel }

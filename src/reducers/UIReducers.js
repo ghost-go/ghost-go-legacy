@@ -9,10 +9,10 @@ function createReducer(initialState, handlers) {
   };
 }
 
-export const sidebarCollpase = createReducer({ sidebar: { collpase: false } }, {
-  TOGGLE_SIDEBAR: state => ({ sidebar: { collpase: !state.sidebar.collpase } }),
-  OPEN_SIDEBAR: () => ({ sidebar: { collpase: true } }),
-  CLOSE_SIDEBAR: () => ({ sidebar: { collpase: false } }),
+export const sidebarCollpase = createReducer({ sidebar: { collpased: false } }, {
+  TOGGLE_SIDEBAR: state => ({ sidebar: { collpased: !state.sidebar.collpased } }),
+  OPEN_SIDEBAR: () => ({ sidebar: { collpased: false } }),
+  CLOSE_SIDEBAR: () => ({ sidebar: { collpased: true } }),
 });
 
 const uiReducers = reduceReducers(sidebarCollpase);

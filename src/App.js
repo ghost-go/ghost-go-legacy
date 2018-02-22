@@ -45,7 +45,7 @@ const App = props => (
       <Navigation auth={props.auth} />
       <Sidebar auth={props.auth} />
       <div
-        style={{ marginLeft: props.ui.sidebar.collpase === true ? '235px' : '50px' }}
+        style={{ marginLeft: props.ui.sidebar.collpased !== true ? '235px' : '50px' }}
         className="page-container"
       >
         <Route exact path="/" component={() => <Redirect to="/puzzles" />} />
@@ -68,7 +68,7 @@ App.propTypes = {
   auth: PropTypes.instanceOf(AuthService).isRequired,
   ui: PropTypes.shape({
     sidebar: PropTypes.shape({
-      collpase: PropTypes.bool.isRequired,
+      collpased: PropTypes.bool.isRequired,
     }).isRequired,
   }).isRequired,
 };
@@ -80,11 +80,3 @@ function select(state) {
 }
 
 export default withRouter(connect(select)(App));
-
-// style={{ marginLeft: this.state.expanded === true ? '235px' : '50px' }}
-// <Route path="/practices" component={Practices} />
-// <Route path="/practices/:id" component={Practice} />
-// <Route path="/practice_records/:id" component={Practice} />
-// <Route path="/rooms" component={Rooms} />
-// <Route path="/rooms/:id" component={Room} />
-

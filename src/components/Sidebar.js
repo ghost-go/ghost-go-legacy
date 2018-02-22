@@ -18,7 +18,7 @@ export default class Sidebar extends Component {
     auth: PropTypes.instanceOf(AuthService).isRequired,
     ui: PropTypes.shape({
       sidebar: PropTypes.shape({
-        collpase: PropTypes.bool.isRequired,
+        collpased: PropTypes.bool.isRequired,
       }).isRequired,
     }).isRequired,
   }
@@ -43,29 +43,13 @@ export default class Sidebar extends Component {
   render() {
     const { auth } = this.props;
     return (
-      <div style={{ marginLeft: this.props.ui.sidebar.collpase ? '0px' : '-185px' }} id="page-sidebar" className="rm-transition">
+      <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="page-sidebar" className="rm-transition">
         {
-          this.props.ui.sidebar.collpase ? (
+          !this.props.ui.sidebar.collpased ? (
             <div className="page-sidebar-wrapper">
               <div id="sidebar-top">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                   <div>
-                    {/*
-                    <Nav bsStyle="pills" justified={true} stacked>
-                      <NavItem eventKey="first">
-                        <i className="fa fa-users fa-lg"></i>
-                      </NavItem>
-                      <NavItem eventKey="second">
-                        <i className="fa fa-bell fa-lg"></i>
-                      </NavItem>
-                      <NavItem eventKey="third">
-                        <span className="small-badge bg-red"></span>
-                        <i className="fa fa-bar-chart-o fa-lg"></i>
-                      </NavItem>
-                      <NavItem eventKey="fourth">
-                        <i className="fa fa-cogs fa-lg"></i> </NavItem>
-                    </Nav>
-                          */}
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
@@ -91,66 +75,8 @@ export default class Sidebar extends Component {
                                 </div>
                               </div>
                             </div>
-                          ) }
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="second">
-                        <div id="tab-example-2">
-                          <ul className="notifications-box notifications-box-alt">
-                            <li>
-                              <span className="bg-purple icon-notification fa fa-users" />
-                              <span className="notification-text">This is an error notification</span>
-                              <div className="notification-time">
-                                a few seconds ago <span className="fa fa-clock-o" />
-                              </div>
-                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                                <i className="fa fa-arrow-right" />
-                              </a>
-                            </li>
-                            <li>
-                              <span className="bg-warning icon-notification fa fa-ticket" />
-                              <span className="notification-text">This is a warning notification</span>
-                              <div className="notification-time">
-                                <b>15</b> minutes ago <span className="fa fa-clock-o" />
-                              </div>
-                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                                <i className="fa fa-arrow-right" />
-                              </a>
-                            </li>
-                            <li>
-                              <span className="bg-green icon-notification fa fa-random" />
-                              <span className="notification-text font-green">A success message example.</span>
-                              <div className="notification-time">
-                                <b>2 hours</b> ago <span className="fa fa-clock-o" />
-                              </div>
-                              <a className="notification-btn btn btn-xs btn-black tooltip-button" data-placement="right" title="" data-original-title="View details">
-                                <i className="fa fa-arrow-right" />
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="third">
-                        <div id="tab-example-3">
-                          <div className="info-box remove-border">
-                            <div className="chart-icon">
-                              <div className="infobox-sparkline" />
-                            </div>
-                            <b>Exchange rate</b>
-                            <span className="stats font-size-23">
-                              <i className="fa fa-chevron-down font-red" /> 43.79 <span className="font-green">+0.9</span>
-                            </span>
-                          </div>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="fourth">
-                        <div id="tab-example-4">
-                          <div className="complete-user-profile">
-                            <h4>Complete your profile</h4>
-                            <div className="progressbar-small progressbar" data-value="75">
-                              <div className="progressbar-value bg-azure tooltip-button" title="" data-original-title="45%" />
-                            </div><b>Next step:</b> <a title="Verify identity">Verify identity</a>
-                          </div>
-                        </div>
+                          )
+                        }
                       </Tab.Pane>
                     </Tab.Content>
                   </div>
