@@ -20,22 +20,17 @@ export default class AuthService extends EventEmitter {
   }
 
   doAuthentication(authResult) {
-    const state = authResult.state || '';
-    if (state.includes('linking')) {
-      this.linkAccount(authResult.idToken);
-    } else {
-      // Saves the user token
-      AuthService.setToken(authResult.idToken);
-      // Async loads the user profile data
-      this.lock.getProfile(authResult.idToken, (error, profile) => {
-        if (error) {
-          // eslint-disable-next-line
-          console.log('Error loading the Profile', error);
-        } else {
-          this.setProfile(profile);
-        }
-      });
-    }
+    if (!authResult.accessToken) return;
+    AuthService.setToken(authResult.accessToken);
+    // Async loads the user profile data
+    this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
+      if (error) {
+        // eslint-disable-next-line
+        console.log('Error loading the Profile', error);
+      } else {
+        this.setProfile(profile);
+      }
+    });
   }
 
   login() {
