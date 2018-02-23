@@ -135,7 +135,6 @@ export default class Puzzles extends Component {
         </div>
       );
     }
-    // TODO: THERE IS A ISSUE ABOUT HANDLESEEMORE.BIND()
     return (
       <div>
         <FilterBar

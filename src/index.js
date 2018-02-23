@@ -15,9 +15,6 @@ import uiReducers from './reducers/UIReducers';
 import AuthService from './common/AuthService';
 import App from './App';
 
-const AUTH0_CLIENT_ID = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5';
-const AUTH0_DOMAIN = 'ghostgo.auth0.com';
-const auth = new AuthService(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
 
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
@@ -42,22 +39,10 @@ const store = createStoreWithMiddleware(
 
 injectTapEventPlugin();
 
-const hashString = window.location.hash;
-if (hashString) {
-  const idString = '&id_token';
-  const firstIndex = hashString.indexOf(idString) + idString.length + 1;
-  const lastIndex = hashString.indexOf('&token_type=');
-  const idToken = hashString.substring(firstIndex, lastIndex);
-  AuthService.setToken(idToken);
-  auth.doAuthentication({
-    idToken,
-  });
-}
-
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App auth={auth} />
+      <App />
     </ConnectedRouter>
   </Provider>,
   document.getElementById('root'),

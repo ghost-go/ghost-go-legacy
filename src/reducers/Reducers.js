@@ -1,5 +1,6 @@
-import reduceReducers from 'reduce-reducers';
 import _ from 'lodash';
+import reduceReducers from 'reduce-reducers';
+import AuthService from '../common/AuthService';
 
 function updateObject(oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);
@@ -227,8 +228,3 @@ export const tags = buildFetchReducer({}, 'TAGS');
 
 export const room = buildFetchReducer({}, 'ROOM');
 export const roomMessages = buildFetchReducer({}, 'ROOM_MESSAGES');
-export const aiAnswers = buildFetchReducer({
-  data: {
-    genmove: null,
-  },
-}, 'AI_ANSWERS');

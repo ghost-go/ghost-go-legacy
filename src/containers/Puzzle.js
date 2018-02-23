@@ -100,13 +100,6 @@ class Puzzle extends Component {
     currentAnswerId: PropTypes.number,
     theme: PropTypes.string.isRequired,
     nextStoneType: PropTypes.number.isRequired,
-    aiAnswers: PropTypes.shape({
-      isFetching: PropTypes.bool.isRequired,
-      data: PropTypes.shape({
-        genmove: PropTypes.string.isRequired,
-        board_size: PropTypes.number.isRequired,
-      }).isRequired,
-    }).isRequired,
     boardStates: PropTypes.shape({
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
@@ -214,29 +207,6 @@ class Puzzle extends Component {
 
   setCurrentAnswerId(id) {
     this.props.dispatch(setCurrentAnswerId(id));
-  }
-
-  handleAiAnswers() {
-    // if (this.props.aiAnswers.data.genmove === '') return;
-    const offset = (19 - this.boardSize) + 1;
-    const type = this.props.nextStoneType === 1 ? 'black' : 'white';
-    const sgf = Helper.convertStepsForAI(this.props.puzzle.data.steps.split(';').concat(this.props.steps), offset);
-    this.props.dispatch(fetchAiAnswers({
-      id: 22,
-      query: { sgf, type, offset },
-    })).then(() => {
-      if (this.props.aiAnswers.data.genmove === 'resign') {
-        // eslint-disable-next-line
-        alert('AI resign!');
-      } else {
-        const step = Helper.a1ToSGF(
-          this.props.aiAnswers.data.genmove,
-          Helper.convertStoneTypeToString(this.props.nextStoneType),
-          19 - this.props.aiAnswers.data.board_size,
-        );
-        this.props.dispatch(addSteps(step));
-      }
-    });
   }
 
   handleCommentsToggle() {
@@ -410,8 +380,6 @@ class Puzzle extends Component {
             currentMode={this.props.currentMode}
             currentAnswerId={this.props.currentAnswerId}
             steps={this.props.steps}
-            aiAnswers={this.handleAiAnswers}
-            aiFetching={this.props.aiAnswers.isFetching}
           />
         </div>
         <div className="clearfix" />
@@ -429,7 +397,6 @@ function select(state) {
     theme: state.theme,
     nextStoneType: state.nextStoneType,
     boardStates: state.boardStates,
-    aiAnswers: state.aiAnswers,
   };
 }
 

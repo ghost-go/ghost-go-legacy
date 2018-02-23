@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 
-export const setPuzzleFilter = createAction('SET_PUZZLE_FILTER');
+export const setPuzzleFilter = createAction('SET_KIFU_FILTER');
 export const setKifuFilter = createAction('SET_KIFU_FILTER');
 export const setRangeFilter = createAction('SET_RANGE_FILTER');
 export const setTagFilter = createAction('SET_TAG_FILTER');
@@ -26,4 +26,10 @@ export const setBoardStates = createAction('SET_BOARD_STATES');
 export const openSidebar = createAction('OPEN_SIDEBAR');
 export const closeSidebar = createAction('CLOSE_SIDEBAR');
 export const toggleSidebar = createAction('TOGGLE_SIDEBAR');
+export const openPuzzleFilter = createAction('OPEN_PUZZLE_FILTER');
+export const closePuzzleFilter = createAction('CLOSE_PUZZLE_FILTER');
+export const togglePuzzleFilter = createAction('TOGGLE_PUZZLE_FILTER');
+export const openKifuFilter = createAction('OPEN_KIFU_FILTER');
+export const closeKifuFilter = createAction('CLOSE_KIFU_FILTER');
+export const toggleKifuFilter = createAction('TOGGLE_KIFU_FILTER');
 export const setTheme = createAction('SET_THEME');

@@ -76,6 +76,7 @@ App.propTypes = {
 function select(state) {
   return {
     ui: state.ui,
+    auth: state.ui.auth,
   };
 }
 

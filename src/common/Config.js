@@ -19,15 +19,12 @@ switch (ENV) {
 }
 
 export const AUTH0_CONFIG = {
-  auth: {
-    redirectUrl: appDomain,
-    responseType: 'token',
-    authParams: {
-      scope: 'openid profile',
-    },
-  },
-  languageDictionary: {
-    title: '',
+  oidcConformant: true,
+  allowShowPassword: true,
+  usernameStyle: 'email',
+  defaultDatabaseConnection: 'acme',
+  prefill: {
+    email: 'johnfoo@gmail.com',
   },
   theme: {
     primaryColor: 'black',

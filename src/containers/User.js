@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import _ from 'lodash';
 import Snackbar from 'material-ui/Snackbar';
@@ -6,14 +7,20 @@ import { Button, Col, ControlLabel, FormControl, FormGroup } from 'react-bootstr
 
 import AuthService from '../common/AuthService';
 
+function mapStateToProps(state) {
+  return {
+    auth: state.ui.auth,
+  };
+}
+
+@connect(mapStateToProps)
 export default class User extends Component {
-  static contextTypes = {
-    auth: PropTypes.object.isRequired,
+  static propTypes = {
+    auth: PropTypes.instanceOf(AuthService).isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context);
-    const { auth } = this.context;
+  constructor(props) {
+    super(props);
     const profile = AuthService.getProfile();
     // Be careful for following code.
     // profile.user_metadata might be undefiend.
@@ -33,7 +40,7 @@ export default class User extends Component {
       // nickname: profile.nickname || nickname,
     };
 
-    auth.on('profile_updated', (newProfile) => {
+    props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
 

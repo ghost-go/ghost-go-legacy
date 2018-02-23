@@ -8,6 +8,7 @@ import AuthService from '../common/AuthService';
 
 function mapStateToProps(state) {
   return {
+    auth: state.ui.auth,
     ui: state.ui,
   };
 }

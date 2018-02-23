@@ -65,7 +65,7 @@ export default class FilterBar extends Component {
       <div className="page-nav">
         <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={this.handleToggle}>
           <Dropdown.Toggle>
-            <Glyphicon className="filter-icon" glyph="filter" />
+            <i className="fa fa-filter" />
           </Dropdown.Toggle>
           <Dropdown.Menu className="super-colors">
             {

@@ -11,6 +11,7 @@ import { toggleSidebar } from '../actions/Actions';
 
 function mapStateToProps(state) {
   return {
+    auth: state.ui.auth,
     ui: state.ui,
   };
 }
@@ -35,9 +36,9 @@ export default class Navigation extends Component {
       navOpen: false,
     };
 
-    props.auth.on('profile_updated', (newProfile) => {
-      this.setState({ profile: newProfile });
-    });
+    // props.auth.on('profile_updated', (newProfile) => {
+    //   this.setState({ profile: newProfile });
+    // });
 
     this.handleToggle = this.handleToggle.bind(this);
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
