@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { Button } from 'react-bootstrap';
 import { StyleSheet, css } from 'aphrodite';
 
-import FilterBar from '../components/FilterBar';
+import PuzzleFilterBar from '../components/PuzzleFilterBar';
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions';
 import {
   setPuzzleFilter,
@@ -137,31 +137,7 @@ export default class Puzzles extends Component {
     }
     return (
       <div>
-        <FilterBar
-          data={[{
-            name: 'Level',
-            tags: ['all', '18k-10k', '9k-5K', '4k-1k', '1d-3d', '4d-6d'],
-            filterName: 'rangeFilter',
-            filterVal: this.props.rangeFilter.text,
-            handleSeeMore: this.handleSeeMore,
-          }, {
-            name: 'Tags',
-            tags: ['all', ...tags.data.map(tag => tag.name)],
-            filterName: 'tagFilter',
-            filterVal: this.props.tagFilter,
-            handleSeeMore: this.handleSeeMore,
-          }]}
-        >
-          <li key="seemore">
-            <Button
-              className="seemore"
-              onClick={this.handleSeeMore}
-              bsStyle="primary"
-            >
-              See More
-            </Button>
-          </li>
-        </FilterBar>
+        <PuzzleFilterBar />
         <div className={css(styles.puzzleContent)}>
           { puzzlesCards }
         </div>
