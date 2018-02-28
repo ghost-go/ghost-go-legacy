@@ -19,15 +19,15 @@ export const sidebarCollpase = createReducer({
   puzzleFilter: { open: false },
   kifuFilter: { open: false },
 }, {
-  TOGGLE_SIDEBAR: state => ({ sidebar: { collpased: !state.sidebar.collpased } }),
-  OPEN_SIDEBAR: () => ({ sidebar: { collpased: false } }),
-  CLOSE_SIDEBAR: () => ({ sidebar: { collpased: true } }),
-  TOGGLE_PUZZLE_FILTER: state => ({ puzzleFilter: { open: !state.puzzleFilter.open } }),
-  OPEN_PUZZLE_FILTER: () => ({ puzzleFilter: { open: true } }),
-  CLOSE_PUZZLE_FILTER: () => ({ puzzleFilter: { open: false } }),
-  TOGGLE_KIFU_FILTER: state => ({ kifuFilter: { open: !state.kifuFilter.open } }),
-  OPEN_KIFU_FILTER: () => ({ kifuFilter: { open: true } }),
-  CLOSE_KIFU_FILTER: () => ({ kifuFilter: { open: false } }),
+  TOGGLE_SIDEBAR: state => ({ ...state, sidebar: { collpased: !state.sidebar.collpased } }),
+  OPEN_SIDEBAR: state => ({ ...state, sidebar: { collpased: false } }),
+  CLOSE_SIDEBAR: state => ({ ...state, sidebar: { collpased: true } }),
+  TOGGLE_PUZZLE_FILTER: state => ({ ...state, puzzleFilter: { open: !state.puzzleFilter.open } }),
+  OPEN_PUZZLE_FILTER: state => ({ ...state, puzzleFilter: { open: true } }),
+  CLOSE_PUZZLE_FILTER: state => ({ ...state, puzzleFilter: { open: false } }),
+  TOGGLE_KIFU_FILTER: state => ({ ...state, kifuFilter: { open: !state.kifuFilter.open } }),
+  OPEN_KIFU_FILTER: state => ({ ...state, kifuFilter: { open: true } }),
+  CLOSE_KIFU_FILTER: state => ({ ...state, kifuFilter: { open: false } }),
 });
 
 const uiReducers = reduceReducers(sidebarCollpase);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'react-bootstrap';
+import { openPuzzleFilter, closePuzzleFilter, togglePuzzleFilter } from '../actions/Actions';
 
 const ListItem = props => (
   <li className={`tag ${props.active ? 'active' : ''}`}>
@@ -26,6 +27,7 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 export default class PuzzleFilterBar extends Component {
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     tags: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
@@ -33,6 +35,11 @@ export default class PuzzleFilterBar extends Component {
     })).isRequired,
     rangeFilter: PropTypes.shape({
       text: PropTypes.string,
+    }).isRequired,
+    ui: PropTypes.shape({
+      puzzleFilter: PropTypes.shape({
+        open: PropTypes.bool.isRequired,
+      }),
     }).isRequired,
     tagFilter: PropTypes.string.isRequired,
   }
@@ -48,28 +55,38 @@ export default class PuzzleFilterBar extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  state = {
-    filterOpen: false,
-  }
-
   handleToggle() {
-    this.setState({ filterOpen: !this.state.filterOpen });
+    this.props.dispatch(togglePuzzleFilter());
   }
 
   handleClick(fetchData, filter, val) {
-    this.setState({ filterOpen: false });
+    this.props.dispatch(openPuzzleFilter());
     fetchData(filter, val);
   }
 
   render() {
     return (
       <div className="page-nav">
-        <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.state.filterOpen} onToggle={this.handleToggle}>
+        <Dropdown
+          id="filterMenu"
+          title="filter-menu"
+          className="filter"
+          // open={this.props.ui.puzzleFilter.open}
+          open
+          onToggle={this.handleToggle}
+        >
           <Dropdown.Toggle>
             <i className="fa fa-filter" />
           </Dropdown.Toggle>
           <Dropdown.Menu className="super-colors">
-            <div key="level">
+            <ul>
+              <li>aaa</li>
+              <li>aaa</li>
+              <li>aaa</li>
+              <li>aaa</li>
+              <li>aaa</li>
+            </ul>
+            {/* <div key="level">
               <div className="popover-title">Level</div>
               <div className="popover-content">
                 <ul className="tags">
@@ -89,7 +106,7 @@ export default class PuzzleFilterBar extends Component {
                   { this.props.tags.map(tag => (<ListItem key={tag.name} tag={tag.name} />)) }
                 </ul>
               </div>
-            </div>
+            </div> */}
           </Dropdown.Menu>
         </Dropdown>
         <ul className="page-subnav">
