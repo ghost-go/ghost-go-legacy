@@ -2,17 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'react-bootstrap';
-import { openPuzzleFilter, closePuzzleFilter, togglePuzzleFilter } from '../actions/Actions';
-
-const ListItem = props => (
-  <li className={`tag ${props.active ? 'active' : ''}`}>
-    <a tabIndex={0} onKeyPress={() => {}} role="button">{props.tag}</a>
-  </li>
-);
-ListItem.propTypes = {
-  tag: PropTypes.string.isRequired,
-  active: PropTypes.bool.isRequired,
-};
+import { openPuzzleFilter, togglePuzzleFilter, setTagFilter, setRangeFilter } from '../actions/Actions';
 
 function mapStateToProps(state) {
   return {
@@ -20,6 +10,7 @@ function mapStateToProps(state) {
     rangeFilter: state.rangeFilter,
     tagFilter: state.tagFilter,
     tags: state.tags.data,
+    ranges: state.ranges,
     ui: state.ui,
   };
 }
@@ -33,6 +24,7 @@ export default class PuzzleFilterBar extends Component {
       name: PropTypes.string.isRequired,
       tagging_count: PropTypes.number.isRequired,
     })).isRequired,
+    ranges: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     rangeFilter: PropTypes.shape({
       text: PropTypes.string,
     }).isRequired,
@@ -42,10 +34,6 @@ export default class PuzzleFilterBar extends Component {
       }),
     }).isRequired,
     tagFilter: PropTypes.string.isRequired,
-  }
-
-  static defaultProps = {
-    children: null,
   }
 
   constructor(props) {
@@ -65,6 +53,8 @@ export default class PuzzleFilterBar extends Component {
   }
 
   render() {
+    const { tags, ranges } = this.props;
+
     return (
       <div className="page-nav">
         <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.props.ui.puzzleFilter.open} onToggle={this.handleToggle}>
@@ -76,20 +66,44 @@ export default class PuzzleFilterBar extends Component {
               <div className="popover-title">Level</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <ListItem key="all" tag="all" />
-                  <ListItem key="18k-10k" tag="18k-10k" />
-                  <ListItem key="9k-5k" tag="9k-5k" />
-                  <ListItem key="4k-1k" tag="4k-1k" />
-                  <ListItem key="1d-3d" tag="1d-3d" />
-                  <ListItem key="4d-6d" tag="4d-6d" />
+                  {
+                    ranges.map(level => (
+                      <li className={`tag ${this.props.rangeFilter.text === level ? 'active' : ''}`}>
+                        <a onClick={() => { this.props.dispatch(setRangeFilter(level)); }} tabIndex={0} onKeyPress={() => {}} role="button">{level}</a>
+                      </li>
+                    ))
+                  }
                 </ul>
               </div>
             </div>
             <div key="tag">
-              <div className="popover-title">Level</div>
+              <div className="popover-title">Tags</div>
               <div className="popover-content">
                 <ul className="tags">
-                  { this.props.tags.map(tag => (<ListItem key={tag.name} tag={tag.name} />)) }
+                  <li key="tag-all" className={`tag ${this.props.tagFilter === 'all' ? 'active' : ''}`}>
+                    <a
+                      onClick={() => { this.props.dispatch(setTagFilter('all')); }}
+                      tabIndex={0}
+                      onKeyPress={() => {}}
+                      role="button"
+                    >
+                      all
+                    </a>
+                  </li>
+                  {
+                    tags.map(tag => (
+                      <li key={tag.id} className={`tag ${this.props.tagFilter === tag.name ? 'active' : ''}`}>
+                        <a
+                          onClick={() => { this.props.dispatch(setTagFilter(tag.name)); }}
+                          tabIndex={0}
+                          onKeyPress={() => {}}
+                          role="button"
+                        >
+                          {tag.name}
+                        </a>
+                      </li>
+                    ))
+                }
                 </ul>
               </div>
             </div>

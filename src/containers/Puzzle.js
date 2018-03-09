@@ -13,7 +13,6 @@ import Board from '../eboard/Board';
 import {
   fetchPuzzle,
   fetchPuzzleNext,
-  fetchAiAnswers,
 } from '../actions/FetchActions';
 import { postPuzzleRecord } from '../actions/PostActions';
 import {
@@ -135,7 +134,6 @@ class Puzzle extends Component {
     this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleAiAnswers = this.handleAiAnswers.bind(this);
     this.setCurrentMode = this.setCurrentMode.bind(this);
     this.setCurrentAnswerId = this.setCurrentAnswerId.bind(this);
     this.resetSteps = this.resetSteps.bind(this);

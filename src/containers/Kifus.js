@@ -9,7 +9,7 @@ import { StyleSheet, css } from 'aphrodite';
 
 import { fetchKifus, fetchTopPlayers } from '../actions/FetchActions';
 import { setKifuFilter, setToolbarHidden } from '../actions/Actions';
-import FilterBar from '../components/FilterBar';
+import KifuFilterBar from '../components/KifuFilterBar';
 
 const styles = StyleSheet.create({
   loading: {
@@ -151,7 +151,7 @@ class Kifus extends Component {
     }
     return (
       <div>
-        <FilterBar
+        <KifuFilterBar
           data={[{
             name: 'Player',
             tags: ['all', ...players.data.map(player => player.en_name)],

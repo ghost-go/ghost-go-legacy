@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions';
 import { fetchDashboard, fetchScoreboard } from '../actions/FetchActions';
-import FilterBar from '../components/FilterBar';
+// import FilterBar from '../components/FilterBar';
 import AuthService from '../common/AuthService';
 
 class Dashboard extends Component {
@@ -112,7 +112,7 @@ class Dashboard extends Component {
     if (last7daysList.length === 0) { last7daysList = <div>No Data</div>; }
     return (
       <div>
-        <FilterBar
+        {/* <FilterBar
           data={[{
             name: 'Date Range',
             tags: ['today', 'yesterday', 'last7days', 'last30days', 'all'],
@@ -126,7 +126,7 @@ class Dashboard extends Component {
             filterVal: userRangeFilter,
             handleSeeMore: this.handleSeeMore,
           }]}
-        />
+        /> */}
         {
           !AuthService.loggedIn() ? <div>You must login to access this page</div> :
           <Row style={{ marginTop: '40px' }}>

@@ -8,7 +8,7 @@ import { StyleSheet, css } from 'aphrodite';
 import { fetchPuzzleRecords } from '../actions/FetchActions';
 import { setRecordTypeFilter } from '../actions/Actions';
 import RecordList from '../components/RecordList';
-import FilterBar from '../components/FilterBar';
+// import FilterBar from '../components/FilterBar';
 import AuthService from '../common/AuthService';
 
 const styles = StyleSheet.create({
@@ -156,7 +156,7 @@ class History extends Component {
     }
     return (
       <div>
-        <FilterBar
+        {/* <FilterBar
           data={[{
             name: 'Record Type',
             tags: ['all', 'right', 'wrong'],
@@ -164,7 +164,7 @@ class History extends Component {
             filterVal: recordTypeFilter,
             handleSeeMore: this.handleSeeMore,
           }]}
-        />
+        /> */}
         <div className={css(styles.historyContainer)}>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>

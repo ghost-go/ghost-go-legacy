@@ -82,16 +82,6 @@ function setObjectFilter(state, action) {
   return updateObject(state, action.payload);
 }
 
-function setRangeFilter(state, action) {
-  let text;
-  if (action.payload.start === '18k' && action.payload.end === '9d') {
-    text = 'all';
-  } else {
-    text = `${action.payload.start}-${action.payload.end}`;
-  }
-  return updateObject(state, { ...action.payload, text });
-}
-
 function setPracticePuzzleId(state, action) {
   return action.payload;
 }
@@ -199,8 +189,7 @@ export const kifu = buildFetchReducer({
 }, 'KIFU');
 
 export const topPlayers = buildFetchReducer({}, 'TOP_PLAYERS');
-export const puzzleFilter = createReducer({ start: '18k', end: '9d' }, { SET_PUZZLE_FILTER: setObjectFilter });
-export const rangeFilter = createReducer({ start: '18k', end: '9d', text: 'all' }, { SET_RANGE_FILTER: setRangeFilter });
+export const rangeFilter = createReducer('all', { SET_RANGE_FILTER: setPlainTextFilter });
 export const kifuFilter = createReducer('all', { SET_KIFU_FILTER: setPlainTextFilter });
 export const tagFilter = createReducer('all', { SET_TAG_FILTER: setPlainTextFilter });
 export const dateRangeFilter = createReducer('last7days', { SET_DATE_RANGE_FILTER: setPlainTextFilter });
@@ -215,7 +204,7 @@ export const boardStates = createReducer({
   turn: 'B-W',
   clear: false,
 }, { SET_BOARD_STATES: setObjectFilter });
-
+export const ranges = createReducer(['all', '18k-10k', '9k-5k', '4k-1k', '1d-3d', '4d-6d'], {});
 export const practicePuzzleId = createReducer(
   null,
   { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
