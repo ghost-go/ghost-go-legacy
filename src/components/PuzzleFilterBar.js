@@ -139,7 +139,7 @@ export default class PuzzleFilterBar extends Component {
         <ul className="page-subnav">
           <li><a title={`Level: ${this.props.rangeFilter}`}>{`Level: ${this.props.rangeFilter}`}</a></li>
           <li><a title={`Tags: ${this.props.tagFilter}`}>{`Tags: ${this.props.tagFilter}`}</a></li>
-          <li><Button onClick={() => { this.handleSeeMore() }} bsStyle="primary">See More</Button></li>
+          <li><Button className="seemore" onClick={() => { this.handleSeeMore(); }} bsStyle="primary">See More</Button></li>
         </ul>
       </div>
     );
