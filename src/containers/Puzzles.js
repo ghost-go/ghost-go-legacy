@@ -39,10 +39,6 @@ export default class Puzzles extends Component {
   static propTypes = {
     tags: PropTypes.shape({}).isRequired,
     puzzles: PropTypes.shape({}).isRequired,
-    rangeFilter: PropTypes.shape({
-      text: PropTypes.string,
-    }).isRequired,
-    tagFilter: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     location: PropTypes.shape({
       query: PropTypes.shape({
@@ -50,18 +46,6 @@ export default class Puzzles extends Component {
         rank: PropTypes.string,
       }),
     }).isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-    this.handleSeeMore = this.handleSeeMore.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
-  }
-
-  state = {
-    // tipsOpen: false,
-    // isLoading: false,
-    filterOpen: false,
   }
 
   componentWillMount() {
@@ -74,45 +58,11 @@ export default class Puzzles extends Component {
     this.props.dispatch(setToolbarHidden(true));
   }
 
-  componentDidMount() {
-  }
-
-  handleSeeMore(filter, val) {
-    let range = [];
-    const { dispatch, rangeFilter, tagFilter } = this.props;
-    this.setState({ filterOpen: false });
-    if (filter === 'rangeFilter') {
-      if (val === 'all' || val === null) {
-        range = ['18k', '9d'];
-      } else {
-        range = val.split('-');
-      }
-      dispatch(setPuzzleFilter({ start: range[0], end: range[1] }));
-      dispatch(setRangeFilter({ start: range[0], end: range[1] }));
-    } else if (filter === 'tagFilter') {
-      const newValue = val || 'all';
-      dispatch(setTagFilter(newValue));
-    }
-
-    dispatch(fetchPuzzles({
-      rank: filter === 'rangeFilter' ? val : rangeFilter.text,
-      tags: filter === 'tagFilter' ? val : tagFilter,
-    }));
-  }
-
-  // handleTips() {
-  //   this.setState({ tipsOpen: true });
-  // }
-
-  handleToggle() {
-    this.setState({ filterOpen: !this.state.filterOpen });
-  }
-
   render() {
     const { puzzles, tags } = this.props;
     if (_.isNil(puzzles) || _.isNil(tags) || _.isNil(tags.data)) return null;
-
     let puzzlesCards = [];
+
     if (!puzzles.isFetching && puzzles.data != null && puzzles.data.puzzles.length > 0) {
       puzzles.data.puzzles.forEach((i) => {
         const puzzleCard = (

@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dropdown } from 'react-bootstrap';
-import { openPuzzleFilter, togglePuzzleFilter, setTagFilter, setRangeFilter } from '../actions/Actions';
+import { Dropdown, Button } from 'react-bootstrap';
+import {
+  closePuzzleFilter,
+  togglePuzzleFilter,
+  setTagFilter,
+  setRangeFilter,
+} from '../actions/Actions';
+import { fetchPuzzles } from '../actions/FetchActions';
 
 function mapStateToProps(state) {
   return {
@@ -25,9 +31,7 @@ export default class PuzzleFilterBar extends Component {
       tagging_count: PropTypes.number.isRequired,
     })).isRequired,
     ranges: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    rangeFilter: PropTypes.shape({
-      text: PropTypes.string,
-    }).isRequired,
+    rangeFilter: PropTypes.string.isRequired,
     ui: PropTypes.shape({
       puzzleFilter: PropTypes.shape({
         open: PropTypes.bool.isRequired,
@@ -40,16 +44,39 @@ export default class PuzzleFilterBar extends Component {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   handleToggle() {
     this.props.dispatch(togglePuzzleFilter());
   }
 
-  handleClick(fetchData, filter, val) {
-    this.props.dispatch(openPuzzleFilter());
-    fetchData(filter, val);
+  handleTagChange(tag) {
+    const { dispatch, rangeFilter } = this.props;
+    dispatch(closePuzzleFilter());
+    dispatch(setTagFilter(tag));
+    dispatch(fetchPuzzles({
+      rank: rangeFilter,
+      tags: tag,
+    }));
+  }
+
+  handleRangeChange(range) {
+    const { dispatch, tagFilter } = this.props;
+    dispatch(closePuzzleFilter());
+    dispatch(setRangeFilter(range));
+    dispatch(fetchPuzzles({
+      rank: range,
+      tags: tagFilter,
+    }));
+  }
+
+  handleSeeMore() {
+    const { dispatch, rangeFilter, tagFilter } = this.props;
+    dispatch(closePuzzleFilter());
+    dispatch(fetchPuzzles({
+      rank: rangeFilter,
+      tags: tagFilter,
+    }));
   }
 
   render() {
@@ -68,8 +95,8 @@ export default class PuzzleFilterBar extends Component {
                 <ul className="tags">
                   {
                     ranges.map(level => (
-                      <li className={`tag ${this.props.rangeFilter.text === level ? 'active' : ''}`}>
-                        <a onClick={() => { this.props.dispatch(setRangeFilter(level)); }} tabIndex={0} onKeyPress={() => {}} role="button">{level}</a>
+                      <li className={`tag ${this.props.rangeFilter === level ? 'active' : ''}`}>
+                        <a onClick={() => { this.handleRangeChange(level); }} tabIndex={0} onKeyPress={() => {}} role="button">{level}</a>
                       </li>
                     ))
                   }
@@ -82,7 +109,7 @@ export default class PuzzleFilterBar extends Component {
                 <ul className="tags">
                   <li key="tag-all" className={`tag ${this.props.tagFilter === 'all' ? 'active' : ''}`}>
                     <a
-                      onClick={() => { this.props.dispatch(setTagFilter('all')); }}
+                      onClick={() => { this.handleTagChange('all'); }}
                       tabIndex={0}
                       onKeyPress={() => {}}
                       role="button"
@@ -94,7 +121,7 @@ export default class PuzzleFilterBar extends Component {
                     tags.map(tag => (
                       <li key={tag.id} className={`tag ${this.props.tagFilter === tag.name ? 'active' : ''}`}>
                         <a
-                          onClick={() => { this.props.dispatch(setTagFilter(tag.name)); }}
+                          onClick={() => { this.handleTagChange(tag.name); }}
                           tabIndex={0}
                           onKeyPress={() => {}}
                           role="button"
@@ -112,6 +139,7 @@ export default class PuzzleFilterBar extends Component {
         <ul className="page-subnav">
           <li><a title={`Level: ${this.props.rangeFilter}`}>{`Level: ${this.props.rangeFilter}`}</a></li>
           <li><a title={`Tags: ${this.props.tagFilter}`}>{`Tags: ${this.props.tagFilter}`}</a></li>
+          <li><Button onClick={() => { this.handleSeeMore() }} bsStyle="primary">See More</Button></li>
         </ul>
       </div>
     );
