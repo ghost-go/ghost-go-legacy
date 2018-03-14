@@ -1,32 +1,41 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
+// import { StyleSheet, css } from 'aphrodite';
 import Remove from 'material-ui/svg-icons/content/remove';
 
 import RankList from './RankList';
 
-const styles = StyleSheet.create({
+import { setRangeFilter } from '../actions/Actions';
 
-  rangeContainer: {
-    alignItems: 'center',
-  },
+// const styles = StyleSheet.create({
 
-  remove: {
-    height: '50px',
-    margin: '0 15px',
-  },
+//   rangeContainer: {
+//     alignItems: 'center',
+//   },
 
-  customWidth: {
-    width: 60,
-  },
-});
+//   remove: {
+//     height: '50px',
+//     margin: '0 15px',
+//   },
 
+//   customWidth: {
+//     width: 60,
+//   },
+// });
+
+function mapStateToProps(state) {
+  return {
+    rangeFilter: state.rangeFilter,
+  };
+}
+
+@connect(mapStateToProps)
 export default class RankRange extends Component {
   static propTypes = {
-    rankRange: PropTypes.shape({
-      start: PropTypes.string.isRequired,
-      end: PropTypes.string.isRequired,
-    }).isRequired,
+    // rankRange: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    rangeFilter: PropTypes.string.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
   }
 
@@ -38,26 +47,36 @@ export default class RankRange extends Component {
   }
 
   handleRangeStart(rank) {
-    this.props.handleRangeChange({ start: rank });
+    const rangeEnd = this.props.rangeFilter === 'all' ? '9d' : this.props.rangeFilter.split('-')[1];
+    this.props.dispatch(setRangeFilter(`${rank}-${rangeEnd}`))
   }
 
   handleRangeEnd(rank) {
-    this.props.handleRangeChange({ end: rank });
+    const rangeStart = this.props.rangeFilter === 'all' ? '18k' : this.props.rangeFilter.split('-')[0];
+    this.props.dispatch(setRangeFilter(`${rangeStart}-${rank}`))
   }
 
   render() {
+    const { rangeFilter } = this.props;
+    let rangeStart;
+    let rangeEnd;
+    if (rangeFilter === 'all') {
+      rangeStart = '18k';
+      rangeEnd = '9d';
+    } else {
+      [rangeStart, rangeEnd] = rangeFilter.split('-');
+    }
     return (
-      <div className={css(styles.rangeContainer)}>
+      <div>
         <RankList
+          rank={rangeStart}
           floatingLabelText="FROM"
-          rank={this.props.rankRange.start}
           onChange={this.handleRangeStart}
         />
-        <Remove className={css(styles.remove)} />
+        <Remove />
         <RankList
+          rank={rangeEnd}
           floatingLabelText="TO"
-          inlineStyle={styles.customWidth}
-          rank={this.props.rankRange.end}
           onChange={this.handleRangeEnd}
         />
       </div>
