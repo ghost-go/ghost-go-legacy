@@ -41,7 +41,6 @@ export default class PuzzlePanel extends Component {
     setCurrentMode: PropTypes.func.isRequired,
     currentMode: PropTypes.string.isRequired,
     currentAnswerId: PropTypes.number,
-    showNext: PropTypes.bool.isRequired,
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
   }
@@ -54,17 +53,17 @@ export default class PuzzlePanel extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      // answersExpanded: true,
-      favorite: this.props.puzzle.is_favorite,
-    };
+    // this.state = {
+    //   // answersExpanded: true,
+    //   favorite: this.props.puzzle.is_favorite,
+    // };
 
     this.handleResearchMode = this.handleResearchMode.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ favorite: nextProps.puzzle.is_favorite });
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({ favorite: nextProps.puzzle.is_favorite });
+  // }
 
   handleResearchMode() {
     if (this.props.currentMode === 'answer') {
@@ -74,68 +73,58 @@ export default class PuzzlePanel extends Component {
     }
   }
 
-  handleFavorite(id) {
-    const { auth } = this.props;
-    const profile = AuthService.getProfile();
-    if (AuthService.loggedIn()) {
-      this.setState({ favorite: !this.state.favorite });
-      this.props.dispatch(postFavorite({
-        likable_id: id,
-        likable_type: 'Puzzle',
-        value: !this.state.favorite,
-        scope: 'favorite',
-        user_id: profile.user_id,
-      }));
-    } else {
-      auth.login();
-    }
-  }
+  // handleFavorite(id) {
+  //   const { auth } = this.props;
+  //   const profile = AuthService.getProfile();
+  //   if (AuthService.loggedIn()) {
+  //     this.setState({ favorite: !this.state.favorite });
+  //     this.props.dispatch(postFavorite({
+  //       likable_id: id,
+  //       likable_type: 'Puzzle',
+  //       value: !this.state.favorite,
+  //       scope: 'favorite',
+  //       user_id: profile.user_id,
+  //     }));
+  //   } else {
+  //     auth.login();
+  //   }
+  // }
 
-  handleRatingChange(rate) {
-    const { auth } = this.props;
-    const profile = AuthService.getProfile();
-    if (AuthService.loggedIn()) {
-      const { id } = this.props.params;
-      this.props.dispatch(postRating({
-        ratable_id: id,
-        ratable_type: 'Puzzle',
-        score: rate,
-        user_id: profile.user_id,
-      })).then((promise) => {
-        if (promise.type === 'POST_RATING_SUCCESS') {
-          this.setState({
-            // open: true,
-            // score: rate,
-            // ratingInfo: promise.payload.data.message || 'Thanks for you rating!',
-          });
-        }
-      });
-    } else {
-      auth.login();
-    }
-  }
+  // handleRatingChange(rate) {
+  //   const { auth } = this.props;
+  //   const profile = AuthService.getProfile();
+  //   if (AuthService.loggedIn()) {
+  //     const { id } = this.props.params;
+  //     this.props.dispatch(postRating({
+  //       ratable_id: id,
+  //       ratable_type: 'Puzzle',
+  //       score: rate,
+  //       user_id: profile.user_id,
+  //     })).then((promise) => {
+  //       if (promise.type === 'POST_RATING_SUCCESS') {
+  //         this.setState({
+  //           // open: true,
+  //           // score: rate,
+  //           // ratingInfo: promise.payload.data.message || 'Thanks for you rating!',
+  //         });
+  //       }
+  //     });
+  //   } else {
+  //     auth.login();
+  //   }
+  // }
 
   render() {
     const { puzzle } = this.props;
     if (puzzle === undefined) return null;
 
-    const shareUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-    const title = `P-${puzzle.id}`;
-    const exampleImage = puzzle.preview_img_r1.x400.url;
+    // const shareUrl = `
+    // ${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+    // const title = `P-${puzzle.id}`;
+    // const exampleImage = puzzle.preview_img_r1.x400.url;
 
     const rightAnswers = [];
     const wrongAnswers = [];
-    let nextPanel;
-    let nextBtn;
-    if (this.props.showNext === true) {
-      nextBtn = <Button style={{ marginRight: '10px' }} onClick={this.props.handleNext} bsStyle="info"> Next Tsumego </Button>;
-      nextPanel = (
-        <RankRange
-          rankRange={this.props.rangeFilter}
-          handleRangeChange={this.props.handleRangeChange}
-        />
-      );
-    }
     if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
       puzzle.right_answers.forEach((i) => {
         const answer = (
@@ -202,10 +191,19 @@ export default class PuzzlePanel extends Component {
           >
             Reset
           </Button>
-          { nextBtn }
+          <Button
+            style={{ marginRight: '10px' }}
+            onClick={this.props.handleNext}
+            bsStyle="info"
+          >
+            Next Tsumego
+          </Button>;
         </div>
         <div>
-          { nextPanel }
+          <RankRange
+            rankRange={this.props.rangeFilter}
+            handleRangeChange={this.props.handleRangeChange}
+          />
         </div>
         <div className="clearfix" />
         <Toggle

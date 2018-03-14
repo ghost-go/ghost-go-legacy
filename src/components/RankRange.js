@@ -73,7 +73,7 @@ export default class RankRange extends Component {
           floatingLabelText="FROM"
           onChange={this.handleRangeStart}
         />
-        <Remove />
+        <Remove style={{ height: '50px', margin: '0 10px' }} />
         <RankList
           rank={rangeEnd}
           floatingLabelText="TO"

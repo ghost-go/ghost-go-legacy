@@ -253,9 +253,8 @@ class Puzzle extends Component {
   }
 
   handleNext() {
-    const range = `${this.props.rangeFilter.start}-${this.props.rangeFilter.end}`;
-    this.props.dispatch(fetchPuzzleNext({ range })).then(() => {
-      const nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${range}`;
+    this.props.dispatch(fetchPuzzleNext({ range: this.props.rangeFilter })).then(() => {
+      const nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${this.props.rangeFilter}`;
       this.props.dispatch(push(nextUrl));
       this.setCurrentMode('answer');
       this.handleReset();
