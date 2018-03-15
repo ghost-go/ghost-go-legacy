@@ -29,6 +29,11 @@ class Kifu extends Component {
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
     }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -47,7 +52,7 @@ class Kifu extends Component {
   }
 
   componentWillMount() {
-    const { id } = this.props.params;
+    const { id } = this.props.match.params;
     this.props.dispatch(fetchKifu({ id }));
     this.props.dispatch(setToolbarHidden(false));
   }
