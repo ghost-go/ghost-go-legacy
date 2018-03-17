@@ -26,6 +26,7 @@
     "no-plusplus": ["error", {
       "allowForLoopAfterthoughts": true
     }],
+    "max-len": [1],
     "no-debugger": [1],
     "no-unused-vars": [1],
     "new-cap": [1],

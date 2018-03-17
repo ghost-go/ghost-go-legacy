@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import Toggle from 'material-ui/Toggle';
 import { StyleSheet, css } from 'aphrodite';
 import { Button } from 'react-bootstrap';
-import { ShareButtons, generateShareIcon } from 'react-share';
 
 import AnswerBar from '../components/AnswerBar';
 import RankRange from '../components/RankRange';
-import { postRating, postFavorite } from '../actions/PostActions';
-import AuthService from '../common/AuthService';
 
 const styles = StyleSheet.create({
 
@@ -28,11 +25,6 @@ export default class PuzzlePanel extends Component {
     }).isRequired,
     rangeFilter: PropTypes.shape({}).isRequired,
     className: PropTypes.string,
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-    dispatch: PropTypes.func.isRequired,
-    auth: PropTypes.shape({}).isRequired,
     addSteps: PropTypes.func.isRequired,
     resetSteps: PropTypes.func.isRequired,
     handleReset: PropTypes.func.isRequired,

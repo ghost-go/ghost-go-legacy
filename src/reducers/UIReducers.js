@@ -18,6 +18,7 @@ export const sidebarCollpase = createReducer({
   sidebar: { collpased: false },
   puzzleFilter: { open: false },
   kifuFilter: { open: false },
+  dashboardFilter: { open: false },
 }, {
   TOGGLE_SIDEBAR: state => ({ ...state, sidebar: { collpased: !state.sidebar.collpased } }),
   OPEN_SIDEBAR: state => ({ ...state, sidebar: { collpased: false } }),
@@ -28,6 +29,10 @@ export const sidebarCollpase = createReducer({
   TOGGLE_KIFU_FILTER: state => ({ ...state, kifuFilter: { open: !state.kifuFilter.open } }),
   OPEN_KIFU_FILTER: state => ({ ...state, kifuFilter: { open: true } }),
   CLOSE_KIFU_FILTER: state => ({ ...state, kifuFilter: { open: false } }),
+  TOGGLE_DASHBOARD_FILTER: state => (
+    { ...state, dashboardFilter: { open: !state.dashboardFilter.open } }),
+  OPEN_DASHBOARD_FILTER: state => ({ ...state, dashboardFilter: { open: true } }),
+  CLOSE_DASHBOARD_FILTER: state => ({ ...state, dashboardFilter: { open: false } }),
 });
 
 const uiReducers = reduceReducers(sidebarCollpase);
