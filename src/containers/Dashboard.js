@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 
-import { setDateRangeFilter, setUserRangeFilter } from '../actions/Actions';
-import { fetchDashboard, fetchScoreboard } from '../actions/FetchActions';
+import DashboardFilterBar from '../components/DashboardFilterBar';
+import { fetchDashboard } from '../actions/FetchActions';
 import AuthService from '../common/AuthService';
 
 class Dashboard extends Component {
@@ -45,6 +45,7 @@ class Dashboard extends Component {
 
     return (
       <div>
+        <DashboardFilterBar />
         <Row style={{ marginTop: '40px' }}>
           <Col xs={8} md={4}>
             <div className="tile-box tile-box-alt bg-blue">

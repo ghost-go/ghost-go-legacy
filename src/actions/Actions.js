@@ -32,4 +32,7 @@ export const togglePuzzleFilter = createAction('TOGGLE_PUZZLE_FILTER');
 export const openKifuFilter = createAction('OPEN_KIFU_FILTER');
 export const closeKifuFilter = createAction('CLOSE_KIFU_FILTER');
 export const toggleKifuFilter = createAction('TOGGLE_KIFU_FILTER');
+export const openDashboardFilter = createAction('OPEN_DASHBOARD_FILTER');
+export const closeDashboardFilter = createAction('CLOSE_DASHBOARD_FILTER');
+export const toggleDashboardFilter = createAction('TOGGLE_DASHBOARD_FILTER');
 export const setTheme = createAction('SET_THEME');

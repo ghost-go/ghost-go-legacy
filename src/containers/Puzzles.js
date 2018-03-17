@@ -3,17 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import { Button } from 'react-bootstrap';
 import { StyleSheet, css } from 'aphrodite';
 
 import PuzzleFilterBar from '../components/PuzzleFilterBar';
 import { fetchPuzzles, fetchTags } from '../actions/FetchActions';
-import {
-  setPuzzleFilter,
-  setRangeFilter,
-  setTagFilter,
-  setToolbarHidden,
-} from '../actions/Actions';
+import { setToolbarHidden } from '../actions/Actions';
 
 const styles = StyleSheet.create({
   loading: {

@@ -1,90 +1,77 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dropdown, Button } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import {
-  closePuzzleFilter,
-  togglePuzzleFilter,
-  setTagFilter,
-  setRangeFilter,
+  closeDashboardFilter,
+  toggleDashboardFilter,
+  setDateRangeFilter,
+  setUserRangeFilter,
 } from '../actions/Actions';
-import { fetchPuzzles } from '../actions/FetchActions';
+import { fetchDashboard } from '../actions/FetchActions';
+import AuthService from '../common/AuthService';
 
 function mapStateToProps(state) {
   return {
-    puzzles: state.puzzles,
-    rangeFilter: state.rangeFilter,
-    tagFilter: state.tagFilter,
-    tags: state.tags.data,
-    ranges: state.ranges,
+    dateRangeFilter: state.dateRangeFilter,
+    userRangeFilter: state.userRangeFilter,
     ui: state.ui,
   };
 }
 
 @connect(mapStateToProps)
-export default class PuzzleFilterBar extends Component {
+export default class DashboardFilterBar extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      tagging_count: PropTypes.number.isRequired,
-    })).isRequired,
-    ranges: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    rangeFilter: PropTypes.string.isRequired,
+    dateRangeFilter: PropTypes.string.isRequired,
+    userRangeFilter: PropTypes.string.isRequired,
     ui: PropTypes.shape({
-      puzzleFilter: PropTypes.shape({
+      dashboardFilter: PropTypes.shape({
         open: PropTypes.bool.isRequired,
       }),
     }).isRequired,
-    tagFilter: PropTypes.string.isRequired,
   }
 
   constructor(props) {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleUserChange = this.handleUserChange.bind(this);
   }
 
   handleToggle() {
-    this.props.dispatch(togglePuzzleFilter());
+    this.props.dispatch(toggleDashboardFilter());
   }
 
-  handleTagChange(tag) {
-    const { dispatch, rangeFilter } = this.props;
-    dispatch(closePuzzleFilter());
-    dispatch(setTagFilter(tag));
-    dispatch(fetchPuzzles({
-      rank: rangeFilter,
-      tags: tag,
+  handleUserChange(userRange) {
+    const { dispatch, dateRangeFilter } = this.props;
+    const profile = AuthService.getProfile();
+    dispatch(closeDashboardFilter());
+    dispatch(setUserRangeFilter(userRange));
+    dispatch(fetchDashboard({
+      date_range: dateRangeFilter,
+      user_range: userRange,
+      user_id: profile.user_id,
     }));
   }
 
-  handleRangeChange(range) {
-    const { dispatch, tagFilter } = this.props;
-    dispatch(closePuzzleFilter());
-    dispatch(setRangeFilter(range));
-    dispatch(fetchPuzzles({
-      rank: range,
-      tags: tagFilter,
-    }));
-  }
-
-  handleSeeMore() {
-    const { dispatch, rangeFilter, tagFilter } = this.props;
-    dispatch(closePuzzleFilter());
-    dispatch(fetchPuzzles({
-      rank: rangeFilter,
-      tags: tagFilter,
+  handleDateChange(dateRange) {
+    const { dispatch, userRangeFilter } = this.props;
+    const profile = AuthService.getProfile();
+    dispatch(closeDashboardFilter());
+    dispatch(setDateRangeFilter(dateRange));
+    dispatch(fetchDashboard({
+      date_range: dateRange,
+      user_range: userRangeFilter,
+      user_id: profile.user_id,
     }));
   }
 
   render() {
-    const { tags, ranges } = this.props;
-
     return (
       <div className="page-nav">
-        <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.props.ui.puzzleFilter.open} onToggle={this.handleToggle}>
+        <Dropdown id="filterMenu" title="filter-menu" className="filter" open={this.props.ui.dashboardFilter.open} onToggle={this.handleToggle}>
           <Dropdown.Toggle>
             <i className="fa fa-filter" />
           </Dropdown.Toggle>
@@ -94,9 +81,9 @@ export default class PuzzleFilterBar extends Component {
               <div className="popover-content">
                 <ul className="tags">
                   {
-                    ranges.map(level => (
-                      <li className={`tag ${this.props.rangeFilter === level ? 'active' : ''}`}>
-                        <a onClick={() => { this.handleRangeChange(level); }} tabIndex={0} onKeyPress={() => {}} role="button">{level}</a>
+                    ['today', 'yesterday', 'last7days', 'last30days', 'all'].map(range => (
+                      <li className={`tag ${this.props.dateRangeFilter === range ? 'active' : ''}`}>
+                        <a onClick={() => { this.handleDateChange(range); }} tabIndex={0} onKeyPress={() => {}} role="button">{range}</a>
                       </li>
                     ))
                   }
@@ -107,26 +94,16 @@ export default class PuzzleFilterBar extends Component {
               <div className="popover-title">Tags</div>
               <div className="popover-content">
                 <ul className="tags">
-                  <li key="tag-all" className={`tag ${this.props.tagFilter === 'all' ? 'active' : ''}`}>
-                    <a
-                      onClick={() => { this.handleTagChange('all'); }}
-                      tabIndex={0}
-                      onKeyPress={() => {}}
-                      role="button"
-                    >
-                      all
-                    </a>
-                  </li>
                   {
-                    tags.map(tag => (
-                      <li key={tag.id} className={`tag ${this.props.tagFilter === tag.name ? 'active' : ''}`}>
+                    ['onlyme', 'all'].map(range => (
+                      <li key={range} className={`tag ${this.props.userRangeFilter === range ? 'active' : ''}`}>
                         <a
-                          onClick={() => { this.handleTagChange(tag.name); }}
+                          onClick={() => { this.handleUserChange(range); }}
                           tabIndex={0}
                           onKeyPress={() => {}}
                           role="button"
                         >
-                          {tag.name}
+                          {range}
                         </a>
                       </li>
                     ))
@@ -137,9 +114,8 @@ export default class PuzzleFilterBar extends Component {
           </Dropdown.Menu>
         </Dropdown>
         <ul className="page-subnav">
-          <li><a title={`Level: ${this.props.rangeFilter}`}>{`Level: ${this.props.rangeFilter}`}</a></li>
-          <li><a title={`Tags: ${this.props.tagFilter}`}>{`Tags: ${this.props.tagFilter}`}</a></li>
-          <li><Button className="seemore" onClick={() => { this.handleSeeMore(); }} bsStyle="primary">See More</Button></li>
+          <li><a title={`Date Range: ${this.props.dateRangeFilter}`}>{`Date Range: ${this.props.dateRangeFilter}`}</a></li>
+          <li><a title={`Users: ${this.props.userRangeFilter}`}>{`Users: ${this.props.userRangeFilter}`}</a></li>
         </ul>
       </div>
     );
