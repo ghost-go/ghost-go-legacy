@@ -131,11 +131,6 @@ export default class Sidebar extends Component {
                       <li className="divider" />
                       <div className="divider-header">Others</div>
                       <li>
-                        <NavLink activeClassName="active" to="/users">
-                          <i className="fa fa-users" /> <span>Profile</span>
-                        </NavLink>
-                      </li>
-                      <li>
                         <NavLink activeClassName="active" to="/records">
                           <i className="fa fa-history" /> <span>Records</span>
                         </NavLink>
@@ -182,11 +177,6 @@ export default class Sidebar extends Component {
                   { AuthService.loggedIn() ? (
                     <div>
                       <li className="divider" />
-                      <li>
-                        <NavLink activeClassName="active" to="/users">
-                          <i className="fa fa-users" /> <span>Profile</span>
-                        </NavLink>
-                      </li>
                       {/*
                       <li>
                         <Link activeClassName="active" to="/favorites">
