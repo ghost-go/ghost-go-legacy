@@ -8,7 +8,7 @@ import { StyleSheet, css } from 'aphrodite';
 import { fetchPuzzleRecords } from '../actions/FetchActions';
 import { setRecordTypeFilter } from '../actions/Actions';
 import RecordList from '../components/RecordList';
-// import FilterBar from '../components/FilterBar';
+import RecordFilterBar from '../components/RecordFilterBar';
 import AuthService from '../common/AuthService';
 
 const styles = StyleSheet.create({
@@ -86,9 +86,9 @@ class History extends Component {
   }
 
   componentWillMount() {
-    const { query } = this.props.location;
-    this.props.dispatch(setRecordTypeFilter(query.type || 'all'));
-    this.getRecordData(query.page || 1, query.type || 'all');
+    const query = new URLSearchParams(this.props.location);
+    this.props.dispatch(setRecordTypeFilter(query.get('type') || 'all'));
+    this.getRecordData(query.get('page') || 1, query.get('type') || 'all');
   }
 
   getRecordData(page = 1, recordType = 'all') {
@@ -108,28 +108,28 @@ class History extends Component {
   }
 
   handlePageClick(data) {
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location);
     const page = data.selected + 1;
-    this.getRecordData(page, query.type);
-    this.props.dispatch(push(`/records?page=${page}&type=${query.type || 'all'}`));
+    this.getRecordData(page, query.get('type'));
+    this.props.dispatch(push(`/records?page=${page}&type=${query.get('type') || 'all'}`));
   }
 
   handleSeeMore(filter, val) {
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location);
     this.setState({ filterOpen: false });
     this.props.dispatch(setRecordTypeFilter(val));
-    this.getRecordData(query.page, val);
-    this.props.dispatch(push(`/records?page=${query.page || 1}&type=${val}`));
+    this.getRecordData(query.get('page'), val);
+    this.props.dispatch(push(`/records?page=${query.get('page') || 1}&type=${val}`));
   }
 
   render() {
     let recordList;
     let pagination;
     let page = 0;
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location);
     const { records, recordTypeFilter } = this.props;
-    if (query && query.page) {
-      page = parseInt(query.page - 1, 10);
+    if (query && query.get('page')) {
+      page = parseInt(query.get('page') - 1, 10);
     }
     if (records.data !== undefined) {
       recordList = <RecordList recordList={records.data.data} />;
@@ -156,7 +156,7 @@ class History extends Component {
     }
     return (
       <div>
-        {/* <FilterBar
+        <RecordFilterBar
           data={[{
             name: 'Record Type',
             tags: ['all', 'right', 'wrong'],
@@ -164,7 +164,7 @@ class History extends Component {
             filterVal: recordTypeFilter,
             handleSeeMore: this.handleSeeMore,
           }]}
-        /> */}
+        />
         <div className={css(styles.historyContainer)}>
           <div className={css(styles.right)}>
             <div className={css(styles.listContainer)}>
