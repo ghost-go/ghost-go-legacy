@@ -21,7 +21,6 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "next",
-    "react-share": "^2.0.0",
     "react-tap-event-plugin": "^3.0.2",
     "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
