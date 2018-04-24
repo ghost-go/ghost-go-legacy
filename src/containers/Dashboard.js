@@ -6,6 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import DashboardFilterBar from '../components/DashboardFilterBar';
 import { fetchDashboard } from '../actions/FetchActions';
 import AuthService from '../common/AuthService';
+import RecordList from '../components/RecordList';
 
 class Dashboard extends Component {
   static propTypes = {
@@ -42,6 +43,7 @@ class Dashboard extends Component {
   render() {
     const loading = <div><i className="fa fa-spinner fa-pulse fa-fw" /></div>;
     const { dashboard } = this.props;
+    if (!dashboard.data.most_wrong_list) return null;
 
     return (
       <div>
@@ -83,6 +85,20 @@ class Dashboard extends Component {
                 <small>{`take up ${((dashboard.data.wrong * 100) / dashboard.data.total).toFixed(2)}% of all`}</small>
               </div>
             </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={8} md={4}>
+            <b>Most Wrong</b> <a href="/records">View all</a>
+            <RecordList recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
+          </Col>
+          <Col xs={8} md={4}>
+            <b>Favoriates</b> <a href="/favoriates">View all</a>
+            <RecordList recordList={dashboard.data.favorites_list} />
+          </Col>
+          <Col xs={8} md={4}>
+            <b>Recents</b> <a href="/records">View all</a>
+            <RecordList recordList={dashboard.data.recents_list.map(i => i.puzzle)} />
           </Col>
         </Row>
       </div>

@@ -96,7 +96,7 @@ export default class Navigation extends Component {
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
-            AuthService.loggedIn() ? (
+            auth.loggedIn() ? (
               <div>
                 <div className="user-profile dropdown">
                   <a onTouchTap={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
@@ -109,8 +109,8 @@ export default class Navigation extends Component {
                         <div className="user-img"><img src={this.state.profile.picture} alt="" /></div>
                         <div className="user-info">
                           <span>{this.state.profile.nickname}<i>Welcome back!</i></span>
-                          <Link to="/users">
-                            Edit profile
+                          <Link to="/dashboard">
+                            Dashboard
                           </Link>
                           {/*
                           <a href="#" title="">View notifications</a>

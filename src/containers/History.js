@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
-import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
+import { connect } from 'react-redux'; import ReactPaginate from 'react-paginate';
 import { StyleSheet, css } from 'aphrodite';
 
 import { fetchPuzzleRecords } from '../actions/FetchActions';
@@ -61,6 +60,7 @@ const styles = StyleSheet.create({
 
 class History extends Component {
   static propTypes = {
+    auth: PropTypes.instanceOf(AuthService).isRequired,
     location: PropTypes.shape({
       query: PropTypes.shape({}).isRequired,
     }).isRequired,
@@ -92,9 +92,9 @@ class History extends Component {
   }
 
   getRecordData(page = 1, recordType = 'all') {
-    const { dispatch } = this.props;
+    const { dispatch, auth } = this.props;
     const profile = AuthService.getProfile();
-    if (AuthService.loggedIn()) {
+    if (auth.loggedIn()) {
       dispatch(fetchPuzzleRecords({
         page,
         user_id: profile.user_id,
@@ -128,11 +128,12 @@ class History extends Component {
     let page = 0;
     const query = new URLSearchParams(this.props.location);
     const { records, recordTypeFilter } = this.props;
+    if (!records.data) return null;
     if (query && query.get('page')) {
       page = parseInt(query.get('page') - 1, 10);
     }
     if (records.data !== undefined) {
-      recordList = <RecordList recordList={records.data.data} />;
+      recordList = <RecordList recordList={records.data.data.map(i => i.puzzle)} />;
       const pageCount = records.data.total_pages;
       if (pageCount > 1) {
         pagination = (<ReactPaginate
@@ -183,6 +184,7 @@ class History extends Component {
 
 function select(state) {
   return {
+    auth: state.ui.auth,
     records: state.puzzleRecords,
     recordTypeFilter: state.recordTypeFilter,
   };

@@ -32,7 +32,7 @@ function buildFetchData(name = '', api = '') {
 export const fetchKifus = buildFetchData('KIFUS', 'kifus');
 export const fetchPuzzles = buildFetchData('PUZZLES', 'puzzles');
 export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', 'puzzle_records');
-export const fetchDashboard = buildFetchData('DASHBOARD', 'puzzle_records/dashboard');
+export const fetchDashboard = buildFetchData('DASHBOARD', 'dashboard');
 export const fetchPractices = buildFetchData('PRACTICES', 'practices');
 export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', 'practice_templates');
 export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', 'practice_records/:id');

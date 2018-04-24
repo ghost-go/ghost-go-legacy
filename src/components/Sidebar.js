@@ -54,7 +54,7 @@ export default class Sidebar extends Component {
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
-                          AuthService.loggedIn() ? (
+                          auth.loggedIn() ? (
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <img width="45" className="img-rounded" src={this.state.profile.picture} alt="" />
@@ -86,7 +86,7 @@ export default class Sidebar extends Component {
 
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { AuthService.loggedIn() ? (
+                  { auth.loggedIn() ? (
                     <div>
                       <div className="divider-header">Dashboard</div>
                       <li>
@@ -126,7 +126,7 @@ export default class Sidebar extends Component {
                   <li className="divider"></li>
                   */
                   }
-                  { AuthService.loggedIn() ? (
+                  { auth.loggedIn() ? (
                     <div>
                       <li className="divider" />
                       <div className="divider-header">Others</div>
@@ -145,7 +145,7 @@ export default class Sidebar extends Component {
             <div>
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { AuthService.loggedIn() ? (
+                  { auth.loggedIn() ? (
                     <div>
                       <li>
                         <NavLink activeClassName="active" to="/dashboard">
@@ -174,7 +174,7 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  { AuthService.loggedIn() ? (
+                  { auth.loggedIn() ? (
                     <div>
                       <li className="divider" />
                       {/*

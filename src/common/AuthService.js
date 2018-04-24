@@ -22,7 +22,7 @@ export default class AuthService extends EventEmitter {
   doAuthentication(authResult) {
     console.log(authResult)
     if (!authResult.accessToken) return;
-    AuthService.setToken(authResult.accessToken);
+    this.setToken(authResult.accessToken);
     // Async loads the user profile data
     this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
       if (error) {
@@ -40,9 +40,9 @@ export default class AuthService extends EventEmitter {
     this.lock.show();
   }
 
-  static loggedIn() {
+  loggedIn() {
     // Checks if there is a saved token and it's still valid
-    return !!AuthService.getToken();
+    return !!this.getToken();
   }
 
   setProfile(profile) {
@@ -58,14 +58,15 @@ export default class AuthService extends EventEmitter {
     return profile ? JSON.parse(localStorage.profile) : {};
   }
 
-  static setToken(idToken) {
+  setToken(idToken) {
+    this.token = idToken;
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken);
   }
 
-  static getToken() {
+  getToken() {
     // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token');
+    return this.token || localStorage.getItem('id_token');
   }
 
   static logout() {
@@ -75,6 +76,7 @@ export default class AuthService extends EventEmitter {
   }
 
   updateProfile(userId, data) {
+    console.log(this.getToken())
     const headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',

@@ -13,7 +13,6 @@ import Puzzles from './containers/Puzzles';
 import Puzzle from './containers/Puzzle';
 import Kifus from './containers/Kifus';
 import Kifu from './containers/Kifu';
-import User from './containers/User';
 import Dashboard from './containers/Dashboard';
 import History from './containers/History';
 import Favorite from './containers/Favorite';
@@ -51,10 +50,11 @@ const App = props => (
         <Route exact path="/" component={() => <Redirect to="/puzzles" />} />
         <Route exact path="/" component={Puzzles} />
         <Route exact path="/puzzles" component={Puzzles} />
+        <Route exact path="/problems" component={Puzzles} />
         <Route exact path="/kifus" component={Kifus} />
         <Route path="/puzzles/:id" component={Puzzle} />
+        <Route path="/problems/:id" component={Puzzle} />
         <Route path="/kifus/:id" component={Kifu} />
-        <Route path="/users" component={User} />
         <Route path="/records" component={History} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/favorites" component={Favorite} />
