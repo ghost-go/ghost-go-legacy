@@ -47,13 +47,13 @@ const App = props => (
         style={{ marginLeft: props.ui.sidebar.collpased !== true ? '235px' : '50px' }}
         className="page-container"
       >
-        <Route exact path="/" component={() => <Redirect to="/puzzles" />} />
+        <Route exact path="/" component={() => <Redirect to="/problems" />} />
         <Route exact path="/" component={Puzzles} />
         <Route exact path="/puzzles" component={Puzzles} />
         <Route exact path="/problems" component={Puzzles} />
         <Route exact path="/kifus" component={Kifus} />
-        <Route path="/puzzles/:id" component={Puzzle} />
         <Route path="/problems/:id" component={Puzzle} />
+        <Route path="/puzzles/:id" component={Puzzle} />
         <Route path="/kifus/:id" component={Kifu} />
         <Route path="/records" component={History} />
         <Route path="/dashboard" component={Dashboard} />

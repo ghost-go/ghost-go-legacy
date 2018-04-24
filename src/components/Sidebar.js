@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tab } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import AuthService from '../common/AuthService';
 
@@ -13,8 +14,8 @@ function mapStateToProps(state) {
   };
 }
 
-@connect(mapStateToProps)
-export default class Sidebar extends Component {
+// @withRouter(@connect(mapStateToProps))
+class Sidebar extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(AuthService).isRequired,
     ui: PropTypes.shape({
@@ -100,8 +101,8 @@ export default class Sidebar extends Component {
                   }
                   <div className="divider-header">Resources</div>
                   <li>
-                    <NavLink activeClassName="active" to="/puzzles">
-                      <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
+                    <NavLink activeClassName="active" to="/problems">
+                      <i className="fa fa-puzzle-piece" /> <span>Problem Library</span>
                     </NavLink>
                   </li>
                   <li>
@@ -109,23 +110,11 @@ export default class Sidebar extends Component {
                       <i className="fa fa-book" /> <span>Kifu Library</span>
                     </NavLink>
                   </li>
-                  {/*
-                  <li className="divider"></li>
-                  <div className="divider-header">Practices</div>
-                  <li>
-                    <Link to="/practices">
-                      <i className="fa fa-television"></i> <span>Practices(beta)</span>
-                    </Link>
-                  </li>
-                  /*
                   <li>
                     <Link activeClassName="active" to="/favorites">
-                      <i className="fa fa-heart"></i> <span>Favorites</span>
+                      <i className="fa fa-heart" /><span>Favorites</span>
                     </Link>
                   </li>
-                  <li className="divider"></li>
-                  */
-                  }
                   { auth.loggedIn() ? (
                     <div>
                       <li className="divider" />
@@ -157,8 +146,8 @@ export default class Sidebar extends Component {
                     ) : null
                   }
                   <li>
-                    <NavLink activeClassName="active" to="/puzzles">
-                      <i className="fa fa-puzzle-piece" /> <span>Tsumego Library</span>
+                    <NavLink activeClassName="active" to="/problems">
+                      <i className="fa fa-puzzle-piece" /> <span>Problem Library</span>
                     </NavLink>
                   </li>
                   <li>
@@ -201,3 +190,5 @@ export default class Sidebar extends Component {
     );
   }
 }
+
+export default withRouter(connect(mapStateToProps)(Sidebar));

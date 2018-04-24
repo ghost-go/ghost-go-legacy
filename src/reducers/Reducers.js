@@ -82,10 +82,6 @@ function setObjectFilter(state, action) {
   return updateObject(state, action.payload);
 }
 
-function setPracticePuzzleId(state, action) {
-  return action.payload;
-}
-
 export const steps = createReducer([], {
   ADD_STEPS(state, action) {
     if (typeof (action.payload) === 'string') {
@@ -137,25 +133,6 @@ export const puzzle = reduceReducers(
   buildFetchReducer({}, 'PUZZLE_NEXT'),
 );
 
-export const practices = buildFetchReducer({}, 'PRACTICES');
-export const practice = reduceReducers(
-  buildFetchReducer({}, 'PRACTICE'),
-  buildPostReducer({}, 'PRACTICE'),
-);
-
-export const practiceRecord = reduceReducers(
-  buildFetchReducer({}, 'PRACTICE_RECORD'),
-  buildPostReducer({}, 'PRACTICE_RECORDS'),
-);
-
-export const practiceRecords = buildFetchReducer({}, 'PRACTICE_RECORDS');
-
-export const practiceTemplates = buildFetchReducer({}, 'PRACTICE_TEMPLATES');
-export const practiceTemplate = reduceReducers(
-  buildFetchReducer({}, 'PRACTICE_TEMPLATE'),
-  buildPostReducer({}, 'PRACTICE_TEMPLATE'),
-);
-
 export const puzzleRecords = buildFetchReducer({}, 'PUZZLE_RECORDS');
 export const puzzleRecord = reduceReducers(
   buildFetchReducer({}, 'PUZZLE_RECORD'),
@@ -198,15 +175,8 @@ export const boardStates = createReducer({
   clear: false,
 }, { SET_BOARD_STATES: setObjectFilter });
 export const ranges = createReducer(['all', '18k-10k', '9k-5k', '4k-1k', '1d-3d', '4d-6d'], {});
-export const practicePuzzleId = createReducer(
-  null,
-  { SET_PRACTICE_PUZZLE_ID: setPracticePuzzleId },
-);
 export const theme = createReducer(
   localStorage.getItem('theme') || 'black-and-white',
   { SET_THEME: setPlainTextFilter },
 );
 export const tags = buildFetchReducer({}, 'TAGS');
-
-export const room = buildFetchReducer({}, 'ROOM');
-export const roomMessages = buildFetchReducer({}, 'ROOM_MESSAGES');

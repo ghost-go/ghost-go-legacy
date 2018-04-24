@@ -39,7 +39,7 @@ const RecordList = (props) => {
   const list = [];
   props.recordList.forEach((i) => {
     const link = (
-      <Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
+      <Link key={`${i.id}`} to={`/problems/${i.id}`}>
         <div className={css(style.listBox)}>
           <div className="list-preview-img">
             <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} alt="" />

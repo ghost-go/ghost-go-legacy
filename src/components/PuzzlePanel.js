@@ -188,8 +188,8 @@ export default class PuzzlePanel extends Component {
             onClick={this.props.handleNext}
             bsStyle="info"
           >
-            Next Tsumego
-          </Button>;
+            Next Problem
+          </Button>
         </div>
         <div>
           <RankRange

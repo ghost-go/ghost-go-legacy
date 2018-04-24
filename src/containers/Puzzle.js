@@ -254,7 +254,7 @@ class Puzzle extends Component {
 
   handleNext() {
     this.props.dispatch(fetchPuzzleNext({ range: this.props.rangeFilter })).then(() => {
-      const nextUrl = `/puzzles/${this.props.puzzle.data.id}?range=${this.props.rangeFilter}`;
+      const nextUrl = `/problems/${this.props.puzzle.data.id}?range=${this.props.rangeFilter}`;
       this.props.dispatch(push(nextUrl));
       this.setCurrentMode('answer');
       this.handleReset();

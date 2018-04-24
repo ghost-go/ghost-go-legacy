@@ -159,7 +159,7 @@ class Favorite extends Component {
       } else {
         const pageCount = favorites.data.total_pages;
         recordList = favorites.data.data.map(i => (
-          <Link key={`${i.id}`} to={`/puzzles/${i.id}`}>
+          <Link key={`${i.id}`} to={`/problems/${i.id}`}>
             <div className={css(style.listBox)}>
               <div className="list-preview-img">
                 <img className={css(style.previewImg)} src={i.preview_img_r1.x200.url} alt="" />

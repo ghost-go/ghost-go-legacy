@@ -61,7 +61,7 @@ export default class Puzzles extends Component {
       puzzles.data.puzzles.forEach((i) => {
         const puzzleCard = (
           <div key={i.id} className="puzzle-card">
-            <Link to={`/puzzles/${i.id}`}>
+            <Link to={`/problems/${i.id}`}>
               <img src={i.preview_img_r1.x300.url} alt="" />
             </Link>
             <div className="puzzle-info">
