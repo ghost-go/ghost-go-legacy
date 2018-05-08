@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import reduceReducers from 'reduce-reducers';
-import AuthService from '../common/AuthService';
 
 function updateObject(oldObject, newValues) {
   return Object.assign({}, oldObject, newValues);

@@ -11,6 +11,7 @@ function buildPostData(name = '', api = '') {
     dispatch(postDataRequest(params));
     const url = URI(`${config.API_DOMAIN}/${config.API_VERSION}/${api}`);
 
+    console.log(params)
     return fetch(url, {
       method: 'POST',
       headers: {

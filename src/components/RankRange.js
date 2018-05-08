@@ -36,7 +36,6 @@ export default class RankRange extends Component {
     // rankRange: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     rangeFilter: PropTypes.string.isRequired,
-    handleRangeChange: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -48,12 +47,12 @@ export default class RankRange extends Component {
 
   handleRangeStart(rank) {
     const rangeEnd = this.props.rangeFilter === 'all' ? '9d' : this.props.rangeFilter.split('-')[1];
-    this.props.dispatch(setRangeFilter(`${rank}-${rangeEnd}`))
+    this.props.dispatch(setRangeFilter(`${rank}-${rangeEnd}`));
   }
 
   handleRangeEnd(rank) {
     const rangeStart = this.props.rangeFilter === 'all' ? '18k' : this.props.rangeFilter.split('-')[0];
-    this.props.dispatch(setRangeFilter(`${rangeStart}-${rank}`))
+    this.props.dispatch(setRangeFilter(`${rangeStart}-${rank}`));
   }
 
   render() {

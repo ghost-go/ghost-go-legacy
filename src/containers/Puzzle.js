@@ -363,10 +363,6 @@ class Puzzle extends Component {
         <div className="puzzle-panel">
           <PuzzlePanel
             {...this.props}
-            showNext
-            auth={this.context.auth}
-            puzzle={puzzle.data}
-            handleRangeChange={this.handleRangeChange}
             handleNext={this.handleNext}
             rangeFilter={this.props.rangeFilter}
             handleReset={this.handleReset}

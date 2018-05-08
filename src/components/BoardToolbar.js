@@ -124,7 +124,7 @@ export default class BoardToolbar extends Component {
               >
                 <b>XY</b>
               </Button>
-              <Button
+              {/* <Button
                 title="analysis"
                 bsStyle="default"
                 onClick={this.handleShowAnalysisModal}
@@ -146,7 +146,7 @@ export default class BoardToolbar extends Component {
                 active={this.props.boardStates.clear}
               >
                 <i className="fa fa-eraser" aria-hidden="true" />
-              </Button>
+              </Button> */}
             </ButtonGroup>
             {/*
             <ButtonGroup>

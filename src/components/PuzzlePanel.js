@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'material-ui/Toggle';
+import { connect } from 'react-redux';
 import { StyleSheet, css } from 'aphrodite';
 import { Button } from 'react-bootstrap';
+import AuthService from '../common/AuthService';
+import { postFavorite } from '../actions/PostActions';
 
 import AnswerBar from '../components/AnswerBar';
 import RankRange from '../components/RankRange';
@@ -18,10 +21,12 @@ const styles = StyleSheet.create({
 
 });
 
-export default class PuzzlePanel extends Component {
+class PuzzlePanel extends Component {
   static propTypes = {
     puzzle: PropTypes.shape({
-      is_favorite: PropTypes.bool.isRequired,
+      data: PropTypes.shape({
+        is_favorite: PropTypes.bool.isRequired,
+      }),
     }).isRequired,
     rangeFilter: PropTypes.shape({}).isRequired,
     className: PropTypes.string,
@@ -35,6 +40,8 @@ export default class PuzzlePanel extends Component {
     currentAnswerId: PropTypes.number,
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    auth: PropTypes.instanceOf(AuthService).isRequired,
   }
 
   static defaultProps = {
@@ -51,6 +58,7 @@ export default class PuzzlePanel extends Component {
     // };
 
     this.handleResearchMode = this.handleResearchMode.bind(this);
+    this.handleFavorite = this.handleFavorite.bind(this);
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -65,22 +73,21 @@ export default class PuzzlePanel extends Component {
     }
   }
 
-  // handleFavorite(id) {
-  //   const { auth } = this.props;
-  //   const profile = AuthService.getProfile();
-  //   if (AuthService.loggedIn()) {
-  //     this.setState({ favorite: !this.state.favorite });
-  //     this.props.dispatch(postFavorite({
-  //       likable_id: id,
-  //       likable_type: 'Puzzle',
-  //       value: !this.state.favorite,
-  //       scope: 'favorite',
-  //       user_id: profile.user_id,
-  //     }));
-  //   } else {
-  //     auth.login();
-  //   }
-  // }
+  handleFavorite() {
+    const { auth, puzzle } = this.props;
+    const profile = AuthService.getProfile();
+    if (auth.loggedIn()) {
+      this.props.dispatch(postFavorite({
+        likable_id: puzzle.data.id,
+        likable_type: 'Puzzle',
+        value: !puzzle.data.is_favorite,
+        scope: 'favorite',
+        user_id: profile.user_id,
+      }));
+    } else {
+      auth.login();
+    }
+  }
 
   // handleRatingChange(rate) {
   //   const { auth } = this.props;
@@ -160,20 +167,20 @@ export default class PuzzlePanel extends Component {
     return (
       <div className={this.props.className}>
         <div className="title">
-          {`${puzzle.whofirst} ${puzzle.rank}`}&nbsp;&nbsp;
-          {/*
-          <a onClick={this.handleFavorite.bind(this, puzzle.id)}
-            className={`favorite ${this.state.favorite === true ? 'active' : ''}`}
-            title={`${this.state.favorite === true ? 'Cancle Favorite' : 'Favorite'}`}>
-            <i className="fa fa-heart" aria-hidden="true"></i>
-          </a>
-          */}
+          {`${puzzle.data.whofirst} ${puzzle.data.rank}`}&nbsp;&nbsp;
+          <button
+            onClick={this.handleFavorite}
+            className={`favorite ${this.props.puzzle.data.is_favorite === true ? 'active' : ''}`}
+            title={`${this.props.puzzle.data.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
+          >
+            <i className="fa fa-heart" aria-hidden="true" />
+          </button>
         </div>
         <div>
-          <strong>NO.:</strong>{`P-${puzzle.id}`}&nbsp;&nbsp;&nbsp;
-          <i className="fa fa-check" aria-hidden="true" /><span>&nbsp;{puzzle.right_count}</span>&nbsp;&nbsp;
-          <i className="fa fa-times" aria-hidden="true" /><span>&nbsp;{puzzle.wrong_count}</span>&nbsp;&nbsp;
-          <i className="fa fa-heart" aria-hidden="true" /><span>&nbsp;{puzzle.favorite_count}</span>&nbsp;&nbsp;
+          <strong>NO.:</strong>{`P-${puzzle.data.id}`}&nbsp;&nbsp;&nbsp;
+          <i className="fa fa-check" aria-hidden="true" /><span>&nbsp;{puzzle.data.right_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-times" aria-hidden="true" /><span>&nbsp;{puzzle.data.wrong_count}</span>&nbsp;&nbsp;
+          <i className="fa fa-heart" aria-hidden="true" /><span>&nbsp;{puzzle.data.favorite_count}</span>&nbsp;&nbsp;
         </div>
         <div className="button-container">
           <Button
@@ -214,3 +221,13 @@ export default class PuzzlePanel extends Component {
     );
   }
 }
+
+function select(state) {
+  return {
+    auth: state.ui.auth,
+    puzzle: state.puzzle,
+    rangeFilter: state.rangeFilter,
+  };
+}
+
+export default connect(select)(PuzzlePanel);

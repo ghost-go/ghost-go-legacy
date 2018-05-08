@@ -3,7 +3,7 @@ import Auth0Lock from 'auth0-lock';
 import * as config from '../common/Config';
 
 export default class AuthService extends EventEmitter {
-  constructor(clientId, domain, options) {
+  constructor(clientId, domain) {
     // Configure Auth0
     super();
     this.domain = domain;
@@ -20,7 +20,6 @@ export default class AuthService extends EventEmitter {
   }
 
   doAuthentication(authResult) {
-    console.log(authResult)
     if (!authResult.accessToken) return;
     this.setToken(authResult.accessToken);
     // Async loads the user profile data
@@ -29,7 +28,6 @@ export default class AuthService extends EventEmitter {
         // eslint-disable-next-line
         console.log('Error loading the Profile', error);
       } else {
-        console.log(profile)
         this.setProfile(profile);
       }
     });
@@ -76,7 +74,6 @@ export default class AuthService extends EventEmitter {
   }
 
   updateProfile(userId, data) {
-    console.log(this.getToken())
     const headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',

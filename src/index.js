@@ -12,7 +12,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import * as reducers from './reducers/Reducers';
 import uiReducers from './reducers/UIReducers';
-import AuthService from './common/AuthService';
 import App from './App';
 
 

@@ -5,6 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import DashboardFilterBar from '../components/DashboardFilterBar';
 import { fetchDashboard } from '../actions/FetchActions';
+import { setToolbarHidden } from '../actions/Actions';
 import AuthService from '../common/AuthService';
 import RecordList from '../components/RecordList';
 
@@ -28,6 +29,10 @@ class Dashboard extends Component {
         <td>{count}</td>
       </tr>
     );
+  }
+
+  componentWillMount() {
+    this.props.dispatch(setToolbarHidden(true));
   }
 
   componentDidMount() {
@@ -59,7 +64,9 @@ class Dashboard extends Component {
                 </div>
                 <small>Well done!</small>
               </div>
-              {/* <Link className="tile-footer" to="/records?page=1&type=all">view details <i className="fa fa-arrow-right" /></Link> */}
+              {/* <Link className="tile-footer" to="/records?page=1&type=all">
+                view details <i className="fa fa-arrow-right" />
+              </Link> */}
             </div>
           </Col>
           <Col xs={8} md={4}>
