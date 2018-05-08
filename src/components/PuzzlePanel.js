@@ -6,6 +6,7 @@ import { StyleSheet, css } from 'aphrodite';
 import { Button } from 'react-bootstrap';
 import AuthService from '../common/AuthService';
 import { postFavorite } from '../actions/PostActions';
+import { toggleFavorite } from '../actions/Actions';
 
 import AnswerBar from '../components/AnswerBar';
 import RankRange from '../components/RankRange';
@@ -26,6 +27,9 @@ class PuzzlePanel extends Component {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
         is_favorite: PropTypes.bool.isRequired,
+        favorite_count: PropTypes.number.isRequired,
+        right_count: PropTypes.number.isRequired,
+        wrong_count: PropTypes.number.isRequired,
       }),
     }).isRequired,
     rangeFilter: PropTypes.shape({}).isRequired,
@@ -52,18 +56,21 @@ class PuzzlePanel extends Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   // answersExpanded: true,
-    //   favorite: this.props.puzzle.is_favorite,
-    // };
+    this.state = {
+      is_favorite: false,
+      favorite_count: 0,
+    };
 
     this.handleResearchMode = this.handleResearchMode.bind(this);
     this.handleFavorite = this.handleFavorite.bind(this);
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({ favorite: nextProps.puzzle.is_favorite });
-  // }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      is_favorite: nextProps.puzzle.data.is_favorite,
+      favorite_count: nextProps.puzzle.data.favorite_count,
+    });
+  }
 
   handleResearchMode() {
     if (this.props.currentMode === 'answer') {
@@ -77,41 +84,24 @@ class PuzzlePanel extends Component {
     const { auth, puzzle } = this.props;
     const profile = AuthService.getProfile();
     if (auth.loggedIn()) {
-      this.props.dispatch(postFavorite({
-        likable_id: puzzle.data.id,
-        likable_type: 'Puzzle',
-        value: !puzzle.data.is_favorite,
-        scope: 'favorite',
-        user_id: profile.user_id,
-      }));
+      this.setState({
+        is_favorite: !this.state.is_favorite,
+        favorite_count:
+          this.state.is_favorite ? this.state.favorite_count - 1 : this.state.favorite_count + 1,
+      }, () => {
+        this.props.dispatch(toggleFavorite());
+        this.props.dispatch(postFavorite({
+          likable_id: puzzle.data.id,
+          likable_type: 'Puzzle',
+          value: this.state.is_favorite,
+          scope: 'favorite',
+          user_id: profile.user_id,
+        }));
+      });
     } else {
       auth.login();
     }
   }
-
-  // handleRatingChange(rate) {
-  //   const { auth } = this.props;
-  //   const profile = AuthService.getProfile();
-  //   if (AuthService.loggedIn()) {
-  //     const { id } = this.props.params;
-  //     this.props.dispatch(postRating({
-  //       ratable_id: id,
-  //       ratable_type: 'Puzzle',
-  //       score: rate,
-  //       user_id: profile.user_id,
-  //     })).then((promise) => {
-  //       if (promise.type === 'POST_RATING_SUCCESS') {
-  //         this.setState({
-  //           // open: true,
-  //           // score: rate,
-  //           // ratingInfo: promise.payload.data.message || 'Thanks for you rating!',
-  //         });
-  //       }
-  //     });
-  //   } else {
-  //     auth.login();
-  //   }
-  // }
 
   render() {
     const { puzzle } = this.props;
@@ -124,8 +114,8 @@ class PuzzlePanel extends Component {
 
     const rightAnswers = [];
     const wrongAnswers = [];
-    if (puzzle != null && puzzle.right_answers != null && puzzle.wrong_answers != null) {
-      puzzle.right_answers.forEach((i) => {
+    if (puzzle != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
+      puzzle.data.right_answers.forEach((i) => {
         const answer = (
           <AnswerBar
             setCurrentAnswerId={this.props.setCurrentAnswerId}
@@ -144,7 +134,7 @@ class PuzzlePanel extends Component {
         );
         rightAnswers.push(answer);
       });
-      puzzle.wrong_answers.forEach((i) => {
+      puzzle.data.wrong_answers.forEach((i) => {
         const answer = (
           <AnswerBar
             setCurrentAnswerId={this.props.setCurrentAnswerId}
@@ -170,10 +160,10 @@ class PuzzlePanel extends Component {
           {`${puzzle.data.whofirst} ${puzzle.data.rank}`}&nbsp;&nbsp;
           <button
             onClick={this.handleFavorite}
-            className={`favorite ${this.props.puzzle.data.is_favorite === true ? 'active' : ''}`}
-            title={`${this.props.puzzle.data.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
+            className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
+            title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
           >
-            <i className="fa fa-heart" aria-hidden="true" />
+            <i className="fa fa-heart bounceIn" aria-hidden="true" />
           </button>
         </div>
         <div>

@@ -121,7 +121,6 @@ export default class SgfBoard {
   }
 
   render() {
-    console.log('render');
     this.size = this.canvas.width / (_.max([this.width, this.height]) + 1);
     const ctx = this.canvas.getContext('2d');
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

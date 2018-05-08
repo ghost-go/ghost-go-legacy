@@ -33,22 +33,12 @@ export const fetchKifus = buildFetchData('KIFUS', 'kifus');
 export const fetchPuzzles = buildFetchData('PUZZLES', 'puzzles');
 export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', 'puzzle_records');
 export const fetchDashboard = buildFetchData('DASHBOARD', 'dashboard');
-export const fetchPractices = buildFetchData('PRACTICES', 'practices');
-export const fetchPracticeTemplates = buildFetchData('PRACTICE_TEMPLATES', 'practice_templates');
 export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', 'practice_records/:id');
 
 export const fetchKifu = buildFetchData('KIFU', 'kifus/:id');
 export const fetchPuzzle = buildFetchData('PUZZLE', 'puzzles/:id');
 export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', 'puzzles/next');
-
 export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', 'players/top');
-export const fetchPractice = buildFetchData('PRACTICE', 'practices/:id');
-export const fetchPracticeTemplate = buildFetchData('PRACTICE_TEMPLATE', 'practice_templates/:id');
 
 export const fetchTags = buildFetchData('TAGS', 'tags');
 export const fetchFavorites = buildFetchData('FAVORITES', 'favorites');
-
-export const fetchRoom = buildFetchData('ROOM', 'rooms/:id');
-export const fetchRoomMessages = buildFetchData('ROOM_MESSAGES', 'rooms/:identifier/messages');
-
-export const fetchAiAnswers = buildFetchData('AI_ANSWERS', 'ai/answers/:id');

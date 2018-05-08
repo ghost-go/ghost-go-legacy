@@ -36,3 +36,4 @@ export const openDashboardFilter = createAction('OPEN_DASHBOARD_FILTER');
 export const closeDashboardFilter = createAction('CLOSE_DASHBOARD_FILTER');
 export const toggleDashboardFilter = createAction('TOGGLE_DASHBOARD_FILTER');
 export const setTheme = createAction('SET_THEME');
+export const toggleFavorite = createAction('TOGGLE_FAVORITE');

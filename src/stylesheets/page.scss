@@ -321,12 +321,37 @@
 }
 
 .favorite {
+
   cursor: pointer;
   &:hover {
     color: red;
   }
   &.active {
     color: red;
+    .fa {
+      animation-name: bounceIn;
+      animation-duration: 0.5s;
+      animation-fill-mode: both;
+    }
+  }
+}
+
+@keyframes bounceIn{
+  0%{
+    opacity: 0;
+    transform: scale(0.3) translate3d(0,0,0);
+  }
+  50%{
+    opacity: 0.9;
+    transform: scale(1.3);
+  }
+  80%{
+    opacity: 1;
+    transform: scale(0.8);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1) translate3d(0,0,0);
   }
 }
 
@@ -437,4 +462,16 @@ $online-list-width: 150px;
       margin-bottom: 14px;
     }
   }
+}
+
+
+.favorite.active .fa {
+  animation-name: bounceIn;
+}
+
+.favorite.active .fa {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }

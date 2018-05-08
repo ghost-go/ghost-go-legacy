@@ -46,7 +46,6 @@ function createReducer(initialState, handlers) {
   };
 }
 
-
 function buildFetchReducer(initialState, name = '') {
   const newInitialState = {
     ...initialState,
@@ -130,6 +129,17 @@ export const puzzle = reduceReducers(
     },
   }, 'PUZZLE'),
   buildFetchReducer({}, 'PUZZLE_NEXT'),
+  createReducer({}, {
+    TOGGLE_FAVORITE: state => ({
+      ...state,
+      data: {
+        ...state.data,
+        is_favorite: !state.data.is_favorite,
+        favorite_count:
+          state.data.is_favorite ? state.data.favorite_count - 1 : state.data.favorite_count + 1,
+      },
+    }),
+  }),
 );
 
 export const puzzleRecords = buildFetchReducer({}, 'PUZZLE_RECORDS');

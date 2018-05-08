@@ -13,7 +13,7 @@ function createReducer(initialState, handlers) {
 const AUTH0_CLIENT_ID = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5';
 const AUTH0_DOMAIN = 'ghostgo.auth0.com';
 
-export const sidebarCollpase = createReducer({
+export const uiReducers = createReducer({
   auth: new AuthService(AUTH0_CLIENT_ID, AUTH0_DOMAIN),
   sidebar: { collpased: false },
   puzzleFilter: { open: false },
@@ -35,6 +35,6 @@ export const sidebarCollpase = createReducer({
   CLOSE_DASHBOARD_FILTER: state => ({ ...state, dashboardFilter: { open: false } }),
 });
 
-const uiReducers = reduceReducers(sidebarCollpase);
+// const uiReducers = reduceReducers(sidebarCollpase);
 
 export default uiReducers;
