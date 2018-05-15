@@ -35,15 +35,12 @@ export default class Puzzles extends Component {
     puzzles: PropTypes.shape({}).isRequired,
     dispatch: PropTypes.func.isRequired,
     location: PropTypes.shape({
-      query: PropTypes.shape({
-        page: PropTypes.string,
-        rank: PropTypes.string,
-      }),
+      search: PropTypes.string.isRequired,
     }).isRequired,
   }
 
   componentWillMount() {
-    const query = new URLSearchParams(this.props.location);
+    const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(fetchTags({}));
     this.props.dispatch(fetchPuzzles({
       page: query.get('page'),

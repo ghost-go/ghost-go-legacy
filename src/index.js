@@ -14,7 +14,6 @@ import * as reducers from './reducers/Reducers';
 import uiReducers from './reducers/UIReducers';
 import App from './App';
 
-
 const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
 

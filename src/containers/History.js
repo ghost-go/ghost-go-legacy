@@ -62,7 +62,7 @@ class History extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(AuthService).isRequired,
     location: PropTypes.shape({
-      query: PropTypes.shape({}).isRequired,
+      search: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
     records: PropTypes.shape({}).isRequired,
@@ -86,7 +86,7 @@ class History extends Component {
   }
 
   componentWillMount() {
-    const query = new URLSearchParams(this.props.location);
+    const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(setRecordTypeFilter(query.get('type') || 'all'));
     this.getRecordData(query.get('page') || 1, query.get('type') || 'all');
   }
@@ -108,14 +108,14 @@ class History extends Component {
   }
 
   handlePageClick(data) {
-    const query = new URLSearchParams(this.props.location);
+    const query = new URLSearchParams(this.props.location.search);
     const page = data.selected + 1;
     this.getRecordData(page, query.get('type'));
     this.props.dispatch(push(`/records?page=${page}&type=${query.get('type') || 'all'}`));
   }
 
   handleSeeMore(filter, val) {
-    const query = new URLSearchParams(this.props.location);
+    const query = new URLSearchParams(this.props.location.search);
     this.setState({ filterOpen: false });
     this.props.dispatch(setRecordTypeFilter(val));
     this.getRecordData(query.get('page'), val);
@@ -126,11 +126,17 @@ class History extends Component {
     let recordList;
     let pagination;
     let page = 0;
-    const query = new URLSearchParams(this.props.location);
+    let type = 'all';
+    const query = new URLSearchParams(this.props.location.search);
     const { records, recordTypeFilter } = this.props;
     if (!records.data) return null;
     if (query && query.get('page')) {
       page = parseInt(query.get('page') - 1, 10);
+    }
+    if (query && query.get('type')) {
+      type = query.get('type');
+    } else {
+      type = recordTypeFilter;
     }
     if (records.data !== undefined) {
       recordList = <RecordList recordList={records.data.data.map(i => i.puzzle)} />;
@@ -162,7 +168,7 @@ class History extends Component {
             name: 'Record Type',
             tags: ['all', 'right', 'wrong'],
             filterName: 'recordTypeFilter',
-            filterVal: recordTypeFilter,
+            filterVal: type,
             handleSeeMore: this.handleSeeMore,
           }]}
         />

@@ -322,8 +322,6 @@ class Puzzle extends Component {
   }
 
   render() {
-    const { puzzle } = this.props;
-
     const actions = [
       <FlatButton
         label="OK"

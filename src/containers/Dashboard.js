@@ -96,7 +96,7 @@ class Dashboard extends Component {
         </Row>
         <Row>
           <Col xs={8} md={4}>
-            <b>Most Wrong</b> <a href="/records">View all</a>
+            <b>Most Wrong</b> <a href="/records?type=wrong">View all</a>
             <RecordList recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
           </Col>
           <Col xs={8} md={4}>
@@ -104,7 +104,7 @@ class Dashboard extends Component {
             <RecordList recordList={dashboard.data.favorites_list} />
           </Col>
           <Col xs={8} md={4}>
-            <b>Recents</b> <a href="/records">View all</a>
+            <b>Recents</b> <a href="/records?type=all">View all</a>
             <RecordList recordList={dashboard.data.recents_list.map(i => i.puzzle)} />
           </Col>
         </Row>

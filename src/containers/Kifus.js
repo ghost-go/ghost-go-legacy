@@ -31,9 +31,7 @@ class Kifus extends Component {
     }).isRequired,
     players: PropTypes.shape({}).isRequired,
     location: PropTypes.shape({
-      query: PropTypes.shape({
-        page: PropTypes.string,
-      }),
+      search: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
     kifuFilter: PropTypes.string.isRequired,
@@ -52,7 +50,7 @@ class Kifus extends Component {
   }
 
   componentWillMount() {
-    const query = new URLSearchParams(this.props.location);
+    const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(fetchKifus({
       page: query.get('page'),
       player: this.state.kifuFilter,
@@ -98,9 +96,9 @@ class Kifus extends Component {
     let kifuCards = [];
     let pagination;
     let page = 0;
-    const query = new URLSearchParams(this.props.location);
+    const query = new URLSearchParams(this.props.location.search);
     if (query && query.get('page')) {
-      page = parseInt(query.page - 1, 10);
+      page = parseInt(query.get('page') - 1, 10);
     }
     if (this.props.kifus.data !== undefined) {
       const pageCount = this.props.kifus.data.total_pages;

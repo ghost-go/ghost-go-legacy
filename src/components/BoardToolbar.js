@@ -90,14 +90,14 @@ export default class BoardToolbar extends Component {
   }
 
   render() {
-    let turnIcon;
-    if (this.props.boardStates.turn === 'B') {
-      turnIcon = <i className="fa fa-circle" aria-hidden="true" />;
-    } else if (this.props.boardStates.turn === 'W') {
-      turnIcon = <i className="fa fa-circle-thin" aria-hidden="true" />;
-    } else {
-      turnIcon = <i className="fa fa-adjust fa-rotate-180" aria-hidden="true" />;
-    }
+    // let turnIcon;
+    // if (this.props.boardStates.turn === 'B') {
+    //   turnIcon = <i className="fa fa-circle" aria-hidden="true" />;
+    // } else if (this.props.boardStates.turn === 'W') {
+    //   turnIcon = <i className="fa fa-circle-thin" aria-hidden="true" />;
+    // } else {
+    //   turnIcon = <i className="fa fa-adjust fa-rotate-180" aria-hidden="true" />;
+    // }
     return (
       <div className={`board-toolbar ${this.props.toolbarHidden ? 'hidden' : ''}`}>
         <div className="section">
