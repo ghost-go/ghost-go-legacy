@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { StyleSheet, css } from 'aphrodite';
 import { List } from 'material-ui/List';
 import moment from 'moment';
+import AuthService from '../common/AuthService';
 
 import { fetchFavorites } from '../actions/FetchActions';
 
@@ -90,14 +91,11 @@ const style = StyleSheet.create({
 class Favorite extends Component {
   static propTypes = {
     location: PropTypes.shape({
-      query: PropTypes.string.isRequired,
+      search: PropTypes.string.isRequired,
     }).isRequired,
+    auth: PropTypes.instanceOf(AuthService).isRequired,
     dispatch: PropTypes.func.isRequired,
     favorites: PropTypes.shape({}).isRequired,
-  }
-
-  static contextTypes = {
-    auth: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -111,14 +109,13 @@ class Favorite extends Component {
   }
 
   componentWillMount() {
-    const { query } = this.props.location;
-    this.getFavoriteData(query.page || 1);
+    const query = new URLSearchParams(this.props.location.search);
+    this.getFavoriteData(query.get('page') || 1);
   }
 
   getFavoriteData(page = 1) {
-    const { dispatch } = this.props;
-    const { auth } = this.context;
-    const profile = auth.getProfile();
+    const { dispatch, auth } = this.props;
+    const profile = AuthService.getProfile();
     if (auth.loggedIn()) {
       dispatch(fetchFavorites({
         page,
@@ -138,20 +135,20 @@ class Favorite extends Component {
   }
 
   handleSeeMore() {
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location.search);
     this.setState({ filterOpen: false });
     this.getFavoriteData(query.page);
-    this.props.dispatch(push(`/favorites?page=${query.page || 1}`));
+    this.props.dispatch(push(`/favorites?page=${query.get('page') || 1}`));
   }
 
   render() {
     let recordList;
     let pagination;
     let page = 0;
-    const { query } = this.props.location;
+    const query = new URLSearchParams(this.props.location.search);
     const { favorites } = this.props;
-    if (query && query.page) {
-      page = parseInt(query.page - 1, 10);
+    if (query && query.get('page')) {
+      page = parseInt(query.get('page') - 1, 10);
     }
     if (favorites.data !== undefined) {
       if (favorites.data.data.length === 0) {
@@ -198,6 +195,7 @@ class Favorite extends Component {
       <div>
         <div className={css(styles.favoriteContainer)}>
           <div className={css(styles.right)}>
+            <h1>Favorites</h1>
             <div className={css(styles.listContainer)}>
               <List>
                 { recordList }
@@ -215,6 +213,7 @@ class Favorite extends Component {
 
 function select(state) {
   return {
+    auth: state.ui.auth,
     favorites: state.favorites,
   };
 }
