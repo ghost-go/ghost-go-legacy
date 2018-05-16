@@ -19,6 +19,13 @@ switch (ENV) {
 }
 
 export const AUTH0_CONFIG = {
+  auth: {
+    redirectUrl: 'http://localhost:3000/callback',
+    responseType: 'code',
+    params: {
+      scope: 'openid email', // Learn about scopes: https://auth0.com/docs/scopes
+    },
+  },
   oidcConformant: true,
   allowShowPassword: true,
   usernameStyle: 'email',

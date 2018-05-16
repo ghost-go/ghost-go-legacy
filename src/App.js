@@ -16,9 +16,19 @@ import Kifu from './containers/Kifu';
 import Dashboard from './containers/Dashboard';
 import History from './containers/History';
 import Favorite from './containers/Favorite';
+import Callback from './containers/Callback';
 
 import './App.css';
-import AuthService from './common/AuthService';
+// import Auth from './common/AuthService';
+import Auth from './common/Auth';
+
+const auth = new Auth();
+
+const handleAuthentication = (nextState, replace) => {
+  if (/access_token|id_token|error/.test(nextState.location.hash)) {
+    auth.handleAuthentication();
+  }
+}
 
 const Footer = () => (
   <div className="footer">
@@ -58,6 +68,13 @@ const App = props => (
         <Route path="/records" component={History} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/favorites" component={Favorite} />
+        <Route
+          path="/callback"
+          component={() => {
+            handleAuthentication(props);
+            return <Callback {...props} />;
+          }}
+        />
       </div>
       <Footer />
     </div>
@@ -65,7 +82,7 @@ const App = props => (
 );
 
 App.propTypes = {
-  auth: PropTypes.instanceOf(AuthService).isRequired,
+  auth: PropTypes.instanceOf(Auth).isRequired,
   ui: PropTypes.shape({
     sidebar: PropTypes.shape({
       collpased: PropTypes.bool.isRequired,

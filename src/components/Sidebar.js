@@ -5,7 +5,7 @@ import { Tab } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 
 function mapStateToProps(state) {
   return {
@@ -17,7 +17,7 @@ function mapStateToProps(state) {
 // @withRouter(@connect(mapStateToProps))
 class Sidebar extends Component {
   static propTypes = {
-    auth: PropTypes.instanceOf(AuthService).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
     ui: PropTypes.shape({
       sidebar: PropTypes.shape({
         collpased: PropTypes.bool.isRequired,
@@ -29,12 +29,14 @@ class Sidebar extends Component {
     super(props);
 
     this.state = {
-      profile: AuthService.getProfile(),
+      profile: {
+        sub: 'sub',
+        nickname: 'Ghost Go',
+        name: 'Ghost Go',
+        picture: 'https://s.gravatar.com/avatar/cc82c4164a2afbdacd86…&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fha.png',
+        updated_at: '2018-05-16T07:04:06.008Z',
+      },
     };
-
-    props.auth.on('profile_updated', (newProfile) => {
-      this.setState({ profile: newProfile });
-    });
   }
 
   // handleTouchTap(index) {
@@ -42,8 +44,23 @@ class Sidebar extends Component {
   // }
   //
 
+  componentWillMount() {
+    const { auth } = this.props;
+    if (auth.isAuthenticated()) {
+      const { userProfile, getProfile } = this.props.auth;
+      if (!userProfile) {
+        getProfile((err, profile) => {
+          this.setState({ profile });
+        });
+      } else {
+        this.setState({ profile: userProfile });
+      }
+    }
+  }
+
   render() {
     const { auth } = this.props;
+    const { profile } = this.state;
     return (
       <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="page-sidebar" className="rm-transition">
         {
@@ -55,12 +72,12 @@ class Sidebar extends Component {
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
-                          auth.loggedIn() ? (
+                          auth.isAuthenticated() && profile ? (
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
-                                <img width="45" className="img-rounded" src={this.state.profile.picture} alt="" />
+                                <img width="45" className="img-rounded" src={profile.picture} alt="" />
                                 <div className="user-welcome">
-                                  Welcome back, <b>{this.state.profile.nickname}</b>
+                                  Welcome back, <b>{profile.nickname}</b>
                                 </div>
                                 <Link to="/users" className="btn btn-sm btn-black-opacity-alt">
                                   <i className="fa fa-cog" />
@@ -87,7 +104,7 @@ class Sidebar extends Component {
 
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { auth.loggedIn() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <div className="divider-header">Dashboard</div>
                       <li>
@@ -115,7 +132,7 @@ class Sidebar extends Component {
                       <i className="fa fa-heart" /><span>Favorites</span>
                     </Link>
                   </li>
-                  { auth.loggedIn() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <li className="divider" />
                       <div className="divider-header">Others</div>
@@ -134,7 +151,7 @@ class Sidebar extends Component {
             <div>
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { auth.loggedIn() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <li>
                         <NavLink activeClassName="active" to="/dashboard">
@@ -163,7 +180,7 @@ class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  { auth.loggedIn() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <li className="divider" />
                       {/*

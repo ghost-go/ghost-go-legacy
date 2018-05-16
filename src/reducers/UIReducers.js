@@ -1,5 +1,5 @@
 // import reduceReducers from 'reduce-reducers';
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 
 function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
@@ -14,7 +14,7 @@ const AUTH0_CLIENT_ID = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5';
 const AUTH0_DOMAIN = 'ghostgo.auth0.com';
 
 const uiReducers = createReducer({
-  auth: new AuthService(AUTH0_CLIENT_ID, AUTH0_DOMAIN),
+  auth: new Auth(),
   sidebar: { collpased: false },
   puzzleFilter: { open: false },
   kifuFilter: { open: false },

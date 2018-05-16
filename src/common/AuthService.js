@@ -1,23 +1,74 @@
 import { EventEmitter } from 'events';
 import Auth0Lock from 'auth0-lock';
+import auth0 from 'auth0-js';
 import * as config from '../common/Config';
 
 export default class AuthService extends EventEmitter {
+  auth0 = new auth0.WebAuth({
+    domain: 'ghostgo.auth0.com',
+    clientID: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5',
+    redirectUri: `${config.APP_DOMAIN}/problems`,
+    audience: 'https://ghostgo.auth0.com/userinfo',
+    responseType: 'token id_token',
+    scope: 'openid',
+  });
+
   constructor(clientId, domain) {
     // Configure Auth0
     super();
     this.domain = domain;
     this.lock = new Auth0Lock(clientId, domain, config.AUTH0_CONFIG);
     // Add callback for lock `authenticated` event
-    this.doAuthentication = this.doAuthentication.bind(this);
-    this.lock.on('authenticated', this.doAuthentication);
+    // this.doAuthentication = this.doAuthentication.bind(this);
+    // this.lock.on('authenticated', this.doAuthentication);
     // binds login functions to keep this context
-    this.lock.on('authorization_error', (error) => {
-      // eslint-disable-next-line
-      console.log('Authentication Error', error);
-    });
-    this.login = this.login.bind(this);
+    // this.lock.on('authorization_error', (error) => {
+    //   eslint-disable-next-line
+    //   console.log('Authentication Error', error);
+    // });
+    // this.login = this.login.bind(this);
+    // this.logout = this.logout.bind(this);
+    // this.handleAuthentication = this.handleAuthentication.bind(this);
+    // this.isAuthenticated = this.isAuthenticated.bind(this);
   }
+
+  handleAuthentication() {
+    this.auth0.parseHash((err, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        this.setSession(authResult);
+        history.replace('/home');
+      } else if (err) {
+        history.replace('/home');
+        console.log(err);
+      }
+    });
+  }
+
+  // setSession(authResult) {
+  //   // Set the time that the Access Token will expire at
+  //   let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+  //   localStorage.setItem('access_token', authResult.accessToken);
+  //   localStorage.setItem('id_token', authResult.idToken);
+  //   localStorage.setItem('expires_at', expiresAt);
+  //   // navigate to the home route
+  //   history.replace('/home');
+  // }
+
+  // logout() {
+  //   // Clear Access Token and ID Token from local storage
+  //   localStorage.removeItem('access_token');
+  //   localStorage.removeItem('id_token');
+  //   localStorage.removeItem('expires_at');
+  //   // navigate to the home route
+  //   history.replace('/home');
+  // }
+
+  // isAuthenticated() {
+  //   // Check whether the current time is past the
+  //   // Access Token's expiry time
+  //   let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+  //   return new Date().getTime() < expiresAt;
+  // }
 
   doAuthentication(authResult) {
     if (!authResult.accessToken) return;
@@ -35,7 +86,8 @@ export default class AuthService extends EventEmitter {
 
   login() {
     // Call the show method to display the widget.
-    this.lock.show();
+    this.auth0.authorize();
+    // this.lock.show();
   }
 
   loggedIn() {

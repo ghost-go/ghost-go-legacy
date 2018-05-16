@@ -53,6 +53,7 @@
     "no-restricted-globals": "warn",
     "jsx-a11y/click-events-have-key-events": "warn",
     "prefer-destructuring": "warn",
-    "react/jsx-curly-brace-presence": "warn"
+    "react/jsx-curly-brace-presence": "warn",
+    "class-methods-use-this": "warn"
   }
 }

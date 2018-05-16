@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 import BoardToolbar from './BoardToolbar';
 
 import { toggleSidebar } from '../actions/Actions';
@@ -19,7 +19,7 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 export default class Navigation extends Component {
   static propTypes = {
-    auth: PropTypes.instanceOf(AuthService).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
     dispatch: PropTypes.func.isRequired,
     ui: PropTypes.shape({
       sidebar: PropTypes.shape({
@@ -32,13 +32,15 @@ export default class Navigation extends Component {
     super(props);
 
     this.state = {
-      profile: AuthService.getProfile(),
       navOpen: false,
+      profile: {
+        sub: 'sub',
+        nickname: 'Ghost Go',
+        name: 'Ghost Go',
+        picture: 'https://s.gravatar.com/avatar/cc82c4164a2afbdacd86…&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fha.png',
+        updated_at: '2018-05-16T07:04:06.008Z',
+      },
     };
-
-    // props.auth.on('profile_updated', (newProfile) => {
-    //   this.setState({ profile: newProfile });
-    // });
 
     this.handleToggle = this.handleToggle.bind(this);
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
@@ -48,12 +50,24 @@ export default class Navigation extends Component {
   }
 
   componentWillMount() {
-    window.addEventListener('mousedown', () => {
-      if (this.mouseIsDownOnCalendar) {
-        return;
+    const { auth } = this.props;
+    if (auth.isAuthenticated()) {
+      const { userProfile, getProfile } = this.props.auth;
+      if (!userProfile) {
+        getProfile((err, profile) => {
+          this.setState({ profile });
+        });
+      } else {
+        this.setState({ profile: userProfile });
       }
-      this.setState({ navOpen: false });
-    }, false);
+    }
+
+    // window.addEventListener('mousedown', () => {
+    //   if (this.mouseIsDownOnCalendar) {
+    //     return;
+    //   }
+    //   this.setState({ navOpen: false });
+    // }, false);
   }
 
   componentDidMount() {
@@ -69,7 +83,8 @@ export default class Navigation extends Component {
 
   handleLogout() {
     this.setState({ navOpen: false });
-    AuthService.logout();
+    const auth = new Auth();
+    auth.logout();
   }
 
   mouseDownHandler() {
@@ -82,6 +97,7 @@ export default class Navigation extends Component {
 
   render() {
     const { auth } = this.props;
+    const { profile } = this.state;
     return (
       <div id="page-header">
         <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="header-logo">
@@ -96,17 +112,17 @@ export default class Navigation extends Component {
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
-            auth.loggedIn() ? (
+            auth.isAuthenticated() && profile ? (
               <div>
                 <div className="user-profile dropdown">
                   <a onTouchTap={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
-                    <img width="36" src={this.state.profile.picture} alt="" />
+                    <img width="36" src={profile.picture} alt="" />
                     <i className="fa fa-chevron-down" />
                   </a>
                   <div style={{ display: this.state.navOpen ? 'block' : 'none' }} className="dropdown-menu account">
                     <div className="box-sm">
                       <div className="login-box clearfix">
-                        <div className="user-img"><img src={this.state.profile.picture} alt="" /></div>
+                        <div className="user-img"><img src={profile.picture} alt="" /></div>
                         <div className="user-info">
                           <span>{this.state.profile.nickname}<i>Welcome back!</i></span>
                           <Link to="/dashboard">
