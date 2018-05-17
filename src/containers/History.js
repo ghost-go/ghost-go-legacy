@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
 
 class History extends Component {
   static propTypes = {
-    auth: PropTypes.instanceOf(Auth).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
@@ -186,7 +185,6 @@ class History extends Component {
 
 function select(state) {
   return {
-    auth: state.ui.auth,
     records: state.puzzleRecords,
     recordTypeFilter: state.recordTypeFilter,
   };

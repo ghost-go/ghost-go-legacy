@@ -34,7 +34,9 @@ export default class Auth {
         this.history.replace('/problems');
       } else if (err) {
         this.history.replace('/problems');
+        // eslint-disable-next-line no-console
         console.log(err);
+        // eslint-disable-next-line no-alert
         alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });

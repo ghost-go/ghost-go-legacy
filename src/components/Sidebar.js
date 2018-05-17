@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tab } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
 import Auth from '../common/Auth';
@@ -110,9 +110,9 @@ class Sidebar extends Component {
                   { Auth.isAuthenticated() ? (
                     <div>
                       <li>
-                        <Link activeClassName="active" to="/favorites">
+                        <NavLink activeClassName="active" to="/favorites">
                           <i className="fa fa-heart" /><span>Favorites</span>
-                        </Link>
+                        </NavLink>
                       </li>
                       <li className="divider" />
                       <div className="divider-header">Others</div>

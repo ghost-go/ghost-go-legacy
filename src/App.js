@@ -23,11 +23,11 @@ import Auth from './common/Auth';
 
 const auth = new Auth();
 
-const handleAuthentication = (nextState, replace) => {
+const handleAuthentication = (nextState) => {
   if (/access_token|id_token|error/.test(nextState.location.hash)) {
     auth.handleAuthentication();
   }
-}
+};
 
 const Footer = () => (
   <div className="footer">

@@ -11,7 +11,6 @@ import RecordList from '../components/RecordList';
 
 class Dashboard extends Component {
   static propTypes = {
-    auth: PropTypes.instanceOf(Auth).isRequired,
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
@@ -112,7 +111,7 @@ class Dashboard extends Component {
             <RecordList recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
           </Col>
           <Col xs={8} md={4}>
-            <b>Favoriates</b> <a href="/favoriates">View details</a>
+            <b>Favoriates</b> <a href="/favorites">View details</a>
             <RecordList recordList={dashboard.data.favorites_list} />
           </Col>
           <Col xs={8} md={4}>
@@ -130,7 +129,6 @@ function mapStateToProps(state) {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
     dashboard: state.dashboard,
-    auth: state.ui.auth,
   };
 }
 

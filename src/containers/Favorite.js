@@ -93,7 +93,6 @@ class Favorite extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
-    auth: PropTypes.instanceOf(Auth).isRequired,
     dispatch: PropTypes.func.isRequired,
     favorites: PropTypes.shape({}).isRequired,
   }
@@ -213,7 +212,6 @@ class Favorite extends Component {
 
 function select(state) {
   return {
-    auth: state.ui.auth,
     favorites: state.favorites,
   };
 }

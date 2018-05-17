@@ -41,7 +41,7 @@ export default class DashboardFilterBar extends Component {
     this.handleUserChange = this.handleUserChange.bind(this);
     this.state = {
       profile: Auth.getProfile(),
-    }
+    };
   }
 
   handleToggle() {

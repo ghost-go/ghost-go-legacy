@@ -10,9 +10,6 @@ function createReducer(initialState, handlers) {
   };
 }
 
-const AUTH0_CLIENT_ID = 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5';
-const AUTH0_DOMAIN = 'ghostgo.auth0.com';
-
 const uiReducers = createReducer({
   auth: new Auth(),
   sidebar: { collpased: false },
