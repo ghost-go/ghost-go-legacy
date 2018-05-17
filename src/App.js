@@ -19,7 +19,6 @@ import Favorite from './containers/Favorite';
 import Callback from './containers/Callback';
 
 import './App.css';
-// import Auth from './common/AuthService';
 import Auth from './common/Auth';
 
 const auth = new Auth();

@@ -6,11 +6,12 @@ import { Row, Col } from 'react-bootstrap';
 import DashboardFilterBar from '../components/DashboardFilterBar';
 import { fetchDashboard } from '../actions/FetchActions';
 import { setToolbarHidden } from '../actions/Actions';
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 import RecordList from '../components/RecordList';
 
 class Dashboard extends Component {
   static propTypes = {
+    auth: PropTypes.instanceOf(Auth).isRequired,
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
@@ -31,17 +32,28 @@ class Dashboard extends Component {
     );
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      profile: Auth.getProfile(),
+    };
+  }
+
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(true));
   }
 
   componentDidMount() {
+    this.fetchDashboardData(this.state.profile.sub);
+  }
+
+  fetchDashboardData(sub) {
     const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
-    const profile = AuthService.getProfile();
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
       user_range: userRangeFilter,
-      user_id: profile.user_id,
+      user_id: sub,
     }));
   }
 
@@ -96,15 +108,15 @@ class Dashboard extends Component {
         </Row>
         <Row>
           <Col xs={8} md={4}>
-            <b>Most Wrong</b> <a href="/records?type=wrong">View all</a>
+            <b>Most Wrong</b> <a href="/records?type=wrong">View details</a>
             <RecordList recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
           </Col>
           <Col xs={8} md={4}>
-            <b>Favoriates</b> <a href="/favoriates">View all</a>
+            <b>Favoriates</b> <a href="/favoriates">View details</a>
             <RecordList recordList={dashboard.data.favorites_list} />
           </Col>
           <Col xs={8} md={4}>
-            <b>Recents</b> <a href="/records?type=all">View all</a>
+            <b>Recents</b> <a href="/records?type=all">View details</a>
             <RecordList recordList={dashboard.data.recents_list.map(i => i.puzzle)} />
           </Col>
         </Row>
@@ -118,6 +130,7 @@ function mapStateToProps(state) {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
     dashboard: state.dashboard,
+    auth: state.ui.auth,
   };
 }
 

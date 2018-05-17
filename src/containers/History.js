@@ -8,7 +8,7 @@ import { fetchPuzzleRecords } from '../actions/FetchActions';
 import { setRecordTypeFilter } from '../actions/Actions';
 import RecordList from '../components/RecordList';
 import RecordFilterBar from '../components/RecordFilterBar';
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 
 const styles = StyleSheet.create({
   centerContainer: {
@@ -60,17 +60,13 @@ const styles = StyleSheet.create({
 
 class History extends Component {
   static propTypes = {
-    auth: PropTypes.instanceOf(AuthService).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
     records: PropTypes.shape({}).isRequired,
     recordTypeFilter: PropTypes.string.isRequired,
-  }
-
-  static contextTypes = {
-    auth: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -83,21 +79,21 @@ class History extends Component {
 
   state = {
     filterOpen: false,
+    profile: Auth.getProfile(),
   }
 
   componentWillMount() {
     const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(setRecordTypeFilter(query.get('type') || 'all'));
-    this.getRecordData(query.get('page') || 1, query.get('type') || 'all');
+    this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', this.state.profile.sub);
   }
 
-  getRecordData(page = 1, recordType = 'all') {
-    const { dispatch, auth } = this.props;
-    const profile = AuthService.getProfile();
-    if (auth.loggedIn()) {
+  fetchRecordData(page = 1, recordType = 'all', sub) {
+    const { dispatch } = this.props;
+    if (Auth.isAuthenticated()) {
       dispatch(fetchPuzzleRecords({
         page,
-        user_id: profile.user_id,
+        user_id: sub,
         record_type: recordType,
       }));
     }
@@ -110,7 +106,7 @@ class History extends Component {
   handlePageClick(data) {
     const query = new URLSearchParams(this.props.location.search);
     const page = data.selected + 1;
-    this.getRecordData(page, query.get('type'));
+    this.fetchRecordData(page, query.get('type'), this.state.profile.sub);
     this.props.dispatch(push(`/records?page=${page}&type=${query.get('type') || 'all'}`));
   }
 
@@ -118,7 +114,7 @@ class History extends Component {
     const query = new URLSearchParams(this.props.location.search);
     this.setState({ filterOpen: false });
     this.props.dispatch(setRecordTypeFilter(val));
-    this.getRecordData(query.get('page'), val);
+    this.fetchRecordData(query.get('page'), val, this.state.profile.sub);
     this.props.dispatch(push(`/records?page=${query.get('page') || 1}&type=${val}`));
   }
 

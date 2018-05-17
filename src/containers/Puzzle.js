@@ -23,7 +23,7 @@ import {
   setNextStoneType,
   setToolbarHidden,
 } from '../actions/Actions';
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 
 const styles = StyleSheet.create({
   tipRight: {
@@ -103,6 +103,7 @@ class Puzzle extends Component {
       showCoordinate: PropTypes.bool.isRequired,
       mark: PropTypes.string.isRequired,
     }).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
   }
 
   static contextTypes = {
@@ -123,6 +124,7 @@ class Puzzle extends Component {
       rightTipOpen: false,
       wrongTipOpen: false,
       researchMode: false,
+      profile: Auth.getProfile(),
     };
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this);
     this.handleRight = this.handleRight.bind(this);
@@ -147,11 +149,10 @@ class Puzzle extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    const profile = AuthService.getProfile();
     this.handleReset();
-    this.props.dispatch(fetchPuzzle({ id, query: { user_id: profile.user_id } }));
+    const { id } = this.props.match.params;
     this.props.dispatch(setNextStoneType(this.getInitNextStoneType()));
+    this.props.dispatch(fetchPuzzle({ id, query: { user_id: this.state.profile.sub } }));
     let boardWidth = 0;
     if (window.screen.width > window.screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -216,10 +217,9 @@ class Puzzle extends Component {
   }
 
   handleRight() {
-    const profile = AuthService.getProfile();
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: profile.user_id,
+      user_id: this.state.profile.sub,
       record_type: 'right',
     }));
 
@@ -227,10 +227,9 @@ class Puzzle extends Component {
   }
 
   handleWrong() {
-    const profile = AuthService.getProfile();
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: profile.user_id,
+      user_id: this.state.profile.sub,
       record_type: 'wrong',
     }));
 
@@ -388,6 +387,7 @@ function select(state) {
     theme: state.theme,
     nextStoneType: state.nextStoneType,
     boardStates: state.boardStates,
+    auth: state.ui.auth,
   };
 }
 

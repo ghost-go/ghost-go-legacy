@@ -21,9 +21,6 @@ export default class Auth {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.getProfile = this.getProfile.bind(this);
-    this.getAccessToken = this.getAccessToken.bind(this);
   }
 
   login() {
@@ -49,6 +46,12 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+      if (profile) {
+        localStorage.setItem('profile', JSON.stringify(profile));
+        this.userProfile = profile;
+      }
+    });
     // navigate to the home route
     this.history.replace('/problems');
   }
@@ -62,26 +65,12 @@ export default class Auth {
     this.history.replace('/problems');
   }
 
-  getAccessToken() {
-    const accessToken = localStorage.getItem('access_token');
-    if (!accessToken) {
-      console.log('No Access Token found');
-      // throw new Error('No Access Token found');
-    }
-    return accessToken;
+  static getProfile() {
+    const profile = localStorage.getItem('profile');
+    return profile ? JSON.parse(localStorage.profile) : null;
   }
 
-  getProfile(cb) {
-    const accessToken = this.getAccessToken();
-    this.auth0.client.userInfo(accessToken, (err, profile) => {
-      if (profile) {
-        this.userProfile = profile;
-      }
-      cb(err, profile);
-    });
-  }
-
-  isAuthenticated() {
+  static isAuthenticated() {
     // Check whether the current time is past the
     // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));

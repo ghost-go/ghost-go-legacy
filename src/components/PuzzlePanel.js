@@ -4,9 +4,9 @@ import Toggle from 'material-ui/Toggle';
 import { connect } from 'react-redux';
 import { StyleSheet, css } from 'aphrodite';
 import { Button } from 'react-bootstrap';
-import AuthService from '../common/AuthService';
 import { postFavorite } from '../actions/PostActions';
 import { toggleFavorite } from '../actions/Actions';
+import Auth from '../common/Auth';
 
 import AnswerBar from '../components/AnswerBar';
 import RankRange from '../components/RankRange';
@@ -45,7 +45,7 @@ class PuzzlePanel extends Component {
     handleNext: PropTypes.func.isRequired,
     handleRangeChange: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
-    auth: PropTypes.instanceOf(AuthService).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
   }
 
   static defaultProps = {
@@ -59,6 +59,7 @@ class PuzzlePanel extends Component {
     this.state = {
       is_favorite: false,
       favorite_count: 0,
+      profile: Auth.getProfile(),
     };
 
     this.handleResearchMode = this.handleResearchMode.bind(this);
@@ -82,8 +83,7 @@ class PuzzlePanel extends Component {
 
   handleFavorite() {
     const { auth, puzzle } = this.props;
-    const profile = AuthService.getProfile();
-    if (auth.loggedIn()) {
+    if (Auth.isAuthenticated()) {
       this.setState({
         is_favorite: !this.state.is_favorite,
         favorite_count:
@@ -95,7 +95,7 @@ class PuzzlePanel extends Component {
           likable_type: 'Puzzle',
           value: this.state.is_favorite,
           scope: 'favorite',
-          user_id: profile.user_id,
+          user_id: this.state.profile.sub,
         }));
       });
     } else {

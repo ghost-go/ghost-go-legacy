@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { StyleSheet, css } from 'aphrodite';
 import { List } from 'material-ui/List';
 import moment from 'moment';
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 
 import { fetchFavorites } from '../actions/FetchActions';
 
@@ -93,7 +93,7 @@ class Favorite extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
-    auth: PropTypes.instanceOf(AuthService).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
     dispatch: PropTypes.func.isRequired,
     favorites: PropTypes.shape({}).isRequired,
   }
@@ -106,20 +106,20 @@ class Favorite extends Component {
 
   state = {
     filterOpen: false,
+    profile: Auth.getProfile(),
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
-    this.getFavoriteData(query.get('page') || 1);
+    this.fetchFavoriteData(query.get('page') || 1, this.state.profile.sub);
   }
 
-  getFavoriteData(page = 1) {
-    const { dispatch, auth } = this.props;
-    const profile = AuthService.getProfile();
-    if (auth.loggedIn()) {
+  fetchFavoriteData(page = 1, sub) {
+    const { dispatch } = this.props;
+    if (Auth.isAuthenticated()) {
       dispatch(fetchFavorites({
         page,
-        user_id: profile.user_id,
+        user_id: sub,
       }));
     }
   }
@@ -130,7 +130,7 @@ class Favorite extends Component {
 
   handlePageClick(data) {
     const page = data.selected + 1;
-    this.getFavoriteData(page);
+    this.fetchFavoriteData(page, this.state.profile.sub);
     this.props.dispatch(push(`/favorites?page=${page}`));
   }
 

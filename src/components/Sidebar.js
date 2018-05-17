@@ -29,13 +29,7 @@ class Sidebar extends Component {
     super(props);
 
     this.state = {
-      profile: {
-        sub: 'sub',
-        nickname: 'Ghost Go',
-        name: 'Ghost Go',
-        picture: 'https://s.gravatar.com/avatar/cc82c4164a2afbdacd86…&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fha.png',
-        updated_at: '2018-05-16T07:04:06.008Z',
-      },
+      profile: Auth.getProfile(),
     };
   }
 
@@ -43,20 +37,6 @@ class Sidebar extends Component {
   // this.setState({ selectedIndex: index })
   // }
   //
-
-  componentWillMount() {
-    const { auth } = this.props;
-    if (auth.isAuthenticated()) {
-      const { userProfile, getProfile } = this.props.auth;
-      if (!userProfile) {
-        getProfile((err, profile) => {
-          this.setState({ profile });
-        });
-      } else {
-        this.setState({ profile: userProfile });
-      }
-    }
-  }
 
   render() {
     const { auth } = this.props;
@@ -72,7 +52,7 @@ class Sidebar extends Component {
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
-                          auth.isAuthenticated() && profile ? (
+                          Auth.isAuthenticated() && profile ? (
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <img width="45" className="img-rounded" src={profile.picture} alt="" />
@@ -104,7 +84,7 @@ class Sidebar extends Component {
 
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { auth.isAuthenticated() ? (
+                  { Auth.isAuthenticated() ? (
                     <div>
                       <div className="divider-header">Dashboard</div>
                       <li>
@@ -127,13 +107,13 @@ class Sidebar extends Component {
                       <i className="fa fa-book" /> <span>Kifu Library</span>
                     </NavLink>
                   </li>
-                  <li>
-                    <Link activeClassName="active" to="/favorites">
-                      <i className="fa fa-heart" /><span>Favorites</span>
-                    </Link>
-                  </li>
-                  { auth.isAuthenticated() ? (
+                  { Auth.isAuthenticated() ? (
                     <div>
+                      <li>
+                        <Link activeClassName="active" to="/favorites">
+                          <i className="fa fa-heart" /><span>Favorites</span>
+                        </Link>
+                      </li>
                       <li className="divider" />
                       <div className="divider-header">Others</div>
                       <li>
@@ -151,7 +131,7 @@ class Sidebar extends Component {
             <div>
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { auth.isAuthenticated() ? (
+                  { Auth.isAuthenticated() ? (
                     <div>
                       <li>
                         <NavLink activeClassName="active" to="/dashboard">
@@ -180,7 +160,7 @@ class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  { auth.isAuthenticated() ? (
+                  { Auth.isAuthenticated() ? (
                     <div>
                       <li className="divider" />
                       {/*

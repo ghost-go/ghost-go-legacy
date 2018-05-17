@@ -33,13 +33,7 @@ export default class Navigation extends Component {
 
     this.state = {
       navOpen: false,
-      profile: {
-        sub: 'sub',
-        nickname: 'Ghost Go',
-        name: 'Ghost Go',
-        picture: 'https://s.gravatar.com/avatar/cc82c4164a2afbdacd86…&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fha.png',
-        updated_at: '2018-05-16T07:04:06.008Z',
-      },
+      profile: Auth.getProfile(),
     };
 
     this.handleToggle = this.handleToggle.bind(this);
@@ -47,27 +41,6 @@ export default class Navigation extends Component {
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleSidebar = this.handleSidebar.bind(this);
-  }
-
-  componentWillMount() {
-    const { auth } = this.props;
-    if (auth.isAuthenticated()) {
-      const { userProfile, getProfile } = this.props.auth;
-      if (!userProfile) {
-        getProfile((err, profile) => {
-          this.setState({ profile });
-        });
-      } else {
-        this.setState({ profile: userProfile });
-      }
-    }
-
-    // window.addEventListener('mousedown', () => {
-    //   if (this.mouseIsDownOnCalendar) {
-    //     return;
-    //   }
-    //   this.setState({ navOpen: false });
-    // }, false);
   }
 
   componentDidMount() {
@@ -112,7 +85,7 @@ export default class Navigation extends Component {
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
-            auth.isAuthenticated() && profile ? (
+            Auth.isAuthenticated() && profile ? (
               <div>
                 <div className="user-profile dropdown">
                   <a onTouchTap={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">

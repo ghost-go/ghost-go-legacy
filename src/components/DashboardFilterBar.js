@@ -9,12 +9,13 @@ import {
   setUserRangeFilter,
 } from '../actions/Actions';
 import { fetchDashboard } from '../actions/FetchActions';
-import AuthService from '../common/AuthService';
+import Auth from '../common/Auth';
 
 function mapStateToProps(state) {
   return {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
+    auth: state.ui.auth,
     ui: state.ui,
   };
 }
@@ -38,6 +39,9 @@ export default class DashboardFilterBar extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
+    this.state = {
+      profile: Auth.getProfile(),
+    }
   }
 
   handleToggle() {
@@ -46,25 +50,23 @@ export default class DashboardFilterBar extends Component {
 
   handleUserChange(userRange) {
     const { dispatch, dateRangeFilter } = this.props;
-    const profile = AuthService.getProfile();
     dispatch(closeDashboardFilter());
     dispatch(setUserRangeFilter(userRange));
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
       user_range: userRange,
-      user_id: profile.user_id,
+      user_id: this.state.profile.sub,
     }));
   }
 
   handleDateChange(dateRange) {
     const { dispatch, userRangeFilter } = this.props;
-    const profile = AuthService.getProfile();
     dispatch(closeDashboardFilter());
     dispatch(setDateRangeFilter(dateRange));
     dispatch(fetchDashboard({
       date_range: dateRange,
       user_range: userRangeFilter,
-      user_id: profile.user_id,
+      user_id: this.state.profile.user_id,
     }));
   }
 
