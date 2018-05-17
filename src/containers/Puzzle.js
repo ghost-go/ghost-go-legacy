@@ -22,6 +22,8 @@ import {
   resetSteps, setCurrentAnswerId,
   setNextStoneType,
   setToolbarHidden,
+  rightAddOne,
+  wrongAddOne,
 } from '../actions/Actions';
 import Auth from '../common/Auth';
 
@@ -191,7 +193,6 @@ class Puzzle extends Component {
     board.render();
   }
 
-
   getInitNextStoneType() {
     return (this.props.puzzle.data.whofirst === 'Black First' ? 1 : -1);
   }
@@ -217,6 +218,7 @@ class Puzzle extends Component {
   }
 
   handleRight() {
+    this.props.dispatch(rightAddOne());
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: this.state.profile.sub,
@@ -227,6 +229,7 @@ class Puzzle extends Component {
   }
 
   handleWrong() {
+    this.props.dispatch(wrongAddOne());
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
       user_id: this.state.profile.sub,

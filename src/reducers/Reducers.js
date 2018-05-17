@@ -139,6 +139,20 @@ export const puzzle = reduceReducers(
           state.data.is_favorite ? state.data.favorite_count - 1 : state.data.favorite_count + 1,
       },
     }),
+    RIGHT_ADD_ONE: state => ({
+      ...state,
+      data: {
+        ...state.data,
+        right_count: state.data.right_count + 1,
+      },
+    }),
+    WRONG_ADD_ONE: state => ({
+      ...state,
+      data: {
+        ...state.data,
+        wrong_count: state.data.wrong_count + 1,
+      },
+    }),
   }),
 );
 
