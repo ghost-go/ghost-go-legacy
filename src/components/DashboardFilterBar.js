@@ -84,7 +84,7 @@ export default class DashboardFilterBar extends Component {
                 <ul className="tags">
                   {
                     ['today', 'yesterday', 'last7days', 'last30days', 'all'].map(range => (
-                      <li className={`tag ${this.props.dateRangeFilter === range ? 'active' : ''}`}>
+                      <li key={range} className={`tag ${this.props.dateRangeFilter === range ? 'active' : ''}`}>
                         <a onClick={() => { this.handleDateChange(range); }} tabIndex={0} onKeyPress={() => {}} role="button">{range}</a>
                       </li>
                     ))

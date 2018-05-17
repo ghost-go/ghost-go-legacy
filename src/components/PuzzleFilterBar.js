@@ -28,7 +28,7 @@ export default class PuzzleFilterBar extends Component {
     tags: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      tagging_count: PropTypes.number.isRequired,
+      tagging_count: PropTypes.number,
     })).isRequired,
     ranges: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     rangeFilter: PropTypes.string.isRequired,
@@ -95,7 +95,7 @@ export default class PuzzleFilterBar extends Component {
                 <ul className="tags">
                   {
                     ranges.map(level => (
-                      <li className={`tag ${this.props.rangeFilter === level ? 'active' : ''}`}>
+                      <li key={level} className={`tag ${this.props.rangeFilter === level ? 'active' : ''}`}>
                         <a onClick={() => { this.handleRangeChange(level); }} tabIndex={0} onKeyPress={() => {}} role="button">{level}</a>
                       </li>
                     ))

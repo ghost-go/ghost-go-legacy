@@ -27,12 +27,12 @@ class PuzzlePanel extends Component {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
         is_favorite: PropTypes.bool.isRequired,
-        favorite_count: PropTypes.number.isRequired,
-        right_count: PropTypes.number.isRequired,
-        wrong_count: PropTypes.number.isRequired,
+        favorite_count: PropTypes.number,
+        right_count: PropTypes.number,
+        wrong_count: PropTypes.number,
       }),
     }).isRequired,
-    rangeFilter: PropTypes.shape({}).isRequired,
+    rangeFilter: PropTypes.string.isRequired,
     className: PropTypes.string,
     addSteps: PropTypes.func.isRequired,
     resetSteps: PropTypes.func.isRequired,
@@ -43,7 +43,6 @@ class PuzzlePanel extends Component {
     currentMode: PropTypes.string.isRequired,
     currentAnswerId: PropTypes.number,
     handleNext: PropTypes.func.isRequired,
-    handleRangeChange: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     auth: PropTypes.instanceOf(Auth).isRequired,
   }
@@ -189,10 +188,7 @@ class PuzzlePanel extends Component {
           </Button>
         </div>
         <div>
-          <RankRange
-            rankRange={this.props.rangeFilter}
-            handleRangeChange={this.props.handleRangeChange}
-          />
+          <RankRange rankRange={this.props.rangeFilter} />
         </div>
         <div className="clearfix" />
         <Toggle

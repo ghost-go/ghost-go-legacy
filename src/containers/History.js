@@ -134,7 +134,7 @@ class History extends Component {
       type = recordTypeFilter;
     }
     if (records.data !== undefined) {
-      recordList = <RecordList recordList={records.data.data.map(i => i.puzzle)} />;
+      recordList = <RecordList type="records" recordList={records.data.data.map(i => i.puzzle)} />;
       const pageCount = records.data.total_pages;
       if (pageCount > 1) {
         pagination = (<ReactPaginate

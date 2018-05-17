@@ -87,10 +87,7 @@ class Puzzle extends Component {
       }).isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
-    rangeFilter: PropTypes.shape({
-      start: PropTypes.string.isRequired,
-      end: PropTypes.string.isRequired,
-    }).isRequired,
+    rangeFilter: PropTypes.string.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -106,10 +103,6 @@ class Puzzle extends Component {
       mark: PropTypes.string.isRequired,
     }).isRequired,
     auth: PropTypes.instanceOf(Auth).isRequired,
-  }
-
-  static contextTypes = {
-    auth: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -135,7 +128,6 @@ class Puzzle extends Component {
     // this.handleAnswersToggle = this.handleAnswersToggle.bind(this);
     this.handleResearchMode = this.handleResearchMode.bind(this);
     this.handleNext = this.handleNext.bind(this);
-    this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.setCurrentMode = this.setCurrentMode.bind(this);

@@ -17,10 +17,6 @@ class Dashboard extends Component {
     dashboard: PropTypes.shape({}).isRequired,
   }
 
-  static contextTypes = {
-    auth: PropTypes.object.isRequired,
-  }
-
   static buildScoreboardItem(userId, index, picture, nickname, count) {
     return (
       <tr key={userId}>
@@ -108,15 +104,15 @@ class Dashboard extends Component {
         <Row>
           <Col xs={8} md={4}>
             <b>Most Wrong</b> <a href="/records?type=wrong">View details</a>
-            <RecordList recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
+            <RecordList type="most_wrong" recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
           </Col>
           <Col xs={8} md={4}>
             <b>Favoriates</b> <a href="/favorites">View details</a>
-            <RecordList recordList={dashboard.data.favorites_list} />
+            <RecordList type="favorites" recordList={dashboard.data.favorites_list} />
           </Col>
           <Col xs={8} md={4}>
             <b>Recents</b> <a href="/records?type=all">View details</a>
-            <RecordList recordList={dashboard.data.recents_list.map(i => i.puzzle)} />
+            <RecordList type="recents" recordList={dashboard.data.recents_list.map(i => i.puzzle)} />
           </Col>
         </Row>
       </div>

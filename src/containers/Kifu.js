@@ -15,9 +15,6 @@ const {
 
 class Kifu extends Component {
   static propTypes = {
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
     dispatch: PropTypes.func.isRequired,
     kifu: PropTypes.shape({
       data: PropTypes.shape({
