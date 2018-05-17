@@ -59,9 +59,9 @@ class Sidebar extends Component {
                                 <div className="user-welcome">
                                   Welcome back, <b>{profile.nickname}</b>
                                 </div>
-                                <Link to="/users" className="btn btn-sm btn-black-opacity-alt">
+                                {/* <Link to="/users" className="btn btn-sm btn-black-opacity-alt">
                                   <i className="fa fa-cog" />
-                                </Link>
+                                </Link> */}
                               </div>
                             </div>
                           ) : (
