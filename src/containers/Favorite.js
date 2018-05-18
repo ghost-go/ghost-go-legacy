@@ -163,7 +163,7 @@ class Favorite extends Component {
               <div className={css(style.listRight)}>
                 <span className={css(style.title)}>{`P-${i.id}(${i.rank})`}</span>
                 <span>{i.whofirst}</span>
-                <span className={css(style.date)}>{moment(i.created_at).format('YYYY-MM-DD')}</span>
+                <span className={css(style.date)}>{moment(i.updated_at).format('YYYY-MM-DD')}</span>
               </div>
             </div>
           </Link>
