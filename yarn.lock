@@ -2486,8 +2486,8 @@ detect-port-alt@1.1.6:
     debug "^2.6.0"
 
 detect-port@^1.2.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/detect-port/-/detect-port-1.2.2.tgz#57a44533632d8bc74ad255676866ca43f96c7469"
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/detect-port/-/detect-port-1.2.3.tgz#15bf49820d02deb84bfee0a74876b32d791bf610"
   dependencies:
     address "^1.0.1"
     debug "^2.6.0"
@@ -2839,8 +2839,8 @@ eslint-plugin-flowtype@^2.46.1:
     lodash "^4.15.0"
 
 eslint-plugin-import@^2.9.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.11.0.tgz#15aeea37a67499d848e8e981806d4627b5503816"
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.12.0.tgz#dad31781292d6664b25317fd049d2e2b2f02205d"
   dependencies:
     contains-path "^0.1.0"
     debug "^2.6.8"
