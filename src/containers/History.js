@@ -113,7 +113,7 @@ class History extends Component {
     const query = new URLSearchParams(this.props.location.search);
     this.setState({ filterOpen: false });
     this.props.dispatch(setRecordTypeFilter(val));
-    this.fetchRecordData(query.get('page'), val, this.state.profile.sub);
+    this.fetchRecordData(query.get('page'), val, this.state.profile.sub || this.state.profile.user_id);
     this.props.dispatch(push(`/records?page=${query.get('page') || 1}&type=${val}`));
   }
 

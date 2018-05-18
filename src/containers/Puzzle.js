@@ -214,7 +214,7 @@ class Puzzle extends Component {
     this.props.dispatch(rightAddOne());
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: this.state.profile.sub || this.state.profile.sub,
+      user_id: this.state.profile.sub || this.state.profile.user_id,
       record_type: 'right',
     }));
 
@@ -225,7 +225,7 @@ class Puzzle extends Component {
     this.props.dispatch(wrongAddOne());
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: this.state.profile.sub || this.state.profile.sub,
+      user_id: this.state.profile.sub || this.state.profile.user_id,
       record_type: 'wrong',
     }));
 
