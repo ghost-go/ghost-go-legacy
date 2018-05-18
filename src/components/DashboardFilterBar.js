@@ -26,6 +26,10 @@ export default class DashboardFilterBar extends Component {
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
+    auth: PropTypes.shape({
+      userProfile: PropTypes.shape({}).isRequired,
+      getProfile: PropTypes.func.isRequired,
+    }).isRequired,
     ui: PropTypes.shape({
       dashboardFilter: PropTypes.shape({
         open: PropTypes.bool.isRequired,
@@ -42,6 +46,18 @@ export default class DashboardFilterBar extends Component {
     this.state = {
       profile: Auth.getProfile(),
     };
+  }
+
+  componentWillMount() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+      });
+    } else {
+      this.setState({ profile: userProfile });
+    }
   }
 
   handleToggle() {

@@ -33,6 +33,18 @@ class Sidebar extends Component {
     };
   }
 
+  componentWillMount() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+      });
+    } else {
+      this.setState({ profile: userProfile });
+    }
+  }
+
   // handleTouchTap(index) {
   // this.setState({ selectedIndex: index })
   // }

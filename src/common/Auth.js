@@ -21,6 +21,8 @@ export default class Auth {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+    this.getAccessToken = this.getAccessToken.bind(this);
+    this.getProfile = this.getProfile.bind(this);
   }
 
   login() {
@@ -71,6 +73,27 @@ export default class Auth {
   static getProfile() {
     const profile = localStorage.getItem('profile');
     return profile ? JSON.parse(localStorage.profile) : null;
+  }
+
+  getAccessToken() {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      // throw new Error('No Access Token found');
+      console.log('No Access Token found');
+    }
+    return accessToken;
+  }
+
+  getProfile(cb) {
+    const accessToken = this.getAccessToken();
+    if (accessToken) {
+      this.auth0.client.userInfo(accessToken, (err, profile) => {
+        if (profile) {
+          this.userProfile = profile;
+        }
+        cb(err, profile);
+      });
+    }
   }
 
   static isAuthenticated() {

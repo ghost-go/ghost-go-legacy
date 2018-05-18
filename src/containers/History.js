@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
   },
-
 });
 
 class History extends Component {
@@ -66,6 +65,7 @@ class History extends Component {
     dispatch: PropTypes.func.isRequired,
     records: PropTypes.shape({}).isRequired,
     recordTypeFilter: PropTypes.string.isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
   }
 
   constructor(props) {
@@ -84,7 +84,19 @@ class History extends Component {
   componentWillMount() {
     const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(setRecordTypeFilter(query.get('type') || 'all'));
-    this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', this.state.profile.sub || this.state.profile.user_id);
+    // this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', this.state.profile.sub || this.state.profile.user_id);
+
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+        this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', profile.sub);
+      });
+    } else {
+      this.setState({ profile: userProfile });
+      this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', userProfile.sub);
+    }
   }
 
   fetchRecordData(page = 1, recordType = 'all', sub) {
@@ -187,6 +199,7 @@ function select(state) {
   return {
     records: state.puzzleRecords,
     recordTypeFilter: state.recordTypeFilter,
+    auth: state.ui.auth,
   };
 }
 

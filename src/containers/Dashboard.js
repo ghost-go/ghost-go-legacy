@@ -15,6 +15,10 @@ class Dashboard extends Component {
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
     dashboard: PropTypes.shape({}).isRequired,
+    auth: PropTypes.shape({
+      userProfile: PropTypes.shape({}),
+      getProfile: PropTypes.func.isRequired,
+    }).isRequired,
   }
 
   static buildScoreboardItem(userId, index, picture, nickname, count) {
@@ -31,17 +35,27 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
-      profile: Auth.getProfile(),
+      // profile: Auth.getProfile(),
     };
   }
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(true));
+    // this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        // this.setState({ profile });
+        this.fetchDashboardData(profile.sub || profile.user_id);
+      });
+    } else {
+      // this.setState({ profile: userProfile });
+      this.fetchDashboardData(userProfile.sub || userProfile.user_id);
+    }
   }
 
-  componentDidMount() {
-    this.fetchDashboardData(this.state.profile.sub || this.state.profile.user_id);
-  }
+  // componentDidMount() {
+  // }
 
   fetchDashboardData(sub) {
     const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
@@ -125,6 +139,7 @@ function mapStateToProps(state) {
     dateRangeFilter: state.dateRangeFilter,
     userRangeFilter: state.userRangeFilter,
     dashboard: state.dashboard,
+    auth: state.ui.auth,
   };
 }
 

@@ -43,6 +43,18 @@ export default class Navigation extends Component {
     this.handleSidebar = this.handleSidebar.bind(this);
   }
 
+  componentWillMount() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+      });
+    } else {
+      this.setState({ profile: userProfile });
+    }
+  }
+
   componentDidMount() {
   }
 

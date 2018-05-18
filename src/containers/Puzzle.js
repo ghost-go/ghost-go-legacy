@@ -141,6 +141,15 @@ class Puzzle extends Component {
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+      });
+    } else {
+      this.setState({ profile: userProfile });
+    }
   }
 
   componentDidMount() {

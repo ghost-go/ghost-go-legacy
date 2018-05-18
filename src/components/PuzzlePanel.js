@@ -65,6 +65,18 @@ class PuzzlePanel extends Component {
     this.handleFavorite = this.handleFavorite.bind(this);
   }
 
+  componentWillMount() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+      });
+    } else {
+      this.setState({ profile: userProfile });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       is_favorite: nextProps.puzzle.data.is_favorite,

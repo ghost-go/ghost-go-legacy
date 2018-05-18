@@ -90,6 +90,7 @@ const style = StyleSheet.create({
 
 class Favorite extends Component {
   static propTypes = {
+    auth: PropTypes.instanceOf(Auth).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
@@ -108,9 +109,19 @@ class Favorite extends Component {
     profile: Auth.getProfile(),
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
     const query = new URLSearchParams(this.props.location.search);
-    this.fetchFavoriteData(query.get('page') || 1, this.state.profile.sub || this.state.profile.user_id);
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+        this.fetchFavoriteData(query.get('page') || 1, profile.sub);
+      });
+    } else {
+      this.setState({ profile: userProfile });
+      this.fetchFavoriteData(query.get('page') || 1, userProfile.sub);
+    }
   }
 
   fetchFavoriteData(page = 1, sub) {
@@ -213,6 +224,7 @@ class Favorite extends Component {
 function select(state) {
   return {
     favorites: state.favorites,
+    auth: state.ui.auth,
   };
 }
 
