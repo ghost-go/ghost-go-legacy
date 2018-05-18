@@ -94,7 +94,7 @@ class PuzzlePanel extends Component {
           likable_type: 'Puzzle',
           value: this.state.is_favorite,
           scope: 'favorite',
-          user_id: this.state.profile.sub,
+          user_id: this.state.profile.sub || this.state.profile.user_id,
         }));
       });
     } else {

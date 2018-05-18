@@ -40,7 +40,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.fetchDashboardData(this.state.profile.sub);
+    this.fetchDashboardData(this.state.profile.sub || this.state.profile.user_id);
   }
 
   fetchDashboardData(sub) {

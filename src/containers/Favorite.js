@@ -110,7 +110,7 @@ class Favorite extends Component {
 
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
-    this.fetchFavoriteData(query.get('page') || 1, this.state.profile.sub);
+    this.fetchFavoriteData(query.get('page') || 1, this.state.profile.sub || this.state.profile.user_id);
   }
 
   fetchFavoriteData(page = 1, sub) {
@@ -129,7 +129,7 @@ class Favorite extends Component {
 
   handlePageClick(data) {
     const page = data.selected + 1;
-    this.fetchFavoriteData(page, this.state.profile.sub);
+    this.fetchFavoriteData(page, this.state.profile.sub || this.state.profile.user_id);
     this.props.dispatch(push(`/favorites?page=${page}`));
   }
 

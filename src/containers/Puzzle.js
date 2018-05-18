@@ -128,6 +128,7 @@ class Puzzle extends Component {
     // this.handleAnswersToggle = this.handleAnswersToggle.bind(this);
     this.handleResearchMode = this.handleResearchMode.bind(this);
     this.handleNext = this.handleNext.bind(this);
+    this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.setCurrentMode = this.setCurrentMode.bind(this);
@@ -146,7 +147,7 @@ class Puzzle extends Component {
     this.handleReset();
     const { id } = this.props.match.params;
     this.props.dispatch(setNextStoneType(this.getInitNextStoneType()));
-    this.props.dispatch(fetchPuzzle({ id, query: { user_id: this.state.profile.sub } }));
+    this.props.dispatch(fetchPuzzle({ id, query: { user_id: this.state.profile.sub || this.state.profile.user_id } }));
     let boardWidth = 0;
     if (window.screen.width > window.screen.height) {
       boardWidth = window.innerHeight - 60;
@@ -213,7 +214,7 @@ class Puzzle extends Component {
     this.props.dispatch(rightAddOne());
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: this.state.profile.sub,
+      user_id: this.state.profile.sub || this.state.profile.sub,
       record_type: 'right',
     }));
 
@@ -224,7 +225,7 @@ class Puzzle extends Component {
     this.props.dispatch(wrongAddOne());
     this.props.dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: this.state.profile.sub,
+      user_id: this.state.profile.sub || this.state.profile.sub,
       record_type: 'wrong',
     }));
 

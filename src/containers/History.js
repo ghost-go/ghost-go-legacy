@@ -84,7 +84,7 @@ class History extends Component {
   componentWillMount() {
     const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(setRecordTypeFilter(query.get('type') || 'all'));
-    this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', this.state.profile.sub);
+    this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', this.state.profile.sub || this.state.profile.user_id);
   }
 
   fetchRecordData(page = 1, recordType = 'all', sub) {
@@ -105,7 +105,7 @@ class History extends Component {
   handlePageClick(data) {
     const query = new URLSearchParams(this.props.location.search);
     const page = data.selected + 1;
-    this.fetchRecordData(page, query.get('type'), this.state.profile.sub);
+    this.fetchRecordData(page, query.get('type'), this.state.profile.sub || this.state.profile.user_id);
     this.props.dispatch(push(`/records?page=${page}&type=${query.get('type') || 'all'}`));
   }
 

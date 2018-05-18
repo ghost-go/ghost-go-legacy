@@ -55,7 +55,7 @@ export default class DashboardFilterBar extends Component {
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
       user_range: userRange,
-      user_id: this.state.profile.sub,
+      user_id: this.state.profile.sub || this.state.profile.user_id,
     }));
   }
 
@@ -66,7 +66,7 @@ export default class DashboardFilterBar extends Component {
     dispatch(fetchDashboard({
       date_range: dateRange,
       user_range: userRangeFilter,
-      user_id: this.state.profile.user_id,
+      user_id: this.state.profile.sub || this.state.profile.user_id,
     }));
   }
 
