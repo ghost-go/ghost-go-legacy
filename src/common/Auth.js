@@ -10,7 +10,7 @@ export default class Auth {
     domain: 'ghostgo.auth0.com',
     clientID: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5',
     redirectUri: `${config.APP_DOMAIN}/callback`,
-    audience: 'https://ghostgo.auth0.com/userinfo',
+    audience: 'https://ghostgo.auth0.com/api/v2/',
     responseType: 'token id_token',
     scope: 'openid profile',
   });
