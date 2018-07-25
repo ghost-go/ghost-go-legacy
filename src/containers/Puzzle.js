@@ -336,7 +336,7 @@ class Puzzle extends Component {
         label="OK"
         primary
         keyboardFocused
-        onTouchTap={this.handleClose}
+        onClick={this.handleClose}
       />,
     ];
 

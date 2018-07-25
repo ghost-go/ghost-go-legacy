@@ -11,12 +11,14 @@ export default class Auth {
     clientID: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5',
     redirectUri: `${config.APP_DOMAIN}/callback`,
     // audience: 'https://ghostgo.auth0.com/api/v2/',
-    audience: 'ghostgo',
+    // audience: 'ghostgo',
+    audience: config.AUDIENCE,
     responseType: 'token id_token',
     scope: 'openid profile',
   });
 
   userProfile;
+  tokenRenewalTimeout;
 
   constructor() {
     this.login = this.login.bind(this);
@@ -24,6 +26,7 @@ export default class Auth {
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
     this.getProfile = this.getProfile.bind(this);
+    this.scheduleRenewal();
   }
 
   login() {
@@ -51,12 +54,16 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
-    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
-      if (profile) {
-        localStorage.setItem('profile', JSON.stringify(profile));
-        this.userProfile = profile;
-      }
-    });
+
+    // schedule a token renewal
+    this.scheduleRenewal();
+
+    // this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+    //   if (profile) {
+    //     localStorage.setItem('profile', JSON.stringify(profile));
+    //     this.userProfile = profile;
+    //   }
+    // });
     // navigate to the home route
     this.history.replace('/problems');
   }
@@ -68,6 +75,8 @@ export default class Auth {
     localStorage.removeItem('expires_at');
     // localStorage.removeItem('profile');
     // navigate to the home route
+    clearTimeout(this.tokenRenewalTimeout);
+    this.userProfile = null;
     this.history.replace('/problems');
   }
 
@@ -94,6 +103,31 @@ export default class Auth {
         }
         cb(err, profile);
       });
+    }
+  }
+
+  renewToken() {
+    this.auth0.checkSession({},
+      (err, result) => {
+        if (err) {
+          console.log(`Could not get a new token (${err.error}: ${err.error_description}).`)
+        } else {
+          this.setSession(result);
+          console.log('Successfully renewed auth!')
+        }
+      },
+    );
+  }
+
+  scheduleRenewal() {
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    const delay = expiresAt - Date.now();
+    if (delay > 0) {
+      this.tokenRenewalTimeout = setTimeout(() => {
+        this.renewToken();
+      }, delay);
+    } else {
+      this.renewToken();
     }
   }
 

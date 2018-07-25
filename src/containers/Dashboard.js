@@ -10,6 +10,16 @@ import Auth from '../common/Auth';
 import RecordList from '../components/RecordList';
 
 class Dashboard extends Component {
+  static buildScoreboardItem(userId, index, picture, nickname, count) {
+    return (
+      <tr key={userId}>
+        <td>{index + 1}</td>
+        <td><img width="24" height="24" src={picture} alt="" />&nbsp;&nbsp;{nickname}</td>
+        <td>{count}</td>
+      </tr>
+    );
+  }
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
@@ -19,16 +29,6 @@ class Dashboard extends Component {
       userProfile: PropTypes.shape({}),
       getProfile: PropTypes.func.isRequired,
     }).isRequired,
-  }
-
-  static buildScoreboardItem(userId, index, picture, nickname, count) {
-    return (
-      <tr key={userId}>
-        <td>{index + 1}</td>
-        <td><img width="24" height="24" src={picture} alt="" />&nbsp;&nbsp;{nickname}</td>
-        <td>{count}</td>
-      </tr>
-    );
   }
 
   constructor(props) {

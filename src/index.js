@@ -8,7 +8,6 @@ import thunkMiddleware from 'redux-thunk';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware, routerReducer } from 'react-router-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import * as reducers from './reducers/Reducers';
 import uiReducers from './reducers/UIReducers';
@@ -34,8 +33,6 @@ const store = createStoreWithMiddleware(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
-
-injectTapEventPlugin();
 
 ReactDOM.render(
   <Provider store={store}>

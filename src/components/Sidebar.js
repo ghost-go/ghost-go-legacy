@@ -45,11 +45,6 @@ class Sidebar extends Component {
     }
   }
 
-  // handleTouchTap(index) {
-  // this.setState({ selectedIndex: index })
-  // }
-  //
-
   render() {
     const { auth } = this.props;
     const { profile } = this.state;

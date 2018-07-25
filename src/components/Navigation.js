@@ -82,7 +82,7 @@ export default class Navigation extends Component {
 
   render() {
     const { auth } = this.props;
-    const { profile } = this.state;
+    const { profile, navOpen } = this.state;
     return (
       <div id="page-header">
         <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="header-logo">
@@ -100,11 +100,11 @@ export default class Navigation extends Component {
             Auth.isAuthenticated() && profile ? (
               <div>
                 <div className="user-profile dropdown">
-                  <a onTouchTap={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
+                  <a role="button" tabIndex={0} onKeyPress={() => {}} onClick={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
                     <img width="36" src={profile.picture} alt="" />
                     <i className="fa fa-chevron-down" />
                   </a>
-                  <div style={{ display: this.state.navOpen ? 'block' : 'none' }} className="dropdown-menu account">
+                  <div style={{ display: navOpen ? 'block' : 'none' }} className="dropdown-menu account">
                     <div className="box-sm">
                       <div className="login-box clearfix">
                         <div className="user-img"><img src={profile.picture} alt="" /></div>
@@ -141,7 +141,7 @@ export default class Navigation extends Component {
                         </li>
                       </ul>
                       */}
-                      <div onTouchTap={this.handleLogout} className="text-center button-pane">
+                      <div onKeyPress={this.handleLogout} onClick={this.handleLogout} className="text-center button-pane">
                         <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off" />Logout</a>
                       </div>
                     </div>
