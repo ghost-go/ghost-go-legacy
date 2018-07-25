@@ -199,7 +199,7 @@ export const boardStates = createReducer({
 }, { SET_BOARD_STATES: setObjectFilter });
 export const ranges = createReducer(['all', '18k-10k', '9k-5k', '4k-1k', '1d-3d', '4d-6d'], {});
 export const theme = createReducer(
-  localStorage.getItem('theme') || 'black-and-white',
+  localStorage.getItem('theme') || 'subdued-theme',
   { SET_THEME: setPlainTextFilter },
 );
 export const tags = buildFetchReducer({}, 'TAGS');
