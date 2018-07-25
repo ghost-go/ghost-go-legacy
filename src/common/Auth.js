@@ -1,11 +1,8 @@
-import createHistory from 'history/createBrowserHistory';
 import auth0 from 'auth0-js';
-import * as config from '../common/Config';
+import * as config from './Config';
+import history from './History';
 
 export default class Auth {
-  history = createHistory({
-    forceRefresh: true,
-  });
   auth0 = new auth0.WebAuth({
     domain: 'ghostgo.auth0.com',
     clientID: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5',
@@ -26,6 +23,7 @@ export default class Auth {
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
     this.getProfile = this.getProfile.bind(this);
+    this.history = history;
     this.scheduleRenewal();
   }
 

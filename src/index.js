@@ -6,14 +6,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware, routerReducer } from 'react-router-redux';
 
 import * as reducers from './reducers/Reducers';
 import uiReducers from './reducers/UIReducers';
 import App from './App';
+import history from './common/History';
 
-const history = createHistory();
 const historyMiddleware = routerMiddleware(history);
 
 const reducer = combineReducers({

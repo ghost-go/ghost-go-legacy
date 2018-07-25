@@ -59,7 +59,7 @@ class Sidebar extends Component {
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
-                          Auth.isAuthenticated() && profile ? (
+                          Auth.isAuthenticated() ? (
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <img width="45" className="img-rounded" src={profile.picture} alt="" />
