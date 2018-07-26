@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux'; import ReactPaginate from 'react-paginate';
@@ -62,10 +63,11 @@ class History extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
+    auth: PropTypes.instanceOf(Auth).isRequired,
     dispatch: PropTypes.func.isRequired,
     records: PropTypes.shape({}).isRequired,
     recordTypeFilter: PropTypes.string.isRequired,
-    auth: PropTypes.instanceOf(Auth).isRequired,
+    profile: PropTypes.shape({}).isRequired,
   }
 
   constructor(props) {
@@ -78,34 +80,29 @@ class History extends Component {
 
   state = {
     filterOpen: false,
-    profile: Auth.getProfile(),
   }
 
   componentWillMount() {
     const query = new URLSearchParams(this.props.location.search);
     this.props.dispatch(setRecordTypeFilter(query.get('type') || 'all'));
-    // this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', this.state.profile.sub || this.state.profile.user_id);
-
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-        this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', profile.sub);
-      });
-    } else {
-      this.setState({ profile: userProfile });
-      this.fetchRecordData(query.get('page') || 1, query.get('type') || 'all', userProfile.sub);
+    const { dispatch, auth, profile } = this.props;
+    if (auth.isAuthenticated()) {
+      dispatch(fetchPuzzleRecords({
+        page: query.get('page') || 1,
+        user_id: profile.sub || profile.user_id,
+        record_type: 'all',
+      }));
     }
   }
 
-  fetchRecordData(page = 1, recordType = 'all', sub) {
-    const { dispatch } = this.props;
-    if (Auth.isAuthenticated()) {
+  componentDidUpdate(prevProps) {
+    const { profile, dispatch } = this.props;
+    if (_.isEmpty(prevProps.profile) && !_.isEmpty(profile)) {
+      const query = new URLSearchParams(this.props.location.search);
       dispatch(fetchPuzzleRecords({
-        page,
-        user_id: sub,
-        record_type: recordType,
+        page: query.get('page') || 1,
+        user_id: profile.sub || profile.user_id,
+        record_type: 'all',
       }));
     }
   }
@@ -117,7 +114,12 @@ class History extends Component {
   handlePageClick(data) {
     const query = new URLSearchParams(this.props.location.search);
     const page = data.selected + 1;
-    this.fetchRecordData(page, query.get('type'), this.state.profile.sub || this.state.profile.user_id);
+    const { dispatch, profile } = this.props;
+    dispatch(fetchPuzzleRecords({
+      page,
+      user_id: profile.sub || profile.user_id,
+      record_type: query.get('type'),
+    }));
     this.props.dispatch(push(`/records?page=${page}&type=${query.get('type') || 'all'}`));
   }
 
@@ -125,7 +127,12 @@ class History extends Component {
     const query = new URLSearchParams(this.props.location.search);
     this.setState({ filterOpen: false });
     this.props.dispatch(setRecordTypeFilter(val));
-    this.fetchRecordData(query.get('page'), val, this.state.profile.sub || this.state.profile.user_id);
+    const { dispatch, profile } = this.props;
+    dispatch(fetchPuzzleRecords({
+      page: query.get('page'),
+      user_id: profile.sub || profile.user_id,
+      record_type: val,
+    }));
     this.props.dispatch(push(`/records?page=${query.get('page') || 1}&type=${val}`));
   }
 

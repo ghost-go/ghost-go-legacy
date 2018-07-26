@@ -103,6 +103,7 @@ class Puzzle extends Component {
       mark: PropTypes.string.isRequired,
     }).isRequired,
     auth: PropTypes.instanceOf(Auth).isRequired,
+    profile: PropTypes.shape({}).isRequired,
   }
 
   static defaultProps = {
@@ -119,7 +120,6 @@ class Puzzle extends Component {
       rightTipOpen: false,
       wrongTipOpen: false,
       researchMode: false,
-      profile: Auth.getProfile(),
     };
     this.handleCommentsToggle = this.handleCommentsToggle.bind(this);
     this.handleRight = this.handleRight.bind(this);
@@ -141,25 +141,17 @@ class Puzzle extends Component {
 
   componentWillMount() {
     this.props.dispatch(setToolbarHidden(false));
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-      });
-    } else {
-      this.setState({ profile: userProfile });
-    }
   }
 
   componentDidMount() {
     this.handleReset();
     const { id } = this.props.match.params;
-    this.props.dispatch(setNextStoneType(this.getInitNextStoneType()));
-    this.props.dispatch(fetchPuzzle({
+    const { dispatch, profile } = this.props;
+    dispatch(setNextStoneType(this.getInitNextStoneType()));
+    dispatch(fetchPuzzle({
       id,
       query: {
-        user_id: this.state.profile ? (this.state.profile.sub || this.state.profile.user_id) : null,
+        user_id: profile ? (profile.sub || profile.user_id) : null,
       },
     }));
     let boardWidth = 0;
@@ -225,10 +217,11 @@ class Puzzle extends Component {
   }
 
   handleRight() {
-    this.props.dispatch(rightAddOne());
-    this.props.dispatch(postPuzzleRecord({
+    const { dispatch, profile } = this.props;
+    dispatch(rightAddOne());
+    dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: this.state.profile ? (this.state.profile.sub || this.state.profile.user_id) : null,
+      user_id: profile ? (profile.sub || profile.user_id) : null,
       record_type: 'right',
     }));
 
@@ -236,10 +229,11 @@ class Puzzle extends Component {
   }
 
   handleWrong() {
-    this.props.dispatch(wrongAddOne());
-    this.props.dispatch(postPuzzleRecord({
+    const { dispatch, profile } = this.props;
+    dispatch(wrongAddOne());
+    dispatch(postPuzzleRecord({
       puzzle_id: this.props.puzzle.data.id,
-      user_id: this.state.profile ? (this.state.profile.sub || this.state.profile.user_id) : null,
+      user_id: profile ? (profile.sub || profile.user_id) : null,
       record_type: 'wrong',
     }));
 

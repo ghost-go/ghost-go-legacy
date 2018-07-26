@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
@@ -90,12 +91,12 @@ const style = StyleSheet.create({
 
 class Favorite extends Component {
   static propTypes = {
-    auth: PropTypes.instanceOf(Auth).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
     favorites: PropTypes.shape({}).isRequired,
+    profile: PropTypes.shape({}).isRequired,
   }
 
   constructor(props) {
@@ -106,30 +107,22 @@ class Favorite extends Component {
 
   state = {
     filterOpen: false,
-    profile: Auth.getProfile(),
   }
 
-  componentWillMount() {
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    const query = new URLSearchParams(this.props.location.search);
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-        this.fetchFavoriteData(query.get('page') || 1, profile.sub);
-      });
-    } else {
-      this.setState({ profile: userProfile });
-      this.fetchFavoriteData(query.get('page') || 1, userProfile.sub);
-    }
+  componentDidMount() {
+    const { profile, dispatch } = this.props;
+    dispatch(fetchFavorites({
+      page: 1,
+      user_id: profile.sub || profile.user_id,
+    }));
   }
 
-  fetchFavoriteData(page = 1, sub) {
-    const { dispatch } = this.props;
-    if (Auth.isAuthenticated()) {
+  componentDidUpdate(prevProps) {
+    const { profile, dispatch } = this.props;
+    if (_.isEmpty(prevProps.profile) && !_.isEmpty(profile)) {
       dispatch(fetchFavorites({
-        page,
-        user_id: sub,
+        page: 1,
+        user_id: profile.sub || profile.user_id,
       }));
     }
   }
@@ -140,7 +133,11 @@ class Favorite extends Component {
 
   handlePageClick(data) {
     const page = data.selected + 1;
-    this.fetchFavoriteData(page, this.state.profile.sub || this.state.profile.user_id);
+    const { profile, dispatch } = this.props;
+    dispatch(fetchFavorites({
+      page,
+      user_id: profile.sub || profile.user_id,
+    }));
     this.props.dispatch(push(`/favorites?page=${page}`));
   }
 

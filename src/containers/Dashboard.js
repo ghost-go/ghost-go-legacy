@@ -25,55 +25,28 @@ class Dashboard extends Component {
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
     dashboard: PropTypes.shape({}).isRequired,
-    auth: PropTypes.shape({
-      userProfile: PropTypes.shape({}),
-      getProfile: PropTypes.func.isRequired,
-    }).isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      // profile: Auth.getProfile(),
-    };
+    profile: PropTypes.shape({}).isRequired,
   }
 
   componentWillMount() {
+    const { profile } = this.props;
     this.props.dispatch(setToolbarHidden(true));
-    // this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        // this.setState({ profile });
-        this.fetchDashboardData(profile.sub || profile.user_id);
-      });
-    } else {
-      // this.setState({ profile: userProfile });
-      this.fetchDashboardData(userProfile.sub || userProfile.user_id);
-    }
-  }
-
-  // componentDidMount() {
-  // }
-
-  fetchDashboardData(sub) {
     const { dispatch, dateRangeFilter, userRangeFilter } = this.props;
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
       user_range: userRangeFilter,
-      user_id: sub,
+      user_id: profile.sub || profile.user_id,
     }));
   }
 
   render() {
     const loading = <div><i className="fa fa-spinner fa-pulse fa-fw" /></div>;
-    const { dashboard } = this.props;
+    const { dashboard, profile } = this.props;
     if (!dashboard.data.most_wrong_list) return null;
 
     return (
       <div>
-        <DashboardFilterBar />
+        <DashboardFilterBar profile={profile} />
         <Row style={{ marginTop: '40px' }}>
           <Col xs={8} md={4}>
             <div className="tile-box tile-box-alt bg-blue">

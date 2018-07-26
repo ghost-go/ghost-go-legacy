@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -20,6 +21,7 @@ function mapStateToProps(state) {
 export default class Navigation extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(Auth).isRequired,
+    profile: PropTypes.shape({}).isRequired,
     dispatch: PropTypes.func.isRequired,
     ui: PropTypes.shape({
       sidebar: PropTypes.shape({
@@ -31,31 +33,13 @@ export default class Navigation extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      navOpen: false,
-      profile: Auth.getProfile(),
-    };
+    this.state = { navOpen: false };
 
     this.handleToggle = this.handleToggle.bind(this);
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleSidebar = this.handleSidebar.bind(this);
-  }
-
-  componentWillMount() {
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-      });
-    } else {
-      this.setState({ profile: userProfile });
-    }
-  }
-
-  componentDidMount() {
   }
 
   handleToggle() {
@@ -81,12 +65,12 @@ export default class Navigation extends Component {
   }
 
   render() {
-    const { auth } = this.props;
-    const { profile, navOpen } = this.state;
+    const { auth, profile } = this.props;
+    const { navOpen } = this.state;
     return (
       <div id="page-header">
         <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="header-logo">
-          <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta.3</i></span>
+          <span>GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta</i></span>
           <a role="button" tabIndex={0} onKeyPress={() => {}} onClick={this.handleSidebar} id="collapse-sidebar" title="">
             <i className="fa fa-chevron-left" />
           </a>
@@ -97,7 +81,7 @@ export default class Navigation extends Component {
         </div>
         <div role="button" tabIndex={0} id="header-right" onMouseDown={this.mouseDownHandler} onMouseUp={this.mouseUpHandler}>
           {
-            Auth.isAuthenticated() && profile ? (
+            auth.isAuthenticated() && !_.isEmpty(profile) ? (
               <div>
                 <div className="user-profile dropdown">
                   <a role="button" tabIndex={0} onKeyPress={() => {}} onClick={this.handleToggle} className="user-ico clearfix" data-toggle="dropdown" aria-expanded="false">
@@ -109,7 +93,7 @@ export default class Navigation extends Component {
                       <div className="login-box clearfix">
                         <div className="user-img"><img src={profile.picture} alt="" /></div>
                         <div className="user-info">
-                          <span>{this.state.profile.nickname}<i>Welcome back!</i></span>
+                          <span>{profile.nickname}<i>Welcome back!</i></span>
                           <Link to="/dashboard">
                             Dashboard
                           </Link>

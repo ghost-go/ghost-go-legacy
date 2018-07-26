@@ -45,6 +45,7 @@ class PuzzlePanel extends Component {
     handleNext: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     auth: PropTypes.instanceOf(Auth).isRequired,
+    profile: PropTypes.shape({}).isRequired,
   }
 
   static defaultProps = {
@@ -58,23 +59,10 @@ class PuzzlePanel extends Component {
     this.state = {
       is_favorite: false,
       favorite_count: 0,
-      profile: Auth.getProfile(),
     };
 
     this.handleResearchMode = this.handleResearchMode.bind(this);
     this.handleFavorite = this.handleFavorite.bind(this);
-  }
-
-  componentWillMount() {
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-      });
-    } else {
-      this.setState({ profile: userProfile });
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -93,8 +81,8 @@ class PuzzlePanel extends Component {
   }
 
   handleFavorite() {
-    const { auth, puzzle } = this.props;
-    if (Auth.isAuthenticated()) {
+    const { auth, puzzle, profile } = this.props;
+    if (auth.isAuthenticated()) {
       this.setState({
         is_favorite: !this.state.is_favorite,
         favorite_count:
@@ -106,7 +94,7 @@ class PuzzlePanel extends Component {
           likable_type: 'Puzzle',
           value: this.state.is_favorite,
           scope: 'favorite',
-          user_id: this.state.profile.sub || this.state.profile.user_id,
+          user_id: profile.sub || profile.user_id,
         }));
       });
     } else {

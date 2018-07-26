@@ -7,8 +7,6 @@ export default class Auth {
     domain: 'ghostgo.auth0.com',
     clientID: 'GydWO2877MMcpteCqgQEWSFGqtQOCiP5',
     redirectUri: `${config.APP_DOMAIN}/callback`,
-    // audience: 'https://ghostgo.auth0.com/api/v2/',
-    // audience: 'ghostgo',
     audience: config.AUDIENCE,
     responseType: 'token id_token',
     scope: 'openid profile',
@@ -78,30 +76,27 @@ export default class Auth {
     this.history.replace('/problems');
   }
 
-  static getProfile() {
-    const profile = localStorage.getItem('profile');
-    return profile ? JSON.parse(localStorage.profile) : null;
-  }
+  // static getProfile() {
+  //   const profile = localStorage.getItem('profile');
+  //   return profile ? JSON.parse(localStorage.profile) : null;
+  // }
 
   getAccessToken() {
     const accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
-      // throw new Error('No Access Token found');
-      console.log('No Access Token found');
+      throw new Error('No Access Token found');
     }
     return accessToken;
   }
 
   getProfile(cb) {
     const accessToken = this.getAccessToken();
-    if (accessToken) {
-      this.auth0.client.userInfo(accessToken, (err, profile) => {
-        if (profile) {
-          this.userProfile = profile;
-        }
-        cb(err, profile);
-      });
-    }
+    this.auth0.client.userInfo(accessToken, (err, profile) => {
+      if (profile) {
+        this.userProfile = profile;
+      }
+      cb(err, profile);
+    });
   }
 
   renewToken() {
@@ -124,12 +119,10 @@ export default class Auth {
       this.tokenRenewalTimeout = setTimeout(() => {
         this.renewToken();
       }, delay);
-    } else {
-      this.renewToken();
     }
   }
 
-  static isAuthenticated() {
+  isAuthenticated() {
     // Check whether the current time is past the
     // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));

@@ -26,15 +26,12 @@ export default class DashboardFilterBar extends Component {
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
     userRangeFilter: PropTypes.string.isRequired,
-    auth: PropTypes.shape({
-      userProfile: PropTypes.shape({}).isRequired,
-      getProfile: PropTypes.func.isRequired,
-    }).isRequired,
     ui: PropTypes.shape({
       dashboardFilter: PropTypes.shape({
         open: PropTypes.bool.isRequired,
       }),
     }).isRequired,
+    profile: PropTypes.shape({}).isRequired,
   }
 
   constructor(props) {
@@ -43,21 +40,6 @@ export default class DashboardFilterBar extends Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
-    this.state = {
-      profile: Auth.getProfile(),
-    };
-  }
-
-  componentWillMount() {
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-      });
-    } else {
-      this.setState({ profile: userProfile });
-    }
   }
 
   handleToggle() {
@@ -65,24 +47,24 @@ export default class DashboardFilterBar extends Component {
   }
 
   handleUserChange(userRange) {
-    const { dispatch, dateRangeFilter } = this.props;
+    const { dispatch, dateRangeFilter, profile } = this.props;
     dispatch(closeDashboardFilter());
     dispatch(setUserRangeFilter(userRange));
     dispatch(fetchDashboard({
       date_range: dateRangeFilter,
       user_range: userRange,
-      user_id: this.state.profile.sub || this.state.profile.user_id,
+      user_id: profile.sub || profile.user_id,
     }));
   }
 
   handleDateChange(dateRange) {
-    const { dispatch, userRangeFilter } = this.props;
+    const { dispatch, userRangeFilter, profile } = this.props;
     dispatch(closeDashboardFilter());
     dispatch(setDateRangeFilter(dateRange));
     dispatch(fetchDashboard({
       date_range: dateRange,
       user_range: userRangeFilter,
-      user_id: this.state.profile.sub || this.state.profile.user_id,
+      user_id: profile.sub || profile.user_id,
     }));
   }
 

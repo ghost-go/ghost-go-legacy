@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tab } from 'react-bootstrap';
@@ -18,6 +19,7 @@ function mapStateToProps(state) {
 class Sidebar extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(Auth).isRequired,
+    profile: PropTypes.shape({}).isRequired,
     ui: PropTypes.shape({
       sidebar: PropTypes.shape({
         collpased: PropTypes.bool.isRequired,
@@ -25,29 +27,8 @@ class Sidebar extends Component {
     }).isRequired,
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      profile: Auth.getProfile(),
-    };
-  }
-
-  componentWillMount() {
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
-    if (!userProfile) {
-      getProfile((err, profile) => {
-        this.setState({ profile });
-      });
-    } else {
-      this.setState({ profile: userProfile });
-    }
-  }
-
   render() {
-    const { auth } = this.props;
-    const { profile } = this.state;
+    const { auth, profile } = this.props;
     return (
       <div style={{ marginLeft: this.props.ui.sidebar.collpased ? '-185px' : '0px' }} id="page-sidebar" className="rm-transition">
         {
@@ -59,7 +40,7 @@ class Sidebar extends Component {
                     <Tab.Content animation>
                       <Tab.Pane eventKey="first">
                         {
-                          Auth.isAuthenticated() ? (
+                          auth.isAuthenticated() && !_.isEmpty(profile) ? (
                             <div id="tab-example-1">
                               <div className="user-profile-sm clearfix">
                                 <img width="45" className="img-rounded" src={profile.picture} alt="" />
@@ -91,7 +72,7 @@ class Sidebar extends Component {
 
               <div id="sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { Auth.isAuthenticated() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <div className="divider-header">Dashboard</div>
                       <li>
@@ -114,7 +95,7 @@ class Sidebar extends Component {
                       <i className="fa fa-book" /> <span>Kifu Library</span>
                     </NavLink>
                   </li>
-                  { Auth.isAuthenticated() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <li>
                         <NavLink activeClassName="active" to="/favorites">
@@ -138,7 +119,7 @@ class Sidebar extends Component {
             <div>
               <div id="collapse-sidebar-menu">
                 <ul className="sf-js-enabled sf-arrows">
-                  { Auth.isAuthenticated() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <li>
                         <NavLink activeClassName="active" to="/dashboard">
@@ -167,7 +148,7 @@ class Sidebar extends Component {
                     </Link>
                   </li>
                   */}
-                  { Auth.isAuthenticated() ? (
+                  { auth.isAuthenticated() ? (
                     <div>
                       <li className="divider" />
                       {/*

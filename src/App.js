@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
@@ -42,52 +42,74 @@ const Footer = () => (
   </div>
 );
 
-const App = props => (
-  <MuiThemeProvider muiTheme={getMuiTheme()}>
-    <div className="App">
-      <Helmet
-        htmlAttributes={{ lang: 'en', amp: undefined }}
-        title="A modern website to learn Go,Weiqi,Baduk - beta"
-        titleTemplate="GhostGo - %s"
-      />
-      <Navigation auth={props.auth} />
-      <Sidebar auth={props.auth} />
-      <div
-        style={{ marginLeft: props.ui.sidebar.collpased !== true ? '235px' : '50px' }}
-        className="page-container"
-      >
-        <Route exact path="/" component={() => <Redirect to="/problems" />} />
-        <Route exact path="/" component={Puzzles} />
-        <Route exact path="/puzzles" component={Puzzles} />
-        <Route exact path="/problems" component={Puzzles} />
-        <Route exact path="/kifus" component={Kifus} />
-        <Route path="/problems/:id" component={Puzzle} />
-        <Route path="/puzzles/:id" component={Puzzle} />
-        <Route path="/kifus/:id" component={Kifu} />
-        <Route path="/records" component={History} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/favorites" component={Favorite} />
-        <Route
-          path="/callback"
-          component={() => {
-            handleAuthentication(props);
-            return <Callback {...props} />;
-          }}
-        />
-      </div>
-      <Footer />
-    </div>
-  </MuiThemeProvider>
-);
-
-App.propTypes = {
-  auth: PropTypes.instanceOf(Auth).isRequired,
-  ui: PropTypes.shape({
-    sidebar: PropTypes.shape({
-      collpased: PropTypes.bool.isRequired,
+class App extends Component {
+  static propTypes = {
+    auth: PropTypes.instanceOf(Auth).isRequired,
+    ui: PropTypes.shape({
+      sidebar: PropTypes.shape({
+        collpased: PropTypes.bool.isRequired,
+      }).isRequired,
     }).isRequired,
-  }).isRequired,
-};
+  };
+
+  componentWillMount() {
+    const { isAuthenticated } = this.props.auth;
+    this.setState({ profile: {} });
+    setTimeout(() => {
+      if (isAuthenticated()) {
+        const { userProfile, getProfile } = this.props.auth;
+        if (!userProfile) {
+          getProfile((err, profile) => {
+            this.setState({ profile });
+          });
+        } else {
+          this.setState({ profile: userProfile });
+        }
+      }
+    }, 0);
+  }
+
+  render() {
+    return (
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <div className="App">
+          <Helmet
+            htmlAttributes={{ lang: 'en', amp: undefined }}
+            title="A modern website to learn Go,Weiqi,Baduk - beta"
+            titleTemplate="GhostGo - %s"
+          />
+          <Navigation auth={this.props.auth} profile={this.state.profile} />
+          <Sidebar auth={this.props.auth} profile={this.state.profile} />
+          <div
+            style={{ marginLeft: this.props.ui.sidebar.collpased !== true ? '235px' : '50px' }}
+            className="page-container"
+          >
+            <Route exact path="/" component={() => <Redirect to="/problems" />} />
+            <Route exact path="/" component={Puzzles} />
+            {/* <Route exact path="/problems" component={Puzzles} /> */}
+            <Route exact path="/puzzles" render={props => <Puzzles auth={auth} profile={this.state.profile} {...props} />} />
+            <Route exact path="/problems" render={props => <Puzzles auth={auth} profile={this.state.profile} {...props} />} />
+            <Route exact path="/kifus" component={Kifus} />
+            <Route path="/kifus/:id" component={Kifu} />
+            <Route path="/problems/:id" render={props => <Puzzle auth={auth} profile={this.state.profile} {...props} />} />
+            <Route path="/puzzles/:id" render={props => <Puzzle auth={auth} profile={this.state.profile} {...props} />} />
+            <Route path="/records" render={props => <History auth={auth} profile={this.state.profile} {...props} />} />
+            <Route path="/dashboard" render={props => <Dashboard auth={auth} profile={this.state.profile} {...props} />} />
+            <Route path="/favorites" render={props => <Favorite auth={auth} profile={this.state.profile} {...props} />} />
+            <Route
+              path="/callback"
+              component={() => {
+                handleAuthentication(this.props);
+                return <Callback {...this.props} />;
+              }}
+            />
+          </div>
+          <Footer />
+        </div>
+      </MuiThemeProvider>
+    )
+  }
+}
 
 function select(state) {
   return {
