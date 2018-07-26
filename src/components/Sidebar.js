@@ -16,6 +16,7 @@ function mapStateToProps(state) {
 }
 
 // @withRouter(@connect(mapStateToProps))
+// eslint-disable-next-line react/prefer-stateless-function
 class Sidebar extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(Auth).isRequired,

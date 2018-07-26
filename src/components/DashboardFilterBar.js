@@ -9,7 +9,6 @@ import {
   setUserRangeFilter,
 } from '../actions/Actions';
 import { fetchDashboard } from '../actions/FetchActions';
-import Auth from '../common/Auth';
 
 function mapStateToProps(state) {
   return {

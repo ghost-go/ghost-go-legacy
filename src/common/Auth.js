@@ -81,6 +81,7 @@ export default class Auth {
   //   return profile ? JSON.parse(localStorage.profile) : null;
   // }
 
+  // eslint-disable-next-line class-methods-use-this
   getAccessToken() {
     const accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
@@ -100,16 +101,16 @@ export default class Auth {
   }
 
   renewToken() {
-    this.auth0.checkSession({},
-      (err, result) => {
-        if (err) {
-          console.log(`Could not get a new token (${err.error}: ${err.error_description}).`)
-        } else {
-          this.setSession(result);
-          console.log('Successfully renewed auth!')
-        }
-      },
-    );
+    this.auth0.checkSession({}, (err, result) => {
+      if (err) {
+        // eslint-disable-next-line no-console
+        console.log(`Could not get a new token (${err.error}: ${err.error_description}).`);
+      } else {
+        this.setSession(result);
+        // eslint-disable-next-line no-console
+        console.log('Successfully renewed auth!');
+      }
+    });
   }
 
   scheduleRenewal() {
@@ -122,6 +123,7 @@ export default class Auth {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   isAuthenticated() {
     // Check whether the current time is past the
     // access token's expiry time

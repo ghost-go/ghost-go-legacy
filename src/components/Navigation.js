@@ -125,7 +125,7 @@ export default class Navigation extends Component {
                         </li>
                       </ul>
                       */}
-                      <div onKeyPress={this.handleLogout} onClick={this.handleLogout} className="text-center button-pane">
+                      <div role="button" tabIndex={0} onKeyPress={this.handleLogout} onClick={this.handleLogout} className="text-center button-pane">
                         <a className="btn display-block font-normal btn-danger"><i className="glyph-icon icon-power-off" />Logout</a>
                       </div>
                     </div>

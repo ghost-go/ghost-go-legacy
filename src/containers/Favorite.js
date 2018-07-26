@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { StyleSheet, css } from 'aphrodite';
 import { List } from 'material-ui/List';
 import moment from 'moment';
-import Auth from '../common/Auth';
 
 import { fetchFavorites } from '../actions/FetchActions';
 

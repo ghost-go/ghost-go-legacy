@@ -6,7 +6,6 @@ import { Row, Col } from 'react-bootstrap';
 import DashboardFilterBar from '../components/DashboardFilterBar';
 import { fetchDashboard } from '../actions/FetchActions';
 import { setToolbarHidden } from '../actions/Actions';
-import Auth from '../common/Auth';
 import RecordList from '../components/RecordList';
 
 class Dashboard extends Component {
