@@ -21,6 +21,7 @@ export const setCurrentMode = createAction('SET_CURRENT_MODE');
 export const setNextStoneType = createAction('SET_NEXT_STONE_TYPE_FILTER');
 export const setToolbarHidden = createAction('SET_TOOLBAR_HIDDEN');
 export const setBoardStates = createAction('SET_BOARD_STATES');
+export const setRoom = createAction('SET_ROOM');
 
 // UI actions
 export const openSidebar = createAction('OPEN_SIDEBAR');

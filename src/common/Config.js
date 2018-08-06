@@ -2,6 +2,7 @@ let protocol = 'http';
 let apiDomain = '';
 let appDomain = '';
 let audience = '';
+let wsDomain = '';
 export const ENV = process.env.NODE_ENV;
 export const { TOTAL_VERSION } = process.env;
 
@@ -11,11 +12,13 @@ switch (ENV) {
     apiDomain = `${protocol}://localhost:3000`;
     appDomain = `${protocol}://localhost:5000`;
     audience = 'ghostgo-development';
+    wsDomain = 'ws://localhost:3000';
     break;
   case 'production':
     protocol = 'https';
     apiDomain = `${protocol}://api.ghost-go.com`;
     appDomain = `${protocol}://www.ghost-go.com`;
+    wsDomain = 'wss://www.ghost-go.com';
     audience = 'ghostgo';
     break;
   default:
@@ -47,4 +50,5 @@ const PROTOCOL = protocol;
 const API_DOMAIN = apiDomain;
 const APP_DOMAIN = appDomain;
 const AUDIENCE = audience;
-export { PROTOCOL, API_DOMAIN, APP_DOMAIN, AUDIENCE };
+const WS_DOMAIN = wsDomain;
+export { PROTOCOL, API_DOMAIN, APP_DOMAIN, AUDIENCE, WS_DOMAIN };

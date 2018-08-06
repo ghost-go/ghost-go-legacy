@@ -37,6 +37,7 @@ class PuzzlePanel extends Component {
     addSteps: PropTypes.func.isRequired,
     resetSteps: PropTypes.func.isRequired,
     handleReset: PropTypes.func.isRequired,
+    handleGenmove: PropTypes.func.isRequired,
     steps: PropTypes.arrayOf(PropTypes.string).isRequired,
     setCurrentAnswerId: PropTypes.func.isRequired,
     setCurrentMode: PropTypes.func.isRequired,
@@ -185,6 +186,13 @@ class PuzzlePanel extends Component {
             bsStyle="info"
           >
             Next Problem
+          </Button>
+          <Button
+            style={{ marginRight: '10px' }}
+            onClick={this.props.handleGenmove}
+            bsStyle="success"
+          >
+            AI Move
           </Button>
         </div>
         <div>

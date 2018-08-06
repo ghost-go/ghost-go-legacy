@@ -104,6 +104,10 @@ export const currentMode = createReducer('answer', {
   SET_CURRENT_MODE(state, action) { return action.payload; },
 });
 
+export const room = createReducer(null, {
+  SET_ROOM(state, action) { return action.payload; },
+});
+
 export const currentAnswerId = createReducer(null, {
   SET_CURRENT_ANSWER_ID(state, action) { return action.payload; },
 });

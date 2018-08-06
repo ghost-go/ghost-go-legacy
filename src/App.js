@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ActionCable from 'actioncable';
 
 import Navigation from './components/Navigation';
 import Sidebar from './components/Sidebar';
@@ -17,11 +18,15 @@ import Dashboard from './containers/Dashboard';
 import History from './containers/History';
 import Favorite from './containers/Favorite';
 import Callback from './containers/Callback';
+import { WS_DOMAIN } from './common/Config';
+import { setRoom } from './actions/Actions';
 
 import './App.css';
 import Auth from './common/Auth';
 
 const auth = new Auth();
+// const cable = ActionCable.createConsumer(`wss://${DOMAIN}/cable`);
+const cable = ActionCable.createConsumer(`${WS_DOMAIN}/cable`);
 
 const handleAuthentication = (nextState) => {
   if (/access_token|id_token|error/.test(nextState.location.hash)) {
@@ -50,6 +55,7 @@ class App extends Component {
         collpased: PropTypes.bool.isRequired,
       }).isRequired,
     }).isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
   componentWillMount() {
@@ -67,6 +73,16 @@ class App extends Component {
         }
       }
     }, 0);
+
+    const room = cable.subscriptions.create({
+      channel: 'GlobalChannel',
+      room: btoa(Math.random()).substr(6, 6),
+    }, {
+      received: (data) => {
+        console.log(data);
+      },
+    });
+    this.props.dispatch(setRoom(room));
   }
 
   render() {

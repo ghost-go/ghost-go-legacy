@@ -14,7 +14,10 @@ import {
   fetchPuzzle,
   fetchPuzzleNext,
 } from '../actions/FetchActions';
-import { postPuzzleRecord } from '../actions/PostActions';
+import {
+  postPuzzleRecord,
+  postGenmove,
+} from '../actions/PostActions';
 import {
   setCurrentMode,
   setRangeFilter,
@@ -104,6 +107,7 @@ class Puzzle extends Component {
     }).isRequired,
     auth: PropTypes.instanceOf(Auth).isRequired,
     profile: PropTypes.shape({}).isRequired,
+    room: PropTypes.shape({}).isRequired,
   }
 
   static defaultProps = {
@@ -216,7 +220,7 @@ class Puzzle extends Component {
     this.setState({ researchMode: !this.state.researchMode });
   }
 
-  handleRight() {
+  handleRight = () => {
     const { dispatch, profile } = this.props;
     dispatch(rightAddOne());
     dispatch(postPuzzleRecord({
@@ -228,7 +232,7 @@ class Puzzle extends Component {
     this.setState({ rightTipOpen: true, wrongTipOpen: false });
   }
 
-  handleWrong() {
+  handleWrong = () => {
     const { dispatch, profile } = this.props;
     dispatch(wrongAddOne());
     dispatch(postPuzzleRecord({
@@ -268,10 +272,21 @@ class Puzzle extends Component {
     this.props.dispatch(setRangeFilter(range));
   }
 
+  handleGenmove = () => {
+    const {
+      dispatch, profile, puzzle, steps, room,
+    } = this.props;
+    dispatch(postGenmove({
+      problem_id: puzzle.data.id,
+      user_id: profile ? (profile.sub || profile.user_id) : null,
+      moves: puzzle.data.steps + steps.join(';'),
+      room: JSON.parse(room.identifier).room,
+    }));
+  }
+
   addSteps(step) {
     this.props.dispatch(addSteps(step));
   }
-
 
   resetSteps() {
     this.props.dispatch(resetSteps());
@@ -367,6 +382,7 @@ class Puzzle extends Component {
             handleNext={this.handleNext}
             rangeFilter={this.props.rangeFilter}
             handleReset={this.handleReset}
+            handleGenmove={this.handleGenmove}
             addSteps={this.addSteps}
             resetSteps={this.resetSteps}
             setCurrentAnswerId={this.setCurrentAnswerId}
@@ -392,6 +408,7 @@ function select(state) {
     nextStoneType: state.nextStoneType,
     boardStates: state.boardStates,
     auth: state.ui.auth,
+    room: state.room,
   };
 }
 

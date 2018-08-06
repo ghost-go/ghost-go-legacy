@@ -2,21 +2,26 @@ import { createAction } from 'redux-actions';
 import URI from 'urijs';
 import * as config from '../common/Config';
 
-function buildPostData(name = '', api = '') {
+function buildPostData(name = '', api = '', version = config.API_VERSION) {
   const postDataRequest = createAction(`POST_${name}_REQUEST`);
   const postDataSuccess = createAction(`POST_${name}_SUCCESS`);
   const postDataFailure = createAction(`POST_${name}_FAILURE`);
 
   return params => (dispatch) => {
     dispatch(postDataRequest(params));
-    const url = URI(`${config.API_DOMAIN}/${config.API_VERSION}/${api}`);
+    const url = URI(`${config.API_DOMAIN}/${version}/${api}`);
+    const headerV1 = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+    const headerV2 = {
+      Accept: 'application/vnd.api+json',
+      'Content-Type': 'application/vnd.api+json',
+    }
 
     return fetch(url, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers: version === 'v2' ? headerV2 : headerV1,
       body: JSON.stringify(params),
     }).then(res => res.json())
       .then(data => dispatch(postDataSuccess({ data })))
@@ -30,3 +35,4 @@ export const postFavorite = buildPostData('FAVORITE', 'likes');
 export const postPractice = buildPostData('PRACTICE', 'practices');
 export const postPracticeRecord = buildPostData('PRACTICE_RECORD', 'practice_records');
 export const postPracticeTemplate = buildPostData('PRACTICE_TEMPLATE', 'practice_templates');
+export const postGenmove = buildPostData('GEN_MOVE', 'genmove', 'v2');
