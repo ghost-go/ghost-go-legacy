@@ -10,6 +10,7 @@ import ActionCable from 'actioncable';
 
 import Navigation from './components/Navigation';
 import Sidebar from './components/Sidebar';
+import MessageBox from './components/MessageBox';
 import Puzzles from './containers/Puzzles';
 import Puzzle from './containers/Puzzle';
 import Kifus from './containers/Kifus';
@@ -19,7 +20,8 @@ import History from './containers/History';
 import Favorite from './containers/Favorite';
 import Callback from './containers/Callback';
 import { WS_DOMAIN } from './common/Config';
-import { setRoom } from './actions/Actions';
+import { setRoom, setMessage, openMessageBox } from './actions/Actions';
+import { a1ToSGF } from './common/Helper';
 
 import './App.css';
 import Auth from './common/Auth';
@@ -56,10 +58,17 @@ class App extends Component {
       }).isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
+    message: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+      duration: PropTypes.number.isRequired,
+      open: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   componentWillMount() {
     const { isAuthenticated } = this.props.auth;
+    const { dispatch } = this.props;
     this.setState({ profile: {} });
     setTimeout(() => {
       if (isAuthenticated()) {
@@ -79,13 +88,21 @@ class App extends Component {
       room: btoa(Math.random()).substr(6, 6),
     }, {
       received: (data) => {
+        // eslint-disable-next-line no-console
         console.log(data);
+        dispatch(setMessage({
+          title: `The calculating task for P-${data.puzzle_id} has been done`,
+          text: 'Click the message will show the AI result',
+          action: `/problems/${data.puzzle_id}?moves=${data.moves}&genmove=${a1ToSGF(data.genmove)}`,
+        }));
+        dispatch(openMessageBox());
       },
     });
-    this.props.dispatch(setRoom(room));
+    dispatch(setRoom(room));
   }
 
   render() {
+    const { profile } = this.state;
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div className="App">
@@ -94,8 +111,9 @@ class App extends Component {
             title="A modern website to learn Go,Weiqi,Baduk - beta"
             titleTemplate="GhostGo - %s"
           />
-          <Navigation auth={this.props.auth} profile={this.state.profile} />
-          <Sidebar auth={this.props.auth} profile={this.state.profile} />
+          <Navigation auth={auth} profile={profile} />
+          <Sidebar auth={auth} profile={profile} />
+          <MessageBox />
           <div
             style={{ marginLeft: this.props.ui.sidebar.collpased !== true ? '235px' : '50px' }}
             className="page-container"
@@ -131,6 +149,7 @@ function select(state) {
   return {
     ui: state.ui,
     auth: state.ui.auth,
+    message: state.message,
   };
 }
 

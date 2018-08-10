@@ -32,6 +32,9 @@ class PuzzlePanel extends Component {
         wrong_count: PropTypes.number,
       }),
     }).isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
     rangeFilter: PropTypes.string.isRequired,
     className: PropTypes.string,
     addSteps: PropTypes.func.isRequired,
@@ -104,8 +107,9 @@ class PuzzlePanel extends Component {
   }
 
   render() {
-    const { puzzle } = this.props;
+    const { puzzle, location } = this.props;
     if (puzzle === undefined) return null;
+    const query = new URLSearchParams(location.search);
 
     // const shareUrl = `
     // ${window.location.protocol}//${window.location.host}${window.location.pathname}`;
@@ -187,13 +191,16 @@ class PuzzlePanel extends Component {
           >
             Next Problem
           </Button>
-          <Button
-            style={{ marginRight: '10px' }}
-            onClick={this.props.handleGenmove}
-            bsStyle="success"
-          >
-            AI Move
-          </Button>
+          {
+            query.get('ai') &&
+              <Button
+                style={{ marginRight: '10px' }}
+                onClick={this.props.handleGenmove}
+                bsStyle="success"
+              >
+                AI Move
+              </Button>
+          }
         </div>
         <div>
           <RankRange rankRange={this.props.rangeFilter} />

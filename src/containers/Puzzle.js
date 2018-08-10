@@ -27,6 +27,8 @@ import {
   setToolbarHidden,
   rightAddOne,
   wrongAddOne,
+  openMessageBox,
+  setMessage,
 } from '../actions/Actions';
 import Auth from '../common/Auth';
 
@@ -90,6 +92,9 @@ class Puzzle extends Component {
       }).isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
     rangeFilter: PropTypes.string.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -169,7 +174,8 @@ class Puzzle extends Component {
   }
 
   componentDidUpdate() {
-    const { puzzle, steps } = this.props;
+    const { puzzle, steps, location } = this.props;
+    const query = new URLSearchParams(location.search);
 
     const board = new Board({
       autofit: true,
@@ -190,7 +196,7 @@ class Puzzle extends Component {
     });
 
     this.props.dispatch(setNextStoneType(this.getInitNextStoneType() * ((-1) ** steps.length)));
-    const totalSteps = puzzle.data.steps.split(';').concat(steps);
+    const totalSteps = query.get('moves') ? query.get('moves').split(';').concat(query.get('genmove')) : puzzle.data.steps.split(';').concat(steps);
     board.setStones(Helper.CoordsToTree(totalSteps), true);
     this.boardSize = board.maxhv;
     board.render();
@@ -260,9 +266,10 @@ class Puzzle extends Component {
   }
 
   handleNext() {
-    this.props.dispatch(fetchPuzzleNext({ range: this.props.rangeFilter })).then(() => {
-      const nextUrl = `/problems/${this.props.puzzle.data.id}?range=${this.props.rangeFilter}`;
-      this.props.dispatch(push(nextUrl));
+    const { dispatch, rangeFilter, puzzle } = this.props;
+    dispatch(fetchPuzzleNext({ range: rangeFilter })).then(() => {
+      const nextUrl = `/problems/${puzzle.data.id}?range=${rangeFilter}`;
+      dispatch(push(nextUrl));
       this.setCurrentMode('answer');
       this.handleReset();
     });
@@ -281,6 +288,11 @@ class Puzzle extends Component {
       user_id: profile ? (profile.sub || profile.user_id) : null,
       moves: puzzle.data.steps + steps.join(';'),
       room: JSON.parse(room.identifier).room,
+    }));
+    dispatch(openMessageBox());
+    dispatch(setMessage({
+      title: 'The calculating task already been executed',
+      text: 'The calculating process may take some time. You can continue playing on the website. The calculating result will be pushed to website once they are done. ',
     }));
   }
 

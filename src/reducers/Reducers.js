@@ -108,6 +108,33 @@ export const room = createReducer(null, {
   SET_ROOM(state, action) { return action.payload; },
 });
 
+export const message = createReducer({
+  type: 'success',
+  text: 'Default',
+  duration: 5000,
+  open: false,
+  action: null,
+}, {
+  SET_MESSAGE(state, action) {
+    return {
+      ...state,
+      ...action.payload,
+    };
+  },
+  OPEN_MESSAGE_BOX(state) {
+    return {
+      ...state,
+      open: true,
+    };
+  },
+  CLOSE_MESSAGE_BOX(state) {
+    return {
+      ...state,
+      open: false,
+    };
+  },
+});
+
 export const currentAnswerId = createReducer(null, {
   SET_CURRENT_ANSWER_ID(state, action) { return action.payload; },
 });

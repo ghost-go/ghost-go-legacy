@@ -22,6 +22,7 @@ export const setNextStoneType = createAction('SET_NEXT_STONE_TYPE_FILTER');
 export const setToolbarHidden = createAction('SET_TOOLBAR_HIDDEN');
 export const setBoardStates = createAction('SET_BOARD_STATES');
 export const setRoom = createAction('SET_ROOM');
+export const setMessage = createAction('SET_MESSAGE');
 
 // UI actions
 export const openSidebar = createAction('OPEN_SIDEBAR');
@@ -40,4 +41,5 @@ export const setTheme = createAction('SET_THEME');
 export const toggleFavorite = createAction('TOGGLE_FAVORITE');
 export const rightAddOne = createAction('RIGHT_ADD_ONE');
 export const wrongAddOne = createAction('WRONG_ADD_ONE');
-
+export const openMessageBox = createAction('OPEN_MESSAGE_BOX');
+export const closeMessageBox = createAction('CLOSE_MESSAGE_BOX');

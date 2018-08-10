@@ -13,11 +13,11 @@ function buildPostData(name = '', api = '', version = config.API_VERSION) {
     const headerV1 = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-    }
+    };
     const headerV2 = {
       Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
-    }
+    };
 
     return fetch(url, {
       method: 'POST',

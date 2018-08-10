@@ -239,3 +239,61 @@
   color: #999;
   text-align: center;
 }
+
+$message-box-width: 500px;
+.messagebox {
+  display: flex;
+  position: fixed;
+  z-index: 100;
+  background-color: rgb(218, 240, 213);
+  border: 2px solid rgb(214, 230, 206);
+  top: 40px;
+  right: -$message-box-width;
+  padding: 15px 20px;
+  width: $message-box-width;
+  justify-content: space-between;
+  transition: all .5s ease-in-out;
+
+  &.open {
+    right: 0px;
+  }
+
+  .icon-bg {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    background-color: rgb(202, 225, 189);
+    text-align: center;
+    align-self: center;
+    i {
+      font-size: 28px;
+      color: rgb(78, 100, 65);
+      line-height: 40px;
+    }
+  }
+
+  .message-content {
+    flex: 2;
+    margin-left: 15px;
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      color: rgb(78, 100, 65);
+    }
+    .text {
+      margin-top: 5px;
+      color: rgb(78, 100, 65);
+    }
+  }
+
+  .close {
+    font-size: 20px;
+    align-self: center;
+    margin-left: 15px;
+    opacity: .4;
+    &:hover {
+      opacity: .6;
+    }
+  }
+}
