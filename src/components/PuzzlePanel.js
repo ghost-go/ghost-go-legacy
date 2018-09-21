@@ -118,7 +118,11 @@ class PuzzlePanel extends Component {
 
     const rightAnswers = [];
     const wrongAnswers = [];
-    if (puzzle != null && puzzle.data.right_answers != null && puzzle.data.wrong_answers != null) {
+    const changeAnswers = [];
+    if (puzzle != null &&
+        puzzle.data.right_answers != null &&
+        puzzle.data.wrong_answers != null &&
+        puzzle.data.change_answers != null) {
       puzzle.data.right_answers.forEach((i) => {
         const answer = (
           <AnswerBar
@@ -156,6 +160,25 @@ class PuzzlePanel extends Component {
           />
         );
         wrongAnswers.push(answer);
+      });
+      puzzle.data.change_answers.forEach((i) => {
+        const answer = (
+          <AnswerBar
+            setCurrentAnswerId={this.props.setCurrentAnswerId}
+            addSteps={this.props.addSteps}
+            resetSteps={this.props.resetSteps}
+            key={i.id}
+            id={i.id}
+            answer={i.steps}
+            steps={this.props.steps}
+            currentAnswerId={this.props.currentAnswerId}
+            setCurrentMode={this.props.setCurrentMode}
+            current={0}
+            up={0}
+            down={0}
+          />
+        );
+        changeAnswers.push(answer);
       });
     }
     return (
@@ -217,6 +240,12 @@ class PuzzlePanel extends Component {
           { rightAnswers }
           <div>Wrong Answers</div>
           { wrongAnswers }
+          { changeAnswers.length > 0 &&
+            <div>
+              <div>Change Answers</div>
+              { changeAnswers }
+            </div>
+          }
         </div>
       </div>
     );
