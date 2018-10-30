@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -36,6 +37,22 @@ class Dashboard extends Component {
       user_range: userRangeFilter,
       user_id: profile.sub || profile.user_id,
     }));
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      profile,
+      dispatch,
+      dateRangeFilter,
+      userRangeFilter,
+    } = this.props;
+    if (_.isEmpty(prevProps.profile) && !_.isEmpty(profile)) {
+      dispatch(fetchDashboard({
+        date_range: dateRangeFilter,
+        user_range: userRangeFilter,
+        user_id: profile.sub || profile.user_id,
+      }));
+    }
   }
 
   render() {

@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import Helmet from 'react-helmet';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import ActionCable from 'actioncable';
+// import ActionCable from 'actioncable';
 
 import Navigation from './components/Navigation';
 import Sidebar from './components/Sidebar';
@@ -28,7 +28,7 @@ import Auth from './common/Auth';
 
 const auth = new Auth();
 // const cable = ActionCable.createConsumer(`wss://${DOMAIN}/cable`);
-const cable = ActionCable.createConsumer(`${WS_DOMAIN}/cable`);
+// const cable = ActionCable.createConsumer(`${WS_DOMAIN}/cable`);
 
 const handleAuthentication = (nextState) => {
   if (/access_token|id_token|error/.test(nextState.location.hash)) {
@@ -83,22 +83,22 @@ class App extends Component {
       }
     }, 0);
 
-    const room = cable.subscriptions.create({
-      channel: 'GlobalChannel',
-      room: btoa(Math.random()).substr(6, 6),
-    }, {
-      received: (data) => {
-        // eslint-disable-next-line no-console
-        console.log(data);
-        dispatch(setMessage({
-          title: `The calculating task for P-${data.puzzle_id} has been done`,
-          text: 'Click the message will show the AI result',
-          action: `/problems/${data.puzzle_id}?moves=${data.moves}&genmove=${a1ToSGF(data.genmove)}`,
-        }));
-        dispatch(openMessageBox());
-      },
-    });
-    dispatch(setRoom(room));
+    // const room = cable.subscriptions.create({
+    //   channel: 'GlobalChannel',
+    //   room: btoa(Math.random()).substr(6, 6),
+    // }, {
+    //   received: (data) => {
+    //     // eslint-disable-next-line no-console
+    //     console.log(data);
+    //     dispatch(setMessage({
+    //       title: `The calculating task for P-${data.puzzle_id} has been done`,
+    //       text: 'Click the message will show the AI result',
+    //       action: `/problems/${data.puzzle_id}?moves=${data.moves}&genmove=${a1ToSGF(data.genmove)}`,
+    //     }));
+    //     dispatch(openMessageBox());
+    //   },
+    // });
+    // dispatch(setRoom(room));
   }
 
   render() {
