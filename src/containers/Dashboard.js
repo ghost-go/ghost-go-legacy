@@ -93,7 +93,7 @@ class Dashboard extends Component {
             <RecordList type="most_wrong" recordList={dashboard.data.most_wrong_list.map(i => i[0])} />
           </Col>
           <Col xs={8} md={4}>
-            <b>Favoriates</b> <a href="/favorites">View details</a>
+            <b>Favorites</b> <a href="/favorites">View details</a>
             <RecordList type="favorites" recordList={dashboard.data.favorites_list} />
           </Col>
           <Col xs={8} md={4}>
