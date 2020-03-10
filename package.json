@@ -8,7 +8,7 @@
     "auth0-js": "^9.3.3",
     "auth0-lock": "^11.4.0",
     "history": "^4.7.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "material-ui": "^0.20.0",
     "moment": "^2.21.0",
     "prop-types": "^15.6.1",
