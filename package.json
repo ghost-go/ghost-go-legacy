@@ -14,7 +14,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
     "react-keydown": "^1.9.7",
     "react-paginate": "^5.0.0",
