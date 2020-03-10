@@ -6,7 +6,7 @@
     "actioncable": "^5.2.0",
     "aphrodite": "^1.2.5",
     "auth0-js": "^9.3.3",
-    "auth0-lock": "^11.4.0",
+    "auth0-lock": "^11.21.0",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
     "material-ui": "^0.20.0",
