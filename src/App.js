@@ -11,7 +11,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Navigation from './components/Navigation';
 import Sidebar from './components/Sidebar';
 import MessageBox from './components/MessageBox';
-import Puzzles from './containers/Puzzles';
+import Problems from './containers/Problems';
 import Puzzle from './containers/Puzzle';
 import Kifus from './containers/Kifus';
 import Kifu from './containers/Kifu';
@@ -119,10 +119,10 @@ class App extends Component {
             className="page-container"
           >
             <Route exact path="/" component={() => <Redirect to="/problems" />} />
-            <Route exact path="/" component={Puzzles} />
+            <Route exact path="/" component={Problems} />
             {/* <Route exact path="/problems" component={Puzzles} /> */}
-            <Route exact path="/puzzles" render={props => <Puzzles auth={auth} profile={this.state.profile} {...props} />} />
-            <Route exact path="/problems" render={props => <Puzzles auth={auth} profile={this.state.profile} {...props} />} />
+            <Route exact path="/puzzles" render={props => <Problems auth={auth} profile={this.state.profile} {...props} />} />
+            <Route exact path="/problems" render={props => <Problems auth={auth} profile={this.state.profile} {...props} />} />
             <Route exact path="/kifus" component={Kifus} />
             <Route path="/kifus/:id" component={Kifu} />
             <Route path="/problems/:id" render={props => <Puzzle auth={auth} profile={this.state.profile} {...props} />} />

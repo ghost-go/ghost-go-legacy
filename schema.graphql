@@ -1,0 +1,64 @@
+type Kifu {
+  bName: String!
+  bRank: String!
+  content: String!
+  createdAt: String
+  id: ID!
+  komi: String!
+  place: String!
+  playerBId: String!
+  playerWId: String!
+  previewImg: String!
+  result: String!
+  steps: String!
+  title: String!
+  wName: String!
+  wRank: String!
+}
+
+type Mutation {
+  """
+  An example field added by the generator
+  """
+  testField: String!
+}
+
+type Problem {
+  awswerType: Int!
+  createdAt: String
+  id: ID!
+  name: String!
+  number: String!
+  previewImg: String!
+  previewImgR1: PuzzleImgR1Uploader!
+  puzzleType: Int!
+  rank: String!
+  rightCount: Int!
+  sgf: String!
+  steps: String!
+  type: Int!
+  whofirst: String!
+  wrongCount: Int!
+}
+
+type PuzzleImgR1Uploader {
+  x100: String!
+  x1000: String!
+  x200: String!
+  x300: String!
+  x400: String!
+  x500: String!
+  x800: String!
+}
+
+type Query {
+  """
+  Find all problems
+  """
+  kifus(last: Int! = 100): [Kifu!]
+
+  """
+  Find all problems
+  """
+  problems(last: Int! = 100): [Problem!]
+}
