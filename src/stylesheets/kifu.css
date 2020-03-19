@@ -1,0 +1,9 @@
+.kifu-board {
+  float: left; }
+
+.kifu-panel {
+  margin-left: 20px;
+  width: 400px;
+  float: left; }
+  .kifu-panel .fixed-width {
+    width: 100px; }

@@ -22,7 +22,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class PuzzleFilterBar extends Component {
+class PuzzleFilterBar extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     tags: PropTypes.arrayOf(PropTypes.shape({
@@ -145,3 +145,5 @@ export default class PuzzleFilterBar extends Component {
     );
   }
 }
+
+export default PuzzleFilterBar;

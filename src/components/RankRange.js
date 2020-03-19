@@ -31,7 +31,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class RankRange extends Component {
+class RankRange extends Component {
   static propTypes = {
     // rankRange: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -82,3 +82,5 @@ export default class RankRange extends Component {
     );
   }
 }
+
+export default RankRange;

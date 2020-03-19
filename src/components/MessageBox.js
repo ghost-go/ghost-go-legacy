@@ -10,7 +10,7 @@ function mapStateToProps(state) {
   };
 }
 @connect(mapStateToProps)
-export default class MessageBoxe extends Component {
+class MessageBox extends Component {
   static propTypes = {
     message: PropTypes.shape({
       type: PropTypes.string.isRequired,
@@ -45,3 +45,5 @@ export default class MessageBoxe extends Component {
     );
   }
 }
+
+export default MessageBox

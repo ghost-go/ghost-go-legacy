@@ -29,7 +29,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class Puzzles extends Component {
+class Puzzles extends Component {
   static propTypes = {
     tags: PropTypes.shape({}).isRequired,
     puzzles: PropTypes.shape({}).isRequired,
@@ -88,3 +88,4 @@ export default class Puzzles extends Component {
   }
 }
 
+export default Puzzles;

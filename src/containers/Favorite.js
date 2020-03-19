@@ -94,8 +94,13 @@ class Favorite extends Component {
       search: PropTypes.string.isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
-    favorites: PropTypes.shape({}).isRequired,
-    profile: PropTypes.shape({}).isRequired,
+    favorites: PropTypes.shape({
+      data: PropTypes.shape({}).isRequired,
+    }).isRequired,
+    profile: PropTypes.shape({
+      sub: PropTypes.string,
+      user_id: PropTypes.string,
+    }).isRequired,
   }
 
   constructor(props) {

@@ -18,7 +18,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class Navigation extends Component {
+class Navigation extends Component {
   static propTypes = {
     auth: PropTypes.instanceOf(Auth).isRequired,
     profile: PropTypes.shape({}).isRequired,
@@ -164,3 +164,5 @@ export default class Navigation extends Component {
     );
   }
 }
+
+export default Navigation;

@@ -111,7 +111,10 @@ class Puzzle extends Component {
       mark: PropTypes.string.isRequired,
     }).isRequired,
     auth: PropTypes.instanceOf(Auth).isRequired,
-    profile: PropTypes.shape({}).isRequired,
+    profile: PropTypes.shape({
+      sub: PropTypes.string,
+      user_id: PropTypes.string,
+    }).isRequired,
     room: PropTypes.shape({}).isRequired,
   }
 

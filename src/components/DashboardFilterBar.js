@@ -20,7 +20,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class DashboardFilterBar extends Component {
+class DashboardFilterBar extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     dateRangeFilter: PropTypes.string.isRequired,
@@ -120,3 +120,5 @@ export default class DashboardFilterBar extends Component {
     );
   }
 }
+
+export default DashboardFilterBar;

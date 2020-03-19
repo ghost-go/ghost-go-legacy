@@ -35,7 +35,7 @@ function mapStateToProps(state) {
 }
 
 @connect(mapStateToProps)
-export default class FilterBar extends Component {
+class FilterBar extends Component {
   static propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
       filterName: PropTypes.string.isRequired,
@@ -117,3 +117,5 @@ export default class FilterBar extends Component {
     );
   }
 }
+
+export default FilterBar;

@@ -1,0 +1,178 @@
+#page-sidebar {
+  position: fixed;
+  width: 235px;
+  background-color: #2a2a2a;
+  color: #9e9e9e;
+  height: 100%;
+  transition: all .6s ease-in-out;
+  z-index: 8; }
+  #page-sidebar li a {
+    color: #737373; }
+  #page-sidebar .divider {
+    background: rgba(255, 255, 255, 0.05);
+    margin: 5px 15px;
+    border-bottom: 0;
+    overflow: hidden;
+    height: 1px; }
+  #page-sidebar .divider-header {
+    font-size: 11px;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    opacity: .2;
+    color: #fff; }
+  #page-sidebar .page-sidebar-wrapper {
+    overflow-y: hidden;
+    outline: none; }
+
+#sidebar-bottom, #sidebar-top {
+  background: #313131; }
+
+#sidebar-top {
+  text-align: center; }
+  #sidebar-top .nav > li.active > a, #sidebar-top .nav > li > a:hover {
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.05); }
+  #sidebar-top .nav-pills > li + li {
+    margin: 0; }
+  #sidebar-top .nav-justified {
+    display: block;
+    margin: 0;
+    padding: 4px; }
+  #sidebar-top .tab-content {
+    padding: 10px; }
+  #sidebar-top .user-profile-sm {
+    padding: 5px;
+    text-align: left; }
+    #sidebar-top .user-profile-sm .user-welcome {
+      font-size: 12px;
+      float: left;
+      padding: 3px 0 0 15px; }
+      #sidebar-top .user-profile-sm .user-welcome b {
+        font-size: 13px;
+        display: block;
+        color: #d6d6d6; }
+    #sidebar-top .user-profile-sm img {
+      float: left; }
+    #sidebar-top .user-profile-sm .btn-sm {
+      float: right;
+      margin-top: 8px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.2);
+      border-color: transparent; }
+
+.notification-box li {
+  line-height: 26px;
+  position: relative;
+  padding: 10px;
+  border-bottom: #ebebeb solid 1px; }
+
+.notifications-box-alt {
+  text-align: left;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: 3px; }
+  .notifications-box-alt li {
+    position: relative;
+    line-height: inherit;
+    padding: 15px 10px;
+    border-bottom: #232323 solid 1px; }
+    .notifications-box-alt li:first-child {
+      padding-top: 5px; }
+    .notifications-box-alt li .notification-btn {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      margin-top: -11px;
+      border-color: #000;
+      background: #2d2d2d; }
+    .notifications-box-alt li .notification-text {
+      font-size: 11px;
+      display: block;
+      float: none;
+      margin-top: -1px;
+      margin-bottom: 1px; }
+    .notifications-box-alt li .notification-time {
+      font-style: italic;
+      margin: 0 5px 0 10px;
+      font-size: 10px;
+      float: none;
+      color: #a9a9a9; }
+    .notifications-box-alt li .icon-notification {
+      line-height: 26px;
+      float: left;
+      width: 26px;
+      height: 26px;
+      margin: 0 10px 0 0;
+      text-align: center;
+      border-radius: 50px; }
+    .notifications-box-alt li .bg-purple {
+      color: #fff;
+      background: #984dff; }
+    .notifications-box-alt li .bg-warning {
+      color: #fff;
+      border-color: #f96339;
+      background: #fa7753; }
+    .notifications-box-alt li .bg-green {
+      color: #fff;
+      border-color: #8eca3f;
+      background: #9cd159; }
+
+#sidebar-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  #sidebar-menu ul li {
+    position: relative; }
+    #sidebar-menu ul li a {
+      font-size: 14px;
+      line-height: 42px;
+      position: relative;
+      display: block;
+      height: 42px;
+      margin: 0 5px;
+      padding: 0 10px;
+      text-align: left; }
+      #sidebar-menu ul li a .fa {
+        font-size: 18px;
+        line-height: 42px;
+        display: block;
+        float: left;
+        width: 30px;
+        height: 42px;
+        margin-right: 11px;
+        text-align: center;
+        opacity: .3;
+        -moz-opacity: .3;
+        filter: alpha(opacity=30); }
+    #sidebar-menu ul li a:hover, #sidebar-menu ul li a.active {
+      color: rgba(255, 255, 255, 0.85); }
+
+#collapse-sidebar-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  #collapse-sidebar-menu ul li {
+    position: relative; }
+    #collapse-sidebar-menu ul li a {
+      font-size: 14px;
+      line-height: 42px;
+      position: relative;
+      display: block;
+      height: 42px;
+      text-align: left; }
+      #collapse-sidebar-menu ul li a .fa {
+        font-size: 18px;
+        line-height: 42px;
+        display: block;
+        float: right;
+        width: 30px;
+        height: 42px;
+        margin-right: 11px;
+        text-align: center;
+        opacity: .3;
+        -moz-opacity: .3;
+        filter: alpha(opacity=30); }
+    #collapse-sidebar-menu ul li a:hover {
+      color: rgba(255, 255, 255, 0.85); }
