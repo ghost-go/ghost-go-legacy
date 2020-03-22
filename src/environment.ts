@@ -40,7 +40,7 @@ commitLocalUpdate(environment, store => {
     "4d-6d",
   ], "ranges");
   store.getRoot().setValue('all', "tagFilter");
-  store.getRoot().setValue('all', "rangeFilter");
+  store.getRoot().setValue('all', "levelFilter");
 
   const fieldKey = "settings";
   const __typename = "Settings";

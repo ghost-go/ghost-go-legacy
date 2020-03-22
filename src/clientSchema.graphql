@@ -1,5 +1,5 @@
 extend type Query {
-	rangeFilter: String!
+	levelFilter: String!
 	tagFilter: String!
 	ranges: [String]
 	settings: Settings!

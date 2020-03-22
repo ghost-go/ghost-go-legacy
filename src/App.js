@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
@@ -25,6 +25,9 @@ import { a1ToSGF } from './common/Helper';
 
 import './App.css';
 import Auth from './common/Auth';
+
+import { RelayEnvironmentProvider } from 'react-relay/hooks';
+import environment from './environment';
 
 const auth = new Auth();
 // const cable = ActionCable.createConsumer(`wss://${DOMAIN}/cable`);
@@ -105,6 +108,7 @@ class App extends Component {
     const { profile } = this.state;
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <RelayEnvironmentProvider environment={environment}>
         <div className="App">
           <Helmet
             htmlAttributes={{ lang: 'en', amp: undefined }}
@@ -121,8 +125,14 @@ class App extends Component {
             <Route exact path="/" component={() => <Redirect to="/problems" />} />
             <Route exact path="/" component={Problems} />
             {/* <Route exact path="/problems" component={Puzzles} /> */}
-            <Route exact path="/puzzles" render={props => <Problems auth={auth} profile={this.state.profile} {...props} />} />
-            <Route exact path="/problems" render={props => <Problems auth={auth} profile={this.state.profile} {...props} />} />
+            <Suspense fallback={
+              <div className="loading">
+                <i className="fa fa-spinner fa-pulse fa-fw" />
+              </div>
+            }>
+              <Route exact path="/puzzles" render={props => <Problems auth={auth} profile={this.state.profile} {...props} />} />
+              <Route exact path="/problems" render={props => <Problems auth={auth} profile={this.state.profile} {...props} />} />
+            </Suspense>
             <Route exact path="/kifus" component={Kifus} />
             <Route path="/kifus/:id" component={Kifu} />
             <Route path="/problems/:id" render={props => <Puzzle auth={auth} profile={this.state.profile} {...props} />} />
@@ -140,6 +150,7 @@ class App extends Component {
           </div>
           <Footer />
         </div>
+        </RelayEnvironmentProvider>
       </MuiThemeProvider>
     );
   }

@@ -37,6 +37,7 @@ type Problem implements Node {
   awswerType: Int!
   createdAt: String
   id: ID!
+  identifier: String!
   name: String!
   number: String!
   previewImg: String!

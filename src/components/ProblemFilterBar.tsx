@@ -25,15 +25,18 @@ const updateFilter = (value: string | never, filterName: string | never) => {
 const ProblemFilterBar = ({
   ranges,
   tags,
-  rangeFilter,
+  levelFilter,
   tagFilter,
-  isFilterMenuOpen
+  isFilterMenuOpen,
+  refetch
 } : {
   ranges: Array<string>,
   tags: Array<any>,
-  rangeFilter: string,
+  levelFilter: string,
   tagFilter: string,
   isFilterMenuOpen: boolean,
+  relay: any,
+  refetch: any
 }) => (
   <div className="page-nav">
     <div id="filterMenu" title="filter-menu" className={`filter dropdown btn-group ${isFilterMenuOpen ? 'open' : ''}`} onClick={toggleFilterMenu.bind(null, isFilterMenuOpen)}>
@@ -48,8 +51,8 @@ const ProblemFilterBar = ({
             <ul className="tags">
               {
                 ranges.map(level => (
-                  <li key={level} className={`tag ${rangeFilter === level ? 'active' : ''}`}
-                    onClick={(e) => { updateFilter(e.currentTarget.innerText, "rangeFilter")}}>{level}</li>
+                  <li key={level} className={`tag ${levelFilter === level ? 'active' : ''}`}
+                    onClick={(e) => { updateFilter(e.currentTarget.innerText, "levelFilter")}}>{level}</li>
                 ))
               }
             </ul>
@@ -75,9 +78,9 @@ const ProblemFilterBar = ({
       </ul>
     </div>
     <ul className="page-subnav">
-      <li><span title={`Level: ${rangeFilter}`}>{`Level: ${rangeFilter}`}</span></li>
+      <li><span title={`Level: ${levelFilter}`}>{`Level: ${levelFilter}`}</span></li>
       <li><span title={`Tags: ${tagFilter}`}>{`Tags: ${tagFilter}`}</span></li>
-      <li><button className="btn primary seemore" onClick={() => { }}>See More</button></li>
+      <li><button className="btn primary seemore" onClick={refetch}>See More</button></li>
     </ul>
   </div>
 )

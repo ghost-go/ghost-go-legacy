@@ -1,20 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { graphql, QueryRenderer } from 'react-relay';
+import { ROOT_ID } from "relay-runtime";
 
-import ProblemFilterBar from '../components/ProblemFilterBar';
+import ProblemList from './ProblemList';
 import environment from '../environment';
 
 import "./Problems.scss";
+
+const root = environment.getStore().getSource().get(ROOT_ID);
+console.log(root);
 
 const Problems = () => (
   <div>
     <QueryRenderer
       environment={environment}
       query={graphql`
-        query ProblemsQuery {
+        query ProblemsQuery($last: Int!, $tags: String!, $level: String!) {
           tagFilter
-          rangeFilter
+          levelFilter
           ranges
           settings {
             isFilterMenuOpen
@@ -24,18 +27,16 @@ const Problems = () => (
             id
             name
           }
-          problems(last: 100) {
-            id,
-            rank,
-            whofirst,
-            previewImgR1 {
-              x300
-            }
-          }
+          ...ProblemList_query @arguments(last: $last, tags: $tags, level: $level)
         }
       `}
-      variables={{}}
+      variables={{
+        last: 12,
+        tags: 'all',
+        level: 'all'
+      }}
       render={({error, props}: { error: any, props: any}) => {
+        console.log(props);
         if (error) {
           return <div>Error!</div>;
         }
@@ -48,27 +49,16 @@ const Problems = () => (
         }
         return (
           <div>
-            <ProblemFilterBar
-              isFilterMenuOpen={props.settings.isFilterMenuOpen}
-              tags={props.tags}
-              ranges={props.ranges}
-              tagFilter={props.tagFilter}
-              rangeFilter={props.rangeFilter}
-            />
             { console.log('props', props) }
-            {
-              props.problems.map((i: any) => (
-                <div key={i.id} className="puzzle-card">
-                  <Link to={`/problems/${i.id}`}>
-                    <img src={i.previewImgR1.x300} alt="" />
-                  </Link>
-                  <div className="puzzle-info">
-                    <span>Level: {i.rank}</span>
-                    { i.whofirst === 'Black First' ? <div className="black-ki-shape" /> : <div className="white-ki-shape" /> }
-                  </div>
-                </div>
-              ))
-            }
+            <ProblemList
+              query={props}
+              isFilterMenuOpen={props.settings.isFilterMenuOpen}
+              problems={props.problems}
+              ranges={props.ranges}
+              tags={props.tags}
+              tagFilter={props.tagFilter}
+              levelFilter={props.levelFilter}
+            ></ProblemList>
           </div>
         )
       }}
