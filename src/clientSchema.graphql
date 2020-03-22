@@ -1,21 +1,21 @@
 extend type Query {
 	rangeFilter: String!
-	kifuFilter: String!
 	tagFilter: String!
-	dateRangeFilter: String!
-	userRangeFilter: String!
-	recordTypeFilter: String!
-  nextStoneType: Int
-  toolbarHidden: Boolean!
-  boardStates: BoardStates!
-  ranges: [String]
-  theme: String!
+	ranges: [String]
+	settings: Settings!
+  viewer: [Query]
+	# kifuFilter: String!
+	# dateRangeFilter: String!
+	# userRangeFilter: String!
+	# recordTypeFilter: String!
+  # nextStoneType: Int
+  # toolbarHidden: Boolean!
+  # boardStates: BoardStates!
+  # ranges: [String]
+  # theme: String!
 }
 
-type BoardStates {
-  showCoordinate: Boolean!
-  showAnalysisModal: Boolean!
-  mark: String!
-  turn: String!
-  clear: Boolean!
+type Settings {
+  isFilterMenuOpen: Boolean!
 }
+

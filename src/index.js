@@ -13,9 +13,6 @@ import uiReducers from './reducers/UIReducers';
 import App from './App';
 import history from './common/History';
 
-import { commitLocalUpdate } from 'react-relay';
-import environment from './environment';
-
 const historyMiddleware = routerMiddleware(history);
 
 const reducer = combineReducers({
@@ -35,17 +32,6 @@ const store = createStoreWithMiddleware(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
-
-
-commitLocalUpdate(environment, store => {
-  store.getRoot().setValue("all", "rangeFilter");
-  store.getRoot().setValue("all", "kifuFilter");
-  store.getRoot().setValue("all", "tagFilter");
-
-  // const user = store.getRoot().getLinkedRecord('query');
-  // initialize user notes to an empty array.
-  // user.setLinkedRecords([], 'notes');
-});
 
 
 ReactDOM.render(

@@ -531,7 +531,8 @@ submit {
       line-height: 30px;
       display: inline-block;
       height: 30px; }
-      .page-nav .page-subnav li a {
+      .page-nav .page-subnav li a,
+      .page-nav .page-subnav li span {
         color: #888;
         font-size: 14px;
         line-height: 56px;

@@ -23,7 +23,17 @@ type Mutation {
   testField: String!
 }
 
-type Problem {
+"""
+An object with an ID.
+"""
+interface Node {
+  """
+  ID of the object.
+  """
+  id: ID!
+}
+
+type Problem implements Node {
   awswerType: Int!
   createdAt: String
   id: ID!
@@ -58,7 +68,38 @@ type Query {
   kifus(last: Int! = 100): [Kifu!]
 
   """
+  Fetches an object given its ID.
+  """
+  node(
+    """
+    ID of the object.
+    """
+    id: ID!
+  ): Node
+
+  """
+  Fetches a list of objects given a list of IDs.
+  """
+  nodes(
+    """
+    IDs of the objects.
+    """
+    ids: [ID!]!
+  ): [Node]!
+
+  """
   Find all problems
   """
-  problems(last: Int! = 100): [Problem!]
+  problems(last: Int! = 100, level: String = "all", tags: String = "all"): [Problem!]
+
+  """
+  Find all tags
+  """
+  tags(last: Int! = 100): [Tag!]
+}
+
+type Tag implements Node {
+  id: ID!
+  name: String!
+  taggingsCount: Int!
 }
