@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 5bca0a35b557b3e12c04300c31d7a674 */
+/* @relayHash 4ad995c005c69752a6674fbfc561b90d */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -10,7 +10,7 @@ export type ProblemListRefetchQueryVariables = {
     level: string;
 };
 export type ProblemListRefetchQueryResponse = {
-    readonly " $fragmentRefs": FragmentRefs<"ProblemList_query">;
+    readonly " $fragmentRefs": FragmentRefs<"ProblemList_querya">;
 };
 export type ProblemListRefetchQuery = {
     readonly response: ProblemListRefetchQueryResponse;
@@ -25,10 +25,10 @@ query ProblemListRefetchQuery(
   $tags: String!
   $level: String!
 ) {
-  ...ProblemList_query_3ZcBfX
+  ...ProblemList_querya_3ZcBfX
 }
 
-fragment ProblemList_query_3ZcBfX on Query {
+fragment ProblemList_querya_3ZcBfX on Query {
   problems(last: $last, tags: $tags, level: $level) {
     id
     rank
@@ -89,7 +89,7 @@ return {
     "selections": [
       {
         "kind": "FragmentSpread",
-        "name": "ProblemList_query",
+        "name": "ProblemList_querya",
         "args": (v1/*: any*/)
       }
     ]
@@ -155,10 +155,10 @@ return {
     "operationKind": "query",
     "name": "ProblemListRefetchQuery",
     "id": null,
-    "text": "query ProblemListRefetchQuery(\n  $last: Int!\n  $tags: String!\n  $level: String!\n) {\n  ...ProblemList_query_3ZcBfX\n}\n\nfragment ProblemList_query_3ZcBfX on Query {\n  problems(last: $last, tags: $tags, level: $level) {\n    id\n    rank\n    whofirst\n    previewImgR1 {\n      x300\n    }\n  }\n}\n",
+    "text": "query ProblemListRefetchQuery(\n  $last: Int!\n  $tags: String!\n  $level: String!\n) {\n  ...ProblemList_querya_3ZcBfX\n}\n\nfragment ProblemList_querya_3ZcBfX on Query {\n  problems(last: $last, tags: $tags, level: $level) {\n    id\n    rank\n    whofirst\n    previewImgR1 {\n      x300\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = '2af2058acbaf9cf537bdb48cd33f7a9f';
+(node as any).hash = '2de39ce6f8623648e6ab51865596ae71';
 export default node;

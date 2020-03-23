@@ -3,7 +3,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type ProblemList_query = {
+export type ProblemList_querya = {
     readonly problems: ReadonlyArray<{
         readonly id: string;
         readonly rank: string;
@@ -12,19 +12,19 @@ export type ProblemList_query = {
             readonly x300: string;
         };
     }> | null;
-    readonly " $refType": "ProblemList_query";
+    readonly " $refType": "ProblemList_querya";
 };
-export type ProblemList_query$data = ProblemList_query;
-export type ProblemList_query$key = {
-    readonly " $data"?: ProblemList_query$data;
-    readonly " $fragmentRefs": FragmentRefs<"ProblemList_query">;
+export type ProblemList_querya$data = ProblemList_querya;
+export type ProblemList_querya$key = {
+    readonly " $data"?: ProblemList_querya$data;
+    readonly " $fragmentRefs": FragmentRefs<"ProblemList_querya">;
 };
 
 
 
 const node: ReaderFragment = {
   "kind": "Fragment",
-  "name": "ProblemList_query",
+  "name": "ProblemList_querya",
   "type": "Query",
   "metadata": null,
   "argumentDefinitions": [
@@ -116,5 +116,5 @@ const node: ReaderFragment = {
     }
   ]
 };
-(node as any).hash = '81f036d5b7332e46e5277c034680f824';
+(node as any).hash = 'dfe3642a1e2d82931c240044f9f293d9';
 export default node;

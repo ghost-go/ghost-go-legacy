@@ -10,7 +10,7 @@ const root = environment.getStore().getSource().get(ROOT_ID);
 console.log(root);
 
 const ProblemList = (props: any) => {
-  console.log('query', props.query)
+  console.log('query', props.querya)
   return(
   <React.Fragment>
     <ProblemFilterBar
@@ -20,23 +20,17 @@ const ProblemList = (props: any) => {
       tagFilter={props.tagFilter}
       levelFilter={props.levelFilter}
       refetch={() => {
-        console.log(props.tagFilter);
-        console.log(props.levelFilter);
-        console.log(props.problems);
-        console.log(props.relay);
         props.relay.refetch({
           last: 12,
           tags: props.tagFilter,
           level: props.levelFilter
         }, null, () => {
-          console.log('Refetch done')
+          console.log('Problem refetch done')
         }, { force: true })
       }}
     />
-    { console.log(props.problems) }
-    { console.log(props.problems) }
     {
-      props.query.problems.map((i: any) => (
+      props.querya.problems.map((i: any) => (
         <div key={i.id} className="puzzle-card">
           <Link to={`/problems/${i.id}`}>
             <img src={i.previewImgR1.x300} alt="" />
@@ -53,8 +47,8 @@ const ProblemList = (props: any) => {
 }
 
 export default createRefetchContainer(ProblemList, {
-  query: graphql`
-    fragment ProblemList_query on Query @argumentDefinitions(
+  querya: graphql`
+    fragment ProblemList_querya on Query @argumentDefinitions(
       last: { type: Int, defaultValue: 10 }
       tags: { type: String}
       level: { type: String}
@@ -71,6 +65,6 @@ export default createRefetchContainer(ProblemList, {
   `
 }, graphql`
   query ProblemListRefetchQuery($last: Int!, $tags: String!, $level: String!) {
-    ...ProblemList_query @arguments(last: $last, tags: $tags, level: $level)
+    ...ProblemList_querya @arguments(last: $last, tags: $tags, level: $level)
   }
 `)

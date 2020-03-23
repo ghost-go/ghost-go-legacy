@@ -27,7 +27,7 @@ const Problems = () => (
             id
             name
           }
-          ...ProblemList_query @arguments(last: $last, tags: $tags, level: $level)
+          ...ProblemList_querya @arguments(last: $last, tags: $tags, level: $level)
         }
       `}
       variables={{
@@ -36,7 +36,6 @@ const Problems = () => (
         level: 'all'
       }}
       render={({error, props}: { error: any, props: any}) => {
-        console.log(props);
         if (error) {
           return <div>Error!</div>;
         }
@@ -47,13 +46,13 @@ const Problems = () => (
             </div>
           )
         }
+        console.log(props);
         return (
           <div>
-            { console.log('props', props) }
             <ProblemList
               query={props}
               isFilterMenuOpen={props.settings.isFilterMenuOpen}
-              problems={props.problems}
+              problemList={props.problems}
               ranges={props.ranges}
               tags={props.tags}
               tagFilter={props.tagFilter}
