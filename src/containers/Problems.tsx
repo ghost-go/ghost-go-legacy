@@ -1,69 +1,90 @@
 import React from 'react';
-import { graphql, QueryRenderer } from 'react-relay';
-import { ROOT_ID } from "relay-runtime";
-
-import ProblemList from './ProblemList';
-import environment from '../environment';
-
 import "./Problems.scss";
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag'
+import ProblemFilterBar from '../components/ProblemFilterBar';
+import { Link } from 'react-router-dom';
 
-const root = environment.getStore().getSource().get(ROOT_ID);
-console.log(root);
+interface PrevieImageData {
+  x300: String
+}
 
-const Problems = () => (
-  <div>
-    <QueryRenderer
-      environment={environment}
-      query={graphql`
-        query ProblemsQuery($last: Int!, $tags: String!, $level: String!) {
-          tagFilter
-          levelFilter
-          ranges
-          settings {
-            isFilterMenuOpen
-          }
-          tags(last: 100) {
-            ...ProblemFilterBar_tags
-            id
-            name
-          }
-          ...ProblemList_querya @arguments(last: $last, tags: $tags, level: $level)
-        }
-      `}
-      variables={{
-        last: 12,
+interface ProblemsPageData {
+  tags: [TagData]
+  problems: [ProblemData]
+}
+
+interface TagData {
+  id: String,
+  name: String,
+}
+
+interface ProblemData {
+  id: String,
+  rank: String,
+  whofirst: String,
+  previewImgR1: PrevieImageData
+}
+
+interface ProblemQueryVar {
+  last: number,
+  tags: string,
+  level: string,
+}
+
+const FEED_QUERY = gql`
+  query getProblems($last: Int!, $tags: String!, $level: String!) {
+    tags(last: 100) {
+      id
+      name
+    }
+    problems(last: $last, tags: $tags, level: $level) {
+      id,
+      rank,
+      whofirst,
+      previewImgR1 {
+        x300
+      }
+    }
+  }
+`
+
+const Problems = () => {
+  const { loading, error, data } = useQuery<ProblemsPageData, ProblemQueryVar>(
+    FEED_QUERY, {
+      variables: {
+        last: 10,
         tags: 'all',
         level: 'all'
-      }}
-      render={({error, props}: { error: any, props: any}) => {
-        if (error) {
-          return <div>Error!</div>;
-        }
-        if (!props) {
-          return (
-            <div className="loading">
-              <i className="fa fa-spinner fa-pulse fa-fw" />
+      }
+    }
+  );
+  if (loading) return (
+    <div className="loading">
+      <i className="fa fa-spinner fa-pulse fa-fw" />
+    </div>
+  )
+  if (error) return <div>Error</div>
+  if (data) {
+    return (
+      <React.Fragment>
+        <ProblemFilterBar />
+        {
+          data.problems.map((i: any) => (
+            <div key={i.id} className="puzzle-card">
+              <Link to={`/problems/${i.id}`}>
+                <img src={i.previewImgR1.x300} alt="" />
+              </Link>
+              <div className="puzzle-info">
+                <span>Level: {i.rank}</span>
+                { i.whofirst === 'Black First' ? <div className="black-ki-shape" /> : <div className="white-ki-shape" /> }
+              </div>
             </div>
-          )
+          ))
         }
-        console.log(props);
-        return (
-          <div>
-            <ProblemList
-              query={props}
-              isFilterMenuOpen={props.settings.isFilterMenuOpen}
-              problemList={props.problems}
-              ranges={props.ranges}
-              tags={props.tags}
-              tagFilter={props.tagFilter}
-              levelFilter={props.levelFilter}
-            ></ProblemList>
-          </div>
-        )
-      }}
-    />
-    <div className="clearfix" />
-  </div>
-)
+      </React.Fragment>
+    )
+  }
+}
 
 export default Problems;

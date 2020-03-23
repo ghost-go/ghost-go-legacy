@@ -1,46 +1,48 @@
 import React from 'react';
-import { graphql, createFragmentContainer, commitLocalUpdate } from 'react-relay';
-
-import environment from '../environment';
+import { gql, useQuery } from '@apollo/client';
 
 import "./ProblemFilterBar.scss";
 
-const toggleFilterMenu = (isFilterMenuOpen: boolean) => {
-  commitLocalUpdate(environment, store => {
-    const record = store.getRoot().getLinkedRecord("settings");
-    if (record) {
-      record.setValue(!isFilterMenuOpen, "isFilterMenuOpen");
+const ProblemFilterBar = () => {
+  const GET_SETTINGS = gql`{
+    tags(last: 100) {
+      id
+      name
     }
-  });
-}
+    ranges
+    settings {
+      tagFilter
+      levelFilter
+      isFilterMenuOpen
+    }
+  }`
 
-const updateFilter = (value: string | never, filterName: string | never) => {
-  commitLocalUpdate(environment, store => {
-    const query = store.getRoot();
-    query.setValue(value, filterName);
-  })
-  toggleFilterMenu(true)
-}
+  const { data, client } = useQuery(GET_SETTINGS);
 
-const ProblemFilterBar = ({
-  ranges,
-  tags,
-  levelFilter,
-  tagFilter,
-  isFilterMenuOpen,
-  refetch
-} : {
-  ranges: Array<string>,
-  tags: Array<any>,
-  levelFilter: string,
-  tagFilter: string,
-  isFilterMenuOpen: boolean,
-  relay: any,
-  refetch: any
-}) => (
+  const updateSettings = (name: string, value: any) => {
+    const settings = { ...data.settings }
+    settings[name] = value;
+    client.writeQuery({
+      query: GET_SETTINGS,
+      data: { settings }
+    });
+  }
+
+  const {
+    tagFilter,
+    levelFilter,
+    isFilterMenuOpen,
+  } : {
+    tagFilter: string,
+    levelFilter: string
+    isFilterMenuOpen: boolean,
+  } = data.settings;
+  return (
   <div className="page-nav">
-    <div id="filterMenu" title="filter-menu" className={`filter dropdown btn-group ${isFilterMenuOpen ? 'open' : ''}`} onClick={toggleFilterMenu.bind(null, isFilterMenuOpen)}>
-      <button id="filterMenu" aria-haspopup="true" aria-expanded="false" type="button" className="dropdown-toggle btn btn-default">
+    <div id="filterMenu" title="filter-menu" className={`filter dropdown btn-group ${isFilterMenuOpen ? 'open' : ''}`}>
+      <button id="filterMenu" aria-haspopup="true" aria-expanded="false" type="button" className="dropdown-toggle btn btn-default" onClick={() => {
+        updateSettings('isFilterMenuOpen', !isFilterMenuOpen)
+      }}>
         <i className="fa fa-filter"></i>
         <span className="caret"></span>
       </button>
@@ -50,9 +52,9 @@ const ProblemFilterBar = ({
           <div className="popover-content">
             <ul className="tags">
               {
-                ranges.map(level => (
-                  <li key={level} className={`tag ${levelFilter === level ? 'active' : ''}`}
-                    onClick={(e) => { updateFilter(e.currentTarget.innerText, "levelFilter")}}>{level}</li>
+                data.ranges.map((level: any) => (
+                  <li key={level} className={`tag ${data.settings.levelFilter === level ? 'active' : ''}`}
+                    onClick={(e) => { updateSettings('levelFilter', e.currentTarget.innerText)}}>{level}</li>
                 ))
               }
             </ul>
@@ -64,12 +66,12 @@ const ProblemFilterBar = ({
             <ul className="tags">
               <li
                 key="tag-all"
-                className={`tag ${tagFilter === 'all' ? 'active' : ''}`}
-                onClick={() => { updateFilter("all", "tagFilter") }}>all</li>
+                className={`tag ${data.settings.tagFilter === 'all' ? 'active' : ''}`}
+                onClick={() => { updateSettings("tagFilter", "all") }}>all</li>
               {
-                tags.map(tag => (
-                  <li key={tag.id} className={`tag ${tagFilter === tag.name ? 'active' : ''}`}
-                    onClick={(e) => { updateFilter(e.currentTarget.innerText, "tagFilter") }}>{tag.name}</li>
+                data.tags.map((tag: any) => (
+                  <li key={tag.id} className={`tag ${data.settings.tagFilter === tag.name ? 'active' : ''}`}
+                    onClick={(e) => { updateSettings("tagFilter", e.currentTarget.innerText) }}>{tag.name}</li>
                 ))
               }
             </ul>
@@ -80,16 +82,10 @@ const ProblemFilterBar = ({
     <ul className="page-subnav">
       <li><span title={`Level: ${levelFilter}`}>{`Level: ${levelFilter}`}</span></li>
       <li><span title={`Tags: ${tagFilter}`}>{`Tags: ${tagFilter}`}</span></li>
-      <li><button className="btn primary seemore" onClick={refetch}>See More</button></li>
+      <li><button className="btn primary seemore" onClick={() => {}}>See More</button></li>
     </ul>
   </div>
-)
+  )
+}
 
-export default createFragmentContainer(ProblemFilterBar, {
-  tags: graphql`
-    fragment ProblemFilterBar_tags on Tag @relay(plural: true) {
-      id
-      name
-    }
-  `,
-})
+export default ProblemFilterBar;

@@ -26,9 +26,6 @@ import { a1ToSGF } from './common/Helper';
 import './App.css';
 import Auth from './common/Auth';
 
-import { RelayEnvironmentProvider } from 'react-relay/hooks';
-import environment from './environment';
-
 const auth = new Auth();
 // const cable = ActionCable.createConsumer(`wss://${DOMAIN}/cable`);
 // const cable = ActionCable.createConsumer(`${WS_DOMAIN}/cable`);
@@ -108,7 +105,6 @@ class App extends Component {
     const { profile } = this.state;
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <RelayEnvironmentProvider environment={environment}>
         <div className="App">
           <Helmet
             htmlAttributes={{ lang: 'en', amp: undefined }}
@@ -150,7 +146,6 @@ class App extends Component {
           </div>
           <Footer />
         </div>
-        </RelayEnvironmentProvider>
       </MuiThemeProvider>
     );
   }

@@ -13,6 +13,45 @@ import uiReducers from './reducers/UIReducers';
 import App from './App';
 import history from './common/History';
 
+// 1
+import {
+  ApolloProvider ,
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  gql,
+} from '@apollo/client'
+
+const link = createHttpLink({
+  uri: '/graphql'
+})
+
+const cache = new InMemoryCache();
+
+cache.writeQuery({
+  query: gql`
+    query {
+      ranges
+      settings {
+        tagFilter
+        levelFilter
+        isFilterMenuOpen
+      }
+    }
+  `,
+  data: {
+    ranges: ['all', "18k-10k", "9k-5k", "4k-1k", "1d-3d"],
+    settings: {
+      __typename: "Settings",
+      tagFilter: 'all',
+      levelFilter: 'all',
+      isFilterMenuOpen: false,
+    },
+  },
+});
+
+const client = new ApolloClient({ link, cache })
+
 const historyMiddleware = routerMiddleware(history);
 
 const reducer = combineReducers({
@@ -35,10 +74,12 @@ const store = createStoreWithMiddleware(
 
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root')
 );
