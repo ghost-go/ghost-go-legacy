@@ -12,16 +12,16 @@ import Navigation from './components/Navigation';
 import Sidebar from './components/Sidebar';
 import MessageBox from './components/MessageBox';
 import Problems from './containers/Problems';
-import Puzzle from './containers/Puzzle';
+import Problem from './containers/Problem';
 import Kifus from './containers/Kifus';
 import Kifu from './containers/Kifu';
 import Dashboard from './containers/Dashboard';
 import History from './containers/History';
 import Favorite from './containers/Favorite';
 import Callback from './containers/Callback';
-import { WS_DOMAIN } from './common/Config';
-import { setRoom, setMessage, openMessageBox } from './actions/Actions';
-import { a1ToSGF } from './common/Helper';
+// import { WS_DOMAIN } from './common/Config';
+// import { setRoom, setMessage, openMessageBox } from './actions/Actions';
+// import { a1ToSGF } from './common/Helper';
 
 import './App.css';
 import Auth from './common/Auth';
@@ -131,8 +131,8 @@ class App extends Component {
             </Suspense>
             <Route exact path="/kifus" component={Kifus} />
             <Route path="/kifus/:id" component={Kifu} />
-            <Route path="/problems/:id" render={props => <Puzzle auth={auth} profile={this.state.profile} {...props} />} />
-            <Route path="/puzzles/:id" render={props => <Puzzle auth={auth} profile={this.state.profile} {...props} />} />
+            <Route path="/problems/:id" render={props => <Problem auth={auth} profile={this.state.profile} {...props} />} />
+            <Route path="/puzzles/:id" render={props => <Problem auth={auth} profile={this.state.profile} {...props} />} />
             <Route path="/records" render={props => <History auth={auth} profile={this.state.profile} {...props} />} />
             <Route path="/dashboard" render={props => <Dashboard auth={auth} profile={this.state.profile} {...props} />} />
             <Route path="/favorites" render={props => <Favorite auth={auth} profile={this.state.profile} {...props} />} />

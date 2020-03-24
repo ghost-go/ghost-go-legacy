@@ -64,7 +64,7 @@ type PuzzleImgR1Uploader {
 
 type Query {
   """
-  Find all problems
+  Find all kifus
   """
   kifus(last: Int! = 100): [Kifu!]
 
@@ -87,6 +87,11 @@ type Query {
     """
     ids: [ID!]!
   ): [Node]!
+
+  """
+  Find a problem
+  """
+  problem(id: ID!): Problem!
 
   """
   Find all problems

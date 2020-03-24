@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Puzzle extends Component {
+class Problem extends Component {
   static propTypes = {
     puzzle: PropTypes.shape({
       data: PropTypes.shape({
@@ -427,4 +427,4 @@ function select(state) {
   };
 }
 
-export default connect(select)(Puzzle);
+export default connect(select)(Problem);
