@@ -5,7 +5,7 @@
   "dependencies": {
     "actioncable": "^5.2.0",
     "aphrodite": "^1.2.5",
-    "auth0-js": "^9.3.3",
+    "auth0-js": "^9.13.2",
     "auth0-lock": "^11.4.0",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
