@@ -1,34 +1,53 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
+import _ from "lodash";
+import { cache } from "./ApolloClient";
 
-const GET_SETTINGS = gql`{
-  tags(last: 100) {
-    id
-    name
+const GET_SETTINGS = gql`
+  {
+    settings @client
   }
-  ranges
-  settings {
-    tagFilter
-    levelFilter
-    isFilterMenuOpen
-  }
-}`
+`;
 
 interface SettingVars {
-  name: string,
-  value: any
+  name: string;
+  value: any;
 }
 
-export const updateSettings = (query: any, obj: Array<SettingVars>) => {
-  const settings = { ...query.data.settings }
-  obj.forEach((i: { name: string, value: any}) => {
-    if (settings.hasOwnProperty(i.name)) {
+const GET_MOVES = gql`
+  {
+    moves @client
+  }
+`;
+
+export const updateSettings = (obj: Array<SettingVars>) => {
+  const query: any = cache.readQuery({ query: GET_SETTINGS });
+  const settings = _.cloneDeep(query.settings);
+  obj.forEach((i: { name: string; value: any }) => {
+    if (i.name in settings) {
       settings[i.name] = i.value;
     } else {
-      console.error(`key '${i.name}' not in the settings object`)
+      console.error(`key '${i.name}' not in the settings object`);
     }
-  })
-  query.client.writeQuery({
-    query: GET_SETTINGS,
-    data: { settings }
   });
-}
+  cache.writeQuery({
+    query: GET_SETTINGS,
+    data: { settings },
+  });
+};
+
+export const addMoves = (moves: Array<string>) => {
+  const query: any = cache.readQuery({ query: GET_MOVES });
+  const res = query.moves.concat(moves);
+  cache.writeQuery({
+    query: GET_MOVES,
+    data: { moves: res },
+  });
+  return res;
+};
+
+export const clearMoves = () => {
+  cache.writeQuery({
+    query: GET_MOVES,
+    data: { moves: [] },
+  });
+};

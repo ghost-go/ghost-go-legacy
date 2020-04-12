@@ -1,6 +1,6 @@
 projects:
   app:
-    schemaPath: schema.graphql
+    schemaPath: "schema.graphql"
     includes: ["./src/**/*.tsx"]
     extensions:
       endpoints:

@@ -9,7 +9,7 @@ import "./ProblemFilterBar.scss";
 
 const ProblemFilterBar = ({
   tags,
-  refetch
+  refetch,
 }: {
   tags: Array<TagData>;
   refetch: (variables?: ProblemQueryVar) => {};
@@ -30,41 +30,41 @@ const ProblemFilterBar = ({
   const queryParams = {
     tags: tagFilter,
     level: levelFilter,
-    last: 100
+    last: 100,
   };
 
   const isFilterMenuOpenFalseObj = {
     name: "isFilterMenuOpen",
-    value: false
+    value: false,
   };
 
   const handleLevelChange = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
-    updateSettings(query, [
+    updateSettings([
       {
         name: "levelFilter",
-        value: e.currentTarget.innerText
+        value: e.currentTarget.innerText,
       },
-      isFilterMenuOpenFalseObj
+      isFilterMenuOpenFalseObj,
     ]);
     refetch({
       ...queryParams,
-      level: e.currentTarget.innerText
+      level: e.currentTarget.innerText,
     });
   };
 
   const handleTagChange = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    updateSettings(query, [
+    updateSettings([
       {
         name: "tagFilter",
-        value: e.currentTarget.innerText
+        value: e.currentTarget.innerText,
       },
-      isFilterMenuOpenFalseObj
+      isFilterMenuOpenFalseObj,
     ]);
     refetch({
       ...queryParams,
-      tags: e.currentTarget.innerText
+      tags: e.currentTarget.innerText,
     });
   };
 
@@ -90,11 +90,11 @@ const ProblemFilterBar = ({
           type="button"
           className="dropdown-toggle btn btn-default"
           onClick={() => {
-            updateSettings(query, [
+            updateSettings([
               {
                 name: "isFilterMenuOpen",
-                value: !isFilterMenuOpen
-              }
+                value: !isFilterMenuOpen,
+              },
             ]);
           }}
         >

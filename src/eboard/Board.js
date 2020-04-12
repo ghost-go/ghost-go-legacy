@@ -28,7 +28,7 @@ export default class Board {
     this.canvas = args.canvas;
     this.setNextStoneType = args.setNextStoneType;
     this.materials = MATERIALS[_.camelCase(this.theme)];
-    this.showCoordinate = args.showCoordinate || false;
+    this.showCoordinate = args.showCoordinate || true;
     this.offsetX = 0;
     this.offsetY = 0;
     this.root = CoordsToTree([]);
@@ -118,6 +118,7 @@ export default class Board {
           ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
           this.renderBoard(ctx);
           this.renderStones(this.canvas, ctx);
+          this.renderCoordinate(ctx);
           if (this.afterMove) {
             this.afterMove(step);
           }
