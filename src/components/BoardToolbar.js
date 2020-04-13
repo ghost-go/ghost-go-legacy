@@ -15,12 +15,7 @@ const BoardToolbar = () => {
 
   const handleTheme = (e) => {
     localStorage.setItem("theme", e.target.value);
-    updateSettings([
-      {
-        name: "theme",
-        value: e.target.value,
-      },
-    ]);
+    updateSettings({ theme: e.target.value });
   };
 
   return (

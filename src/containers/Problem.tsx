@@ -64,6 +64,7 @@ const Problem = () => {
     theme: "black-and-white",
     currentMode: "normal",
   });
+  const [nextStoneType, setNextStoneType] = useState(1);
 
   const [moves, setMoves] = useState([]);
 
@@ -93,6 +94,7 @@ const Problem = () => {
     setProblem(data.problem);
     setSettings(data.settings);
     setMoves(data.moves);
+    setNextStoneType(data.problem.whofirst[0] === "B" ? 1 : -1);
 
     setRightAnswers(
       data.problem.problemAnswers.filter((p: any) => p.answerType === 1)
@@ -167,14 +169,15 @@ const Problem = () => {
         showCoordinate: true,
         editable: true,
         theme: settings.theme,
-        nextStoneType: problem.whofirst[0] === "B" ? 0 : 1,
-        // setNextStoneType: this.setNextStoneType,
+        nextStoneType: nextStoneType,
         afterMove: (step: string) => {
           const moves = addMoves([step]);
+          setNextStoneType(-nextStoneType);
           setTimeout(() => {
             if (settings.currentMode !== "research") {
               response(moves);
             }
+            setNextStoneType(-nextStoneType);
           }, 300);
         },
       });
@@ -182,8 +185,7 @@ const Problem = () => {
       board.setStones(Helper.CoordsToTree(totalSteps.concat(moves)));
       board.render();
     }
-    // TODO: client has bad smell
-  }, [problem, settings, moves, client]);
+  }, [problem, settings, moves, client, nextStoneType]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -239,66 +241,24 @@ const Problem = () => {
             label="Research Mode"
             defaultToggled={settings.currentMode === "research"}
             onToggle={() => {
-              updateSettings([
-                {
-                  name: "currentMode",
-                  value:
-                    settings.currentMode === "research" ? "normal" : "research",
-                },
-              ]);
+              updateSettings({
+                currentMode:
+                  settings.currentMode === "research" ? "normal" : "research",
+              });
             }}
           />
           <div>
             <div>Right Answers</div>
             {rightAnswers.map((a: any) => (
-              <AnswerBar
-                // setCurrentAnswerId={this.props.setCurrentAnswerId}
-                // addSteps={this.props.addSteps}
-                // resetSteps={this.props.resetSteps}
-                key={a.id}
-                id={a.identifier}
-                answer={a.steps}
-                // steps={this.props.steps}
-                // currentAnswerId={this.props.currentAnswerId}
-                // setCurrentMode={this.props.setCurrentMode}
-                // current={0}
-                // up={0}
-                // down={0}
-              />
+              <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
             ))}
             <div>Wrong Answers</div>
             {wrongAnswers.map((a: any) => (
-              <AnswerBar
-                // setCurrentAnswerId={this.props.setCurrentAnswerId}
-                // addSteps={this.props.addSteps}
-                // resetSteps={this.props.resetSteps}
-                key={a.id}
-                id={a.identifier}
-                answer={a.steps}
-                // steps={this.props.steps}
-                // currentAnswerId={this.props.currentAnswerId}
-                // setCurrentMode={this.props.setCurrentMode}
-                // current={0}
-                // up={0}
-                // down={0}
-              />
+              <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
             ))}
             {changeAnswers.length > 0 && <div>Change Answers</div>}
             {changeAnswers.map((a: any) => (
-              <AnswerBar
-                // setCurrentAnswerId={this.props.setCurrentAnswerId}
-                // addSteps={this.props.addSteps}
-                // resetSteps={this.props.resetSteps}
-                key={a.id}
-                id={a.identifier}
-                answer={a.steps}
-                // steps={this.props.steps}
-                // currentAnswerId={this.props.currentAnswerId}
-                // setCurrentMode={this.props.setCurrentMode}
-                // current={0}
-                // up={0}
-                // down={0}
-              />
+              <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
             ))}
           </div>
         </div>

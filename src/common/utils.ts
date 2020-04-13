@@ -1,34 +1,22 @@
 import gql from "graphql-tag";
 import _ from "lodash";
 import { cache } from "./ApolloClient";
+import { GET_MOVES, GET_SETTINGS } from "./graphql";
 
-const GET_SETTINGS = gql`
-  {
-    settings @client
-  }
-`;
-
-interface SettingVars {
-  name: string;
-  value: any;
-}
-
-const GET_MOVES = gql`
-  {
-    moves @client
-  }
-`;
-
-export const updateSettings = (obj: Array<SettingVars>) => {
-  const query: any = cache.readQuery({ query: GET_SETTINGS });
-  const settings = _.cloneDeep(query.settings);
-  obj.forEach((i: { name: string; value: any }) => {
-    if (i.name in settings) {
-      settings[i.name] = i.value;
-    } else {
-      console.error(`key '${i.name}' not in the settings object`);
-    }
+export const updateSettings = (obj: object) => {
+  const query: any = cache.readQuery({
+    query: GET_SETTINGS,
   });
+  const settings = _.cloneDeep(query.settings);
+  console.log("settings", obj);
+  for (let [key, value] of Object.entries(obj)) {
+    if (settings.hasOwnProperty(key)) {
+      settings[key] = value;
+    } else {
+      console.error(`key '${key}' not in the settings object`);
+    }
+  }
+
   cache.writeQuery({
     query: GET_SETTINGS,
     data: { settings },

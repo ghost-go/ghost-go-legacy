@@ -24,6 +24,7 @@ cache.writeQuery({
         isFilterMenuOpen
         theme
         currentMode
+        currentAnswerId
       }
     }
   `,
@@ -44,6 +45,7 @@ cache.writeQuery({
       levelFilter: "all",
       isFilterMenuOpen: false,
       currentMode: "normal",
+      currentAnswerId: 0,
       theme: localStorage.getItem("theme") || "shell-stone",
     },
   },

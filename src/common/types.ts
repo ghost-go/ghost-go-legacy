@@ -23,3 +23,8 @@ export interface ProblemQueryVar {
   tags: string;
   level: string;
 }
+
+export interface SettingVars {
+  name: string;
+  value: any;
+}

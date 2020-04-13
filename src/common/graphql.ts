@@ -1,10 +1,13 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-export const GET_SETTINGS = gql`{
-  fragment 
-  settings {
-    tagFilter
-    levelFilter
-    isFilterMenuOpen
+export const GET_SETTINGS = gql`
+  {
+    settings @client
   }
-}`
+`;
+
+export const GET_MOVES = gql`
+  {
+    moves @client
+  }
+`;

@@ -41,13 +41,10 @@ const ProblemFilterBar = ({
   const handleLevelChange = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
-    updateSettings([
-      {
-        name: "levelFilter",
-        value: e.currentTarget.innerText,
-      },
+    updateSettings({
+      levelFilter: e.currentTarget.innerText,
       isFilterMenuOpenFalseObj,
-    ]);
+    });
     refetch({
       ...queryParams,
       level: e.currentTarget.innerText,
@@ -55,13 +52,10 @@ const ProblemFilterBar = ({
   };
 
   const handleTagChange = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    updateSettings([
-      {
-        name: "tagFilter",
-        value: e.currentTarget.innerText,
-      },
+    updateSettings({
+      tagFilter: e.currentTarget.innerText,
       isFilterMenuOpenFalseObj,
-    ]);
+    });
     refetch({
       ...queryParams,
       tags: e.currentTarget.innerText,
@@ -90,12 +84,7 @@ const ProblemFilterBar = ({
           type="button"
           className="dropdown-toggle btn btn-default"
           onClick={() => {
-            updateSettings([
-              {
-                name: "isFilterMenuOpen",
-                value: !isFilterMenuOpen,
-              },
-            ]);
+            updateSettings({ isFilterMenuOpen: !isFilterMenuOpen });
           }}
         >
           <i className="fa fa-filter"></i>
