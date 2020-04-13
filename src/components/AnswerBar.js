@@ -49,6 +49,10 @@ const styles = {
     height: 32,
     padding: 5,
   },
+
+  reverse: {
+    transform: "scale(-1, 1)",
+  },
 };
 
 const AnswerBar = (props) => {
@@ -63,6 +67,15 @@ const AnswerBar = (props) => {
     }
   }, [settings.currentAnswerId, props.id]);
 
+  const handleAnswerMoves = (current, newMoves) => {
+    updateSettings({ currentAnswerId: props.id });
+    if (current >= 0 && current <= moves.length) {
+      clearMoves();
+      setCurrent(current);
+      addMoves(newMoves);
+    }
+  };
+
   return (
     <Paper style={styles.answerContainer} zDepth={0}>
       <div style={styles.noInfo}>{`No.${props.id}`}</div>
@@ -70,48 +83,36 @@ const AnswerBar = (props) => {
         props.answer.split(";").length
       }`}</div>
       <IconButton
-        onClick={() => {
-          updateSettings({ currentAnswerId: props.id });
-          clearMoves();
-          setCurrent(1);
-          addMoves(moves[0]);
-        }}
-        iconStyle={styles.smallIcon}
-        style={styles.small}
-        iconClassName="fa fa-backward"
-      />
-      <IconButton
-        onClick={() => {
-          updateSettings({ currentAnswerId: props.id });
-          if (current > 1) {
-            clearMoves();
-            setCurrent(current - 1);
-            addMoves(moves.slice(0, current - 1));
-          }
-        }}
+        onClick={handleAnswerMoves.bind(null, 1, moves[0])}
         iconStyle={styles.smallIcon}
         style={styles.small}
         iconClassName="fa fa-step-backward"
       />
       <IconButton
-        onClick={() => {
-          updateSettings({ currentAnswerId: props.id });
-          if (current < moves.length) {
-            clearMoves();
-            setCurrent(current + 1);
-            addMoves(moves.slice(0, current + 1));
-          }
+        onClick={handleAnswerMoves.bind(
+          null,
+          current - 1,
+          moves.slice(0, current - 1)
+        )}
+        iconStyle={styles.smallIcon}
+        style={{
+          ...styles.small,
+          ...styles.reverse,
         }}
+        iconClassName="fa fa-play"
+      />
+      <IconButton
+        onClick={handleAnswerMoves.bind(
+          null,
+          current + 1,
+          moves.slice(0, current + 1)
+        )}
         iconStyle={styles.smallIcon}
         style={styles.small}
         iconClassName="fa fa-play"
       />
       <IconButton
-        onClick={() => {
-          updateSettings({ currentAnswerId: props.id });
-          clearMoves();
-          addMoves(moves);
-        }}
+        onClick={handleAnswerMoves.bind(null, moves.length, moves)}
         iconStyle={styles.smallIcon}
         style={styles.small}
         iconClassName="fa fa-step-forward"
@@ -129,46 +130,3 @@ const AnswerBar = (props) => {
   );
 };
 export default AnswerBar;
-
-//   firstStep() {
-//     const steps = this.props.answer.split(";");
-//     this.props.setCurrentMode("research");
-//     this.props.setCurrentAnswerId(this.props.id);
-//     this.props.resetSteps();
-//     this.props.addSteps(steps[0]);
-//   }
-
-//   prevStep() {
-//     const steps = this.props.answer.split(";");
-//     this.props.setCurrentMode("research");
-//     this.props.resetSteps();
-//     this.props.addSteps(steps.slice(0, this.props.steps.length - 1));
-//   }
-
-//   nextStep() {
-//     const steps = this.props.answer.split(";");
-//     this.props.setCurrentMode("research");
-//     if (this.props.currentAnswerId !== this.props.id) {
-//       this.firstStep();
-//     } else {
-//       this.props.resetSteps();
-//       this.props.addSteps(steps.slice(0, this.props.steps.length + 1));
-//     }
-//   }
-
-//   lastStep() {
-//     const steps = this.props.answer.split(";");
-//     this.props.setCurrentMode("research");
-//     this.props.resetSteps();
-//     this.props.addSteps(steps);
-//   }
-
-//   render() {
-//     const current =
-//       this.props.currentAnswerId === this.props.id
-//         ? this.props.steps.length
-//         : 0;
-//     return (
-//     );
-//   }
-// }
