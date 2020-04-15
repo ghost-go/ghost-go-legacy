@@ -68,7 +68,7 @@ const AnswerBar = (props) => {
   }, [settings.currentAnswerId, props.id]);
 
   const handleAnswerMoves = (current, newMoves) => {
-    updateSettings({ currentAnswerId: props.id });
+    updateSettings({ currentAnswerId: props.id, currentMode: "research" });
     if (current >= 0 && current <= moves.length) {
       clearMoves();
       setCurrent(current);

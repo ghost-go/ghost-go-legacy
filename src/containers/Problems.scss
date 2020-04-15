@@ -1,1 +1,22 @@
 @import "../stylesheets/base";
+
+.problem-right,
+.problem-wrong {
+  position: absolute;
+  font-size: 240px;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  top: 45%;
+
+  &.hide {
+    display: none;
+  }
+}
+
+.problem-right {
+  color: green;
+}
+
+.problem-wrong {
+  color: red;
+}

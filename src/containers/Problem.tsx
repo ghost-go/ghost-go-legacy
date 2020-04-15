@@ -16,14 +16,9 @@ const GET_PROBLEM = gql`
     problem(id: $id) {
       id
       identifier
-      sgf
       steps
       rank
-      puzzleType
       whofirst
-      previewImgR1 {
-        x300
-      }
       rightCount
       wrongCount
       favoriteCount
@@ -33,8 +28,6 @@ const GET_PROBLEM = gql`
         identifier
         answerType
         steps
-        createdAt
-        number
       }
     }
   }
@@ -65,6 +58,9 @@ const Problem = () => {
     currentMode: "normal",
   });
   const [nextStoneType, setNextStoneType] = useState(1);
+  const [isRight, setIsRight] = useState(false);
+  const [isWrong, setIsWrong] = useState(false);
+  const [boardEditable, setBoardEditable] = useState(true);
 
   const [moves, setMoves] = useState([]);
 
@@ -72,20 +68,22 @@ const Problem = () => {
 
   const handleReset = () => {
     clearMoves();
+    updateSettings({ currentAnswerId: 0 });
+    setIsRight(false);
+    setIsWrong(false);
+    setBoardEditable(true);
   };
 
   const handleRight = () => {
-    alert("right");
-    setTimeout(() => {
-      handleReset();
-    }, 100);
+    setIsRight(true);
+    setBoardEditable(false);
   };
 
   const handleWrong = () => {
-    alert("wrong");
+    setIsWrong(true);
     setTimeout(() => {
       handleReset();
-    }, 100);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -167,7 +165,7 @@ const Problem = () => {
         autofit: true,
         canvas: canvasRef.current,
         showCoordinate: true,
-        editable: true,
+        editable: boardEditable,
         theme: settings.theme,
         nextStoneType: nextStoneType,
         afterMove: (step: string) => {
@@ -185,7 +183,7 @@ const Problem = () => {
       board.setStones(Helper.CoordsToTree(totalSteps.concat(moves)));
       board.render();
     }
-  }, [problem, settings, moves, client, nextStoneType]);
+  }, [problem, settings, moves, client, nextStoneType, boardEditable]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -194,6 +192,14 @@ const Problem = () => {
     <React.Fragment>
       <div className="puzzle-board">
         <canvas id="puzzle_layer" ref={canvasRef} />
+        <i
+          className={`fa fa-check problem-right ${isRight ? "" : "hide"}`}
+          aria-hidden="true"
+        />
+        <i
+          className={`fa fa-times problem-wrong ${isWrong ? "" : "hide"}`}
+          aria-hidden="true"
+        />
       </div>
       <div className="puzzle-panel">
         <div className="title">
