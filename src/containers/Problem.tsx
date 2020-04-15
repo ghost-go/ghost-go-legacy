@@ -7,7 +7,16 @@ import Board from "../eboard/Board";
 import RankRange from "../components/RankRange";
 import AnswerBar from "../components/AnswerBar";
 import { addMoves, clearMoves, updateSettings } from "../common/utils";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
+
+const CREATE_PROBLEM_RECORD = gql`
+  mutation CreateProblemRecord($problemRecord: ProblemRecordInput!) {
+    addTodo(problemRecord: $problemRecord) {
+      id
+      type
+    }
+  }
+`;
 
 const GET_PROBLEM = gql`
   query getProblem($id: ID!) {
@@ -38,10 +47,13 @@ const Problem = () => {
   const { data, loading, error, client } = useQuery(GET_PROBLEM, {
     variables: { id },
   });
+  const [createProblemRecord] = useMutation(CREATE_PROBLEM_RECORD);
+
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [changeAnswers, setChangeAnswers] = useState([]);
   const [problem, setProblem] = useState({
+    id: 0,
     whofirst: "Black",
     rank: "18K",
     identifier: "",
@@ -80,6 +92,14 @@ const Problem = () => {
   };
 
   const handleWrong = () => {
+    createProblemRecord({
+      variables: {
+        problemRecord: {
+          problemId: problem.id,
+          recordType: "wrong",
+        },
+      },
+    });
     setIsWrong(true);
     setTimeout(() => {
       handleReset();
