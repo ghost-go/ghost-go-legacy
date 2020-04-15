@@ -13,7 +13,7 @@ const BoardToolbar = () => {
   const query = useQuery(GET_FILTER_DATA);
   const { themes, settings } = query.data;
 
-  const handleTheme = (e) => {
+  const handleTheme = (e: any) => {
     localStorage.setItem("theme", e.target.value);
     updateSettings({ theme: e.target.value });
   };
@@ -26,7 +26,7 @@ const BoardToolbar = () => {
           onChange={handleTheme}
           defaultValue={settings.theme}
         >
-          {themes.map((t) => (
+          {themes.map((t: string) => (
             <option>{t}</option>
           ))}
         </select>

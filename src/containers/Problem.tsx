@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import Remove from "material-ui/svg-icons/content/remove";
 import * as Helper from "../common/Helper";
-// import * as Const from '../common/Constants';
 import Toggle from "material-ui/Toggle";
 import Board from "../eboard/Board";
-import RankRange from "../components/RankRange";
+import RankList from "../components/RankList";
 import AnswerBar from "../components/AnswerBar";
 import { addMoves, clearMoves, updateSettings } from "../common/utils";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
 
 const CREATE_PROBLEM_RECORD = gql`
   mutation CreateProblemRecord($problemRecord: ProblemRecordInput!) {
-    addTodo(problemRecord: $problemRecord) {
+    createProblemRecord(problemRecord: $problemRecord) {
       id
-      type
+    }
+  }
+`;
+
+const GET_PROBLEMS_FOR_NEXT = gql`
+  query getProblems($last: Int!, $tags: String!, $level: String!) {
+    problems(last: $last, tags: $tags, level: $level) {
+      id
+      identifier
     }
   }
 `;
@@ -44,14 +52,17 @@ const GET_PROBLEM = gql`
 
 const Problem = () => {
   const id = window.location.pathname.split("/").pop();
-  const { data, loading, error, client } = useQuery(GET_PROBLEM, {
+  const { data, loading, error } = useQuery(GET_PROBLEM, {
     variables: { id },
   });
+
   const [createProblemRecord] = useMutation(CREATE_PROBLEM_RECORD);
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [changeAnswers, setChangeAnswers] = useState([]);
+  const [levelRangeLow, setLevelRangeLow] = useState("18k");
+  const [levelRangeHigh, setLevelRangeHigh] = useState("6d");
   const [problem, setProblem] = useState({
     id: 0,
     whofirst: "Black",
@@ -67,6 +78,7 @@ const Problem = () => {
   const [settings, setSettings] = useState({
     levelFilter: "all",
     theme: "black-and-white",
+    levelRange: "18k-6d",
     currentMode: "normal",
   });
   const [nextStoneType, setNextStoneType] = useState(1);
@@ -87,6 +99,14 @@ const Problem = () => {
   };
 
   const handleRight = () => {
+    createProblemRecord({
+      variables: {
+        problemRecord: {
+          problemId: problem.identifier,
+          recordType: "right",
+        },
+      },
+    });
     setIsRight(true);
     setBoardEditable(false);
   };
@@ -95,7 +115,7 @@ const Problem = () => {
     createProblemRecord({
       variables: {
         problemRecord: {
-          problemId: problem.id,
+          problemId: problem.identifier,
           recordType: "wrong",
         },
       },
@@ -114,6 +134,9 @@ const Problem = () => {
     setMoves(data.moves);
     setNextStoneType(data.problem.whofirst[0] === "B" ? 1 : -1);
 
+    setLevelRangeLow(data.settings.levelRange.split("-")[0]);
+    setLevelRangeHigh(data.settings.levelRange.split("-")[1]);
+
     setRightAnswers(
       data.problem.problemAnswers.filter((p: any) => p.answerType === 1)
     );
@@ -124,6 +147,16 @@ const Problem = () => {
       data.problem.problemAnswers.filter((p: any) => p.answerType === 3)
     );
   }, [data]);
+
+  const [getNextProblem, nextProblemQuery] = useLazyQuery(
+    GET_PROBLEMS_FOR_NEXT,
+    {
+      onCompleted: (data: any) => {
+        // console.log(data.problems[0]);
+        window.location.href = `${data.problems[0].identifier}`;
+      },
+    }
+  );
 
   const response = (moves: Array<string>) => {
     const rights: any = [];
@@ -203,7 +236,7 @@ const Problem = () => {
       board.setStones(Helper.CoordsToTree(totalSteps.concat(moves)));
       board.render();
     }
-  }, [problem, settings, moves, client, nextStoneType, boardEditable]);
+  }, [problem, settings, moves, nextStoneType, boardEditable]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -253,13 +286,39 @@ const Problem = () => {
           </Button>
           <Button
             style={{ marginRight: "10px" }}
-            // onClick={this.props.handleNext}
+            onClick={() => {
+              getNextProblem({
+                variables: {
+                  last: 1,
+                  tags: "all",
+                  level: `${levelRangeLow}-${levelRangeHigh}`,
+                },
+              });
+            }}
             bsStyle="info"
           >
             Next Problem
           </Button>
           <div>
-            <RankRange rankRange={settings.levelFilter} />
+            <RankList
+              rank={levelRangeLow}
+              floatingLabelText="FROM"
+              onChange={(e: any) => {
+                updateSettings({
+                  levelRange: `${e.target.innerText}-${levelRangeHigh}`,
+                });
+              }}
+            />
+            <Remove style={{ height: "50px", margin: "0 10px" }} />
+            <RankList
+              rank={levelRangeHigh}
+              floatingLabelText="TO"
+              onChange={(e: any) => {
+                updateSettings({
+                  levelRange: `${levelRangeLow}-${e.target.innerText}`,
+                });
+              }}
+            />
           </div>
           <div className="clearfix" />
           <Toggle

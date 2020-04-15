@@ -17,10 +17,7 @@ type Kifu {
 }
 
 type Mutation {
-  """
-  An example field added by the generator
-  """
-  testField: String!
+  createProblemRecord(problemRecord: ProblemRecordInput!): ProblemRecord!
 }
 
 """
@@ -36,12 +33,14 @@ interface Node {
 type Problem implements Node {
   awswerType: Int!
   createdAt: String
+  favoriteCount: Int!
   id: ID!
-  identifier: String!
+  identifier: Int!
   name: String!
   number: String!
   previewImg: String!
   previewImgR1: PuzzleImgR1Uploader!
+  problemAnswers: [ProblemAnswer!]
   puzzleType: Int!
   rank: String!
   rightCount: Int!
@@ -50,6 +49,38 @@ type Problem implements Node {
   type: Int!
   whofirst: String!
   wrongCount: Int!
+}
+
+type ProblemAnswer implements Node {
+  answerType: Int!
+  createdAt: String!
+  descriptions: String
+  id: ID!
+  identifier: ID!
+  number: String
+  steps: String
+  updatedAt: String!
+}
+
+type ProblemRecord implements Node {
+  createdAt: String!
+  id: ID!
+  identifier: ID!
+  problem: Problem!
+  recordType: String!
+  steps: String
+  updatedAt: String!
+  userId: String
+}
+
+"""
+Attributes for creating or updating a blog post
+"""
+input ProblemRecordInput {
+  problemId: Int!
+  recordType: String!
+  steps: String
+  userId: String
 }
 
 type PuzzleImgR1Uploader {

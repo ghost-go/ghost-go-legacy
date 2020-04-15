@@ -1,6 +1,3 @@
-/* eslint no-underscore-dangle:  */
-/* [2, { "allow": ["__REDUX_DEVTOOLS_EXTENSION__", "_doAuthentication"] }] */
-
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -18,7 +15,7 @@ import App from "./App";
 import history from "./common/History";
 
 import { ApolloProvider } from "@apollo/client";
-import { client } from "./common/ApolloClient";
+import { client } from "./common/ApolloClient.ts";
 
 const historyMiddleware = routerMiddleware(history);
 
@@ -30,10 +27,6 @@ const reducer = combineReducers({
 });
 
 const middlewares = [thunkMiddleware, historyMiddleware];
-if (process.env.NODE_ENV === "development") {
-  // const createLogger = require('redux-logger')
-  // middlewares.push(createLogger())
-}
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 const store = createStoreWithMiddleware(
   reducer,

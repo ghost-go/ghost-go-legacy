@@ -5,7 +5,7 @@ import ProblemFilterBar from "../components/ProblemFilterBar";
 import { Link } from "react-router-dom";
 import { ProblemsData, ProblemQueryVar } from "../common/types";
 
-const FEED_QUERY = gql`
+const GET_PROBLEMS = gql`
   query getProblems($last: Int!, $tags: String!, $level: String!) {
     problems(last: $last, tags: $tags, level: $level) {
       id
@@ -29,12 +29,12 @@ const TAG_QUERY = gql`
 `;
 
 const Problems = () => {
-  const problemQuery = useQuery<ProblemsData, ProblemQueryVar>(FEED_QUERY, {
+  const problemQuery = useQuery<ProblemsData, ProblemQueryVar>(GET_PROBLEMS, {
     variables: {
       last: 10,
       tags: "all",
-      level: "all"
-    }
+      level: "all",
+    },
   });
   const tagQuery = useQuery(TAG_QUERY);
   return (

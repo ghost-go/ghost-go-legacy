@@ -55,7 +55,7 @@ const styles = {
   },
 };
 
-const AnswerBar = (props) => {
+const AnswerBar = (props: any) => {
   const [current, setCurrent] = useState(0);
   const { data } = useQuery(GET_SETTINGS);
   const { settings } = data;
@@ -67,7 +67,7 @@ const AnswerBar = (props) => {
     }
   }, [settings.currentAnswerId, props.id]);
 
-  const handleAnswerMoves = (current, newMoves) => {
+  const handleAnswerMoves = (current: number, newMoves: Array<string>) => {
     updateSettings({ currentAnswerId: props.id, currentMode: "research" });
     if (current >= 0 && current <= moves.length) {
       clearMoves();
