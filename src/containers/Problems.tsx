@@ -4,29 +4,7 @@ import { useQuery, gql } from "@apollo/client";
 import ProblemFilterBar from "../components/ProblemFilterBar";
 import { Link } from "react-router-dom";
 import { ProblemsData, ProblemQueryVar } from "../common/types";
-
-const GET_PROBLEMS = gql`
-  query getProblems($last: Int!, $tags: String!, $level: String!) {
-    problems(last: $last, tags: $tags, level: $level) {
-      id
-      identifier
-      rank
-      whofirst
-      previewImgR1 {
-        x300
-      }
-    }
-  }
-`;
-
-const TAG_QUERY = gql`
-  {
-    tags(last: 100) {
-      id
-      name
-    }
-  }
-`;
+import { GET_PROBLEMS, GET_TAGS } from "../common/graphql";
 
 const Problems = () => {
   const problemQuery = useQuery<ProblemsData, ProblemQueryVar>(GET_PROBLEMS, {
@@ -36,7 +14,7 @@ const Problems = () => {
       level: "all",
     },
   });
-  const tagQuery = useQuery(TAG_QUERY);
+  const tagQuery = useQuery(GET_TAGS);
   return (
     <React.Fragment>
       {tagQuery.data && (

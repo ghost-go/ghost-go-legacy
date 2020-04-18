@@ -8,6 +8,7 @@ import RankList from "../components/RankList";
 import AnswerBar from "../components/AnswerBar";
 import { addMoves, clearMoves, updateSettings } from "../common/utils";
 import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
+// import { useParams } from "react-router-dom";
 
 const CREATE_PROBLEM_RECORD = gql`
   mutation CreateProblemRecord($problemRecord: ProblemRecordInput!) {
@@ -87,6 +88,7 @@ const Problem = () => {
   const [boardEditable, setBoardEditable] = useState(true);
 
   const [moves, setMoves] = useState([]);
+  // const { levelRange } = useParams();
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 

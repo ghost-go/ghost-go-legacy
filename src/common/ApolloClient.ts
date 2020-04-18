@@ -21,6 +21,7 @@ cache.writeQuery({
       settings {
         tagFilter
         levelFilter
+        playerFilter
         levelRange
         isFilterMenuOpen
         theme
@@ -43,6 +44,7 @@ cache.writeQuery({
     settings: {
       __typename: "Settings",
       tagFilter: "all",
+      playerFilter: "all",
       levelFilter: "all",
       levelRange: "18k-6d",
       isFilterMenuOpen: false,
