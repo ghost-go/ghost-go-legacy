@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import Remove from "material-ui/svg-icons/content/remove";
-import * as Helper from "../common/Helper";
+import { CoordsToTree } from "../common/Helper";
 import Toggle from "material-ui/Toggle";
 import Board from "../eboard/Board";
 import RankList from "../components/RankList";
@@ -90,7 +90,7 @@ const Problem = () => {
   const [moves, setMoves] = useState([]);
   // const { levelRange } = useParams();
 
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleReset = () => {
     clearMoves();
@@ -235,7 +235,7 @@ const Problem = () => {
         },
       });
       const totalSteps = problem.steps.split(";");
-      board.setStones(Helper.CoordsToTree(totalSteps.concat(moves)));
+      board.setStones(CoordsToTree(totalSteps.concat(moves)));
       board.render();
     }
   }, [problem, settings, moves, nextStoneType, boardEditable]);
