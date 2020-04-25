@@ -1,13 +1,13 @@
-import { createAction } from 'redux-actions';
-import URI from 'urijs';
-import * as config from '../common/Config';
+import { createAction } from "redux-actions";
+import URI from "urijs";
+import * as config from "../common/Config";
 
-function buildFetchData(name = '', api = '') {
+function buildFetchData(name = "", api = "") {
   const fetchDataRequest = createAction(`FETCH_${name}_REQUEST`);
   const fetchDataSuccess = createAction(`FETCH_${name}_SUCCESS`);
   const fetchDataFailure = createAction(`FETCH_${name}_FAILURE`);
 
-  return params => (dispatch) => {
+  return (params) => (dispatch) => {
     dispatch(fetchDataRequest(params));
     let url = URI(`${config.API_DOMAIN}/${config.API_VERSION}/${api}`);
     const templates = api.match(/:[A-Za-z0-9]*/g);
@@ -23,22 +23,16 @@ function buildFetchData(name = '', api = '') {
     }
 
     return fetch(url)
-      .then(res => res.json())
-      .then(data => dispatch(fetchDataSuccess({ data })))
-      .catch(ex => dispatch(fetchDataFailure(ex)));
+      .then((res) => res.json())
+      .then((data) => dispatch(fetchDataSuccess({ data })))
+      .catch((ex) => dispatch(fetchDataFailure(ex)));
   };
 }
 
-export const fetchKifus = buildFetchData('KIFUS', 'kifus');
-export const fetchPuzzles = buildFetchData('PUZZLES', 'puzzles');
-export const fetchPuzzleRecords = buildFetchData('PUZZLE_RECORDS', 'puzzle_records');
-export const fetchDashboard = buildFetchData('DASHBOARD', 'dashboard');
-export const fetchPracticeRecord = buildFetchData('PRACTICE_RECORD', 'practice_records/:id');
-
-export const fetchKifu = buildFetchData('KIFU', 'kifus/:id');
-export const fetchPuzzle = buildFetchData('PUZZLE', 'puzzles/:id');
-export const fetchPuzzleNext = buildFetchData('PUZZLE_NEXT', 'puzzles/next');
-export const fetchTopPlayers = buildFetchData('TOP_PLAYERS', 'players/top');
-
-export const fetchTags = buildFetchData('TAGS', 'tags');
-export const fetchFavorites = buildFetchData('FAVORITES', 'favorites');
+export const fetchPuzzleRecords = buildFetchData(
+  "PUZZLE_RECORDS",
+  "puzzle_records"
+);
+export const fetchDashboard = buildFetchData("DASHBOARD", "dashboard");
+export const fetchPuzzle = buildFetchData("PUZZLE", "puzzles/:id");
+export const fetchFavorites = buildFetchData("FAVORITES", "favorites");

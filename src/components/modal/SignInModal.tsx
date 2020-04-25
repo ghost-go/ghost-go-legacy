@@ -5,7 +5,7 @@ import { updateUi } from "../../common/utils";
 import { GET_UI } from "../../common/graphql";
 import { useQuery } from "@apollo/client";
 
-const SignInModal = (props: any) => {
+const SignInModal = () => {
   const { data, loading, error } = useQuery(GET_UI);
 
   const [ui, setUi] = useState({
@@ -40,7 +40,7 @@ const SignInModal = (props: any) => {
   return (
     <Modal
       visible={ui.signInModalVisible}
-      // closable={true}
+      closable={false}
       footer={null}
       onCancel={() => {
         updateUi({ signInModalVisible: false });
