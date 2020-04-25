@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import _ from "lodash";
 import { cache } from "./ApolloClient";
-import { GET_MOVES, GET_SETTINGS } from "./graphql";
+import { GET_MOVES, GET_SETTINGS, GET_UI } from "./graphql";
 
 export const updateSettings = (obj: object) => {
   const query: any = cache.readQuery({
@@ -20,6 +20,26 @@ export const updateSettings = (obj: object) => {
   cache.writeQuery({
     query: GET_SETTINGS,
     data: { settings },
+  });
+};
+
+export const updateUi = (obj: object) => {
+  const query: any = cache.readQuery({
+    query: GET_UI,
+  });
+  const ui = _.cloneDeep(query.ui);
+  console.log("ui", obj);
+  for (let [key, value] of Object.entries(obj)) {
+    if (ui.hasOwnProperty(key)) {
+      ui[key] = value;
+    } else {
+      console.error(`key '${key}' not in the ui object`);
+    }
+  }
+
+  cache.writeQuery({
+    query: GET_UI,
+    data: { ui },
   });
 };
 

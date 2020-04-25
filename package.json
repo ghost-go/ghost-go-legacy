@@ -31,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "actioncable": "^5.2.0",
+    "antd": "^4.1.4",
     "aphrodite": "^1.2.5",
     "auth0-js": "^9.3.3",
     "auth0-lock": "^11.4.0",

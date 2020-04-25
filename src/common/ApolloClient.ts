@@ -18,6 +18,10 @@ cache.writeQuery({
       moves
       ranges
       themes
+      ui {
+        signInModalVisible
+        signUpModalVisible
+      }
       settings {
         tagFilter
         levelFilter
@@ -41,6 +45,10 @@ cache.writeQuery({
       "walnut-theme",
       "flat-theme",
     ],
+    ui: {
+      signInModalVisible: false,
+      signUpModalVisible: false,
+    },
     settings: {
       __typename: "Settings",
       tagFilter: "all",

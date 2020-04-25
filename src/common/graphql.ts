@@ -6,6 +6,12 @@ export const GET_SETTINGS = gql`
   }
 `;
 
+export const GET_UI = gql`
+  {
+    ui @client
+  }
+`;
+
 export const GET_MOVES = gql`
   {
     moves @client
