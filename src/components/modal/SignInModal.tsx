@@ -3,20 +3,38 @@ import { Button, Modal, Form, Input, Checkbox } from "antd";
 
 import { updateUi } from "../../common/utils";
 import { GET_UI } from "../../common/graphql";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
+
+const SIGN_IN = gql`
+  mutation CreateProblemRecord($email: String!, $password: String!) {
+    signinUser(credentials: { email: $email, password: $password }) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
 
 const SignInModal = () => {
   const { data, loading, error } = useQuery(GET_UI);
+  const [signIn, { data: signInMutationData }] = useMutation(SIGN_IN);
 
   const [ui, setUi] = useState({
     signInModalVisible: false,
   });
+  const [signInData, setSignInData] = useState({});
 
   useEffect(() => {
     if (!data) return;
-
     setUi(data.ui);
   }, [data]);
+
+  useEffect(() => {
+    if (!signInMutationData) return;
+    setSignInData(signInMutationData);
+    console.log("token", signInMutationData.signinUser.token);
+  }, [signInMutationData]);
 
   const layout = {
     labelCol: { span: 6 },
@@ -27,6 +45,13 @@ const SignInModal = () => {
   };
 
   const onFinish = (values: any) => {
+    signIn({
+      variables: {
+        email: values.email,
+        password: values.password,
+      },
+    });
+
     console.log("Success:", values);
   };
 
