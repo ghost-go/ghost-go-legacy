@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import _ from "lodash";
 import { cache } from "./ApolloClient";
-import { GET_MOVES, GET_SETTINGS, GET_UI } from "./graphql";
+import { GET_MOVES, GET_SETTINGS, GET_UI, GET_AUTH } from "./graphql";
 
 export const updateSettings = (obj: object) => {
   const query: any = cache.readQuery({
@@ -20,6 +20,26 @@ export const updateSettings = (obj: object) => {
   cache.writeQuery({
     query: GET_SETTINGS,
     data: { settings },
+  });
+};
+
+export const updateAuth = (obj: object) => {
+  const query: any = cache.readQuery({
+    query: GET_AUTH,
+  });
+  const auth = _.cloneDeep(query.auth);
+  console.log("auth", obj);
+  for (let [key, value] of Object.entries(obj)) {
+    if (auth.hasOwnProperty(key)) {
+      auth[key] = value;
+    } else {
+      console.error(`key '${key}' not in the auth object`);
+    }
+  }
+
+  cache.writeQuery({
+    query: GET_SETTINGS,
+    data: { auth },
   });
 };
 

@@ -12,6 +12,12 @@ export const GET_UI = gql`
   }
 `;
 
+export const GET_AUTH = gql`
+  {
+    auth @client
+  }
+`;
+
 export const GET_MOVES = gql`
   {
     moves @client

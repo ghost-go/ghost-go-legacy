@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, Checkbox } from "antd";
 
-import { updateUi } from "../../common/utils";
-import { GET_UI } from "../../common/graphql";
+import { updateUi, updateAuth } from "../../common/utils";
+import { GET_UI, GET_AUTH } from "../../common/graphql";
 import { useQuery, useMutation, gql } from "@apollo/client";
 
 const SIGN_IN = gql`
@@ -11,29 +11,34 @@ const SIGN_IN = gql`
       token
       user {
         id
+        name
+        email
       }
     }
   }
 `;
 
 const SignInModal = () => {
-  const { data, loading, error } = useQuery(GET_UI);
+  const { data: uiData } = useQuery(GET_UI);
   const [signIn, { data: signInMutationData }] = useMutation(SIGN_IN);
 
   const [ui, setUi] = useState({
     signInModalVisible: false,
   });
-  const [signInData, setSignInData] = useState({});
 
   useEffect(() => {
-    if (!data) return;
-    setUi(data.ui);
-  }, [data]);
+    if (!uiData) return;
+    setUi(uiData.ui);
+  }, [uiData]);
 
   useEffect(() => {
     if (!signInMutationData) return;
-    setSignInData(signInMutationData);
-    console.log("token", signInMutationData.signinUser.token);
+    if (signInMutationData.signinUser) {
+      updateAuth({ signinUser: signInMutationData.signinUser });
+      updateUi({ signInModalVisible: false });
+    } else {
+      alert("用户名或密码错误");
+    }
   }, [signInMutationData]);
 
   const layout = {
@@ -58,9 +63,6 @@ const SignInModal = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
 
   return (
     <Modal

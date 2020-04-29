@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 
@@ -8,8 +8,30 @@ import SignInModal from "./modal/SignInModal";
 import { Button } from "antd";
 import "antd/dist/antd.css";
 import { updateUi } from "../common/utils";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_NAV_INFO = gql`
+  {
+    ui @client
+    settings @client
+    auth @client
+  }
+`;
 
 const Navigation = () => {
+  const { data } = useQuery(GET_NAV_INFO);
+
+  const [settings, setSettings] = useState({});
+  const [ui, setUi] = useState({});
+  const [auth, setAuth] = useState({});
+
+  useEffect(() => {
+    if (!data) return;
+    setSettings(data.settings);
+    setUi(data.ui);
+    setAuth(data.auth);
+  }, [data]);
+
   return (
     <div id="page-header">
       <div

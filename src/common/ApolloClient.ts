@@ -18,6 +18,13 @@ cache.writeQuery({
       moves
       ranges
       themes
+      auth {
+        signinUser {
+          email
+          name
+          token
+        }
+      }
       ui {
         signInModalVisible
         signUpModalVisible
@@ -45,6 +52,9 @@ cache.writeQuery({
       "walnut-theme",
       "flat-theme",
     ],
+    auth: {
+      signinUser: null,
+    },
     ui: {
       signInModalVisible: false,
       signUpModalVisible: false,
