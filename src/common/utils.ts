@@ -1,4 +1,3 @@
-import gql from "graphql-tag";
 import _ from "lodash";
 import { cache } from "./ApolloClient";
 import { GET_MOVES, GET_SETTINGS, GET_UI, GET_AUTH } from "./graphql";
@@ -38,7 +37,7 @@ export const updateAuth = (obj: object) => {
   }
 
   cache.writeQuery({
-    query: GET_SETTINGS,
+    query: GET_AUTH,
     data: { auth },
   });
 };

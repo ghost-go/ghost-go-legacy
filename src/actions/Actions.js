@@ -34,5 +34,3 @@ export const openDashboardFilter = createAction("OPEN_DASHBOARD_FILTER");
 export const closeDashboardFilter = createAction("CLOSE_DASHBOARD_FILTER");
 export const toggleDashboardFilter = createAction("TOGGLE_DASHBOARD_FILTER");
 export const toggleFavorite = createAction("TOGGLE_FAVORITE");
-export const openMessageBox = createAction("OPEN_MESSAGE_BOX");
-export const closeMessageBox = createAction("CLOSE_MESSAGE_BOX");

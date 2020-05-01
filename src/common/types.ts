@@ -7,14 +7,14 @@ export interface ProblemsData {
 }
 
 export interface TagData {
-  id: String;
-  name: String;
+  id: string;
+  name: string;
 }
 
 export interface ProblemData {
-  id: String;
-  rank: String;
-  whofirst: String;
+  id: string;
+  rank: string;
+  whofirst: string;
   previewImgR1: PrevieImageData;
 }
 
@@ -27,4 +27,25 @@ export interface ProblemQueryVar {
 export interface SettingVars {
   name: string;
   value: any;
+}
+
+export interface signinUserData {
+  token: string;
+  user: {
+    name: string;
+    email: string;
+  };
+}
+
+export interface authData {
+  signinUser: null | signinUserData;
+}
+
+export interface dashboardData {
+  right: number;
+  wrong: number;
+  total: number;
+  mostWrongList: ProblemData;
+  favoriteList: ProblemData;
+  recentList: ProblemData;
 }

@@ -34,6 +34,7 @@ const SignInModal = () => {
   useEffect(() => {
     if (!signInMutationData) return;
     if (signInMutationData.signinUser) {
+      console.log("signinuser", signInMutationData.signinUser);
       updateAuth({ signinUser: signInMutationData.signinUser });
       updateUi({ signInModalVisible: false });
     } else {

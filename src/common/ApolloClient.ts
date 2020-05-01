@@ -5,13 +5,31 @@ import {
   gql,
   createHttpLink,
 } from "@apollo/client";
+import { setContext } from "@apollo/link-context";
 
 const link = createHttpLink({
   uri: "/graphql",
 });
 
-export const cache = new InMemoryCache();
+const authLink = setContext((_: any, { headers }: { headers: any }) => {
+  const data = client.readQuery({
+    query: gql`
+      {
+        auth @client
+      }
+    `,
+  });
+  return {
+    headers: {
+      ...headers,
+      authorization: data.auth.signinUser
+        ? `Bearer ${data.auth.signinUser.token}`
+        : "",
+    },
+  };
+});
 
+export const cache = new InMemoryCache();
 cache.writeQuery({
   query: gql`
     query {
@@ -73,4 +91,7 @@ cache.writeQuery({
   },
 });
 
-export const client = new ApolloClient({ link, cache });
+export const client = new ApolloClient({
+  link: authLink.concat(link),
+  cache,
+});

@@ -5,8 +5,6 @@ import { ProblemQueryVar, TagData } from "../common/types";
 import GlobalFragments from "../common/fragments";
 import { updateSettings } from "../common/utils";
 
-import "./ProblemFilterBar.scss";
-
 const ProblemFilterBar = ({
   tags,
   refetch,
