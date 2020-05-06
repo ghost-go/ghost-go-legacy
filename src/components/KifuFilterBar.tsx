@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
+import { Popover, Button } from 'antd';
+
 import { updateSettings } from "../common/utils";
 import { useQuery } from "@apollo/client";
 import { GET_SETTINGS } from "../common/graphql";
+
 
 const KifuFilterBar = (props: any) => {
   const { players, refetch } = props;
@@ -16,12 +19,50 @@ const KifuFilterBar = (props: any) => {
     setSettings(data.settings);
   }, [data.settings]);
 
+  const popover = () => (
+    <div>
+      <div className="popover-title">Players</div>
+      <div className="popover-content">
+        <ul className="tags">
+          {players.map((tag: string) => (
+            <li
+              key={tag}
+              className={`tag ${
+                settings.playerFilter === tag ? "active" : ""
+              }`}
+            >
+              <span
+                onClick={() => {
+                  refetch({ players: tag });
+                  updateSettings({
+                    playerFilter: tag,
+                    isFilterMenuOpen: false,
+                  });
+                }}
+              >
+                {tag}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
 
   return (
     <div className="page-nav">
-      <Dropdown
+      <Popover
+        content={popover}
+        trigger="click"
+        visible={settings.isFilterMenuOpen}
+        onVisibleChange={() => { updateSettings({ isFilterMenuOpen: !settings.isFilterMenuOpen })} }
+      >
+        <Button type="primary">Click me</Button>
+      </Popover>
+      {/* <Dropdown
         id="filterMenu"
         title="filter-menu"
         className="filter"
@@ -34,35 +75,8 @@ const KifuFilterBar = (props: any) => {
           <i className="fa fa-filter" />
         </Dropdown.Toggle>
         <Dropdown.Menu className="super-colors">
-          <div>
-            <div className="popover-title">Players</div>
-            <div className="popover-content">
-              <ul className="tags">
-                {players.map((tag: string) => (
-                  <li
-                    key={tag}
-                    className={`tag ${
-                      settings.playerFilter === tag ? "active" : ""
-                    }`}
-                  >
-                    <span
-                      onClick={() => {
-                        refetch({ players: tag });
-                        updateSettings({
-                          playerFilter: tag,
-                          isFilterMenuOpen: false,
-                        });
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown> */}
       <ul className="page-subnav">
         <li>
           <span>{`${"Player"}: ${settings.playerFilter}`}</span>

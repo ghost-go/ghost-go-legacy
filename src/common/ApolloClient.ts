@@ -44,6 +44,7 @@ cache.writeQuery({
         }
       }
       ui {
+        collapsed
         signInModalVisible
         signUpModalVisible
       }
@@ -74,6 +75,7 @@ cache.writeQuery({
       signinUser: null,
     },
     ui: {
+      collapsed: false,
       signInModalVisible: false,
       signUpModalVisible: false,
     },

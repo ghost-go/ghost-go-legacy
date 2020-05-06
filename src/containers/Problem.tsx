@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button } from "react-bootstrap";
+import { Button } from "antd";
 import Remove from "material-ui/svg-icons/content/remove";
 import { CoordsToTree } from "../common/Helper";
 import Toggle from "material-ui/Toggle";
@@ -282,7 +282,7 @@ const Problem = () => {
           <Button
             style={{ marginRight: "10px" }}
             onClick={handleReset}
-            bsStyle="primary"
+            type="primary"
           >
             Reset
           </Button>
@@ -297,7 +297,8 @@ const Problem = () => {
                 },
               });
             }}
-            bsStyle="info"
+
+            type="ghost"
           >
             Next Problem
           </Button>

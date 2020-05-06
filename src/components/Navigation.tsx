@@ -60,31 +60,8 @@ const Navigation = () => {
 
   return (
     <div id="page-header">
-      <div
-        style={
-          {
-            // marginLeft: this.props.ui.sidebar.collpased ? "-185px" : "0px",
-          }
-        }
-        id="header-logo"
-      >
-        <span>
-          GHOSTGO <i className="opacity-80">&nbsp;- &nbsp;beta</i>
-        </span>
-        <a
-          // onClick={this.handleSidebar}
-          id="collapse-sidebar"
-        >
-          <i className="fa fa-chevron-left" />
-        </a>
-      </div>
       <div id="sidebar-search" />
-      <div
-        // style={{
-        //   paddingLeft: this.props.ui.sidebar.collpased ? "50px" : "235px",
-        // }}
-        className="theme"
-      >
+      <div className="theme">
         <BoardToolbar />
       </div>
       {auth.signinUser ? (

@@ -17,7 +17,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/aphrodite": "^2.0.0",
     "@types/jest": "^24.0.0",
     "@types/lodash": "^4.14.149",
     "@types/material-ui": "^0.21.7",
@@ -28,11 +27,9 @@
     "@types/react-helmet": "^5.0.15",
     "@types/react-paginate": "^6.2.1",
     "@types/react-router-dom": "^5.1.3",
-    "@types/relay-runtime": "^8.0.7",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "antd": "^4.1.4",
-    "aphrodite": "^1.2.5",
     "babel-eslint": "10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.0.6",
@@ -70,7 +67,7 @@
     "material-ui": "^0.20.0",
     "mini-css-extract-plugin": "0.9.0",
     "moment": "^2.21.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.6.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -87,7 +84,6 @@
     "react-dev-utils": "^10.2.0",
     "react-dom": "^16.13.0",
     "react-helmet": "^5.2.0",
-    "react-keydown": "^1.9.7",
     "react-paginate": "^5.0.0",
     "react-router-dom": "^5.1.2",
     "resolve": "1.15.0",
@@ -183,12 +179,6 @@
       "react-app"
     ],
     "plugins": [
-      [
-        "relay",
-        {
-          "artifactDirectory": "./src/__generated__"
-        }
-      ],
       [
         "@babel/plugin-proposal-decorators",
         {
