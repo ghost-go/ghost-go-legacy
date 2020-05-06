@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const GlobalFragments: any = {};
 
@@ -11,8 +11,7 @@ GlobalFragments.fragments = {
         isFilterMenuOpen
       }
     }
-  `
-}
-
+  `,
+};
 
 export default GlobalFragments;

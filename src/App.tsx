@@ -1,5 +1,5 @@
 import React, { Component, Suspense } from "react";
-import { Redirect, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Helmet from "react-helmet";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -40,41 +40,43 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <div className="App">
-          <Helmet
-            htmlAttributes={{ lang: "en", amp: undefined }}
-            title="A modern website to learn Go,Weiqi,Baduk - beta"
-            titleTemplate="GhostGo - %s"
-          />
-          <Navigation />
-          <Sidebar />
-          <div className="page-container">
-            <Route
-              exact
-              path="/"
-              component={() => <Redirect to="/problems" />}
+        <Router>
+          <div className="App">
+            <Helmet
+              htmlAttributes={{ lang: "en", amp: undefined }}
+              title="A modern website to learn Go,Weiqi,Baduk - beta"
+              titleTemplate="GhostGo - %s"
             />
-            <Route exact path="/" component={Problems} />
-            <Suspense
-              fallback={
-                <div className="loading">
-                  <i className="fa fa-spinner fa-pulse fa-fw" />
-                </div>
-              }
-            >
-              <Route exact path="/puzzles" component={Problems} />
-              <Route exact path="/problems" component={Problems} />} />
-            </Suspense>
-            <Route exact path="/kifus" component={Kifus} />
-            <Route path="/kifus/:id" component={Kifu} />
-            <Route path="/problems/:id" component={Problem} />
-            <Route path="/puzzles/:id" component={Problem} />
-            <Route path="/records" component={History} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/favorites" component={Favorite} />
+            <Navigation />
+            <Sidebar />
+            <div className="page-container">
+              <Route
+                exact
+                path="/"
+                component={() => <Redirect to="/problems" />}
+              />
+              <Route exact path="/" component={Problems} />
+              <Suspense
+                fallback={
+                  <div className="loading">
+                    <i className="fa fa-spinner fa-pulse fa-fw" />
+                  </div>
+                }
+              >
+                <Route exact path="/puzzles" component={Problems} />
+                <Route exact path="/problems" component={Problems} />}
+              </Suspense>
+              <Route exact path="/kifus" component={Kifus} />
+              <Route path="/kifus/:id" component={Kifu} />
+              <Route path="/problems/:id" component={Problem} />
+              <Route path="/puzzles/:id" component={Problem} />
+              <Route path="/records" component={History} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/favorites" component={Favorite} />
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </Router>
       </MuiThemeProvider>
     );
   }
