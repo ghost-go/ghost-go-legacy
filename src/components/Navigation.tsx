@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import BoardToolbar from "./BoardToolbar";
 import SignInModal from "./modal/SignInModal";
 
-import { Button } from "antd";
-import "antd/dist/antd.css";
+import { Button, Row, Col } from "antd";
 import { updateUi } from "../common/utils";
 import { gql, useQuery } from "@apollo/client";
 
@@ -60,34 +59,37 @@ const Navigation = () => {
 
   return (
     <div id="page-header">
-      <div id="sidebar-search" />
-      <div className="theme">
-        <BoardToolbar />
-      </div>
-      {auth.signinUser ? (
-        <div className="user-profile dropdown login">
-          <Dropdown overlay={menu}>
-            <div
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Avatar name={auth.signinUser!.user.name} size="40" round />
+      <Row>
+        <Col flex="auto">
+          <BoardToolbar />
+        </Col>
+        <Col flex="100px">
+          {auth.signinUser ? (
+            <div className="user-profile dropdown login">
+              <Dropdown overlay={menu}>
+                <div
+                  className="ant-dropdown-link"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <Avatar name={auth.signinUser!.user.name} size="40" round />
+                </div>
+              </Dropdown>
             </div>
-          </Dropdown>
-        </div>
-      ) : (
-        <div className="user-profile dropdown login">
-          <Button
-            onClick={() => {
-              updateUi({ signInModalVisible: true });
-            }}
-            className="signin clearfix"
-            type="primary"
-          >
-            Sign in
-          </Button>
-        </div>
-      )}
+          ) : (
+            <div className="user-profile dropdown login">
+              <Button
+                onClick={() => {
+                  updateUi({ signInModalVisible: true });
+                }}
+                className="signin clearfix"
+                type="primary"
+              >
+                Sign in
+              </Button>
+            </div>
+          )}
+        </Col>
+      </Row>
       <SignInModal></SignInModal>
     </div>
   );

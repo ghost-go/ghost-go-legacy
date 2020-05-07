@@ -40,12 +40,14 @@ const Sidebar = () => {
   return (
     <Sider
       collapsible
+      width={200}
+      // collapsedWidth={60}
       collapsed={ui.collapsed}
       onCollapse={() => {
-        updateUi({ ui: !ui.collapsed });
+        updateUi({ collapsed: !ui.collapsed });
       }}
     >
-      <div className="logo">Ghost Go</div>
+      <div className="logo">GhostGo</div>
       <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
         <Menu.Item key="1">
           <NavLink to="/problems">

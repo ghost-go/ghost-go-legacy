@@ -6,9 +6,6 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import { Layout, Menu, Breadcrumb } from "antd";
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
-
 import Navigation from "./components/Navigation";
 import Sidebar from "./components/Sidebar";
 import Problems from "./containers/Problems";
@@ -20,7 +17,10 @@ import History from "./containers/History";
 import Favorite from "./containers/Favorite";
 // import { a1ToSGF } from './common/Helper';
 
-import "./App.css";
+import "./stylesheets/App.less";
+import "./stylesheets/App.scss";
+
+const { Header, Content, Footer } = Layout;
 
 class App extends Component {
   render() {
@@ -34,11 +34,11 @@ class App extends Component {
           />
           <Layout style={{ minHeight: "100vh" }}>
             <Sidebar />
-          </Layout>
-          <Layout className="site-layout">
-            <Navigation />
-            <Content style={{ margin: "0 16px" }}>
-              <div className="page-container">
+            <Layout className="site-layout">
+              <Header className="header">
+                <Navigation />
+              </Header>
+              <Content className="container">
                 <Route
                   exact
                   path="/"
@@ -53,7 +53,7 @@ class App extends Component {
                   }
                 >
                   <Route exact path="/puzzles" component={Problems} />
-                  <Route exact path="/problems" component={Problems} />}
+                  <Route exact path="/problems" component={Problems} />
                 </Suspense>
                 <Route exact path="/kifus" component={Kifus} />
                 <Route path="/kifus/:id" component={Kifu} />
@@ -62,26 +62,26 @@ class App extends Component {
                 <Route path="/records" component={History} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/favorites" component={Favorite} />
-              </div>
-            </Content>
-            <Footer>
-              <div className="footer">
-                <span>Source Code:</span>
-                <a href="https://github.com/happybai/ghost-go">
-                  https://github.com/happybai/ghost-go
-                </a>
-                &nbsp;&nbsp;&nbsp;
-                <a href="http://www.w3.org/html/logo/">
-                  <img
-                    src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png"
-                    width="24"
-                    height="25"
-                    alt="HTML5 Powered"
-                    title="HTML5 Powered"
-                  />
-                </a>
-              </div>
-            </Footer>
+              </Content>
+              <Footer>
+                <div className="footer">
+                  <span>Source Code:</span>
+                  <a href="https://github.com/happybai/ghost-go">
+                    https://github.com/happybai/ghost-go
+                  </a>
+                  &nbsp;&nbsp;&nbsp;
+                  <a href="http://www.w3.org/html/logo/">
+                    <img
+                      src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png"
+                      width="24"
+                      height="25"
+                      alt="HTML5 Powered"
+                      title="HTML5 Powered"
+                    />
+                  </a>
+                </div>
+              </Footer>
+            </Layout>
           </Layout>
         </Router>
       </MuiThemeProvider>

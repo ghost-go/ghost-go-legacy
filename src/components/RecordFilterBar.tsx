@@ -1,7 +1,6 @@
 // import React, { Component } from "react";
 // import { connect } from "react-redux";
 // import PropTypes from "prop-types";
-// import { Dropdown } from "react-bootstrap";
 
 const RecordFilterBar = () => {
   return null;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown } from "react-bootstrap";
-import { Popover, Button } from 'antd';
+import { Popover, Button, Row, Col } from "antd";
+import { FilterOutlined, CaretDownOutlined } from "@ant-design/icons";
 
 import { updateSettings } from "../common/utils";
 import { useQuery } from "@apollo/client";
 import { GET_SETTINGS } from "../common/graphql";
-
+import TagMenu from "./TagMenu";
 
 const KifuFilterBar = (props: any) => {
   const { players, refetch } = props;
@@ -19,69 +19,51 @@ const KifuFilterBar = (props: any) => {
     setSettings(data.settings);
   }, [data.settings]);
 
-  const popover = () => (
-    <div>
-      <div className="popover-title">Players</div>
-      <div className="popover-content">
-        <ul className="tags">
-          {players.map((tag: string) => (
-            <li
-              key={tag}
-              className={`tag ${
-                settings.playerFilter === tag ? "active" : ""
-              }`}
-            >
-              <span
-                onClick={() => {
-                  refetch({ players: tag });
-                  updateSettings({
-                    playerFilter: tag,
-                    isFilterMenuOpen: false,
-                  });
-                }}
-              >
-                {tag}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
+  const popover = (
+    <TagMenu
+      tagGroup={[
+        {
+          title: "Players",
+          tags: players,
+          active: settings.playerFilter,
+          callback: (tag) => {
+            refetch({ players: tag });
+            updateSettings({
+              playerFilter: tag,
+              isFilterMenuOpen: false,
+            });
+          },
+        },
+      ]}
+    ></TagMenu>
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
 
   return (
-    <div className="page-nav">
-      <Popover
-        content={popover}
-        trigger="click"
-        visible={settings.isFilterMenuOpen}
-        onVisibleChange={() => { updateSettings({ isFilterMenuOpen: !settings.isFilterMenuOpen })} }
-      >
-        <Button type="primary">Click me</Button>
-      </Popover>
-      {/* <Dropdown
-        id="filterMenu"
-        title="filter-menu"
-        className="filter"
-        open={settings.isFilterMenuOpen}
-        onToggle={() => {
-          updateSettings({ isFilterMenuOpen: !settings.isFilterMenuOpen });
-        }}
-      >
-        <Dropdown.Toggle>
-          <i className="fa fa-filter" />
-        </Dropdown.Toggle>
-        <Dropdown.Menu className="super-colors">
-        </Dropdown.Menu>
-      </Dropdown> */}
-      <ul className="page-subnav">
-        <li>
+    <div className="filter-bar">
+      <Row justify="start" align="middle" gutter={10}>
+        <Col span={3}>
+          <Popover
+            placement="bottomRight"
+            content={popover}
+            trigger="click"
+            visible={settings.isFilterMenuOpen}
+            onVisibleChange={() => {
+              updateSettings({ isFilterMenuOpen: !settings.isFilterMenuOpen });
+            }}
+          >
+            <Button type="primary">
+              <FilterOutlined />
+              <CaretDownOutlined style={{ marginLeft: 2 }} />
+            </Button>
+          </Popover>
+        </Col>
+        <Col>
           <span>{`${"Player"}: ${settings.playerFilter}`}</span>
-        </li>
-      </ul>
+        </Col>
+      </Row>
     </div>
   );
 };

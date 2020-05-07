@@ -1,15 +1,17 @@
 import React from "react";
-import "./Problems.scss";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import ProblemFilterBar from "../components/ProblemFilterBar";
 import { Link } from "react-router-dom";
 import { ProblemsData, ProblemQueryVar } from "../common/types";
 import { GET_PROBLEMS, GET_TAGS } from "../common/graphql";
+import { Card, Row, Col } from "antd";
+
+import "../stylesheets/containers/Problems.scss";
 
 const Problems = () => {
   const problemQuery = useQuery<ProblemsData, ProblemQueryVar>(GET_PROBLEMS, {
     variables: {
-      last: 10,
+      last: 36,
       tags: "all",
       level: "all",
     },
@@ -29,22 +31,31 @@ const Problems = () => {
         </div>
       )}
 
-      {problemQuery.data &&
-        problemQuery.data.problems.map((i: any) => (
-          <div key={i.id} className="puzzle-card">
-            <Link to={`/problems/${i.identifier}`}>
-              <img src={i.previewImgR1.x300} alt="" />
-            </Link>
-            <div className="puzzle-info">
-              <span>Level: {i.rank}</span>
-              <div
-                className={`${
-                  i.whofirst === "Black First" ? "black" : "white"
-                }-ki-shape`}
-              />
-            </div>
-          </div>
-        ))}
+      <Row>
+        {problemQuery.data &&
+          problemQuery.data.problems.map((i: any) => (
+            <Col xs={12} sm={8} md={6} lg={4} xl={4}>
+              <Card
+                className="problem"
+                bordered={false}
+                bodyStyle={{
+                  padding: 10,
+                  paddingBottom: 24,
+                }}
+              >
+                <Link to={`/problems/${i.identifier}`}>
+                  <img src={i.previewImgR1.x300} alt="" />
+                </Link>
+                <span className="problem-level">Level: {i.rank}</span>
+                <div
+                  className={`${
+                    i.whofirst === "Black First" ? "black" : "white"
+                  } ki-shape`}
+                />
+              </Card>
+            </Col>
+          ))}
+      </Row>
     </React.Fragment>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { Card, Row, Col, Pagination } from "antd";
 
 import KifuFilterBar from "../components/KifuFilterBar";
 import { useQuery, gql } from "@apollo/client";
@@ -48,7 +49,7 @@ export const GET_KIFUS = gql`
 `;
 
 // TODO: Loading style
-const PAGE_LIMIT = 30;
+const PAGE_LIMIT = 24;
 
 const Kifus = () => {
   const { data, loading, error, refetch } = useQuery(GET_KIFUS, {
@@ -79,30 +80,43 @@ const Kifus = () => {
   if (error) return <div>Error</div>;
 
   return (
-    <div>
+    <div className="kifu-container">
       <KifuFilterBar
         players={["all", ...players.map((player: any) => player.enName)]}
         refetch={refetch}
       />
-      {kifus.map((i: any) => (
-        <div key={i.id} className="kifu-card">
-          <Link to={`/kifus/${i.identifier}`}>
-            <img src={i.previewImg.x300} alt="" />
-          </Link>
-          <div className="kifu-info">
-            <span>
-              {i.playerB && i.playerB.enName} <b>VS</b>{" "}
-              {i.playerW && i.playerW.enName}
-            </span>
-            <br />
-            <span>{`Result: ${i.result}`}</span>
-            <br />
-            <span>{`Date: ${i.shortDate}`}</span>
-          </div>
-        </div>
-      ))}
-      <div className="clearfix" />
-      <ReactPaginate
+      <Row>
+        {kifus.map((i: any) => (
+          <Col xs={12} sm={8} md={8} lg={6} xl={6}>
+            <Card
+              className="problem"
+              bordered={false}
+              bodyStyle={{
+                padding: 10,
+                paddingBottom: 24,
+              }}
+            >
+              <Link to={`/kifus/${i.identifier}`}>
+                <img src={i.previewImg.x300} alt="" />
+              </Link>
+              <div className="kifu-info">
+                <span>
+                  {i.playerB && i.playerB.enName} <b>VS</b>{" "}
+                  {i.playerW && i.playerW.enName}
+                </span>
+                <br />
+                <span>{`Result: ${i.result}`}</span>
+                <br />
+                <span>{`Date: ${i.shortDate}`}</span>
+              </div>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+      <Row style={{ paddingLeft: 10 }}>
+        <Pagination defaultCurrent={1} total={kifuTotalCount} />
+      </Row>
+      {/* <ReactPaginate
         disableInitialCallback
         initialPage={page}
         previousLabel="previous"
@@ -122,8 +136,7 @@ const Kifus = () => {
         }}
         containerClassName="pagination"
         activeClassName="active"
-      />
-      <div className="clearfix" />
+      /> */}
     </div>
   );
 };

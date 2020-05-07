@@ -1,9 +1,15 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
+import { Popover, Button, Row, Col } from "antd";
+import { FilterOutlined, CaretDownOutlined } from "@ant-design/icons";
 
 import { ProblemQueryVar, TagData } from "../common/types";
 import GlobalFragments from "../common/fragments";
 import { updateSettings } from "../common/utils";
+
+import TagMenu from "./TagMenu";
+
+import "../stylesheets/components/tags.scss";
 
 const ProblemFilterBar = ({
   tags,
@@ -21,7 +27,7 @@ const ProblemFilterBar = ({
   `;
   const query = useQuery(GET_FILTER_DATA);
   const { ranges, settings } = query.data;
-  const { tagFilter, levelFilter, isFilterMenuOpen } = settings;
+  const { tagFilter, levelFilter } = settings;
   let tagAll: TagData = { id: "0", name: "all" };
   const tagsWithAll = [tagAll].concat(tags);
 
@@ -31,111 +37,77 @@ const ProblemFilterBar = ({
     last: 100,
   };
 
-  const isFilterMenuOpenFalseObj = {
-    name: "isFilterMenuOpen",
-    value: false,
-  };
-
-  const handleLevelChange = (
-    e: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    updateSettings({
-      levelFilter: e.currentTarget.innerText,
-      isFilterMenuOpenFalseObj,
-    });
-    refetch({
-      ...queryParams,
-      level: e.currentTarget.innerText,
-    });
-  };
-
-  const handleTagChange = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    updateSettings({
-      tagFilter: e.currentTarget.innerText,
-      isFilterMenuOpenFalseObj,
-    });
-    refetch({
-      ...queryParams,
-      tags: e.currentTarget.innerText,
-    });
-  };
-
   const handleSeeMore = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     refetch({ ...queryParams });
   };
 
+  const popover = (
+    <TagMenu
+      tagGroup={[
+        {
+          title: "Level",
+          tags: ranges,
+          active: settings.levelFilter,
+          callback: (tag: string) => {
+            refetch({ ...queryParams, level: tag });
+            updateSettings({
+              levelFilter: tag,
+              isFilterMenuOpen: false,
+            });
+          },
+        },
+        {
+          title: "Tag",
+          tags: tagsWithAll.map((tag) => tag.name),
+          active: settings.tagFilter,
+          callback: (tag: string) => {
+            updateSettings({
+              tagFilter: tag,
+              isFilterMenuOpen: false,
+            });
+            refetch({
+              ...queryParams,
+              tags: tag,
+            });
+          },
+        },
+      ]}
+    />
+  );
+
   return (
-    <div className="page-nav">
-      <div
-        id="filterMenu"
-        title="filter-menu"
-        className={`filter dropdown btn-group ${
-          isFilterMenuOpen ? "open" : ""
-        }`}
-      >
-        <button
-          id="filterMenu"
-          aria-haspopup="true"
-          aria-expanded="false"
-          type="button"
-          className="dropdown-toggle btn btn-default"
-          onClick={() => {
-            updateSettings({ isFilterMenuOpen: !isFilterMenuOpen });
-          }}
-        >
-          <i className="fa fa-filter"></i>
-          <span className="caret"></span>
-        </button>
-        <ul role="menu" className="super-colors dropdown-menu">
-          <div key="level">
-            <div className="popover-title">Level</div>
-            <div className="popover-content">
-              <ul className="tags">
-                {ranges.map((level: any) => (
-                  <li
-                    key={level}
-                    className={`tag ${levelFilter === level ? "active" : ""}`}
-                    onClick={handleLevelChange}
-                  >
-                    {level}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div key="tag">
-            <div className="popover-title">Tags</div>
-            <div className="popover-content">
-              <ul className="tags">
-                {tagsWithAll.map((tag: any) => (
-                  <li
-                    key={tag.id}
-                    className={`tag ${tagFilter === tag.name ? "active" : ""}`}
-                    onClick={handleTagChange}
-                  >
-                    {tag.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </ul>
-      </div>
-      <ul className="page-subnav">
-        <li>
+    <div className="filter-bar">
+      <Row justify="start" align="middle" gutter={10}>
+        <Col xs={4} sm={4} md={3} lg={2} xl={2}>
+          <Popover
+            placement="bottomRight"
+            content={popover}
+            trigger="click"
+            visible={settings.isFilterMenuOpen}
+            onVisibleChange={() => {
+              updateSettings({ isFilterMenuOpen: !settings.isFilterMenuOpen });
+            }}
+          >
+            <Button type="primary">
+              <FilterOutlined />
+              <CaretDownOutlined style={{ marginLeft: 2 }} />
+            </Button>
+          </Popover>
+        </Col>
+        <Col xs={4} sm={4} md={4} lg={3} xl={3}>
           <span title={`Level: ${levelFilter}`}>{`Level: ${levelFilter}`}</span>
-        </li>
-        <li>
+        </Col>
+        <Col xs={4} sm={4} md={4} lg={3} xl={3}>
           <span title={`Tags: ${tagFilter}`}>{`Tags: ${tagFilter}`}</span>
-        </li>
-        <li>
-          <button className="btn primary seemore" onClick={handleSeeMore}>
+        </Col>
+        <Col xs={4} sm={4} md={4} lg={3} xl={3}>
+          <Button type="primary" onClick={handleSeeMore}>
             See More
-          </button>
-        </li>
-      </ul>
+          </Button>
+        </Col>
+      </Row>
     </div>
   );
 };

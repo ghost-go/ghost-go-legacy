@@ -1,6 +1,8 @@
 import React from "react";
-
 import { gql, useQuery } from "@apollo/client";
+import { Menu, Dropdown, Button } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+
 import { updateSettings } from "../common/utils";
 
 const BoardToolbar = () => {
@@ -14,24 +16,24 @@ const BoardToolbar = () => {
   const { themes, settings } = query.data;
 
   const handleTheme = (e: any) => {
-    localStorage.setItem("theme", e.target.value);
-    updateSettings({ theme: e.target.value });
+    localStorage.setItem("theme", e.key);
+    updateSettings({ theme: e.key });
   };
 
+  const menu = (
+    <Menu onClick={handleTheme}>
+      {themes.map((t: string) => (
+        <Menu.Item key={t}>{t}</Menu.Item>
+      ))}
+    </Menu>
+  );
+
   return (
-    <div className={`board-toolbar`}>
-      <div className="section">
-        <select
-          className="form-control"
-          onChange={handleTheme}
-          defaultValue={settings.theme}
-        >
-          {themes.map((t: string) => (
-            <option>{t}</option>
-          ))}
-        </select>
-      </div>
-    </div>
+    <Dropdown overlay={menu} trigger={["click"]}>
+      <Button>
+        {settings.theme} <DownOutlined />
+      </Button>
+    </Dropdown>
   );
 };
 

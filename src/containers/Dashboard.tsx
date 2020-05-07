@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col } from "antd";
 import { gql, useQuery } from "@apollo/client";
 
 import DashboardFilterBar from "../components/DashboardFilterBar";

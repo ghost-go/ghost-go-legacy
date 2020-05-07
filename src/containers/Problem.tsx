@@ -297,7 +297,6 @@ const Problem = () => {
                 },
               });
             }}
-
             type="ghost"
           >
             Next Problem
