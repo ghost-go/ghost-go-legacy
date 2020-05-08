@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import ReactPaginate from "react-paginate";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { Card, Row, Col, Pagination } from "antd";
 
 import KifuFilterBar from "../components/KifuFilterBar";
@@ -49,23 +48,28 @@ export const GET_KIFUS = gql`
 `;
 
 // TODO: Loading style
-const PAGE_LIMIT = 24;
+const PAGE_LIMIT = 20;
 
 const Kifus = () => {
-  const { data, loading, error, refetch } = useQuery(GET_KIFUS, {
-    variables: {
-      players: "all",
-      limit: PAGE_LIMIT,
-      offset: 0,
-    },
-  });
+  let { search } = useLocation();
+  const history = useHistory();
+  const query = new URLSearchParams(search);
+  const page = parseInt(query.get("page") || "1");
+  const pageSize = parseInt(query.get("pageSize") || PAGE_LIMIT.toString());
   const [kifus, setKifus] = useState([]);
   const [players, setPlayers] = useState([]);
   const [settings, setSettings] = useState({
     playerFilter: "all",
   });
+  const { data, loading, error, refetch } = useQuery(GET_KIFUS, {
+    variables: {
+      players: "all",
+      page: page,
+      limit: pageSize,
+      offset: (page - 1) * PAGE_LIMIT,
+    },
+  });
   // TODO: page params need to extract from url params
-  const [page, setPage] = useState(0);
   const [kifuTotalCount, setKifuTotalCount] = useState(0);
 
   useEffect(() => {
@@ -75,6 +79,24 @@ const Kifus = () => {
     setPlayers(data.players);
     setKifuTotalCount(data.kifuTotalCount);
   }, [data, settings]);
+
+  const handlePageChange = (page: number, pageSize?: number) => {
+    query.set("page", page.toString());
+    query.set("pageSize", (pageSize || PAGE_LIMIT).toString());
+    history.push({
+      pathname: "/kifus",
+      search: query.toString(),
+    });
+  };
+
+  const handlePageSizeChange = (current: number, pageSize: number) => {
+    query.set("page", page.toString());
+    query.set("pageSize", (pageSize || PAGE_LIMIT).toString());
+    history.push({
+      pathname: "/kifus",
+      search: query.toString(),
+    });
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
@@ -114,7 +136,14 @@ const Kifus = () => {
         ))}
       </Row>
       <Row style={{ paddingLeft: 10 }}>
-        <Pagination defaultCurrent={1} total={kifuTotalCount} />
+        <Pagination
+          current={page}
+          pageSize={pageSize}
+          defaultPageSize={PAGE_LIMIT}
+          total={kifuTotalCount}
+          onChange={handlePageChange}
+          onShowSizeChange={handlePageSizeChange}
+        />
       </Row>
       {/* <ReactPaginate
         disableInitialCallback
