@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button } from "antd";
+import { Button, Row, Col } from "antd";
 import Remove from "material-ui/svg-icons/content/remove";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+
 import { CoordsToTree } from "../common/Helper";
 import Toggle from "material-ui/Toggle";
 import Board from "../eboard/Board";
@@ -244,114 +246,133 @@ const Problem = () => {
   if (error) return <div>Error</div>;
 
   return (
-    <React.Fragment>
-      <div className="puzzle-board">
-        <canvas id="puzzle_layer" ref={canvasRef} />
-        <i
-          className={`fa fa-check problem-right ${isRight ? "" : "hide"}`}
-          aria-hidden="true"
-        />
-        <i
-          className={`fa fa-times problem-wrong ${isWrong ? "" : "hide"}`}
-          aria-hidden="true"
-        />
-      </div>
-      <div className="puzzle-panel">
-        <div className="title">
-          {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
-          <button
-          // onClick={this.handleFavorite}
-          // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
-          // title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
-          >
-            <i className="fa fa-heart bounceIn" aria-hidden="true" />
-          </button>
-        </div>
-        <div>
-          <strong>NO.:</strong>
-          {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
-          <i className="fa fa-check" aria-hidden="true" />
-          <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
-          <i className="fa fa-times" aria-hidden="true" />
-          <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
-          <i className="fa fa-heart" aria-hidden="true" />
-          <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
-        </div>
-
-        <div className="button-container">
-          <Button
-            style={{ marginRight: "10px" }}
-            onClick={handleReset}
-            type="primary"
-          >
-            Reset
-          </Button>
-          <Button
-            style={{ marginRight: "10px" }}
-            onClick={() => {
-              getNextProblem({
-                variables: {
-                  last: 1,
-                  tags: "all",
-                  level: `${levelRangeLow}-${levelRangeHigh}`,
-                },
-              });
-            }}
-            type="ghost"
-          >
-            Next Problem
-          </Button>
-          <div>
-            <RankList
-              rank={levelRangeLow}
-              floatingLabelText="FROM"
-              onChange={(e: any) => {
-                updateSettings({
-                  levelRange: `${e.target.innerText}-${levelRangeHigh}`,
-                });
-              }}
-            />
-            <Remove style={{ height: "50px", margin: "0 10px" }} />
-            <RankList
-              rank={levelRangeHigh}
-              floatingLabelText="TO"
-              onChange={(e: any) => {
-                updateSettings({
-                  levelRange: `${levelRangeLow}-${e.target.innerText}`,
-                });
-              }}
-            />
-          </div>
-          <div className="clearfix" />
-          <Toggle
-            className="research"
-            label="Research Mode"
-            defaultToggled={settings.currentMode === "research"}
-            onToggle={() => {
-              updateSettings({
-                currentMode:
-                  settings.currentMode === "research" ? "normal" : "research",
-              });
+    <Row gutter={[24, 0]}>
+      <Col>
+        <div className="problem-board">
+          <canvas ref={canvasRef} />
+          <CheckOutlined
+            style={{
+              position: "absolute",
+              fontSize: "40vmin",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              color: "green",
+              opacity: `${isRight ? 0 : 1}`,
+              transition: "opacity 0.3s ease-in-out",
             }}
           />
+          <CloseOutlined
+            style={{
+              position: "absolute",
+              fontSize: "40vmin",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              color: "red",
+              opacity: `${isWrong ? 0 : 1}`,
+              transition: "opacity 0.3s ease-in-out",
+            }}
+          />
+        </div>
+      </Col>
+      <Col>
+        <div className="puzzle-panel">
+          <div className="title">
+            {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
+            <button
+            // onClick={this.handleFavorite}
+            // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
+            // title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
+            >
+              <i className="fa fa-heart bounceIn" aria-hidden="true" />
+            </button>
+          </div>
           <div>
-            <div>Right Answers</div>
-            {rightAnswers.map((a: any) => (
-              <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-            ))}
-            <div>Wrong Answers</div>
-            {wrongAnswers.map((a: any) => (
-              <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-            ))}
-            {changeAnswers.length > 0 && <div>Change Answers</div>}
-            {changeAnswers.map((a: any) => (
-              <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-            ))}
+            <strong>NO.:</strong>
+            {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
+            <i className="fa fa-check" aria-hidden="true" />
+            <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
+            <i className="fa fa-times" aria-hidden="true" />
+            <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
+            <i className="fa fa-heart" aria-hidden="true" />
+            <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
+          </div>
+
+          <div className="button-container">
+            <Button
+              style={{ marginRight: "10px" }}
+              onClick={handleReset}
+              type="primary"
+            >
+              Reset
+            </Button>
+            <Button
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                getNextProblem({
+                  variables: {
+                    last: 1,
+                    tags: "all",
+                    level: `${levelRangeLow}-${levelRangeHigh}`,
+                  },
+                });
+              }}
+              type="ghost"
+            >
+              Next Problem
+            </Button>
+            <div>
+              <RankList
+                rank={levelRangeLow}
+                floatingLabelText="FROM"
+                onChange={(e: any) => {
+                  updateSettings({
+                    levelRange: `${e.target.innerText}-${levelRangeHigh}`,
+                  });
+                }}
+              />
+              <Remove style={{ height: "50px", margin: "0 10px" }} />
+              <RankList
+                rank={levelRangeHigh}
+                floatingLabelText="TO"
+                onChange={(e: any) => {
+                  updateSettings({
+                    levelRange: `${levelRangeLow}-${e.target.innerText}`,
+                  });
+                }}
+              />
+            </div>
+            <div className="clearfix" />
+            <Toggle
+              className="research"
+              label="Research Mode"
+              defaultToggled={settings.currentMode === "research"}
+              onToggle={() => {
+                updateSettings({
+                  currentMode:
+                    settings.currentMode === "research" ? "normal" : "research",
+                });
+              }}
+            />
+            <div>
+              <div>Right Answers</div>
+              {rightAnswers.map((a: any) => (
+                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+              ))}
+              <div>Wrong Answers</div>
+              {wrongAnswers.map((a: any) => (
+                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+              ))}
+              {changeAnswers.length > 0 && <div>Change Answers</div>}
+              {changeAnswers.map((a: any) => (
+                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="clearfix" />
-    </React.Fragment>
+      </Col>
+    </Row>
   );
 };
 
