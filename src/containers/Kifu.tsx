@@ -103,11 +103,12 @@ const Kifu = () => {
     fontSize: 26,
     padding: 8,
     marginTop: 10,
+    marginLeft: -10,
   };
 
   return (
     <Row className="kifu-container" gutter={[24, 24]}>
-      <Col>
+      <Col style={{ padding: "12px 20px" }}>
         <div className="kifu-board">
           <canvas
             role="button"
