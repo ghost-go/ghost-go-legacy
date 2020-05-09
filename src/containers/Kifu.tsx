@@ -1,9 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import Paper from "material-ui/Paper";
-import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table";
 import { CoordsToTree } from "../common/Helper";
 import { useQuery, gql } from "@apollo/client";
+import { Row, Col } from "antd";
 import Board from "../eboard/Board";
+import {
+  FastBackwardOutlined,
+  FastForwardOutlined,
+  BackwardOutlined,
+  ForwardOutlined,
+  CaretLeftOutlined,
+  CaretRightOutlined,
+} from "@ant-design/icons";
+import "../stylesheets/containers/Kifu.scss";
 
 const GET_KIFU = gql`
   query getKifu($id: ID!) {
@@ -90,117 +98,98 @@ const Kifu = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
 
+  const gutter = 18;
+  const iconStyle = {
+    fontSize: 26,
+    padding: 8,
+    marginTop: 10,
+  };
+
   return (
-    <div>
-      <div className="kifu-board">
-        <canvas
-          role="button"
-          ref={canvasRef}
-          onClick={() => {
-            if (step > moves.length) return;
-            setStep(step + 1);
-          }}
-        />
-      </div>
-      <div className="kifu-panel">
-        <Paper>
-          <Table selectable={false}>
-            <TableBody displayRowCheckbox={false}>
-              <TableRow>
-                <TableRowColumn className="fixed-width">Black</TableRowColumn>
-                <TableRowColumn>
-                  {kifu.playerB.enName}({kifu.bRank})
-                </TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn className="fixed-width">White</TableRowColumn>
-                <TableRowColumn>
-                  {kifu.playerW.enName}({kifu.wRank})
-                </TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn className="fixed-width">Result</TableRowColumn>
-                <TableRowColumn>{kifu.result}</TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn className="fixed-width">Komi</TableRowColumn>
-                <TableRowColumn>{kifu.komi}</TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn className="fixed-width">Date</TableRowColumn>
-                <TableRowColumn>{kifu.shortDate}</TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn colSpan={2}>
-                  <div className="control-bar">
-                    <span
-                      className="move-control"
-                      onClick={() => {
-                        setStep(1);
-                      }}
-                    >
-                      <i className="fa fa-fast-backward" />
-                    </span>
-                    <span
-                      className="move-control"
-                      onClick={() => {
-                        step < 10 ? setStep(0) : setStep(step - 10);
-                      }}
-                    >
-                      <i className="fa fa-backward" />
-                    </span>
-                    <span
-                      className="move-control"
-                      onClick={() => {
-                        if (step <= 0) return;
-                        setStep(step - 1);
-                      }}
-                    >
-                      <i className="fa fa-play rotate" />
-                    </span>
-                    <span
-                      className="move-control"
-                      onClick={() => {
-                        if (step > moves.length) return;
-                        setStep(step + 1);
-                      }}
-                    >
-                      <i className="fa fa-play" />
-                    </span>
-                    <span
-                      className="move-control"
-                      onClick={() => {
-                        step < moves.length - 10
-                          ? setStep(step + 10)
-                          : setStep(moves.length);
-                      }}
-                    >
-                      <i className="fa fa-forward" />
-                    </span>
-                    <span
-                      className="move-control"
-                      onClick={() => {
-                        setStep(moves.length);
-                      }}
-                    >
-                      <i className="fa fa-fast-forward" />
-                    </span>
-                  </div>
-                </TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn colSpan={2}>
-                  <div className="control-bar">
-                    You can use the keyboard keys to control game records.
-                  </div>
-                </TableRowColumn>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Paper>
-      </div>
-      <div className="clearfix" />
-    </div>
+    <Row className="kifu-container" gutter={[24, 24]}>
+      <Col>
+        <div className="kifu-board">
+          <canvas
+            role="button"
+            ref={canvasRef}
+            onClick={() => {
+              if (step > moves.length) return;
+              setStep(step + 1);
+            }}
+          />
+        </div>
+      </Col>
+      <Col style={{ padding: "30px 30px" }}>
+        <Row gutter={[gutter, gutter]}>
+          <Col>Black: </Col>
+          <Col>
+            {kifu.playerB.enName}({kifu.bRank})
+          </Col>
+        </Row>
+        <Row gutter={[gutter, gutter]}>
+          <Col>White: </Col>
+          <Col>
+            {kifu.playerW.enName}({kifu.wRank})
+          </Col>
+        </Row>
+        <Row gutter={[gutter, gutter]}>
+          <Col>Result: </Col>
+          <Col>{kifu.result}</Col>
+        </Row>
+        <Row gutter={[gutter, gutter]}>
+          <Col>Komi: </Col>
+          <Col>{kifu.komi}</Col>
+        </Row>
+        <Row gutter={[gutter, gutter]}>
+          <Col>Date: </Col>
+          <Col>{kifu.shortDate}</Col>
+        </Row>
+        <Row gutter={[gutter, gutter]}>
+          <Col>
+            <FastBackwardOutlined
+              style={iconStyle}
+              onClick={() => {
+                setStep(1);
+              }}
+            />
+            <BackwardOutlined
+              style={iconStyle}
+              onClick={() => {
+                step < 10 ? setStep(0) : setStep(step - 10);
+              }}
+            />
+            <CaretLeftOutlined
+              style={iconStyle}
+              onClick={() => {
+                if (step <= 0) return;
+                setStep(step - 1);
+              }}
+            />
+            <CaretRightOutlined
+              style={iconStyle}
+              onClick={() => {
+                if (step > moves.length) return;
+                setStep(step + 1);
+              }}
+            />
+            <ForwardOutlined
+              style={iconStyle}
+              onClick={() => {
+                step < moves.length - 10
+                  ? setStep(step + 10)
+                  : setStep(moves.length);
+              }}
+            />
+            <FastForwardOutlined
+              style={iconStyle}
+              onClick={() => {
+                setStep(moves.length);
+              }}
+            />
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 };
 

@@ -1,16 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Row, Col } from "antd";
-import Remove from "material-ui/svg-icons/content/remove";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { Button, Switch, Row, Col } from "antd";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  HeartFilled,
+  MinusOutlined,
+} from "@ant-design/icons";
 
 import { CoordsToTree } from "../common/Helper";
-import Toggle from "material-ui/Toggle";
 import Board from "../eboard/Board";
 import RankList from "../components/RankList";
 import AnswerBar from "../components/AnswerBar";
 import { addMoves, clearMoves, updateSettings } from "../common/utils";
 import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
 // import { useParams } from "react-router-dom";
+
+import "../stylesheets/containers/Problem.scss";
 
 const CREATE_PROBLEM_RECORD = gql`
   mutation CreateProblemRecord($problemRecord: ProblemRecordInput!) {
@@ -152,15 +157,11 @@ const Problem = () => {
     );
   }, [data]);
 
-  const [getNextProblem, nextProblemQuery] = useLazyQuery(
-    GET_PROBLEMS_FOR_NEXT,
-    {
-      onCompleted: (data: any) => {
-        // console.log(data.problems[0]);
-        window.location.href = `${data.problems[0].identifier}`;
-      },
-    }
-  );
+  const [getNextProblem] = useLazyQuery(GET_PROBLEMS_FOR_NEXT, {
+    onCompleted: (data: any) => {
+      window.location.href = `${data.problems[0].identifier}`;
+    },
+  });
 
   const response = (moves: Array<string>) => {
     const rights: any = [];
@@ -250,30 +251,8 @@ const Problem = () => {
       <Col>
         <div className="problem-board">
           <canvas ref={canvasRef} />
-          <CheckOutlined
-            style={{
-              position: "absolute",
-              fontSize: "40vmin",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              color: "green",
-              opacity: `${isRight ? 0 : 1}`,
-              transition: "opacity 0.3s ease-in-out",
-            }}
-          />
-          <CloseOutlined
-            style={{
-              position: "absolute",
-              fontSize: "40vmin",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              color: "red",
-              opacity: `${isWrong ? 0 : 1}`,
-              transition: "opacity 0.3s ease-in-out",
-            }}
-          />
+          <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
+          <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
         </div>
       </Col>
       <Col>
@@ -291,10 +270,11 @@ const Problem = () => {
           <div>
             <strong>NO.:</strong>
             {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
-            <i className="fa fa-check" aria-hidden="true" />
+            <CheckOutlined />
             <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
-            <i className="fa fa-times" aria-hidden="true" />
+            <CloseOutlined />
             <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
+            <HeartFilled />
             <i className="fa fa-heart" aria-hidden="true" />
             <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
           </div>
@@ -322,39 +302,45 @@ const Problem = () => {
             >
               Next Problem
             </Button>
-            <div>
+            <div className="level-range">
               <RankList
                 rank={levelRangeLow}
-                floatingLabelText="FROM"
-                onChange={(e: any) => {
+                placeholder="FROM"
+                onChange={(val: string) => {
                   updateSettings({
-                    levelRange: `${e.target.innerText}-${levelRangeHigh}`,
+                    levelRange: `${val}-${levelRangeHigh}`,
                   });
                 }}
               />
-              <Remove style={{ height: "50px", margin: "0 10px" }} />
+              <MinusOutlined style={{ margin: "0 10px" }} />
               <RankList
                 rank={levelRangeHigh}
-                floatingLabelText="TO"
-                onChange={(e: any) => {
+                placeholder="TO"
+                onChange={(val: string) => {
                   updateSettings({
-                    levelRange: `${levelRangeLow}-${e.target.innerText}`,
+                    levelRange: `${levelRangeLow}-${val}`,
                   });
                 }}
               />
             </div>
-            <div className="clearfix" />
-            <Toggle
-              className="research"
-              label="Research Mode"
-              defaultToggled={settings.currentMode === "research"}
-              onToggle={() => {
-                updateSettings({
-                  currentMode:
-                    settings.currentMode === "research" ? "normal" : "research",
-                });
-              }}
-            />
+            <Row style={{ margin: "20px 0" }}>
+              <Col span={20}>
+                <label className="research-mode-label">Research Mode: </label>
+              </Col>
+              <Col span={4}>
+                <Switch
+                  defaultChecked={settings.currentMode === "research"}
+                  onChange={() => {
+                    updateSettings({
+                      currentMode:
+                        settings.currentMode === "research"
+                          ? "normal"
+                          : "research",
+                    });
+                  }}
+                />
+              </Col>
+            </Row>
             <div>
               <div>Right Answers</div>
               {rightAnswers.map((a: any) => (

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import IconButton from "material-ui/IconButton";
-import Paper from "material-ui/Paper";
 import { clearMoves, addMoves, updateSettings } from "../common/utils";
 import { useQuery } from "@apollo/client";
 import { GET_SETTINGS } from "../common/graphql";
+import {
+  StepBackwardOutlined,
+  StepForwardOutlined,
+  CaretLeftOutlined,
+  CaretRightOutlined,
+} from "@ant-design/icons";
 
 const styles = {
   answerContainer: {
@@ -76,46 +80,40 @@ const AnswerBar = (props: any) => {
     }
   };
 
+  const iconStyle = {
+    fontSize: 24,
+    padding: "5px",
+  };
+
   return (
-    <Paper style={styles.answerContainer} zDepth={0}>
+    <div style={styles.answerContainer}>
       <div style={styles.noInfo}>{`No.${props.id}`}</div>
       <div style={styles.stepInfo}>{`${current}/${
         props.answer.split(";").length
       }`}</div>
-      <IconButton
+      <StepBackwardOutlined
+        style={iconStyle}
         onClick={handleAnswerMoves.bind(null, 1, moves[0])}
-        iconStyle={styles.smallIcon}
-        style={styles.small}
-        iconClassName="fa fa-step-backward"
       />
-      <IconButton
+      <CaretLeftOutlined
+        style={iconStyle}
         onClick={handleAnswerMoves.bind(
           null,
           current - 1,
           moves.slice(0, current - 1)
         )}
-        iconStyle={styles.smallIcon}
-        style={{
-          ...styles.small,
-          ...styles.reverse,
-        }}
-        iconClassName="fa fa-play"
       />
-      <IconButton
+      <CaretRightOutlined
+        style={iconStyle}
         onClick={handleAnswerMoves.bind(
           null,
           current + 1,
           moves.slice(0, current + 1)
         )}
-        iconStyle={styles.smallIcon}
-        style={styles.small}
-        iconClassName="fa fa-play"
       />
-      <IconButton
+      <StepForwardOutlined
+        style={iconStyle}
         onClick={handleAnswerMoves.bind(null, moves.length, moves)}
-        iconStyle={styles.smallIcon}
-        style={styles.small}
-        iconClassName="fa fa-step-forward"
       />
       {
         // <div style={styles.voteInfo}>Vote</div>
@@ -126,7 +124,7 @@ const AnswerBar = (props: any) => {
         // iconStyle={styles.smallIcon} style={styles.vote} iconClassName="fa fa-thumbs-o-down" />
         // <span>{this.props.down}</span>
       }
-    </Paper>
+    </div>
   );
 };
 export default AnswerBar;
