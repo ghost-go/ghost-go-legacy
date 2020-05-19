@@ -1,14 +1,8 @@
-// import React from "react";
-// import PropTypes from "prop-types";
-// import { List } from "material-ui/List";
+import React from "react";
+import { Row, Col } from "antd";
 import { Link } from "react-router-dom";
-// import moment from "moment";
-
-// import { StyleSheet, css } from "aphrodite";
-
-const RecordList = () => {
-  return null;
-};
+import styled from "styled-components";
+import moment from "moment";
 
 // const style = StyleSheet.create({
 //   listBox: {
@@ -38,36 +32,43 @@ const RecordList = () => {
 //   },
 // });
 
-// const RecordList = (props) => {
-//   return (
-//     <List>
-//       {props.recordList.map((i) => (
-//         <Link
-//           key={`${props.type}_${i.identifier}`}
-//           to={`/problems/${i.identifier}`}
-//         >
-//           <div className={css(style.listBox)}>
-//             <div className="list-preview-img">
-//               <img
-//                 className={css(style.previewImg)}
-//                 src={i.previewImgR1.x300}
-//                 alt=""
-//               />
-//             </div>
-//             <div className={css(style.listRight)}>
-//               <span
-//                 className={css(style.title)}
-//               >{`P-${i.identifier}(${i.rank})`}</span>
-//               <span>{i.whofirst}</span>
-//               <span className={css(style.date)}>
-//                 {moment(i.updated_at).format("YYYY-MM-DD")}
-//               </span>
-//             </div>
-//           </div>
-//         </Link>
-//       ))}
-//     </List>
-//   );
-// };
+const ListBox = styled.div`
+  display: "flex";
+  width: "300px";
+  height: "120px";
+  float: "left";
+`;
+
+const Image = styled.img`
+  width: 100%;
+`;
+
+const ProblemTitle = styled.div`
+  padding: 10px 0;
+  font-size: 20px;
+`;
+
+const RecordList = (props: any) => {
+  return (
+    <div>
+      {props.recordList.map((i: any) => (
+        <Link key={`${i.identifier}`} to={`/problems/${i.identifier}`}>
+          <ListBox>
+            <Row>
+              <Col span={10}>
+                <Image src={i.previewImgR1.x300} alt="" />
+              </Col>
+              <Col span={14} style={{ textAlign: "right" }}>
+                <ProblemTitle>{`P-${i.identifier}(${i.rank})`}</ProblemTitle>
+                <div>{i.whofirst}</div>
+                <div>{moment(i.updated_at).format("YYYY-MM-DD")}</div>
+              </Col>
+            </Row>
+          </ListBox>
+        </Link>
+      ))}
+    </div>
+  );
+};
 
 export default RecordList;

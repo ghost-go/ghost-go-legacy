@@ -94,7 +94,7 @@ export const updateAuthFromToken = (token: string) => {
   });
 };
 
-let refreshTokenInterval: NodeJS.Timeout;
+let refreshTokenInterval: number;
 export const refreshAccessToken = async () => {
   const url = "/api/refresh_token";
   const response = await fetch(url, {

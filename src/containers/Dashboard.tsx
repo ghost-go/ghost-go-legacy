@@ -18,6 +18,7 @@ const GET_DASHBOARD = gql`
       mostWrongList {
         id
         identifier
+        rank
         whofirst
         updatedAt
         previewImgR1 {
@@ -27,6 +28,7 @@ const GET_DASHBOARD = gql`
       favoriteList {
         id
         identifier
+        rank
         whofirst
         updatedAt
         previewImgR1 {
@@ -36,6 +38,7 @@ const GET_DASHBOARD = gql`
       recentList {
         id
         identifier
+        rank
         whofirst
         updatedAt
         previewImgR1 {
@@ -97,6 +100,8 @@ const Dashboard = () => {
     </Menu>
   );
 
+  const cardBodyStyle = { padding: 10 };
+
   return (
     <div className="dashboard-container">
       <Row>
@@ -154,23 +159,28 @@ const Dashboard = () => {
           <Card
             title="Most Wrong Problem"
             extra={<a href="/records?type=wrong">More</a>}
+            bodyStyle={cardBodyStyle}
           >
-            <RecordList />
-            {/* <RecordList type="most_wrong" recordList={dashboard.mostWrongList} /> */}
+            {/* <RecordList /> */}
+            <RecordList recordList={dashboard.mostWrongList} />
           </Card>
         </Col>
         <Col xs={24} md={8}>
           <Card
             title="Favorites"
             extra={<a href="/records?type=wrong">More</a>}
+            bodyStyle={cardBodyStyle}
           >
-            <RecordList />
-            {/* <RecordList type="most_wrong" recordList={dashboard.mostWrongList} /> */}
+            <RecordList recordList={dashboard.favoriteList} />
           </Card>
         </Col>
         <Col xs={24} md={8}>
-          <Card title="Recents" extra={<a href="/records?type=wrong">More</a>}>
-            <RecordList />
+          <Card
+            title="Recents"
+            extra={<a href="/records?type=wrong">More</a>}
+            bodyStyle={cardBodyStyle}
+          >
+            <RecordList recordList={dashboard.recentList} />
           </Card>
         </Col>
       </Row>
