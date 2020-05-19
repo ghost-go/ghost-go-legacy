@@ -1,8 +1,8 @@
-import React, { Component, Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout } from "antd";
 
 import Navigation from "./components/Navigation";
 import Sidebar from "./components/Sidebar";
@@ -20,15 +20,16 @@ import "./stylesheets/App.scss";
 import {
   refreshAccessToken,
   setRefreshAccessTokenInterval,
-} from "./common/utils";
+} from "./common/Auth";
 
 const { Header, Content, Footer } = Layout;
 
+refreshAccessToken();
+setRefreshAccessTokenInterval();
+
 const App = () => {
-  useEffect(() => {
-    refreshAccessToken();
-    setRefreshAccessTokenInterval();
-  }, []);
+  // useEffect(() => {
+  // }, []);
 
   return (
     <Router>

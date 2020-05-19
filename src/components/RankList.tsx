@@ -5,11 +5,15 @@ const { Option } = Select;
 export default (props: any) => {
   let menuItems = [];
   for (let i = 18; i > 0; i--) {
-    menuItems.push(<Option value={`${i}k`}>{`${i}k`}</Option>);
+    menuItems.push(
+      <Option key={props.placeholder + i} value={`${i}k`}>{`${i}k`}</Option>
+    );
   }
 
   for (let i = 1; i < 7; i++) {
-    menuItems.push(<Option value={`${i}d`}>{`${i}d`}</Option>);
+    menuItems.push(
+      <Option key={props.placeholder + i} value={`${i}d`}>{`${i}d`}</Option>
+    );
   }
 
   return (

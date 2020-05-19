@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "antd";
 import { gql, useQuery } from "@apollo/client";
-import { Menu, Dropdown, Button, message, Card } from "antd";
+import { Menu, Dropdown, Button, Card } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 
 import RecordList from "../components/RecordList";
@@ -50,13 +50,6 @@ const GET_DASHBOARD = gql`
 `;
 
 const Dashboard = () => {
-  const { data } = useQuery(GET_DASHBOARD, {
-    variables: {
-      dateRange: "last7days",
-      userRange: "onlyme",
-    },
-  });
-
   const [dashboard, setDashboard] = useState({
     wrong: 0,
     right: 0,
@@ -69,16 +62,33 @@ const Dashboard = () => {
     signinUser: null,
   });
 
+  const { data, refetch } = useQuery(GET_DASHBOARD, {
+    variables: {
+      dateRange: "all",
+      userRange: "onlyme",
+    },
+  });
+
+  const [filter, setFilter] = useState("All");
+  console.log("update");
+
   useEffect(() => {
     if (!data) return;
-    setDashboard(data.dashboard);
     setAuth(data.auth);
+    setDashboard(data.dashboard);
   }, [data]);
 
   function handleMenuClick(e: any) {
-    message.info("Click on menu item.");
-    console.log("click", e);
+    setFilter(e.item.node.innerText);
+    refetch({
+      dateRange: e.key,
+      userRange: "onlyme",
+    });
   }
+
+  if (!data) return null;
+  if (!auth.signinUser) return null;
+  if (!dashboard) return null;
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -95,7 +105,7 @@ const Dashboard = () => {
         <UserOutlined /> Last 30 days
       </Menu.Item>
       <Menu.Item key="all">
-        <UserOutlined /> all
+        <UserOutlined /> All
       </Menu.Item>
     </Menu>
   );
@@ -111,7 +121,8 @@ const Dashboard = () => {
         <Col md={4} style={{ textAlign: "right" }}>
           <Dropdown overlay={menu}>
             <Button>
-              Button <DownOutlined />
+              {filter}
+              <DownOutlined />
             </Button>
           </Dropdown>
         </Col>

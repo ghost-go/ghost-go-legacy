@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { Button, Switch, Row, Col } from "antd";
 import {
   CheckOutlined,
@@ -13,6 +13,8 @@ import RankList from "../components/RankList";
 import AnswerBar from "../components/AnswerBar";
 import { addMoves, clearMoves, updateSettings } from "../common/utils";
 import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
+import ThemeContext from "../contexts/theme-context";
+
 // import { useParams } from "react-router-dom";
 
 import "../stylesheets/containers/Problem.scss";
@@ -65,6 +67,7 @@ const Problem = () => {
   });
 
   const [createProblemRecord] = useMutation(CREATE_PROBLEM_RECORD);
+  const themeContext = useContext(ThemeContext);
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
@@ -85,7 +88,6 @@ const Problem = () => {
   });
   const [settings, setSettings] = useState({
     levelFilter: "all",
-    theme: "black-and-white",
     levelRange: "18k-6d",
     currentMode: "normal",
   });
@@ -93,6 +95,12 @@ const Problem = () => {
   const [isRight, setIsRight] = useState(false);
   const [isWrong, setIsWrong] = useState(false);
   const [boardEditable, setBoardEditable] = useState(true);
+  const [theme, setTheme] = useState(themeContext.theme);
+
+  const changeTheme = (theme: string) => {
+    localStorage.setItem("theme", theme);
+    setTheme(theme);
+  };
 
   const [moves, setMoves] = useState([]);
   // const { levelRange } = useParams();
@@ -224,7 +232,7 @@ const Problem = () => {
         canvas: canvasRef.current,
         showCoordinate: true,
         editable: boardEditable,
-        theme: settings.theme,
+        theme: themeContext.theme,
         nextStoneType: nextStoneType,
         afterMove: (step: string) => {
           const moves = addMoves([step]);
@@ -247,118 +255,120 @@ const Problem = () => {
   if (error) return <div>Error</div>;
 
   return (
-    <Row gutter={[24, 0]}>
-      <Col>
-        <div className="problem-board">
-          <canvas ref={canvasRef} />
-          <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
-          <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
-        </div>
-      </Col>
-      <Col>
-        <div className="puzzle-panel">
-          <div className="title">
-            {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
-            <button
-            // onClick={this.handleFavorite}
-            // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
-            // title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
-            >
-              <i className="fa fa-heart bounceIn" aria-hidden="true" />
-            </button>
+    <ThemeContext.Provider value={{ ...themeContext, theme, changeTheme }}>
+      <Row gutter={[24, 0]}>
+        <Col>
+          <div className="problem-board">
+            <canvas ref={canvasRef} />
+            <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
+            <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
           </div>
-          <div>
-            <strong>NO.:</strong>
-            {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
-            <CheckOutlined />
-            <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
-            <CloseOutlined />
-            <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
-            <HeartFilled />
-            <i className="fa fa-heart" aria-hidden="true" />
-            <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
-          </div>
-
-          <div className="button-container">
-            <Button
-              style={{ marginRight: "10px" }}
-              onClick={handleReset}
-              type="primary"
-            >
-              Reset
-            </Button>
-            <Button
-              style={{ marginRight: "10px" }}
-              onClick={() => {
-                getNextProblem({
-                  variables: {
-                    last: 1,
-                    tags: "all",
-                    level: `${levelRangeLow}-${levelRangeHigh}`,
-                  },
-                });
-              }}
-              type="ghost"
-            >
-              Next Problem
-            </Button>
-            <div className="level-range">
-              <RankList
-                rank={levelRangeLow}
-                placeholder="FROM"
-                onChange={(val: string) => {
-                  updateSettings({
-                    levelRange: `${val}-${levelRangeHigh}`,
-                  });
-                }}
-              />
-              <MinusOutlined style={{ margin: "0 10px" }} />
-              <RankList
-                rank={levelRangeHigh}
-                placeholder="TO"
-                onChange={(val: string) => {
-                  updateSettings({
-                    levelRange: `${levelRangeLow}-${val}`,
-                  });
-                }}
-              />
+        </Col>
+        <Col>
+          <div className="puzzle-panel">
+            <div className="title">
+              {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
+              <button
+              // onClick={this.handleFavorite}
+              // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
+              // title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
+              >
+                <i className="fa fa-heart bounceIn" aria-hidden="true" />
+              </button>
             </div>
-            <Row style={{ margin: "20px 0" }}>
-              <Col span={20}>
-                <label className="research-mode-label">Research Mode: </label>
-              </Col>
-              <Col span={4}>
-                <Switch
-                  defaultChecked={settings.currentMode === "research"}
-                  onChange={() => {
+            <div>
+              <strong>NO.:</strong>
+              {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
+              <CheckOutlined />
+              <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
+              <CloseOutlined />
+              <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
+              <HeartFilled />
+              <i className="fa fa-heart" aria-hidden="true" />
+              <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
+            </div>
+
+            <div className="button-container">
+              <Button
+                style={{ marginRight: "10px" }}
+                onClick={handleReset}
+                type="primary"
+              >
+                Reset
+              </Button>
+              <Button
+                style={{ marginRight: "10px" }}
+                onClick={() => {
+                  getNextProblem({
+                    variables: {
+                      last: 1,
+                      tags: "all",
+                      level: `${levelRangeLow}-${levelRangeHigh}`,
+                    },
+                  });
+                }}
+                type="ghost"
+              >
+                Next Problem
+              </Button>
+              <div className="level-range">
+                <RankList
+                  rank={levelRangeLow}
+                  placeholder="FROM"
+                  onChange={(val: string) => {
                     updateSettings({
-                      currentMode:
-                        settings.currentMode === "research"
-                          ? "normal"
-                          : "research",
+                      levelRange: `${val}-${levelRangeHigh}`,
                     });
                   }}
                 />
-              </Col>
-            </Row>
-            <div>
-              <div>Right Answers</div>
-              {rightAnswers.map((a: any) => (
-                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-              ))}
-              <div>Wrong Answers</div>
-              {wrongAnswers.map((a: any) => (
-                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-              ))}
-              {changeAnswers.length > 0 && <div>Change Answers</div>}
-              {changeAnswers.map((a: any) => (
-                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-              ))}
+                <MinusOutlined style={{ margin: "0 10px" }} />
+                <RankList
+                  rank={levelRangeHigh}
+                  placeholder="TO"
+                  onChange={(val: string) => {
+                    updateSettings({
+                      levelRange: `${levelRangeLow}-${val}`,
+                    });
+                  }}
+                />
+              </div>
+              <Row style={{ margin: "20px 0" }}>
+                <Col span={20}>
+                  <label className="research-mode-label">Research Mode: </label>
+                </Col>
+                <Col span={4}>
+                  <Switch
+                    defaultChecked={settings.currentMode === "research"}
+                    onChange={() => {
+                      updateSettings({
+                        currentMode:
+                          settings.currentMode === "research"
+                            ? "normal"
+                            : "research",
+                      });
+                    }}
+                  />
+                </Col>
+              </Row>
+              <div>
+                <div>Right Answers</div>
+                {rightAnswers.map((a: any) => (
+                  <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+                ))}
+                <div>Wrong Answers</div>
+                {wrongAnswers.map((a: any) => (
+                  <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+                ))}
+                {changeAnswers.length > 0 && <div>Change Answers</div>}
+                {changeAnswers.map((a: any) => (
+                  <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </ThemeContext.Provider>
   );
 };
 

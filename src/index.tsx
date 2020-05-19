@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 import { ApolloProvider } from "@apollo/client";
-import { client } from "./common/ApolloClient";
+import { client } from "./common/Auth";
 
 ReactDOM.render(
   <ApolloProvider client={client}>

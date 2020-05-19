@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import _ from "lodash";
 import { NavLink } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu } from "antd";
 import {
   BookOutlined,
   ReadOutlined,
@@ -13,13 +12,13 @@ import { authData } from "../common/types";
 import { updateUi } from "../common/utils";
 
 const { Sider } = Layout;
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 
-const routeKeyMap : any = {
+const routeKeyMap: any = {
   "/dashboard": "dashboard",
   "/problems": "problems",
   "/kifus": "kifus",
-}
+};
 
 const GET_SIDEBAR_INFO = gql`
   {
@@ -32,7 +31,7 @@ const GET_SIDEBAR_INFO = gql`
 const Sidebar = () => {
   const { data } = useQuery(GET_SIDEBAR_INFO);
 
-  const [settings, setSettings] = useState();
+  // const [settings, setSettings] = useState();
   const [ui, setUi] = useState({
     collapsed: false,
   });
@@ -43,7 +42,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     if (!data) return;
-    setSettings(data.settings);
+    // setSettings(data.settings);
     setUi(data.ui);
     setAuth(data.auth);
   }, [data]);

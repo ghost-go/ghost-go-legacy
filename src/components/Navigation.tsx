@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import _ from "lodash";
-import { Link } from "react-router-dom";
 
 import BoardToolbar from "./BoardToolbar";
 import SignInModal from "./modal/SignInModal";
 
 import { Button, Row, Col } from "antd";
-import { updateUi, logout } from "../common/utils";
 import { gql, useQuery } from "@apollo/client";
 
 import Avatar from "react-avatar";
 import { Menu, Dropdown } from "antd";
 import { authData } from "../common/types";
-import { updateAuth } from "../common/utils";
+import { updateUi } from "../common/utils";
+import { logout } from "../common/Auth";
 
 const GET_NAV_INFO = gql`
   {
@@ -25,16 +23,16 @@ const GET_NAV_INFO = gql`
 const Navigation = () => {
   const { data } = useQuery(GET_NAV_INFO);
 
-  const [settings, setSettings] = useState({});
-  const [ui, setUi] = useState({});
+  // const [settings, setSettings] = useState({});
+  // const [ui, setUi] = useState({});
   const [auth, setAuth]: [authData, any] = useState({
     signinUser: null,
   });
 
   useEffect(() => {
     if (!data) return;
-    setSettings(data.settings);
-    setUi(data.ui);
+    // setSettings(data.settings);
+    // setUi(data.ui);
     setAuth(data.auth);
     console.log("auth", data.auth);
   }, [data]);

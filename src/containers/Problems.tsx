@@ -34,7 +34,7 @@ const Problems = () => {
       <Row>
         {problemQuery.data &&
           problemQuery.data.problems.map((i: any) => (
-            <Col xs={12} sm={8} md={6} lg={4} xl={4}>
+            <Col key={`problem-${i.id}`} xs={12} sm={8} md={6} lg={4} xl={4}>
               <Card
                 className="problem"
                 bordered={false}

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, Checkbox } from "antd";
 
-import {
-  updateUi,
-  updateAuth,
-  setRefreshAccessTokenInterval,
-} from "../../common/utils";
-import { GET_UI, GET_AUTH } from "../../common/graphql";
+import { updateUi, updateAuth } from "../../common/utils";
+import { login } from "../../common/Auth";
+
+import { setRefreshAccessTokenInterval } from "../../common/Auth";
+import { GET_UI } from "../../common/graphql";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import jwtDecode from "jwt-decode";
 
@@ -41,6 +40,7 @@ const SignInModal = () => {
     if (signInMutationData.signinUser) {
       console.log("signinuser", signInMutationData.signinUser);
       const decodedData: any = jwtDecode(signInMutationData.signinUser.token);
+      login(signInMutationData.signinUser.token);
       updateAuth({
         signinUser: signInMutationData.signinUser,
         exp: decodedData.exp,
