@@ -6,12 +6,13 @@ import BoardToolbar from "./BoardToolbar";
 import SignInModal from "./modal/SignInModal";
 
 import { Button, Row, Col } from "antd";
-import { updateUi } from "../common/utils";
+import { updateUi, logout } from "../common/utils";
 import { gql, useQuery } from "@apollo/client";
 
 import Avatar from "react-avatar";
 import { Menu, Dropdown } from "antd";
 import { authData } from "../common/types";
+import { updateAuth } from "../common/utils";
 
 const GET_NAV_INFO = gql`
   {
@@ -46,13 +47,13 @@ const Navigation = () => {
         </a>
       </Menu.Item>
       <Menu.Item>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.taobao.com/"
+        <span
+          onClick={() => {
+            logout();
+          }}
         >
           Logout
-        </a>
+        </span>
       </Menu.Item>
     </Menu>
   );
@@ -63,7 +64,7 @@ const Navigation = () => {
         <Col flex="auto">
           <BoardToolbar />
         </Col>
-        <Col flex="100px">
+        <Col flex="100px" style={{ textAlign: "right" }}>
           {auth.signinUser ? (
             <div className="user-profile dropdown login">
               <Dropdown overlay={menu}>

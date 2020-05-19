@@ -1,7 +1,7 @@
 // import React from "react";
 // import PropTypes from "prop-types";
 // import { List } from "material-ui/List";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import moment from "moment";
 
 // import { StyleSheet, css } from "aphrodite";
@@ -9,8 +9,6 @@
 const RecordList = () => {
   return null;
 };
-
-export default RecordList;
 
 // const style = StyleSheet.create({
 //   listBox: {
@@ -71,21 +69,5 @@ export default RecordList;
 //     </List>
 //   );
 // };
-// RecordList.propTypes = {
-//   type: PropTypes.string.isRequired,
-//   recordList: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       preview_img_r1: PropTypes.shape({
-//         x200: PropTypes.shape({
-//           url: PropTypes.string.isRequired,
-//         }),
-//       }).isRequired,
-//       rank: PropTypes.string.isRequired,
-//       whofirst: PropTypes.string.isRequired,
-//       updated_at: PropTypes.string.isRequired,
-//     })
-//   ).isRequired,
-// };
 
-// export default RecordList;
+export default RecordList;

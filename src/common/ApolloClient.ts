@@ -1,4 +1,3 @@
-// 1
 import {
   ApolloClient,
   InMemoryCache,
@@ -6,10 +5,42 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/link-context";
+import { onError } from "@apollo/link-error";
+import {
+  updateAuth,
+  logout,
+} from "./utils";
 
 const link = createHttpLink({
   uri: "/graphql",
 });
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+});
+
+const logoutLink = onError(({ networkError }) => {
+  if (
+    networkError &&
+    "statusCode" in networkError &&
+    networkError.statusCode === 401
+  ) {
+    logout();
+  }
+});
+
+const syncLogout = (event: any) => {
+  if (event.key === "logout") {
+    updateAuth({ signinUser: null });
+  }
+};
+
+window.addEventListener("storage", syncLogout);
 
 const authLink = setContext((_: any, { headers }: { headers: any }) => {
   const data = client.readQuery({
@@ -37,11 +68,7 @@ cache.writeQuery({
       ranges
       themes
       auth {
-        signinUser {
-          email
-          name
-          token
-        }
+        signinUser
       }
       ui {
         collapsed
@@ -94,6 +121,6 @@ cache.writeQuery({
 });
 
 export const client = new ApolloClient({
-  link: authLink.concat(link),
+  link: authLink.concat(link).concat(errorLink).concat(logoutLink),
   cache,
 });

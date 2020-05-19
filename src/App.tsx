@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from "react";
+import React, { Component, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Helmet from "react-helmet";
 
@@ -17,72 +17,79 @@ import Favorite from "./containers/Favorite";
 
 import "./stylesheets/App.less";
 import "./stylesheets/App.scss";
+import {
+  refreshAccessToken,
+  setRefreshAccessTokenInterval,
+} from "./common/utils";
 
 const { Header, Content, Footer } = Layout;
 
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <Helmet
-          htmlAttributes={{ lang: "en", amp: undefined }}
-          title="A modern website to learn Go,Weiqi,Baduk - beta"
-          titleTemplate="GhostGo - %s"
-        />
-        <Layout style={{ minHeight: "100vh" }}>
-          <Sidebar />
-          <Layout className="site-layout">
-            <Header className="header">
-              <Navigation />
-            </Header>
-            <Content className="container">
-              <Route
-                exact
-                path="/"
-                component={() => <Redirect to="/problems" />}
-              />
-              <Route exact path="/" component={Problems} />
-              <Suspense
-                fallback={
-                  <div className="loading">
-                    <i className="fa fa-spinner fa-pulse fa-fw" />
-                  </div>
-                }
-              >
-                <Route exact path="/puzzles" component={Problems} />
-                <Route exact path="/problems" component={Problems} />
-              </Suspense>
-              <Route exact path="/kifus" component={Kifus} />
-              <Route path="/kifus/:id" component={Kifu} />
-              <Route path="/problems/:id" component={Problem} />
-              <Route path="/puzzles/:id" component={Problem} />
-              <Route path="/records" component={History} />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/favorites" component={Favorite} />
-            </Content>
-            <Footer>
-              <div className="footer">
-                <span>Source Code:</span>
-                <a href="https://github.com/happybai/ghost-go">
-                  https://github.com/happybai/ghost-go
-                </a>
-                &nbsp;&nbsp;&nbsp;
-                <a href="http://www.w3.org/html/logo/">
-                  <img
-                    src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png"
-                    width="24"
-                    height="25"
-                    alt="HTML5 Powered"
-                    title="HTML5 Powered"
-                  />
-                </a>
-              </div>
-            </Footer>
-          </Layout>
+const App = () => {
+  useEffect(() => {
+    refreshAccessToken();
+    setRefreshAccessTokenInterval();
+  }, []);
+
+  return (
+    <Router>
+      <Helmet
+        htmlAttributes={{ lang: "en", amp: undefined }}
+        title="A modern website to learn Go,Weiqi,Baduk - beta"
+        titleTemplate="GhostGo - %s"
+      />
+      <Layout style={{ minHeight: "100vh" }}>
+        <Sidebar />
+        <Layout className="site-layout">
+          <Header className="header">
+            <Navigation />
+          </Header>
+          <Content className="container">
+            <Route
+              exact
+              path="/"
+              component={() => <Redirect to="/problems" />}
+            />
+            <Route exact path="/" component={Problems} />
+            <Suspense
+              fallback={
+                <div className="loading">
+                  <i className="fa fa-spinner fa-pulse fa-fw" />
+                </div>
+              }
+            >
+              <Route exact path="/puzzles" component={Problems} />
+              <Route exact path="/problems" component={Problems} />
+            </Suspense>
+            <Route exact path="/kifus" component={Kifus} />
+            <Route path="/kifus/:id" component={Kifu} />
+            <Route path="/problems/:id" component={Problem} />
+            <Route path="/puzzles/:id" component={Problem} />
+            <Route path="/records" component={History} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/favorites" component={Favorite} />
+          </Content>
+          <Footer>
+            <div className="footer">
+              <span>Source Code:</span>
+              <a href="https://github.com/happybai/ghost-go">
+                https://github.com/happybai/ghost-go
+              </a>
+              &nbsp;&nbsp;&nbsp;
+              <a href="http://www.w3.org/html/logo/">
+                <img
+                  src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png"
+                  width="24"
+                  height="25"
+                  alt="HTML5 Powered"
+                  title="HTML5 Powered"
+                />
+              </a>
+            </div>
+          </Footer>
         </Layout>
-      </Router>
-    );
-  }
-}
+      </Layout>
+    </Router>
+  );
+};
 
 export default App;

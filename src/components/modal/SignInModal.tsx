@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, Checkbox } from "antd";
 
-import { updateUi, updateAuth } from "../../common/utils";
+import {
+  updateUi,
+  updateAuth,
+  setRefreshAccessTokenInterval,
+} from "../../common/utils";
 import { GET_UI, GET_AUTH } from "../../common/graphql";
 import { useQuery, useMutation, gql } from "@apollo/client";
+import jwtDecode from "jwt-decode";
 
 const SIGN_IN = gql`
   mutation CreateProblemRecord($email: String!, $password: String!) {
@@ -35,8 +40,13 @@ const SignInModal = () => {
     if (!signInMutationData) return;
     if (signInMutationData.signinUser) {
       console.log("signinuser", signInMutationData.signinUser);
-      updateAuth({ signinUser: signInMutationData.signinUser });
+      const decodedData: any = jwtDecode(signInMutationData.signinUser.token);
+      updateAuth({
+        signinUser: signInMutationData.signinUser,
+        exp: decodedData.exp,
+      });
       updateUi({ signInModalVisible: false });
+      setRefreshAccessTokenInterval();
     } else {
       alert("用户名或密码错误");
     }
