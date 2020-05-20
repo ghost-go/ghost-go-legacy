@@ -6,10 +6,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/link-context";
 import { onError } from "@apollo/link-error";
-import {
-  updateAuth,
-  logout,
-} from "./utils";
+import { updateAuth, logout } from "./utils";
 
 const link = createHttpLink({
   uri: "/graphql",
@@ -66,7 +63,6 @@ cache.writeQuery({
     query {
       moves
       ranges
-      themes
       auth {
         signinUser
       }
@@ -90,14 +86,6 @@ cache.writeQuery({
   data: {
     moves: [],
     ranges: ["all", "18k-10k", "9k-5k", "4k-1k", "1d-3d"],
-    themes: [
-      "black-and-white",
-      "subdued-theme",
-      "photorealistic-theme",
-      "shell-stone",
-      "walnut-theme",
-      "flat-theme",
-    ],
     auth: {
       signinUser: null,
     },

@@ -5,15 +5,11 @@ import { DownOutlined } from "@ant-design/icons";
 import ThemeContext from "../contexts/theme-context";
 
 const BoardToolbar = () => {
-  const themeContext = useContext(ThemeContext);
-
-  const handleTheme = (e: any) => {
-    themeContext.changeTheme(e.key);
-  };
+  const { theme, themes, changeTheme } = useContext(ThemeContext);
 
   const menu = (
-    <Menu onClick={handleTheme}>
-      {themeContext.themes.map((t: string) => (
+    <Menu onClick={changeTheme}>
+      {themes.map((t: string) => (
         <Menu.Item key={t}>{t}</Menu.Item>
       ))}
     </Menu>
@@ -22,7 +18,7 @@ const BoardToolbar = () => {
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
       <Button>
-        {themeContext.theme} <DownOutlined />
+        {theme} <DownOutlined />
       </Button>
     </Dropdown>
   );

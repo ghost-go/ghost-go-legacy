@@ -80,6 +80,13 @@ export const THEME: any = {
     stoneShadow: false,
     boardShadow: false,
   },
+  flatTheme: {
+    board: [],
+    black: [],
+    white: [],
+    stoneShadow: false,
+    boardShadow: false,
+  },
   photorealisticTheme: {
     board: ["/photorealistic-theme/board.png"],
     black: ["/photorealistic-theme/black.png"],

@@ -10,7 +10,7 @@ const ThemeContext = React.createContext({
     "flat-theme",
   ],
   theme: localStorage.getItem("theme") || "subdued-theme",
-  changeTheme: (theme: string) => {},
+  changeTheme: (theme: any) => {},
 });
 
 export default ThemeContext;

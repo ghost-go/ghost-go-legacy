@@ -67,7 +67,6 @@ const Problem = () => {
   });
 
   const [createProblemRecord] = useMutation(CREATE_PROBLEM_RECORD);
-  const themeContext = useContext(ThemeContext);
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
@@ -95,15 +94,11 @@ const Problem = () => {
   const [isRight, setIsRight] = useState(false);
   const [isWrong, setIsWrong] = useState(false);
   const [boardEditable, setBoardEditable] = useState(true);
-  const [theme, setTheme] = useState(themeContext.theme);
-
-  const changeTheme = (theme: string) => {
-    localStorage.setItem("theme", theme);
-    setTheme(theme);
-  };
 
   const [moves, setMoves] = useState([]);
   // const { levelRange } = useParams();
+  const { theme } = useContext(ThemeContext);
+  console.log("theme", theme);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -232,7 +227,7 @@ const Problem = () => {
         canvas: canvasRef.current,
         showCoordinate: true,
         editable: boardEditable,
-        theme: themeContext.theme,
+        theme: theme,
         nextStoneType: nextStoneType,
         afterMove: (step: string) => {
           const moves = addMoves([step]);
@@ -249,126 +244,124 @@ const Problem = () => {
       board.setStones(CoordsToTree(totalSteps.concat(moves)));
       board.render();
     }
-  }, [problem, settings, moves, nextStoneType, boardEditable]);
+  }, [problem, settings, moves, nextStoneType, boardEditable, theme]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
 
   return (
-    <ThemeContext.Provider value={{ ...themeContext, theme, changeTheme }}>
-      <Row gutter={[24, 0]}>
-        <Col>
-          <div className="problem-board">
-            <canvas ref={canvasRef} />
-            <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
-            <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
+    <Row gutter={[24, 0]}>
+      <Col>
+        <div className="problem-board">
+          <canvas ref={canvasRef} />
+          <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
+          <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
+        </div>
+      </Col>
+      <Col>
+        <div className="puzzle-panel">
+          <div className="title">
+            {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
+            <button
+            // onClick={this.handleFavorite}
+            // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
+            // title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
+            >
+              <i className="fa fa-heart bounceIn" aria-hidden="true" />
+            </button>
           </div>
-        </Col>
-        <Col>
-          <div className="puzzle-panel">
-            <div className="title">
-              {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
-              <button
-              // onClick={this.handleFavorite}
-              // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
-              // title={`${this.state.is_favorite === true ? 'Cancle Favorite' : 'Favorite'}`}
-              >
-                <i className="fa fa-heart bounceIn" aria-hidden="true" />
-              </button>
-            </div>
-            <div>
-              <strong>NO.:</strong>
-              {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
-              <CheckOutlined />
-              <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
-              <CloseOutlined />
-              <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
-              <HeartFilled />
-              <i className="fa fa-heart" aria-hidden="true" />
-              <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
-            </div>
+          <div>
+            <strong>NO.:</strong>
+            {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
+            <CheckOutlined />
+            <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
+            <CloseOutlined />
+            <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
+            <HeartFilled />
+            <i className="fa fa-heart" aria-hidden="true" />
+            <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
+          </div>
 
-            <div className="button-container">
-              <Button
-                style={{ marginRight: "10px" }}
-                onClick={handleReset}
-                type="primary"
-              >
-                Reset
-              </Button>
-              <Button
-                style={{ marginRight: "10px" }}
-                onClick={() => {
-                  getNextProblem({
-                    variables: {
-                      last: 1,
-                      tags: "all",
-                      level: `${levelRangeLow}-${levelRangeHigh}`,
-                    },
+          <div className="button-container">
+            <Button
+              style={{ marginRight: "10px" }}
+              onClick={handleReset}
+              type="primary"
+            >
+              Reset
+            </Button>
+            <Button
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                getNextProblem({
+                  variables: {
+                    last: 1,
+                    tags: "all",
+                    level: `${levelRangeLow}-${levelRangeHigh}`,
+                  },
+                });
+              }}
+              type="ghost"
+            >
+              Next Problem
+            </Button>
+            <div className="level-range">
+              <RankList
+                rank={levelRangeLow}
+                placeholder="FROM"
+                onChange={(val: string) => {
+                  updateSettings({
+                    levelRange: `${val}-${levelRangeHigh}`,
                   });
                 }}
-                type="ghost"
-              >
-                Next Problem
-              </Button>
-              <div className="level-range">
-                <RankList
-                  rank={levelRangeLow}
-                  placeholder="FROM"
-                  onChange={(val: string) => {
+              />
+              <MinusOutlined style={{ margin: "0 10px" }} />
+              <RankList
+                rank={levelRangeHigh}
+                placeholder="TO"
+                onChange={(val: string) => {
+                  updateSettings({
+                    levelRange: `${levelRangeLow}-${val}`,
+                  });
+                }}
+              />
+            </div>
+            <Row style={{ margin: "20px 0" }}>
+              <Col span={20}>
+                <label className="research-mode-label">Research Mode: </label>
+              </Col>
+              <Col span={4}>
+                <Switch
+                  defaultChecked={settings.currentMode === "research"}
+                  onChange={() => {
                     updateSettings({
-                      levelRange: `${val}-${levelRangeHigh}`,
+                      currentMode:
+                        settings.currentMode === "research"
+                          ? "normal"
+                          : "research",
                     });
                   }}
                 />
-                <MinusOutlined style={{ margin: "0 10px" }} />
-                <RankList
-                  rank={levelRangeHigh}
-                  placeholder="TO"
-                  onChange={(val: string) => {
-                    updateSettings({
-                      levelRange: `${levelRangeLow}-${val}`,
-                    });
-                  }}
-                />
-              </div>
-              <Row style={{ margin: "20px 0" }}>
-                <Col span={20}>
-                  <label className="research-mode-label">Research Mode: </label>
-                </Col>
-                <Col span={4}>
-                  <Switch
-                    defaultChecked={settings.currentMode === "research"}
-                    onChange={() => {
-                      updateSettings({
-                        currentMode:
-                          settings.currentMode === "research"
-                            ? "normal"
-                            : "research",
-                      });
-                    }}
-                  />
-                </Col>
-              </Row>
-              <div>
-                <div>Right Answers</div>
-                {rightAnswers.map((a: any) => (
-                  <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-                ))}
-                <div>Wrong Answers</div>
-                {wrongAnswers.map((a: any) => (
-                  <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-                ))}
-                {changeAnswers.length > 0 && <div>Change Answers</div>}
-                {changeAnswers.map((a: any) => (
-                  <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
-                ))}
-              </div>
+              </Col>
+            </Row>
+            <div>
+              <div>Right Answers</div>
+              {rightAnswers.map((a: any) => (
+                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+              ))}
+              <div>Wrong Answers</div>
+              {wrongAnswers.map((a: any) => (
+                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+              ))}
+              {changeAnswers.length > 0 && <div>Change Answers</div>}
+              {changeAnswers.map((a: any) => (
+                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+              ))}
             </div>
           </div>
-        </Col>
-      </Row>
-    </ThemeContext.Provider>
+        </div>
+      </Col>
+    </Row>
   );
 };
 
