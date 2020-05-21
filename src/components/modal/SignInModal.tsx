@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Button, Modal, Form, Input, Checkbox } from "antd";
 
-import { updateUi, updateAuth } from "../../common/utils";
-import { login } from "../../common/Auth";
-
-import { setRefreshAccessTokenInterval } from "../../common/Auth";
-import { GET_UI } from "../../common/graphql";
-import { useQuery, useMutation, gql } from "@apollo/client";
-import jwtDecode from "jwt-decode";
+import { useMutation, gql } from "@apollo/client";
+import AuthContext from "../../contexts/auth-context";
+import UIContext from "../../contexts/ui-context";
 
 const SIGN_IN = gql`
   mutation CreateProblemRecord($email: String!, $password: String!) {
@@ -23,30 +19,19 @@ const SIGN_IN = gql`
 `;
 
 const SignInModal = () => {
-  const { data: uiData } = useQuery(GET_UI);
   const [signIn, { data: signInMutationData }] = useMutation(SIGN_IN);
 
-  const [ui, setUi] = useState({
-    signInModalVisible: false,
-  });
-
-  useEffect(() => {
-    if (!uiData) return;
-    setUi(uiData.ui);
-  }, [uiData]);
+  const { setToken, setSigninUser } = useContext(AuthContext);
+  const { signInModalVisible, setSignInModalVisible } = useContext(UIContext);
 
   useEffect(() => {
     if (!signInMutationData) return;
     if (signInMutationData.signinUser) {
       console.log("signinuser", signInMutationData.signinUser);
-      const decodedData: any = jwtDecode(signInMutationData.signinUser.token);
-      login(signInMutationData.signinUser.token);
-      updateAuth({
-        signinUser: signInMutationData.signinUser,
-        exp: decodedData.exp,
-      });
-      updateUi({ signInModalVisible: false });
-      setRefreshAccessTokenInterval();
+      localStorage.setItem("signinUser", JSON.stringify(signInMutationData.signinUser.user))
+      setToken(signInMutationData.signinUser.token);
+      setSigninUser(signInMutationData.signinUser.user);
+      setSignInModalVisible(false);
     } else {
       alert("用户名或密码错误");
     }
@@ -77,12 +62,10 @@ const SignInModal = () => {
 
   return (
     <Modal
-      visible={ui.signInModalVisible}
+      visible={signInModalVisible}
       closable={false}
       footer={null}
-      onCancel={() => {
-        updateUi({ signInModalVisible: false });
-      }}
+      onCancel={setSignInModalVisible.bind(null, false)}
     >
       <Form
         {...layout}

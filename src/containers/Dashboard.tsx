@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Row, Col } from "antd";
 import { gql, useQuery } from "@apollo/client";
 import { Menu, Dropdown, Button, Card } from "antd";
@@ -7,6 +7,7 @@ import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import RecordList from "../components/RecordList";
 
 import "../stylesheets/containers/Dashboard.scss";
+import AuthContext from "../contexts/auth-context";
 
 const GET_DASHBOARD = gql`
   query getDashboard($dateRange: String!, $userRange: String!) {
@@ -58,23 +59,21 @@ const Dashboard = () => {
     recentList: [],
     mostWrongList: [],
   });
-  const [auth, setAuth] = useState({
-    signinUser: null,
-  });
 
   const { data, refetch } = useQuery(GET_DASHBOARD, {
     variables: {
       dateRange: "all",
       userRange: "onlyme",
-    },
+    }
   });
 
   const [filter, setFilter] = useState("All");
-  console.log("update");
+
+  const { token } = useContext(AuthContext)
+  console.log('token', token);
 
   useEffect(() => {
     if (!data) return;
-    setAuth(data.auth);
     setDashboard(data.dashboard);
   }, [data]);
 
@@ -87,7 +86,6 @@ const Dashboard = () => {
   }
 
   if (!data) return null;
-  if (!auth.signinUser) return null;
   if (!dashboard) return null;
 
   const menu = (

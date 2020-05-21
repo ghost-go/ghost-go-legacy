@@ -1,41 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import BoardToolbar from "./BoardToolbar";
 import SignInModal from "./modal/SignInModal";
 
 import { Button, Row, Col } from "antd";
-import { gql, useQuery } from "@apollo/client";
 
 import Avatar from "react-avatar";
 import { Menu, Dropdown } from "antd";
-import { authData } from "../common/types";
-import { updateUi } from "../common/utils";
-import { logout } from "../common/Auth";
-
-const GET_NAV_INFO = gql`
-  {
-    ui @client
-    settings @client
-    auth @client
-  }
-`;
+import UIContext from "../contexts/ui-context";
+import AuthContext from "../contexts/auth-context";
 
 const Navigation = () => {
-  const { data } = useQuery(GET_NAV_INFO);
-
-  // const [settings, setSettings] = useState({});
-  // const [ui, setUi] = useState({});
-  const [auth, setAuth]: [authData, any] = useState({
-    signinUser: null,
-  });
-
-  useEffect(() => {
-    if (!data) return;
-    // setSettings(data.settings);
-    // setUi(data.ui);
-    setAuth(data.auth);
-    console.log("auth", data.auth);
-  }, [data]);
+  const { signinUser, logout } = useContext(AuthContext);
+  const { setSignInModalVisible } = useContext(UIContext);
 
   const menu = (
     <Menu>
@@ -63,23 +40,21 @@ const Navigation = () => {
           <BoardToolbar />
         </Col>
         <Col flex="100px" style={{ textAlign: "right" }}>
-          {auth.signinUser ? (
+          {signinUser ? (
             <div className="user-profile dropdown login">
               <Dropdown overlay={menu}>
                 <div
                   className="ant-dropdown-link"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <Avatar name={auth.signinUser!.user.name} size="40" round />
+                  <Avatar name={signinUser!.name} size="40" round />
                 </div>
               </Dropdown>
             </div>
           ) : (
             <div className="user-profile dropdown login">
               <Button
-                onClick={() => {
-                  updateUi({ signInModalVisible: true });
-                }}
+                onClick={setSignInModalVisible.bind(null, true)}
                 className="signin clearfix"
                 type="primary"
               >

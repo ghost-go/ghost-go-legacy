@@ -49,3 +49,8 @@ export interface dashboardData {
   favoriteList: ProblemData;
   recentList: ProblemData;
 }
+
+export interface SigninUserTypes {
+  name: string;
+  email: string;
+}

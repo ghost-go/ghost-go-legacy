@@ -1,7 +1,6 @@
 import _ from "lodash";
-import jwtDecode from "jwt-decode";
 
-import { cache } from "./ApolloClient";
+import { cache } from "./Auth";
 import { GET_MOVES, GET_SETTINGS, GET_UI, GET_AUTH } from "./graphql";
 
 export const updateSettings = (obj: object) => {
@@ -79,50 +78,4 @@ export const clearMoves = () => {
     query: GET_MOVES,
     data: { moves: [] },
   });
-};
-
-// export const refreshToken = (token) => {};
-
-export const updateAuthFromToken = (token: string) => {
-  if (!token) return;
-  const decodedData: any = jwtDecode(token);
-  updateAuth({
-    signinUser: {
-      ...decodedData,
-      token: token,
-    },
-  });
-};
-
-let refreshTokenInterval: number;
-export const refreshAccessToken = async () => {
-  const url = "/api/refresh_token";
-  const response = await fetch(url, {
-    method: "GET",
-    credentials: "include",
-  });
-  const data = await response.json();
-  if (data.errors && data.errors[0].status === 401) {
-    clearInterval(refreshTokenInterval);
-  } else {
-    updateAuthFromToken(data.token);
-  }
-};
-
-export const setRefreshAccessTokenInterval = () => {
-  refreshTokenInterval = setInterval(async () => {
-    await refreshAccessToken();
-  }, 10000);
-};
-
-export const clearRefreshAccessTokenInterval = () => {
-  clearInterval(refreshTokenInterval);
-};
-
-export const logout = async () => {
-  updateAuth({ signinUser: null });
-  const url = "/api/logout";
-  await fetch(url, { method: "POST", credentials: "include" });
-  clearRefreshAccessTokenInterval();
-  localStorage.setItem("logout", Date.now().toString());
 };

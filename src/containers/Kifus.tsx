@@ -145,27 +145,6 @@ const Kifus = () => {
           onShowSizeChange={handlePageSizeChange}
         />
       </Row>
-      {/* <ReactPaginate
-        disableInitialCallback
-        initialPage={page}
-        previousLabel="previous"
-        nextLabel="next"
-        breakLabel={<span>...</span>}
-        breakClassName="break-me"
-        pageCount={kifuTotalCount / PAGE_LIMIT}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={(obj) => {
-          setPage(obj.selected);
-          refetch({
-            offset: obj.selected * PAGE_LIMIT,
-            limit: PAGE_LIMIT,
-            players: settings.playerFilter,
-          });
-        }}
-        containerClassName="pagination"
-        activeClassName="active"
-      /> */}
     </div>
   );
 };
