@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { ProblemFragments } from "./fragments";
 
 export const GET_SETTINGS = gql`
   {
@@ -27,15 +28,10 @@ export const GET_MOVES = gql`
 export const GET_PROBLEMS = gql`
   query getProblems($last: Int!, $tags: String!, $level: String!) {
     problems(last: $last, tags: $tags, level: $level) {
-      id
-      identifier
-      rank
-      whofirst
-      previewImgR1 {
-        x300
-      }
+      ...ProblemFragment
     }
   }
+  ${ProblemFragments.fragments.problem}
 `;
 
 export const GET_TAGS = gql`
@@ -55,37 +51,17 @@ export const GET_DASHBOARD = gql`
       right
       wrong
       mostWrongList {
-        id
-        identifier
-        rank
-        whofirst
-        updatedAt
-        previewImgR1 {
-          x300
-        }
+        ...ProblemFragment
       }
       favoriteList {
-        id
-        identifier
-        rank
-        whofirst
-        updatedAt
-        previewImgR1 {
-          x300
-        }
+        ...ProblemFragment
       }
       recentList {
-        id
-        identifier
-        rank
-        whofirst
-        updatedAt
-        previewImgR1 {
-          x300
-        }
+        ...ProblemFragment
       }
     }
   }
+  ${ProblemFragments.fragments.problem}
 `;
 
 export const SIGN_IN = gql`
@@ -99,4 +75,22 @@ export const SIGN_IN = gql`
       }
     }
   }
+`;
+
+export const GET_MOST_WRONG_LIST = gql`
+  query {
+    mostWrongList {
+      ...ProblemFragment
+    }
+  }
+  ${ProblemFragments.fragments.problem}
+`;
+
+export const GET_RECENT_LIST = gql`
+  query {
+    recentList {
+      ...ProblemFragment
+    }
+  }
+  ${ProblemFragments.fragments.problem}
 `;

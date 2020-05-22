@@ -305,6 +305,11 @@ const Problem = () => {
             >
               Next Problem
             </Button>
+            {/* <Row>
+              <Col span={24}>
+                <div className="addthis_inline_share_toolbox"></div>
+              </Col>
+            </Row> */}
             <div className="level-range">
               <RankList
                 rank={levelRangeLow}

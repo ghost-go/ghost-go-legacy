@@ -4,7 +4,6 @@ import { Popover, Button, Row, Col } from "antd";
 import { FilterOutlined, CaretDownOutlined } from "@ant-design/icons";
 
 import { ProblemQueryVar, TagData } from "../common/types";
-import GlobalFragments from "../common/fragments";
 import { updateSettings } from "../common/utils";
 
 import TagMenu from "./TagMenu";
@@ -21,9 +20,12 @@ const ProblemFilterBar = ({
   const GET_FILTER_DATA = gql`
     {
       ranges @client
-      ...Settings
+      settings {
+        tagFilter
+        levelFilter
+        isFilterMenuOpen
+      }
     }
-    ${GlobalFragments.fragments.settings}
   `;
   const query = useQuery(GET_FILTER_DATA);
   const { ranges, settings } = query.data;
