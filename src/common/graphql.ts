@@ -46,3 +46,57 @@ export const GET_TAGS = gql`
     }
   }
 `;
+
+export const GET_DASHBOARD = gql`
+  query getDashboard($dateRange: String!, $userRange: String!) {
+    auth @client
+    dashboard(dateRange: $dateRange, userRange: $userRange) {
+      total
+      right
+      wrong
+      mostWrongList {
+        id
+        identifier
+        rank
+        whofirst
+        updatedAt
+        previewImgR1 {
+          x300
+        }
+      }
+      favoriteList {
+        id
+        identifier
+        rank
+        whofirst
+        updatedAt
+        previewImgR1 {
+          x300
+        }
+      }
+      recentList {
+        id
+        identifier
+        rank
+        whofirst
+        updatedAt
+        previewImgR1 {
+          x300
+        }
+      }
+    }
+  }
+`;
+
+export const SIGN_IN = gql`
+  mutation CreateProblemRecord($email: String!, $password: String!) {
+    signinUser(credentials: { email: $email, password: $password }) {
+      token
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+`;

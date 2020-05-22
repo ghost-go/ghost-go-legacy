@@ -4,34 +4,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
 
-// const style = StyleSheet.create({
-//   listBox: {
-//     display: "flex",
-//     width: "300px",
-//     height: "120px",
-//     float: "left",
-//   },
-
-//   previewImg: {
-//     width: "100px",
-//   },
-
-//   title: {
-//     fontSize: "20px",
-//   },
-
-//   listRight: {
-//     display: "flex",
-//     flexDirection: "column",
-//     padding: "8px",
-//   },
-
-//   date: {
-//     marginTop: "auto",
-//     marginBottom: "20px",
-//   },
-// });
-
 const ListBox = styled.div`
   display: "flex";
   width: "300px";

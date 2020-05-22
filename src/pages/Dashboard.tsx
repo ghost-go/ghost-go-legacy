@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Row, Col } from "antd";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Menu, Dropdown, Button, Card } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 
@@ -8,47 +8,7 @@ import RecordList from "../components/RecordList";
 
 import "../stylesheets/containers/Dashboard.scss";
 import AuthContext from "../contexts/auth-context";
-
-const GET_DASHBOARD = gql`
-  query getDashboard($dateRange: String!, $userRange: String!) {
-    auth @client
-    dashboard(dateRange: $dateRange, userRange: $userRange) {
-      total
-      right
-      wrong
-      mostWrongList {
-        id
-        identifier
-        rank
-        whofirst
-        updatedAt
-        previewImgR1 {
-          x300
-        }
-      }
-      favoriteList {
-        id
-        identifier
-        rank
-        whofirst
-        updatedAt
-        previewImgR1 {
-          x300
-        }
-      }
-      recentList {
-        id
-        identifier
-        rank
-        whofirst
-        updatedAt
-        previewImgR1 {
-          x300
-        }
-      }
-    }
-  }
-`;
+import { GET_DASHBOARD } from "../common/graphql";
 
 const Dashboard = () => {
   const [dashboard, setDashboard] = useState({
@@ -64,13 +24,13 @@ const Dashboard = () => {
     variables: {
       dateRange: "all",
       userRange: "onlyme",
-    }
+    },
   });
 
   const [filter, setFilter] = useState("All");
 
-  const { token } = useContext(AuthContext)
-  console.log('token', token);
+  const { token } = useContext(AuthContext);
+  console.log("token", token);
 
   useEffect(() => {
     if (!data) return;
@@ -164,17 +124,23 @@ const Dashboard = () => {
         </Col>
       </Row>
       <Row gutter={20}>
-        <Col xs={24} md={8}>
+        <Col xs={24} md={12}>
           <Card
             title="Most Wrong Problem"
             extra={<a href="/records?type=wrong">More</a>}
             bodyStyle={cardBodyStyle}
           >
-            {/* <RecordList /> */}
-            <RecordList recordList={dashboard.mostWrongList} />
+            <Row gutter={50}>
+              <Col span={12}>
+                <RecordList recordList={dashboard.mostWrongList} />
+              </Col>
+              <Col span={12}>
+                <RecordList recordList={dashboard.mostWrongList} />
+              </Col>
+            </Row>
           </Card>
         </Col>
-        <Col xs={24} md={8}>
+        <Col xs={24} md={6}>
           <Card
             title="Favorites"
             extra={<a href="/records?type=wrong">More</a>}
@@ -183,7 +149,7 @@ const Dashboard = () => {
             <RecordList recordList={dashboard.favoriteList} />
           </Card>
         </Col>
-        <Col xs={24} md={8}>
+        <Col xs={24} md={6}>
           <Card
             title="Recents"
             extra={<a href="/records?type=wrong">More</a>}

@@ -1,17 +1,17 @@
 import React, { Suspense, useState, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Layout } from "antd";
+import { Layout, BackTop } from "antd";
 
 import Navigation from "./components/Navigation";
 import Sidebar from "./components/Sidebar";
-import Problems from "./containers/Problems";
-import Problem from "./containers/Problem";
-import Kifus from "./containers/Kifus";
-import Kifu from "./containers/Kifu";
-import Dashboard from "./containers/Dashboard";
-import History from "./containers/History";
-import Favorite from "./containers/Favorite";
+import Problems from "./pages/Problems";
+import Problem from "./pages/Problem";
+import Kifus from "./pages/Kifus";
+import Kifu from "./pages/Kifu";
+import Dashboard from "./pages/Dashboard";
+import History from "./pages/Records";
+import Favorite from "./pages/Favorite";
 // import { a1ToSGF } from './common/Helper';
 
 import "./stylesheets/App.less";
@@ -27,18 +27,22 @@ import { client } from "./common/Auth";
 const { Header, Content, Footer } = Layout;
 
 const getSiginUser = () => {
-  const signinUser = localStorage.getItem('signinUser');
+  const signinUser = localStorage.getItem("signinUser");
   if (typeof signinUser === "string") {
-    return JSON.parse(signinUser)
+    return JSON.parse(signinUser);
   }
-}
+};
 
 const App = () => {
   const themeContext = useContext(ThemeContext);
   const uiContext = useContext(UIContext);
   const [theme, setTheme] = useState(themeContext.theme);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
-  const [signinUser, setSigninUser] = useState<SigninUserTypes | null>(getSiginUser());
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
+  const [signinUser, setSigninUser] = useState<SigninUserTypes | null>(
+    getSiginUser()
+  );
   const [signInModalVisible, setSignInModalVisible] = useState(
     uiContext.signInModalVisible
   );
@@ -50,7 +54,7 @@ const App = () => {
   );
 
   useEffect(() => {
-    if (token) localStorage.setItem('token', token)
+    if (token) localStorage.setItem("token", token);
   }, [token]);
 
   const changeTheme = (e: any) => {
@@ -64,22 +68,22 @@ const App = () => {
     const url = "/api/logout";
     await fetch(url, { method: "POST", credentials: "include" });
     localStorage.setItem("logout", Date.now().toString());
-    localStorage.removeItem('token')
-    localStorage.removeItem('signinUser')
+    localStorage.removeItem("token");
+    localStorage.removeItem("signinUser");
   };
 
   const syncLogout = (event: any) => {
     if (event.key === "logout") {
-      localStorage.removeItem('token')
-      localStorage.removeItem('signinUser')
-      setToken(null)
-      setSigninUser(null)
+      localStorage.removeItem("token");
+      localStorage.removeItem("signinUser");
+      setToken(null);
+      setSigninUser(null);
     }
   };
 
   useEffect(() => {
     window.addEventListener("storage", syncLogout);
-  }, [])
+  }, []);
 
   return (
     <UIContext.Provider
@@ -110,6 +114,7 @@ const App = () => {
                 titleTemplate="GhostGo - %s"
               />
               <Layout style={{ minHeight: "100vh" }}>
+                <BackTop />
                 <Sidebar />
                 <Layout className="site-layout">
                   <Header className="header">

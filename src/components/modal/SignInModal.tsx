@@ -1,22 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { Button, Modal, Form, Input, Checkbox } from "antd";
 
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import AuthContext from "../../contexts/auth-context";
 import UIContext from "../../contexts/ui-context";
-
-const SIGN_IN = gql`
-  mutation CreateProblemRecord($email: String!, $password: String!) {
-    signinUser(credentials: { email: $email, password: $password }) {
-      token
-      user {
-        id
-        name
-        email
-      }
-    }
-  }
-`;
+import { SIGN_IN } from "../../common/graphql";
 
 const SignInModal = () => {
   const [signIn, { data: signInMutationData }] = useMutation(SIGN_IN);
@@ -28,14 +16,17 @@ const SignInModal = () => {
     if (!signInMutationData) return;
     if (signInMutationData.signinUser) {
       console.log("signinuser", signInMutationData.signinUser);
-      localStorage.setItem("signinUser", JSON.stringify(signInMutationData.signinUser.user))
+      localStorage.setItem(
+        "signinUser",
+        JSON.stringify(signInMutationData.signinUser.user)
+      );
       setToken(signInMutationData.signinUser.token);
       setSigninUser(signInMutationData.signinUser.user);
       setSignInModalVisible(false);
     } else {
       alert("用户名或密码错误");
     }
-  }, [signInMutationData]);
+  }, [signInMutationData, setToken, setSigninUser, setSignInModalVisible]);
 
   const layout = {
     labelCol: { span: 6 },
