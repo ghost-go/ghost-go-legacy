@@ -118,7 +118,7 @@ const Dashboard = () => {
             extra={<a href="/records?type=wrong">More</a>}
             bodyStyle={cardBodyStyle}
           >
-            <Row gutter={50}>
+            <Row gutter={60}>
               <RecordList recordList={dashboard.mostWrongList} />
             </Row>
           </Card>
@@ -127,11 +127,11 @@ const Dashboard = () => {
       <Row>
         <Col span={24}>
           <Card
-            title="Recents"
+            title="Recent Viewed Problem"
             extra={<a href="/records?type=wrong">More</a>}
             bodyStyle={cardBodyStyle}
           >
-            <Row gutter={50}>
+            <Row gutter={60}>
               <RecordList recordList={dashboard.recentList} />
             </Row>
           </Card>

@@ -71,9 +71,9 @@ export const GET_MOST_WRONG_LIST = gql`
   ${ProblemFragments.fragments.problem}
 `;
 
-export const GET_RECENT_LIST = gql`
-  query {
-    recentList {
+export const GET_RECENT_VIEWED_PROBLEMS = gql`
+  query($offset: Int!, $limit: Int!) {
+    recentViewedProblems(offset: $offset, limit: $limit) {
       ...ProblemFragment
     }
   }
