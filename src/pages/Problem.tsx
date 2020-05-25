@@ -1,19 +1,20 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Button, Switch, Row, Col } from "antd";
-import {
-  CheckOutlined,
-  CloseOutlined,
-  HeartFilled,
-  MinusOutlined,
-} from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, MinusOutlined } from "@ant-design/icons";
 
 import { CoordsToTree } from "../common/Helper";
 import Board from "../eboard/Board";
 import RankList from "../components/RankList";
 import AnswerBar from "../components/AnswerBar";
-import { addMoves, clearMoves, updateSettings } from "../common/utils";
+import {
+  addMoves,
+  clearMoves,
+  updateSettings,
+  getSiginUser,
+} from "../common/utils";
 import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
 import ThemeContext from "../contexts/theme-context";
+import styled from "styled-components";
 
 // import { useParams } from "react-router-dom";
 
@@ -31,7 +32,6 @@ const GET_PROBLEMS_FOR_NEXT = gql`
   query getProblems($last: Int!, $tags: String!, $level: String!) {
     problems(last: $last, tags: $tags, level: $level) {
       id
-      identifier
     }
   }
 `;
@@ -42,22 +42,39 @@ const GET_PROBLEM = gql`
     settings @client
     problem(id: $id) {
       id
-      identifier
       steps
       rank
       whofirst
       rightCount
       wrongCount
-      favoriteCount
       name
       problemAnswers {
         id
-        identifier
         answerType
         steps
       }
     }
   }
+`;
+
+const RightTip = styled.div`
+  font-size: 50vmin;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: green;
+  pointer-events: none;
+`;
+
+const WrongTip = styled.div`
+  font-size: 50vmin;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  pointer-events: none;
 `;
 
 const Problem = () => {
@@ -77,12 +94,10 @@ const Problem = () => {
     id: 0,
     whofirst: "Black",
     rank: "18K",
-    identifier: "",
     rightAnswers: [],
     wrongAnswers: [],
     rightCount: 0,
     wrongCount: 0,
-    favoriteCount: 0,
     steps: "",
   });
   const [settings, setSettings] = useState({
@@ -96,9 +111,7 @@ const Problem = () => {
   const [boardEditable, setBoardEditable] = useState(true);
 
   const [moves, setMoves] = useState([]);
-  // const { levelRange } = useParams();
   const { theme } = useContext(ThemeContext);
-  console.log("theme", theme);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -114,8 +127,9 @@ const Problem = () => {
     createProblemRecord({
       variables: {
         problemRecord: {
-          problemId: problem.identifier,
+          problemId: problem.id,
           recordType: "right",
+          userId: getSiginUser()?.id,
         },
       },
     });
@@ -127,8 +141,9 @@ const Problem = () => {
     createProblemRecord({
       variables: {
         problemRecord: {
-          problemId: problem.identifier,
+          problemId: problem.id,
           recordType: "wrong",
+          userId: getSiginUser()?.id,
         },
       },
     });
@@ -137,6 +152,10 @@ const Problem = () => {
       handleReset();
     }, 1000);
   };
+
+  useEffect(() => {
+    handleReset();
+  }, []);
 
   useEffect(() => {
     if (!data) return;
@@ -162,7 +181,7 @@ const Problem = () => {
 
   const [getNextProblem] = useLazyQuery(GET_PROBLEMS_FOR_NEXT, {
     onCompleted: (data: any) => {
-      window.location.href = `${data.problems[0].identifier}`;
+      window.location.href = `${data.problems[0].id}`;
     },
   });
 
@@ -254,8 +273,12 @@ const Problem = () => {
       <Col>
         <div className="problem-board">
           <canvas ref={canvasRef} />
-          <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
-          <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
+          <RightTip>
+            <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
+          </RightTip>
+          <WrongTip>
+            <CloseOutlined className={`wrong-tip ${isWrong ? "show" : ""}`} />
+          </WrongTip>
         </div>
       </Col>
       <Col>
@@ -272,14 +295,11 @@ const Problem = () => {
           </div>
           <div>
             <strong>NO.:</strong>
-            {`P-${problem.identifier}`}&nbsp;&nbsp;&nbsp;
+            {`P-${problem.id}`}&nbsp;&nbsp;&nbsp;
             <CheckOutlined />
             <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
             <CloseOutlined />
             <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
-            <HeartFilled />
-            <i className="fa fa-heart" aria-hidden="true" />
-            <span>&nbsp;{problem.favoriteCount}</span>&nbsp;&nbsp;
           </div>
 
           <div className="button-container">
@@ -352,15 +372,15 @@ const Problem = () => {
             <div>
               <div>Right Answers</div>
               {rightAnswers.map((a: any) => (
-                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+                <AnswerBar key={a.id} id={a.id} answer={a.steps} />
               ))}
               <div>Wrong Answers</div>
               {wrongAnswers.map((a: any) => (
-                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+                <AnswerBar key={a.id} id={a.id} answer={a.steps} />
               ))}
               {changeAnswers.length > 0 && <div>Change Answers</div>}
               {changeAnswers.map((a: any) => (
-                <AnswerBar key={a.id} id={a.identifier} answer={a.steps} />
+                <AnswerBar key={a.id} id={a.id} answer={a.steps} />
               ))}
             </div>
           </div>

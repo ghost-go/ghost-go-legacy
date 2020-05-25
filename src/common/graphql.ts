@@ -7,18 +7,6 @@ export const GET_SETTINGS = gql`
   }
 `;
 
-export const GET_UI = gql`
-  {
-    ui @client
-  }
-`;
-
-export const GET_AUTH = gql`
-  {
-    auth @client
-  }
-`;
-
 export const GET_MOVES = gql`
   {
     moves @client
@@ -53,9 +41,6 @@ export const GET_DASHBOARD = gql`
       mostWrongList {
         ...ProblemFragment
       }
-      favoriteList {
-        ...ProblemFragment
-      }
       recentList {
         ...ProblemFragment
       }
@@ -65,7 +50,7 @@ export const GET_DASHBOARD = gql`
 `;
 
 export const SIGN_IN = gql`
-  mutation CreateProblemRecord($email: String!, $password: String!) {
+  mutation signin($email: String!, $password: String!) {
     signinUser(credentials: { email: $email, password: $password }) {
       token
       user {

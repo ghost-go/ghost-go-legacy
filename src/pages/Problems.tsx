@@ -43,7 +43,7 @@ const Problems = () => {
                   paddingBottom: 24,
                 }}
               >
-                <Link to={`/problems/${i.identifier}`}>
+                <Link to={`/problems/${i.id}`}>
                   <img src={i.previewImgR1.x300} alt="" />
                 </Link>
                 <span className="problem-level">Level: {i.rank}</span>

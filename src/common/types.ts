@@ -46,11 +46,11 @@ export interface dashboardData {
   wrong: number;
   total: number;
   mostWrongList: ProblemData;
-  favoriteList: ProblemData;
   recentList: ProblemData;
 }
 
 export interface SigninUserTypes {
+  id: number;
   name: string;
   email: string;
 }

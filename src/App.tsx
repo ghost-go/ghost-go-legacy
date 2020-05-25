@@ -23,15 +23,9 @@ import UIContext from "./contexts/ui-context";
 import { SigninUserTypes } from "./common/types";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./common/Auth";
+import { getSiginUser } from "./common/utils";
 
 const { Header, Content, Footer } = Layout;
-
-const getSiginUser = () => {
-  const signinUser = localStorage.getItem("signinUser");
-  if (typeof signinUser === "string") {
-    return JSON.parse(signinUser);
-  }
-};
 
 const App = () => {
   const themeContext = useContext(ThemeContext);

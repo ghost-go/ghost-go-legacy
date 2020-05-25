@@ -18,7 +18,6 @@ const GET_KIFU = gql`
     settings @client
     kifu(id: $id) {
       id
-      identifier
       title
       playerB {
         name

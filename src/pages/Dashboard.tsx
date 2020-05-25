@@ -15,7 +15,6 @@ const Dashboard = () => {
     wrong: 0,
     right: 0,
     total: 0,
-    favoriteList: [],
     recentList: [],
     mostWrongList: [],
   });
@@ -124,38 +123,32 @@ const Dashboard = () => {
         </Col>
       </Row>
       <Row gutter={20}>
-        <Col xs={24} md={12}>
+        <Col span={24}>
           <Card
             title="Most Wrong Problem"
             extra={<a href="/records?type=wrong">More</a>}
             bodyStyle={cardBodyStyle}
           >
             <Row gutter={50}>
-              <Col span={12}>
-                <RecordList recordList={dashboard.mostWrongList} />
-              </Col>
-              <Col span={12}>
+              <Col span={6}>
                 <RecordList recordList={dashboard.mostWrongList} />
               </Col>
             </Row>
           </Card>
         </Col>
-        <Col xs={24} md={6}>
-          <Card
-            title="Favorites"
-            extra={<a href="/records?type=wrong">More</a>}
-            bodyStyle={cardBodyStyle}
-          >
-            <RecordList recordList={dashboard.favoriteList} />
-          </Card>
-        </Col>
-        <Col xs={24} md={6}>
+      </Row>
+      <Row>
+        <Col span={24}>
           <Card
             title="Recents"
             extra={<a href="/records?type=wrong">More</a>}
             bodyStyle={cardBodyStyle}
           >
-            <RecordList recordList={dashboard.recentList} />
+            <Row gutter={50}>
+              <Col span={6}>
+                <RecordList recordList={dashboard.recentList} />
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>

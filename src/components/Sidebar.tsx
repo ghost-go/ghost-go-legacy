@@ -99,14 +99,14 @@ const Sidebar = () => {
             OTHERS
           </Divider>
         )}
-        {signinUser && (
+        {/* {signinUser && (
           <Menu.Item key="favorites">
             <NavLink to="/favorites">
               <HeartOutlined />
               <span>Favorites</span>
             </NavLink>
           </Menu.Item>
-        )}
+        )} */}
         {signinUser && (
           <Menu.Item key="records">
             <NavLink to="/records">

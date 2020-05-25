@@ -15,7 +15,6 @@ export const GET_KIFUS = gql`
     kifuTotalCount(players: $players)
     kifus(players: $players, limit: $limit, offset: $offset) {
       id
-      identifier
       title
       playerBId
       playerWId
@@ -109,7 +108,7 @@ const Kifus = () => {
       />
       <Row>
         {kifus.map((i: any) => (
-          <Col xs={12} sm={8} md={8} lg={6} xl={6}>
+          <Col key={`kifu-${i.id}`} xs={12} sm={8} md={8} lg={6} xl={6}>
             <Card
               className="problem"
               bordered={false}
@@ -118,7 +117,7 @@ const Kifus = () => {
                 paddingBottom: 24,
               }}
             >
-              <Link to={`/kifus/${i.identifier}`}>
+              <Link to={`/kifus/${i.id}`}>
                 <img src={i.previewImg.x300} alt="" />
               </Link>
               <div className="kifu-info">

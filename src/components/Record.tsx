@@ -23,14 +23,14 @@ const ProblemTitle = styled.div`
 const Record = (props: any) => {
   const i = props.problem;
   return (
-    <Link key={`${i.identifier}`} to={`/problems/${i.identifier}`}>
+    <Link key={`${i.id}`} to={`/problems/${i.id}`}>
       <ListBox>
         <Row>
           <Col span={10}>
             <Image src={i.previewImgR1.x300} alt="" />
           </Col>
           <Col span={14} style={{ textAlign: "right" }}>
-            <ProblemTitle>{`P-${i.identifier}(${i.rank})`}</ProblemTitle>
+            <ProblemTitle>{`P-${i.id}(${i.rank})`}</ProblemTitle>
             <div>{i.whofirst}</div>
             <div>{moment(i.updated_at).format("YYYY-MM-DD")}</div>
           </Col>

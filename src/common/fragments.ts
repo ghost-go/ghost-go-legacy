@@ -5,7 +5,6 @@ ProblemFragments.fragments = {
   problem: gql`
     fragment ProblemFragment on Problem {
       id
-      identifier
       rank
       whofirst
       previewImgR1 {
