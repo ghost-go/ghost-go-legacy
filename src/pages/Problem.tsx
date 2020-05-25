@@ -19,10 +19,19 @@ import styled from "styled-components";
 // import { useParams } from "react-router-dom";
 
 import "../stylesheets/containers/Problem.scss";
+import { ProblemData } from "../common/types";
 
 const CREATE_PROBLEM_RECORD = gql`
   mutation CreateProblemRecord($problemRecord: ProblemRecordInput!) {
     createProblemRecord(problemRecord: $problemRecord) {
+      id
+    }
+  }
+`;
+
+const CREATE_VIEWED_PROBLEM = gql`
+  mutation CreateViewedProblem($viewedProblem: ViewedProblemInput!) {
+    createViewedProblem(viewedProblem: $viewedProblem) {
       id
     }
   }
@@ -84,22 +93,14 @@ const Problem = () => {
   });
 
   const [createProblemRecord] = useMutation(CREATE_PROBLEM_RECORD);
+  const [createViewedProblem] = useMutation(CREATE_VIEWED_PROBLEM);
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [changeAnswers, setChangeAnswers] = useState([]);
   const [levelRangeLow, setLevelRangeLow] = useState("18k");
   const [levelRangeHigh, setLevelRangeHigh] = useState("6d");
-  const [problem, setProblem] = useState({
-    id: 0,
-    whofirst: "Black",
-    rank: "18K",
-    rightAnswers: [],
-    wrongAnswers: [],
-    rightCount: 0,
-    wrongCount: 0,
-    steps: "",
-  });
+  const [problem, setProblem] = useState<ProblemData>();
   const [settings, setSettings] = useState({
     levelFilter: "all",
     levelRange: "18k-6d",
@@ -127,7 +128,7 @@ const Problem = () => {
     createProblemRecord({
       variables: {
         problemRecord: {
-          problemId: problem.id,
+          problemId: problem?.id,
           recordType: "right",
           userId: getSiginUser()?.id,
         },
@@ -141,7 +142,7 @@ const Problem = () => {
     createProblemRecord({
       variables: {
         problemRecord: {
-          problemId: problem.id,
+          problemId: problem?.id,
           recordType: "wrong",
           userId: getSiginUser()?.id,
         },
@@ -152,10 +153,6 @@ const Problem = () => {
       handleReset();
     }, 1000);
   };
-
-  useEffect(() => {
-    handleReset();
-  }, []);
 
   useEffect(() => {
     if (!data) return;
@@ -178,6 +175,19 @@ const Problem = () => {
       data.problem.problemAnswers.filter((p: any) => p.answerType === 3)
     );
   }, [data]);
+
+  useEffect(() => {
+    handleReset();
+    if (!problem) return;
+    createViewedProblem({
+      variables: {
+        viewedProblem: {
+          problemId: problem?.id,
+          userId: getSiginUser()?.id,
+        },
+      },
+    });
+  }, [problem, createViewedProblem]);
 
   const [getNextProblem] = useLazyQuery(GET_PROBLEMS_FOR_NEXT, {
     onCompleted: (data: any) => {
@@ -259,7 +269,7 @@ const Problem = () => {
           }, 300);
         },
       });
-      const totalSteps = problem.steps.split(";");
+      const totalSteps = problem?.steps.split(";");
       board.setStones(CoordsToTree(totalSteps.concat(moves)));
       board.render();
     }
@@ -284,7 +294,7 @@ const Problem = () => {
       <Col>
         <div className="puzzle-panel">
           <div className="title">
-            {`${problem.whofirst} ${problem.rank}`}&nbsp;&nbsp;
+            {`${problem?.whofirst} ${problem?.rank}`}&nbsp;&nbsp;
             <button
             // onClick={this.handleFavorite}
             // className={`favorite ${this.state.is_favorite === true ? 'active' : ''}`}
@@ -295,11 +305,11 @@ const Problem = () => {
           </div>
           <div>
             <strong>NO.:</strong>
-            {`P-${problem.id}`}&nbsp;&nbsp;&nbsp;
+            {`P-${problem?.id}`}&nbsp;&nbsp;&nbsp;
             <CheckOutlined />
-            <span>&nbsp;{problem.rightCount}</span>&nbsp;&nbsp;
+            <span>&nbsp;{problem?.rightCount}</span>&nbsp;&nbsp;
             <CloseOutlined />
-            <span>&nbsp;{problem.wrongCount}</span>&nbsp;&nbsp;
+            <span>&nbsp;{problem?.wrongCount}</span>&nbsp;&nbsp;
           </div>
 
           <div className="button-container">

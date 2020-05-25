@@ -16,6 +16,9 @@ export interface ProblemData {
   rank: string;
   whofirst: string;
   previewImgR1: PrevieImageData;
+  rightCount: number;
+  wrongCount: number;
+  steps: string;
 }
 
 export interface ProblemQueryVar {

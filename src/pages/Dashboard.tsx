@@ -24,6 +24,7 @@ const Dashboard = () => {
       dateRange: "all",
       userRange: "onlyme",
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const [filter, setFilter] = useState("All");
@@ -90,11 +91,7 @@ const Dashboard = () => {
             <div>Total</div>
             <div>
               <div className="tile-content">{dashboard.total}</div>
-              {/* <small>Well done!</small> */}
             </div>
-            {/* <Link className="tile-footer" to="/records?page=1&type=all">
-                view details <i className="fa fa-arrow-right" />
-              </Link> */}
           </div>
         </Col>
         <Col xs={24} md={8}>
@@ -102,10 +99,6 @@ const Dashboard = () => {
             <div>Right</div>
             <div>
               <div className="tile-content">{dashboard.right}</div>
-              {/* <small>{`take up ${(dashboard.total === 0
-                ? 0
-                : (dashboard.right * 100) / dashboard.total
-              ).toFixed(2)}% of all`}</small> */}
             </div>
           </div>
         </Col>
@@ -114,10 +107,6 @@ const Dashboard = () => {
             <div>Wrong</div>
             <div>
               <div className="tile-content">{dashboard.wrong}</div>
-              {/* <small>{`take up ${(dashboard.total === 0
-                ? 0
-                : (dashboard.wrong * 100) / dashboard.total
-              ).toFixed(2)}% of all`}</small> */}
             </div>
           </div>
         </Col>
@@ -130,9 +119,7 @@ const Dashboard = () => {
             bodyStyle={cardBodyStyle}
           >
             <Row gutter={50}>
-              <Col span={6}>
-                <RecordList recordList={dashboard.mostWrongList} />
-              </Col>
+              <RecordList recordList={dashboard.mostWrongList} />
             </Row>
           </Card>
         </Col>
@@ -145,9 +132,7 @@ const Dashboard = () => {
             bodyStyle={cardBodyStyle}
           >
             <Row gutter={50}>
-              <Col span={6}>
-                <RecordList recordList={dashboard.recentList} />
-              </Col>
+              <RecordList recordList={dashboard.recentList} />
             </Row>
           </Card>
         </Col>
