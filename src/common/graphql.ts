@@ -72,9 +72,20 @@ export const GET_MOST_WRONG_LIST = gql`
 `;
 
 export const GET_RECENT_VIEWED_PROBLEMS = gql`
-  query($offset: Int!, $limit: Int!) {
-    recentViewedProblems(offset: $offset, limit: $limit) {
-      ...ProblemFragment
+  query getRecentViewedProblems($first: Int!, $after: String) {
+    recentViewedProblems(first: $first, after: $after)
+      @connection(key: "recentViewedProblems") {
+      pageInfo {
+        endCursor
+        startCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          ...ProblemFragment
+        }
+      }
     }
   }
   ${ProblemFragments.fragments.problem}

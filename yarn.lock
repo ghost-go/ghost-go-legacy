@@ -1689,6 +1689,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-infinite-scroller@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@types/react-infinite-scroller/-/react-infinite-scroller-1.2.1.tgz#1cd747ef8f50d3c883e375c0491a906e5436fcb2"
+  integrity sha512-64bpbqdSgtmy1zSZ2AQoFzguwZO7TyKjqJRTEnfNMCAQbnrX90kz+rYufZyY9CmzhwpXMwRO8xR9fMQnbYUkgQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native@*":
   version "0.62.10"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.10.tgz#82c481df21db4e7460755dc3fc7091e333a1d2bd"
@@ -9894,7 +9901,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.10, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10461,6 +10468,12 @@ react-helmet@^6.0.0:
     prop-types "^15.7.2"
     react-fast-compare "^2.0.4"
     react-side-effect "^2.1.0"
+
+react-infinite-scroller@BAI-Bonjwa/react-infinite-scroller:
+  version "1.2.4"
+  resolved "https://codeload.github.com/BAI-Bonjwa/react-infinite-scroller/tar.gz/ce1b31c0b4876fe85d3b9d674e1bc837a6c0dec5"
+  dependencies:
+    prop-types "^15.5.8"
 
 react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.13.1"

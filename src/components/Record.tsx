@@ -32,7 +32,8 @@ const Record = (props: any) => {
           <Col span={14} style={{ textAlign: "right" }}>
             <ProblemTitle>{`P-${i.id}(${i.rank})`}</ProblemTitle>
             <div>{i.whofirst}</div>
-            <div>{moment(i.updated_at).format("YYYY-MM-DD")}</div>
+            {/* TODO: implement record date */}
+            <div>{moment(i.createdAt).format("YYYY-MM-DD")}</div>
           </Col>
         </Row>
       </ListBox>

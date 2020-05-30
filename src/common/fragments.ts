@@ -10,6 +10,7 @@ ProblemFragments.fragments = {
       previewImgR1 {
         x300
       }
+      createdAt
     }
   `,
 };

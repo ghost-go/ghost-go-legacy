@@ -9,12 +9,14 @@ import {
 } from "../common/graphql";
 import { useLocation, useHistory } from "react-router-dom";
 import Record from "../components/Record";
+import InfiniteScroll from "../components/InfiniteScroll";
 
 const Records = () => {
   let { search } = useLocation();
   const query = new URLSearchParams(search);
 
   const [filter, setFilter] = useState("Recents");
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const [
@@ -28,26 +30,21 @@ const Records = () => {
       data: recentViewedProblemsListData,
       fetchMore: fetchMoreRecentViewedProblems,
     },
-  ] = useLazyQuery(GET_RECENT_VIEWED_PROBLEMS);
+  ] = useLazyQuery(GET_RECENT_VIEWED_PROBLEMS, {
+    onCompleted: () => {
+      console.log("loading", false);
+      setLoading(false);
+    },
+  });
 
   useEffect(() => {
-    window.onscroll = function () {
-      if (
-        window.innerHeight + window.pageYOffset >=
-        document.body.offsetHeight
-      ) {
-        console.log("bottom");
-      }
-    };
-
     if (query.get("type") === "wrong") {
       getMostWrongList();
       setFilter("Most Wrong Problem");
     } else {
       getRecentViewedProblemsList({
         variables: {
-          offset: 0,
-          limit: 20,
+          first: 20,
         },
       });
       setFilter("Recents");
@@ -81,6 +78,36 @@ const Records = () => {
     </Menu>
   );
 
+  const loadMore = (page: number) => {
+    // if (loading) return;
+    if (fetchMoreRecentViewedProblems) {
+      console.log("fetch more, page", page);
+      fetchMoreRecentViewedProblems({
+        variables: {
+          first: 20,
+          after:
+            recentViewedProblemsListData.recentViewedProblems.pageInfo
+              .endCursor,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          const newEdges = fetchMoreResult.recentViewedProblems.edges;
+          const pageInfo = fetchMoreResult.recentViewedProblems.pageInfo;
+          console.log(pageInfo);
+
+          return newEdges.length
+            ? {
+                recentViewedProblems: {
+                  __typename: prev.recentViewedProblems.__typename,
+                  edges: [...prev.recentViewedProblems.edges, ...newEdges],
+                  pageInfo,
+                },
+              }
+            : prev;
+        },
+      });
+    }
+  };
+
   return (
     <div className="dashboard-container">
       <Row>
@@ -97,20 +124,35 @@ const Records = () => {
         </Col>
       </Row>
       <Row gutter={20}>
-        {filter === "Recents" &&
-          recentViewedProblemsListData &&
-          recentViewedProblemsListData.recentViewedProblems.map((i: any) => (
-            <Col md={6}>
-              <Record problem={i}></Record>
-            </Col>
-          ))}
-        {filter === "Most Wrong Problem" &&
+        <InfiniteScroll
+          pageStart={1}
+          loadMore={loadMore}
+          hasMore={
+            recentViewedProblemsListData?.recentViewedProblems.pageInfo
+              .hasNextPage
+          }
+          loader={
+            <div className="loader" key={0}>
+              Loading ...
+            </div>
+          }
+        >
+          {filter === "Recents" &&
+            recentViewedProblemsListData?.recentViewedProblems.edges.map(
+              (i: any) => (
+                <Col md={6}>
+                  <Record problem={i.node}></Record>
+                </Col>
+              )
+            )}
+        </InfiniteScroll>
+        {/* {filter === "Most Wrong Problem" &&
           mostWrongListData &&
           mostWrongListData.mostWrongList.map((i: any) => (
             <Col md={6}>
               <Record problem={i}></Record>
             </Col>
-          ))}
+          ))} */}
       </Row>
     </div>
   );
