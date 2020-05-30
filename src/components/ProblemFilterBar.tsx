@@ -15,7 +15,7 @@ const ProblemFilterBar = ({
   refetch,
 }: {
   tags: Array<TagData>;
-  refetch: (variables?: ProblemQueryVar) => {};
+  refetch: (variables: any) => {};
 }) => {
   const GET_FILTER_DATA = gql`
     {
@@ -36,7 +36,7 @@ const ProblemFilterBar = ({
   const queryParams = {
     tags: tagFilter,
     level: levelFilter,
-    last: 100,
+    first: 100,
   };
 
   const handleSeeMore = (

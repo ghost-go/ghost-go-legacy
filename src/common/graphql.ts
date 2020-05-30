@@ -14,9 +14,24 @@ export const GET_MOVES = gql`
 `;
 
 export const GET_PROBLEMS = gql`
-  query getProblems($last: Int!, $tags: String!, $level: String!) {
-    problems(last: $last, tags: $tags, level: $level) {
-      ...ProblemFragment
+  query getProblems(
+    $tags: String!
+    $level: String!
+    $first: Int!
+    $after: String
+  ) {
+    problems(tags: $tags, level: $level, first: $first, after: $after) {
+      pageInfo {
+        endCursor
+        startCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          ...ProblemFragment
+        }
+      }
     }
   }
   ${ProblemFragments.fragments.problem}
