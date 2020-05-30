@@ -115,7 +115,7 @@ const Dashboard = () => {
         <Col span={24}>
           <Card
             title="Most Wrong Problem"
-            extra={<a href="/records?type=wrong">More</a>}
+            extra={<a href="/mostwrongs">More</a>}
             bodyStyle={cardBodyStyle}
           >
             <Row gutter={60}>
@@ -128,11 +128,14 @@ const Dashboard = () => {
         <Col span={24}>
           <Card
             title="Recent Viewed Problem"
-            extra={<a href="/records?type=wrong">More</a>}
+            extra={<a href="/recents">More</a>}
             bodyStyle={cardBodyStyle}
           >
             <Row gutter={60}>
-              <RecordList recordList={dashboard.recentList} />
+              <RecordList
+                recordList={dashboard.recentList}
+                showCreatedAt={true}
+              />
             </Row>
           </Card>
         </Col>

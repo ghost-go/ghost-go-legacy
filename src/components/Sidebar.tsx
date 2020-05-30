@@ -4,7 +4,7 @@ import { Layout, Menu } from "antd";
 import {
   BookOutlined,
   ReadOutlined,
-  HeartOutlined,
+  CloseCircleOutlined,
   DashboardOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
@@ -99,19 +99,19 @@ const Sidebar = () => {
             OTHERS
           </Divider>
         )}
-        {/* {signinUser && (
-          <Menu.Item key="favorites">
-            <NavLink to="/favorites">
-              <HeartOutlined />
-              <span>Favorites</span>
+        {signinUser && (
+          <Menu.Item key="mostwrongs">
+            <NavLink to="/mostwrongs">
+              <CloseCircleOutlined />
+              <span>Most Wrong</span>
             </NavLink>
           </Menu.Item>
-        )} */}
+        )}
         {signinUser && (
-          <Menu.Item key="records">
-            <NavLink to="/records">
+          <Menu.Item key="recents">
+            <NavLink to="/recents">
               <HistoryOutlined />
-              <span>Records</span>
+              <span>Recents</span>
             </NavLink>
           </Menu.Item>
         )}

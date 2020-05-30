@@ -10,7 +10,8 @@ import Problem from "./pages/Problem";
 import Kifus from "./pages/Kifus";
 import Kifu from "./pages/Kifu";
 import Dashboard from "./pages/Dashboard";
-import History from "./pages/Records";
+import RecentRecords from "./pages/RecentRecords";
+import MostWrongRecords from "./pages/MostWrongRecords";
 import Favorite from "./pages/Favorite";
 // import { a1ToSGF } from './common/Helper';
 
@@ -135,7 +136,8 @@ const App = () => {
                     <Route path="/kifus/:id" component={Kifu} />
                     <Route path="/problems/:id" component={Problem} />
                     <Route path="/puzzles/:id" component={Problem} />
-                    <Route path="/records" component={History} />
+                    <Route path="/recents" component={RecentRecords} />
+                    <Route path="/mostwrongs" component={MostWrongRecords} />
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/favorites" component={Favorite} />
                   </Content>

@@ -63,9 +63,20 @@ export const SIGN_IN = gql`
 `;
 
 export const GET_MOST_WRONG_LIST = gql`
-  query {
-    mostWrongList {
-      ...ProblemFragment
+  query getMostWrongProblems($first: Int!, $after: String) {
+    mostWrongProblems(first: $first, after: $after)
+      @connection(key: "recentViewedProblems") {
+      pageInfo {
+        endCursor
+        startCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          ...ProblemFragment
+        }
+      }
     }
   }
   ${ProblemFragments.fragments.problem}
