@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Row, Col } from "antd";
 import { useQuery } from "@apollo/client";
-import { Menu, Dropdown, Button, Card } from "antd";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
+import { Card } from "antd";
 
 import RecordList from "../components/RecordList";
 
@@ -19,7 +18,7 @@ const Dashboard = () => {
     mostWrongList: [],
   });
 
-  const { data, refetch } = useQuery(GET_DASHBOARD, {
+  const { data } = useQuery(GET_DASHBOARD, {
     variables: {
       dateRange: "all",
       userRange: "onlyme",
@@ -27,7 +26,7 @@ const Dashboard = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const [filter, setFilter] = useState("All");
+  // const [filter, setFilter] = useState("All");
 
   const { token } = useContext(AuthContext);
   console.log("token", token);
@@ -37,36 +36,36 @@ const Dashboard = () => {
     setDashboard(data.dashboard);
   }, [data]);
 
-  function handleMenuClick(e: any) {
-    setFilter(e.item.node.innerText);
-    refetch({
-      dateRange: e.key,
-      userRange: "onlyme",
-    });
-  }
+  // function handleMenuClick(e: any) {
+  //   setFilter(e.item.node.innerText);
+  //   refetch({
+  //     dateRange: e.key,
+  //     userRange: "onlyme",
+  //   });
+  // }
 
   if (!data) return null;
   if (!dashboard) return null;
 
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="today">
-        <UserOutlined /> Today
-      </Menu.Item>
-      <Menu.Item key="yesterday">
-        <UserOutlined /> Yesterday
-      </Menu.Item>
-      <Menu.Item key="last7days">
-        <UserOutlined /> Last 7 days
-      </Menu.Item>
-      <Menu.Item key="last30days">
-        <UserOutlined /> Last 30 days
-      </Menu.Item>
-      <Menu.Item key="all">
-        <UserOutlined /> All
-      </Menu.Item>
-    </Menu>
-  );
+  // const menu = (
+  //   <Menu onClick={handleMenuClick}>
+  //     <Menu.Item key="today">
+  //       <UserOutlined /> Today
+  //     </Menu.Item>
+  //     <Menu.Item key="yesterday">
+  //       <UserOutlined /> Yesterday
+  //     </Menu.Item>
+  //     <Menu.Item key="last7days">
+  //       <UserOutlined /> Last 7 days
+  //     </Menu.Item>
+  //     <Menu.Item key="last30days">
+  //       <UserOutlined /> Last 30 days
+  //     </Menu.Item>
+  //     <Menu.Item key="all">
+  //       <UserOutlined /> All
+  //     </Menu.Item>
+  //   </Menu>
+  // );
 
   const cardBodyStyle = { padding: 10 };
 

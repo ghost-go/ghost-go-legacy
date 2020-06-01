@@ -1,9 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import { Button, Modal, Form, Input, Checkbox, message } from "antd";
+import { Button, Modal, Form, Input, message } from "antd";
 import styled from "styled-components";
 
 import { useMutation } from "@apollo/client";
-import AuthContext from "../../contexts/auth-context";
 import UIContext from "../../contexts/ui-context";
 import { SIGN_UP } from "../../common/graphql";
 
@@ -21,9 +20,8 @@ const SignUpModal = () => {
     { data: signUpMutationData, error: signUpError },
   ] = useMutation(SIGN_UP);
 
-  const { setToken, setSigninUser } = useContext(AuthContext);
   const { signUpModalVisible, setSignUpModalVisible } = useContext(UIContext);
-  const { signInModalVisible, setSignInModalVisible } = useContext(UIContext);
+  const { setSignInModalVisible } = useContext(UIContext);
 
   useEffect(() => {
     if (!signUpMutationData) return;

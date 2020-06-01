@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import ProblemFilterBar from "../components/ProblemFilterBar";
 import { Link } from "react-router-dom";
 import { GET_PROBLEMS, GET_TAGS } from "../common/graphql";
-import { Card, Row, Col, Spin } from "antd";
+import { Card, Col, Spin } from "antd";
 import InfiniteScroll from "../components/InfiniteScroll";
 
 import "../stylesheets/containers/Problems.scss";

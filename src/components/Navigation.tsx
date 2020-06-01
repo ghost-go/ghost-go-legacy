@@ -14,7 +14,6 @@ import AuthContext from "../contexts/auth-context";
 const Navigation = () => {
   const { signinUser, logout } = useContext(AuthContext);
   const { setSignUpModalVisible } = useContext(UIContext);
-  const { setSignInModalVisible } = useContext(UIContext);
 
   const menu = (
     <Menu>

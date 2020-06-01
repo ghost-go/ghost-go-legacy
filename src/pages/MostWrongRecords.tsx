@@ -1,33 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Row, Col, Spin, Empty } from "antd";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { GET_MOST_WRONG_LIST } from "../common/graphql";
 import Record from "../components/Record";
 import InfiniteScroll from "../components/InfiniteScroll";
 
 const MostWrongRecords = () => {
-  const [
-    getMostWrongProblemsList,
-    { data: mostWrongProblemsListData, fetchMore: fetchMoreMostWrongProblems },
-  ] = useLazyQuery(GET_MOST_WRONG_LIST);
-
-  useEffect(() => {
-    getMostWrongProblemsList({
-      variables: {
-        first: 20,
-      },
-    });
-  }, []);
+  const {
+    data: mostWrongProblemsListData,
+    fetchMore: fetchMoreMostWrongProblems,
+  } = useQuery(GET_MOST_WRONG_LIST, {
+    variables: {
+      first: 20,
+      after: null,
+    },
+  });
 
   const loadMore = (page: number) => {
-    // if (loading) return;
     if (fetchMoreMostWrongProblems) {
       fetchMoreMostWrongProblems({
         variables: {
           first: 20,
           after: mostWrongProblemsListData.mostWrongProblems.pageInfo.endCursor,
         },
-        updateQuery: (prev, { fetchMoreResult }) => {
+        updateQuery: (prev: any, { fetchMoreResult }: any) => {
           const newEdges = fetchMoreResult.mostWrongProblems.edges;
           const pageInfo = fetchMoreResult.mostWrongProblems.pageInfo;
           console.log(pageInfo);

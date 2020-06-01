@@ -1,26 +1,20 @@
-import React, { useEffect } from "react";
-import { Row, Col, Spin, Space, Empty } from "antd";
-import { useLazyQuery } from "@apollo/client";
+import React from "react";
+import { Row, Col, Spin, Empty } from "antd";
+import { useQuery } from "@apollo/client";
 import { GET_RECENT_VIEWED_PROBLEMS } from "../common/graphql";
 import Record from "../components/Record";
 import InfiniteScroll from "../components/InfiniteScroll";
 
 const RecentRecords = () => {
-  const [
-    getRecentViewedProblemsList,
-    {
-      data: recentViewedProblemsListData,
-      fetchMore: fetchMoreRecentViewedProblems,
+  const {
+    data: recentViewedProblemsListData,
+    fetchMore: fetchMoreRecentViewedProblems,
+  } = useQuery(GET_RECENT_VIEWED_PROBLEMS, {
+    variables: {
+      first: 20,
+      after: null,
     },
-  ] = useLazyQuery(GET_RECENT_VIEWED_PROBLEMS);
-
-  useEffect(() => {
-    getRecentViewedProblemsList({
-      variables: {
-        first: 20,
-      },
-    });
-  }, []);
+  });
 
   const loadMore = (page: number) => {
     if (fetchMoreRecentViewedProblems) {
@@ -31,10 +25,9 @@ const RecentRecords = () => {
             recentViewedProblemsListData.recentViewedProblems.pageInfo
               .endCursor,
         },
-        updateQuery: (prev, { fetchMoreResult }) => {
+        updateQuery: (prev: any, { fetchMoreResult }: any) => {
           const newEdges = fetchMoreResult.recentViewedProblems.edges;
           const pageInfo = fetchMoreResult.recentViewedProblems.pageInfo;
-          console.log(pageInfo);
 
           return newEdges.length
             ? {

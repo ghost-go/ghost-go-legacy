@@ -20,7 +20,7 @@ const SignInModal = () => {
 
   const { setToken, setSigninUser } = useContext(AuthContext);
   const { signInModalVisible, setSignInModalVisible } = useContext(UIContext);
-  const { signUpModalVisible, setSignUpModalVisible } = useContext(UIContext);
+  const { setSignUpModalVisible } = useContext(UIContext);
 
   useEffect(() => {
     if (!signInMutationData) return;

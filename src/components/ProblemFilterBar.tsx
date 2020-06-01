@@ -3,7 +3,7 @@ import { gql, useQuery } from "@apollo/client";
 import { Popover, Button, Row, Col } from "antd";
 import { FilterOutlined, CaretDownOutlined } from "@ant-design/icons";
 
-import { ProblemQueryVar, TagData } from "../common/types";
+import { TagData } from "../common/types";
 import { updateSettings } from "../common/utils";
 
 import TagMenu from "./TagMenu";
@@ -39,11 +39,11 @@ const ProblemFilterBar = ({
     first: 100,
   };
 
-  const handleSeeMore = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    refetch({ ...queryParams });
-  };
+  // const handleSeeMore = (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  // ) => {
+  //   refetch({ ...queryParams });
+  // };
 
   const popover = (
     <TagMenu
