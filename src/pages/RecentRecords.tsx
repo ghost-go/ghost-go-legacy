@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Row, Col, Spin, Space } from "antd";
+import { Row, Col, Spin, Space, Empty } from "antd";
 import { useLazyQuery } from "@apollo/client";
 import { GET_RECENT_VIEWED_PROBLEMS } from "../common/graphql";
 import Record from "../components/Record";
@@ -23,9 +23,7 @@ const RecentRecords = () => {
   }, []);
 
   const loadMore = (page: number) => {
-    // if (loading) return;
     if (fetchMoreRecentViewedProblems) {
-      console.log("fetch more, page", page);
       fetchMoreRecentViewedProblems({
         variables: {
           first: 20,
@@ -59,25 +57,25 @@ const RecentRecords = () => {
           <h1>Recents</h1>
         </Col>
       </Row>
-      <Row gutter={20}>
-        <InfiniteScroll
-          pageStart={1}
-          loadMore={loadMore}
-          hasMore={
-            recentViewedProblemsListData?.recentViewedProblems.pageInfo
-              .hasNextPage
-          }
-          loader={<Spin size="default" />}
-        >
-          {recentViewedProblemsListData?.recentViewedProblems.edges.map(
-            (i: any) => (
-              <Col md={12} sm={12} lg={6}>
-                <Record problem={i.node} showCreatedAt={true}></Record>
-              </Col>
-            )
-          )}
-        </InfiniteScroll>
-      </Row>
+      <InfiniteScroll
+        pageStart={1}
+        loadMore={loadMore}
+        hasMore={
+          recentViewedProblemsListData?.recentViewedProblems.pageInfo
+            .hasNextPage
+        }
+        loader={<Spin style={{ margin: "10px auto" }} />}
+      >
+        {recentViewedProblemsListData?.recentViewedProblems.edges.map(
+          (i: any) => (
+            <Col md={12} sm={12} lg={6}>
+              <Record problem={i.node} showCreatedAt={true}></Record>
+            </Col>
+          )
+        )}
+        {recentViewedProblemsListData?.recentViewedProblems.edges.length ===
+          0 && <Empty />}
+      </InfiniteScroll>
     </div>
   );
 };

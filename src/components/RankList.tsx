@@ -6,13 +6,13 @@ export default (props: any) => {
   let menuItems = [];
   for (let i = 18; i > 0; i--) {
     menuItems.push(
-      <Option key={props.placeholder + i} value={`${i}k`}>{`${i}k`}</Option>
+      <Option key={`${i}k-${Date.now()}`} value={`${i}k`}>{`${i}k`}</Option>
     );
   }
 
   for (let i = 1; i < 7; i++) {
     menuItems.push(
-      <Option key={props.placeholder + i} value={`${i}d`}>{`${i}d`}</Option>
+      <Option key={`${i}d-${Date.now()}`} value={`${i}d`}>{`${i}d`}</Option>
     );
   }
 

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 
 import BoardToolbar from "./BoardToolbar";
 import SignInModal from "./modal/SignInModal";
+import SignUpModal from "./modal/SignUpModal";
 
 import { Button, Row, Col } from "antd";
 
@@ -12,6 +13,7 @@ import AuthContext from "../contexts/auth-context";
 
 const Navigation = () => {
   const { signinUser, logout } = useContext(AuthContext);
+  const { setSignUpModalVisible } = useContext(UIContext);
   const { setSignInModalVisible } = useContext(UIContext);
 
   const menu = (
@@ -54,17 +56,18 @@ const Navigation = () => {
           ) : (
             <div className="user-profile dropdown login">
               <Button
-                onClick={setSignInModalVisible.bind(null, true)}
+                onClick={setSignUpModalVisible.bind(null, true)}
                 className="signin clearfix"
                 type="primary"
               >
-                Sign in
+                Sign up
               </Button>
             </div>
           )}
         </Col>
       </Row>
-      <SignInModal></SignInModal>
+      <SignInModal />
+      <SignUpModal />
     </div>
   );
 };

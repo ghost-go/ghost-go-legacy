@@ -105,9 +105,9 @@ const ProblemFilterBar = ({
           <span title={`Tags: ${tagFilter}`}>{`Tags: ${tagFilter}`}</span>
         </Col>
         <Col xs={4} sm={4} md={4} lg={3} xl={3}>
-          <Button type="primary" onClick={handleSeeMore}>
+          {/* <Button type="primary" onClick={handleSeeMore}>
             See More
-          </Button>
+          </Button> */}
         </Col>
       </Row>
     </div>

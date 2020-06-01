@@ -8,6 +8,7 @@ const ListBox = styled.div`
   display: "flex";
   width: "300px";
   height: "120px";
+  margin: 10px;
   float: "left";
 `;
 

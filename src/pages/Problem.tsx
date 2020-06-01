@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { Button, Switch, Row, Col } from "antd";
+import { Button, Switch, Row, Col, Spin } from "antd";
 import { CheckOutlined, CloseOutlined, MinusOutlined } from "@ant-design/icons";
+import { useLocation, useHistory } from "react-router-dom";
 
 import { CoordsToTree } from "../common/Helper";
 import Board from "../eboard/Board";
@@ -12,11 +13,9 @@ import {
   updateSettings,
   getSiginUser,
 } from "../common/utils";
-import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import ThemeContext from "../contexts/theme-context";
 import styled from "styled-components";
-
-// import { useParams } from "react-router-dom";
 
 import "../stylesheets/containers/Problem.scss";
 import { ProblemData } from "../common/types";
@@ -38,9 +37,18 @@ const CREATE_VIEWED_PROBLEM = gql`
 `;
 
 const GET_PROBLEMS_FOR_NEXT = gql`
-  query getProblems($last: Int!, $tags: String!, $level: String!) {
-    problems(last: $last, tags: $tags, level: $level) {
-      id
+  query getProblems(
+    $tags: String!
+    $level: String!
+    $first: Int!
+    $after: String
+  ) {
+    problems(tags: $tags, level: $level, first: $first, after: $after) {
+      edges {
+        node {
+          id
+        }
+      }
     }
   }
 `;
@@ -87,7 +95,10 @@ const WrongTip = styled.div`
 `;
 
 const Problem = () => {
+  const { search } = useLocation();
+  const history = useHistory();
   const id = window.location.pathname.split("/").pop();
+  const query = new URLSearchParams(search);
   const { data, loading, error } = useQuery(GET_PROBLEM, {
     variables: { id },
   });
@@ -98,12 +109,14 @@ const Problem = () => {
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [changeAnswers, setChangeAnswers] = useState([]);
-  const [levelRangeLow, setLevelRangeLow] = useState("18k");
-  const [levelRangeHigh, setLevelRangeHigh] = useState("6d");
+  const [levelRangeLow, setLevelRangeLow] = useState(
+    query.get("level")?.split("-")[0] || "18k"
+  );
+  const [levelRangeHigh, setLevelRangeHigh] = useState(
+    query.get("level")?.split("-")[1] || "6d"
+  );
   const [problem, setProblem] = useState<ProblemData>();
   const [settings, setSettings] = useState({
-    levelFilter: "all",
-    levelRange: "18k-6d",
     currentMode: "normal",
   });
   const [nextStoneType, setNextStoneType] = useState(1);
@@ -162,9 +175,6 @@ const Problem = () => {
     setMoves(data.moves);
     setNextStoneType(data.problem.whofirst[0] === "B" ? 1 : -1);
 
-    setLevelRangeLow(data.settings.levelRange.split("-")[0]);
-    setLevelRangeHigh(data.settings.levelRange.split("-")[1]);
-
     setRightAnswers(
       data.problem.problemAnswers.filter((p: any) => p.answerType === 1)
     );
@@ -189,11 +199,16 @@ const Problem = () => {
     });
   }, [problem, createViewedProblem]);
 
-  const [getNextProblem] = useLazyQuery(GET_PROBLEMS_FOR_NEXT, {
-    onCompleted: (data: any) => {
-      window.location.href = `${data.problems[0].id}`;
-    },
-  });
+  const { data: nextProblemData, refetch: nextProblemRefetch } = useQuery(
+    GET_PROBLEMS_FOR_NEXT,
+    {
+      variables: {
+        first: 1,
+        tags: "all",
+        level: `${levelRangeLow}-${levelRangeHigh}`,
+      },
+    }
+  );
 
   const response = (moves: Array<string>) => {
     const rights: any = [];
@@ -275,14 +290,14 @@ const Problem = () => {
     }
   }, [problem, settings, moves, nextStoneType, boardEditable, theme]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spin />;
   if (error) return <div>Error</div>;
 
   return (
     <Row gutter={[24, 0]}>
       <Col>
         <div className="problem-board">
-          <canvas ref={canvasRef} />
+          <canvas style={{ width: "90vh", height: "90vh" }} ref={canvasRef} />
           <RightTip>
             <CheckOutlined className={`right-tip ${isRight ? "show" : ""}`} />
           </RightTip>
@@ -291,7 +306,7 @@ const Problem = () => {
           </WrongTip>
         </div>
       </Col>
-      <Col>
+      <Col flex="auto">
         <div className="puzzle-panel">
           <div className="title">
             {`${problem?.whofirst} ${problem?.rank}`}&nbsp;&nbsp;
@@ -322,13 +337,16 @@ const Problem = () => {
             </Button>
             <Button
               style={{ marginRight: "10px" }}
-              onClick={() => {
-                getNextProblem({
-                  variables: {
-                    last: 1,
-                    tags: "all",
-                    level: `${levelRangeLow}-${levelRangeHigh}`,
-                  },
+              onClick={async () => {
+                await nextProblemRefetch({
+                  first: 1,
+                  tags: "all",
+                  level: `${levelRangeLow}-${levelRangeHigh}`,
+                });
+                console.log("next", nextProblemData);
+                history.push({
+                  pathname: `/problems/${nextProblemData?.problems.edges[0].node.id}`,
+                  search: `level=${levelRangeLow}-${levelRangeHigh}`,
                 });
               }}
               type="ghost"
@@ -345,9 +363,7 @@ const Problem = () => {
                 rank={levelRangeLow}
                 placeholder="FROM"
                 onChange={(val: string) => {
-                  updateSettings({
-                    levelRange: `${val}-${levelRangeHigh}`,
-                  });
+                  setLevelRangeLow(val);
                 }}
               />
               <MinusOutlined style={{ margin: "0 10px" }} />
@@ -355,9 +371,7 @@ const Problem = () => {
                 rank={levelRangeHigh}
                 placeholder="TO"
                 onChange={(val: string) => {
-                  updateSettings({
-                    levelRange: `${levelRangeLow}-${val}`,
-                  });
+                  setLevelRangeHigh(val);
                 }}
               />
             </div>

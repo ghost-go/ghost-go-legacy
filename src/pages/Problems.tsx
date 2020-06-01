@@ -21,7 +21,6 @@ const Problems = () => {
   const loadMore = (page: number) => {
     // if (loading) return;
     if (fetchMore) {
-      console.log("fetch more, page", page);
       fetchMore({
         variables: {
           first: 20,
@@ -57,44 +56,36 @@ const Problems = () => {
         </div>
       )}
 
-      <Row>
-        <InfiniteScroll
-          pageStart={1}
-          loadMore={loadMore}
-          hasMore={data?.problems.pageInfo.hasNextPage}
-          loader={<Spin size="default" />}
-        >
-          {data?.problems.edges.map((i: any) => (
-            <Col
-              key={`problem-${i.node.id}`}
-              xs={12}
-              sm={8}
-              md={6}
-              lg={4}
-              xl={4}
+      <InfiniteScroll
+        pageStart={1}
+        loadMore={loadMore}
+        hasMore={data?.problems.pageInfo.hasNextPage}
+        useWindow={true}
+        loader={<Spin size="default" style={{ margin: "10px auto" }} />}
+      >
+        {data?.problems.edges.map((i: any) => (
+          <Col key={`problem-${i.node.id}`} xs={12} sm={8} md={6} lg={4} xl={4}>
+            <Card
+              className="problem"
+              bordered={false}
+              bodyStyle={{
+                padding: 10,
+                paddingBottom: 24,
+              }}
             >
-              <Card
-                className="problem"
-                bordered={false}
-                bodyStyle={{
-                  padding: 10,
-                  paddingBottom: 24,
-                }}
-              >
-                <Link to={`/problems/${i.node.id}`}>
-                  <img src={i.node.previewImgR1.x300} alt="" />
-                </Link>
-                <span className="problem-level">Level: {i.node.rank}</span>
-                <div
-                  className={`${
-                    i.node.whofirst === "Black First" ? "black" : "white"
-                  } ki-shape`}
-                />
-              </Card>
-            </Col>
-          ))}
-        </InfiniteScroll>
-      </Row>
+              <Link to={`/problems/${i.node.id}`}>
+                <img src={i.node.previewImgR1.x300} alt="" />
+              </Link>
+              <span className="problem-level">Level: {i.node.rank}</span>
+              <div
+                className={`${
+                  i.node.whofirst === "Black First" ? "black" : "white"
+                } ki-shape`}
+              />
+            </Card>
+          </Col>
+        ))}
+      </InfiniteScroll>
     </React.Fragment>
   );
 };

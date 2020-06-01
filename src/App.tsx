@@ -1,7 +1,7 @@
 import React, { Suspense, useState, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Layout, BackTop } from "antd";
+import { Layout, BackTop, Spin } from "antd";
 
 import Navigation from "./components/Navigation";
 import Sidebar from "./components/Sidebar";
@@ -12,7 +12,6 @@ import Kifu from "./pages/Kifu";
 import Dashboard from "./pages/Dashboard";
 import RecentRecords from "./pages/RecentRecords";
 import MostWrongRecords from "./pages/MostWrongRecords";
-import Favorite from "./pages/Favorite";
 // import { a1ToSGF } from './common/Helper';
 
 import "./stylesheets/App.less";
@@ -122,42 +121,20 @@ const App = () => {
                       component={() => <Redirect to="/problems" />}
                     />
                     <Route exact path="/" component={Problems} />
-                    <Suspense
-                      fallback={
-                        <div className="loading">
-                          <i className="fa fa-spinner fa-pulse fa-fw" />
-                        </div>
-                      }
-                    >
+                    <Suspense fallback={<Spin />}>
                       <Route exact path="/puzzles" component={Problems} />
                       <Route exact path="/problems" component={Problems} />
+                      <Route exact path="/kifus" component={Kifus} />
+                      <Route path="/kifus/:id" component={Kifu} />
+                      <Route path="/problems/:id" component={Problem} />
+                      <Route path="/puzzles/:id" component={Problem} />
+                      <Route path="/recents" component={RecentRecords} />
+                      <Route path="/mostwrongs" component={MostWrongRecords} />
+                      <Route path="/dashboard" component={Dashboard} />
                     </Suspense>
-                    <Route exact path="/kifus" component={Kifus} />
-                    <Route path="/kifus/:id" component={Kifu} />
-                    <Route path="/problems/:id" component={Problem} />
-                    <Route path="/puzzles/:id" component={Problem} />
-                    <Route path="/recents" component={RecentRecords} />
-                    <Route path="/mostwrongs" component={MostWrongRecords} />
-                    <Route path="/dashboard" component={Dashboard} />
-                    <Route path="/favorites" component={Favorite} />
                   </Content>
-                  <Footer>
-                    <div className="footer">
-                      <span>Source Code:</span>
-                      <a href="https://github.com/happybai/ghost-go">
-                        https://github.com/happybai/ghost-go
-                      </a>
-                      &nbsp;&nbsp;&nbsp;
-                      <a href="http://www.w3.org/html/logo/">
-                        <img
-                          src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png"
-                          width="24"
-                          height="25"
-                          alt="HTML5 Powered"
-                          title="HTML5 Powered"
-                        />
-                      </a>
-                    </div>
+                  <Footer style={{ textAlign: "center" }}>
+                    Copyright © 2020 GhostGo. All rights reserved.
                   </Footer>
                 </Layout>
               </Layout>

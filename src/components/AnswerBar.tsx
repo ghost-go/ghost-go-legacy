@@ -19,7 +19,6 @@ const styles = {
   noInfo: {
     display: "flex",
     justifyContent: "middle",
-    width: "70px",
     marginLeft: "15px",
     fontSize: "16px",
     lineHeight: "32px",

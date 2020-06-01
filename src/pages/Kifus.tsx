@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useHistory } from "react-router-dom";
-import { Card, Row, Col, Pagination } from "antd";
+import { Card, Row, Col, Pagination, Spin } from "antd";
 
 import KifuFilterBar from "../components/KifuFilterBar";
 import { useQuery, gql } from "@apollo/client";
@@ -97,7 +97,7 @@ const Kifus = () => {
     });
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spin />;
   if (error) return <div>Error</div>;
 
   return (

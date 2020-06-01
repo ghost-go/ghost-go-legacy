@@ -76,14 +76,14 @@ const Dashboard = () => {
         <Col md={20}>
           <h1>Dashboard</h1>
         </Col>
-        <Col md={4} style={{ textAlign: "right" }}>
+        {/* <Col md={4} style={{ textAlign: "right" }}>
           <Dropdown overlay={menu}>
             <Button>
               {filter}
               <DownOutlined />
             </Button>
           </Dropdown>
-        </Col>
+        </Col> */}
       </Row>
       <Row gutter={20} style={{ marginBottom: 10 }}>
         <Col xs={24} md={8}>

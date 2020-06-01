@@ -77,6 +77,19 @@ export const SIGN_IN = gql`
   }
 `;
 
+export const SIGN_UP = gql`
+  mutation signup($name: String!, $email: String!, $password: String!) {
+    createUser(
+      name: $name
+      authProvider: { credentials: { email: $email, password: $password } }
+    ) {
+      id
+      name
+      email
+    }
+  }
+`;
+
 export const GET_MOST_WRONG_LIST = gql`
   query getMostWrongProblems($first: Int!, $after: String) {
     mostWrongProblems(first: $first, after: $after)

@@ -1,13 +1,13 @@
 import React, { useEffect, useContext } from "react";
-import { Button, Modal, Form, Input, message } from "antd";
+import { Button, Modal, Form, Input, Checkbox, message } from "antd";
 import styled from "styled-components";
 
 import { useMutation } from "@apollo/client";
 import AuthContext from "../../contexts/auth-context";
 import UIContext from "../../contexts/ui-context";
-import { SIGN_IN } from "../../common/graphql";
+import { SIGN_UP } from "../../common/graphql";
 
-const SignUp = styled.span`
+const SignIn = styled.span`
   font-size: 12px;
   &:hover {
     color: #f87500;
@@ -15,29 +15,27 @@ const SignUp = styled.span`
   cursor: pointer;
 `;
 
-const SignInModal = () => {
-  const [signIn, { data: signInMutationData }] = useMutation(SIGN_IN);
+const SignUpModal = () => {
+  const [
+    signUp,
+    { data: signUpMutationData, error: signUpError },
+  ] = useMutation(SIGN_UP);
 
   const { setToken, setSigninUser } = useContext(AuthContext);
-  const { signInModalVisible, setSignInModalVisible } = useContext(UIContext);
   const { signUpModalVisible, setSignUpModalVisible } = useContext(UIContext);
+  const { signInModalVisible, setSignInModalVisible } = useContext(UIContext);
 
   useEffect(() => {
-    if (!signInMutationData) return;
-    if (signInMutationData.signinUser) {
-      console.log("signinuser", signInMutationData.signinUser);
-      localStorage.setItem(
-        "signinUser",
-        JSON.stringify(signInMutationData.signinUser.user)
-      );
-      setToken(signInMutationData.signinUser.token);
-      setSigninUser(signInMutationData.signinUser.user);
-      setSignInModalVisible(false);
-      message.success("Signin successfully");
+    if (!signUpMutationData) return;
+    if (signUpMutationData.createUser) {
+      setSignUpModalVisible(false);
+      setSignInModalVisible(true);
+      message.success("Sign up successfully. Please login!");
+      console.log("signinuser", signUpMutationData.createUser);
     } else {
-      message.info("Email or password incorrect! Please try again.");
+      message.info(signUpMutationData.error);
     }
-  }, [signInMutationData, setToken, setSigninUser, setSignInModalVisible]);
+  }, [signUpMutationData, signUpError]);
 
   const layout = {
     labelCol: { span: 6 },
@@ -48,8 +46,9 @@ const SignInModal = () => {
   };
 
   const onFinish = (values: any) => {
-    signIn({
+    signUp({
       variables: {
+        name: values.name,
         email: values.email,
         password: values.password,
       },
@@ -64,10 +63,10 @@ const SignInModal = () => {
 
   return (
     <Modal
-      visible={signInModalVisible}
+      visible={signUpModalVisible}
       closable={false}
       footer={null}
-      onCancel={setSignInModalVisible.bind(null, false)}
+      onCancel={setSignUpModalVisible.bind(null, false)}
     >
       <Form
         {...layout}
@@ -80,6 +79,14 @@ const SignInModal = () => {
           label="Email"
           name="email"
           rules={[{ required: true, message: "Please input your email!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[{ required: true, message: "Please input your name!" }]}
         >
           <Input />
         </Form.Item>
@@ -98,21 +105,21 @@ const SignInModal = () => {
 
         <Form.Item {...tailLayout} style={{ marginBottom: 0 }}>
           <Button type="primary" htmlType="submit">
-            Submit
+            Sign Up
           </Button>
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <SignUp
+          <SignIn
             onClick={() => {
-              setSignUpModalVisible(true);
-              setSignInModalVisible(false);
+              setSignUpModalVisible(false);
+              setSignInModalVisible(true);
             }}
           >
-            Don't have an account? Sign up!
-          </SignUp>
+            Already have an account? Sign in!
+          </SignIn>
         </Form.Item>
       </Form>
     </Modal>
   );
 };
-export default SignInModal;
+export default SignUpModal;
