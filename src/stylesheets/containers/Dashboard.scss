@@ -1,0 +1,31 @@
+.dashboard-container {
+  h1 {
+    font-size: 24px;
+  }
+
+  .tile-box {
+    // border-radius: 4px;
+    padding: 10px;
+    color: white;
+
+    .tile-content {
+      font-size: 38px;
+    }
+  }
+
+  .bg-blue {
+    background-color: #009efb !important;
+  }
+
+  .bg-purple {
+    background-color: #7460ee !important;
+  }
+
+  .bg-green {
+    background-color: #55ce63 !important;
+  }
+
+  .bg-red {
+    background-color: #f62d51 !important;
+  }
+}

@@ -1,0 +1,57 @@
+.right-tip,
+.wrong-tip {
+  position: "absolute";
+  font-size: "40vmin";
+  left: "50%";
+  top: "50%";
+  transform: "translate(-50%, -50%)";
+  color: "green";
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+.right-tip {
+  color: "green";
+}
+
+.wrong-tip {
+  color: "red";
+}
+
+.puzzle-panel {
+  overflow: hidden;
+  background-color: #fff;
+  padding: 15px;
+}
+.puzzle-panel .title {
+  padding: 10px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+.puzzle-panel .research {
+  margin: 20px 0px;
+}
+.puzzle-panel .button-container {
+  margin-top: 20px;
+}
+
+.level-range {
+  margin-top: 20px;
+}
+
+.research-mode-label {
+  position: relative;
+  display: block;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 700;
+}
+
+.problem-board {
+  margin-left: 10px;
+}
