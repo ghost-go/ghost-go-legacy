@@ -9,7 +9,7 @@ import { onError } from "@apollo/link-error";
 import { message as msesageBox } from "antd";
 
 const link = createHttpLink({
-  uri: "/graphql",
+  uri: "/api/graphql",
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

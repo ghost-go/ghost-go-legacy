@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'mina'
+group :development do
+  gem "capistrano"
+  gem "capistrano-nvm", require: false
+  gem "capistrano-yarn"
+end

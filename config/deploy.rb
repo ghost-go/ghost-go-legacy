@@ -1,110 +1,65 @@
-require 'mina/git'
-require 'mina/deploy'
+# config valid for current version and patch releases of Capistrano
+lock "~> 3.14.0"
 
-# Basic settings:
-#   domain       - The hostname to SSH to.
-#   deploy_to    - Path to deploy into.
-#   repository   - Git repo to clone from. (needed by mina/git)
-#   branch       - Branch name to deploy. (needed by mina/git)
+set :application, "ghost-go"
+set :repo_url, "git@github.com:BAI-Bonjwa/ghost-go.git"
 
-set :domain, 'ghost-go.com'
-set :deploy_to, '/var/www/ghost-go.com'
-set :repository, 'git@github.com:happybai/ghost-go.git'
-set :branch, 'master'
+# append :linked_files, ".env"
+append :linked_dirs, "node_modules"
 
-# https://github.com/mina-deploy/mina/issues/99
-set :term_mode, nil
+set :ssh_options, {
+  verify_host_key: :always,
+  forward_agent: true
+}
 
-# For system-wide RVM install.
-#set :rvm_path, '/usr/local/rvm/bin/rvm'
-#set :rvm_path, '/home/happybai/.rvm/scripts/rvm'
-set :nvm_path, '/home/happybai/.nvm/scripts/nvm'
+set :nvm_type, :user
+set :nvm_node, 'v14.3.0'
+set :nvm_map_bins, %w{node npm yarn}
 
-# Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
-# They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_dirs, ['log']
-set :shared_paths, ['log']
+set :yarn_flags, %w(--slient --no-progress)
 
-# Optional settings:
-set :user, 'happybai'    # Username in the server to SSH to.
-#   set :port, '30000'     # SSH port number.
-#   set :forward_agent, true     # SSH forward_agent.
-#
-# set :pm2, "#{deploy_to}/shared/node_modules/pm2/bin"
-
-# This task is the environment that is loaded for most commands, such as
-# `mina deploy` or `mina rake`.
-task :remote_environment do
-  # If you're using rbenv, use this to load the rbenv environment.
-  # Be sure to commit your .ruby-version or .rbenv-version to your repository.
-  # invoke :'rbenv:load'
-
-  # For those using RVM, use this to load an RVM version@gemset.
-  # invoke :'rvm:use[ruby-2.3.0-p0@default]'
-  command 'echo "-----> Loading nvm"'
-  command %{
-    source ~/.nvm/nvm.sh
-  }
-  command 'echo "-----> Now using nvm v.`nvm --version`"'
-
-  command 'export Lin_directoryANGUAGE=en_US.utf8'
-  command 'export LANG=en_US.utf8'
-  command 'export LC_ALL=en_US.utf8'
-  # yarn
-  command 'export PATH="$HOME/.yarn/bin:$PATH"'
-end
-
-# Put any custom mkdir's in here for when `mina setup` is ran.
-# For Rails apps, we'll make some of the shared paths that are shared between
-# all releases.
-task :setup => :remote_environment do
-  command %[mkdir -p "#{fetch(:deploy_to)}/#{shared_path}/log"]
-  command %[chmod g+rx,u+rwx "#{fetch(:deploy_to)}/#{shared_path}/log"]
-
-  command %[mkdir -p "#{fetch(:deploy_to)}/#{shared_path}/config"]
-  command %[chmod g+rx,u+rwx "#{fetch(:deploy_to)}/#{shared_path}/config"]
-
-  if repository
-    repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
-    repo_port = /:([0-9]+)/.match(repository) && /:([0-9]+)/.match(repository)[1] || '22'
-
-    command %[
-      if ! ssh-keygen -H  -F #{repo_host} &>/dev/null; then
-        ssh-keyscan -t rsa -p #{repo_port} -H #{repo_host} >> ~/.ssh/known_hosts
-      fi
-    ]
-  end
-end
-
-desc "Deploys the current version to the server."
-
-task :deploy => :remote_environment do
-  on :before_hook do
-    # Put things to run locally before ssh
-  end
-
-  deploy do
-    # Put things that will set up an empty directory into a fully set-up
-    # instance of your project.
-    invoke :'git:clone'
-    invoke :'deploy:link_shared_paths'
-    invoke :'deploy:cleanup'
-    command "nvm use node 14.3.0"
-    command "node --version"
-    command "yarn install"
-    # command "yarn build"
-    #command 'sed -i -- "s/<\/body>/<script type=\"text\/javascript\" src=\"\/\/s7.addthis.com\/js\/300\/addthis_widget.js#pubid=ra-5818445a7b592e4c\"><\/script><\/body>/g" dist/index.html'
-
-    on :launch do
-      command "mkdir -p #{fetch(:current_path)}/tmp/"
-      command "touch #{fetch(:current_path)}/tmp/restart.txt"
+namespace :deploy do
+  task :yarn_deploy do
+    on roles fetch(:yarn_roles) do
+      within fetch(:yarn_target_path, release_path) do
+        execute fetch(:yarn_bin), 'build'
+      end
     end
   end
+
+  before "symlink:release", :yarn_deploy
 end
 
-# For help in making your deploy script, see the Mina documentation:
-#
-#  - http://nadarei.co/mina
-#  - http://nadarei.co/mina/tasks
-#  - http://nadarei.co/mina/settings
-#  - http://nadarei.co/mina/helpers
+# Default branch is :master
+# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+
+# Default deploy_to directory is /var/www/my_app_name
+# set :deploy_to, "/var/www/my_app_name"
+
+# Default value for :format is :airbrussh.
+# set :format, :airbrussh
+
+# You can configure the Airbrussh format using :format_options.
+# These are the defaults.
+# set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
+
+# Default value for :pty is false
+# set :pty, true
+
+# Default value for :linked_files is []
+# append :linked_files, "config/database.yml"
+
+# Default value for linked_dirs is []
+# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# Default value for local_user is ENV['USER']
+# set :local_user, -> { `git config user.name`.chomp }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5
+
+# Uncomment the following to require manually verifying the host key before first deploy.
+# set :ssh_options, verify_host_key: :secure
