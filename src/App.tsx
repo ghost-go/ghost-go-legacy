@@ -111,7 +111,7 @@ const App = () => {
                 <BackTop />
                 <Sidebar />
                 <Layout className="site-layout">
-                  <Header className="header">
+                  <Header style={{ background: "#fff", padding: "0px 25px" }}>
                     <Navigation />
                   </Header>
                   <Content className="container">
