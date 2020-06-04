@@ -1,4 +1,4 @@
-server "bw-dev", user: "deploy"
+server "18.180.212.155", user: "deploy"
 set :branch, 'master'
 
 # server-based syntax

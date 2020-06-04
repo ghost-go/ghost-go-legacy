@@ -18,16 +18,43 @@ set :nvm_map_bins, %w{node npm yarn}
 
 set :yarn_flags, %w(--slient --no-progress)
 
+set :deploy_to, "/home/deploy/ghost-go"
+
 namespace :deploy do
-  task :yarn_deploy do
-    on roles fetch(:yarn_roles) do
-      within fetch(:yarn_target_path, release_path) do
-        execute fetch(:yarn_bin), 'build'
+  desc 'Sycning local build to server'
+  task :sync do
+    on roles(:app), in: :parallel do |role|
+      run_locally do
+        puts 'sdlfasdfasdfas'
+        execute "rsync -avr -e ssh build #{role.username}@#{role.hostname}:#{release_path}/"
       end
     end
   end
 
+  desc 'Buiding locally'
+  task :build do
+    on roles fetch(:app) do
+      run_locally do
+        puts 'sdlfasdfasdfas'
+        execute "yarn build"
+      end
+    end
+  end
+
+  task :yarn_deploy do
+    on roles fetch(:yarn_roles) do |role|
+      run_locally do
+        execute "yarn build"
+      end
+      run_locally do
+        execute "rsync -avr -e ssh build #{role.username}@#{role.hostname}:#{release_path}/"
+      end
+    end
+  end
+
+  # before "symlink:release", :build
   before "symlink:release", :yarn_deploy
+  # before "symlink:release", :sync
 end
 
 # Default branch is :master
