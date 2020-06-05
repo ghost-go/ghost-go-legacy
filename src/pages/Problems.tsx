@@ -19,7 +19,6 @@ const Problems = () => {
   const tagQuery = useQuery(GET_TAGS);
 
   const loadMore = (page: number) => {
-    // if (loading) return;
     if (fetchMore) {
       fetchMore({
         variables: {

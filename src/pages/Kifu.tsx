@@ -111,6 +111,7 @@ const Kifu = () => {
         <div className="kifu-board">
           <canvas
             role="button"
+            style={{ width: "90vh", height: "90vh" }}
             ref={canvasRef}
             onClick={() => {
               if (step > moves.length) return;
