@@ -22,24 +22,6 @@ set :deploy_to, "/home/deploy/ghost-go"
 
 namespace :deploy do
   desc 'Sycning local build to server'
-  task :sync do
-    on roles(:app), in: :parallel do |role|
-      run_locally do
-        puts 'sdlfasdfasdfas'
-        execute "rsync -avr -e ssh build #{role.username}@#{role.hostname}:#{release_path}/"
-      end
-    end
-  end
-
-  desc 'Buiding locally'
-  task :build do
-    on roles fetch(:app) do
-      run_locally do
-        puts 'sdlfasdfasdfas'
-        execute "yarn build"
-      end
-    end
-  end
 
   task :yarn_deploy do
     on roles fetch(:yarn_roles) do |role|

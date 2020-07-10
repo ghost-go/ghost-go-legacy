@@ -1,4 +1,4 @@
-server "18.180.212.155", user: "deploy"
+server "18.180.212.155", user: "deploy", roles: %w{app}, primary: true
 set :branch, 'master'
 
 # server-based syntax
