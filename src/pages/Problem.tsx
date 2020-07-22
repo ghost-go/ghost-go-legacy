@@ -233,7 +233,9 @@ const Problem = () => {
       } else {
         const step = rights[i].steps.split(";")[moves.length];
         addMoves([step]);
-        stepsStr = moves.join(";");
+
+        stepsStr = moves.concat([step]).join(";");
+
         if (rights[i].steps === stepsStr) {
           handleRight();
         }
@@ -246,7 +248,9 @@ const Problem = () => {
       } else {
         const step = wrongs[i].steps.split(";")[moves.length];
         addMoves([step]);
-        stepsStr = moves.join(";");
+
+        stepsStr = moves.concat([step]).join(";");
+
         if (wrongs[i].steps === stepsStr) {
           handleWrong();
         }
