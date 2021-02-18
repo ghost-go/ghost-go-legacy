@@ -28,7 +28,6 @@ const Problems = () => {
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           const newEdges = fetchMoreResult.problems.edges;
           const pageInfo = fetchMoreResult.problems.pageInfo;
-          console.log(pageInfo);
 
           return newEdges.length
             ? {
@@ -73,7 +72,7 @@ const Problems = () => {
               }}
             >
               <Link to={`/problems/${i.node.id}`}>
-                <img src={i.node.previewImgR1.x300} alt="" />
+                <img src={i.node.imageUrl} alt="" />
               </Link>
               <span className="problem-level">Level: {i.node.rank}</span>
               <div

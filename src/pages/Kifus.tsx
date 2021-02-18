@@ -40,6 +40,7 @@ export const GET_KIFUS = gql`
       previewImg {
         x300
       }
+      imageUrl
       createdAt
       shortDate
     }
@@ -118,7 +119,7 @@ const Kifus = () => {
               }}
             >
               <Link to={`/kifus/${i.id}`}>
-                <img src={i.previewImg.x300} alt="" />
+                <img src={i.imageUrl} alt="" />
               </Link>
               <div className="kifu-info">
                 <span>
