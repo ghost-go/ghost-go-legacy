@@ -1,151 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useHistory } from "react-router-dom";
-import { Card, Row, Col, Pagination, Spin } from "antd";
-
-import KifuFilterBar from "../components/KifuFilterBar";
-import { useQuery, gql } from "@apollo/client";
-
-export const GET_KIFUS = gql`
-  query getKifus($players: String!, $limit: Int!, $offset: Int!) {
-    settings @client
-    players {
-      id
-      enName
-    }
-    kifuTotalCount(players: $players)
-    kifus(players: $players, limit: $limit, offset: $offset) {
-      id
-      title
-      playerBId
-      playerWId
-      playerB {
-        id
-        enName
-        name
-      }
-      playerW {
-        id
-        enName
-        name
-      }
-      bName
-      bRank
-      wName
-      wRank
-      result
-      place
-      komi
-      content
-      steps
-      previewImg {
-        x300
-      }
-      imageUrl
-      createdAt
-      shortDate
-    }
-  }
-`;
-
-// TODO: Loading style
-const PAGE_LIMIT = 20;
+import React, { useEffect, useCallback, useState } from "react";
+import { fetchKifus } from "slices";
+import { useGenericData, useTypedSelector, useDispatch } from "utils";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Kifus = () => {
-  let { search } = useLocation();
-  const history = useHistory();
-  const query = new URLSearchParams(search);
-  const page = parseInt(query.get("page") || "1");
-  const pageSize = parseInt(query.get("pageSize") || PAGE_LIMIT.toString());
-  const [kifus, setKifus] = useState([]);
-  const [players, setPlayers] = useState([]);
-  const [settings, setSettings] = useState({
-    playerFilter: "all",
-  });
-  const { data, loading, error, refetch } = useQuery(GET_KIFUS, {
-    variables: {
-      players: "all",
-      page: page,
-      limit: pageSize,
-      offset: (page - 1) * PAGE_LIMIT,
+  const dispatch = useDispatch();
+
+  const [kifus] = useGenericData(useTypedSelector((state) => state.kifus));
+  const [kifuList, setKifuList] = useState([]);
+  const handleFetchKifus = useCallback(
+    (q) => {
+      dispatch(fetchKifus({ params: { q } })).then((obj: any) => {
+        console.log("obj", obj);
+        setKifuList((oldKifuList: any) =>
+          oldKifuList.concat(obj.payload.data.data)
+        );
+      });
     },
-  });
-  // TODO: page params need to extract from url params
-  const [kifuTotalCount, setKifuTotalCount] = useState(0);
+    [dispatch]
+  );
 
   useEffect(() => {
-    if (!data) return;
-    setKifus(data.kifus);
-    setSettings(data.settings);
-    setPlayers(data.players);
-    setKifuTotalCount(data.kifuTotalCount);
-  }, [data, settings]);
+    handleFetchKifus({});
+  }, [handleFetchKifus]);
 
-  const handlePageChange = (page: number, pageSize?: number) => {
-    query.set("page", page.toString());
-    query.set("pageSize", (pageSize || PAGE_LIMIT).toString());
-    history.push({
-      pathname: "/kifus",
-      search: query.toString(),
+  const items: any = [];
+  if (kifuList.length > 0) {
+    kifuList.forEach((p: any) => {
+      const { name, whofirst, image_url } = p.attributes;
+      items.push(
+        <div key={p.id} className="w-60 h-60">
+          <div>
+            <img src={image_url} alt={p.id} />
+          </div>
+          <div className="flex flex-row justify-between p-2">
+            <div>{name}</div>
+            <div>{whofirst}</div>
+          </div>
+        </div>
+      );
     });
-  };
+  }
 
-  const handlePageSizeChange = (current: number, pageSize: number) => {
-    query.set("page", page.toString());
-    query.set("pageSize", (pageSize || PAGE_LIMIT).toString());
-    history.push({
-      pathname: "/kifus",
-      search: query.toString(),
-    });
-  };
-
-  if (loading) return <Spin />;
-  if (error) return <div>Error</div>;
+  console.log("items", items);
 
   return (
-    <div className="kifu-container">
-      <KifuFilterBar
-        players={["all", ...players.map((player: any) => player.enName)]}
-        refetch={refetch}
-      />
-      <Row>
-        {kifus.map((i: any) => (
-          <Col key={`kifu-${i.id}`} xs={12} sm={8} md={8} lg={6} xl={6}>
-            <Card
-              className="problem"
-              bordered={false}
-              bodyStyle={{
-                padding: 10,
-                paddingBottom: 24,
-              }}
-            >
-              <Link to={`/kifus/${i.id}`}>
-                <img src={i.imageUrl} alt="" />
-              </Link>
-              <div className="kifu-info">
-                <span>
-                  {i.playerB && i.playerB.enName} <b>VS</b>{" "}
-                  {i.playerW && i.playerW.enName}
-                </span>
-                <br />
-                <span>{`Result: ${i.result}`}</span>
-                <br />
-                <span>{`Date: ${i.shortDate}`}</span>
-              </div>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-      <Row style={{ paddingLeft: 10 }}>
-        <Pagination
-          current={page}
-          pageSize={pageSize}
-          defaultPageSize={PAGE_LIMIT}
-          total={kifuTotalCount}
-          onChange={handlePageChange}
-          onShowSizeChange={handlePageSizeChange}
-        />
-      </Row>
-    </div>
+    <>
+      <InfiniteScroll
+        dataLength={items.length} //This is important field to render the next data
+        next={() => {
+          handleFetchKifus({});
+        }}
+        hasMore={true}
+        loader={<h4>Loading...</h4>}
+        // endMessage={
+        //   <p style={{ textAlign: "center" }}>
+        //     <b>Yay! You have seen it all</b>
+        //   </p>
+        // }
+        // below props only if you need pull down functionality
+        refreshFunction={() => {
+          handleFetchKifus({});
+        }}
+        pullDownToRefresh
+        pullDownToRefreshThreshold={50}
+        pullDownToRefreshContent={
+          <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
+        }
+        releaseToRefreshContent={
+          <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+        }>
+        <div className="flex flex-row flex-wrap">{items}</div>
+      </InfiniteScroll>
+    </>
   );
 };
 

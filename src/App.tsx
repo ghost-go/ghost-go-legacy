@@ -1,5 +1,5 @@
 import React, { Suspense, useState, useContext, useEffect } from "react";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import {
   BrowserRouter as Router,
   Route,
@@ -24,17 +24,7 @@ import { SidebarItem } from "./components";
 
 import "./App.less";
 import logo from "assets/images/logo.png";
-
-import reducer from "slices";
-
-const store = configureStore({
-  reducer: reducer,
-  middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-    },
-  }),
-});
+import { store } from "utils";
 
 const App = () => {
   // useEffect(() => {
@@ -99,7 +89,7 @@ const App = () => {
                       </button> */}
               </div>
               <nav className="flex-grow md:block px-4 pb-4 md:pb-0 md:overflow-y-auto">
-                <div className="block px-1 py-1 mt-1 text-xs font-semibold text-gray-400 dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                <div className="block px-1 py-1 mt-1 text-sm font-semibold text-gray-400 dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
                   RESOURCES
                 </div>
                 <SidebarItem to="/problems" active={true}>

@@ -1,6 +1,11 @@
-import { buildGenericReducer } from '../utils/reducers';
+import { buildGenericReducer } from "../utils/reducers";
 
 export const {
-  asyncThunk: fetchProblems,
-  slice: problemsSlice,
-} = buildGenericReducer<any>('problems/fetchProblems', '/problems');
+  asyncThunk: fetchKifus,
+  slice: kifusSlice,
+} = buildGenericReducer<any>("kifus/fetchKifus", "/kifus");
+
+export const {
+  asyncThunk: fetchKifu,
+  slice: kifuSlice,
+} = buildGenericReducer<any>("kifus/fetchKifu", "/kifus/:id");

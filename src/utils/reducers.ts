@@ -93,7 +93,6 @@ export const buildGenericSlice = <T>(
         state.status = "succeeded";
         state.payload = action.payload.data;
         state.headers = action.payload.headers;
-        console.log("action", action);
       });
       builder.addCase(asyncThunk.rejected, (state, action) => {
         state.status = "failed";
