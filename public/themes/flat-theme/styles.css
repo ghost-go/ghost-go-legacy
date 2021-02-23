@@ -1,0 +1,50 @@
+.goban li.sign_-1 .stone img {
+    background-image: url('white.svg');
+}
+.goban li.sign_1 .stone img {
+    background-image: url('black.svg');
+}
+.goban,
+.goban .row li .stone span::before,
+.goban .row li .stone span::after,
+.goban .row li.cross .stone span {
+    background-color: #ECB55A;
+    background-image: none;
+}
+.goban .row li.triangle .stone span::after {
+    border-bottom-color: #ECB55A;
+}
+.goban .row li {
+    position: relative;
+    background: url('inner.svg') center;
+}
+.goban .row li.hoshi::after {
+    background: #000000;
+}
+.goban .row:nth-child(3) li {
+    background-image: url('side-n.svg');
+}
+.goban .row:nth-last-child(3) li {
+    background-image: url('side-s.svg');
+}
+.goban .row li:first-child {
+    background-image: url('side-w.svg');
+}
+.goban .row li:last-child {
+    background-image: url('side-e.svg');
+}
+.goban .row:nth-child(3) li:first-child {
+    background-image: url('corner-nw.svg');
+}
+.goban .row:nth-child(3) li:last-child {
+    background-image: url('corner-ne.svg');
+}
+.goban .row:nth-last-child(3) li:first-child {
+    background-image: url('corner-sw.svg');
+}
+.goban .row:nth-last-child(3) li:last-child {
+    background-image: url('corner-se.svg');
+}
+main {
+    background-image: url('background.png');
+}

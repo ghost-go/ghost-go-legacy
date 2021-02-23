@@ -1,0 +1,82 @@
+/* Stone */
+.goban li.sign_-1.random_0 .stone img {
+    background-image: url('white0.png');
+    /* Shadow */
+    -webkit-filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+    filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+}
+.goban li.sign_-1.random_1 .stone img {
+    background-image: url('white1.png');
+    /* Shadow */
+    -webkit-filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+    filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+}
+.goban li.sign_-1.random_2 .stone img {
+    background-image: url('white2.png');
+    /* Shadow */
+    -webkit-filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+    filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+}
+.goban li.sign_-1.random_3 .stone img {
+    background-image: url('white3.png');
+    /* Shadow */
+    -webkit-filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+    filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+}
+.goban li.sign_-1.random_4 .stone img {
+    background-image: url('white4.png');
+    /* Shadow */
+    -webkit-filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+    filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+}
+.goban li.sign_1 .stone img {
+    background-image: url('black.png');
+    /* Shadow */
+    -webkit-filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+    filter: drop-shadow(.085em .077em 1.7px rgba(0,0,0,.45));
+}
+/* Black lines */
+.goban .row li {
+    position: relative;
+    background: url('inner.svg') center;
+}
+.goban .row li.hoshi::after {
+    background: #000000;
+}
+.goban .row:nth-child(3) li {
+    background-image: url('side-n.svg');
+}
+.goban .row:nth-last-child(3) li {
+    background-image: url('side-s.svg');
+}
+.goban .row li:first-child {
+    background-image: url('side-w.svg');
+}
+.goban .row li:last-child {
+    background-image: url('side-e.svg');
+}
+.goban .row:nth-child(3) li:first-child {
+    background-image: url('corner-nw.svg');
+}
+.goban .row:nth-child(3) li:last-child {
+    background-image: url('corner-ne.svg');
+}
+.goban .row:nth-last-child(3) li:first-child {
+    background-image: url('corner-sw.svg');
+}
+.goban .row:nth-last-child(3) li:last-child {
+    background-image: url('corner-se.svg');
+}
+/* Background */
+main {
+    background-image: url('background.png');
+}
+/* Hide last stone marker */
+/*
+.goban .row li.sign_1.point .stone::after {
+    background: none;
+}
+.goban .row li.sign_-1.point .stone::after {
+    background: none;
+}
+*/
