@@ -7,12 +7,14 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import * as utils from '../utils';
 import { problemSlice, problemsSlice } from "./problemSlice";
 import { kifuSlice, kifusSlice } from "./kifuSlice";
+import { uiSlice } from "./uiSlice";
+import { tagsSlice } from "./tagSlice";
 
 // export * from './authSlice';
 export * from "./problemSlice";
 export * from "./kifuSlice";
-
-// const { initialGenericState } = utils;
+export * from "./uiSlice";
+export * from "./tagSlice";
 
 const rootReducer = combineReducers({
   // user: userReducer,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   problem: problemSlice.reducer,
   kifus: kifusSlice.reducer,
   kifu: kifuSlice.reducer,
+  tags: tagsSlice.reducer,
+  ui: uiSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

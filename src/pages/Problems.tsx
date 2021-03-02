@@ -1,82 +1,153 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { fetchProblems } from "slices";
-import { useGenericData, useTypedSelector, useDispatch } from "utils";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { isMobile } from "react-device-detect";
+import "react-lazy-load-image-component/src/effects/opacity.css";
+
+import {
+  closeProblemFilterVisible,
+  fetchProblems,
+  selectUI,
+  selectTags,
+  toggleProblemFilterVisible,
+  fetchTags,
+  setProblemFilterTags,
+  setProblemFilterLevel,
+} from "slices";
+import {
+  useDispatch,
+  useTypedSelector,
+  useOutsideClick,
+  useGenericData,
+} from "utils";
+import { FilterButton, ProblemCard, Tag } from "components/common";
+import {} from "slices/tagSlice";
+
+const LEVEL_LIST = ["18k-10k", "10k-5k", "5k-1d", "1d-3d", "3d-6d"];
 
 const Problems = () => {
   const dispatch = useDispatch();
-
-  const [problems] = useGenericData(
-    useTypedSelector((state) => state.problems)
-  );
+  const ref = useRef<HTMLDivElement>(null);
   const [problemList, setProblemList] = useState([]);
-  const handleFetchProblems = useCallback(
-    (q) => {
-      dispatch(fetchProblems({ params: { q } })).then((obj: any) => {
-        console.log("obj", obj);
+  const {
+    problemFilterVisible,
+    problemFilterLevel,
+    problemFilterTags,
+  } = useTypedSelector((state) => selectUI(state));
+
+  const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
+
+  useOutsideClick(ref, () => {
+    if (problemFilterVisible) {
+      dispatch(closeProblemFilterVisible());
+    }
+  });
+
+  const handleFetchProblems = useCallback(() => {
+    dispatch(
+      fetchProblems({
+        params: {
+          level: problemFilterLevel || "all",
+          tags: problemFilterTags.join(),
+        },
+      })
+    ).then((obj: any) => {
+      if (obj && obj.payload) {
         setProblemList((oldProblemList: any) =>
           oldProblemList.concat(obj.payload.data.data)
         );
-      });
-    },
-    [dispatch]
-  );
+      }
+    });
+  }, [dispatch, problemFilterLevel, problemFilterTags]);
 
   useEffect(() => {
-    handleFetchProblems({});
-  }, [handleFetchProblems]);
+    dispatch(fetchTags());
+    handleFetchProblems();
+  }, [handleFetchProblems, dispatch]);
 
-  const items: any = [];
+  let items: any = [];
   if (problemList.length > 0) {
-    problemList.forEach((p: any) => {
-      const { rank, whofirst, image_url } = p.attributes;
-      items.push(
-        <div
-          key={p.id}
-          className="relative"
-          style={{ paddingTop: "calc(100% + 25px)" }}>
-          <img className="absolute w-full top-0" src={image_url} alt={p.id} />
-          <div className="absolute left-2 bottom-0 text-base">
-            LEVEL: {rank}
-          </div>
-          {whofirst === "Black First" ? (
-            <div className="absolute right-2 bottom-0 rounded-full h-5 w-5 flex items-center justify-center bg-black"></div>
-          ) : (
-            <div className="absolute right-2 bottom-0 rounded-full h-5 w-5 flex items-center justify-center bg-white border border-black"></div>
-          )}
-        </div>
-      );
-    });
+    items = problemList.map((p: any) => <ProblemCard key={p.id} problem={p} />);
   }
-
-  console.log("items", items);
 
   return (
     <>
+      <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
+        <FilterButton
+          onClick={() => {
+            dispatch(toggleProblemFilterVisible());
+          }}
+        />
+        <div className="text-base ml-4">
+          Level: {problemFilterLevel || "ALL"}
+        </div>
+        <div className="text-base ml-4">
+          Tags:{" "}
+          {problemFilterTags.length > 0 ? problemFilterTags.join(",") : "ALL"}
+        </div>
+      </div>
+      <div
+        ref={ref}
+        className={`absolute transition transform origin-top-left ${
+          problemFilterVisible ? "scale-100 opacity-1" : "scale-50 opacity-0"
+        } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}>
+        <div>
+          <div className="block font-semibold text-gray-400 mb-2">LEVEL</div>
+          {LEVEL_LIST.map((l) => (
+            <Tag
+              key={l}
+              onClick={() => {
+                dispatch(setProblemFilterLevel(l));
+                dispatch(closeProblemFilterVisible());
+                handleFetchProblems();
+              }}>
+              {l}
+            </Tag>
+          ))}
+        </div>
+        <div>
+          <div className="block font-semibold text-gray-400 mb-2">TAGS</div>
+          {tags &&
+            tags.data.map(({ attributes: { name } }: any) => (
+              <Tag
+                key={`t-${name}`}
+                onClick={() => {
+                  dispatch(setProblemFilterTags([name]));
+                  dispatch(closeProblemFilterVisible());
+                  handleFetchProblems();
+                }}>
+                {name}
+              </Tag>
+            ))}
+        </div>
+      </div>
       <InfiniteScroll
-        dataLength={items.length} //This is important field to render the next data
+        dataLength={items.length}
         next={() => {
-          handleFetchProblems({});
+          handleFetchProblems();
         }}
         hasMore={true}
         loader={<h4>Loading...</h4>}
-        // endMessage={
-        //   <p style={{ textAlign: "center" }}>
-        //     <b>Yay! You have seen it all</b>
-        //   </p>
-        // }
-        // below props only if you need pull down functionality
-        refreshFunction={fetchProblems}
-        pullDownToRefresh
+        endMessage={
+          <p className="text-center text-sm">
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        refreshFunction={() => {
+          handleFetchProblems();
+        }}
+        pullDownToRefresh={isMobile}
         pullDownToRefreshThreshold={50}
         pullDownToRefreshContent={
-          <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
+          <span className="text-center text-sm">
+            <h3>&#8595; Pull down to refresh</h3>
+          </span>
         }
         releaseToRefreshContent={
-          <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+          <span className="text-center text-sm">
+            &#8593; Release to refresh
+          </span>
         }>
-        <div className="grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 grid-col-2 gap-4 pl-3 pr-6 pt-1">
+        <div className="grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 grid-cols-2 lg:gap-4 gap-2 lg:pr-2 lg:pl-0 p-2">
           {items}
         </div>
       </InfiniteScroll>

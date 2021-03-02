@@ -20,6 +20,22 @@ export const useGenericData = <T>(
   return [data, setData];
 };
 
+export const useOutsideClick = (ref: any, callback: any) => {
+  const handleClick = (e: any) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      callback();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  });
+};
+
 export type AppDispatch = typeof store.dispatch;
 export const useDispatch = () => useReactReduxDispatch<AppDispatch>();
 
