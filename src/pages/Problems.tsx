@@ -1,13 +1,14 @@
-import React, { useEffect, useCallback, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useState,
+  useRef,
+} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { isMobile } from "react-device-detect";
 import "react-lazy-load-image-component/src/effects/opacity.css";
-import {
-  useQueryParam,
-  StringParam,
-  ArrayParam,
-  withDefault,
-} from "use-query-params";
+import { useQueryParam } from "use-query-params";
 
 import {
   closeProblemFilterVisible,
@@ -16,8 +17,6 @@ import {
   selectTags,
   toggleProblemFilterVisible,
   fetchTags,
-  setProblemFilterTags,
-  setProblemFilterLevel,
 } from "slices";
 import {
   useDispatch,
@@ -25,7 +24,7 @@ import {
   useOutsideClick,
   useGenericData,
 } from "utils";
-import { FilterButton, ProblemCard, Tag } from "components/common";
+import { FilterButton, ProblemCard, Tag, Spinner } from "components/common";
 import {} from "slices/tagSlice";
 
 const LEVEL_LIST = ["18k-10k", "10k-5k", "5k-1d", "1d-3d", "3d-6d"];
@@ -34,22 +33,18 @@ const Problems = () => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [problemList, setProblemList] = useState([]);
-  const {
-    problemFilterVisible,
-    problemFilterLevel,
-    problemFilterTags,
-  } = useTypedSelector((state) => selectUI(state));
+  const { problemFilterVisible } = useTypedSelector((state) => selectUI(state));
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
-  const [levelParam, setLevelParam] = useQueryParam("level", StringParam);
-  const [tagsParam, setTagsParam] = useQueryParam(
-    "tags",
-    withDefault(ArrayParam, [])
-  );
+  const problems = useTypedSelector((state) => state.problems);
+  const [levelParam = "all", setLevelParam] = useQueryParam<string>("level");
+  const [tagsParam = "all", setTagsParam] = useQueryParam<string>("tags");
 
-  const handleFetchProblems = (level: string | null, tags: string[]) => {
+  console.log(problems);
+
+  const handleFetchProblems = () => {
     const params = {
-      level: level || "all",
-      tags: tags.join(),
+      level: levelParam,
+      tags: tagsParam,
     };
     dispatch(fetchProblems({ params })).then((obj: any) => {
       if (obj && obj.payload) {
@@ -60,11 +55,21 @@ const Problems = () => {
     });
   };
 
+  useOutsideClick(ref, () => {
+    if (problemFilterVisible) {
+      dispatch(closeProblemFilterVisible());
+    }
+  });
+
+  useLayoutEffect(() => {
+    dispatch(fetchTags());
+  }, [dispatch]);
+
   const refetchProblems = useCallback(
-    (level: string | null, tags: string[]) => {
+    (levelParam, tagsParam) => {
       const params = {
-        level: level || "all",
-        tags: tags.join(),
+        level: levelParam,
+        tags: tagsParam,
       };
       dispatch(fetchProblems({ params })).then((obj: any) => {
         if (obj && obj.payload) {
@@ -75,23 +80,15 @@ const Problems = () => {
     [dispatch]
   );
 
-  useOutsideClick(ref, () => {
-    if (problemFilterVisible) {
-      dispatch(closeProblemFilterVisible());
-    }
-  });
-
   useEffect(() => {
-    dispatch(fetchTags());
-  }, [dispatch]);
-
-  useEffect(() => {
-    refetchProblems(problemFilterLevel, problemFilterTags);
-  }, [dispatch, refetchProblems, problemFilterLevel, problemFilterTags]);
+    refetchProblems(levelParam, tagsParam);
+  }, [levelParam, tagsParam, refetchProblems]);
 
   let items: any = [];
   if (problemList.length > 0) {
-    items = problemList.map((p: any) => <ProblemCard key={p.id} problem={p} />);
+    items = problemList.map((p: any, index) => (
+      <ProblemCard key={`p-index-${index}`} problem={p} />
+    ));
   }
 
   return (
@@ -102,26 +99,31 @@ const Problems = () => {
             dispatch(toggleProblemFilterVisible());
           }}
         />
-        <div className="text-base ml-4">
-          Level: {problemFilterLevel || "all"}
-        </div>
-        <div className="text-base ml-4">
-          Tags:{" "}
-          {problemFilterTags.length > 0 ? problemFilterTags.join(",") : "all"}
-        </div>
+        <div className="text-base ml-4">Level: {levelParam}</div>
+        <div className="text-base ml-4">Tags: {tagsParam}</div>
       </div>
       <div
         ref={ref}
         className={`absolute transition transform origin-top-left ${
-          problemFilterVisible ? "scale-100 opacity-1" : "scale-50 opacity-0"
+          problemFilterVisible
+            ? "scale-100 opacity-1"
+            : "scale-50 opacity-0 pointer-events-none"
         } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}>
         <div>
           <div className="block font-semibold text-gray-400 mb-2">LEVEL</div>
+          <Tag
+            key={`level-all`}
+            onClick={() => {
+              setLevelParam("all");
+              dispatch(closeProblemFilterVisible());
+            }}>
+            all
+          </Tag>
           {LEVEL_LIST.map((l) => (
             <Tag
               key={l}
               onClick={() => {
-                dispatch(setProblemFilterLevel(l));
+                setLevelParam(l);
                 dispatch(closeProblemFilterVisible());
               }}>
               {l}
@@ -130,12 +132,20 @@ const Problems = () => {
         </div>
         <div>
           <div className="block font-semibold text-gray-400 mb-2">TAGS</div>
+          <Tag
+            key={`t-all`}
+            onClick={() => {
+              setTagsParam("all");
+              dispatch(closeProblemFilterVisible());
+            }}>
+            all
+          </Tag>
           {tags &&
             tags.data.map(({ attributes: { name } }: any) => (
               <Tag
                 key={`t-${name}`}
                 onClick={() => {
-                  dispatch(setProblemFilterTags([name]));
+                  setTagsParam(name);
                   dispatch(closeProblemFilterVisible());
                 }}>
                 {name}
@@ -146,7 +156,7 @@ const Problems = () => {
       <InfiniteScroll
         dataLength={items.length}
         next={() => {
-          handleFetchProblems(problemFilterLevel, problemFilterTags);
+          handleFetchProblems();
         }}
         hasMore={true}
         loader={<></>}
@@ -156,7 +166,7 @@ const Problems = () => {
           </p>
         }
         refreshFunction={() => {
-          refetchProblems(problemFilterLevel, problemFilterTags);
+          refetchProblems(levelParam, tagsParam);
         }}
         pullDownToRefresh={isMobile}
         pullDownToRefreshThreshold={50}
@@ -170,9 +180,36 @@ const Problems = () => {
             &#8593; Release to refresh
           </span>
         }>
-        <div className="grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 grid-cols-2 lg:gap-4 gap-2 lg:pr-2 lg:pl-0 p-2">
-          {items}
-        </div>
+        {problems.status === "loading" && items.length === 0 && (
+          <div className="mt-20">
+            <Spinner />
+          </div>
+        )}
+        {items.length > 0 && (
+          <div className="grid 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 grid-cols-2 lg:gap-4 gap-2 lg:pr-2 lg:pl-0 p-2">
+            {items}
+          </div>
+        )}
+        {problems.status === "succeeded" && items.length === 0 && (
+          <div className="text-center">
+            <div className="mt-10 text-2xl">No Data</div>
+            <button
+              onClick={() => {
+                setLevelParam("all");
+                setTagsParam("all");
+              }}
+              className="underline p-5 mt-2">
+              Clear Filters
+            </button>
+            <button
+              onClick={() => {
+                window.history.back();
+              }}
+              className="underline p-5">
+              Go back
+            </button>
+          </div>
+        )}
       </InfiniteScroll>
     </>
   );
