@@ -1,16 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "slices";
 
 interface UIState {
   problemFilterVisible: boolean;
-  problemFilterLevel: string | null;
-  problemFilterTags: string[];
+  kifuFilterVisible: boolean;
 }
 
 const initialState: UIState = {
   problemFilterVisible: false,
-  problemFilterLevel: null,
-  problemFilterTags: [],
+  kifuFilterVisible: false,
 };
 
 export const uiSlice = createSlice({
@@ -26,11 +24,14 @@ export const uiSlice = createSlice({
     closeProblemFilterVisible: (state) => {
       state.problemFilterVisible = false;
     },
-    setProblemFilterTags: (state, action) => {
-      state.problemFilterTags = action.payload;
+    toggleKifuFilterVisible: (state) => {
+      state.kifuFilterVisible = !state.kifuFilterVisible;
     },
-    setProblemFilterLevel: (state, action) => {
-      state.problemFilterLevel = action.payload;
+    openKifuFilterVisible: (state) => {
+      state.kifuFilterVisible = true;
+    },
+    closeKifuFilterVisible: (state) => {
+      state.kifuFilterVisible = false;
     },
   },
 });
@@ -39,8 +40,9 @@ export const {
   toggleProblemFilterVisible,
   openProblemFilterVisible,
   closeProblemFilterVisible,
-  setProblemFilterTags,
-  setProblemFilterLevel,
+  toggleKifuFilterVisible,
+  openKifuFilterVisible,
+  closeKifuFilterVisible,
 } = uiSlice.actions;
 
 export const selectUI = (state: RootState) => state.ui;

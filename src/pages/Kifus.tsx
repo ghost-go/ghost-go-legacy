@@ -1,76 +1,200 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { fetchKifus } from "slices";
-import { useGenericData, useTypedSelector, useDispatch } from "utils";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useState,
+  useRef,
+} from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { isMobile } from "react-device-detect";
+import "react-lazy-load-image-component/src/effects/opacity.css";
+import { useQueryParam } from "use-query-params";
+
+import {
+  closeKifuFilterVisible,
+  fetchKifus,
+  selectUI,
+  toggleKifuFilterVisible,
+  selectPlayers,
+  fetchPlayers,
+} from "slices";
+import {
+  useDispatch,
+  useTypedSelector,
+  useOutsideClick,
+  useGenericData,
+} from "utils";
+import { FilterButton, KifuCard, Tag, Spinner } from "components/common";
+import {} from "slices/tagSlice";
 
 const Kifus = () => {
   const dispatch = useDispatch();
-
-  const [kifus] = useGenericData(useTypedSelector((state) => state.kifus));
+  const ref = useRef<HTMLDivElement>(null);
   const [kifuList, setKifuList] = useState([]);
-  const handleFetchKifus = useCallback(
-    (q) => {
-      dispatch(fetchKifus({ params: { q } })).then((obj: any) => {
-        console.log("obj", obj);
+  const { kifuFilterVisible } = useTypedSelector((state) => selectUI(state));
+  const [players] = useGenericData(
+    useTypedSelector((state) => selectPlayers(state))
+  );
+  const kifus = useTypedSelector((state) => state.kifus);
+  const [playerParam = "all", setPlayerParam] = useQueryParam<string>("player");
+
+  const handleFetchKifus = () => {
+    const params = {
+      player: playerParam,
+    };
+    dispatch(fetchKifus({ params })).then((obj: any) => {
+      if (obj && obj.payload) {
         setKifuList((oldKifuList: any) =>
           oldKifuList.concat(obj.payload.data.data)
         );
+      }
+    });
+  };
+
+  useOutsideClick(ref, () => {
+    if (kifuFilterVisible) {
+      dispatch(closeKifuFilterVisible());
+    }
+  });
+
+  useLayoutEffect(() => {
+    dispatch(fetchPlayers());
+  }, [dispatch]);
+
+  const refetchKifus = useCallback(
+    (playerParams) => {
+      const params = {
+        player: playerParams,
+      };
+      dispatch(fetchKifus({ params })).then((obj: any) => {
+        if (obj && obj.payload) {
+          setKifuList(obj.payload.data.data);
+        }
       });
     },
     [dispatch]
   );
 
   useEffect(() => {
-    handleFetchKifus({});
-  }, [handleFetchKifus]);
+    refetchKifus(playerParam);
+  }, [playerParam, refetchKifus]);
 
-  const items: any = [];
+  let items: any = [];
   if (kifuList.length > 0) {
-    kifuList.forEach((p: any) => {
-      const { name, whofirst, image_url } = p.attributes;
-      items.push(
-        <div key={p.id} className="w-60 h-60">
-          <div>
-            <img src={image_url} alt={p.id} />
-          </div>
-          <div className="flex flex-row justify-between p-2">
-            <div>{name}</div>
-            <div>{whofirst}</div>
-          </div>
-        </div>
-      );
-    });
+    items = kifuList.map((k: any, index) => (
+      <KifuCard key={`p-index-${index}`} kifu={k} />
+    ));
   }
-
-  console.log("items", items);
 
   return (
     <>
+      <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
+        <FilterButton
+          onClick={() => {
+            dispatch(toggleKifuFilterVisible());
+          }}
+        />
+        <div className="text-base ml-4">Player: {playerParam}</div>
+        {playerParam !== "all" && (
+          <div>
+            <button
+              onClick={() => {
+                setPlayerParam("all");
+              }}
+              className="text-base underline ml-4">
+              Clear Filters
+            </button>
+          </div>
+        )}
+      </div>
+      <div
+        ref={ref}
+        className={`absolute transition transform origin-top-left ${
+          kifuFilterVisible
+            ? "scale-100 opacity-1"
+            : "scale-50 opacity-0 pointer-events-none"
+        } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}>
+        <div>
+          <div className="block font-semibold text-gray-400 mb-2">
+            Top Players(Top 30 from go ratings)
+          </div>
+          <Tag
+            key={`t-all`}
+            onClick={() => {
+              setPlayerParam("all");
+              dispatch(closeKifuFilterVisible());
+            }}>
+            all
+          </Tag>
+          {players &&
+            players.data.map(({ attributes: { name, en_name } }: any) => (
+              <Tag
+                key={`p-${en_name}`}
+                onClick={() => {
+                  setPlayerParam(en_name);
+                  dispatch(closeKifuFilterVisible());
+                }}>
+                {en_name}
+              </Tag>
+            ))}
+        </div>
+      </div>
       <InfiniteScroll
-        dataLength={items.length} //This is important field to render the next data
+        dataLength={items.length}
         next={() => {
-          handleFetchKifus({});
+          handleFetchKifus();
         }}
         hasMore={true}
-        loader={<h4>Loading...</h4>}
-        // endMessage={
-        //   <p style={{ textAlign: "center" }}>
-        //     <b>Yay! You have seen it all</b>
-        //   </p>
-        // }
-        // below props only if you need pull down functionality
+        loader={<></>}
+        endMessage={
+          <p className="text-center text-sm">
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
         refreshFunction={() => {
-          handleFetchKifus({});
+          refetchKifus(playerParam);
         }}
-        pullDownToRefresh
+        pullDownToRefresh={isMobile}
         pullDownToRefreshThreshold={50}
         pullDownToRefreshContent={
-          <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
+          <span className="text-center text-sm">
+            <h3>&#8595; Pull down to refresh</h3>
+          </span>
         }
         releaseToRefreshContent={
-          <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+          <span className="text-center text-sm">
+            &#8593; Release to refresh
+          </span>
         }>
-        <div className="flex flex-row flex-wrap">{items}</div>
+        {kifus.status === "loading" && items.length === 0 && (
+          <div className="mt-20">
+            <Spinner />
+          </div>
+        )}
+        {items.length > 0 && (
+          <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 grid-cols-2 lg:gap-2 gap-1 lg:pr-2 lg:pl-0 p-2">
+            {items}
+          </div>
+        )}
+        {kifus.status === "succeeded" && items.length === 0 && (
+          <div className="text-center">
+            <div className="mt-10 text-2xl">No Data</div>
+            <button
+              onClick={() => {
+                setPlayerParam("all");
+              }}
+              className="underline p-5 mt-2">
+              Clear Filters
+            </button>
+            <button
+              onClick={() => {
+                window.history.back();
+              }}
+              className="underline p-5">
+              Go back
+            </button>
+          </div>
+        )}
       </InfiniteScroll>
     </>
   );

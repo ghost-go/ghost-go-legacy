@@ -4,7 +4,7 @@ import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Link,
+  useLocation,
 } from "react-router-dom";
 import { QueryParamProvider } from "use-query-params";
 import { Helmet } from "react-helmet";
@@ -82,9 +82,7 @@ const App = () => {
                   <div className="block px-1 py-1 mt-1 text-sm font-semibold text-gray-400">
                     RESOURCES
                   </div>
-                  <SidebarItem to="/problems" active={true}>
-                    Problems
-                  </SidebarItem>
+                  <SidebarItem to="/problems">Problems</SidebarItem>
                   <SidebarItem to="/kifus">Kifus</SidebarItem>
                 </nav>
               </div>

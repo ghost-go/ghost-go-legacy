@@ -6,7 +6,7 @@ const ProblemCard = ({ problem }: { problem: any }) => {
     <div key={problem.id} className="relative" style={{ paddingTop: "100%" }}>
       <LazyLoadImage
         className="absolute w-full top-0"
-        height={40}
+        height={20}
         alt={problem.id}
         effect="opacity"
         src={image_url}

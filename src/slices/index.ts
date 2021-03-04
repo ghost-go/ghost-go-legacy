@@ -9,12 +9,14 @@ import { problemSlice, problemsSlice } from "./problemSlice";
 import { kifuSlice, kifusSlice } from "./kifuSlice";
 import { uiSlice } from "./uiSlice";
 import { tagsSlice } from "./tagSlice";
+import { playersSlice } from "./playerSlice";
 
 // export * from './authSlice';
 export * from "./problemSlice";
 export * from "./kifuSlice";
 export * from "./uiSlice";
 export * from "./tagSlice";
+export * from "./playerSlice";
 
 const rootReducer = combineReducers({
   // user: userReducer,
@@ -23,6 +25,7 @@ const rootReducer = combineReducers({
   problem: problemSlice.reducer,
   kifus: kifusSlice.reducer,
   kifu: kifuSlice.reducer,
+  players: playersSlice.reducer,
   tags: tagsSlice.reducer,
   ui: uiSlice.reducer,
 });
