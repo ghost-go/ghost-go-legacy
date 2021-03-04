@@ -2,6 +2,12 @@ import React, { useEffect, useCallback, useState, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { isMobile } from "react-device-detect";
 import "react-lazy-load-image-component/src/effects/opacity.css";
+import {
+  useQueryParam,
+  StringParam,
+  ArrayParam,
+  withDefault,
+} from "use-query-params";
 
 import {
   closeProblemFilterVisible,
@@ -33,8 +39,41 @@ const Problems = () => {
     problemFilterLevel,
     problemFilterTags,
   } = useTypedSelector((state) => selectUI(state));
-
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
+  const [levelParam, setLevelParam] = useQueryParam("level", StringParam);
+  const [tagsParam, setTagsParam] = useQueryParam(
+    "tags",
+    withDefault(ArrayParam, [])
+  );
+
+  const handleFetchProblems = (level: string | null, tags: string[]) => {
+    const params = {
+      level: level || "all",
+      tags: tags.join(),
+    };
+    dispatch(fetchProblems({ params })).then((obj: any) => {
+      if (obj && obj.payload) {
+        setProblemList((oldProblemList: any) =>
+          oldProblemList.concat(obj.payload.data.data)
+        );
+      }
+    });
+  };
+
+  const refetchProblems = useCallback(
+    (level: string | null, tags: string[]) => {
+      const params = {
+        level: level || "all",
+        tags: tags.join(),
+      };
+      dispatch(fetchProblems({ params })).then((obj: any) => {
+        if (obj && obj.payload) {
+          setProblemList(obj.payload.data.data);
+        }
+      });
+    },
+    [dispatch]
+  );
 
   useOutsideClick(ref, () => {
     if (problemFilterVisible) {
@@ -42,27 +81,13 @@ const Problems = () => {
     }
   });
 
-  const handleFetchProblems = useCallback(() => {
-    dispatch(
-      fetchProblems({
-        params: {
-          level: problemFilterLevel || "all",
-          tags: problemFilterTags.join(),
-        },
-      })
-    ).then((obj: any) => {
-      if (obj && obj.payload) {
-        setProblemList((oldProblemList: any) =>
-          oldProblemList.concat(obj.payload.data.data)
-        );
-      }
-    });
-  }, [dispatch, problemFilterLevel, problemFilterTags]);
-
   useEffect(() => {
     dispatch(fetchTags());
-    handleFetchProblems();
-  }, [handleFetchProblems, dispatch]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    refetchProblems(problemFilterLevel, problemFilterTags);
+  }, [dispatch, refetchProblems, problemFilterLevel, problemFilterTags]);
 
   let items: any = [];
   if (problemList.length > 0) {
@@ -78,11 +103,11 @@ const Problems = () => {
           }}
         />
         <div className="text-base ml-4">
-          Level: {problemFilterLevel || "ALL"}
+          Level: {problemFilterLevel || "all"}
         </div>
         <div className="text-base ml-4">
           Tags:{" "}
-          {problemFilterTags.length > 0 ? problemFilterTags.join(",") : "ALL"}
+          {problemFilterTags.length > 0 ? problemFilterTags.join(",") : "all"}
         </div>
       </div>
       <div
@@ -98,7 +123,6 @@ const Problems = () => {
               onClick={() => {
                 dispatch(setProblemFilterLevel(l));
                 dispatch(closeProblemFilterVisible());
-                handleFetchProblems();
               }}>
               {l}
             </Tag>
@@ -113,7 +137,6 @@ const Problems = () => {
                 onClick={() => {
                   dispatch(setProblemFilterTags([name]));
                   dispatch(closeProblemFilterVisible());
-                  handleFetchProblems();
                 }}>
                 {name}
               </Tag>
@@ -123,17 +146,17 @@ const Problems = () => {
       <InfiniteScroll
         dataLength={items.length}
         next={() => {
-          handleFetchProblems();
+          handleFetchProblems(problemFilterLevel, problemFilterTags);
         }}
         hasMore={true}
-        loader={<h4>Loading...</h4>}
+        loader={<></>}
         endMessage={
           <p className="text-center text-sm">
             <b>Yay! You have seen it all</b>
           </p>
         }
         refreshFunction={() => {
-          handleFetchProblems();
+          refetchProblems(problemFilterLevel, problemFilterTags);
         }}
         pullDownToRefresh={isMobile}
         pullDownToRefreshThreshold={50}

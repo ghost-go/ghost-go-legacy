@@ -3,6 +3,7 @@ import { useSelector, TypedUseSelectorHook } from "react-redux";
 import { GenericState } from "./reducers";
 import { RootState } from "slices";
 import { useDispatch as useReactReduxDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { store } from "utils";
 
 export const useGenericData = <T>(
@@ -40,3 +41,7 @@ export type AppDispatch = typeof store.dispatch;
 export const useDispatch = () => useReactReduxDispatch<AppDispatch>();
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
