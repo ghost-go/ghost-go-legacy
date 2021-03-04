@@ -101,6 +101,18 @@ const Problems = () => {
         />
         <div className="text-base ml-4">Level: {levelParam}</div>
         <div className="text-base ml-4">Tags: {tagsParam}</div>
+        {(levelParam !== "all" || tagsParam !== "all") && (
+          <div>
+            <button
+              onClick={() => {
+                setLevelParam("all");
+                setTagsParam("all");
+              }}
+              className="text-base underline ml-4">
+              Clear Filters
+            </button>
+          </div>
+        )}
       </div>
       <div
         ref={ref}
