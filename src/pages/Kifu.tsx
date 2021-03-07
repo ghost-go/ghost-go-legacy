@@ -1,197 +1,238 @@
-import React, { useState, useEffect, useRef } from "react";
-import { CoordsToTree } from "../common/Helper";
-import { useQuery, gql } from "@apollo/client";
-import { Row, Col } from "antd";
-import Board from "../eboard/Board";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import GBoard, { canMove, move as moveStone } from "gboard";
+import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { fetchKifu, selectKifu } from "slices";
+import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 import {
-  FastBackwardOutlined,
-  FastForwardOutlined,
-  BackwardOutlined,
-  ForwardOutlined,
-  CaretLeftOutlined,
-  CaretRightOutlined,
-} from "@ant-design/icons";
-import "../stylesheets/containers/Kifu.scss";
+  useDispatch,
+  useTypedSelector,
+  useOutsideClick,
+  useGenericData,
+} from "utils";
+import { zeros, matrix, Matrix } from "mathjs";
+import { sgfToPosition } from "../common/Helper";
 
-const GET_KIFU = gql`
-  query getKifu($id: ID!) {
-    settings @client
-    kifu(id: $id) {
-      id
-      title
-      playerB {
-        name
-        enName
-      }
-      playerW {
-        name
-        enName
-      }
-      bName
-      bRank
-      wName
-      wRank
-      result
-      place
-      komi
-      steps
-      previewImg {
-        x300
-      }
-      shortDate
-    }
-  }
+const KifuBoard = styled.div`
+  width: calc(100vh - 80px);
 `;
 
+const board = new GBoard();
+const mats: Map<number, Matrix> = new Map();
 const Kifu = () => {
-  const id = window.location.pathname.split("/").pop();
+  const dispatch = useDispatch();
+  const params: { id: string } = useParams();
+  const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
+  const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
+  const [move, setMove] = useQueryParam("move", withDefault(NumberParam, 0));
 
-  const { data, loading, error } = useQuery(GET_KIFU, {
-    variables: { id },
-  });
+  const boardRef = useCallback((node) => {
+    mats.set(0, matrix(zeros([19, 19])));
 
-  const [kifu, setKifu] = useState({
-    bRank: "",
-    wRank: "",
-    result: "",
-    komi: "",
-    shortDate: "",
-    playerB: { enName: "" },
-    playerW: { enName: "" },
-  });
-
-  const [moves, setMoves] = useState([]);
-  const [step, setStep] = useState(0);
-  const [settings, setSettings] = useState({ theme: "" });
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!data) return;
-    setKifu(data.kifu);
-    setSettings(data.settings);
-    setMoves(data.kifu.steps.split(";"));
-  }, [data]);
-
-  useEffect(() => {
-    if (canvasRef.current) {
-      const { width, height } = window.screen;
-      const boardWidth =
-        width > height ? window.innerHeight - 60 : window.innerWidth;
-      if (canvasRef.current !== null) {
-        canvasRef.current.width = boardWidth;
-        canvasRef.current.height = boardWidth;
-      }
-
-      const board = new Board({
-        theme: settings.theme,
-        canvas: canvasRef.current,
-        showCoordinate: true,
-      });
-
-      board.setStones(CoordsToTree(moves.slice(0, step)));
+    if (node !== null) {
+      board.init(node);
       board.render();
     }
-  }, [moves, settings, step]);
+  }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
+  useEffect(() => {
+    board.render(mat);
+  }, [mat]);
 
-  const gutter = 18;
-  const iconStyle = {
-    fontSize: 26,
-    padding: 8,
-    marginTop: 10,
-    marginLeft: -10,
+  useEffect(() => {
+    console.log("move changed");
+    if (kifu) {
+      const index = move - 1;
+      const steps = kifu.data.attributes.steps;
+      let mat = mats.get(move);
+      if (mat) {
+        console.log("next");
+        const { x, y, ki } = sgfToPosition(steps.split(";")[index]);
+        const newMat = moveStone(mat, x, y, ki);
+        setMat(newMat);
+        mats.set(move, newMat);
+        mat = mats.get(index);
+      } else {
+        mat = matrix(zeros([19, 19]));
+        for (let i = 0; i < move; i++) {
+          const { x, y, ki } = sgfToPosition(steps.split(";")[i]);
+          const newMat = moveStone(mat, x, y, ki);
+          setMat(newMat);
+          mats.set(i + 1, newMat);
+          mat = newMat;
+        }
+      }
+    }
+  }, [move, kifu]);
+
+  useEffect(() => {
+    dispatch(fetchKifu({ pattern: { id: params.id } }));
+  }, [dispatch, params]);
+
+  const handleNext = () => {
+    if (move) {
+      setMove(move + 1);
+    } else {
+      setMove(1);
+    }
   };
 
   return (
-    <Row className="kifu-container" gutter={[24, 24]}>
-      <Col style={{ padding: "12px 20px" }}>
-        <div className="kifu-board">
-          <canvas
-            role="button"
-            style={{ width: "90vh", height: "90vh" }}
-            ref={canvasRef}
-            onClick={() => {
-              if (step > moves.length) return;
-              setStep(step + 1);
-            }}
-          />
-        </div>
-      </Col>
-      <Col style={{ padding: "30px 30px" }}>
-        <Row gutter={[gutter, gutter]}>
-          <Col>Black: </Col>
-          <Col>
-            {kifu.playerB.enName}({kifu.bRank})
-          </Col>
-        </Row>
-        <Row gutter={[gutter, gutter]}>
-          <Col>White: </Col>
-          <Col>
-            {kifu.playerW.enName}({kifu.wRank})
-          </Col>
-        </Row>
-        <Row gutter={[gutter, gutter]}>
-          <Col>Result: </Col>
-          <Col>{kifu.result}</Col>
-        </Row>
-        <Row gutter={[gutter, gutter]}>
-          <Col>Komi: </Col>
-          <Col>{kifu.komi}</Col>
-        </Row>
-        <Row gutter={[gutter, gutter]}>
-          <Col>Date: </Col>
-          <Col>{kifu.shortDate}</Col>
-        </Row>
-        <Row gutter={[gutter, gutter]}>
-          <Col>
-            <FastBackwardOutlined
-              style={iconStyle}
-              onClick={() => {
-                setStep(1);
-              }}
-            />
-            <BackwardOutlined
-              style={iconStyle}
-              onClick={() => {
-                step < 10 ? setStep(0) : setStep(step - 10);
-              }}
-            />
-            <CaretLeftOutlined
-              style={iconStyle}
-              onClick={() => {
-                if (step <= 0) return;
-                setStep(step - 1);
-              }}
-            />
-            <CaretRightOutlined
-              style={iconStyle}
-              onClick={() => {
-                if (step > moves.length) return;
-                setStep(step + 1);
-              }}
-            />
-            <ForwardOutlined
-              style={iconStyle}
-              onClick={() => {
-                step < moves.length - 10
-                  ? setStep(step + 10)
-                  : setStep(moves.length);
-              }}
-            />
-            <FastForwardOutlined
-              style={iconStyle}
-              onClick={() => {
-                setStep(moves.length);
-              }}
-            />
-          </Col>
-        </Row>
-      </Col>
-    </Row>
+    <div className="flex flex-row">
+      <KifuBoard id="ghost-board" ref={boardRef} />
+      <div className="p-2">
+        <button onClick={handleNext}>Next</button>
+      </div>
+    </div>
   );
 };
 
 export default Kifu;
+
+// const id = window.location.pathname.split("/").pop();
+
+// const { data, loading, error } = useQuery(GET_KIFU, {
+//   variables: { id },
+// });
+
+// const [kifu, setKifu] = useState({
+//   bRank: "",
+//   wRank: "",
+//   result: "",
+//   komi: "",
+//   shortDate: "",
+//   playerB: { enName: "" },
+//   playerW: { enName: "" },
+// });
+
+// const [moves, setMoves] = useState([]);
+// const [step, setStep] = useState(0);
+// const [settings, setSettings] = useState({ theme: "" });
+
+// const canvasRef = useRef<HTMLCanvasElement>(null);
+
+// useEffect(() => {
+//   if (!data) return;
+//   setKifu(data.kifu);
+//   setSettings(data.settings);
+//   setMoves(data.kifu.steps.split(";"));
+// }, [data]);
+
+// useEffect(() => {
+//   if (canvasRef.current) {
+//     const { width, height } = window.screen;
+//     const boardWidth =
+//       width > height ? window.innerHeight - 60 : window.innerWidth;
+//     if (canvasRef.current !== null) {
+//       canvasRef.current.width = boardWidth;
+//       canvasRef.current.height = boardWidth;
+//     }
+
+//     const board = new Board({
+//       theme: settings.theme,
+//       canvas: canvasRef.current,
+//       showCoordinate: true,
+//     });
+
+//     board.setStones(CoordsToTree(moves.slice(0, step)));
+//     board.render();
+//   }
+// }, [moves, settings, step]);
+
+// if (loading) return <div>Loading...</div>;
+// if (error) return <div>Error</div>;
+
+// const gutter = 18;
+// const iconStyle = {
+//   fontSize: 26,
+//   padding: 8,
+//   marginTop: 10,
+//   marginLeft: -10,
+// };
+
+// return (
+//   <Row className="kifu-container" gutter={[24, 24]}>
+//     <Col style={{ padding: "12px 20px" }}>
+//       <div className="kifu-board">
+//         <canvas
+//           role="button"
+//           style={{ width: "90vh", height: "90vh" }}
+//           ref={canvasRef}
+//           onClick={() => {
+//             if (step > moves.length) return;
+//             setStep(step + 1);
+//           }}
+//         />
+//       </div>
+//     </Col>
+//     <Col style={{ padding: "30px 30px" }}>
+//       <Row gutter={[gutter, gutter]}>
+//         <Col>Black: </Col>
+//         <Col>
+//           {kifu.playerB.enName}({kifu.bRank})
+//         </Col>
+//       </Row>
+//       <Row gutter={[gutter, gutter]}>
+//         <Col>White: </Col>
+//         <Col>
+//           {kifu.playerW.enName}({kifu.wRank})
+//         </Col>
+//       </Row>
+//       <Row gutter={[gutter, gutter]}>
+//         <Col>Result: </Col>
+//         <Col>{kifu.result}</Col>
+//       </Row>
+//       <Row gutter={[gutter, gutter]}>
+//         <Col>Komi: </Col>
+//         <Col>{kifu.komi}</Col>
+//       </Row>
+//       <Row gutter={[gutter, gutter]}>
+//         <Col>Date: </Col>
+//         <Col>{kifu.shortDate}</Col>
+//       </Row>
+//       <Row gutter={[gutter, gutter]}>
+//         <Col>
+//           <FastBackwardOutlined
+//             style={iconStyle}
+//             onClick={() => {
+//               setStep(1);
+//             }}
+//           />
+//           <BackwardOutlined
+//             style={iconStyle}
+//             onClick={() => {
+//               step < 10 ? setStep(0) : setStep(step - 10);
+//             }}
+//           />
+//           <CaretLeftOutlined
+//             style={iconStyle}
+//             onClick={() => {
+//               if (step <= 0) return;
+//               setStep(step - 1);
+//             }}
+//           />
+//           <CaretRightOutlined
+//             style={iconStyle}
+//             onClick={() => {
+//               if (step > moves.length) return;
+//               setStep(step + 1);
+//             }}
+//           />
+//           <ForwardOutlined
+//             style={iconStyle}
+//             onClick={() => {
+//               step < moves.length - 10
+//                 ? setStep(step + 10)
+//                 : setStep(moves.length);
+//             }}
+//           />
+//           <FastForwardOutlined
+//             style={iconStyle}
+//             onClick={() => {
+//               setStep(moves.length);
+//             }}
+//           />
+//         </Col>
+//       </Row>
+//     </Col>
+//   </Row>

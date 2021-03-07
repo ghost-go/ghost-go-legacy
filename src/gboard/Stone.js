@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import { THEME, MATERIALS } from '../common/Constants';
+import _ from "lodash";
+import { THEME, MATERIALS } from "../common/Constants";
 
 export default class Stone {
-  constructor(x, y, size, type, isMarked = false, theme = 'black-and-white') {
+  constructor(x, y, size, type, isMarked = false, theme = "black-and-white") {
     this.x = x || 0;
     this.y = y || 0;
     this.size = size;
@@ -15,14 +15,14 @@ export default class Stone {
   static addShadow(ctx) {
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
-    ctx.shadowColor = '#555';
+    ctx.shadowColor = "#555";
     ctx.shadowBlur = 10;
   }
 
   static removeShadow(ctx) {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
-    ctx.shadowColor = 'black';
+    ctx.shadowColor = "black";
     ctx.shadowBlur = 0;
   }
 
@@ -36,17 +36,17 @@ export default class Stone {
         this.x - this.size,
         this.y - this.size,
         this.size * 2,
-        this.size * 2,
+        this.size * 2
       );
     } else {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI, true);
       ctx.lineWidth = 1;
-      ctx.strokeStyle = '#000';
+      ctx.strokeStyle = "#000";
       if (this.type === 1) {
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = "#000";
       } else {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = "#fff";
       }
       ctx.fill();
       ctx.stroke();
@@ -58,18 +58,17 @@ export default class Stone {
       ctx.arc(this.x, this.y, this.size * 0.6, 0, 2 * Math.PI, true);
       ctx.lineWidth = 2;
       if (this.type === 1) {
-        ctx.strokeStyle = '#fff';
+        ctx.strokeStyle = "#fff";
       } else {
-        ctx.strokeStyle = '#000';
+        ctx.strokeStyle = "#000";
       }
       ctx.stroke();
       ctx.lineWidth = 1;
-      ctx.strokeStyle = '#000';
+      ctx.strokeStyle = "#000";
     }
   }
 
   remove(ctx, size) {
-    ctx.clearRect(this.x - (size / 2), this.y - (size / 2), size, size);
+    ctx.clearRect(this.x - size / 2, this.y - size / 2, size, size);
   }
 }
-

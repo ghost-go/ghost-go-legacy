@@ -12,6 +12,7 @@ export const sgfToPosition = (str: any) => {
     const y = Const.SGF_LETTERS.indexOf(pos[1]);
     return { x, y, ki };
   }
+  return { x: -1, y: -1, ki: 0 };
 };
 
 // export const sgfOffset = (sgf, offset = 0, quadrant = 1) => {

@@ -1,4 +1,5 @@
-import { buildGenericReducer } from "../utils/reducers";
+import { RootState } from "slices";
+import { buildGenericReducer } from "utils/reducers";
 
 export const {
   asyncThunk: fetchKifus,
@@ -9,3 +10,6 @@ export const {
   asyncThunk: fetchKifu,
   slice: kifuSlice,
 } = buildGenericReducer<any>("kifus/fetchKifu", "/kifus/:id");
+
+export const selectKifus = (state: RootState) => state.kifus;
+export const selectKifu = (state: RootState) => state.kifu;

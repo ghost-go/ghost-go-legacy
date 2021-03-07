@@ -4,7 +4,7 @@ import { CheckOutlined, CloseOutlined, MinusOutlined } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 
 import { CoordsToTree } from "../common/Helper";
-import Board from "../eboard/Board";
+// import Board from "../eboard/Board";
 import RankList from "../components/RankList";
 import AnswerBar from "../components/AnswerBar";
 import {
@@ -270,27 +270,27 @@ const Problem = () => {
         canvasRef.current.height = boardWidth;
       }
 
-      const board = new Board({
-        autofit: true,
-        canvas: canvasRef.current,
-        showCoordinate: true,
-        editable: boardEditable,
-        theme: theme,
-        nextStoneType: nextStoneType,
-        afterMove: (step: string) => {
-          const moves = addMoves([step]);
-          setNextStoneType(-nextStoneType);
-          setTimeout(() => {
-            if (settings.currentMode !== "research") {
-              response(moves);
-            }
-            setNextStoneType(-nextStoneType);
-          }, 300);
-        },
-      });
-      const totalSteps = problem?.steps.split(";");
-      board.setStones(CoordsToTree(totalSteps.concat(moves)));
-      board.render();
+      // const board = new Board({
+      //   autofit: true,
+      //   canvas: canvasRef.current,
+      //   showCoordinate: true,
+      //   editable: boardEditable,
+      //   theme: theme,
+      //   nextStoneType: nextStoneType,
+      //   afterMove: (step: string) => {
+      //     const moves = addMoves([step]);
+      //     setNextStoneType(-nextStoneType);
+      //     setTimeout(() => {
+      //       if (settings.currentMode !== "research") {
+      //         response(moves);
+      //       }
+      //       setNextStoneType(-nextStoneType);
+      //     }, 300);
+      //   },
+      // });
+      // const totalSteps = problem?.steps.split(";");
+      // board.setStones(CoordsToTree(totalSteps.concat(moves)));
+      // board.render();
     }
   }, [problem, settings, moves, nextStoneType, boardEditable, theme]);
 
@@ -335,8 +335,7 @@ const Problem = () => {
             <Button
               style={{ marginRight: "10px" }}
               onClick={handleReset}
-              type="primary"
-            >
+              type="primary">
               Reset
             </Button>
             <Button
@@ -353,8 +352,7 @@ const Problem = () => {
                   search: `level=${levelRangeLow}-${levelRangeHigh}`,
                 });
               }}
-              type="ghost"
-            >
+              type="ghost">
               Next Problem
             </Button>
             {/* <Row>

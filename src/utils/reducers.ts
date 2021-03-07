@@ -14,7 +14,7 @@ export interface ParamsType {
 }
 
 export interface PatternType {
-  [key: string]: string;
+  [key: string]: string | number;
 }
 
 export interface HeadersType {
@@ -50,7 +50,7 @@ export const buildGenericAsyncThunk = (
       let replacedUrl = url;
       for (let key in pattern) {
         const re = RegExp(`:${key}`);
-        replacedUrl = replacedUrl.replace(re, pattern[key]);
+        replacedUrl = replacedUrl.replace(re, pattern[key].toString());
       }
       let response;
       if (token) {

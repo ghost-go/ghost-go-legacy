@@ -12,12 +12,12 @@ import { BackTop, Spin } from "antd";
 
 import Navigation from "./components/Navigation";
 import Problems from "./pages/Problems";
-import Problem from "./pages/Problem";
+// import Problem from "./pages/Problem";
 import Kifus from "./pages/Kifus";
 import Kifu from "./pages/Kifu";
-import Dashboard from "./pages/Dashboard";
-import RecentRecords from "./pages/RecentRecords";
-import MostWrongRecords from "./pages/MostWrongRecords";
+// import Dashboard from "./pages/Dashboard";
+// import RecentRecords from "./pages/RecentRecords";
+// import MostWrongRecords from "./pages/MostWrongRecords";
 // import { a1ToSGF } from './common/Helper';
 
 import { SidebarItem } from "./components/common";
@@ -98,15 +98,15 @@ const App = () => {
                 />
                 <Route exact path="/" component={Problems} />
                 <Suspense fallback={<Spin />}>
-                  <Route exact path="/puzzles" component={Problems} />
+                  {/* <Route exact path="/puzzles" component={Problems} /> */}
                   <Route exact path="/problems" component={Problems} />
                   <Route exact path="/kifus" component={Kifus} />
                   <Route path="/kifus/:id" component={Kifu} />
-                  <Route path="/problems/:id" component={Problem} />
+                  {/* <Route path="/problems/:id" component={Problem} />
                   <Route path="/puzzles/:id" component={Problem} />
                   <Route path="/recents" component={RecentRecords} />
                   <Route path="/mostwrongs" component={MostWrongRecords} />
-                  <Route path="/dashboard" component={Dashboard} />
+                  <Route path="/dashboard" component={Dashboard} /> */}
                 </Suspense>
                 {/* <Footer style={{ textAlign: "center" }}>
                     Copyright © 2020 GhostGo. All rights reserved.
