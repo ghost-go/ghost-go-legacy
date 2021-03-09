@@ -1,5 +1,5 @@
 import { matrix, zeros, ones, Matrix } from "mathjs";
-import { drawBoardLine, drawStars, drawStones } from "./utils";
+import { drawBoardLine, drawStars, drawStones, drawMarks } from "./utils";
 
 export type GBoardOptions = {
   boardSize: number;
@@ -42,6 +42,7 @@ export default class GBoard {
       canvas.height = this.options.size;
     } else {
       const { clientWidth } = dom;
+      console.log("client", clientWidth);
       canvas.style.width = clientWidth + "px";
       canvas.style.height = clientWidth + "px";
       canvas.width = Math.floor(clientWidth * scale);
@@ -55,14 +56,15 @@ export default class GBoard {
     drawStars(canvas, this.options);
   }
 
-  render(mat?: Matrix) {
+  render(mat?: Matrix, marks?: Matrix) {
     if (this.canvas && mat) {
       this.clearCanvas();
       drawBoardLine(this.canvas, this.options);
       drawStars(this.canvas, this.options);
       drawStones(this.canvas, this.options, mat);
-    } else {
-      console.log("Please initial the board first.");
+      if (marks) {
+        drawMarks(this.canvas, this.options, marks);
+      }
     }
   }
 

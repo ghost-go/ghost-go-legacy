@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { GBoardOptions } from "gboard/gboard";
+import { GBoardOptions } from "gboard/GBan";
 import { Matrix, forEach } from "mathjs";
 import { GRID } from "../common/Constants";
 import { sgfToPosition } from "../common/Helper";
@@ -98,6 +98,34 @@ export const drawStones = (
         }
         ctx.fill();
         ctx.stroke();
+      }
+    }
+  });
+};
+
+export const drawMarks = (
+  canvas: HTMLCanvasElement,
+  options: GBoardOptions,
+  matrix: Matrix
+) => {
+  forEach(matrix, (value, index) => {
+    if (value !== 0) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        const { space, scaledPadding } = calcSpaceAndPadding(canvas, options);
+        const x = scaledPadding + index[0] * space;
+        const y = scaledPadding + index[1] * space;
+        ctx.beginPath();
+        ctx.arc(x, y, space * 0.3, 0, 2 * Math.PI, true);
+        ctx.lineWidth = 2;
+        if (value === 1) {
+          ctx.strokeStyle = "#fff";
+        } else {
+          ctx.strokeStyle = "#000";
+        }
+        ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#000";
       }
     }
   });

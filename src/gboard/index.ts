@@ -1,5 +1,5 @@
-import GBoard from "./gboard";
+import GBan from "./GBan";
 
-export default GBoard;
+export default GBan;
 
 export * from "./utils";
