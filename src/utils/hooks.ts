@@ -14,7 +14,9 @@ export const useGenericData = <T>(
 
   useEffect(() => {
     if (rawData.status === "succeeded") {
-      setData(rawData.payload);
+      if (rawData.payload) {
+        setData(rawData.payload);
+      }
     }
   }, [rawData]);
 
@@ -22,6 +24,7 @@ export const useGenericData = <T>(
 };
 
 export const useOutsideClick = (ref: any, callback: any) => {
+  console.log(ref.current);
   const handleClick = (e: any) => {
     if (ref.current && !ref.current.contains(e.target)) {
       callback();

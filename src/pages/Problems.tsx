@@ -24,10 +24,13 @@ import {
   useOutsideClick,
   useGenericData,
 } from "utils";
-import { FilterButton, ProblemCard, Tag, Spinner } from "components/common";
-import {} from "slices/tagSlice";
-
-const LEVEL_LIST = ["18k-10k", "10k-5k", "5k-1d", "1d-3d", "3d-6d"];
+import {
+  FilterButton,
+  ProblemCard,
+  Tag,
+  Spinner,
+  ProblemFilterPanel,
+} from "components/common";
 
 const Problems = () => {
   const dispatch = useDispatch();
@@ -114,56 +117,14 @@ const Problems = () => {
           </div>
         )}
       </div>
-      <div
-        ref={ref}
-        className={`absolute transition transform origin-top-left ${
-          problemFilterVisible
-            ? "scale-100 opacity-1"
-            : "scale-50 opacity-0 pointer-events-none"
-        } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}>
-        <div>
-          <div className="block font-semibold text-gray-400 mb-2">LEVEL</div>
-          <Tag
-            key={`level-all`}
-            onClick={() => {
-              setLevelParam("all");
-              dispatch(closeProblemFilterVisible());
-            }}>
-            all
-          </Tag>
-          {LEVEL_LIST.map((l) => (
-            <Tag
-              key={l}
-              onClick={() => {
-                setLevelParam(l);
-                dispatch(closeProblemFilterVisible());
-              }}>
-              {l}
-            </Tag>
-          ))}
-        </div>
-        <div>
-          <div className="block font-semibold text-gray-400 mb-2">TAGS</div>
-          <Tag
-            key={`t-all`}
-            onClick={() => {
-              setTagsParam("all");
-              dispatch(closeProblemFilterVisible());
-            }}>
-            all
-          </Tag>
-          {tags &&
-            tags.data.map(({ attributes: { name } }: any) => (
-              <Tag
-                key={`t-${name}`}
-                onClick={() => {
-                  setTagsParam(name);
-                  dispatch(closeProblemFilterVisible());
-                }}>
-                {name}
-              </Tag>
-            ))}
-        </div>
+      <div ref={ref}>
+        <ProblemFilterPanel
+          ref={ref}
+          visible={problemFilterVisible}
+          setLevelParam={setLevelParam}
+          setTagsParam={setTagsParam}
+          tags={tags}
+        />
       </div>
       <InfiniteScroll
         dataLength={items.length}

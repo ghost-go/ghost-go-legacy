@@ -12,7 +12,7 @@ import { BackTop, Spin } from "antd";
 
 import Navigation from "./components/Navigation";
 import Problems from "./pages/Problems";
-// import Problem from "./pages/Problem";
+import Problem from "./pages/Problem";
 import Kifus from "./pages/Kifus";
 import Kifu from "./pages/Kifu";
 // import Dashboard from "./pages/Dashboard";
@@ -102,8 +102,8 @@ const App = () => {
                   <Route exact path="/problems" component={Problems} />
                   <Route exact path="/kifus" component={Kifus} />
                   <Route path="/kifus/:id" component={Kifu} />
-                  {/* <Route path="/problems/:id" component={Problem} />
-                  <Route path="/puzzles/:id" component={Problem} />
+                  <Route path="/problems/:id" component={Problem} />
+                  {/*<Route path="/puzzles/:id" component={Problem} />
                   <Route path="/recents" component={RecentRecords} />
                   <Route path="/mostwrongs" component={MostWrongRecords} />
                   <Route path="/dashboard" component={Dashboard} /> */}

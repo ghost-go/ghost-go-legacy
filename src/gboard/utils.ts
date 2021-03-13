@@ -4,75 +4,17 @@ import { Matrix, forEach } from "mathjs";
 import { GRID } from "../common/Constants";
 import { sgfToPosition } from "../common/Helper";
 
-const scale = window.devicePixelRatio;
+const devicePixelRatiot = window.devicePixelRatio;
 
 const calcSpaceAndPadding = (
   canvas: HTMLCanvasElement,
   options: GBoardOptions
 ) => {
   const { padding, boardSize } = options;
-  let scaledPadding = padding * scale;
+  let scaledPadding = padding * devicePixelRatiot;
   const space = (canvas.width - scaledPadding * 2) / boardSize;
   scaledPadding = scaledPadding + space / 2;
   return { space, scaledPadding };
-};
-
-export const drawBoardLine = (
-  canvas: HTMLCanvasElement,
-  options: GBoardOptions
-) => {
-  const ctx = canvas.getContext("2d");
-  const { boardSize } = options;
-  if (ctx) {
-    const { space, scaledPadding } = calcSpaceAndPadding(canvas, options);
-
-    ctx.lineWidth = 1 * scale;
-    ctx.fillStyle = "#000000";
-    ctx.beginPath();
-    for (let i = 0; i < boardSize; i++) {
-      ctx.moveTo(i * space + scaledPadding, scaledPadding);
-      ctx.lineTo(
-        i * space + scaledPadding,
-        space * (boardSize - 1) + scaledPadding
-      );
-    }
-    for (let i = 0; i < boardSize; i++) {
-      ctx.moveTo(
-        space * (boardSize - 1) + scaledPadding,
-        i * space + scaledPadding
-      );
-      ctx.lineTo(scaledPadding, i * space + scaledPadding);
-    }
-    ctx.stroke();
-  }
-};
-
-export const drawStars = (
-  canvas: HTMLCanvasElement,
-  options: GBoardOptions
-) => {
-  const ctx = canvas.getContext("2d");
-  if (ctx) {
-    const { space, scaledPadding } = calcSpaceAndPadding(canvas, options);
-
-    // Drawing star
-    ctx.stroke();
-    [4, 16, 10].forEach((i) => {
-      [4, 16, 10].forEach((j) => {
-        ctx.beginPath();
-        ctx.arc(
-          (i - 1) * space + scaledPadding,
-          (j - 1) * space + scaledPadding,
-          3 * scale,
-          0,
-          2 * Math.PI,
-          true
-        );
-        ctx.fillStyle = "black";
-        ctx.fill();
-      });
-    });
-  }
 };
 
 export const drawStones = (
@@ -84,6 +26,7 @@ export const drawStones = (
     if (value !== 0) {
       const ctx = canvas.getContext("2d");
       if (ctx) {
+        // ctx.scale(scale, scale);
         const { space, scaledPadding } = calcSpaceAndPadding(canvas, options);
         const x = scaledPadding + index[0] * space;
         const y = scaledPadding + index[1] * space;

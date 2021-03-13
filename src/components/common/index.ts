@@ -5,6 +5,8 @@ import KifuCard from "./KifuCard";
 import Tag from "./Tag";
 import Spinner from "./Spinner";
 import KifuControls from "./KifuControls";
+import ProblemFilterPanel from "./ProblemFilterPanel";
+import Answer from "./Answer";
 
 export {
   SidebarItem,
@@ -14,4 +16,6 @@ export {
   Spinner,
   KifuCard,
   KifuControls,
+  ProblemFilterPanel,
+  Answer,
 };
