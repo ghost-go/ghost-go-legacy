@@ -4,6 +4,7 @@ import { ReactSVG } from "react-svg";
 import first from "assets/images/first.svg";
 import play from "assets/images/play.svg";
 import last from "assets/images/last.svg";
+import like from "assets/images/like.svg";
 
 const Answer = (data: any) => {
   const [total, setTotal] = useState(0);
@@ -35,6 +36,9 @@ const Answer = (data: any) => {
       <div className="w-8 p-2" onClick={onLast}>
         <ReactSVG src={last} />
       </div>
+      {/* <div className="0 p-2" onClick={onLast}>
+        <ReactSVG src={like} />
+      </div> */}
     </div>
   );
 };

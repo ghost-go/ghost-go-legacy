@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { GBoardOptions } from "gboard/GBan";
+import { GBanOptions } from "gboard/GBan";
 import { Matrix, forEach } from "mathjs";
 import { GRID } from "../common/Constants";
 import { sgfToPosition } from "../common/Helper";
@@ -8,7 +8,7 @@ const devicePixelRatiot = window.devicePixelRatio;
 
 const calcSpaceAndPadding = (
   canvas: HTMLCanvasElement,
-  options: GBoardOptions
+  options: GBanOptions
 ) => {
   const { padding, boardSize } = options;
   let scaledPadding = padding * devicePixelRatiot;
@@ -19,7 +19,7 @@ const calcSpaceAndPadding = (
 
 export const drawStones = (
   canvas: HTMLCanvasElement,
-  options: GBoardOptions,
+  options: GBanOptions,
   matrix: Matrix
 ) => {
   forEach(matrix, (value, index) => {
@@ -48,7 +48,7 @@ export const drawStones = (
 
 export const drawMarks = (
   canvas: HTMLCanvasElement,
-  options: GBoardOptions,
+  options: GBanOptions,
   matrix: Matrix
 ) => {
   forEach(matrix, (value, index) => {

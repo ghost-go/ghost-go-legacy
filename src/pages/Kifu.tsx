@@ -1,29 +1,36 @@
 import { useState, useEffect, useCallback } from "react";
-import GBoard, { move as moveStone } from "gboard";
+import GBan, { move as moveStone } from "gboard";
 import styled from "styled-components";
 import Avatar from "react-avatar";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 
-import { fetchKifu, selectKifu } from "slices";
+import { fetchKifu, selectKifu, selectUI } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 import { KifuControls } from "components/common";
 import { useDispatch, useTypedSelector, useGenericData } from "utils";
 import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
 
+interface ParamTypes {
+  id: string;
+}
+
 const KifuBoard = styled.div``;
 
-const board = new GBoard();
+const board = new GBan();
 const mats: Map<number, Matrix> = new Map();
 let markMat = matrix(zeros([19, 19]));
 const Kifu = () => {
   const dispatch = useDispatch();
-  const params: { id: string } = useParams();
+  const { id } = useParams<ParamTypes>();
   const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
+  const ui = useTypedSelector((state) => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [move, setMove] = useQueryParam("move", withDefault(NumberParam, 0));
+  board.setTheme(ui.theme);
 
+  // const board = new GBan({ theme: ui.theme });
   const boardRef = useCallback((node) => {
     mats.set(0, matrix(zeros([19, 19])));
 
@@ -141,8 +148,8 @@ const Kifu = () => {
   }, [move, kifu]);
 
   useEffect(() => {
-    dispatch(fetchKifu({ pattern: { id: params.id } }));
-  }, [dispatch, params]);
+    dispatch(fetchKifu({ pattern: { id } }));
+  }, [dispatch, id]);
 
   return (
     <div className="flex flex-col lg:flex-row">
@@ -162,7 +169,7 @@ const Kifu = () => {
           onLast={handleLast}
         />
       </div>
-      <div className="flex flex-row justify-around flex-1 px-2 lg:p-4 lg:flex-col lg:justify-start">
+      <div className="flex flex-row justify-around flex-1 px-2 lg:p-4 lg:pl-10 lg:flex-col lg:justify-start">
         <div className="flex flex-row">
           <div>
             <div>

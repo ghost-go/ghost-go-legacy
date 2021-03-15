@@ -143,26 +143,26 @@ export const THEME: any = {
 };
 
 const materials: any = {};
-Object.keys(THEME).forEach((key: string) => {
-  materials[key] = {};
-  materials[key].board = [];
-  materials[key].black = [];
-  materials[key].white = [];
-  THEME[key].board.forEach((src: any) => {
-    const img = new Image();
-    img.src = BASE_THEME_PATH + src;
-    materials[key].board.push(img);
-  });
-  THEME[key].black.forEach((src: any) => {
-    const img = new Image();
-    img.src = BASE_THEME_PATH + src;
-    materials[key].black.push(img);
-  });
-  THEME[key].white.forEach((src: any) => {
-    const img = new Image();
-    img.src = BASE_THEME_PATH + src;
-    materials[key].white.push(img);
-  });
-});
+// Object.keys(THEME).forEach((key: string) => {
+//   materials[key] = {};
+//   materials[key].board = [];
+//   materials[key].black = [];
+//   materials[key].white = [];
+//   THEME[key].board.forEach((src: any) => {
+//     const img = new Image();
+//     img.src = BASE_THEME_PATH + src;
+//     materials[key].board.push(img);
+//   });
+//   THEME[key].black.forEach((src: any) => {
+//     const img = new Image();
+//     img.src = BASE_THEME_PATH + src;
+//     materials[key].black.push(img);
+//   });
+//   THEME[key].white.forEach((src: any) => {
+//     const img = new Image();
+//     img.src = BASE_THEME_PATH + src;
+//     materials[key].white.push(img);
+//   });
+// });
 
 export const MATERIALS = materials;

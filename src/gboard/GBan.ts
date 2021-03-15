@@ -1,35 +1,93 @@
 import { matrix, zeros, ones, forEach, Matrix } from "mathjs";
 import { drawStones, drawMarks } from "./utils";
 
+import SubduedBoard from "assets/images/theme/subdued/board.png";
+import SubduedWhite from "assets/images/theme/subdued/white.png";
+import SubduedBlack from "assets/images/theme/subdued/black.png";
+
+import ShellBoard from "assets/images/theme/shell-stone/board.png";
+import ShellBlack from "assets/images/theme/shell-stone/black.png";
+import ShellWhite0 from "assets/images/theme/shell-stone/white0.png";
+import ShellWhite1 from "assets/images/theme/shell-stone/white1.png";
+import ShellWhite2 from "assets/images/theme/shell-stone/white2.png";
+import ShellWhite3 from "assets/images/theme/shell-stone/white3.png";
+import ShellWhite4 from "assets/images/theme/shell-stone/white4.png";
+
 const devicePixelRatio = window.devicePixelRatio;
 
-export type GBoardOptions = {
+export enum Theme {
+  BlackAndWhite = "Black&White",
+  Flat = "Flat",
+  Subdued = "Subdued",
+  ShellStone = "Shell",
+  // SlateAndShell,
+  Walnut = "Walnet",
+  Photorealistic = "Photorealistic",
+}
+
+const Resources = {
+  [Theme.Subdued]: {
+    board: SubduedBoard,
+    black: [SubduedBlack],
+    white: [SubduedWhite],
+  },
+  [Theme.ShellStone]: {
+    board: ShellBoard,
+    black: [ShellBlack],
+    white: [ShellWhite0, ShellWhite1, ShellWhite2, ShellWhite3, ShellWhite4],
+  },
+  [Theme.Walnut]: {
+    board: SubduedBoard,
+    black: [SubduedBlack],
+    white: [SubduedWhite],
+  },
+  [Theme.Photorealistic]: {
+    board: SubduedBoard,
+    black: [SubduedBlack],
+    white: [SubduedWhite],
+  },
+};
+
+export type GBanOptions = {
   boardSize: number;
   size?: number;
   // theme: Stone;
   padding: number;
   zoom?: boolean;
   extend: number;
+  theme: Theme;
 };
 
-type GBoardOptionsParams = {
+type GBanOptionsParams = {
   boardSize?: number;
   size?: number;
   padding?: number;
   zoom?: boolean;
   extend?: number;
+  theme?: Theme;
 };
 
-export default class GBoard {
-  options: GBoardOptions = {
+export default class GBan {
+  options: GBanOptions = {
     boardSize: 19,
-    padding: 0,
+    padding: 10,
     extend: 2,
+    theme: Theme.Subdued,
     // matrix: matrix(math.ones([19, 19])),
   };
   canvas?: HTMLCanvasElement;
+  resources: {
+    board: HTMLImageElement | null;
+    white: [HTMLImageElement] | [];
+    black: [HTMLImageElement] | [];
+  };
 
-  constructor(options?: GBoardOptionsParams) {
+  constructor(options?: GBanOptionsParams) {
+    this.resources = {
+      board: null,
+      white: [],
+      black: [],
+    };
     const defaultOptions = this.options;
     if (options) {
       this.options = {
@@ -59,6 +117,8 @@ export default class GBoard {
     dom.firstChild?.remove();
     dom.appendChild(canvas);
 
+    this.setTheme(this.options.theme);
+    this.drawBan();
     this.drawBoardLine();
     this.drawStars();
   }
@@ -142,6 +202,7 @@ export default class GBoard {
         }
       }
 
+      this.drawBan();
       this.drawBoardLine(visibleArea);
       this.drawStars(visibleArea);
       drawStones(this.canvas, this.options, mat);
@@ -161,6 +222,31 @@ export default class GBoard {
       }
     }
   }
+
+  drawBan = () => {
+    const { canvas } = this;
+    const { theme } = this.options;
+    if (canvas) {
+      canvas.style.borderRadius = "2px";
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        if (theme === Theme.BlackAndWhite) {
+          canvas.style.boxShadow = "0px 0px 0px #000000";
+        } else if (theme === Theme.Flat) {
+          ctx.fillStyle = "#ECB55A";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else {
+          if (this.resources.board) {
+            const pattern = ctx.createPattern(this.resources.board, "repeat");
+            if (pattern) {
+              ctx.fillStyle = pattern;
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+          }
+        }
+      }
+    }
+  };
 
   drawBoardLine = (
     visibleArea = [
@@ -245,11 +331,35 @@ export default class GBoard {
     }
   };
 
-  calcSpaceAndPadding = (canvas: HTMLCanvasElement, options: GBoardOptions) => {
+  calcSpaceAndPadding = (canvas: HTMLCanvasElement, options: GBanOptions) => {
     const { padding, boardSize } = options;
     let scaledPadding = padding * devicePixelRatio;
     const space = (canvas.width - scaledPadding * 2) / boardSize;
     scaledPadding = scaledPadding + space / 2;
     return { space, scaledPadding };
   };
+
+  setTheme(theme: Theme) {
+    this.options.theme = theme;
+    const shadowStyle = "3px 3px 3px #aaaaaa";
+    const canvas = this.canvas;
+    if (canvas) {
+      if (theme === Theme.BlackAndWhite) {
+        canvas.style.boxShadow = "0px 0px 0px #000000";
+      } else if (theme === Theme.Flat) {
+        canvas.style.boxShadow = shadowStyle;
+      } else {
+        const board = new Image();
+        board.addEventListener(
+          "load",
+          () => {
+            this.resources.board = board;
+            this.render();
+          },
+          false
+        );
+        board.src = Resources[theme].board; // Set source path
+      }
+    }
+  }
 }

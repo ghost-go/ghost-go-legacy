@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import GBoard, { move as moveStone } from "gboard";
-import styled from "styled-components";
-import Avatar from "react-avatar";
+import GBan, { move as moveStone } from "gboard";
+import { ReactSVG } from "react-svg";
 import { useParams } from "react-router-dom";
 import moment from "moment";
+import right from "assets/images/right.svg";
+import wrong from "assets/images/wrong.svg";
+import edit from "assets/images/edit.svg";
 
 import {
   fetchProblem,
@@ -25,7 +27,7 @@ import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
 import { ProblemFilterPanel, Answer } from "components/common";
 
-const board = new GBoard({ zoom: true });
+const board = new GBan({ zoom: true });
 const mats: Map<number, Matrix> = new Map();
 let markMat = matrix(zeros([19, 19]));
 let rightAns: any = [];
@@ -119,7 +121,7 @@ const Problem = () => {
           <div>
             <div className="board" id="ghost-board" ref={boardRef} />
           </div>
-          <div className="flex flex-1 px-4 pt-10 flex-col text-gray-800">
+          <div className="flex flex-1 pl-8 pt-10 flex-col text-gray-800">
             <div className="text-3xl font-bold">
               {problem.data.attributes.turn === -1
                 ? "White to move"
@@ -130,23 +132,13 @@ const Problem = () => {
             <div className="text-base mt-5 flex flex-row items-center text-gray-600">
               <span>ID: P-{problem.data.id}</span>
               <span>
-                <svg
-                  className="h-5 ml-3"
-                  viewBox="0 -65 434.67733 434"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="m152.003906 304.34375c-5.460937 0-10.921875-2.089844-15.082031-6.25l-130.664063-130.667969c-8.34375-8.339843-8.34375-21.824219 0-30.164062 8.339844-8.339844 21.820313-8.339844 30.164063 0l115.582031 115.582031 246.253906-246.25c8.339844-8.339844 21.820313-8.339844 30.164063 0 8.339844 8.34375 8.339844 21.824219 0 30.167969l-261.332031 261.332031c-4.160156 4.160156-9.625 6.25-15.085938 6.25zm0 0" />
-                </svg>
+                <ReactSVG className="h-5 ml-3" src={right} />
               </span>
               <span className="ml-1">
                 {problem.data.attributes.right_count}
               </span>
               <span>
-                <svg
-                  className="h-3.5 ml-3"
-                  viewBox="0 0 329.26933 329"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" />
-                </svg>
+                <ReactSVG className="h-3.5 ml-3" src={wrong} />
               </span>
               <span className="ml-1">
                 {problem.data.attributes.wrong_count}
@@ -164,22 +156,7 @@ const Problem = () => {
                 onClick={() => {
                   dispatch(toggleProblemFilterVisible());
                 }}>
-                <svg className="h-4 mr-0.5" viewBox="0 0 512.035 512.035">
-                  <g>
-                    <polygon points="308.296,76.933 435.229,203.866 470.856,168.282 343.922,41.349 			" />
-                    <path
-                      d="M485.945,26.272c-29.76-29.76-75.307-33.984-109.845-13.077l122.923,122.923
-				C519.907,101.6,515.726,56.054,485.945,26.272z"
-                    />
-                    <path
-                      d="M36.511,348.442c-2.795,2.795-4.757,6.293-5.675,10.133L0.586,485.594c-1.728,7.189,0.427,14.784,5.675,20.011
-				c4.032,4.032,9.493,6.251,15.083,6.251c1.643,0,3.307-0.192,4.928-0.576l127.019-30.251c3.819-0.917,7.339-2.88,10.133-5.675
-				L405.044,234.01L278.111,107.077L36.511,348.442z M313.759,198.106c8.341,8.341,8.341,21.824,0,30.165l-85.333,85.333
-				c-4.16,4.16-9.621,6.251-15.083,6.251c-5.461,0-10.923-2.091-15.083-6.251c-8.341-8.341-8.341-21.824,0-30.165l85.333-85.333
-				C291.935,189.765,305.418,189.765,313.759,198.106z"
-                    />
-                  </g>
-                </svg>
+                <ReactSVG className="h-4 mr-0.5" src={edit} />
                 <span className="underline">
                   {levelParam}/{tagsParam}
                 </span>
