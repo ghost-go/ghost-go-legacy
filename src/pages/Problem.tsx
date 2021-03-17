@@ -22,14 +22,17 @@ import {
   useTypedSelector,
   useGenericData,
   useOutsideClick,
+  store,
 } from "utils";
 import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
 import { ProblemFilterPanel, Answer } from "components/common";
 
-const board = new GBan({ zoom: true });
+const { ui } = store.getState();
+const board = new GBan({ theme: ui.theme, zoom: true });
+
 const mats: Map<number, Matrix> = new Map();
-let markMat = matrix(zeros([19, 19]));
+let marks = matrix(zeros([19, 19]));
 let rightAns: any = [];
 let wrongAns: any = [];
 let changeAns: any = [];
@@ -45,6 +48,7 @@ const Problem = () => {
   const [problem] = useGenericData(
     useTypedSelector((state) => selectProblem(state))
   );
+  const { theme } = useTypedSelector((state) => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [levelParam = "all", setLevelParam] = useQueryParam<string>("level");
   const [tagsParam = "all", setTagsParam] = useQueryParam<string>("tags");
@@ -65,8 +69,9 @@ const Problem = () => {
   });
 
   useEffect(() => {
-    board.render(mat, markMat);
-  }, [mat]);
+    board.setTheme(theme, mat, marks);
+    board.render(mat, marks);
+  }, [mat, theme]);
 
   useEffect(() => {
     dispatch(fetchTags());

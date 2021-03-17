@@ -6,7 +6,7 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: [],
+  whitelist: ["ui"],
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 

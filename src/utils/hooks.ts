@@ -24,7 +24,6 @@ export const useGenericData = <T>(
 };
 
 export const useOutsideClick = (ref: any, callback: any) => {
-  console.log(ref.current);
   const handleClick = (e: any) => {
     if (ref.current && !ref.current.contains(e.target)) {
       callback();

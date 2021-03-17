@@ -1,5 +1,6 @@
 import { matrix, zeros, ones, forEach, Matrix } from "mathjs";
-import { drawStones, drawMarks } from "./utils";
+import _ from "lodash";
+import { drawMarks } from "./utils";
 
 import SubduedBoard from "assets/images/theme/subdued/board.png";
 import SubduedWhite from "assets/images/theme/subdued/white.png";
@@ -13,6 +14,26 @@ import ShellWhite2 from "assets/images/theme/shell-stone/white2.png";
 import ShellWhite3 from "assets/images/theme/shell-stone/white3.png";
 import ShellWhite4 from "assets/images/theme/shell-stone/white4.png";
 
+import SlateAndShellBoard from "assets/images/theme/slate-and-shell/board.png";
+import SlateAndShellBlack0 from "assets/images/theme/slate-and-shell/slate1.png";
+import SlateAndShellBlack1 from "assets/images/theme/slate-and-shell/slate2.png";
+import SlateAndShellBlack2 from "assets/images/theme/slate-and-shell/slate3.png";
+import SlateAndShellBlack3 from "assets/images/theme/slate-and-shell/slate4.png";
+import SlateAndShellBlack4 from "assets/images/theme/slate-and-shell/slate5.png";
+import SlateAndShellWhite0 from "assets/images/theme/slate-and-shell/shell1.png";
+import SlateAndShellWhite1 from "assets/images/theme/slate-and-shell/shell2.png";
+import SlateAndShellWhite2 from "assets/images/theme/slate-and-shell/shell3.png";
+import SlateAndShellWhite3 from "assets/images/theme/slate-and-shell/shell4.png";
+import SlateAndShellWhite4 from "assets/images/theme/slate-and-shell/shell5.png";
+
+import WalnutBoard from "assets/images/theme/walnut/board.jpg";
+import WalnutBlack from "assets/images/theme/walnut/black.png";
+import WalnutWhite from "assets/images/theme/walnut/white.png";
+
+import PhotorealisticBoard from "assets/images/theme/photorealistic/board.png";
+import PhotorealisticBlack from "assets/images/theme/photorealistic/black.png";
+import PhotorealisticWhite from "assets/images/theme/photorealistic/white.png";
+
 const devicePixelRatio = window.devicePixelRatio;
 
 export enum Theme {
@@ -20,7 +41,7 @@ export enum Theme {
   Flat = "Flat",
   Subdued = "Subdued",
   ShellStone = "Shell",
-  // SlateAndShell,
+  SlateAndShell = "SlateAndShell",
   Walnut = "Walnet",
   Photorealistic = "Photorealistic",
 }
@@ -36,15 +57,32 @@ const Resources = {
     black: [ShellBlack],
     white: [ShellWhite0, ShellWhite1, ShellWhite2, ShellWhite3, ShellWhite4],
   },
+  [Theme.SlateAndShell]: {
+    board: SlateAndShellBoard,
+    black: [
+      SlateAndShellBlack0,
+      SlateAndShellBlack1,
+      SlateAndShellBlack2,
+      SlateAndShellBlack3,
+      SlateAndShellBlack4,
+    ],
+    white: [
+      SlateAndShellWhite0,
+      SlateAndShellWhite1,
+      SlateAndShellWhite2,
+      SlateAndShellWhite3,
+      SlateAndShellWhite4,
+    ],
+  },
   [Theme.Walnut]: {
-    board: SubduedBoard,
-    black: [SubduedBlack],
-    white: [SubduedWhite],
+    board: WalnutBoard,
+    black: [WalnutBlack],
+    white: [WalnutWhite],
   },
   [Theme.Photorealistic]: {
-    board: SubduedBoard,
-    black: [SubduedBlack],
-    white: [SubduedWhite],
+    board: PhotorealisticBoard,
+    black: [PhotorealisticBlack],
+    white: [PhotorealisticWhite],
   },
 };
 
@@ -78,17 +116,17 @@ export default class GBan {
   canvas?: HTMLCanvasElement;
   resources: {
     board: HTMLImageElement | null;
-    white: [HTMLImageElement] | [];
-    black: [HTMLImageElement] | [];
+    white: HTMLImageElement[];
+    black: HTMLImageElement[];
   };
 
   constructor(options?: GBanOptionsParams) {
+    const defaultOptions = this.options;
     this.resources = {
       board: null,
       white: [],
       black: [],
     };
-    const defaultOptions = this.options;
     if (options) {
       this.options = {
         ...defaultOptions,
@@ -100,14 +138,14 @@ export default class GBan {
   init(dom: HTMLElement) {
     const canvas = document.createElement("canvas");
     const scale = window.devicePixelRatio;
+    const { size, theme } = this.options;
     canvas.style.position = "absolute";
     this.canvas = canvas;
-    if (this.options.size) {
-      canvas.width = this.options.size;
-      canvas.height = this.options.size;
+    if (size) {
+      canvas.width = size;
+      canvas.height = size;
     } else {
       const { clientWidth } = dom;
-      console.log("client", clientWidth);
       canvas.style.width = clientWidth + "px";
       canvas.style.height = clientWidth + "px";
       canvas.width = Math.floor(clientWidth * scale);
@@ -117,16 +155,65 @@ export default class GBan {
     dom.firstChild?.remove();
     dom.appendChild(canvas);
 
-    this.setTheme(this.options.theme);
-    this.drawBan();
-    this.drawBoardLine();
-    this.drawStars();
+    if (theme) {
+      this.setTheme(theme);
+    }
+    this.#drawBan();
+    this.#drawBoardLine();
+    this.#drawStars();
+  }
+
+  setTheme(theme: Theme, mat?: Matrix, marks?: Matrix) {
+    if (this.options.theme === theme) return;
+    this.options.theme = theme;
+    const shadowStyle = "3px 3px 3px #aaaaaa";
+    const canvas = this.canvas;
+    if (canvas) {
+      if (theme === Theme.BlackAndWhite) {
+        canvas.style.boxShadow = "0px 0px 0px #000000";
+      } else if (theme === Theme.Flat) {
+        canvas.style.boxShadow = shadowStyle;
+      } else {
+        const board = new Image();
+        board.src = Resources[theme].board; // Set source path
+
+        const blacks = Resources[theme].black.map((i) => {
+          const img = new Image();
+          img.src = i;
+          return img;
+        });
+        const whites = Resources[theme].white.map((i) => {
+          const img = new Image();
+          img.src = i;
+          return img;
+        });
+        Promise.all(
+          Array.from([board, ...blacks, ...whites])
+            .filter((img) => !img.complete)
+            .map(
+              (img) =>
+                new Promise((resolve) => {
+                  img.onload = img.onerror = resolve;
+                })
+            )
+        ).then(() => {
+          this.resources.black = blacks;
+          this.resources.white = whites;
+          this.resources.board = board;
+          console.log("done");
+          if (mat && marks) {
+            console.log("re-render");
+            this.render(mat, marks);
+          }
+        });
+      }
+    }
   }
 
   render(mat?: Matrix, marks?: Matrix) {
     const { boardSize, zoom, extend } = this.options;
     if (this.canvas && mat) {
-      this.clearCanvas();
+      this.#clearCanvas();
       const ctx = this.canvas.getContext("2d");
 
       let leftMost: number = boardSize - 1;
@@ -139,9 +226,7 @@ export default class GBan {
           if (rightMost < index[0]) rightMost = index[0];
           if (topMost > index[1]) topMost = index[1];
           if (bottomMost < index[1]) bottomMost = index[1];
-          // console.log("index:", index[0], index[1]);
         }
-        // console.log("l", leftMost, rightMost, topMost, bottomMost);
       });
       const midX = (rightMost + leftMost) / 2;
       const midY = (topMost + bottomMost) / 2;
@@ -174,7 +259,6 @@ export default class GBan {
             [0, maxhv - 1],
           ];
         } else if (midX >= boardSize / 2 && midY < boardSize / 2) {
-          console.log("section 2");
           visibleArea = [
             [boardSize - maxhv, 18],
             [0, maxhv - 1],
@@ -202,10 +286,10 @@ export default class GBan {
         }
       }
 
-      this.drawBan();
-      this.drawBoardLine(visibleArea);
-      this.drawStars(visibleArea);
-      drawStones(this.canvas, this.options, mat);
+      this.#drawBan();
+      this.#drawBoardLine(visibleArea);
+      this.#drawStars(visibleArea);
+      this.#drawStones(mat);
       if (marks) {
         drawMarks(this.canvas, this.options, marks);
       }
@@ -214,16 +298,16 @@ export default class GBan {
     }
   }
 
-  clearCanvas() {
+  #clearCanvas = () => {
     if (this.canvas) {
       const ctx = this.canvas.getContext("2d");
       if (ctx) {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       }
     }
-  }
+  };
 
-  drawBan = () => {
+  #drawBan = () => {
     const { canvas } = this;
     const { theme } = this.options;
     if (canvas) {
@@ -235,6 +319,16 @@ export default class GBan {
         } else if (theme === Theme.Flat) {
           ctx.fillStyle = "#ECB55A";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else if (theme === Theme.Walnut) {
+          if (this.resources.board) {
+            ctx.drawImage(
+              this.resources.board,
+              0,
+              0,
+              canvas.width,
+              canvas.height
+            );
+          }
         } else {
           if (this.resources.board) {
             const pattern = ctx.createPattern(this.resources.board, "repeat");
@@ -248,7 +342,7 @@ export default class GBan {
     }
   };
 
-  drawBoardLine = (
+  #drawBoardLine = (
     visibleArea = [
       [0, 18],
       [0, 18],
@@ -258,7 +352,7 @@ export default class GBan {
     const ctx = this.canvas.getContext("2d");
     const { boardSize } = this.options;
     if (ctx) {
-      const { space, scaledPadding } = this.calcSpaceAndPadding(
+      const { space, scaledPadding } = this.#calcSpaceAndPadding(
         this.canvas,
         this.options
       );
@@ -290,17 +384,16 @@ export default class GBan {
     }
   };
 
-  drawStars = (
+  #drawStars = (
     visibleArea = [
       [0, 18],
       [0, 18],
     ]
   ) => {
-    console.log("va", visibleArea);
     if (!this.canvas) return;
     const ctx = this.canvas.getContext("2d");
     if (ctx) {
-      const { space, scaledPadding } = this.calcSpaceAndPadding(
+      const { space, scaledPadding } = this.#calcSpaceAndPadding(
         this.canvas,
         this.options
       );
@@ -331,7 +424,7 @@ export default class GBan {
     }
   };
 
-  calcSpaceAndPadding = (canvas: HTMLCanvasElement, options: GBanOptions) => {
+  #calcSpaceAndPadding = (canvas: HTMLCanvasElement, options: GBanOptions) => {
     const { padding, boardSize } = options;
     let scaledPadding = padding * devicePixelRatio;
     const space = (canvas.width - scaledPadding * 2) / boardSize;
@@ -339,27 +432,63 @@ export default class GBan {
     return { space, scaledPadding };
   };
 
-  setTheme(theme: Theme) {
-    this.options.theme = theme;
-    const shadowStyle = "3px 3px 3px #aaaaaa";
+  #drawStones = (matrix: Matrix) => {
     const canvas = this.canvas;
+    const theme = this.options.theme;
     if (canvas) {
-      if (theme === Theme.BlackAndWhite) {
-        canvas.style.boxShadow = "0px 0px 0px #000000";
-      } else if (theme === Theme.Flat) {
-        canvas.style.boxShadow = shadowStyle;
-      } else {
-        const board = new Image();
-        board.addEventListener(
-          "load",
-          () => {
-            this.resources.board = board;
-            this.render();
-          },
-          false
-        );
-        board.src = Resources[theme].board; // Set source path
-      }
+      forEach(matrix, (value, index) => {
+        if (value !== 0) {
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            const { space, scaledPadding } = this.#calcSpaceAndPadding(
+              canvas,
+              this.options
+            );
+            const x = scaledPadding + index[0] * space;
+            const y = scaledPadding + index[1] * space;
+
+            const ratio = 0.46;
+            ctx.save();
+            if (
+              theme === Theme.Subdued ||
+              theme === Theme.BlackAndWhite ||
+              theme === Theme.Flat
+            ) {
+            } else {
+              ctx.shadowOffsetX = 3;
+              ctx.shadowOffsetY = 3;
+              ctx.shadowColor = "#555";
+              ctx.shadowBlur = 8;
+            }
+            if (theme === Theme.BlackAndWhite || theme === Theme.Flat) {
+              ctx.beginPath();
+              ctx.arc(x, y, space * ratio, 0, 2 * Math.PI, true);
+              ctx.lineWidth = 1;
+              ctx.strokeStyle = "#000";
+              if (value === 1) {
+                ctx.fillStyle = "#000";
+              } else if (value === -1) {
+                ctx.fillStyle = "#fff";
+              }
+              ctx.fill();
+              ctx.stroke();
+            } else {
+              const mod = index[0] + 10 + index[1];
+              let img;
+              if (value === 1) {
+                img = this.resources.black[mod % this.resources.black.length];
+              } else {
+                img = this.resources.white[mod % this.resources.white.length];
+              }
+              if (img) {
+                const size = space * ratio * 2;
+                ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+              }
+            }
+            ctx.restore();
+          }
+        }
+      });
     }
-  }
+  };
 }

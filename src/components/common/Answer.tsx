@@ -14,7 +14,6 @@ const Answer = (data: any) => {
   const onNext = () => {};
   const onLast = () => {};
   useEffect(() => {
-    console.log(data);
     if (data) {
       setTotal(data.answer.attributes.steps.split(";").length);
     }

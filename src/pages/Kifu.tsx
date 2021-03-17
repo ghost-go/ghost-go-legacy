@@ -8,7 +8,7 @@ import moment from "moment";
 import { fetchKifu, selectKifu, selectUI } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 import { KifuControls } from "components/common";
-import { useDispatch, useTypedSelector, useGenericData } from "utils";
+import { useDispatch, useTypedSelector, useGenericData, store } from "utils";
 import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
 
@@ -18,17 +18,18 @@ interface ParamTypes {
 
 const KifuBoard = styled.div``;
 
-const board = new GBan();
+const { ui } = store.getState();
+const board = new GBan({ theme: ui.theme });
+
 const mats: Map<number, Matrix> = new Map();
 let markMat = matrix(zeros([19, 19]));
 const Kifu = () => {
   const dispatch = useDispatch();
   const { id } = useParams<ParamTypes>();
   const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
-  const ui = useTypedSelector((state) => selectUI(state));
+  const { theme } = useTypedSelector((state) => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [move, setMove] = useQueryParam("move", withDefault(NumberParam, 0));
-  board.setTheme(ui.theme);
 
   // const board = new GBan({ theme: ui.theme });
   const boardRef = useCallback((node) => {
@@ -116,8 +117,9 @@ const Kifu = () => {
   });
 
   useEffect(() => {
+    board.setTheme(theme, mat, markMat);
     board.render(mat, markMat);
-  }, [mat]);
+  }, [mat, theme]);
 
   useEffect(() => {
     if (kifu && move > 0) {

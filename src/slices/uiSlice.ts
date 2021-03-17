@@ -69,6 +69,7 @@ export const {
   toggleKifuFilterVisible,
   openKifuFilterVisible,
   closeKifuFilterVisible,
+  setTheme,
 } = uiSlice.actions;
 
 export const selectUI = (state: RootState) => state.ui;

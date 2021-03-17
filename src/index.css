@@ -27,6 +27,7 @@
 .menu-item-theme {
   @apply block px-4 py-1 m-1 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900
 }
+
 .menu-item-theme.active {
   @apply bg-gray-100 text-gray-900
 }

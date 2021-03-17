@@ -1,8 +1,4 @@
-import React, { useContext } from "react";
-
-import BoardToolbar from "./BoardToolbar";
-import SignInModal from "./modal/SignInModal";
-import SignUpModal from "./modal/SignUpModal";
+import { useRef } from "react";
 
 import { Button, Row, Col } from "antd";
 
@@ -16,13 +12,25 @@ import {
   closeSettingMenu,
   toggleUserMenu,
   closeUserMenu,
+  setTheme,
   selectUI,
 } from "slices";
-import { useDispatch, useTypedSelector } from "utils";
+import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
+import { Theme } from "gboard/GBan";
 
 const Navigation = () => {
   const dispatch = useDispatch();
-  const ui = useTypedSelector((state) => selectUI(state));
+  const ref = useRef<HTMLDivElement>(null);
+  const { settingMenuVisible, theme } = useTypedSelector((state) =>
+    selectUI(state)
+  );
+
+  useOutsideClick(ref, () => {
+    if (settingMenuVisible) {
+      dispatch(closeSettingMenu());
+    }
+  });
+
   const menu = (
     <Menu>
       <Menu.Item>
@@ -41,6 +49,10 @@ const Navigation = () => {
     </Menu>
   );
 
+  const handleThemeChange = (theme: Theme) => {
+    dispatch(setTheme(theme));
+  };
+
   return (
     <div className="flex flex-row justify-between">
       <div>&nbsp;</div>
@@ -50,49 +62,96 @@ const Navigation = () => {
           <div
             className={`transition absolute cursor-pointer p-4
             bg-white z-50 top-6 right-8 shadow-lg rounded-sm w-36 text-base
-            ${ui.settingMenuVisible ? "flex" : "opacity-0 pointer-events-none"}
+            ${settingMenuVisible ? "flex" : "opacity-0 pointer-events-none"}
           `}>
             <div
-              className="origin-top-right absolute right-0 mt-1 p-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+              ref={ref}
+              className="origin-top-right absolute right-0 p-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="options-menu">
-              <div className="p-1">THEMES:</div>
+              <div className="p-1 font-semibold">Theme:</div>
               <div className="grid grid-cols-2" role="none">
                 <span
+                  onClick={() => {
+                    handleThemeChange(Theme.BlackAndWhite);
+                  }}
                   className={`menu-item-theme ${
-                    ui.theme === "Black&White" && "active"
+                    theme === Theme.BlackAndWhite && "active"
                   }`}
                   role="menuitem">
                   Black&White
                 </span>
                 <span
+                  onClick={() => {
+                    handleThemeChange(Theme.Flat);
+                  }}
                   className={`menu-item-theme ${
-                    ui.theme === "Subdued" && "active"
+                    theme === Theme.Flat && "active"
+                  }`}
+                  role="menuitem">
+                  Flat
+                </span>
+                <span
+                  onClick={() => {
+                    handleThemeChange(Theme.Subdued);
+                  }}
+                  className={`menu-item-theme ${
+                    theme === Theme.Subdued && "active"
                   }
                 `}
                   role="menuitem">
                   Subdued
                 </span>
-                <span className="menu-item-theme" role="menuitem">
+                <span
+                  onClick={() => {
+                    handleThemeChange(Theme.ShellStone);
+                  }}
+                  className={`menu-item-theme ${
+                    theme === Theme.ShellStone && "active"
+                  }`}
+                  role="menuitem">
                   Shell
                 </span>
-                <span className="menu-item-theme" role="menuitem">
-                  Walnet
+                <span
+                  onClick={() => {
+                    handleThemeChange(Theme.SlateAndShell);
+                  }}
+                  className={`menu-item-theme ${
+                    theme === Theme.SlateAndShell && "active"
+                  }`}
+                  role="menuitem">
+                  SlateAndShell
                 </span>
-                <span className="menu-item-theme" role="menuitem">
+                <span
+                  onClick={() => {
+                    handleThemeChange(Theme.Walnut);
+                  }}
+                  className={`menu-item-theme ${
+                    theme === Theme.Walnut && "active"
+                  }`}
+                  role="menuitem">
+                  Walnut
+                </span>
+                <span
+                  onClick={() => {
+                    handleThemeChange(Theme.Photorealistic);
+                  }}
+                  className={`menu-item-theme ${
+                    theme === Theme.Photorealistic && "active"
+                  }`}
+                  role="menuitem">
                   Photorealistic
                 </span>
               </div>
             </div>
           </div>
-          <ReactSVG
-            className="w-7 h-7 mr-4 cursor-pointer"
-            src={settings}
+          <div
             onClick={() => {
               dispatch(toggleSettingMenu());
-            }}
-          />
+            }}>
+            <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
+          </div>
         </div>
         {/* <div
               className="origin-top-right absolute right-0 mt-1 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
