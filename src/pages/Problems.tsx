@@ -119,7 +119,6 @@ const Problems = () => {
       </div>
       <div ref={ref}>
         <ProblemFilterPanel
-          ref={ref}
           visible={problemFilterVisible}
           setLevelParam={setLevelParam}
           setTagsParam={setTagsParam}

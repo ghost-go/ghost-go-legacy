@@ -93,7 +93,7 @@ export type GBanOptions = {
   padding: number;
   zoom?: boolean;
   extend: number;
-  theme: Theme;
+  theme?: Theme;
 };
 
 type GBanOptionsParams = {
@@ -110,7 +110,6 @@ export default class GBan {
     boardSize: 19,
     padding: 10,
     extend: 2,
-    theme: Theme.Subdued,
     // matrix: matrix(math.ones([19, 19])),
   };
   canvas?: HTMLCanvasElement;
@@ -119,6 +118,8 @@ export default class GBan {
     white: HTMLImageElement[];
     black: HTMLImageElement[];
   };
+  mat: Matrix;
+  marks: Matrix;
 
   constructor(options?: GBanOptionsParams) {
     const defaultOptions = this.options;
@@ -127,6 +128,9 @@ export default class GBan {
       white: [],
       black: [],
     };
+    this.mat = matrix(zeros([19, 19]));
+    this.marks = matrix(zeros([19, 19]));
+
     if (options) {
       this.options = {
         ...defaultOptions,
@@ -136,9 +140,11 @@ export default class GBan {
   }
 
   init(dom: HTMLElement) {
+    this.mat = matrix(zeros([19, 19]));
+    this.marks = matrix(zeros([19, 19]));
     const canvas = document.createElement("canvas");
     const scale = window.devicePixelRatio;
-    const { size, theme } = this.options;
+    const { size } = this.options;
     canvas.style.position = "absolute";
     this.canvas = canvas;
     if (size) {
@@ -151,24 +157,16 @@ export default class GBan {
       canvas.width = Math.floor(clientWidth * scale);
       canvas.height = Math.floor(clientWidth * scale);
     }
-
     dom.firstChild?.remove();
     dom.appendChild(canvas);
-
-    if (theme) {
-      this.setTheme(theme);
-    }
-    this.#drawBan();
-    this.#drawBoardLine();
-    this.#drawStars();
   }
 
   setTheme(theme: Theme, mat?: Matrix, marks?: Matrix) {
     if (this.options.theme === theme) return;
-    this.options.theme = theme;
     const shadowStyle = "3px 3px 3px #aaaaaa";
     const canvas = this.canvas;
     if (canvas) {
+      this.options.theme = theme;
       if (theme === Theme.BlackAndWhite) {
         canvas.style.boxShadow = "0px 0px 0px #000000";
       } else if (theme === Theme.Flat) {
@@ -200,19 +198,18 @@ export default class GBan {
           this.resources.black = blacks;
           this.resources.white = whites;
           this.resources.board = board;
-          console.log("done");
-          if (mat && marks) {
-            console.log("re-render");
-            this.render(mat, marks);
-          }
+          console.log("re-render");
+          this.render(mat, marks);
         });
       }
     }
   }
 
   render(mat?: Matrix, marks?: Matrix) {
+    if (mat) this.mat = mat;
+    if (marks) this.marks = marks;
     const { boardSize, zoom, extend } = this.options;
-    if (this.canvas && mat) {
+    if (this.canvas) {
       this.#clearCanvas();
       const ctx = this.canvas.getContext("2d");
 
@@ -220,7 +217,7 @@ export default class GBan {
       let rightMost: number = 0;
       let topMost: number = boardSize - 1;
       let bottomMost: number = 0;
-      forEach(mat, (value: number, index: number[]) => {
+      forEach(this.mat, (value: number, index: number[]) => {
         if (value !== 0) {
           if (leftMost > index[0]) leftMost = index[0];
           if (rightMost < index[0]) rightMost = index[0];
@@ -289,10 +286,8 @@ export default class GBan {
       this.#drawBan();
       this.#drawBoardLine(visibleArea);
       this.#drawStars(visibleArea);
-      this.#drawStones(mat);
-      if (marks) {
-        drawMarks(this.canvas, this.options, marks);
-      }
+      this.#drawStones(this.mat);
+      drawMarks(this.canvas, this.options, this.marks);
       ctx?.restore();
       // ctx?.setTransform(1, 0, 0, 1, 0, 0);
     }

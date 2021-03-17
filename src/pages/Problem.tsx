@@ -22,17 +22,18 @@ import {
   useTypedSelector,
   useGenericData,
   useOutsideClick,
-  store,
 } from "utils";
 import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
 import { ProblemFilterPanel, Answer } from "components/common";
+import styled from "styled-components";
 
-const { ui } = store.getState();
-const board = new GBan({ theme: ui.theme, zoom: true });
+interface ParamTypes {
+  id: string;
+}
 
-const mats: Map<number, Matrix> = new Map();
-let marks = matrix(zeros([19, 19]));
+const ProblemBoard = styled.div``;
+const board = new GBan({ zoom: true });
 let rightAns: any = [];
 let wrongAns: any = [];
 let changeAns: any = [];
@@ -42,7 +43,7 @@ let pendingWrongAns: any = [];
 const Problem = () => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
-  const params: { id: string } = useParams();
+  const { id } = useParams<ParamTypes>();
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
   const { problemFilterVisible } = useTypedSelector((state) => selectUI(state));
   const [problem] = useGenericData(
@@ -50,17 +51,22 @@ const Problem = () => {
   );
   const { theme } = useTypedSelector((state) => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
+  const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
   const [levelParam = "all", setLevelParam] = useQueryParam<string>("level");
   const [tagsParam = "all", setTagsParam] = useQueryParam<string>("tags");
 
   const boardRef = useCallback((node) => {
-    mats.set(0, matrix(zeros([19, 19])));
-
     if (node !== null) {
+      console.log("init");
       board.init(node);
       board.render();
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchTags());
+    dispatch(fetchProblem({ pattern: { id: id } }));
+  }, [dispatch, id]);
 
   useOutsideClick(ref, () => {
     if (problemFilterVisible) {
@@ -69,14 +75,10 @@ const Problem = () => {
   });
 
   useEffect(() => {
+    console.log("render");
     board.setTheme(theme, mat, marks);
     board.render(mat, marks);
-  }, [mat, theme]);
-
-  useEffect(() => {
-    dispatch(fetchTags());
-    dispatch(fetchProblem({ pattern: { id: params.id } }));
-  }, [dispatch, params]);
+  }, [mat, theme, marks]);
 
   useEffect(() => {
     if (problem) {
@@ -87,6 +89,8 @@ const Problem = () => {
         const { x, y, ki } = sgfToPosition(move);
         newMat = moveStone(newMat, x, y, ki);
       });
+      console.log(problem);
+      console.log("setMat");
       setMat(newMat);
       rightAns = problem.included.filter(
         (i: any) =>
@@ -114,17 +118,14 @@ const Problem = () => {
     <div>
       {problem && (
         <div className="flex flex-col lg:flex-row">
+          <ProblemBoard ref={boardRef} className="board" id="problem-board" />
           <div ref={ref}>
             <ProblemFilterPanel
-              ref={ref}
               visible={problemFilterVisible}
               setLevelParam={setLevelParam}
               setTagsParam={setTagsParam}
               tags={tags}
             />
-          </div>
-          <div>
-            <div className="board" id="ghost-board" ref={boardRef} />
           </div>
           <div className="flex flex-1 pl-8 pt-10 flex-col text-gray-800">
             <div className="text-3xl font-bold">

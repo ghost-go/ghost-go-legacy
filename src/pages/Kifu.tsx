@@ -17,27 +17,23 @@ interface ParamTypes {
 }
 
 const KifuBoard = styled.div``;
+const board = new GBan();
 
-const { ui } = store.getState();
-const board = new GBan({ theme: ui.theme });
-
-const mats: Map<number, Matrix> = new Map();
-let markMat = matrix(zeros([19, 19]));
+let mats: Map<number, Matrix> = new Map();
 const Kifu = () => {
   const dispatch = useDispatch();
   const { id } = useParams<ParamTypes>();
   const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
   const { theme } = useTypedSelector((state) => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
+  const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
   const [move, setMove] = useQueryParam("move", withDefault(NumberParam, 0));
 
-  // const board = new GBan({ theme: ui.theme });
   const boardRef = useCallback((node) => {
     mats.set(0, matrix(zeros([19, 19])));
-
     if (node !== null) {
+      console.log("init");
       board.init(node);
-      board.render();
     }
   }, []);
 
@@ -50,7 +46,6 @@ const Kifu = () => {
   let komi;
   let result;
   if (kifu && kifu.data.attributes) {
-    console.log(kifu.data.attributes);
     moves_count = kifu.data.attributes.moves_count;
     b_name_en = kifu.data.attributes.b_name_en;
     w_name_en = kifu.data.attributes.w_name_en;
@@ -60,6 +55,7 @@ const Kifu = () => {
     komi = kifu.data.attributes.komi;
     result = kifu.data.attributes.result;
   }
+
   const handleNext = () => {
     if (move < moves_count) {
       setMove(move + 1);
@@ -87,6 +83,11 @@ const Kifu = () => {
   const handleLast = () => {
     setMove(moves_count);
   };
+
+  useEffect(() => {
+    dispatch(fetchKifu({ pattern: { id } }));
+    mats = new Map();
+  }, [dispatch, id]);
 
   useEffect(() => {
     // TODO: There is a performance issue
@@ -117,9 +118,10 @@ const Kifu = () => {
   });
 
   useEffect(() => {
-    board.setTheme(theme, mat, markMat);
-    board.render(mat, markMat);
-  }, [mat, theme]);
+    console.log("render");
+    board.setTheme(theme, mat, marks);
+    board.render(mat, marks);
+  }, [mat, theme, marks]);
 
   useEffect(() => {
     if (kifu && move > 0) {
@@ -144,20 +146,17 @@ const Kifu = () => {
         }
         setMat(newMat);
       }
-      markMat = matrix(zeros([19, 19]));
-      markMat.set([x, y], ki);
+      let marks = matrix(zeros([19, 19]));
+      marks.set([x, y], ki);
+      setMarks(marks);
     }
   }, [move, kifu]);
-
-  useEffect(() => {
-    dispatch(fetchKifu({ pattern: { id } }));
-  }, [dispatch, id]);
 
   return (
     <div className="flex flex-col lg:flex-row">
       <KifuBoard
         className="board"
-        id="ghost-board"
+        id="kifu-board"
         ref={boardRef}
         onClick={handleNext}
       />

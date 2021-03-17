@@ -6,13 +6,11 @@ const LEVEL_LIST = ["18k-10k", "10k-5k", "5k-3k", "3k-1d", "1d-3d", "3d-6d"];
 
 const ProblemFilterPanel = ({
   visible,
-  ref,
   tags,
   setLevelParam,
   setTagsParam,
 }: {
   visible: boolean;
-  ref: any;
   tags: any;
   setLevelParam: (l: string) => void;
   setTagsParam: (t: string) => void;
@@ -20,7 +18,6 @@ const ProblemFilterPanel = ({
   const dispatch = useDispatch();
   return (
     <div
-      ref={ref}
       className={`absolute transition transform origin-top-left ${
         visible
           ? "scale-100 opacity-1"

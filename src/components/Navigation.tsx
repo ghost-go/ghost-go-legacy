@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { Button, Row, Col } from "antd";
 
@@ -7,27 +7,20 @@ import { Menu, Dropdown } from "antd";
 import { ReactSVG } from "react-svg";
 import settings from "assets/images/settings.svg";
 
-import {
-  toggleSettingMenu,
-  closeSettingMenu,
-  toggleUserMenu,
-  closeUserMenu,
-  setTheme,
-  selectUI,
-} from "slices";
+import { setTheme, selectUI } from "slices";
 import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 import { Theme } from "gboard/GBan";
 
 const Navigation = () => {
   const dispatch = useDispatch();
+  const [settingVisible, setSettingVisible] = useState(false);
+  const [userVisible, setUserVisible] = useState(false);
+  const { theme } = useTypedSelector((state) => selectUI(state));
   const ref = useRef<HTMLDivElement>(null);
-  const { settingMenuVisible, theme } = useTypedSelector((state) =>
-    selectUI(state)
-  );
 
   useOutsideClick(ref, () => {
-    if (settingMenuVisible) {
-      dispatch(closeSettingMenu());
+    if (settingVisible) {
+      setSettingVisible(false);
     }
   });
 
@@ -62,7 +55,7 @@ const Navigation = () => {
           <div
             className={`transition absolute cursor-pointer p-4
             bg-white z-50 top-6 right-8 shadow-lg rounded-sm w-36 text-base
-            ${settingMenuVisible ? "flex" : "opacity-0 pointer-events-none"}
+            ${settingVisible ? "flex" : "opacity-0 pointer-events-none"}
           `}>
             <div
               ref={ref}
@@ -148,7 +141,7 @@ const Navigation = () => {
           </div>
           <div
             onClick={() => {
-              dispatch(toggleSettingMenu());
+              setSettingVisible(true);
             }}>
             <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
           </div>
