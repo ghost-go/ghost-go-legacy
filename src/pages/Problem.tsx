@@ -33,7 +33,7 @@ interface ParamTypes {
 }
 
 const ProblemBoard = styled.div``;
-const board = new GBan({ zoom: true });
+const board = new GBan({ zoom: true, interactive: true });
 let rightAns: any = [];
 let wrongAns: any = [];
 let changeAns: any = [];
@@ -138,13 +138,13 @@ const Problem = () => {
             <div className="text-base mt-5 flex flex-row items-center text-gray-600">
               <span>ID: P-{problem.data.id}</span>
               <span>
-                <ReactSVG className="h-5 ml-3" src={right} />
+                <ReactSVG className="w-5 h-5 ml-3" src={right} />
               </span>
               <span className="ml-1">
                 {problem.data.attributes.right_count}
               </span>
               <span>
-                <ReactSVG className="h-3.5 ml-3" src={wrong} />
+                <ReactSVG className="w-3.5 h-3.5 ml-3" src={wrong} />
               </span>
               <span className="ml-1">
                 {problem.data.attributes.wrong_count}
@@ -162,7 +162,7 @@ const Problem = () => {
                 onClick={() => {
                   dispatch(toggleProblemFilterVisible());
                 }}>
-                <ReactSVG className="h-4 mr-0.5" src={edit} />
+                <ReactSVG className="h-3 w-3 mr-0.5" src={edit} />
                 <span className="underline">
                   {levelParam}/{tagsParam}
                 </span>

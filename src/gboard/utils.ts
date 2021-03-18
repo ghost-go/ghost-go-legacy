@@ -1,78 +1,7 @@
 import _ from "lodash";
-import { GBanOptions } from "gboard/GBan";
 import { Matrix, forEach } from "mathjs";
 import { GRID } from "../common/Constants";
 import { sgfToPosition } from "../common/Helper";
-
-const devicePixelRatiot = window.devicePixelRatio;
-
-const calcSpaceAndPadding = (
-  canvas: HTMLCanvasElement,
-  options: GBanOptions
-) => {
-  const { padding, boardSize } = options;
-  let scaledPadding = padding * devicePixelRatiot;
-  const space = (canvas.width - scaledPadding * 2) / boardSize;
-  scaledPadding = scaledPadding + space / 2;
-  return { space, scaledPadding };
-};
-
-export const drawStones = (
-  canvas: HTMLCanvasElement,
-  options: GBanOptions,
-  matrix: Matrix
-) => {
-  forEach(matrix, (value, index) => {
-    if (value !== 0) {
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        // ctx.scale(scale, scale);
-        const { space, scaledPadding } = calcSpaceAndPadding(canvas, options);
-        const x = scaledPadding + index[0] * space;
-        const y = scaledPadding + index[1] * space;
-        ctx.beginPath();
-        ctx.arc(x, y, space * 0.46, 0, 2 * Math.PI, true);
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "#000";
-        if (value === 1) {
-          ctx.fillStyle = "#000";
-        } else if (value === -1) {
-          ctx.fillStyle = "#fff";
-        }
-        ctx.fill();
-        ctx.stroke();
-      }
-    }
-  });
-};
-
-export const drawMarks = (
-  canvas: HTMLCanvasElement,
-  options: GBanOptions,
-  matrix: Matrix
-) => {
-  forEach(matrix, (value, index) => {
-    if (value !== 0) {
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        const { space, scaledPadding } = calcSpaceAndPadding(canvas, options);
-        const x = scaledPadding + index[0] * space;
-        const y = scaledPadding + index[1] * space;
-        ctx.beginPath();
-        ctx.arc(x, y, space * 0.3, 0, 2 * Math.PI, true);
-        ctx.lineWidth = 2;
-        if (value === 1) {
-          ctx.strokeStyle = "#fff";
-        } else {
-          ctx.strokeStyle = "#000";
-        }
-        ctx.stroke();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "#000";
-      }
-    }
-  });
-};
 
 let liberties = 0;
 let recursionPath: string[] = [];
