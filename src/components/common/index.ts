@@ -7,6 +7,7 @@ import Spinner from "./Spinner";
 import KifuControls from "./KifuControls";
 import ProblemFilterPanel from "./ProblemFilterPanel";
 import Answer from "./Answer";
+import AnswerSection from "./AnswerSection";
 
 export {
   SidebarItem,
@@ -18,4 +19,5 @@ export {
   KifuControls,
   ProblemFilterPanel,
   Answer,
+  AnswerSection,
 };

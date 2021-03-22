@@ -1,5 +1,4 @@
-import { matrix, zeros, ones, forEach, Matrix } from "mathjs";
-import _ from "lodash";
+import { matrix, zeros, forEach, Matrix } from "mathjs";
 
 import SubduedBoard from "assets/images/theme/subdued/board.png";
 import SubduedWhite from "assets/images/theme/subdued/white.png";
@@ -33,6 +32,7 @@ import PhotorealisticBoard from "assets/images/theme/photorealistic/board.png";
 import PhotorealisticBlack from "assets/images/theme/photorealistic/black.png";
 import PhotorealisticWhite from "assets/images/theme/photorealistic/white.png";
 
+// const devicePixelRatio = window.devicePixelRatio;
 const devicePixelRatio = window.devicePixelRatio;
 
 export enum Theme {
@@ -109,7 +109,7 @@ type GBanOptionsParams = {
 export default class GBan {
   options: GBanOptions = {
     boardSize: 19,
-    padding: 10,
+    padding: 15,
     extend: 2,
     interactive: false,
     // matrix: matrix(math.ones([19, 19])),
@@ -120,7 +120,7 @@ export default class GBan {
     white: HTMLImageElement[];
     black: HTMLImageElement[];
   };
-  nextMove: 0 | 1 | -1;
+  nextMove: number;
   cursor: [number, number];
   mat: Matrix;
   marks: Matrix;
@@ -170,21 +170,10 @@ export default class GBan {
     dom.firstChild?.remove();
     dom.appendChild(canvas);
 
-    const { space, scaledPadding } = this.#calcSpaceAndPadding();
-    const { padding, interactive } = this.options;
+    const { interactive, padding } = this.options;
+    const { space } = this.#calcSpaceAndPadding();
     if (interactive) {
       canvas.onmousemove = (e) => {
-        const rect = canvas.getBoundingClientRect();
-        // const x = (e.offsetX / canvas.clientWidth) * canvas.width;
-        // const y = (e.offsetY / canvas.clientHeight) * canvas.height;
-        // const { space, scaledPadding } = this.#calcSpaceAndPadding();
-        // console.log("offset", e.offsetX, e.offsetY);
-        // console.log(
-        //   "origin offset",
-        //   e.offsetX - this.offset[0] / scale,
-        //   e.offsetY - this.offset[1] / scale
-        // );
-
         const point = this.transMat
           .inverse()
           .transformPoint(
@@ -193,11 +182,9 @@ export default class GBan {
               e.offsetY * devicePixelRatio
             )
           );
-
-        console.log("point", point);
-
-        this.cursor = [point.x, point.y];
-        // // console.log("xy", x, y);
+        const idx = Math.round((point.x - padding + space / 2) / space);
+        const idy = Math.round((point.y - padding + space / 2) / space);
+        this.cursor = [idx - 1, idy - 1];
         this.render(this.mat, this.marks);
       };
     }
@@ -275,16 +262,13 @@ export default class GBan {
       const midX = (rightMost + leftMost) / 2;
       const midY = (topMost + bottomMost) / 2;
 
-      const ex =
-        extend +
-        Math.max(
-          Math.min(boardSize - rightMost, leftMost),
-          Math.min(topMost, boardSize - bottomMost)
-        ) -
-        1;
       let maxh = rightMost - leftMost + 1;
       let maxv = bottomMost - topMost + 1;
-      let maxhv = Math.max(maxh, maxv) + ex;
+      const revision =
+        maxh > maxv
+          ? Math.min(boardSize - rightMost - 1, leftMost)
+          : Math.min(topMost, boardSize - bottomMost - 1);
+      let maxhv = Math.max(maxh, maxv) + extend + revision;
       if (maxhv > boardSize) maxhv = boardSize;
       this.maxhv = maxhv;
 
@@ -319,20 +303,13 @@ export default class GBan {
           ];
         }
         if (ctx) {
-          // ctx.save();
           const offsetX = midX < boardSize / 2 ? 0 : distance * scale;
           const offsetY = midY < boardSize / 2 ? 0 : distance * scale;
-          const { space, scaledPadding } = this.#calcSpaceAndPadding();
-          // this.#applyMatrix(-offsetX, -offsetY, scale, 0);
 
           this.transMat = new DOMMatrix();
           this.transMat.translateSelf(-offsetX, -offsetY);
           this.transMat.scaleSelf(scale, scale);
-
           ctx.setTransform(this.transMat);
-          // ctx.restore();
-          // ctx.scale(scale, scale);
-          // ctx.translate(-offsetX, -offsetY);
         }
       }
 
@@ -427,7 +404,6 @@ export default class GBan {
   ) => {
     if (!this.canvas) return;
     const ctx = this.canvas.getContext("2d");
-    const { boardSize } = this.options;
     if (ctx) {
       const { space, scaledPadding } = this.#calcSpaceAndPadding();
 
@@ -500,7 +476,8 @@ export default class GBan {
     let scaledPadding = 0;
     if (this.canvas) {
       const { padding, boardSize } = this.options;
-      scaledPadding = padding * devicePixelRatio;
+      // scaledPadding = padding * devicePixelRatio;
+      scaledPadding = padding;
       space = (this.canvas.width - scaledPadding * 2) / boardSize;
       scaledPadding = scaledPadding + space / 2;
     }
@@ -510,37 +487,21 @@ export default class GBan {
   #drawCursor = (visibleArea: number[][]) => {
     const canvas = this.canvas;
     if (canvas) {
-      const { boardSize } = this.options;
+      const { padding } = this.options;
       const ctx = canvas.getContext("2d");
-      const { space, scaledPadding } = this.#calcSpaceAndPadding();
-      // const x = scaledPadding + this.cursor[0] * space;
-      // const y = scaledPadding + this.cursor[1] * space;
-      // const xx = 18;
-      // const yy = 0;
+      const { space } = this.#calcSpaceAndPadding();
 
-      // const x = xx * space + scaledPadding;
-      // const y = yy * space + scaledPadding;
-
-      const x = this.cursor[0];
-      const y = this.cursor[1];
-      // const x = (this.cursor[0] - this.offset[0]) / this.scale;
-      // const y = (this.cursor[1] - this.offset[1]) / this.scale;
-      // console.log("xy", x, y);
-      // const xx = this.cursor[0] + visibleArea[0][0];
-      // const yy = this.cursor[this.cursoreArea[1][0];
-      // console.log("cursor", tthis.cursor0], this.cursor[1]);
-      // console.log("vis", visibleArea[0][0], visibleArea[0][1]);
-      // console.log("xx, yy", xx, yy);
-      // console.log("vis", visibleArea);
-      // const x = xx * space + scaledPadding;
-      // const y = yy * space + scaledPadding;
-      // const x = (this.cursor[0] + visibleArea[0][0]) * space + scaledPadding;
-      // const y = (this.cursor[1] + visibleArea[1][0]) * space + scaledPadding;
-      // console.log("xy", x, y);
+      const [idx, idy] = this.cursor;
+      if (idx < visibleArea[0][0] || idx > visibleArea[0][1]) return;
+      if (idy < visibleArea[1][0] || idy > visibleArea[1][1]) return;
+      const x = idx * space + space / 2 + padding;
+      const y = idy * space + space / 2 + padding;
       if (ctx) {
+        const size = space * 0.4;
+        ctx.save();
         if (this.nextMove === 1) {
           ctx.beginPath();
-          ctx.arc(x, y, space * 0.4, 0, 2 * Math.PI, true);
+          ctx.arc(x, y, size, 0, 2 * Math.PI, true);
           ctx.lineWidth = 1;
           ctx.strokeStyle = "#000";
           ctx.globalAlpha = 0.6;
@@ -550,7 +511,7 @@ export default class GBan {
           ctx.globalAlpha = 1;
         } else {
           ctx.beginPath();
-          ctx.arc(x, y, space, 0, 2 * Math.PI, true);
+          ctx.arc(x, y, size, 0, 2 * Math.PI, true);
           ctx.lineWidth = 1;
           ctx.strokeStyle = "#FFF";
           ctx.globalAlpha = 0.6;
@@ -559,13 +520,14 @@ export default class GBan {
           ctx.stroke();
           ctx.globalAlpha = 1;
         }
+        ctx.restore();
       }
     }
   };
 
   #drawStones = (matrix: Matrix) => {
     const canvas = this.canvas;
-    const theme = this.options.theme;
+    const { theme } = this.options;
     if (canvas) {
       forEach(matrix, (value, index) => {
         if (value !== 0) {
