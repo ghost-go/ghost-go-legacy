@@ -1,4 +1,5 @@
 import { matrix, zeros, forEach, Matrix } from "mathjs";
+import { A1_LETTERS, A1_NUMBERS } from "utils/constants";
 
 import SubduedBoard from "assets/images/theme/subdued/board.png";
 import SubduedWhite from "assets/images/theme/subdued/white.png";
@@ -93,6 +94,7 @@ export type GBanOptions = {
   zoom?: boolean;
   extend: number;
   theme?: Theme;
+  coordinates: boolean;
   interactive: boolean;
 };
 
@@ -104,14 +106,16 @@ type GBanOptionsParams = {
   extend?: number;
   theme?: Theme;
   interactive?: boolean;
+  coordinates?: boolean;
 };
 
 export default class GBan {
   options: GBanOptions = {
     boardSize: 19,
-    padding: 15,
+    padding: 10,
     extend: 2,
     interactive: false,
+    coordinates: true,
     // matrix: matrix(math.ones([19, 19])),
   };
   canvas?: HTMLCanvasElement;
@@ -190,6 +194,10 @@ export default class GBan {
     }
   }
 
+  setOptions(options: GBanOptionsParams) {
+    this.options = { ...this.options, ...options };
+  }
+
   setTheme(theme: Theme, mat?: Matrix, marks?: Matrix) {
     if (this.options.theme === theme) return;
     const shadowStyle = "3px 3px 3px #aaaaaa";
@@ -237,7 +245,7 @@ export default class GBan {
   render(mat?: Matrix, marks?: Matrix, nextMove?: any) {
     if (mat) this.mat = mat;
     if (marks) this.marks = marks;
-    const { boardSize, zoom, extend, interactive } = this.options;
+    const { boardSize, zoom, extend, interactive, coordinates } = this.options;
     const canvas = this.canvas;
     if (canvas) {
       this.#clearCanvas();
@@ -318,6 +326,9 @@ export default class GBan {
       this.#drawStars(visibleArea);
       if (interactive) {
         this.#drawCursor(visibleArea);
+      }
+      if (coordinates) {
+        this.#drawCoordinates(visibleArea);
       }
       this.#drawStones(this.mat);
       this.#drawMarks(this.marks);
@@ -467,6 +478,40 @@ export default class GBan {
             ctx.fill();
           }
         });
+      });
+    }
+  };
+
+  #drawCoordinates = (
+    visibleArea = [
+      [0, 18],
+      [0, 18],
+    ]
+  ) => {
+    const canvas = this.canvas;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const { space, scaledPadding } = this.#calcSpaceAndPadding();
+    if (ctx) {
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#000000";
+      ctx.font = `bold ${space / 2.8}px Helvetica`;
+
+      const offset = space / 3;
+      A1_LETTERS.forEach((l, index) => {
+        const x = space * index + scaledPadding;
+        if (index >= visibleArea[0][0] && index <= visibleArea[0][1]) {
+          ctx.fillText(l, x, 0 + offset);
+          ctx.fillText(l, x, canvas.height - offset);
+        }
+      });
+      A1_NUMBERS.forEach((l: number, index) => {
+        const y = space * index + scaledPadding;
+        if (index >= visibleArea[1][0] && index <= visibleArea[1][1]) {
+          ctx.fillText(l.toString(), offset, y);
+          ctx.fillText(l.toString(), canvas.width - offset, y);
+        }
       });
     }
   };

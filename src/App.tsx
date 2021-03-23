@@ -62,7 +62,7 @@ const App = () => {
           <QueryParamProvider ReactRouterRoute={Route}>
             <Helmet
               htmlAttributes={{ lang: "en", amp: undefined }}
-              title="A modern website to learn Go,Weiqi,Baduk - beta"
+              title="Interactive Go Problem/Kifu Database"
               titleTemplate="GhostGo - %s"
             />
             <div className="flex flex-row">

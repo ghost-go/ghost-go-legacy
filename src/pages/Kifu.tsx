@@ -24,7 +24,7 @@ const Kifu = () => {
   const dispatch = useDispatch();
   const { id } = useParams<ParamTypes>();
   const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
-  const { theme } = useTypedSelector((state) => selectUI(state));
+  const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
   const [move, setMove] = useQueryParam("move", withDefault(NumberParam, 0));
@@ -119,9 +119,11 @@ const Kifu = () => {
 
   useEffect(() => {
     console.log("render");
+    const padding = coordinates ? 30 : 10;
+    board.setOptions({ coordinates, padding });
     board.setTheme(theme, mat, marks);
     board.render(mat, marks);
-  }, [mat, theme, marks]);
+  }, [mat, theme, coordinates, marks]);
 
   useEffect(() => {
     if (kifu && move > 0) {

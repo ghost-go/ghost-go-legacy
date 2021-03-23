@@ -6,12 +6,14 @@ interface UIState {
   problemFilterVisible: boolean;
   kifuFilterVisible: boolean;
   theme: Theme;
+  coordinates: boolean;
 }
 
 const initialState: UIState = {
   problemFilterVisible: false,
   kifuFilterVisible: true,
   theme: Theme.Flat,
+  coordinates: false,
 };
 
 export const uiSlice = createSlice({
@@ -39,6 +41,9 @@ export const uiSlice = createSlice({
     setTheme: (state, action) => {
       state.theme = action.payload;
     },
+    setCoordinates: (state, action) => {
+      state.coordinates = action.payload;
+    },
   },
 });
 
@@ -50,6 +55,7 @@ export const {
   openKifuFilterVisible,
   closeKifuFilterVisible,
   setTheme,
+  setCoordinates,
 } = uiSlice.actions;
 
 export const selectUI = (state: RootState) => state.ui;

@@ -7,7 +7,7 @@ import { Menu, Dropdown } from "antd";
 import { ReactSVG } from "react-svg";
 import settings from "assets/images/settings.svg";
 
-import { setTheme, selectUI } from "slices";
+import { setTheme, setCoordinates, selectUI } from "slices";
 import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 import { Theme } from "gboard/GBan";
 
@@ -15,7 +15,7 @@ const Navigation = () => {
   const dispatch = useDispatch();
   const [settingVisible, setSettingVisible] = useState(false);
   const [userVisible, setUserVisible] = useState(false);
-  const { theme } = useTypedSelector((state) => selectUI(state));
+  const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
   const ref = useRef<HTMLDivElement>(null);
 
   useOutsideClick(ref, () => {
@@ -137,11 +137,29 @@ const Navigation = () => {
                   Photorealistic
                 </span>
               </div>
+              <div
+                onClick={() => {
+                  console.log("click");
+                  dispatch(setCoordinates(!coordinates));
+                }}>
+                <label className="p-1 font-semibold my-4">
+                  Show Coordinates:{" "}
+                </label>
+                <div className="relative inline-block w-10 mx-2 align-middle select-none transition duration-200 ease-in">
+                  <input
+                    type="checkbox"
+                    name="toggle"
+                    className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                    checked={coordinates}
+                  />
+                  <label className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+              </div>
             </div>
           </div>
           <div
             onClick={() => {
-              setSettingVisible(true);
+              setSettingVisible(!settingVisible);
             }}>
             <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
           </div>

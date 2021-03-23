@@ -4,6 +4,7 @@ import GBan, { move as moveStone, canMove } from "gboard";
 import { ReactSVG } from "react-svg";
 import { useParams } from "react-router-dom";
 import { useSpring, animated } from "react-spring";
+import { Spring } from "react-spring/renderprops";
 import moment from "moment";
 import right from "assets/images/right.svg";
 import wrong from "assets/images/wrong.svg";
@@ -55,7 +56,7 @@ const Problem = () => {
   const [problem] = useGenericData(
     useTypedSelector((state) => selectProblem(state))
   );
-  const { theme } = useTypedSelector((state) => selectUI(state));
+  const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
   const [initMat, setInitMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
@@ -63,9 +64,11 @@ const Problem = () => {
   const [tagsParam = "all", setTagsParam] = useQueryParam<string>("tags");
   const [nextMove, setNextMove] = useState<number>(1);
   const [currentPath, setCurrentPath] = useState<string>("");
+  const [rightVisible, setRightVisible] = useState<boolean>(false);
+  const [wrongVisible, setWrongVisible] = useState<boolean>(false);
 
-  const props = useSpring<any>({ x: 100, op: 1, from: { x: 0, op: 0 } });
-  const op = useSpring<any>({ op: 1, from: { op: 0 } });
+  const props = useSpring<any>({ x: 100, from: { x: 0 } });
+  const op = useSpring<any>({ opacity: 1, from: { opacity: 0 } });
 
   const boardRef = useCallback((node) => {
     if (node !== null) {
@@ -76,14 +79,16 @@ const Problem = () => {
   }, []);
 
   const makeWrong = () => {
-    console.log("Make wrong");
+    setRightVisible(false);
+    setWrongVisible(true);
     setTimeout(() => {
       handleReset();
     }, 1000);
   };
 
   const makeRight = () => {
-    console.log("Make right");
+    setRightVisible(true);
+    setWrongVisible(false);
   };
 
   const makeChange = () => {
@@ -133,11 +138,11 @@ const Problem = () => {
   };
 
   const genMove = (mat: Matrix, path: string) => {
-    const rightPaths = rightPath.filter((i) => i.includes(path));
-    const changePaths = changePath.filter((i) => i.includes(path));
-    const wrongPaths = wrongPath.filter((i) => i.includes(path));
+    const rightPaths = rightPath.filter((i) => i.startsWith(path));
+    const changePaths = changePath.filter((i) => i.startsWith(path));
+    const wrongPaths = wrongPath.filter((i) => i.startsWith(path));
 
-    console.log(path);
+    console.log("path", path);
     console.log(
       "r,c,w",
       rightPaths.length,
@@ -164,6 +169,8 @@ const Problem = () => {
 
   const handleReset = () => {
     setCurrentPath("");
+    setRightVisible(false);
+    setWrongVisible(false);
     setNextMove(problem.data.attributes.turn);
     setMat(initMat);
   };
@@ -188,9 +195,11 @@ const Problem = () => {
 
   useEffect(() => {
     console.log("render");
+    const padding = coordinates ? 30 : 10;
+    board.setOptions({ coordinates, padding });
     board.setTheme(theme, mat, marks);
     board.render(mat, marks);
-  }, [mat, theme, marks]);
+  }, [mat, theme, marks, coordinates]);
 
   useEffect(() => {
     if (problem) {
@@ -232,77 +241,77 @@ const Problem = () => {
   return (
     <div>
       {problem && (
-        <animated.div style={op} className="flex flex-col lg:flex-row">
-          <ProblemBoard
-            ref={boardRef}
-            className="board"
-            id="problem-board"
-            onClick={() => {
-              const i = board.cursor[0];
-              const j = board.cursor[1];
-              if (canMove(mat, i, j, nextMove)) {
-                const newMat = moveStone(mat, i, j, nextMove);
-                const move = `${nextMove > 0 ? "B" : "W"}[${
-                  SGF_LETTERS[i] + SGF_LETTERS[j]
-                }]`;
-                setNextMove(-nextMove);
-                setMat(newMat);
-                setCurrentPath((path) => {
-                  const newPath = path === "" ? move : path + ";" + move;
-                  genMove(newMat, newPath);
-                  return newPath;
-                });
-              }
-            }}
-          />
-          {/* <animated.svg */}
-          <svg
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 130.2 130.2"
-            // strokeDashoffset={props.x}
-          >
-            <polyline
-              className="path check"
-              fill="none"
-              stroke="#73AF55"
-              stroke-width="6"
-              stroke-linecap="round"
-              stroke-miterlimit="10"
-              points="100.2,40.2 51.5,88.8 29.8,67.5 "
+        <div className="flex flex-col lg:flex-row">
+          <div className="relative">
+            <ProblemBoard
+              ref={boardRef}
+              className="board"
+              id="problem-board"
+              onClick={() => {
+                const i = board.cursor[0];
+                const j = board.cursor[1];
+                if (canMove(mat, i, j, nextMove)) {
+                  const newMat = moveStone(mat, i, j, nextMove);
+                  const move = `${nextMove > 0 ? "B" : "W"}[${
+                    SGF_LETTERS[i] + SGF_LETTERS[j]
+                  }]`;
+                  setNextMove(-nextMove);
+                  setMat(newMat);
+                  setCurrentPath((path) => {
+                    const newPath = path === "" ? move : path + ";" + move;
+                    genMove(newMat, newPath);
+                    return newPath;
+                  });
+                }
+              }}
             />
-          </svg>
-          {/* </animated.svg> */}
-          <animated.svg
-            strokeDashoffset={props.x}
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 130.2 130.2">
-            <line
-              className="path line"
-              fill="none"
-              stroke="#D06079"
-              stroke-width="6"
-              stroke-linecap="round"
-              stroke-miterlimit="10"
-              x1="34.4"
-              y1="37.9"
-              x2="95.8"
-              y2="92.3"
-            />
-            <line
-              className="path line"
-              fill="none"
-              stroke="#D06079"
-              stroke-width="6"
-              stroke-linecap="round"
-              stroke-miterlimit="10"
-              x1="95.8"
-              y1="38"
-              x2="34.4"
-              y2="92.2"
-            />
-          </animated.svg>
+            <svg
+              className={`mark ${rightVisible ? "block" : "hidden"}`}
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 130.2 130.2">
+              <polyline
+                className="path check"
+                fill="none"
+                stroke="#73AF55"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeMiterlimit="10"
+                points="100.2,40.2 51.5,88.8 29.8,67.5 "
+              />
+            </svg>
+            <svg
+              className={`mark ${wrongVisible ? "block" : "hidden"}`}
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 130.2 130.2">
+              <line
+                className="path line"
+                fill="none"
+                stroke="#D06079"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeMiterlimit="10"
+                x1="34.4"
+                y1="37.9"
+                x2="95.8"
+                y2="92.3"
+              />
+              <line
+                className="path line"
+                strokeDashoffset={props.x}
+                fill="none"
+                stroke="#D06079"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeMiterlimit="10"
+                x1="95.8"
+                y1="38"
+                x2="34.4"
+                y2="92.2"
+              />
+            </svg>
+          </div>
           <div ref={ref}>
             <ProblemFilterPanel
               visible={problemFilterVisible}
@@ -311,7 +320,10 @@ const Problem = () => {
               tags={tags}
             />
           </div>
-          <div className="flex flex-1 pl-8 pt-10 flex-col text-gray-800">
+          <div
+            className="flex flex-1 pl-8 pt-10 flex-col text-gray-800"
+            style={op}>
+            {/* <div className="flex flex-1 pl-8 pt-10 flex-col text-gray-800"> */}
             <div className="text-3xl font-bold">
               {problem.data.attributes.turn === -1
                 ? "White to move"
@@ -334,7 +346,9 @@ const Problem = () => {
               </span>
             </div>
             <div className="flex flex-row mt-5 items-center">
-              <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3">
+              <button
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3"
+                onClick={handleReset}>
                 Reset
               </button>
               <button className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3">
@@ -373,7 +387,7 @@ const Problem = () => {
               )}
             </div>
           </div>
-        </animated.div>
+        </div>
       )}
     </div>
   );

@@ -3,12 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+.inset-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .tooltip {
   @apply invisible absolute;
 }
 
 .has-tooltip:hover .tooltip {
   @apply visible z-50;
+}
+
+.mark {
+  @apply absolute z-50 pointer-events-none w-3/4 inset-center;
 }
 
 .board {
@@ -31,6 +42,18 @@
 .menu-item-theme.active {
   @apply bg-gray-100 text-gray-900
 }
+
+.toggle-checkbox:checked {
+  @apply: right-0 border-green-400;
+  right: 0;
+  border-color: #68D391;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  @apply: bg-green-400;
+  background-color: #68D391;
+}
+
 
 .path {
   stroke-dasharray: 1000;
