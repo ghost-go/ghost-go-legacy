@@ -9,14 +9,15 @@ import moment from "moment";
 import right from "assets/images/right.svg";
 import wrong from "assets/images/wrong.svg";
 import edit from "assets/images/edit.svg";
+import animWrong from "assets/images/anim-wrong.svg";
+import animRight from "assets/images/anim-right.svg";
+import { Switch } from "components/common";
 
 import {
   fetchProblem,
   selectProblem,
-  closeProblemFilterVisible,
   selectUI,
   selectTags,
-  toggleProblemFilterVisible,
   fetchTags,
 } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
@@ -52,7 +53,6 @@ const Problem = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { id } = useParams<ParamTypes>();
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
-  const { problemFilterVisible } = useTypedSelector((state) => selectUI(state));
   const [problem] = useGenericData(
     useTypedSelector((state) => selectProblem(state))
   );
@@ -66,6 +66,10 @@ const Problem = () => {
   const [currentPath, setCurrentPath] = useState<string>("");
   const [rightVisible, setRightVisible] = useState<boolean>(false);
   const [wrongVisible, setWrongVisible] = useState<boolean>(false);
+  const [interactive, setInteractive] = useState<boolean>(true);
+  const [researchMode, setResearchMode] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(false);
+  const [move, setMove] = useState<number>();
 
   const props = useSpring<any>({ x: 100, from: { x: 0 } });
   const op = useSpring<any>({ opacity: 1, from: { opacity: 0 } });
@@ -81,29 +85,47 @@ const Problem = () => {
   const makeWrong = () => {
     setRightVisible(false);
     setWrongVisible(true);
+    setInteractive(false);
     setTimeout(() => {
       handleReset();
+      setInteractive(true);
     }, 1000);
   };
 
   const makeRight = () => {
     setRightVisible(true);
     setWrongVisible(false);
+    setInteractive(false);
   };
-
   const makeChange = () => {
     console.log("Make Change");
   };
 
-  const handleMove = (mat: Matrix, i: number, j: number, next: number) => {
+  const handleMove = (
+    mat: Matrix,
+    i: number,
+    j: number,
+    next: number,
+    ans: string,
+    cb: () => void
+  ) => {
     if (canMove(mat, i, j, next)) {
       const newMat = moveStone(mat, i, j, next);
       const move = `${next > 0 ? "B" : "W"}[${
         SGF_LETTERS[i] + SGF_LETTERS[j]
       }]`;
+
+      let marks = matrix(zeros([19, 19]));
+      marks.set([i, j], next);
+      setMarks(marks);
+
       setNextMove(-next);
       setMat(newMat);
-      setCurrentPath((path) => (path === "" ? move : path + ";" + move));
+      setCurrentPath((path) => {
+        const newPath = path === "" ? move : path + ";" + move;
+        if (newPath === ans) cb();
+        return newPath;
+      });
     } else {
       console.log("cannot move");
     }
@@ -116,23 +138,17 @@ const Problem = () => {
     cb: () => void
   ) => {
     const ans = _.sample(paths);
-    console.log(ans, "ans");
+    if (paths.filter((i) => i === path).length > 0) cb();
     if (ans) {
       let result = ans
         .replace(`${path}`, "")
         .split(";")
         .filter((i) => i.length > 0)[0];
       if (result && result !== "") {
-        console.log("res", result);
         const next = result[0] === "B" ? 1 : -1;
         const i = SGF_LETTERS.indexOf(result[2]);
         const j = SGF_LETTERS.indexOf(result[3]);
-        handleMove(mat, i, j, next || nextMove);
-      } else {
-        console.log("last");
-        if (paths.filter((i) => i === path).length > 0) {
-          cb();
-        }
+        handleMove(mat, i, j, next || nextMove, ans, cb);
       }
     }
   };
@@ -172,7 +188,9 @@ const Problem = () => {
     setRightVisible(false);
     setWrongVisible(false);
     setNextMove(problem.data.attributes.turn);
+    setMarks(matrix(zeros([19, 19])));
     setMat(initMat);
+    setInteractive(true);
   };
 
   useEffect(() => {
@@ -187,10 +205,12 @@ const Problem = () => {
     }
   }, [nextMove]);
 
+  useEffect(() => {
+    board.setInteractive(interactive);
+  }, [interactive]);
+
   useOutsideClick(ref, () => {
-    if (problemFilterVisible) {
-      dispatch(closeProblemFilterVisible());
-    }
+    if (filter) setFilter(false);
   });
 
   useEffect(() => {
@@ -248,82 +268,53 @@ const Problem = () => {
               className="board"
               id="problem-board"
               onClick={() => {
-                const i = board.cursor[0];
-                const j = board.cursor[1];
-                if (canMove(mat, i, j, nextMove)) {
-                  const newMat = moveStone(mat, i, j, nextMove);
-                  const move = `${nextMove > 0 ? "B" : "W"}[${
-                    SGF_LETTERS[i] + SGF_LETTERS[j]
-                  }]`;
-                  setNextMove(-nextMove);
-                  setMat(newMat);
-                  setCurrentPath((path) => {
-                    const newPath = path === "" ? move : path + ";" + move;
-                    genMove(newMat, newPath);
-                    return newPath;
-                  });
+                if (interactive) {
+                  const i = board.cursor[0];
+                  const j = board.cursor[1];
+                  if (canMove(mat, i, j, nextMove)) {
+                    const newMat = moveStone(mat, i, j, nextMove);
+                    const move = `${nextMove > 0 ? "B" : "W"}[${
+                      SGF_LETTERS[i] + SGF_LETTERS[j]
+                    }]`;
+
+                    let marks = matrix(zeros([19, 19]));
+                    marks.set([i, j], nextMove);
+                    setMarks(marks);
+
+                    setNextMove(-nextMove);
+                    setMat(newMat);
+                    if (!researchMode) {
+                      setCurrentPath((path) => {
+                        const newPath = path === "" ? move : path + ";" + move;
+                        genMove(newMat, newPath);
+                        return newPath;
+                      });
+                    }
+                  }
                 }
               }}
             />
-            <svg
+            <ReactSVG
               className={`mark ${rightVisible ? "block" : "hidden"}`}
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 130.2 130.2">
-              <polyline
-                className="path check"
-                fill="none"
-                stroke="#73AF55"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                points="100.2,40.2 51.5,88.8 29.8,67.5 "
-              />
-            </svg>
-            <svg
+              src={animRight}
+            />
+            <ReactSVG
               className={`mark ${wrongVisible ? "block" : "hidden"}`}
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 130.2 130.2">
-              <line
-                className="path line"
-                fill="none"
-                stroke="#D06079"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                x1="34.4"
-                y1="37.9"
-                x2="95.8"
-                y2="92.3"
-              />
-              <line
-                className="path line"
-                strokeDashoffset={props.x}
-                fill="none"
-                stroke="#D06079"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                x1="95.8"
-                y1="38"
-                x2="34.4"
-                y2="92.2"
-              />
-            </svg>
+              src={animWrong}
+            />
           </div>
           <div ref={ref}>
             <ProblemFilterPanel
-              visible={problemFilterVisible}
+              visible={filter}
               setLevelParam={setLevelParam}
               setTagsParam={setTagsParam}
+              setVisible={setFilter}
               tags={tags}
             />
           </div>
           <div
-            className="flex flex-1 pl-8 pt-10 flex-col text-gray-800"
+            className="flex flex-1 p-4 flex-col text-gray-800 lg:pl-8 lg:pt-10"
             style={op}>
-            {/* <div className="flex flex-1 pl-8 pt-10 flex-col text-gray-800"> */}
             <div className="text-3xl font-bold">
               {problem.data.attributes.turn === -1
                 ? "White to move"
@@ -357,7 +348,7 @@ const Problem = () => {
               <div
                 className="flex flex-row items-center self-end cursor-pointer"
                 onClick={() => {
-                  dispatch(toggleProblemFilterVisible());
+                  setFilter(!filter);
                 }}>
                 <ReactSVG className="h-3 w-3 mr-0.5" src={edit} />
                 <span className="underline">
@@ -365,7 +356,17 @@ const Problem = () => {
                 </span>
               </div>
             </div>
-            <div className="mt-3 text-base">
+            <div className="mt-3">
+              <Switch
+                label="Research Mode: "
+                labelClassName="text-lg text-gray-600 font-semibold"
+                onClick={() => {
+                  setResearchMode(!researchMode);
+                }}
+                checked={researchMode}
+              />
+            </div>
+            <div className="text-base">
               <AnswerSection title="Right Answers" answers={rightAns} />
               {wrongAns.length > 0 && (
                 <AnswerSection title="Wrong Answers" answers={wrongAns} />

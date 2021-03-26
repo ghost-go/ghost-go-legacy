@@ -1,6 +1,5 @@
 import { Tag } from "components/common";
 import { useDispatch } from "utils";
-import { closeProblemFilterVisible } from "slices";
 
 const LEVEL_LIST = ["18k-10k", "10k-5k", "5k-3k", "3k-1d", "1d-3d", "3d-6d"];
 
@@ -9,11 +8,13 @@ const ProblemFilterPanel = ({
   tags,
   setLevelParam,
   setTagsParam,
+  setVisible,
 }: {
   visible: boolean;
   tags: any;
   setLevelParam: (l: string) => void;
   setTagsParam: (t: string) => void;
+  setVisible: (v: boolean) => void;
 }) => {
   const dispatch = useDispatch();
   return (
@@ -29,7 +30,7 @@ const ProblemFilterPanel = ({
           key={`level-all`}
           onClick={() => {
             setLevelParam("all");
-            dispatch(closeProblemFilterVisible());
+            setVisible(false);
           }}>
           all
         </Tag>
@@ -38,7 +39,7 @@ const ProblemFilterPanel = ({
             key={l}
             onClick={() => {
               setLevelParam(l);
-              dispatch(closeProblemFilterVisible());
+              setVisible(false);
             }}>
             {l}
           </Tag>
@@ -50,7 +51,7 @@ const ProblemFilterPanel = ({
           key={`t-all`}
           onClick={() => {
             setTagsParam("all");
-            dispatch(closeProblemFilterVisible());
+            setVisible(false);
           }}>
           all
         </Tag>
@@ -60,7 +61,7 @@ const ProblemFilterPanel = ({
               key={`t-${name}`}
               onClick={() => {
                 setTagsParam(name);
-                dispatch(closeProblemFilterVisible());
+                setVisible(false);
               }}>
               {name}
             </Tag>

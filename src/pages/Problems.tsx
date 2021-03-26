@@ -10,14 +10,7 @@ import { isMobile } from "react-device-detect";
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import { useQueryParam } from "use-query-params";
 
-import {
-  closeProblemFilterVisible,
-  fetchProblems,
-  selectUI,
-  selectTags,
-  toggleProblemFilterVisible,
-  fetchTags,
-} from "slices";
+import { fetchProblems, selectTags, fetchTags } from "slices";
 import {
   useDispatch,
   useTypedSelector,
@@ -27,7 +20,6 @@ import {
 import {
   FilterButton,
   ProblemCard,
-  Tag,
   Spinner,
   ProblemFilterPanel,
 } from "components/common";
@@ -36,7 +28,7 @@ const Problems = () => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [problemList, setProblemList] = useState([]);
-  const { problemFilterVisible } = useTypedSelector((state) => selectUI(state));
+  const [filter, setFilter] = useState<boolean>(false);
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
   const problems = useTypedSelector((state) => state.problems);
   const [levelParam = "all", setLevelParam] = useQueryParam<string>("level");
@@ -59,9 +51,7 @@ const Problems = () => {
   };
 
   useOutsideClick(ref, () => {
-    if (problemFilterVisible) {
-      dispatch(closeProblemFilterVisible());
-    }
+    if (filter) setFilter(false);
   });
 
   useLayoutEffect(() => {
@@ -99,7 +89,7 @@ const Problems = () => {
       <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
         <FilterButton
           onClick={() => {
-            dispatch(toggleProblemFilterVisible());
+            setFilter(!filter);
           }}
         />
         <div className="text-base ml-4">Level: {levelParam}</div>
@@ -119,9 +109,10 @@ const Problems = () => {
       </div>
       <div ref={ref}>
         <ProblemFilterPanel
-          visible={problemFilterVisible}
+          visible={filter}
           setLevelParam={setLevelParam}
           setTagsParam={setTagsParam}
+          setVisible={setFilter}
           tags={tags}
         />
       </div>

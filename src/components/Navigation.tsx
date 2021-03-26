@@ -10,6 +10,7 @@ import settings from "assets/images/settings.svg";
 import { setTheme, setCoordinates, selectUI } from "slices";
 import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 import { Theme } from "gboard/GBan";
+import { Switch } from "components/common";
 
 const Navigation = () => {
   const dispatch = useDispatch();
@@ -137,24 +138,13 @@ const Navigation = () => {
                   Photorealistic
                 </span>
               </div>
-              <div
+              <Switch
+                label="Show Coordinates: "
                 onClick={() => {
-                  console.log("click");
                   dispatch(setCoordinates(!coordinates));
-                }}>
-                <label className="p-1 font-semibold my-4">
-                  Show Coordinates:{" "}
-                </label>
-                <div className="relative inline-block w-10 mx-2 align-middle select-none transition duration-200 ease-in">
-                  <input
-                    type="checkbox"
-                    name="toggle"
-                    className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
-                    checked={coordinates}
-                  />
-                  <label className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                </div>
-              </div>
+                }}
+                checked={coordinates}
+              />
             </div>
           </div>
           <div

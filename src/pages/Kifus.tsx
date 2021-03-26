@@ -10,14 +10,7 @@ import { isMobile } from "react-device-detect";
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import { useQueryParam } from "use-query-params";
 
-import {
-  closeKifuFilterVisible,
-  fetchKifus,
-  selectUI,
-  toggleKifuFilterVisible,
-  selectPlayers,
-  fetchPlayers,
-} from "slices";
+import { fetchKifus, selectUI, selectPlayers, fetchPlayers } from "slices";
 import {
   useDispatch,
   useTypedSelector,
@@ -31,7 +24,7 @@ const Kifus = () => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [kifuList, setKifuList] = useState([]);
-  const { kifuFilterVisible } = useTypedSelector((state) => selectUI(state));
+  const [filter, setFilter] = useState(false);
   const [players] = useGenericData(
     useTypedSelector((state) => selectPlayers(state))
   );
@@ -52,9 +45,7 @@ const Kifus = () => {
   };
 
   useOutsideClick(ref, () => {
-    if (kifuFilterVisible) {
-      dispatch(closeKifuFilterVisible());
-    }
+    if (filter) setFilter(false);
   });
 
   useLayoutEffect(() => {
@@ -91,7 +82,7 @@ const Kifus = () => {
       <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
         <FilterButton
           onClick={() => {
-            dispatch(toggleKifuFilterVisible());
+            setFilter(!filter);
           }}
         />
         <div className="text-base ml-4">Player: {playerParam}</div>
@@ -110,7 +101,7 @@ const Kifus = () => {
       <div
         ref={ref}
         className={`absolute transition transform origin-top-left ${
-          kifuFilterVisible
+          filter
             ? "scale-100 opacity-1"
             : "scale-50 opacity-0 pointer-events-none"
         } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}>
@@ -122,7 +113,7 @@ const Kifus = () => {
             key={`t-all`}
             onClick={() => {
               setPlayerParam("all");
-              dispatch(closeKifuFilterVisible());
+              setFilter(false);
             }}>
             all
           </Tag>
@@ -132,7 +123,7 @@ const Kifus = () => {
                 key={`p-${en_name}`}
                 onClick={() => {
                   setPlayerParam(en_name);
-                  dispatch(closeKifuFilterVisible());
+                  setFilter(false);
                 }}>
                 {en_name}
               </Tag>

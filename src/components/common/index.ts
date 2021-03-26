@@ -8,6 +8,7 @@ import KifuControls from "./KifuControls";
 import ProblemFilterPanel from "./ProblemFilterPanel";
 import Answer from "./Answer";
 import AnswerSection from "./AnswerSection";
+import Switch from "./Switch";
 
 export {
   SidebarItem,
@@ -20,4 +21,5 @@ export {
   ProblemFilterPanel,
   Answer,
   AnswerSection,
+  Switch,
 };

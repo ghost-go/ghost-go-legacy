@@ -176,26 +176,56 @@ export default class GBan {
 
     const { interactive, padding } = this.options;
     const { space } = this.#calcSpaceAndPadding();
-    if (interactive) {
-      canvas.onmousemove = (e) => {
-        const point = this.transMat
-          .inverse()
-          .transformPoint(
-            new DOMPoint(
-              e.offsetX * devicePixelRatio,
-              e.offsetY * devicePixelRatio
-            )
-          );
-        const idx = Math.round((point.x - padding + space / 2) / space);
-        const idy = Math.round((point.y - padding + space / 2) / space);
-        this.cursor = [idx - 1, idy - 1];
-        this.render(this.mat, this.marks);
-      };
-    }
+
+    this.setInteractive(interactive);
+
+    // if (interactive) {
+    //   canvas.onmousemove = (e) => {
+    //     const point = this.transMat
+    //       .inverse()
+    //       .transformPoint(
+    //         new DOMPoint(
+    //           e.offsetX * devicePixelRatio,
+    //           e.offsetY * devicePixelRatio
+    //         )
+    //       );
+    //     const idx = Math.round((point.x - padding + space / 2) / space);
+    //     const idy = Math.round((point.y - padding + space / 2) / space);
+    //     this.cursor = [idx - 1, idy - 1];
+    //     this.render(this.mat, this.marks);
+    //   };
+    // }
   }
 
   setOptions(options: GBanOptionsParams) {
     this.options = { ...this.options, ...options };
+  }
+
+  setInteractive(value: boolean) {
+    const canvas = this.canvas;
+    if (!canvas) return;
+    this.options.interactive = value;
+    const { padding } = this.options;
+    const { space } = this.#calcSpaceAndPadding();
+    const onMouseMove = (e: MouseEvent) => {
+      const point = this.transMat
+        .inverse()
+        .transformPoint(
+          new DOMPoint(
+            e.offsetX * devicePixelRatio,
+            e.offsetY * devicePixelRatio
+          )
+        );
+      const idx = Math.round((point.x - padding + space / 2) / space);
+      const idy = Math.round((point.y - padding + space / 2) / space);
+      this.cursor = [idx - 1, idy - 1];
+      this.render(this.mat, this.marks);
+    };
+    if (value) {
+      canvas.addEventListener("mousemove", onMouseMove);
+    } else {
+      canvas.removeEventListener("mousemove", onMouseMove);
+    }
   }
 
   setTheme(theme: Theme, mat?: Matrix, marks?: Matrix) {
@@ -250,10 +280,6 @@ export default class GBan {
     if (canvas) {
       this.#clearCanvas();
       const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.fillStyle = "blue";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
 
       let leftMost: number = boardSize - 1;
       let rightMost: number = 0;
