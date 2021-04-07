@@ -46,6 +46,7 @@
     "react-scripts": "4.0.2",
     "react-spring": "^8.0.27",
     "react-svg": "^12.1.0",
+    "reduce-reducers": "^1.0.4",
     "redux-persist": "^6.0.0",
     "sass": "^1.32.8",
     "styled-components": "^5.2.1",

@@ -110,6 +110,8 @@ const Problems = () => {
       <div ref={ref}>
         <ProblemFilterPanel
           visible={filter}
+          activeLevel={levelParam}
+          activeTags={tagsParam}
           setLevelParam={setLevelParam}
           setTagsParam={setTagsParam}
           setVisible={setFilter}

@@ -6,12 +6,14 @@ interface UIState {
   theme: Theme;
   coordinates: boolean;
   answer: any;
+  answerMove: number;
 }
 
 const initialState: UIState = {
   theme: Theme.Flat,
   coordinates: false,
   answer: undefined,
+  answerMove: 0,
 };
 
 export const uiSlice = createSlice({
@@ -23,6 +25,18 @@ export const uiSlice = createSlice({
     },
     setCoordinates: (state, action) => {
       state.coordinates = action.payload;
+    },
+    setAnswerMove: (state, action) => {
+      state.answerMove = action.payload;
+    },
+    setAnswer: (state, action) => {
+      state.answer = action.payload;
+    },
+    resetAnswer: (state) => {
+      state.answer = initialState.answer;
+    },
+    resetAnswerMove: (state) => {
+      state.answerMove = initialState.answerMove;
     },
   },
 });

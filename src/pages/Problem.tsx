@@ -4,7 +4,6 @@ import GBan, { move as moveStone, canMove } from "gboard";
 import { ReactSVG } from "react-svg";
 import { useParams } from "react-router-dom";
 import { useSpring, animated } from "react-spring";
-import { Spring } from "react-spring/renderprops";
 import moment from "moment";
 import right from "assets/images/right.svg";
 import wrong from "assets/images/wrong.svg";
@@ -19,6 +18,8 @@ import {
   selectUI,
   selectTags,
   fetchTags,
+  uiSlice,
+  fetchProblemNext,
 } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 import {
@@ -29,7 +30,7 @@ import {
 } from "utils";
 import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
-import { ProblemFilterPanel, Answer, AnswerSection } from "components/common";
+import { ProblemFilterPanel, AnswerSection } from "components/common";
 import styled from "styled-components";
 import { SGF_LETTERS } from "common/Constants";
 
@@ -69,9 +70,11 @@ const Problem = () => {
   const [interactive, setInteractive] = useState<boolean>(true);
   const [researchMode, setResearchMode] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
-  const [move, setMove] = useState<number>();
+  const [move, setMove] = useState<number>(0);
 
-  const props = useSpring<any>({ x: 100, from: { x: 0 } });
+  const answerMove = useTypedSelector((i) => i.ui.answerMove);
+  const answer = useTypedSelector((i) => i.ui.answer);
+
   const op = useSpring<any>({ opacity: 1, from: { opacity: 0 } });
 
   const boardRef = useCallback((node) => {
@@ -153,6 +156,17 @@ const Problem = () => {
     }
   };
 
+  const handleNext = () => {
+    dispatch(
+      fetchProblemNext({
+        params: {
+          level: levelParam,
+          tags: tagsParam,
+        },
+      })
+    );
+  };
+
   const genMove = (mat: Matrix, path: string) => {
     const rightPaths = rightPath.filter((i) => i.startsWith(path));
     const changePaths = changePath.filter((i) => i.startsWith(path));
@@ -191,6 +205,8 @@ const Problem = () => {
     setMarks(matrix(zeros([19, 19])));
     setMat(initMat);
     setInteractive(true);
+    dispatch(uiSlice.actions.resetAnswer());
+    dispatch(uiSlice.actions.resetAnswerMove());
   };
 
   useEffect(() => {
@@ -198,6 +214,28 @@ const Problem = () => {
     dispatch(fetchTags());
     dispatch(fetchProblem({ pattern: { id: id } }));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (answer && answerMove) {
+      setResearchMode(true);
+      const moves = answer.attributes.steps.split(";").slice(0, answerMove);
+      let newMat = initMat;
+      let marks = matrix(zeros([19, 19]));
+      moves.forEach((move: string) => {
+        const nextMove = move[0] === "B" ? 1 : -1;
+        const i = SGF_LETTERS.indexOf(move[2]);
+        const j = SGF_LETTERS.indexOf(move[3]);
+        if (canMove(newMat, i, j, nextMove)) {
+          newMat = moveStone(newMat, i, j, nextMove);
+          marks = matrix(zeros([19, 19]));
+          marks.set([i, j], nextMove);
+        }
+        setMarks(marks);
+        setNextMove(-nextMove);
+        setMat(newMat);
+      });
+    }
+  }, [answer, answerMove, initMat]);
 
   useEffect(() => {
     if (board) {
@@ -280,7 +318,6 @@ const Problem = () => {
                     let marks = matrix(zeros([19, 19]));
                     marks.set([i, j], nextMove);
                     setMarks(marks);
-
                     setNextMove(-nextMove);
                     setMat(newMat);
                     if (!researchMode) {
@@ -306,6 +343,8 @@ const Problem = () => {
           <div ref={ref}>
             <ProblemFilterPanel
               visible={filter}
+              activeLevel={levelParam}
+              activeTags={tagsParam}
               setLevelParam={setLevelParam}
               setTagsParam={setTagsParam}
               setVisible={setFilter}
@@ -313,7 +352,7 @@ const Problem = () => {
             />
           </div>
           <div
-            className="flex flex-1 p-4 flex-col text-gray-800 lg:pl-8 lg:pt-10"
+            className="flex flex-1 p-4 flex-col text-gray-800 lg:pl-6 lg:pt-4"
             style={op}>
             <div className="text-3xl font-bold">
               {problem.data.attributes.turn === -1
@@ -321,7 +360,7 @@ const Problem = () => {
                 : "Black to move"}
               <span className="ml-2">{problem.data.attributes.rank}</span>
             </div>
-            <div className="text-base mt-5 flex flex-row items-center text-gray-600">
+            <div className="text-base mt-4 flex flex-row items-center text-gray-600">
               <span>ID: P-{problem.data.id}</span>
               <span>
                 <ReactSVG className="w-5 h-5 ml-3" src={right} />
@@ -336,13 +375,15 @@ const Problem = () => {
                 {problem.data.attributes.wrong_count}
               </span>
             </div>
-            <div className="flex flex-row mt-5 items-center">
+            <div className="flex flex-row mt-4 items-center">
               <button
                 className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3"
                 onClick={handleReset}>
                 Reset
               </button>
-              <button className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3">
+              <button
+                className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3"
+                onClick={handleNext}>
                 Next Problem
               </button>
               <div
@@ -356,10 +397,10 @@ const Problem = () => {
                 </span>
               </div>
             </div>
-            <div className="mt-3">
+            <div className="mt-4">
               <Switch
                 label="Research Mode: "
-                labelClassName="text-lg text-gray-600 font-semibold"
+                labelClassName="text-lg text-gray-600 font-semibold select-none cursor-pointer"
                 onClick={() => {
                   setResearchMode(!researchMode);
                 }}
@@ -367,23 +408,42 @@ const Problem = () => {
               />
             </div>
             <div className="text-base">
-              <AnswerSection title="Right Answers" answers={rightAns} />
+              <AnswerSection
+                title="Right Answers"
+                answers={rightAns}
+                move={0}
+                setMove={setMove}
+              />
               {wrongAns.length > 0 && (
-                <AnswerSection title="Wrong Answers" answers={wrongAns} />
+                <AnswerSection
+                  title="Wrong Answers"
+                  answers={wrongAns}
+                  move={move}
+                  setMove={setMove}
+                />
               )}
               {changeAns.length > 0 && (
-                <AnswerSection title="Change Answers" answers={changeAns} />
+                <AnswerSection
+                  title="Change Answers"
+                  answers={changeAns}
+                  move={move}
+                  setMove={setMove}
+                />
               )}
               {pendingRightAns.length > 0 && (
                 <AnswerSection
                   title="Pending Right Answers"
                   answers={pendingRightAns}
+                  move={move}
+                  setMove={setMove}
                 />
               )}
               {pendingWrongAns.length > 0 && (
                 <AnswerSection
                   title="Pending Wrong Answers"
                   answers={pendingWrongAns}
+                  move={move}
+                  setMove={setMove}
                 />
               )}
             </div>

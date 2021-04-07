@@ -1,15 +1,16 @@
 import { combineReducers } from "@reduxjs/toolkit";
-// import reduceReducers from 'reduce-reducers';
+import reduceReducers from "reduce-reducers";
 
 // import userReducer from './user';
 // import appReducer from './app';
 // import { authSlice } from './authSlice';
 // import * as utils from '../utils';
-import { problemSlice, problemsSlice } from "./problemSlice";
+import { problemNextSlice, problemSlice, problemsSlice } from "./problemSlice";
 import { kifuSlice, kifusSlice } from "./kifuSlice";
 import { uiSlice } from "./uiSlice";
 import { tagsSlice } from "./tagSlice";
 import { playersSlice } from "./playerSlice";
+import { initialGenericState } from "utils";
 
 // export * from './authSlice';
 export * from "./problemSlice";
@@ -22,7 +23,11 @@ const rootReducer = combineReducers({
   // user: userReducer,
   // auth: authSlice.reducer,
   problems: problemsSlice.reducer,
-  problem: problemSlice.reducer,
+  problem: reduceReducers<any>(
+    {},
+    problemSlice.reducer,
+    problemNextSlice.reducer
+  ),
   kifus: kifusSlice.reducer,
   kifu: kifuSlice.reducer,
   players: playersSlice.reducer,

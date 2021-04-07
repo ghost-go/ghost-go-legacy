@@ -12,10 +12,11 @@ const AnswerSection = ({
   setMove: (move: number) => void;
 }) => (
   <>
-    <div className="text-lg text-gray-600 font-semibold mt-2">{title}</div>
-    <div className="flex flex-wrap">
+    <div className="text-lg text-gray-600 font-semibold mt-4">{title}</div>
+    {/* <div className="flex flex-wrap"> */}
+    <div className="grid grid-cols-2 lg:grid-cols-2">
       {answers.map((a: any) => (
-        <Answer data={a} move={move} setMove={setMove} />
+        <Answer data={a} />
       ))}
     </div>
   </>

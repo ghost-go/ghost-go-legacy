@@ -6,17 +6,20 @@ const LEVEL_LIST = ["18k-10k", "10k-5k", "5k-3k", "3k-1d", "1d-3d", "3d-6d"];
 const ProblemFilterPanel = ({
   visible,
   tags,
+  activeLevel,
+  activeTags,
   setLevelParam,
   setTagsParam,
   setVisible,
 }: {
   visible: boolean;
   tags: any;
+  activeLevel: string;
+  activeTags: string;
   setLevelParam: (l: string) => void;
   setTagsParam: (t: string) => void;
   setVisible: (v: boolean) => void;
 }) => {
-  const dispatch = useDispatch();
   return (
     <div
       className={`absolute transition transform origin-top-left ${
@@ -28,6 +31,7 @@ const ProblemFilterPanel = ({
         <div className="block font-semibold text-gray-400 mb-2">LEVEL</div>
         <Tag
           key={`level-all`}
+          active={activeLevel === "all"}
           onClick={() => {
             setLevelParam("all");
             setVisible(false);
@@ -37,6 +41,7 @@ const ProblemFilterPanel = ({
         {LEVEL_LIST.map((l) => (
           <Tag
             key={l}
+            active={activeLevel === l}
             onClick={() => {
               setLevelParam(l);
               setVisible(false);
@@ -49,6 +54,7 @@ const ProblemFilterPanel = ({
         <div className="block font-semibold text-gray-400 mb-2">TAGS</div>
         <Tag
           key={`t-all`}
+          active={activeTags === "all"}
           onClick={() => {
             setTagsParam("all");
             setVisible(false);
@@ -59,6 +65,7 @@ const ProblemFilterPanel = ({
           tags.data.map(({ attributes: { name } }: any) => (
             <Tag
               key={`t-${name}`}
+              active={activeTags === name}
               onClick={() => {
                 setTagsParam(name);
                 setVisible(false);
