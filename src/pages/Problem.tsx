@@ -238,6 +238,16 @@ const Problem = () => {
   }, [answer, answerMove, initMat]);
 
   useEffect(() => {
+    setRightVisible(false);
+    setWrongVisible(false);
+    setMarks(matrix(zeros([19, 19])));
+    setResearchMode(false);
+    setInteractive(true);
+    dispatch(uiSlice.actions.resetAnswer());
+    dispatch(uiSlice.actions.resetAnswerMove());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (board) {
       board.nextMove = nextMove;
     }
@@ -268,7 +278,16 @@ const Problem = () => {
         const { x, y, ki } = sgfToPosition(move);
         newMat = moveStone(newMat, x, y, ki);
       });
+      // reset
       setNextMove(turn);
+      setRightVisible(false);
+      setWrongVisible(false);
+      setMarks(matrix(zeros([19, 19])));
+      setResearchMode(false);
+      setInteractive(true);
+      dispatch(uiSlice.actions.resetAnswer());
+      dispatch(uiSlice.actions.resetAnswerMove());
+
       setInitMat(newMat);
       setMat(newMat);
       rightAns = problem.included.filter(

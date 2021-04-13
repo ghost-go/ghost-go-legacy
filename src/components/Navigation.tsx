@@ -7,7 +7,7 @@ import { Menu, Dropdown } from "antd";
 import { ReactSVG } from "react-svg";
 import settings from "assets/images/settings.svg";
 
-import { setTheme, setCoordinates, selectUI } from "slices";
+import { setTheme, setCoordinates, selectUI, openSignInSlice } from "slices";
 import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 import { Theme } from "gboard/GBan";
 import { Switch } from "components/common";
@@ -184,7 +184,7 @@ const Navigation = () => {
                   </button>
                 </form>
               </div> */}
-        {true ? (
+        {false ? (
           <div className="user-profile dropdown login">
             <Dropdown overlay={menu}>
               <div
@@ -203,10 +203,12 @@ const Navigation = () => {
         ) : (
           <div className="user-profile dropdown login">
             <Button
-              onClick={() => {}}
+              onClick={() => {
+                // dispatch(openSignInSlice.actions.toggle());
+              }}
               className="signin clearfix"
               type="primary">
-              Sign up
+              Sign In
             </Button>
           </div>
         )}
