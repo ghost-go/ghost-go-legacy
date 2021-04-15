@@ -1,9 +1,8 @@
 import { useRef, useState } from "react";
 
-import { Button, Row, Col } from "antd";
+import { Button } from "semantic-ui-react";
 
 import Avatar from "react-avatar";
-import { Menu, Dropdown } from "antd";
 import { ReactSVG } from "react-svg";
 import settings from "assets/images/settings.svg";
 
@@ -15,7 +14,6 @@ import { Switch } from "components/common";
 const Navigation = () => {
   const dispatch = useDispatch();
   const [settingVisible, setSettingVisible] = useState(false);
-  const [userVisible, setUserVisible] = useState(false);
   const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
   const ref = useRef<HTMLDivElement>(null);
 
@@ -24,24 +22,6 @@ const Navigation = () => {
       setSettingVisible(false);
     }
   });
-
-  const menu = (
-    <Menu>
-      <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="/dashboard">
-          Dashboard
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <span
-          onClick={() => {
-            // logout();
-          }}>
-          Logout
-        </span>
-      </Menu.Item>
-    </Menu>
-  );
 
   const handleThemeChange = (theme: Theme) => {
     dispatch(setTheme(theme));
@@ -154,64 +134,15 @@ const Navigation = () => {
             <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
           </div>
         </div>
-        {/* <div
-              className="origin-top-right absolute right-0 mt-1 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="options-menu">
-              <div className="py-1" role="none">
-                <span
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem">
-                  Themes:
-                </span>
-                <span
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem">
-                  Black&White
-                </span>
-                <span
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem">
-                  License
-                </span>
-                <form method="POST" action="#" role="none">
-                  <button
-                    type="submit"
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem">
-                    Sign out
-                  </button>
-                </form>
-              </div> */}
-        {false ? (
-          <div className="user-profile dropdown login">
-            <Dropdown overlay={menu}>
-              <div
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}>
-                <Avatar
-                  name={"BAI"}
-                  size="40"
-                  round
-                  color={"#000000"}
-                  maxInitials={2}
-                />
-              </div>
-            </Dropdown>
-          </div>
-        ) : (
-          <div className="user-profile dropdown login">
-            <Button
-              onClick={() => {
-                // dispatch(openSignInSlice.actions.toggle());
-              }}
-              className="signin clearfix"
-              type="primary">
-              Sign In
-            </Button>
-          </div>
-        )}
+        <div>
+          <Button
+            color="black"
+            onClick={() => {
+              dispatch(openSignInSlice.actions.toggle());
+            }}>
+            Sign In
+          </Button>
+        </div>
       </div>
     </div>
   );

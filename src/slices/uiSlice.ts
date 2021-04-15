@@ -42,7 +42,4 @@ export const uiSlice = createSlice({
 });
 
 export const { setTheme, setCoordinates } = uiSlice.actions;
-
 export const selectUI = (state: RootState) => state.ui;
-
-export default uiSlice;

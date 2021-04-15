@@ -6,6 +6,7 @@ import {
   Redirect,
   useLocation,
 } from "react-router-dom";
+import ReactModal from "react-modal";
 import { PersistGate } from "redux-persist/integration/react";
 import { QueryParamProvider } from "use-query-params";
 import { Helmet } from "react-helmet";
@@ -26,6 +27,9 @@ import { SidebarItem } from "./components/common";
 import "./App.less";
 import logo from "assets/images/logo.png";
 import { store, persistor } from "utils";
+import SignInModal from "components/modal/SignInModal";
+
+ReactModal.setAppElement("body");
 
 const App = () => {
   // useEffect(() => {
@@ -65,20 +69,26 @@ const App = () => {
               title="Interactive Go Problem/Kifu Database"
               titleTemplate="GhostGo - %s"
             />
+            <SignInModal />
             <div className="flex flex-row">
               <div className="lg:flex flex-col lg:flex-row lg:min-h-screen w-full">
                 <div className="flex flex-col w-full lg:w-64 text-gray-700 bg-white flex-shrink-0">
-                  <div className="flex-shrink-0 lg:px-5 flex flex-row items-center px-3 py-5">
-                    <img
-                      className="w-8 h-8 lg:w-10 lg:h-10"
-                      src={logo}
-                      alt="logo"
-                    />
-                    <a
-                      href="/"
-                      className="ml-2 text-2xl font-semibold tracking-wider text-gray-900 rounded-sm focus:outline-none focus:shadow-outline">
-                      GhostGo
-                    </a>
+                  <div className="flex-shrink-0 lg:px-5 flex flex-row items-center px-3 py-5 justify-between">
+                    <div className="flex flex-row">
+                      <img
+                        className="w-8 h-8 lg:w-10 lg:h-10"
+                        src={logo}
+                        alt="logo"
+                      />
+                      <a
+                        href="/"
+                        className="ml-2 text-2xl font-semibold tracking-wider text-gray-900 rounded-sm focus:outline-none focus:shadow-outline">
+                        GhostGo
+                      </a>
+                    </div>
+                    <div className={"lg:hidden"}>
+                      <Navigation />
+                    </div>
                   </div>
                   <nav className="flex-grow lg:block lg:px-4 lg:pb-0 lg:overflow-y-auto hidden">
                     <div className="block px-1 py-1 mt-1 text-sm font-semibold text-gray-400">

@@ -111,3 +111,16 @@ export const buildGenericReducer = <T>(
   const slice = buildGenericSlice<T>(name, asyncThunk, initialState);
   return { asyncThunk, slice };
 };
+
+export const buildGenericBooleanSlice = (name: string) => {
+  const slice = createSlice({
+    name,
+    initialState: false,
+    reducers: {
+      makeTrue: (state) => (state = true),
+      makeFalse: (state) => (state = false),
+      toggle: (state) => (state = !state),
+    },
+  });
+  return slice;
+};
