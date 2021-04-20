@@ -8,6 +8,7 @@ import like from "assets/images/like.svg";
 
 import { uiSlice } from "slices";
 import { useDispatch, useTypedSelector } from "utils";
+import { Icon } from "semantic-ui-react";
 
 const Answer = ({ data }: { data: any }) => {
   const dispatch = useDispatch();
@@ -56,18 +57,15 @@ const Answer = ({ data }: { data: any }) => {
       <div className="text-lg mr-1">
         [{move}/{total}]
       </div>
-      <div className="w-4 h-4 m-1" onClick={onFirst}>
-        <ReactSVG src={first} />
-      </div>
-      <div className="w-4 h-4 m-1" onClick={onPrev}>
-        <ReactSVG className="transform rotate-180" src={play} />
-      </div>
-      <div className="w-4 h-4 m-1" onClick={onNext}>
-        <ReactSVG src={play} />
-      </div>
-      <div className="w-4 h-4 m-1" onClick={onLast}>
-        <ReactSVG src={last} />
-      </div>
+      <Icon className="mx-4" name="step backward" onClick={onFirst} />
+      <Icon
+        className="mx-4"
+        name="play"
+        flipped={"horizontally"}
+        onClick={onPrev}
+      />
+      <Icon className="mx-4" name="play" onClick={onNext} />
+      <Icon className="mx-4" name="step forward" onClick={onLast} />
       {/* <div className="0 p-2" onClick={onLast}>
         <ReactSVG src={like} />
       </div> */}

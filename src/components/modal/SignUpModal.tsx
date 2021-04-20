@@ -1,123 +1,103 @@
-import React, { useEffect, useContext } from "react";
-import { Button, Modal, Form, Input, message } from "antd";
-import styled from "styled-components";
+import { useDispatch, useTypedSelector } from "utils";
+import {
+  Button,
+  Header,
+  Image,
+  Modal,
+  Form,
+  Grid,
+  Message,
+  Segment,
+} from "semantic-ui-react";
 
-import { useMutation } from "@apollo/client";
-import UIContext from "../../contexts/ui-context";
-import { SIGN_UP } from "../../common/graphql";
+import { GoogleLogin } from "react-google-login";
+import { openSignInSlice, openSignUpSlice } from "slices";
 
-const SignIn = styled.span`
-  font-size: 12px;
-  &:hover {
-    color: #f87500;
-  }
-  cursor: pointer;
-`;
+import logo from "assets/images/logo.png";
+import { GOOGLE_CLINET_ID } from "utils/constants";
 
 const SignUpModal = () => {
-  const [
-    signUp,
-    { data: signUpMutationData, error: signUpError },
-  ] = useMutation(SIGN_UP);
-
-  const { signUpModalVisible, setSignUpModalVisible } = useContext(UIContext);
-  const { setSignInModalVisible } = useContext(UIContext);
-
-  useEffect(() => {
-    if (!signUpMutationData) return;
-    if (signUpMutationData.createUser) {
-      setSignUpModalVisible(false);
-      setSignInModalVisible(true);
-      message.success("Sign up successfully. Please login!");
-      console.log("signinuser", signUpMutationData.createUser);
-    } else {
-      message.info(signUpMutationData.error);
-    }
-  }, [signUpMutationData, signUpError]);
-
-  const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 16 },
+  const open = useTypedSelector((i) => i.openSignUp);
+  const dispatch = useDispatch();
+  const handleGoogleSignInSuccess = (res: any) => {
+    console.log(res);
   };
-  const tailLayout = {
-    wrapperCol: { offset: 6, span: 16 },
+  const handleGoogleSignInFailure = (res: any) => {
+    console.log(res);
   };
-
-  const onFinish = (values: any) => {
-    signUp({
-      variables: {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      },
-    });
-
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
   return (
     <Modal
-      visible={signUpModalVisible}
-      closable={false}
-      footer={null}
-      onCancel={setSignUpModalVisible.bind(null, false)}
-    >
-      <Form
-        {...layout}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: "Please input your email!" }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: "Please input your name!" }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        {/* <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
-
-        <Form.Item {...tailLayout} style={{ marginBottom: 0 }}>
-          <Button type="primary" htmlType="submit">
-            Sign Up
-          </Button>
-        </Form.Item>
-        <Form.Item {...tailLayout}>
-          <SignIn
-            onClick={() => {
-              setSignUpModalVisible(false);
-              setSignInModalVisible(true);
-            }}
-          >
-            Already have an account? Sign in!
-          </SignIn>
-        </Form.Item>
-      </Form>
+      onClose={() => dispatch(openSignInSlice.actions.makeFalse())}
+      onOpen={() => dispatch(openSignInSlice.actions.makeTrue())}
+      open={open}>
+      <Modal.Content>
+        <Grid
+          textAlign="center"
+          style={{ height: "90vh" }}
+          verticalAlign="middle">
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as="h2" color="black" textAlign="center">
+              <Image src={logo} />
+              Login to your account
+            </Header>
+            <Form size="large">
+              <Segment textAlign="right">
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="Email Address"
+                />
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="User Name"
+                />
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="Display Name(Optional)"
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  placeholder="Password"
+                  type="password"
+                />
+                <Button color="black" fluid size="large">
+                  Sign Up
+                </Button>
+              </Segment>
+              <Segment size="large" textAlign="left">
+                <div className="mb-2">Or Sign Up with:</div>
+                <GoogleLogin
+                  clientId={GOOGLE_CLINET_ID}
+                  buttonText="Login"
+                  onSuccess={handleGoogleSignInSuccess}
+                  onFailure={handleGoogleSignInFailure}
+                  cookiePolicy={"single_host_origin"}
+                />
+              </Segment>
+            </Form>
+            <Message>
+              Already registered?
+              <span
+                className="text-blue-800 cursor-pointer"
+                onClick={() => {
+                  dispatch(openSignInSlice.actions.makeTrue());
+                  dispatch(openSignUpSlice.actions.makeFalse());
+                }}>
+                Sign In
+              </span>
+            </Message>
+          </Grid.Column>
+        </Grid>
+      </Modal.Content>
     </Modal>
   );
 };
+
 export default SignUpModal;

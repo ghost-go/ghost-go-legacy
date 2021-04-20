@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-
 import { useDispatch, useTypedSelector } from "utils";
 import {
   Button,
@@ -14,7 +11,8 @@ import {
 } from "semantic-ui-react";
 
 import { GoogleLogin } from "react-google-login";
-import { openSignInSlice } from "slices";
+import { openSignInSlice, openSignUpSlice } from "slices";
+import { GOOGLE_CLINET_ID } from "utils/constants";
 
 import logo from "assets/images/logo.png";
 
@@ -57,9 +55,9 @@ const SignInModal = () => {
                   placeholder="Password"
                   type="password"
                 />
-                <a className="inline-block mb-4 text-gray-400">
+                <span className="inline-block mb-4 text-gray-400 cursor-pointer">
                   Forgot password?
-                </a>
+                </span>
                 <Button color="black" fluid size="large">
                   Login
                 </Button>
@@ -67,7 +65,7 @@ const SignInModal = () => {
               <Segment size="large" textAlign="left">
                 <div className="mb-2">Or Login with:</div>
                 <GoogleLogin
-                  clientId="277291989992-j38jt4dat4mi367ec0drpiamt6d4n4s0.apps.googleusercontent.com"
+                  clientId={GOOGLE_CLINET_ID}
                   buttonText="Login"
                   onSuccess={handleGoogleSignInSuccess}
                   onFailure={handleGoogleSignInFailure}
@@ -76,23 +74,19 @@ const SignInModal = () => {
               </Segment>
             </Form>
             <Message>
-              Not registered? <a href="#">Sign Up</a>
+              Not registered?{" "}
+              <span
+                className="text-blue-800 cursor-pointer"
+                onClick={() => {
+                  dispatch(openSignInSlice.actions.makeFalse());
+                  dispatch(openSignUpSlice.actions.makeTrue());
+                }}>
+                Sign Up
+              </span>
             </Message>
           </Grid.Column>
         </Grid>
       </Modal.Content>
-      {/* <Modal.Actions>
-        <Button color='black' onClick={() => setOpen(false)}>
-          Nope
-        </Button>
-        <Button
-          content="Yep, that's me"
-          labelPosition='right'
-          icon='checkmark'
-          onClick={() => setOpen(false)}
-          positive
-        />
-      </Modal.Actions> */}
     </Modal>
   );
 };

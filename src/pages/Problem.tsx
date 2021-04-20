@@ -5,8 +5,6 @@ import { ReactSVG } from "react-svg";
 import { useParams } from "react-router-dom";
 import { useSpring, animated } from "react-spring";
 import moment from "moment";
-import right from "assets/images/right.svg";
-import wrong from "assets/images/wrong.svg";
 import edit from "assets/images/edit.svg";
 import animWrong from "assets/images/anim-wrong.svg";
 import animRight from "assets/images/anim-right.svg";
@@ -19,6 +17,7 @@ import {
   selectTags,
   fetchTags,
   uiSlice,
+  openCommentsSlice,
   fetchProblemNext,
 } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
@@ -33,6 +32,20 @@ import { sgfToPosition } from "../common/Helper";
 import { ProblemFilterPanel, AnswerSection } from "components/common";
 import styled from "styled-components";
 import { SGF_LETTERS } from "common/Constants";
+import {
+  Accordion,
+  Icon,
+  Header,
+  Rating,
+  Button,
+  Label,
+  Sidebar,
+  Segment,
+  Comment,
+  Form,
+  Menu,
+} from "semantic-ui-react";
+import CommentsSidebar from "components/CommentsSidebar";
 
 interface ParamTypes {
   id: string;
@@ -57,7 +70,9 @@ const Problem = () => {
   const [problem] = useGenericData(
     useTypedSelector((state) => selectProblem(state))
   );
+  const [activeIndex, setActiveIndex] = useState();
   const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
+  const open = useTypedSelector((state) => state.openComments);
   const [initMat, setInitMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
@@ -207,6 +222,12 @@ const Problem = () => {
     setInteractive(true);
     dispatch(uiSlice.actions.resetAnswer());
     dispatch(uiSlice.actions.resetAnswerMove());
+  };
+
+  const handleActiveIndexChange = (e: any, titleProps: any) => {
+    const { index } = titleProps;
+    const newIndex = activeIndex === index ? -1 : index;
+    setActiveIndex(newIndex);
   };
 
   useEffect(() => {
@@ -373,38 +394,36 @@ const Problem = () => {
           <div
             className="flex flex-1 p-4 flex-col text-gray-800 lg:pl-6 lg:pt-4"
             style={op}>
-            <div className="text-3xl font-bold">
-              {problem.data.attributes.turn === -1
-                ? "White to move"
-                : "Black to move"}
+            <Header size="huge">
+              <span>
+                {problem.data.attributes.turn === -1
+                  ? "White to move"
+                  : "Black to move"}
+              </span>
               <span className="ml-2">{problem.data.attributes.rank}</span>
-            </div>
-            <div className="text-base mt-4 flex flex-row items-center text-gray-600">
-              <span>ID: P-{problem.data.id}</span>
-              <span>
-                <ReactSVG className="w-5 h-5 ml-3" src={right} />
-              </span>
-              <span className="ml-1">
+            </Header>
+            <div>
+              <Label>
+                <Icon name="puzzle" />
+                ID: P-{problem.data.id}
+              </Label>
+              <Label>
+                <Icon name="checkmark" />
                 {problem.data.attributes.right_count}
-              </span>
-              <span>
-                <ReactSVG className="w-3.5 h-3.5 ml-3" src={wrong} />
-              </span>
-              <span className="ml-1">
+              </Label>
+              <Label>
+                <Icon name="times" />
                 {problem.data.attributes.wrong_count}
-              </span>
+              </Label>
             </div>
             <div className="flex flex-row mt-4 items-center">
-              <button
-                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3"
-                onClick={handleReset}>
+              <Button onClick={handleReset}>
+                <Icon name="redo" />
                 Reset
-              </button>
-              <button
-                className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 mr-3"
-                onClick={handleNext}>
+              </Button>
+              <Button color="black" onClick={handleNext}>
                 Next Problem
-              </button>
+              </Button>
               <div
                 className="flex flex-row items-center self-end cursor-pointer"
                 onClick={() => {
@@ -416,7 +435,61 @@ const Problem = () => {
                 </span>
               </div>
             </div>
-            <div className="mt-4">
+            <div>
+              <div className="inline-block mt-4">
+                <Button size="tiny" as="div" labelPosition="right">
+                  <Button size="tiny" color="red">
+                    <Icon name="heart" />
+                    Like
+                  </Button>
+                  <Label as="a" basic color="red" pointing="left">
+                    2048
+                  </Label>
+                </Button>
+                <Button
+                  size="tiny"
+                  as="div"
+                  labelPosition="right"
+                  onClick={() => {
+                    dispatch(openCommentsSlice.actions.toggle());
+                  }}>
+                  <Button size="tiny" color="blue">
+                    <Icon name="comment" />
+                    Comments
+                  </Button>
+                  <Label as="a" basic color="blue" pointing="left">
+                    2048
+                  </Label>
+                </Button>
+              </div>
+              <div className="inline-block mt-4">
+                <Button.Group size="tiny">
+                  <Button size="tiny" icon color="facebook">
+                    <Icon name="facebook" />
+                  </Button>
+                  <Button size="tiny" icon color="twitter">
+                    <Icon name="twitter" />
+                  </Button>
+                  <Button color="google plus" icon>
+                    <Icon name="google plus" />
+                  </Button>
+                  <Button color="instagram" icon>
+                    <Icon name="instagram" />
+                  </Button>
+                </Button.Group>
+              </div>
+              {/* <Rating
+                icon="star"
+                size="massive"
+                defaultRating={0}
+                maxRating={5}
+              /> */}
+            </div>
+            <Header as="a" dividing>
+              <Icon name="book" />
+              Answers
+            </Header>
+            <div className="-mt-2 mb-2">
               <Switch
                 label="Research Mode: "
                 labelClassName="text-lg text-gray-600 font-semibold select-none cursor-pointer"
@@ -426,47 +499,76 @@ const Problem = () => {
                 checked={researchMode}
               />
             </div>
-            <div className="text-base">
-              <AnswerSection
-                title="Right Answers"
-                answers={rightAns}
-                move={0}
-                setMove={setMove}
-              />
+            <Accordion fluid styled>
+              <Accordion.Title
+                active={activeIndex === 0}
+                index={0}
+                onClick={handleActiveIndexChange}>
+                <Icon name="dropdown" />
+                {`Right Answers(${rightAns.length})`}
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex === 0}>
+                <AnswerSection answers={rightAns} />
+              </Accordion.Content>
               {wrongAns.length > 0 && (
-                <AnswerSection
-                  title="Wrong Answers"
-                  answers={wrongAns}
-                  move={move}
-                  setMove={setMove}
-                />
+                <>
+                  <Accordion.Title
+                    active={activeIndex === 1}
+                    index={1}
+                    onClick={handleActiveIndexChange}>
+                    <Icon name="dropdown" />
+                    {`Wrong Answers(${wrongAns.length})`}
+                  </Accordion.Title>
+                  <Accordion.Content active={activeIndex === 1}>
+                    <AnswerSection answers={wrongAns} />
+                  </Accordion.Content>
+                </>
               )}
               {changeAns.length > 0 && (
-                <AnswerSection
-                  title="Change Answers"
-                  answers={changeAns}
-                  move={move}
-                  setMove={setMove}
-                />
+                <>
+                  <Accordion.Title
+                    active={activeIndex === 2}
+                    index={2}
+                    onClick={handleActiveIndexChange}>
+                    <Icon name="dropdown" />
+                    {`Change Answers(${changeAns.length})`}
+                  </Accordion.Title>
+                  <Accordion.Content active={activeIndex === 2}>
+                    <AnswerSection answers={changeAns} />
+                  </Accordion.Content>
+                </>
               )}
               {pendingRightAns.length > 0 && (
-                <AnswerSection
-                  title="Pending Right Answers"
-                  answers={pendingRightAns}
-                  move={move}
-                  setMove={setMove}
-                />
+                <>
+                  <Accordion.Title
+                    active={activeIndex === 2}
+                    index={2}
+                    onClick={handleActiveIndexChange}>
+                    <Icon name="dropdown" />
+                    {`Pending Right Answers(${pendingRightAns.length})`}
+                  </Accordion.Title>
+                  <Accordion.Content active={activeIndex === 2}>
+                    <AnswerSection answers={pendingRightAns} />
+                  </Accordion.Content>
+                </>
               )}
               {pendingWrongAns.length > 0 && (
-                <AnswerSection
-                  title="Pending Wrong Answers"
-                  answers={pendingWrongAns}
-                  move={move}
-                  setMove={setMove}
-                />
+                <>
+                  <Accordion.Title
+                    active={activeIndex === 2}
+                    index={2}
+                    onClick={handleActiveIndexChange}>
+                    <Icon name="dropdown" />
+                    {`Pending Wrong Answers(${pendingWrongAns.length})`}
+                  </Accordion.Title>
+                  <Accordion.Content active={activeIndex === 2}>
+                    <AnswerSection answers={pendingWrongAns} />
+                  </Accordion.Content>
+                </>
               )}
-            </div>
+            </Accordion>
           </div>
+          <CommentsSidebar />
         </div>
       )}
     </div>

@@ -10,7 +10,11 @@ import { kifuSlice, kifusSlice } from "./kifuSlice";
 import { uiSlice } from "./uiSlice";
 import { tagsSlice } from "./tagSlice";
 import { playersSlice } from "./playerSlice";
-import { openSignInSlice, openSignUpSlice } from "./genericSlice";
+import {
+  openSignInSlice,
+  openSignUpSlice,
+  openCommentsSlice,
+} from "./genericSlice";
 
 // export * from './authSlice';
 export * from "./problemSlice";
@@ -36,6 +40,7 @@ const rootReducer = combineReducers({
   ui: uiSlice.reducer,
   openSignIn: openSignInSlice.reducer,
   openSignUp: openSignUpSlice.reducer,
+  openComments: openCommentsSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

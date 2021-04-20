@@ -28,6 +28,7 @@ import "./App.less";
 import logo from "assets/images/logo.png";
 import { store, persistor } from "utils";
 import SignInModal from "components/modal/SignInModal";
+import SignUpModal from "components/modal/SignUpModal";
 
 ReactModal.setAppElement("body");
 
@@ -70,6 +71,7 @@ const App = () => {
               titleTemplate="GhostGo - %s"
             />
             <SignInModal />
+            <SignUpModal />
             <div className="flex flex-row">
               <div className="lg:flex flex-col lg:flex-row lg:min-h-screen w-full">
                 <div className="flex flex-col w-full lg:w-64 text-gray-700 bg-white flex-shrink-0">
