@@ -63,12 +63,8 @@ const Sidebar = () => {
               OTHERS
             </div>
             <SidebarItem to="/dashboard">Dashboard</SidebarItem>
-            <SidebarItem to="/profile?section=viewedproblem">
-              Viewed Problems
-            </SidebarItem>
-            <SidebarItem to="/profile?section=viewedkifus">
-              Viewed Kifus
-            </SidebarItem>
+            <SidebarItem to="/viewed?type=problem">Viewed Problems</SidebarItem>
+            <SidebarItem to="/viewed?type=kifu">Viewed Kifus</SidebarItem>
           </>
         )}
       </nav>

@@ -13,11 +13,11 @@ import Kifus from "./pages/Kifus";
 import Kifu from "./pages/Kifu";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import Viewed from "./pages/Viewed";
 // import RecentRecords from "./pages/RecentRecords";
 // import MostWrongRecords from "./pages/MostWrongRecords";
 // import { a1ToSGF } from './common/Helper';
 
-import "./App.less";
 import Navigation from "components/Navigation";
 import { store, persistor } from "utils";
 import SignInModal from "components/modal/SignInModal";
@@ -71,7 +71,7 @@ const App = () => {
                 <Sidebar />
                 <div className="flex-1">
                   <BackTop />
-                  <div className={"lg:block lg:py-4 lg:px-4 hidden"}>
+                  <div className={"lg:block lg:py-4 lg:px-4 hidden bg-white"}>
                     <Navigation />
                   </div>
                   <Route
@@ -88,6 +88,7 @@ const App = () => {
                     <Route path="/problems/:id" component={Problem} />
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/profile" component={Profile} />
+                    <Route path="/viewed" component={Viewed} />
                   </Suspense>
                   {/* <Footer style={{ textAlign: "center" }}>
                     Copyright © 2020 GhostGo. All rights reserved.

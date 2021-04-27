@@ -190,15 +190,28 @@ const Navigation = () => {
                 <Menu.Menu>
                   <Menu.Item
                     as={NavLink}
+                    to={"/dashboard"}
+                    name="dashboard"
+                    onClick={handleItemClick}>
+                    Dashboard
+                  </Menu.Item>
+                  <Menu.Item
+                    as={NavLink}
                     to={"/profile"}
                     name="profile"
                     onClick={handleItemClick}>
                     My Profile
                   </Menu.Item>
-                  <Menu.Item name="viewedproblems" onClick={handleItemClick}>
+                  <Menu.Item
+                    name="viewedproblems"
+                    to={"/viewed?type=problem"}
+                    onClick={handleItemClick}>
                     Viewed Problems
                   </Menu.Item>
-                  <Menu.Item name="viewedkifus" onClick={handleItemClick}>
+                  <Menu.Item
+                    name="viewedkifus"
+                    to={"/viewed?type=kifu"}
+                    onClick={handleItemClick}>
                     Viewed Kifus
                   </Menu.Item>
                 </Menu.Menu>
