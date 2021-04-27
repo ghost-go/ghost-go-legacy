@@ -24,7 +24,7 @@ const KifuCard = ({ kifu }: { kifu: any }) => {
           wrapperProps={{ style: { display: "block" } }}
           src={image_url}
         />
-        <div className="flex flex-col mt-1 px-2 text-xs md:text-sm">
+        <div className="flex flex-col mt-1 px-2 text-base text-black">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center">
               <span className="rounded-full h-3.5 w-3.5 bg-black mr-1 mt-0.5"></span>

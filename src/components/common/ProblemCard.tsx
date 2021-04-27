@@ -13,7 +13,7 @@ const ProblemCard = ({ problem }: { problem: any }) => {
           effect="opacity"
           src={image_url}
         />
-        <div className="absolute left-2 bottom-0 text-sm">LEVEL: {rank}</div>
+        <div className="absolute left-2 bottom-0 text-black">LEVEL: {rank}</div>
         {whofirst === "Black First" ? (
           <div className="absolute right-2 bottom-0.5 rounded-full h-4 w-4 flex items-center justify-center bg-black"></div>
         ) : (

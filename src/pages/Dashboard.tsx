@@ -1,145 +1,152 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Row, Col } from "antd";
-import { useQuery } from "@apollo/client";
-import { Card } from "antd";
+import {
+  Container,
+  Statistic,
+  Header,
+  Grid,
+  Card,
+  Image,
+  Icon,
+  Menu,
+  Segment,
+} from "semantic-ui-react";
+import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 
-import RecordList from "../components/RecordList";
-
-import "../stylesheets/containers/Dashboard.scss";
-import AuthContext from "../contexts/auth-context";
-import { GET_DASHBOARD } from "../common/graphql";
+import logo from "assets/images/logo.png";
+import { useHistory } from "react-router";
 
 const Dashboard = () => {
-  const [dashboard, setDashboard] = useState({
-    wrong: 0,
-    right: 0,
-    total: 0,
-    recentList: [],
-    mostWrongList: [],
-  });
-
-  const { data } = useQuery(GET_DASHBOARD, {
-    variables: {
-      dateRange: "all",
-      userRange: "onlyme",
-    },
-    fetchPolicy: "cache-and-network",
-  });
-
-  // const [filter, setFilter] = useState("All");
-
-  const { token } = useContext(AuthContext);
-  console.log("token", token);
-
-  useEffect(() => {
-    if (!data) return;
-    setDashboard(data.dashboard);
-  }, [data]);
-
-  // function handleMenuClick(e: any) {
-  //   setFilter(e.item.node.innerText);
-  //   refetch({
-  //     dateRange: e.key,
-  //     userRange: "onlyme",
-  //   });
-  // }
-
-  if (!data) return null;
-  if (!dashboard) return null;
-
-  // const menu = (
-  //   <Menu onClick={handleMenuClick}>
-  //     <Menu.Item key="today">
-  //       <UserOutlined /> Today
-  //     </Menu.Item>
-  //     <Menu.Item key="yesterday">
-  //       <UserOutlined /> Yesterday
-  //     </Menu.Item>
-  //     <Menu.Item key="last7days">
-  //       <UserOutlined /> Last 7 days
-  //     </Menu.Item>
-  //     <Menu.Item key="last30days">
-  //       <UserOutlined /> Last 30 days
-  //     </Menu.Item>
-  //     <Menu.Item key="all">
-  //       <UserOutlined /> All
-  //     </Menu.Item>
-  //   </Menu>
-  // );
-
-  const cardBodyStyle = { padding: 10 };
+  const { token, user } = useTypedSelector((i) => i.auth);
+  const history = useHistory();
+  if (!token) history.push("/");
 
   return (
-    <div className="dashboard-container">
-      <Row>
-        <Col md={20}>
-          <h1>Dashboard</h1>
-        </Col>
-        {/* <Col md={4} style={{ textAlign: "right" }}>
-          <Dropdown overlay={menu}>
-            <Button>
-              {filter}
-              <DownOutlined />
-            </Button>
-          </Dropdown>
-        </Col> */}
-      </Row>
-      <Row gutter={20} style={{ marginBottom: 10 }}>
-        <Col xs={24} md={8}>
-          <div className="tile-box bg-blue">
-            <div>Total</div>
-            <div>
-              <div className="tile-content">{dashboard.total}</div>
-            </div>
+    <Grid container stackable divided="vertically">
+      <Grid.Row columns={2} divided>
+        <Grid.Column>
+          <Header as="h2">Problems</Header>
+          <Statistic.Group widths="4">
+            <Statistic color="grey">
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Tried</Statistic.Label>
+            </Statistic>
+            <Statistic color="green">
+              <Statistic.Value>31</Statistic.Value>
+              <Statistic.Label>Rights</Statistic.Label>
+            </Statistic>
+            <Statistic color="orange">
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Wrongs</Statistic.Label>
+            </Statistic>
+            <Statistic color="red">
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Liked</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+        </Grid.Column>
+        <Grid.Column>
+          <Header as="h2">Kifus</Header>
+          <Statistic.Group widths="2">
+            <Statistic color="grey">
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Viewed</Statistic.Label>
+            </Statistic>
+            <Statistic color="red">
+              <Statistic.Value>30</Statistic.Value>
+              <Statistic.Label>Liked</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+        </Grid.Column>
+      </Grid.Row>
+
+      {/* <Menu pointing secondary>
+          <Menu.Item name="home" active={false} onClick={() => {}} />
+          <Menu.Item name="messages" active={false} onClick={() => {}} />
+          <Menu.Item name="friends" active={false} onClick={() => {}} />
+        </Menu> */}
+
+      <Grid.Row divided columns={3}>
+        <Grid.Column>
+          <Header as="a">The Most Wrong Problems</Header>
+          <div className="my-2">
+            <Card fluid>
+              <Card.Content>
+                <Image
+                  floated="right"
+                  size="tiny"
+                  src={logo}
+                  spaced={false}
+                  style={{ marginBottom: 0, marginLeft: 0 }}
+                />
+                <Card.Header>P-10000</Card.Header>
+                <Card.Meta>
+                  <span>Level: 4K</span>
+                </Card.Meta>
+                <Card.Meta>
+                  <span>Black to move</span>
+                </Card.Meta>
+                <Card.Meta>
+                  <span>Right rate: 21.3%</span>
+                </Card.Meta>
+              </Card.Content>
+              <Card.Content extra>
+                {/* <Icon name="" /> */}
+                Your wrong count: 10
+              </Card.Content>
+            </Card>
           </div>
-        </Col>
-        <Col xs={24} md={8}>
-          <div className="tile-box bg-green">
-            <div>Right</div>
-            <div>
-              <div className="tile-content">{dashboard.right}</div>
-            </div>
+          <div className="my-2">
+            <Card size="small" fluid>
+              <Card.Content>
+                <Image floated="right" size="tiny" src={logo} />
+                <Card.Header>P-10000</Card.Header>
+                <Card.Meta>
+                  <span>Level: 4K</span>
+                </Card.Meta>
+                <Card.Meta>
+                  <span>Black to move</span>
+                </Card.Meta>
+                <Card.Meta>
+                  <span>Right rate: 21.3%</span>
+                </Card.Meta>
+              </Card.Content>
+              <Card.Content extra>
+                {/* <Icon name="" /> */}
+                Your wrong count: 10
+              </Card.Content>
+            </Card>
           </div>
-        </Col>
-        <Col xs={24} md={8}>
-          <div className="tile-box bg-red">
-            <div>Wrong</div>
-            <div>
-              <div className="tile-content">{dashboard.wrong}</div>
-            </div>
+          <div className="my-2">
+            <Card size="small" fluid>
+              <Card.Content>
+                <Image floated="right" size="tiny" src={logo} />
+                <Card.Header>P-10000</Card.Header>
+                <Card.Meta>
+                  <span>Level: 4K</span>
+                </Card.Meta>
+                <Card.Meta>
+                  <span>Black to move</span>
+                </Card.Meta>
+                <Card.Meta>
+                  <span>Right rate: 21.3%</span>
+                </Card.Meta>
+              </Card.Content>
+              <Card.Content extra>
+                {/* <Icon name="" /> */}
+                Your wrong count: 10
+              </Card.Content>
+            </Card>
           </div>
-        </Col>
-      </Row>
-      <Row gutter={20}>
-        <Col span={24}>
-          <Card
-            title="Most Wrong Problem"
-            extra={<a href="/mostwrongs">More</a>}
-            bodyStyle={cardBodyStyle}
-          >
-            <Row gutter={60}>
-              <RecordList recordList={dashboard.mostWrongList} />
-            </Row>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Card
-            title="Recent Viewed Problem"
-            extra={<a href="/recents">More</a>}
-            bodyStyle={cardBodyStyle}
-          >
-            <Row gutter={60}>
-              <RecordList
-                recordList={dashboard.recentList}
-                showCreatedAt={true}
-              />
-            </Row>
-          </Card>
-        </Col>
-      </Row>
-    </div>
+        </Grid.Column>
+        <Grid.Column>
+          <Header as="a">Viewed Problems</Header>
+          {/* <Image src="/images/wireframe/paragraph.png" /> */}
+        </Grid.Column>
+        <Grid.Column>
+          <Header as="a">Viewed Kifus</Header>
+          {/* <Image src="/images/wireframe/paragraph.png" /> */}
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };
 

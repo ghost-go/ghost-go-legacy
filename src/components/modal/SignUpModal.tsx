@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useDispatch, useTypedSelector } from "utils";
 import {
   Button,
@@ -8,16 +9,26 @@ import {
   Grid,
   Message,
   Segment,
+  InputOnChangeData,
 } from "semantic-ui-react";
 
 import { GoogleLogin } from "react-google-login";
-import { openSignInSlice, openSignUpSlice } from "slices";
+import { openSignInSlice, openSignUpSlice, signIn, signUp } from "slices";
 
 import logo from "assets/images/logo.png";
 import { GOOGLE_CLINET_ID } from "utils/constants";
 
 const SignUpModal = () => {
   const open = useTypedSelector((i) => i.openSignUp);
+  const signup = useTypedSelector((i) => i.signup);
+  const [signUpParams, setSignUpParams] = useState({
+    email: undefined,
+    name: undefined,
+    display_name: undefined,
+    password: undefined,
+  });
+  const [errorMessage, setErrorMessage] = useState();
+
   const dispatch = useDispatch();
   const handleGoogleSignInSuccess = (res: any) => {
     console.log(res);
@@ -25,10 +36,38 @@ const SignUpModal = () => {
   const handleGoogleSignInFailure = (res: any) => {
     console.log(res);
   };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    { name, value }: InputOnChangeData
+  ) => {
+    if (errorMessage) {
+      setErrorMessage(undefined);
+    }
+    setSignUpParams({
+      ...signUpParams,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    if (signup.error) {
+      setErrorMessage(signup.error.message);
+    }
+    if (signup.status === "succeeded") {
+      dispatch(signIn(signUpParams));
+      dispatch(openSignUpSlice.actions.makeFalse());
+    }
+  }, [signup, dispatch, signUpParams]);
+
+  const handleSignUp = () => {
+    dispatch(signUp({ data: signUpParams }));
+  };
+
   return (
     <Modal
-      onClose={() => dispatch(openSignInSlice.actions.makeFalse())}
-      onOpen={() => dispatch(openSignInSlice.actions.makeTrue())}
+      onClose={() => dispatch(openSignUpSlice.actions.makeFalse())}
+      onOpen={() => dispatch(openSignUpSlice.actions.makeTrue())}
       open={open}>
       <Modal.Content>
         <Grid
@@ -40,33 +79,60 @@ const SignUpModal = () => {
               <Image src={logo} />
               Login to your account
             </Header>
-            <Form size="large">
+            <Form size="large" onSubmit={handleSignUp}>
+              {errorMessage && (
+                <Message negative>
+                  <Message.Header>{errorMessage}</Message.Header>
+                </Message>
+              )}
               <Segment textAlign="right">
                 <Form.Input
                   fluid
+                  name="email"
+                  onChange={handleChange}
+                  value={signUpParams.email}
                   icon="user"
                   iconPosition="left"
-                  placeholder="Email Address"
+                  placeholder="Email address"
                 />
                 <Form.Input
                   fluid
+                  name="name"
                   icon="user"
                   iconPosition="left"
                   placeholder="User Name"
+                  onChange={handleChange}
+                  value={signUpParams.name}
                 />
                 <Form.Input
                   fluid
+                  name="display_name"
                   icon="user"
                   iconPosition="left"
+                  value={signUpParams.display_name}
+                  onChange={handleChange}
                   placeholder="Display Name(Optional)"
                 />
                 <Form.Input
+                  name="password"
+                  onChange={handleChange}
+                  value={signUpParams.password}
                   fluid
                   icon="lock"
                   iconPosition="left"
                   placeholder="Password"
                   type="password"
                 />
+                {/* <Form.Input
+                  name="confirm_password"
+                  onChange={handleChange}
+                  value={signUpParams.password}
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  placeholder="Confirm Password"
+                  type="password"
+                /> */}
                 <Button color="black" fluid size="large">
                   Sign Up
                 </Button>
@@ -83,7 +149,7 @@ const SignUpModal = () => {
               </Segment>
             </Form>
             <Message>
-              Already registered?
+              Already registered?&nbsp;
               <span
                 className="text-blue-800 cursor-pointer"
                 onClick={() => {

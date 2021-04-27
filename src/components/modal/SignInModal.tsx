@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useDispatch, useTypedSelector } from "utils";
 import {
   Button,
@@ -8,22 +9,65 @@ import {
   Grid,
   Message,
   Segment,
+  FormProps,
+  InputOnChangeData,
 } from "semantic-ui-react";
 
 import { GoogleLogin } from "react-google-login";
-import { openSignInSlice, openSignUpSlice } from "slices";
+import {
+  authSlice,
+  googleSignIn,
+  openSignInSlice,
+  openSignUpSlice,
+  signIn,
+} from "slices";
 import { GOOGLE_CLINET_ID } from "utils/constants";
 
 import logo from "assets/images/logo.png";
 
 const SignInModal = () => {
   const open = useTypedSelector((i) => i.openSignIn);
+  const auth = useTypedSelector((i) => i.auth);
+  const [signInParams, setSignInParams] = useState({
+    email: undefined,
+    password: undefined,
+  });
+  const [errorMessage, setErrorMessage] = useState();
+
   const dispatch = useDispatch();
   const handleGoogleSignInSuccess = (res: any) => {
     console.log(res);
+    dispatch(googleSignIn({ meta: res }));
   };
   const handleGoogleSignInFailure = (res: any) => {
+    setErrorMessage(res);
     console.log(res);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    { name, value }: InputOnChangeData
+  ) => {
+    if (errorMessage) {
+      setErrorMessage(undefined);
+    }
+    setSignInParams({
+      ...signInParams,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    if (auth.error) {
+      setErrorMessage(auth.error.message);
+    }
+    if (auth.token) {
+      dispatch(openSignInSlice.actions.makeFalse());
+    }
+  }, [auth, dispatch]);
+
+  const handleSignIn = () => {
+    dispatch(signIn(signInParams));
   };
   return (
     <Modal
@@ -40,15 +84,26 @@ const SignInModal = () => {
               <Image src={logo} />
               Login to your account
             </Header>
-            <Form size="large">
+            <Form size="large" onSubmit={handleSignIn}>
+              {errorMessage && (
+                <Message negative>
+                  <Message.Header>{errorMessage}</Message.Header>
+                </Message>
+              )}
               <Segment textAlign="right">
                 <Form.Input
                   fluid
+                  name="email"
+                  onChange={handleChange}
+                  value={signInParams.email}
                   icon="user"
                   iconPosition="left"
                   placeholder="Email address"
                 />
                 <Form.Input
+                  name="password"
+                  onChange={handleChange}
+                  value={signInParams.password}
                   fluid
                   icon="lock"
                   iconPosition="left"

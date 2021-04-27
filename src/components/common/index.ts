@@ -9,6 +9,7 @@ import ProblemFilterPanel from "./ProblemFilterPanel";
 import Answer from "./Answer";
 import AnswerSection from "./AnswerSection";
 import Switch from "./Switch";
+import UserAvatar from "./UserAvatar";
 
 export {
   SidebarItem,
@@ -22,4 +23,5 @@ export {
   Answer,
   AnswerSection,
   Switch,
+  UserAvatar,
 };

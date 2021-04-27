@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import reduceReducers from "reduce-reducers";
 
-// import userReducer from './user';
+import { userSlice } from "./userSlice";
 // import appReducer from './app';
 // import { authSlice } from './authSlice';
 // import * as utils from '../utils';
@@ -10,10 +10,12 @@ import { kifuSlice, kifusSlice } from "./kifuSlice";
 import { uiSlice } from "./uiSlice";
 import { tagsSlice } from "./tagSlice";
 import { playersSlice } from "./playerSlice";
+import { authSlice, signUpSlice } from "./authSlice";
 import {
   openSignInSlice,
   openSignUpSlice,
   openCommentsSlice,
+  openUserMenuSlice,
 } from "./genericSlice";
 
 // export * from './authSlice';
@@ -23,10 +25,12 @@ export * from "./uiSlice";
 export * from "./tagSlice";
 export * from "./playerSlice";
 export * from "./genericSlice";
+export * from "./authSlice";
 
 const rootReducer = combineReducers({
-  // user: userReducer,
-  // auth: authSlice.reducer,
+  user: userSlice.reducer,
+  auth: authSlice.reducer,
+  signup: signUpSlice.reducer,
   problems: problemsSlice.reducer,
   problem: reduceReducers<any>(
     {},
@@ -41,6 +45,7 @@ const rootReducer = combineReducers({
   openSignIn: openSignInSlice.reducer,
   openSignUp: openSignUpSlice.reducer,
   openComments: openCommentsSlice.reducer,
+  openUserMenu: openUserMenuSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

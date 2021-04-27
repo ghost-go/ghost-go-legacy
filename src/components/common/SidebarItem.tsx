@@ -10,7 +10,7 @@ const SidebarItem = ({
 }): ReactElement => {
   const location = useLocation();
   let className =
-    "transition block px-4 py-2 mt-3 text-base font-semibold text-gray-900 rounded-sm hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline";
+    "transition block px-4 py-2 my-2 text-base font-semibold text-gray-900 rounded-sm hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline";
   if (location.pathname.toUpperCase() === to.toUpperCase()) {
     className += " bg-gray-200";
   }

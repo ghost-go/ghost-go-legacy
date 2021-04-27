@@ -1,20 +1,36 @@
 import { useRef, useState } from "react";
 
-import { Button } from "semantic-ui-react";
+import { Link, useLocation, NavLink } from "react-router-dom";
+import {
+  Button,
+  Popup,
+  Menu,
+  MenuItemProps,
+  Dropdown,
+} from "semantic-ui-react";
 
 import Avatar from "react-avatar";
 import { ReactSVG } from "react-svg";
 import settings from "assets/images/settings.svg";
 
-import { setTheme, setCoordinates, selectUI, openSignInSlice } from "slices";
+import {
+  setTheme,
+  setCoordinates,
+  selectUI,
+  openSignInSlice,
+  openUserMenuSlice,
+  authSlice,
+} from "slices";
 import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 import { Theme } from "gboard/GBan";
-import { Switch } from "components/common";
+import { Switch, UserAvatar } from "components/common";
 
 const Navigation = () => {
   const dispatch = useDispatch();
   const [settingVisible, setSettingVisible] = useState(false);
+  const { token, user } = useTypedSelector((i) => i.auth);
   const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
+  const openUserMenu = useTypedSelector((state) => state.openUserMenu);
   const ref = useRef<HTMLDivElement>(null);
 
   useOutsideClick(ref, () => {
@@ -25,6 +41,19 @@ const Navigation = () => {
 
   const handleThemeChange = (theme: Theme) => {
     dispatch(setTheme(theme));
+  };
+
+  const handleItemClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    { name }: MenuItemProps
+  ) => {
+    switch (name) {
+      case "signout":
+        dispatch(authSlice.actions.signOut());
+        break;
+      default:
+    }
+    dispatch(openUserMenuSlice.actions.makeFalse());
   };
 
   return (
@@ -134,7 +163,75 @@ const Navigation = () => {
             <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
           </div>
         </div>
-        <div>
+        {token ? (
+          <Popup
+            on="click"
+            open={openUserMenu}
+            pinned
+            onOpen={() => {
+              dispatch(openUserMenuSlice.actions.makeTrue());
+            }}
+            onClose={() => {
+              // setTimeout here is make sure to call the item click event.
+              setTimeout(() => {
+                dispatch(openUserMenuSlice.actions.makeFalse());
+              }, 0);
+            }}
+            position="bottom right"
+            style={{ padding: 0 }}
+            trigger={
+              <div className="cursor-pointer">
+                <UserAvatar user={user} />
+              </div>
+            }>
+            <Menu vertical>
+              <Menu.Item>
+                Signed In as <b>{`${user.data.attributes.display_name}`}</b>
+                <Menu.Menu>
+                  <Menu.Item
+                    as={NavLink}
+                    to={"/profile"}
+                    name="profile"
+                    onClick={handleItemClick}>
+                    My Profile
+                  </Menu.Item>
+                  <Menu.Item name="viewedproblems" onClick={handleItemClick}>
+                    Viewed Problems
+                  </Menu.Item>
+                  <Menu.Item name="viewedkifus" onClick={handleItemClick}>
+                    Viewed Kifus
+                  </Menu.Item>
+                </Menu.Menu>
+              </Menu.Item>
+              <Menu.Item>
+                Home
+                <Menu.Menu>
+                  <Menu.Item
+                    as={NavLink}
+                    to={"/problems"}
+                    onClick={handleItemClick}>
+                    Problems
+                  </Menu.Item>
+                  <Menu.Item
+                    as={NavLink}
+                    to={"/kifus"}
+                    onClick={handleItemClick}>
+                    Kifus
+                  </Menu.Item>
+                </Menu.Menu>
+              </Menu.Item>
+              <Menu.Item
+                as={NavLink}
+                to={"/messages"}
+                onClick={handleItemClick}>
+                Messages
+              </Menu.Item>
+              <Menu.Item name="signout" onClick={handleItemClick}>
+                Sign out
+              </Menu.Item>
+            </Menu>
+          </Popup>
+        ) : (
           <Button
             color="black"
             onClick={() => {
@@ -142,7 +239,7 @@ const Navigation = () => {
             }}>
             Sign In
           </Button>
-        </div>
+        )}
       </div>
     </div>
   );
