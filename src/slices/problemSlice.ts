@@ -4,17 +4,26 @@ import { buildGenericReducer } from "utils/reducers";
 export const {
   asyncThunk: fetchProblems,
   slice: problemsSlice,
-} = buildGenericReducer<any>("problems/fetchProblems", "/problems");
+} = buildGenericReducer<any>({
+  name: "problems/fetchProblems",
+  endpoint: "/problems",
+});
 
 export const {
   asyncThunk: fetchProblem,
   slice: problemSlice,
-} = buildGenericReducer<any>("problems/fetchProblem", "/problems/:id");
+} = buildGenericReducer<any>({
+  name: "problems/fetchProblem",
+  endpoint: "/problems/:id",
+});
 
 export const {
   asyncThunk: fetchProblemNext,
   slice: problemNextSlice,
-} = buildGenericReducer<any>("problems/fetchProblemNext", "/problems/next");
+} = buildGenericReducer<any>({
+  name: "problems/fetchProblemNext",
+  endpoint: "/problems/next",
+});
 
 export const selectProblems = (state: RootState) => state.problems;
 export const selectProblem = (state: RootState) => state.problem;

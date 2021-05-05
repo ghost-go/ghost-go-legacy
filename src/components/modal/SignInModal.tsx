@@ -32,7 +32,7 @@ const SignInModal = () => {
     email: undefined,
     password: undefined,
   });
-  const [errorMessage, setErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const dispatch = useDispatch();
   const handleGoogleSignInSuccess = (res: any) => {
@@ -49,7 +49,7 @@ const SignInModal = () => {
     { name, value }: InputOnChangeData
   ) => {
     if (errorMessage) {
-      setErrorMessage(undefined);
+      setErrorMessage(null);
     }
     setSignInParams({
       ...signInParams,

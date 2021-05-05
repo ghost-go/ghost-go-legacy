@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import reduceReducers from "reduce-reducers";
 
-import { userSlice } from "./userSlice";
+import { profileSlice, updatedUserSlice, userSlice } from "./userSlice";
 // import appReducer from './app';
 // import { authSlice } from './authSlice';
 // import * as utils from '../utils';
@@ -29,8 +29,10 @@ export * from "./authSlice";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
+  updatedUser: updatedUserSlice.reducer,
   auth: authSlice.reducer,
   signup: signUpSlice.reducer,
+  profile: profileSlice.reducer,
   problems: problemsSlice.reducer,
   problem: reduceReducers<any>(
     {},

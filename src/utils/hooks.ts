@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import { GenericState } from "./reducers";
 import { RootState } from "slices";
@@ -46,4 +46,21 @@ export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export function useQuery() {
   return new URLSearchParams(useLocation().search);
+}
+
+/**
+ * A custom useEffect hook that only triggers on updates, not on initial mount
+ * @param {Function} effect
+ * @param {Array<any>} dependencies
+ */
+export function useUpdateEffect(effect: any, dependencies: any[] = []) {
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      effect();
+    }
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 }

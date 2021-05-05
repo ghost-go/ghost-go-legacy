@@ -1,20 +1,30 @@
 import { RootState } from "slices";
-import { buildGenericReducer } from "utils/reducers";
+import { buildGenericReducer, JsonApiResponseType } from "utils/reducers";
+
+export const {
+  asyncThunk: fetchProfile,
+  slice: profileSlice,
+} = buildGenericReducer<JsonApiResponseType>({
+  name: "fetchProfile",
+  endpoint: "/profile",
+});
 
 export const {
   asyncThunk: fetchUser,
   slice: userSlice,
-} = buildGenericReducer<any>("problems/fetchUser", "/users/:id");
+} = buildGenericReducer<any>({
+  name: "users/fetchUser",
+  endpoint: "/users/:id",
+});
 
 export const {
-  asyncThunk: fetchProblem,
-  slice: problemSlice,
-} = buildGenericReducer<any>("problems/fetchProblem", "/problems/:id");
+  asyncThunk: updateUser,
+  slice: updatedUserSlice,
+} = buildGenericReducer<any>({
+  name: "users/updateUser",
+  endpoint: "/users/:id",
+  method: "PUT",
+  errorCentralized: true,
+});
 
-export const {
-  asyncThunk: fetchProblemNext,
-  slice: problemNextSlice,
-} = buildGenericReducer<any>("problems/fetchProblemNext", "/problems/next");
-
-export const selectProblems = (state: RootState) => state.problems;
-export const selectProblem = (state: RootState) => state.problem;
+export const selectUser = (state: RootState) => state.user;

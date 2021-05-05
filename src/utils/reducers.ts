@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { request, authRequest } from "./api";
+import * as Toast from "./toast";
 
 export interface GenericState<T> {
   payload?: T;
@@ -7,6 +8,14 @@ export interface GenericState<T> {
   status: "idle" | "loading" | "succeeded" | "failed";
   // TODO: Need to implement the GenericErrorType
   error?: any;
+}
+
+export interface JsonApiResponseType {
+  data: {
+    id: string | number;
+    type: string;
+    attributes: any;
+  };
 }
 
 export interface ParamsType {
@@ -77,7 +86,8 @@ export const buildGenericAsyncThunk = (
 export const buildGenericSlice = <T>(
   name: string,
   asyncThunk: any,
-  initialState: GenericState<T>
+  initialState: GenericState<T>,
+  onFailure?: (error: any) => void
 ) =>
   createSlice<GenericState<T>, any, any>({
     name,
@@ -97,18 +107,42 @@ export const buildGenericSlice = <T>(
       builder.addCase(asyncThunk.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
+        if (onFailure) {
+          onFailure(action.error);
+        }
       });
     },
   });
 
-export const buildGenericReducer = <T>(
-  name: string,
-  url: string,
+// : {
+
+// }) => {
+export const buildGenericReducer = <T>({
+  name,
+  endpoint,
   method = "GET",
-  initialState: GenericState<T> = initialGenericState
-) => {
-  const asyncThunk = buildGenericAsyncThunk(name, url, method);
-  const slice = buildGenericSlice<T>(name, asyncThunk, initialState);
+  initialState = initialGenericState,
+  errorCentralized = false,
+  onFailure,
+}: {
+  name: string;
+  endpoint: string;
+  method?: string;
+  initialState?: GenericState<T>;
+  errorCentralized?: boolean;
+  onFailure?: (error: any) => void;
+}) => {
+  const asyncThunk = buildGenericAsyncThunk(name, endpoint, method);
+  const slice = buildGenericSlice<T>(
+    name,
+    asyncThunk,
+    initialState,
+    errorCentralized
+      ? (error) => {
+          Toast.error(error.message);
+        }
+      : onFailure
+  );
   return { asyncThunk, slice };
 };
 

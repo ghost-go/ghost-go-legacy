@@ -23,6 +23,8 @@ import { store, persistor } from "utils";
 import SignInModal from "components/modal/SignInModal";
 import SignUpModal from "components/modal/SignUpModal";
 import Sidebar from "components/Sidebar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactModal.setAppElement("body");
 
@@ -64,6 +66,7 @@ const App = () => {
               title="Interactive Go Problem/Kifu Database"
               titleTemplate="GhostGo - %s"
             />
+            <ToastContainer />
             <SignInModal />
             <SignUpModal />
             <div className="flex flex-row">

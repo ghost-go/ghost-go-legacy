@@ -44,7 +44,11 @@ export const signIn = createAsyncThunk(
 export const {
   asyncThunk: signUp,
   slice: signUpSlice,
-} = buildGenericReducer<any>("auth/signup", "/auth/signup", "POST");
+} = buildGenericReducer<any>({
+  name: "auth/signup",
+  endpoint: "/auth/signup",
+  method: "POST",
+});
 
 export const googleSignIn = createAsyncThunk(
   "auth/google_signin",
