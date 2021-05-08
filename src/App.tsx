@@ -89,7 +89,7 @@ const App = () => {
                     <Route exact path="/kifus" component={Kifus} />
                     <Route path="/kifus/:id" component={Kifu} />
                     <Route path="/problems/:id" component={Problem} />
-                    <Route path="/dashboard" component={Dashboard} />
+                    <Route path="/statistics" component={Dashboard} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/viewed" component={Viewed} />
                   </Suspense>

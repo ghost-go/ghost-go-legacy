@@ -9,6 +9,7 @@ import { problemNextSlice, problemSlice, problemsSlice } from "./problemSlice";
 import { kifuSlice, kifusSlice } from "./kifuSlice";
 import { uiSlice } from "./uiSlice";
 import { tagsSlice } from "./tagSlice";
+import { viewedKifusSlice, viewedProblemsSlice } from "./viewedSlice";
 import { playersSlice } from "./playerSlice";
 import { authSlice, signUpSlice } from "./authSlice";
 import {
@@ -26,6 +27,7 @@ export * from "./tagSlice";
 export * from "./playerSlice";
 export * from "./genericSlice";
 export * from "./authSlice";
+export * from "./viewedSlice";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -43,6 +45,8 @@ const rootReducer = combineReducers({
   kifu: kifuSlice.reducer,
   players: playersSlice.reducer,
   tags: tagsSlice.reducer,
+  viewedProblems: viewedProblemsSlice.reducer,
+  viewedKifus: viewedProblemsSlice.reducer,
   ui: uiSlice.reducer,
   openSignIn: openSignInSlice.reducer,
   openSignUp: openSignUpSlice.reducer,

@@ -190,10 +190,10 @@ const Navigation = () => {
                 <Menu.Menu>
                   <Menu.Item
                     as={NavLink}
-                    to={"/dashboard"}
-                    name="dashboard"
+                    to={"/statistics"}
+                    name="statistics"
                     onClick={handleItemClick}>
-                    Dashboard
+                    Statistic
                   </Menu.Item>
                   <Menu.Item
                     as={NavLink}

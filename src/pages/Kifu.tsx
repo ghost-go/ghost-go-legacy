@@ -11,6 +11,7 @@ import { KifuControls } from "components/common";
 import { useDispatch, useTypedSelector, useGenericData, store } from "utils";
 import { zeros, matrix, Matrix } from "mathjs";
 import { sgfToPosition } from "../common/Helper";
+import { createViewedKifus } from "slices/viewedSlice";
 
 interface ParamTypes {
   id: string;
@@ -22,6 +23,7 @@ const board = new GBan();
 let mats: Map<number, Matrix> = new Map();
 const Kifu = () => {
   const dispatch = useDispatch();
+  const { token } = useTypedSelector((i) => i.auth);
   const { id } = useParams<ParamTypes>();
   const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
   const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
@@ -86,8 +88,9 @@ const Kifu = () => {
 
   useEffect(() => {
     dispatch(fetchKifu({ pattern: { id } }));
+    dispatch(createViewedKifus({ token, data: { kifu_id: id } }));
     mats = new Map();
-  }, [dispatch, id]);
+  }, [dispatch, id, token]);
 
   useEffect(() => {
     // TODO: There is a performance issue

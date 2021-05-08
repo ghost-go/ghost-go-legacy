@@ -18,6 +18,7 @@ import {
   fetchTags,
   uiSlice,
   openCommentsSlice,
+  createViewedProblems,
   fetchProblemNext,
 } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
@@ -64,6 +65,7 @@ let changePath: string[] = [];
 
 const Problem = () => {
   const dispatch = useDispatch();
+  const { token } = useTypedSelector((i) => i.auth);
   const ref = useRef<HTMLDivElement>(null);
   const { id } = useParams<ParamTypes>();
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
@@ -234,6 +236,7 @@ const Problem = () => {
     setCurrentPath("");
     dispatch(fetchTags());
     dispatch(fetchProblem({ pattern: { id: id } }));
+    dispatch(createViewedProblems({ token, data: { problem_id: id } }));
   }, [dispatch, id]);
 
   useEffect(() => {

@@ -62,7 +62,7 @@ const Sidebar = () => {
             <div className="block px-1 mt-8 text-sm font-semibold text-gray-400">
               OTHERS
             </div>
-            <SidebarItem to="/dashboard">Dashboard</SidebarItem>
+            <SidebarItem to="/statistics">Statistics</SidebarItem>
             <SidebarItem to="/viewed?type=problem">Viewed Problems</SidebarItem>
             <SidebarItem to="/viewed?type=kifu">Viewed Kifus</SidebarItem>
           </>

@@ -10,6 +10,7 @@ import {
   Segment,
   Tab,
   Label,
+  Divider,
 } from "semantic-ui-react";
 import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
 
@@ -23,83 +24,60 @@ const Dashboard = () => {
 
   const panes = [
     {
-      menuItem: { key: "dashboard", content: "Dashboard" },
+      menuItem: { key: "statistics", content: "Statistics" },
       render: () => (
         <Tab.Pane>
-          <Grid container stackable divided="vertically">
-            <Grid.Row columns={2} divided>
-              <Grid.Column>
-                <Header as="h2">Problems</Header>
-                <Statistic.Group widths="4">
-                  <Statistic color="grey">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Tried</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="green">
-                    <Statistic.Value>31</Statistic.Value>
-                    <Statistic.Label>Rights</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="orange">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Wrongs</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="red">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Liked</Statistic.Label>
-                  </Statistic>
-                </Statistic.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h2">Kifus</Header>
-                <Statistic.Group widths="2">
-                  <Statistic color="grey">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Viewed</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="red">
-                    <Statistic.Value>30</Statistic.Value>
-                    <Statistic.Label>Liked</Statistic.Label>
-                  </Statistic>
-                </Statistic.Group>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2} divided>
-              <Grid.Column>
-                <Header as="h2">This Week</Header>
-                <Statistic.Group widths="3">
-                  <Statistic color="grey">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Tried</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="green">
-                    <Statistic.Value>31</Statistic.Value>
-                    <Statistic.Label>Rights</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="orange">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Wrongs</Statistic.Label>
-                  </Statistic>
-                </Statistic.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h2">This Month</Header>
-                <Statistic.Group widths="3">
-                  <Statistic color="grey">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Tried</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="green">
-                    <Statistic.Value>31</Statistic.Value>
-                    <Statistic.Label>Rights</Statistic.Label>
-                  </Statistic>
-                  <Statistic color="orange">
-                    <Statistic.Value>22</Statistic.Value>
-                    <Statistic.Label>Wrongs</Statistic.Label>
-                  </Statistic>
-                </Statistic.Group>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <Header as="h2">Total Problems Statistics</Header>
+          <Divider />
+          <Statistic.Group>
+            <Statistic color="grey" size="large" horizontal>
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Tried</Statistic.Label>
+            </Statistic>
+            <Statistic color="green" size="large" horizontal>
+              <Statistic.Value>31</Statistic.Value>
+              <Statistic.Label>Rights</Statistic.Label>
+            </Statistic>
+            <Statistic color="red" size="large" horizontal>
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Wrongs</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+          <Divider />
+          <Header as="h2">Last 7 days</Header>
+          <Divider />
+          <Statistic.Group>
+            <Statistic color="grey" size="large" horizontal>
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Tried</Statistic.Label>
+            </Statistic>
+            <Statistic color="green" size="large" horizontal>
+              <Statistic.Value>31</Statistic.Value>
+              <Statistic.Label>Rights</Statistic.Label>
+            </Statistic>
+            <Statistic color="red" size="large" horizontal>
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Wrongs</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+          <Divider />
+          <Header as="h2">Last 30 days</Header>
+          <Divider />
+          <Statistic.Group>
+            <Statistic color="grey" size="large" horizontal>
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Tried</Statistic.Label>
+            </Statistic>
+            <Statistic color="green" size="large" horizontal>
+              <Statistic.Value>31</Statistic.Value>
+              <Statistic.Label>Rights</Statistic.Label>
+            </Statistic>
+            <Statistic color="red" size="large" horizontal>
+              <Statistic.Value>22</Statistic.Value>
+              <Statistic.Label>Wrongs</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+          <Divider />
         </Tab.Pane>
       ),
     },
