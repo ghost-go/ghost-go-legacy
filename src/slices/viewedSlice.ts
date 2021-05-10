@@ -8,6 +8,7 @@ export const {
   name: "viewedProblems/createViewedProblems",
   endpoint: "/viewed_problems",
   method: "POST",
+  options: { useToken: true },
 });
 
 export const {
@@ -17,6 +18,7 @@ export const {
   name: "viewedKifus/createViewedKifus",
   endpoint: "/viewed_kifus",
   method: "POST",
+  options: { useToken: true },
 });
 
 export const {
@@ -25,6 +27,7 @@ export const {
 } = buildGenericReducer<any>({
   name: "viewedProblems/fetchViewedProblems",
   endpoint: "/viewed_problems",
+  options: { useToken: true },
 });
 
 export const {
@@ -33,6 +36,7 @@ export const {
 } = buildGenericReducer<any>({
   name: "viewedKifus/fetchViewedKifus",
   endpoint: "/viewed_kifus",
+  options: { useToken: true },
 });
 
 export const selectViewedProblems = (state: RootState) => state.viewedProblems;

@@ -30,15 +30,26 @@ export interface HeadersType {
   [key: string]: string;
 }
 
+export interface GenericReducerOptions {
+  useToken?: boolean;
+  errorCentralized?: boolean;
+}
+
 export const initialGenericState: GenericState<any> = {
   payload: undefined,
   status: "idle",
 };
 
+export const initialGenericReducerOptions: GenericReducerOptions = {
+  useToken: false,
+  errorCentralized: true,
+};
+
 export const buildGenericAsyncThunk = (
   name: string,
   url: string,
-  method = "GET"
+  method = "GET",
+  options: GenericReducerOptions
 ) =>
   createAsyncThunk(
     name,
@@ -62,22 +73,18 @@ export const buildGenericAsyncThunk = (
         replacedUrl = replacedUrl.replace(re, pattern[key].toString());
       }
       let response;
-      if (token) {
-        response = await authRequest(token, {
-          method,
-          url: replacedUrl,
-          params,
-          headers,
-          data,
-        });
+      let requestParmas = {
+        method,
+        url: replacedUrl,
+        params,
+        headers,
+        data,
+      };
+      if (token || options.useToken) {
+        let newToken: string = token || localStorage.getItem("token") || "";
+        response = await authRequest(newToken, requestParmas);
       } else {
-        response = await request({
-          method,
-          url: replacedUrl,
-          params,
-          headers,
-          data,
-        });
+        response = await request(requestParmas);
       }
       return response;
     }
@@ -87,7 +94,7 @@ export const buildGenericSlice = <T>(
   name: string,
   asyncThunk: any,
   initialState: GenericState<T>,
-  onFailure?: (error: any) => void
+  options: GenericReducerOptions
 ) =>
   createSlice<GenericState<T>, any, any>({
     name,
@@ -107,42 +114,34 @@ export const buildGenericSlice = <T>(
       builder.addCase(asyncThunk.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
-        if (onFailure) {
-          onFailure(action.error);
+        if (options.errorCentralized) {
+          Toast.error(state.error.message);
         }
       });
     },
   });
 
-// : {
-
-// }) => {
 export const buildGenericReducer = <T>({
   name,
   endpoint,
   method = "GET",
   initialState = initialGenericState,
-  errorCentralized = false,
-  onFailure,
+  options,
 }: {
   name: string;
   endpoint: string;
   method?: string;
   initialState?: GenericState<T>;
-  errorCentralized?: boolean;
-  onFailure?: (error: any) => void;
+  options?: GenericReducerOptions;
 }) => {
-  const asyncThunk = buildGenericAsyncThunk(name, endpoint, method);
-  const slice = buildGenericSlice<T>(
-    name,
-    asyncThunk,
-    initialState,
-    errorCentralized
-      ? (error) => {
-          Toast.error(error.message);
-        }
-      : onFailure
-  );
+  const asyncThunk = buildGenericAsyncThunk(name, endpoint, method, {
+    ...initialGenericReducerOptions,
+    ...options,
+  });
+  const slice = buildGenericSlice<T>(name, asyncThunk, initialState, {
+    ...initialGenericReducerOptions,
+    ...options,
+  });
   return { asyncThunk, slice };
 };
 

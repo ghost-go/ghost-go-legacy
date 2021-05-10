@@ -236,7 +236,7 @@ const Problem = () => {
     setCurrentPath("");
     dispatch(fetchTags());
     dispatch(fetchProblem({ pattern: { id: id } }));
-    dispatch(createViewedProblems({ token, data: { problem_id: id } }));
+    dispatch(createViewedProblems({ data: { record: { problem_id: id } } }));
   }, [dispatch, id]);
 
   useEffect(() => {

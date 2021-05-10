@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import reduceReducers from "reduce-reducers";
+import { useSelector, TypedUseSelectorHook } from "react-redux";
 
 import { profileSlice, updatedUserSlice, userSlice } from "./userSlice";
 // import appReducer from './app';
@@ -54,5 +55,6 @@ const rootReducer = combineReducers({
   openUserMenu: openUserMenuSlice.reducer,
 });
 
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

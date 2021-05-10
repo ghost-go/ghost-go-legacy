@@ -24,7 +24,9 @@ export const {
   name: "users/updateUser",
   endpoint: "/users/:id",
   method: "PUT",
-  errorCentralized: true,
+  options: {
+    errorCentralized: true,
+  },
 });
 
 export const selectUser = (state: RootState) => state.user;

@@ -1,17 +1,5 @@
 import { useEffect } from "react";
-import {
-  Container,
-  Statistic,
-  Header,
-  Grid,
-  Card,
-  Image,
-  Icon,
-  Menu,
-  Segment,
-  Tab,
-  Label,
-} from "semantic-ui-react";
+import { Segment, Tab, Label } from "semantic-ui-react";
 import {
   useDispatch,
   useTypedSelector,
@@ -31,6 +19,9 @@ const Dashboard = () => {
   const [viewedProblems] = useGenericData(
     useTypedSelector((i) => i.viewedProblems)
   );
+
+  console.log(viewedProblems);
+
   const [viewedKifus] = useGenericData(useTypedSelector((i) => i.viewedKifus));
 
   if (!token) history.push("/");
@@ -45,7 +36,8 @@ const Dashboard = () => {
       render: () => (
         <Tab.Pane>
           {viewedProblems &&
-            viewedProblems.map((p: any) => {
+            viewedProblems.data &&
+            viewedProblems.data.map((p: any) => {
               return <div>{p.id}</div>;
             })}
         </Tab.Pane>
@@ -58,9 +50,9 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    dispatch(fetchViewedProblems({ token }));
-    dispatch(fetchViewedKifus({ token }));
-  }, [dispatch, token]);
+    dispatch(fetchViewedProblems());
+    dispatch(fetchViewedKifus());
+  }, [dispatch]);
 
   return <Tab panes={panes} />;
 };

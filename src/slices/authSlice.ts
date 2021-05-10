@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { buildGenericReducer } from "utils/reducers";
-
 import { request } from "utils/api";
 
 // TODO: The auth object need to be refactored after integrating the Wechat login
@@ -83,6 +82,7 @@ export const authSlice = createSlice({
       state.token = undefined;
       state.user = undefined;
       state.error = undefined;
+      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -95,6 +95,7 @@ export const authSlice = createSlice({
       const user = action.payload.user;
       state.token = token;
       state.user = user;
+      localStorage.setItem("token", token);
     };
     const sharedRejectedReducer = (state: AuthState, action: any) => {
       state.status = "failed";

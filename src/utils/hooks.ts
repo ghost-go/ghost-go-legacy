@@ -4,7 +4,7 @@ import { GenericState } from "./reducers";
 import { RootState } from "slices";
 import { useDispatch as useReactReduxDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { store } from "utils";
+import { store } from "utils/store";
 
 export const useGenericData = <T>(
   rawData: GenericState<T>,
