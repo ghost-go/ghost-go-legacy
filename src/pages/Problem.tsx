@@ -2,13 +2,15 @@ import _ from "lodash";
 import { useState, useEffect, useCallback, useRef } from "react";
 import GBan, { move as moveStone, canMove } from "gboard";
 import { ReactSVG } from "react-svg";
-import { useParams } from "react-router-dom";
+import { Router, useParams } from "react-router-dom";
 import { useSpring, animated } from "react-spring";
 import moment from "moment";
 import edit from "assets/images/edit.svg";
 import animWrong from "assets/images/anim-wrong.svg";
 import animRight from "assets/images/anim-right.svg";
+import { useHistory } from "react-router";
 import { Switch } from "components/common";
+import * as Toast from "utils/toast";
 
 import {
   fetchProblem,
@@ -69,6 +71,7 @@ const Problem = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { id } = useParams<ParamTypes>();
   const [tags] = useGenericData(useTypedSelector((state) => selectTags(state)));
+  const history = useHistory();
   const [problem] = useGenericData(
     useTypedSelector((state) => selectProblem(state))
   );
@@ -181,7 +184,20 @@ const Problem = () => {
           tags: tagsParam,
         },
       })
-    );
+    ).then((res) => {
+      if (res.type === "problems/fetchProblemNext/fulfilled") {
+        const payload: any = res.payload;
+        console.log("pay", res.payload);
+        if (payload.data.data) {
+          history.push({
+            pathname: `/problems/${payload.data.data.id}`,
+            search: window.location.search,
+          });
+        } else {
+          Toast.info("No new problem.");
+        }
+      }
+    });
   };
 
   const genMove = (mat: Matrix, path: string) => {

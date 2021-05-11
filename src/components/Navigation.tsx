@@ -203,14 +203,18 @@ const Navigation = () => {
                     My Profile
                   </Menu.Item>
                   <Menu.Item
+                    as={NavLink}
                     name="viewedproblems"
-                    to={"/viewed?type=problem"}
+                    isActive={() => false}
+                    to={"/viewed?active=0"}
                     onClick={handleItemClick}>
                     Viewed Problems
                   </Menu.Item>
                   <Menu.Item
+                    as={NavLink}
                     name="viewedkifus"
-                    to={"/viewed?type=kifu"}
+                    isActive={() => false}
+                    to={"/viewed?active=1"}
                     onClick={handleItemClick}>
                     Viewed Kifus
                   </Menu.Item>

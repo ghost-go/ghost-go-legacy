@@ -73,7 +73,6 @@ const App = () => {
               <div className="lg:flex flex-col lg:flex-row lg:min-h-screen w-full">
                 <Sidebar />
                 <div className="flex-1">
-                  <BackTop />
                   <div className={"lg:block lg:py-4 lg:px-4 hidden bg-white"}>
                     <Navigation />
                   </div>

@@ -88,7 +88,7 @@ const Kifu = () => {
 
   useEffect(() => {
     dispatch(fetchKifu({ pattern: { id } }));
-    dispatch(createViewedKifus({ token, data: { kifu_id: id } }));
+    dispatch(createViewedKifus({ data: { record: { kifu_id: id } } }));
     mats = new Map();
   }, [dispatch, id, token]);
 

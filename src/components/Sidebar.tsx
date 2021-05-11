@@ -63,8 +63,8 @@ const Sidebar = () => {
               OTHERS
             </div>
             <SidebarItem to="/statistics">Statistics</SidebarItem>
-            <SidebarItem to="/viewed?type=problem">Viewed Problems</SidebarItem>
-            <SidebarItem to="/viewed?type=kifu">Viewed Kifus</SidebarItem>
+            <SidebarItem to="/viewed?active=0">Viewed Problems</SidebarItem>
+            <SidebarItem to="/viewed?active=1">Viewed Kifus</SidebarItem>
           </>
         )}
       </nav>
