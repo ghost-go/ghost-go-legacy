@@ -1,12 +1,12 @@
-import axios from 'axios';
-import _ from 'lodash';
+import axios from "axios";
+import _ from "lodash";
 
-export const baseURL = `/api/v1`;
+export const baseURL = `${process.env.REACT_APP_API_DOMAIN}/api/v1`;
 export const axiosInstance = axios.create({
   baseURL,
   headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
 });
 
@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(err);
-  },
+  }
 );
 
 export function request(options = {}) {
