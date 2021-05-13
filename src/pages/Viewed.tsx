@@ -50,6 +50,9 @@ const Dashboard = () => {
                   );
                   return (
                     <ProblemCard2
+                      onClick={() => {
+                        history.push(`/problems/${problem.id}`);
+                      }}
                       problem={problem}
                       extra={`Viewed at ${timeAgo(vp.attributes.updated_at)}`}
                     />
@@ -69,7 +72,11 @@ const Dashboard = () => {
       ),
     },
     {
-      menuItem: { key: "kifus", content: "Viewed Kifus" },
+      menuItem: {
+        key: "kifus",
+        icon: "book",
+        content: "Viewed Kifus",
+      },
       render: () => (
         <Tab.Pane>
           {viewedKifus.status === "succeeded" && (
@@ -83,6 +90,9 @@ const Dashboard = () => {
                     );
                     return (
                       <KifuCard2
+                        onClick={() => {
+                          history.push(`/kifus/${kifu.id}`);
+                        }}
                         kifu={kifu}
                         extra={`Viewed at ${timeAgo(vp.attributes.updated_at)}`}
                       />

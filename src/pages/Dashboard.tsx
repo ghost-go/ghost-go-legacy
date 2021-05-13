@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { Pagination, ProblemCard2 } from "components/common";
 import {
   Container,
   Statistic,
@@ -9,161 +11,224 @@ import {
   Menu,
   Segment,
   Tab,
-  Label,
-  Divider,
+  PaginationProps,
+  TabProps,
 } from "semantic-ui-react";
-import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
+import { useQueryParam } from "use-query-params";
+import {
+  useDispatch,
+  useTypedSelector,
+  checkTokenIsValid,
+  useGenericData,
+} from "utils";
 
 import logo from "assets/images/logo.png";
 import { useHistory } from "react-router";
+import { fetchStatistics, fetchWrongs, fetchTried, signOut } from "slices";
 
 const Dashboard = () => {
   const { token, user } = useTypedSelector((i) => i.auth);
+  const [statistics] = useGenericData(useTypedSelector((i) => i.statistics));
+  const wrongs = useTypedSelector((i) => i.wrongs);
+  const tried = useTypedSelector((i) => i.tried);
   const history = useHistory();
+  const dispatch = useDispatch();
+  const [page = "1", setPage] = useQueryParam("page");
+  const [active = "0", setActive] = useQueryParam("active");
+
+  const handlePaginationChange = (
+    e: React.MouseEvent,
+    data: PaginationProps
+  ) => {
+    setPage(data.activePage);
+  };
+
   if (!token) history.push("/");
+
+  useEffect(() => {
+    if (!checkTokenIsValid(token)) {
+      dispatch(signOut());
+      history.push("/");
+    }
+    if (active === "1") {
+      dispatch(fetchTried({ params: { page } }));
+    } else if (active === "2") {
+      dispatch(fetchWrongs({ params: { page } }));
+    } else {
+      dispatch(fetchWrongs({ params: { page, item: 6 } }));
+      dispatch(fetchTried({ params: { page, item: 6 } }));
+      dispatch(fetchStatistics());
+    }
+  }, [dispatch, history, token, active, page]);
+
+  const handleTabChange = (e: React.MouseEvent, data: TabProps) => {
+    setPage(1);
+    setActive(data.activeIndex);
+  };
 
   const panes = [
     {
       menuItem: { key: "statistics", content: "Statistics" },
       render: () => (
         <Tab.Pane>
-          <Header as="h2">Total Problems Statistics</Header>
-          <Divider />
-          <Statistic.Group>
-            <Statistic color="grey" size="large" horizontal>
-              <Statistic.Value>22</Statistic.Value>
-              <Statistic.Label>Tried</Statistic.Label>
-            </Statistic>
-            <Statistic color="green" size="large" horizontal>
-              <Statistic.Value>31</Statistic.Value>
-              <Statistic.Label>Rights</Statistic.Label>
-            </Statistic>
-            <Statistic color="red" size="large" horizontal>
-              <Statistic.Value>22</Statistic.Value>
-              <Statistic.Label>Wrongs</Statistic.Label>
-            </Statistic>
-          </Statistic.Group>
-          <Divider />
-          <Header as="h2">Last 7 days</Header>
-          <Divider />
-          <Statistic.Group>
-            <Statistic color="grey" size="large" horizontal>
-              <Statistic.Value>22</Statistic.Value>
-              <Statistic.Label>Tried</Statistic.Label>
-            </Statistic>
-            <Statistic color="green" size="large" horizontal>
-              <Statistic.Value>31</Statistic.Value>
-              <Statistic.Label>Rights</Statistic.Label>
-            </Statistic>
-            <Statistic color="red" size="large" horizontal>
-              <Statistic.Value>22</Statistic.Value>
-              <Statistic.Label>Wrongs</Statistic.Label>
-            </Statistic>
-          </Statistic.Group>
-          <Divider />
-          <Header as="h2">Last 30 days</Header>
-          <Divider />
-          <Statistic.Group>
-            <Statistic color="grey" size="large" horizontal>
-              <Statistic.Value>22</Statistic.Value>
-              <Statistic.Label>Tried</Statistic.Label>
-            </Statistic>
-            <Statistic color="green" size="large" horizontal>
-              <Statistic.Value>31</Statistic.Value>
-              <Statistic.Label>Rights</Statistic.Label>
-            </Statistic>
-            <Statistic color="red" size="large" horizontal>
-              <Statistic.Value>22</Statistic.Value>
-              <Statistic.Label>Wrongs</Statistic.Label>
-            </Statistic>
-          </Statistic.Group>
-          <Divider />
+          <Grid columns={2} divided doubling>
+            {statistics && (
+              <Grid.Row>
+                <Grid.Column>
+                  <Header as="h3">Total Problems Statistics</Header>
+                  <Statistic.Group widths={3}>
+                    <Statistic color="grey" horizontal>
+                      <Statistic.Value>{statistics.all.tried}</Statistic.Value>
+                      <Statistic.Label>Tried</Statistic.Label>
+                    </Statistic>
+                    <Statistic color="green" horizontal>
+                      <Statistic.Value>{statistics.all.right}</Statistic.Value>
+                      <Statistic.Label>Rights</Statistic.Label>
+                    </Statistic>
+                    <Statistic color="red" horizontal>
+                      <Statistic.Value>{statistics.all.wrong}</Statistic.Value>
+                      <Statistic.Label>Wrongs</Statistic.Label>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+                <Grid.Column>
+                  <Header as="h3">Last 30 days</Header>
+                  <Statistic.Group widths={3}>
+                    <Statistic color="grey" horizontal>
+                      <Statistic.Value>
+                        {statistics.days_30.tried}
+                      </Statistic.Value>
+                      <Statistic.Label>Tried</Statistic.Label>
+                    </Statistic>
+                    <Statistic color="green" horizontal>
+                      <Statistic.Value>
+                        {statistics.days_30.right}
+                      </Statistic.Value>
+                      <Statistic.Label>Rights</Statistic.Label>
+                    </Statistic>
+                    <Statistic color="red" horizontal>
+                      <Statistic.Value>
+                        {statistics.days_30.wrong}
+                      </Statistic.Value>
+                      <Statistic.Label>Wrongs</Statistic.Label>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+              </Grid.Row>
+            )}
+            {tried.status === "succeeded" && wrongs.status === "succeeded" && (
+              <Grid.Row>
+                <Grid.Column>
+                  <Header as="h3">Tried</Header>
+                  <Card.Group itemsPerRow={2} stackable doubling>
+                    {tried.payload.slice(0, 6).map((t: any) => {
+                      return (
+                        <ProblemCard2
+                          onClick={() => {
+                            history.push(`/problems/${t.problem.data.id}`);
+                          }}
+                          problem={t.problem.data}
+                          extra={`Tried count ${t.tried_count}`}
+                        />
+                      );
+                    })}
+                  </Card.Group>
+                </Grid.Column>
+                <Grid.Column>
+                  <Header as="h3">Most Wrong</Header>
+                  <Card.Group itemsPerRow={2} stackable doubling>
+                    {wrongs.payload.slice(0, 6).map((t: any) => {
+                      return (
+                        <ProblemCard2
+                          onClick={() => {
+                            history.push(`/problems/${t.problem.data.id}`);
+                          }}
+                          problem={t.problem.data}
+                          extra={`Wrongs count ${t.wrongs_count}`}
+                        />
+                      );
+                    })}
+                  </Card.Group>
+                </Grid.Column>
+              </Grid.Row>
+            )}
+          </Grid>
         </Tab.Pane>
       ),
     },
     {
       menuItem: { key: "tried", content: "Tried" },
-      render: () => <Tab.Pane>Tried</Tab.Pane>,
-    },
-    {
-      menuItem: { key: "most wrong", content: "Most Wrong" },
       render: () => (
         <Tab.Pane>
-          <Card.Group itemsPerRow={4}>
-            <Card>
-              <Card.Content>
-                <Image
-                  floated="right"
-                  size="tiny"
-                  src={logo}
-                  spaced={false}
-                  style={{ marginBottom: 0, marginLeft: 0 }}
+          {tried.status === "succeeded" && (
+            <>
+              <Card.Group itemsPerRow={4} stackable doubling>
+                {tried.payload.slice(0, 6).map((t: any) => {
+                  return (
+                    <ProblemCard2
+                      onClick={() => {
+                        history.push(`/problems/${t.problem.data.id}`);
+                      }}
+                      problem={t.problem.data}
+                      extra={`Tried count ${t.tried_count}`}
+                    />
+                  );
+                })}
+              </Card.Group>
+              <div className="mt-5">
+                <Pagination
+                  defaultActivePage={tried.headers["current-page"]}
+                  totalPages={tried.headers["total-page"]}
+                  onPageChange={handlePaginationChange}
                 />
-                <Card.Header>P-10000</Card.Header>
-                <Card.Meta>
-                  <span>Level: 4K</span>
-                </Card.Meta>
-                <Card.Meta>
-                  <span>Black to move</span>
-                </Card.Meta>
-                <Card.Meta>
-                  <span>Right rate: 21.3%</span>
-                </Card.Meta>
-              </Card.Content>
-              <Card.Content extra>
-                {/* <Icon name="" /> */}
-                Your wrong count: 10
-              </Card.Content>
-            </Card>
-            <Card size="small">
-              <Card.Content>
-                <Image floated="right" size="tiny" src={logo} />
-                <Card.Header>P-10000</Card.Header>
-                <Card.Meta>
-                  <span>Level: 4K</span>
-                </Card.Meta>
-                <Card.Meta>
-                  <span>Black to move</span>
-                </Card.Meta>
-                <Card.Meta>
-                  <span>Right rate: 21.3%</span>
-                </Card.Meta>
-              </Card.Content>
-              <Card.Content extra>
-                {/* <Icon name="" /> */}
-                Your wrong count: 10
-              </Card.Content>
-            </Card>
-            <Card size="small">
-              <Card.Content>
-                <Image floated="right" size="tiny" src={logo} />
-                <Card.Header>P-10000</Card.Header>
-                <Card.Meta>
-                  <span>Level: 4K</span>
-                </Card.Meta>
-                <Card.Meta>
-                  <span>Black to move</span>
-                </Card.Meta>
-                <Card.Meta>
-                  <span>Right rate: 21.3%</span>
-                </Card.Meta>
-              </Card.Content>
-              <Card.Content extra>
-                {/* <Icon name="" /> */}
-                Your wrong count: 10
-              </Card.Content>
-            </Card>
-          </Card.Group>
+              </div>
+            </>
+          )}
         </Tab.Pane>
       ),
     },
     {
-      menuItem: { key: "Liked", content: "Liked" },
-      render: () => <Tab.Pane>Liked</Tab.Pane>,
+      menuItem: { key: "wrongs", content: "Wrongs" },
+      render: () => (
+        <Tab.Pane>
+          <Tab.Pane>
+            {wrongs.status === "succeeded" && (
+              <>
+                <Card.Group itemsPerRow={4} stackable doubling>
+                  {wrongs.payload.slice(0, 6).map((t: any) => {
+                    return (
+                      <ProblemCard2
+                        onClick={() => {
+                          history.push(`/problems/${t.problem.data.id}`);
+                        }}
+                        problem={t.problem.data}
+                        extra={`wrong count ${t.wrongs_count}`}
+                      />
+                    );
+                  })}
+                </Card.Group>
+                <div className="mt-5">
+                  <Pagination
+                    defaultActivePage={wrongs.headers["current-page"]}
+                    totalPages={wrongs.headers["total-page"]}
+                    onPageChange={handlePaginationChange}
+                  />
+                </div>
+              </>
+            )}
+          </Tab.Pane>
+        </Tab.Pane>
+      ),
     },
+    // {
+    //   menuItem: { key: "Liked", content: "Liked" },
+    //   render: () => <Tab.Pane>Liked</Tab.Pane>,
+    // },
   ];
 
-  return <Tab panes={panes} />;
+  return (
+    <Tab panes={panes} onTabChange={handleTabChange} activeIndex={active} />
+  );
 };
 
 export default Dashboard;

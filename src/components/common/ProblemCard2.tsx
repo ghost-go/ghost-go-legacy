@@ -1,6 +1,14 @@
 import { Card, Image } from "semantic-ui-react";
 
-const ProblemCard2 = ({ problem, extra }: { problem: any; extra: string }) => {
+const ProblemCard2 = ({
+  problem,
+  extra,
+  onClick,
+}: {
+  problem: any;
+  extra: string;
+  onClick: any;
+}) => {
   const {
     image_url,
     rights_count,
@@ -11,7 +19,7 @@ const ProblemCard2 = ({ problem, extra }: { problem: any; extra: string }) => {
   const rightRate =
     tried_count > 0 ? `${(rights_count / tried_count).toFixed(2)}%` : "No Data";
   return (
-    <Card>
+    <Card onClick={onClick}>
       <Card.Content>
         <Image
           floated="right"

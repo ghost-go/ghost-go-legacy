@@ -18,8 +18,7 @@ import {
 import { Toast, useDispatch, useTypedSelector, useUpdateEffect } from "utils";
 import { UserAvatar } from "components/common";
 import { RANK_OPTIONS, GENDER_OPTIONS } from "utils/constants";
-import { fetchProfile, updateUser } from "slices/userSlice";
-import { list } from "postcss";
+import { fetchProfile, updateUser } from "slices";
 
 const Profile = () => {
   const { token, user } = useTypedSelector((i) => i.auth);

@@ -422,18 +422,18 @@ const Problem = () => {
               <span className="ml-2">{problem.data.attributes.rank}</span>
             </Header>
             <div>
-              <Label>
+              <span className="mr-2">
                 <Icon name="puzzle" />
                 ID: P-{problem.data.id}
-              </Label>
-              <Label>
+              </span>
+              <span className="mr-2">
                 <Icon name="checkmark" />
-                {problem.data.attributes.right_count}
-              </Label>
-              <Label>
+                {problem.data.attributes.rights_count}
+              </span>
+              <span className="mr-2">
                 <Icon name="times" />
-                {problem.data.attributes.wrong_count}
-              </Label>
+                {problem.data.attributes.wrongs_count}
+              </span>
             </div>
             <div className="flex flex-row mt-4 items-center">
               <Button onClick={handleReset}>
@@ -454,9 +454,33 @@ const Problem = () => {
                 </span>
               </div>
             </div>
+            {/* <div>
+              <div className="inline-block mt-4">
+                <Button as="div" labelPosition="right">
+                  <Button basic color="red">
+                    <Icon name="heart" />
+                    Like
+                  </Button>
+                  <Label as="a" basic color="red" pointing="left">
+                    0
+                  </Label>
+                </Button>
+                <Button.Group>
+                  <Button basic attached icon={true}>
+                    <Icon name="thumbs up outline" />
+                  </Button>
+                  <Button basic attached icon={true}>
+                    <Icon name="thumbs down outline" />
+                  </Button>
+                </Button.Group>
+              </div>
+            </div> */}
             <div>
               <div className="inline-block mt-4">
-                <Button size="tiny" as="div" labelPosition="right">
+                {/* <Button size="tiny" color="red" icon={true}>
+                  <Icon name="star" />
+                </Button> */}
+                {/* <Button size="tiny" as="div" labelPosition="right">
                   <Button size="tiny" color="red">
                     <Icon name="heart" />
                     Like
@@ -465,7 +489,9 @@ const Problem = () => {
                     2048
                   </Label>
                 </Button>
-                <Button
+                <Icon name="thumbs up outline" />
+                <Icon name="thumbs down outline" /> */}
+                {/* <Button
                   size="tiny"
                   as="div"
                   labelPosition="right"
@@ -479,14 +505,14 @@ const Problem = () => {
                   <Label as="a" basic color="blue" pointing="left">
                     2048
                   </Label>
-                </Button>
+                </Button> */}
               </div>
               <div className="inline-block mt-4">
-                <Button.Group size="tiny">
-                  <Button size="tiny" icon color="facebook">
+                <Button.Group>
+                  <Button icon color="facebook">
                     <Icon name="facebook" />
                   </Button>
-                  <Button size="tiny" icon color="twitter">
+                  <Button icon color="twitter">
                     <Icon name="twitter" />
                   </Button>
                   <Button color="google plus" icon>

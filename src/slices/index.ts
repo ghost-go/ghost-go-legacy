@@ -2,7 +2,13 @@ import { combineReducers } from "@reduxjs/toolkit";
 import reduceReducers from "reduce-reducers";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 
-import { profileSlice, updatedUserSlice, userSlice } from "./userSlice";
+import { updatedUserSlice, userSlice } from "./userSlice";
+import {
+  profileSlice,
+  statisticsSlice,
+  wrongsSlice,
+  triedSlice,
+} from "./meSlice";
 // import appReducer from './app';
 // import { authSlice } from './authSlice';
 // import * as utils from '../utils';
@@ -29,6 +35,8 @@ export * from "./playerSlice";
 export * from "./genericSlice";
 export * from "./authSlice";
 export * from "./viewedSlice";
+export * from "./userSlice";
+export * from "./meSlice";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -39,12 +47,15 @@ const rootReducer = combineReducers({
   problems: problemsSlice.reducer,
   problem: problemSlice.reducer,
   problemNext: problemNextSlice.reducer,
+  players: playersSlice.reducer,
   kifus: kifusSlice.reducer,
   kifu: kifuSlice.reducer,
-  players: playersSlice.reducer,
   tags: tagsSlice.reducer,
   viewedProblems: viewedProblemsSlice.reducer,
   viewedKifus: viewedKifusSlice.reducer,
+  statistics: statisticsSlice.reducer,
+  wrongs: wrongsSlice.reducer,
+  tried: triedSlice.reducer,
   ui: uiSlice.reducer,
   openSignIn: openSignInSlice.reducer,
   openSignUp: openSignUpSlice.reducer,

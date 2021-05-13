@@ -1,7 +1,15 @@
 import { Card, Image } from "semantic-ui-react";
 import moment from "moment";
 
-const KifuCard2 = ({ kifu, extra }: { kifu: any; extra: string }) => {
+const KifuCard2 = ({
+  kifu,
+  extra,
+  onClick,
+}: {
+  kifu: any;
+  extra: string;
+  onClick: any;
+}) => {
   const {
     image_url,
     b_name_en,
@@ -12,7 +20,7 @@ const KifuCard2 = ({ kifu, extra }: { kifu: any; extra: string }) => {
     w_rank,
   } = kifu.attributes;
   return (
-    <Card>
+    <Card onClick={onClick}>
       <Card.Content>
         <Image
           floated="right"
