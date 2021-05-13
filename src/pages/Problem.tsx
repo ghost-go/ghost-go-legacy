@@ -22,6 +22,7 @@ import {
   openCommentsSlice,
   createViewedProblems,
   fetchProblemNext,
+  createRecord,
 } from "slices";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 import {
@@ -109,6 +110,16 @@ const Problem = () => {
     setRightVisible(false);
     setWrongVisible(true);
     setInteractive(false);
+    dispatch(
+      createRecord({
+        data: {
+          record: {
+            problem_id: id,
+            kind: "wrong",
+          },
+        },
+      })
+    );
     setTimeout(() => {
       handleReset();
       setInteractive(true);
@@ -119,6 +130,16 @@ const Problem = () => {
     setRightVisible(true);
     setWrongVisible(false);
     setInteractive(false);
+    dispatch(
+      createRecord({
+        data: {
+          record: {
+            problem_id: id,
+            kind: "right",
+          },
+        },
+      })
+    );
   };
   const makeChange = () => {
     console.log("Make Change");
