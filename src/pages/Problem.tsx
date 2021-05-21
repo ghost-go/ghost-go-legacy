@@ -10,7 +10,16 @@ import animWrong from "assets/images/anim-wrong.svg";
 import animRight from "assets/images/anim-right.svg";
 import { useHistory } from "react-router";
 import { Switch } from "components/common";
+import { Helmet } from "react-helmet";
 import * as Toast from "utils/toast";
+import {
+  FacebookIcon,
+  FacebookShareCount,
+  FacebookShareButton,
+  TwitterShareButton,
+  RedditShareCount,
+  VKShareCount,
+} from "react-share";
 
 import {
   fetchProblem,
@@ -380,6 +389,14 @@ const Problem = () => {
     <div>
       {problem && (
         <div className="flex flex-col lg:flex-row">
+          <Helmet>
+            <meta
+              name="og:image"
+              property="og:image"
+              content={problem.data.attributes.image_url}
+            />
+            <title>Problem - P-{problem.data.id}</title>
+          </Helmet>
           <div className="relative">
             <ProblemBoard
               ref={boardRef}
@@ -529,10 +546,21 @@ const Problem = () => {
                 </Button> */}
               </div>
               <div className="inline-block mt-4">
+                <FacebookShareButton
+                  // url={window.location.href}
+                  url={`https://sandbox.ghost-go.com${window.location.pathname}`}
+                  quote={`Problem - P-${problem.data.id}`}>
+                  <FacebookIcon size={32} />
+                </FacebookShareButton>
+
+                <div>
+                  <FacebookShareCount
+                    url={window.location.href}
+                    className="Demo__some-network__share-count">
+                    {(count) => count}
+                  </FacebookShareCount>
+                </div>
                 <Button.Group>
-                  <Button icon color="facebook">
-                    <Icon name="facebook" />
-                  </Button>
                   <Button icon color="twitter">
                     <Icon name="twitter" />
                   </Button>
