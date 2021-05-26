@@ -1,8 +1,8 @@
-import _ from "lodash";
-import { Matrix, forEach } from "mathjs";
-import { GRID } from "../common/Constants";
-import { sgfToPosition } from "../common/Helper";
+import _ from 'lodash';
+import {Matrix, forEach} from 'mathjs';
+import {sgfToPosition} from '../common/Helper';
 
+const GRID = 19;
 let liberties = 0;
 let recursionPath: string[] = [];
 
@@ -46,45 +46,47 @@ function calcLiberty(mat: Matrix, x: number, y: number, ki: number) {
 
 function execPonnuki(mat: Matrix, i: number, j: number, ki: number) {
   const newMat = _.cloneDeep(mat);
-  const { liberty: libertyUp, recursionPath: recursionPathUp } = calcLiberty(
+  const {liberty: libertyUp, recursionPath: recursionPathUp} = calcLiberty(
     mat,
     i,
     j - 1,
     ki
   );
-  const {
-    liberty: libertyDown,
-    recursionPath: recursionPathDown,
-  } = calcLiberty(mat, i, j + 1, ki);
-  const {
-    liberty: libertyLeft,
-    recursionPath: recursionPathLeft,
-  } = calcLiberty(mat, i - 1, j, ki);
-  const {
-    liberty: libertyRight,
-    recursionPath: recursionPathRight,
-  } = calcLiberty(mat, i + 1, j, ki);
+  const {liberty: libertyDown, recursionPath: recursionPathDown} = calcLiberty(
+    mat,
+    i,
+    j + 1,
+    ki
+  );
+  const {liberty: libertyLeft, recursionPath: recursionPathLeft} = calcLiberty(
+    mat,
+    i - 1,
+    j,
+    ki
+  );
+  const {liberty: libertyRight, recursionPath: recursionPathRight} =
+    calcLiberty(mat, i + 1, j, ki);
   if (libertyUp === 0) {
-    recursionPathUp.forEach((item) => {
-      const coord = item.split(",");
+    recursionPathUp.forEach(item => {
+      const coord = item.split(',');
       newMat.set([parseInt(coord[0]), parseInt(coord[1])], 0);
     });
   }
   if (libertyDown === 0) {
-    recursionPathDown.forEach((item) => {
-      const coord = item.split(",");
+    recursionPathDown.forEach(item => {
+      const coord = item.split(',');
       newMat.set([parseInt(coord[0]), parseInt(coord[1])], 0);
     });
   }
   if (libertyLeft === 0) {
-    recursionPathLeft.forEach((item) => {
-      const coord = item.split(",");
+    recursionPathLeft.forEach(item => {
+      const coord = item.split(',');
       newMat.set([parseInt(coord[0]), parseInt(coord[1])], 0);
     });
   }
   if (libertyRight === 0) {
-    recursionPathRight.forEach((item) => {
-      const coord = item.split(",");
+    recursionPathRight.forEach(item => {
+      const coord = item.split(',');
       newMat.set([parseInt(coord[0]), parseInt(coord[1])], 0);
     });
   }
@@ -92,24 +94,26 @@ function execPonnuki(mat: Matrix, i: number, j: number, ki: number) {
 }
 
 function canPonnuki(mat: Matrix, i: number, j: number, ki: number) {
-  const { liberty: libertyUp, recursionPath: recursionPathUp } = calcLiberty(
+  const {liberty: libertyUp, recursionPath: recursionPathUp} = calcLiberty(
     mat,
     i,
     j - 1,
     ki
   );
-  const {
-    liberty: libertyDown,
-    recursionPath: recursionPathDown,
-  } = calcLiberty(mat, i, j + 1, ki);
-  const {
-    liberty: libertyLeft,
-    recursionPath: recursionPathLeft,
-  } = calcLiberty(mat, i - 1, j, ki);
-  const {
-    liberty: libertyRight,
-    recursionPath: recursionPathRight,
-  } = calcLiberty(mat, i + 1, j, ki);
+  const {liberty: libertyDown, recursionPath: recursionPathDown} = calcLiberty(
+    mat,
+    i,
+    j + 1,
+    ki
+  );
+  const {liberty: libertyLeft, recursionPath: recursionPathLeft} = calcLiberty(
+    mat,
+    i - 1,
+    j,
+    ki
+  );
+  const {liberty: libertyRight, recursionPath: recursionPathRight} =
+    calcLiberty(mat, i + 1, j, ki);
   if (libertyUp === 0 && recursionPathUp.length > 0) {
     return true;
   }
@@ -132,7 +136,7 @@ export function canMove(mat: Matrix, i: number, j: number, ki: number) {
   }
 
   newMat.set([i, j], ki);
-  const { liberty } = calcLiberty(newMat, i, j, ki);
+  const {liberty} = calcLiberty(newMat, i, j, ki);
   if (canPonnuki(newMat, i, j, -ki)) {
     return true;
   }
@@ -146,7 +150,7 @@ export function canMove(mat: Matrix, i: number, j: number, ki: number) {
 }
 
 export function move(mat: Matrix, i: number, j: number, ki: number) {
-  let newMat = _.cloneDeep(mat);
+  const newMat = _.cloneDeep(mat);
   newMat.set([i, j], ki);
   return execPonnuki(newMat, i, j, -ki);
 }
@@ -154,7 +158,7 @@ export function move(mat: Matrix, i: number, j: number, ki: number) {
 export function showKi(mat: Matrix, steps: string[], isPonnuki = true) {
   let newMat = _.cloneDeep(mat);
   let hasMoved = false;
-  steps.forEach((str) => {
+  steps.forEach(str => {
     const {
       x,
       y,

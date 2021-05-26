@@ -1,20 +1,27 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { request, authRequest } from "./api";
-import * as Toast from "./toast";
+import {
+  createSlice,
+  createAsyncThunk,
+  SliceCaseReducers,
+} from '@reduxjs/toolkit';
+import {request, authRequest} from './api';
+import * as Toast from './toast';
+
+export interface GenericErrorType {
+  message: string;
+}
 
 export interface GenericState<T> {
   payload?: T;
   headers?: T;
-  status: "idle" | "loading" | "succeeded" | "failed";
-  // TODO: Need to implement the GenericErrorType
-  error?: any;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error?: GenericErrorType;
 }
 
-export interface JsonApiResponseType {
+export interface JsonApiResponseType<T> {
   data: {
     id: string | number;
     type: string;
-    attributes: any;
+    attributes: T;
   };
 }
 
@@ -31,24 +38,68 @@ export interface HeadersType {
 }
 
 export interface GenericReducerOptions {
+  cache: boolean;
   useToken?: boolean;
   errorCentralized?: boolean;
 }
 
 export const initialGenericState: GenericState<any> = {
   payload: undefined,
-  status: "idle",
+  status: 'idle',
 };
 
 export const initialGenericReducerOptions: GenericReducerOptions = {
+  cache: false,
   useToken: false,
   errorCentralized: true,
 };
 
-export const buildGenericAsyncThunk = (
+export const buildGenericRequest = <T>(
+  url: string,
+  method = 'GET',
+  options: GenericReducerOptions
+) => {
+  return async ({
+    params,
+    data,
+    pattern,
+    token,
+    headers,
+  }: {
+    params?: ParamsType;
+    // TODO: any or T?
+    data?: T;
+    pattern?: PatternType;
+    token?: string;
+    headers?: HeadersType;
+  } = {}) => {
+    let replacedUrl = url;
+    for (const key in pattern) {
+      const re = RegExp(`:${key}`);
+      replacedUrl = replacedUrl.replace(re, pattern[key].toString());
+    }
+    let response;
+    const requestParmas = {
+      method,
+      url: replacedUrl,
+      params,
+      headers,
+      data,
+    };
+    if (token || options.useToken) {
+      const newToken: string = token || localStorage.getItem('token') || '';
+      response = await authRequest(newToken, requestParmas);
+    } else {
+      response = await request(requestParmas);
+    }
+    return response;
+  };
+};
+
+export const buildGenericAsyncThunk = <T>(
   name: string,
   url: string,
-  method = "GET",
+  method = 'GET',
   options: GenericReducerOptions
 ) =>
   createAsyncThunk(
@@ -61,19 +112,18 @@ export const buildGenericAsyncThunk = (
       headers,
     }: {
       params?: ParamsType;
-      // TODO: any or T?
-      data?: any;
+      data?: T;
       pattern?: PatternType;
       token?: string;
       headers?: HeadersType;
     } = {}) => {
       let replacedUrl = url;
-      for (let key in pattern) {
+      for (const key in pattern) {
         const re = RegExp(`:${key}`);
         replacedUrl = replacedUrl.replace(re, pattern[key].toString());
       }
       let response;
-      let requestParmas = {
+      const requestParmas = {
         method,
         url: replacedUrl,
         params,
@@ -81,12 +131,17 @@ export const buildGenericAsyncThunk = (
         data,
       };
       if (token || options.useToken) {
-        let newToken: string = token || localStorage.getItem("token") || "";
+        const newToken: string = token || localStorage.getItem('token') || '';
         response = await authRequest(newToken, requestParmas);
       } else {
         response = await request(requestParmas);
       }
-      return response;
+      return {
+        data: response.data,
+        headers: response.headers,
+        status: response.status,
+        statusText: response.statusText,
+      };
     }
   );
 
@@ -96,26 +151,26 @@ export const buildGenericSlice = <T>(
   initialState: GenericState<T>,
   options: GenericReducerOptions
 ) =>
-  createSlice<GenericState<T>, any, any>({
+  createSlice<GenericState<T>, SliceCaseReducers<GenericState<T>>, string>({
     name,
     initialState: initialState,
     reducers: {
       reset: () => initialState,
     },
-    extraReducers: (builder) => {
-      builder.addCase(asyncThunk.pending, (state, action) => {
-        state.status = "loading";
+    extraReducers: builder => {
+      builder.addCase(asyncThunk.pending, state => {
+        state.status = 'loading';
       });
       builder.addCase(asyncThunk.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         state.payload = action.payload.data;
         state.headers = action.payload.headers;
       });
       builder.addCase(asyncThunk.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error;
         if (options.errorCentralized) {
-          Toast.error(state.error.message);
+          Toast.error(action.error.message);
         }
       });
     },
@@ -124,7 +179,7 @@ export const buildGenericSlice = <T>(
 export const buildGenericReducer = <T>({
   name,
   endpoint,
-  method = "GET",
+  method = 'GET',
   initialState = initialGenericState,
   options,
 }: {
@@ -134,7 +189,7 @@ export const buildGenericReducer = <T>({
   initialState?: GenericState<T>;
   options?: GenericReducerOptions;
 }) => {
-  const asyncThunk = buildGenericAsyncThunk(name, endpoint, method, {
+  const asyncThunk = buildGenericAsyncThunk<T>(name, endpoint, method, {
     ...initialGenericReducerOptions,
     ...options,
   });
@@ -142,7 +197,12 @@ export const buildGenericReducer = <T>({
     ...initialGenericReducerOptions,
     ...options,
   });
-  return { asyncThunk, slice };
+
+  const request = buildGenericRequest<T>(endpoint, method, {
+    ...initialGenericReducerOptions,
+    ...options,
+  });
+  return {asyncThunk, slice, request};
 };
 
 export const buildGenericBooleanSlice = (name: string) => {
@@ -150,9 +210,11 @@ export const buildGenericBooleanSlice = (name: string) => {
     name,
     initialState: false,
     reducers: {
-      makeTrue: (state) => (state = true),
-      makeFalse: (state) => (state = false),
-      toggle: (state) => (state = !state),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      makeTrue: state => (state = true),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      makeFalse: state => (state = false),
+      toggle: state => (state = !state),
     },
   });
   return slice;

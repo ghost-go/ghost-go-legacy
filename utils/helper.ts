@@ -1,4 +1,4 @@
-import jwtDecode, { JwtPayload } from "jwt-decode";
+import jwtDecode, {JwtPayload} from 'jwt-decode';
 
 export const checkTokenIsValid = async (token?: string) => {
   if (token) {

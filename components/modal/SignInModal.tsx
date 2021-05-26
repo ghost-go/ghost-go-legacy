@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useTypedSelector } from "utils";
+import {useState, useEffect} from 'react';
+import {useDispatch, useTypedSelector} from 'utils';
 import {
   Button,
   Header,
@@ -11,23 +11,23 @@ import {
   Segment,
   FormProps,
   InputOnChangeData,
-} from "semantic-ui-react";
+} from 'semantic-ui-react';
 
-import { GoogleLogin } from "react-google-login";
+import {GoogleLogin} from 'react-google-login';
 import {
   authSlice,
   googleSignIn,
   openSignInSlice,
   openSignUpSlice,
   signIn,
-} from "slices";
-import { GOOGLE_CLINET_ID } from "utils/constants";
+} from 'slices';
+import {GOOGLE_CLINET_ID} from 'utils/constants';
 
-import logo from "public/images/logo.png";
+import logo from 'public/images/logo.png';
 
 const SignInModal = () => {
-  const open = useTypedSelector((i) => i.openSignIn);
-  const auth = useTypedSelector((i) => i.auth);
+  const open = useTypedSelector(i => i.openSignIn);
+  const auth = useTypedSelector(i => i.auth);
   const [signInParams, setSignInParams] = useState({
     email: undefined,
     password: undefined,
@@ -37,7 +37,7 @@ const SignInModal = () => {
   const dispatch = useDispatch();
   const handleGoogleSignInSuccess = (res: any) => {
     console.log(res);
-    dispatch(googleSignIn({ meta: res }));
+    dispatch(googleSignIn({meta: res}));
   };
   const handleGoogleSignInFailure = (res: any) => {
     setErrorMessage(res);
@@ -46,7 +46,7 @@ const SignInModal = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    { name, value }: InputOnChangeData
+    {name, value}: InputOnChangeData
   ) => {
     if (errorMessage) {
       setErrorMessage(null);
@@ -73,13 +73,15 @@ const SignInModal = () => {
     <Modal
       onClose={() => dispatch(openSignInSlice.actions.makeFalse())}
       onOpen={() => dispatch(openSignInSlice.actions.makeTrue())}
-      open={open}>
+      open={open}
+    >
       <Modal.Content>
         <Grid
           textAlign="center"
-          style={{ height: "90vh" }}
-          verticalAlign="middle">
-          <Grid.Column style={{ maxWidth: 450 }}>
+          style={{height: '90vh'}}
+          verticalAlign="middle"
+        >
+          <Grid.Column style={{maxWidth: 450}}>
             <Header as="h2" color="black" textAlign="center">
               <Image src={logo} />
               Login to your account
@@ -124,18 +126,19 @@ const SignInModal = () => {
                   buttonText="Login"
                   onSuccess={handleGoogleSignInSuccess}
                   onFailure={handleGoogleSignInFailure}
-                  cookiePolicy={"single_host_origin"}
+                  cookiePolicy={'single_host_origin'}
                 />
               </Segment>
             </Form>
             <Message>
-              Not registered?{" "}
+              Not registered?{' '}
               <span
                 className="text-blue-800 cursor-pointer"
                 onClick={() => {
                   dispatch(openSignInSlice.actions.makeFalse());
                   dispatch(openSignUpSlice.actions.makeTrue());
-                }}>
+                }}
+              >
                 Sign Up
               </span>
             </Message>

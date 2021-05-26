@@ -1,17 +1,17 @@
-import { RootState } from "slices";
-import { buildGenericReducer, JsonApiResponseType } from "utils/reducers";
+import {RootState} from 'slices';
+import {buildGenericReducer, JsonApiResponseType} from 'utils/reducers';
 
-export const { asyncThunk: fetchUser, slice: userSlice } =
+export const {asyncThunk: fetchUser, slice: userSlice} =
   buildGenericReducer<any>({
-    name: "users/fetchUser",
-    endpoint: "/users/:id",
+    name: 'users/fetchUser',
+    endpoint: '/users/:id',
   });
 
-export const { asyncThunk: updateUser, slice: updatedUserSlice } =
+export const {asyncThunk: updateUser, slice: updatedUserSlice} =
   buildGenericReducer<any>({
-    name: "users/updateUser",
-    endpoint: "/users/:id",
-    method: "PUT",
+    name: 'users/updateUser',
+    endpoint: '/users/:id',
+    method: 'PUT',
     options: {
       errorCentralized: true,
     },

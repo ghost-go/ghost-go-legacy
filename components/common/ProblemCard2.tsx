@@ -1,4 +1,4 @@
-import { Card, Image } from "semantic-ui-react";
+import {Card, Image} from 'semantic-ui-react';
 
 const ProblemCard2 = ({
   problem,
@@ -9,15 +9,10 @@ const ProblemCard2 = ({
   extra: string;
   onClick: any;
 }) => {
-  const {
-    image_url,
-    rights_count,
-    tried_count,
-    whofirst,
-    rank,
-  } = problem.attributes;
+  const {image_url, rights_count, tried_count, whofirst, rank} =
+    problem.attributes;
   const rightRate =
-    tried_count > 0 ? `${(rights_count / tried_count).toFixed(2)}%` : "No Data";
+    tried_count > 0 ? `${(rights_count / tried_count).toFixed(2)}%` : 'No Data';
   return (
     <Card onClick={onClick}>
       <Card.Content>
@@ -26,7 +21,7 @@ const ProblemCard2 = ({
           width="45%"
           src={image_url}
           spaced={false}
-          style={{ marginBottom: 0, marginLeft: 0 }}
+          style={{marginBottom: 0, marginLeft: 0}}
         />
         <Card.Header className="pt-2">P-{problem.id}</Card.Header>
         <Card.Meta>

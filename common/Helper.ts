@@ -1,18 +1,17 @@
-import _ from "lodash";
-import TreeModel from "tree-model";
+import _ from 'lodash';
 // import JsFeat from 'jsfeat';
-import * as Const from "./Constants";
+import * as Const from './Constants';
 
 export const sgfToPosition = (str: any) => {
-  const ki = str[0] === "B" ? 1 : -1;
+  const ki = str[0] === 'B' ? 1 : -1;
   const tempStr = /\[(.*)\]/.exec(str);
   if (tempStr) {
     const pos = tempStr[1];
     const x = Const.SGF_LETTERS.indexOf(pos[0]);
     const y = Const.SGF_LETTERS.indexOf(pos[1]);
-    return { x, y, ki };
+    return {x, y, ki};
   }
-  return { x: -1, y: -1, ki: 0 };
+  return {x: -1, y: -1, ki: 0};
 };
 
 // export const sgfOffset = (sgf, offset = 0, quadrant = 1) => {
@@ -23,14 +22,14 @@ export const sgfOffset = (sgf: any, offset = 0) => {
   return res.substr(0, 2) + Const.SGF_LETTERS[charIndex] + res.substr(2 + 1);
 };
 
-export const a1ToSGF = (str: any, type = "B", offset = 0) => {
+export const a1ToSGF = (str: any, type = 'B', offset = 0) => {
   const inx = Const.A1_LETTERS.indexOf(str[0]) + offset;
   const iny = Const.A1_NUMBERS.indexOf(parseInt(str.substr(1), 0)) - offset;
   const sgf = `${type}[${Const.SGF_LETTERS[inx]}${Const.SGF_LETTERS[iny]}]`;
   return sgf;
 };
 
-export const convertStoneTypeToString = (type: any) => (type === 1 ? "B" : "W");
+export const convertStoneTypeToString = (type: any) => (type === 1 ? 'B' : 'W');
 
 export const convertStepsForAI = (steps: any, offset = 0) => {
   let res = _.clone(steps);
@@ -39,43 +38,20 @@ export const convertStepsForAI = (steps: any, offset = 0) => {
     19 - offset
   }]GN[226]PB[Black]HA[0]PW[White]KM[7.5]DT[2017-08-01]TM[1800]RU[Chinese]CP[Copyright ghost-go.com]AP[ghost-go.com]PL[Black];`;
   let count = 0;
-  let prev = "";
+  let prev = '';
   steps.forEach((step: any, index: any) => {
     if (step[0] === prev[0]) {
-      if (step[0] === "B") {
-        res.splice(index + count, 0, "W[tt]");
+      if (step[0] === 'B') {
+        res.splice(index + count, 0, 'W[tt]');
         count += 1;
       } else {
-        res.splice(index + count, 0, "B[tt]");
+        res.splice(index + count, 0, 'B[tt]');
         count += 1;
       }
     }
     prev = step;
   });
-  return `${header}${res.join(";")})`;
-};
-
-export const CoordsToTree = (steps: any) => {
-  const tree = new TreeModel();
-  const root = tree.parse({ id: "root", index: 0, children: [] });
-  let parentNode: any;
-  let node;
-  steps.forEach((step: any, i: any) => {
-    node = tree.parse({
-      id: `${step}-${i + 1}`,
-      coord: step,
-      type: step[0] === "B" ? 1 : -1,
-      posX: Const.SGF_LETTERS.indexOf(step[1]),
-      posY: Const.SGF_LETTERS.indexOf(step[2]),
-    });
-    if (parentNode === undefined) {
-      root.addChild(node);
-    } else {
-      parentNode.addChild(node);
-    }
-    parentNode = node;
-  });
-  return root;
+  return `${header}${res.join(';')})`;
 };
 
 // export const GoBanDetection = (pixelData, canvas) => {

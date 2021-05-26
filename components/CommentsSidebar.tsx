@@ -1,4 +1,4 @@
-import { isMobile } from "react-device-detect";
+import {isMobile} from 'react-device-detect';
 import {
   Header,
   Button,
@@ -8,24 +8,25 @@ import {
   Form,
   Icon,
   TextArea,
-} from "semantic-ui-react";
+} from 'semantic-ui-react';
 
-import { openCommentsSlice } from "slices";
-import { useDispatch, useTypedSelector } from "utils";
+import {openCommentsSlice} from 'slices';
+import {useDispatch, useTypedSelector} from 'utils';
 
 const CommentsSidebar = () => {
   const dispatch = useDispatch();
-  const open = useTypedSelector((state) => state.openComments);
+  const open = useTypedSelector(state => state.openComments);
   return (
     <Sidebar
       as={Segment}
       width="wide"
       animation="overlay"
-      direction={isMobile ? "bottom" : "right"}
+      direction={isMobile ? 'bottom' : 'right'}
       onHide={() => {
         dispatch(openCommentsSlice.actions.makeFalse());
       }}
-      visible={open}>
+      visible={open}
+    >
       <Comment.Group>
         <Header as="h3" dividing>
           Comments
@@ -33,7 +34,8 @@ const CommentsSidebar = () => {
             className="absolute top-2 right-2"
             onClick={() => {
               dispatch(openCommentsSlice.actions.makeFalse());
-            }}>
+            }}
+          >
             <Icon name="times" />
           </div>
         </Header>
@@ -96,7 +98,7 @@ const CommentsSidebar = () => {
           </Comment.Content>
         </Comment>
         <Form reply>
-          <Form.TextArea style={{ height: "6em" }} />
+          <Form.TextArea style={{height: '6em'}} />
           <Button
             content="Add Reply"
             labelPosition="left"

@@ -1,13 +1,13 @@
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import { buildGenericReducer } from "utils/reducers";
-import { request } from "utils/api";
+import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit';
+import {buildGenericReducer} from 'utils/reducers';
+import {request} from 'utils/api';
 
 // TODO: The auth object need to be refactored after integrating the Wechat login
 interface AuthState {
   token?: string;
   // TODO: UserType
   user: any;
-  status: "idle" | "loading" | "succeeded" | "failed";
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
   // TODO: ErrorType
   error?: any;
 }
@@ -15,7 +15,7 @@ interface AuthState {
 const initialState: AuthState = {
   token: undefined,
   user: undefined,
-  status: "idle",
+  status: 'idle',
   error: undefined,
 };
 
@@ -29,32 +29,30 @@ interface GoogleSignInParams {
 }
 
 export const signIn = createAsyncThunk(
-  "auth/signin",
+  'auth/signin',
   async (data: EmailSignInParams) => {
     const response = await request({
-      method: "POST",
-      url: "auth/signin",
+      method: 'POST',
+      url: 'auth/signin',
       data: data,
     });
     return response.data;
   }
 );
 
-export const {
-  asyncThunk: signUp,
-  slice: signUpSlice,
-} = buildGenericReducer<any>({
-  name: "auth/signup",
-  endpoint: "/auth/signup",
-  method: "POST",
-});
+export const {asyncThunk: signUp, slice: signUpSlice} =
+  buildGenericReducer<any>({
+    name: 'auth/signup',
+    endpoint: '/auth/signup',
+    method: 'POST',
+  });
 
 export const googleSignIn = createAsyncThunk(
-  "auth/google_signin",
+  'auth/google_signin',
   async (data: GoogleSignInParams) => {
     const response = await request({
-      method: "POST",
-      url: "auth/google_signin",
+      method: 'POST',
+      url: 'auth/google_signin',
       data: data,
     });
     return response.data;
@@ -62,11 +60,11 @@ export const googleSignIn = createAsyncThunk(
 );
 
 export const googleSignUp = createAsyncThunk(
-  "auth/google_signup",
+  'auth/google_signup',
   async (data: GoogleSignInParams) => {
     const response = await request({
-      method: "POST",
-      url: "auth/google_signup",
+      method: 'POST',
+      url: 'auth/google_signup',
       data: data,
     });
     return response.data;
@@ -74,31 +72,33 @@ export const googleSignUp = createAsyncThunk(
 );
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
-    signOut: (state) => {
-      state.status = "idle";
+    signOut: state => {
+      state.status = 'idle';
       state.token = undefined;
       state.user = undefined;
       state.error = undefined;
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     const sharedPendingReducer = (state: AuthState) => {
-      state.status = "loading";
+      state.status = 'loading';
     };
     const sharedFulfilledReducer = (state: AuthState, action: any) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       const token = action.payload.token;
       const user = action.payload.user;
       state.token = token;
       state.user = user;
-      localStorage.setItem("token", token);
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
     };
     const sharedRejectedReducer = (state: AuthState, action: any) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.error;
     };
 
@@ -113,4 +113,4 @@ export const authSlice = createSlice({
   },
 });
 
-export const { signOut } = authSlice.actions;
+export const {signOut} = authSlice.actions;

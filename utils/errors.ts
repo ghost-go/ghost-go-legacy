@@ -1,4 +1,4 @@
-import { Toast } from "utils/index";
+import {Toast} from 'utils/index';
 
 export const handleError = (error: any) => {
   // console.log(error);

@@ -3,33 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.3.11",
-    "@apollo/link-context": "^2.0.0-beta.3",
-    "@apollo/link-error": "^2.0.0-beta.3",
-    "@craco/craco": "^6.1.1",
     "@reduxjs/toolkit": "^1.5.1",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.168",
     "@types/mathjs": "^6.0.11",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "@types/react-helmet": "^6.1.0",
     "@types/react-lazy-load-image-component": "^1.5.1",
     "@types/react-modal": "^3.12.0",
     "@types/react-redux": "^7.1.16",
     "@types/styled-components": "^5.1.7",
-    "antd": "^4.12.3",
     "autoprefixer": "^10.2.5",
     "axios": "^0.21.1",
-    "craco-less": "^1.17.1",
     "eslint": "^7.26.0",
-    "graphql": "^15.5.0",
     "gts": "^3.1.0",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "mathjs": "^9.2.0",
     "moment": "^2.29.1",
     "next": "^10.2.2",
@@ -41,10 +30,8 @@
     "react-device-detect": "^1.15.0",
     "react-dom": "^17.0.1",
     "react-google-login": "^5.2.2",
-    "react-helmet": "^6.1.0",
     "react-infinite-scroll-component": "^6.0.0",
     "react-lazy-load-image-component": "^1.5.1",
-    "react-measure": "^2.5.2",
     "react-modal": "^3.12.1",
     "react-redux": "^7.2.2",
     "react-share": "^4.4.0",
@@ -58,15 +45,20 @@
     "semantic-ui-react": "^2.0.3",
     "styled-components": "^5.2.1",
     "tailwindcss": "^2.1.2",
-    "tree-model": "^1.0.7",
     "typescript": "^4.1.2",
-    "use-query-params": "^1.2.0",
-    "web-vitals": "^1.0.1"
+    "use-query-params": "^1.2.0"
   },
   "scripts": {
     "dev": "next dev -p 5000",
     "build": "next build",
-    "start": "next start -p 5000"
+    "start": "next start -p 5000",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "yarn run compile",
+    "pretest": "yarn run compile",
+    "posttest": "yarn run lint"
   },
   "browserslisli": {
     "production": [
@@ -79,5 +71,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.2",
+    "gts": "^3.1.0",
+    "typescript": "^4.0.3"
   }
 }

@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { ReactSVG } from "react-svg";
+import {useState, useEffect} from 'react';
+import {ReactSVG} from 'react-svg';
 
-import { uiSlice } from "slices";
-import { useDispatch, useTypedSelector } from "utils";
-import { Icon } from "semantic-ui-react";
+import {uiSlice} from 'slices';
+import {useDispatch, useTypedSelector} from 'utils';
+import {Icon} from 'semantic-ui-react';
 
-const Answer = ({ data }: { data: any }) => {
+const Answer = ({data}: {data: any}) => {
   const dispatch = useDispatch();
-  const answerMove = useTypedSelector((i) => i.ui.answerMove);
-  const answer = useTypedSelector((i) => i.ui.answer);
+  const answerMove = useTypedSelector(i => i.ui.answerMove);
+  const answer = useTypedSelector(i => i.ui.answer);
   const [total, setTotal] = useState(0);
   const [move, setMove] = useState(0);
 
-  const { setAnswer, setAnswerMove } = uiSlice.actions;
+  const {setAnswer, setAnswerMove} = uiSlice.actions;
   const onFirst = () => {
     dispatch(setAnswer(data));
     dispatch(setAnswerMove(1));
@@ -35,7 +35,7 @@ const Answer = ({ data }: { data: any }) => {
   };
   useEffect(() => {
     if (data) {
-      setTotal(data.attributes.steps.split(";").length);
+      setTotal(data.attributes.steps.split(';').length);
     }
   }, [data]);
 
@@ -56,7 +56,7 @@ const Answer = ({ data }: { data: any }) => {
       <Icon
         className="mx-4"
         name="play"
-        flipped={"horizontally"}
+        flipped={'horizontally'}
         onClick={onPrev}
       />
       <Icon className="mx-4" name="play" onClick={onNext} />

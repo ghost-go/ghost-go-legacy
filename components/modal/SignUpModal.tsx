@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useTypedSelector } from "utils";
+import {useState, useEffect} from 'react';
+import {useDispatch, useTypedSelector} from 'utils';
 import {
   Button,
   Header,
@@ -10,24 +10,24 @@ import {
   Message,
   Segment,
   InputOnChangeData,
-} from "semantic-ui-react";
+} from 'semantic-ui-react';
 
-import { GoogleLogin } from "react-google-login";
-import { openSignInSlice, openSignUpSlice, signIn, signUp } from "slices";
+import {GoogleLogin} from 'react-google-login';
+import {openSignInSlice, openSignUpSlice, signIn, signUp} from 'slices';
 
-import logo from "public/images/logo.png";
-import { GOOGLE_CLINET_ID } from "utils/constants";
+import logo from 'public/images/logo.png';
+import {GOOGLE_CLINET_ID} from 'utils/constants';
 
 const SignUpModal = () => {
-  const open = useTypedSelector((i) => i.openSignUp);
-  const signup = useTypedSelector((i) => i.signup);
+  const open = useTypedSelector(i => i.openSignUp);
+  const signup = useTypedSelector(i => i.signup);
   const [signUpParams, setSignUpParams] = useState({
     email: undefined,
     name: undefined,
     display_name: undefined,
     password: undefined,
   });
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const dispatch = useDispatch();
   const handleGoogleSignInSuccess = (res: any) => {
@@ -39,7 +39,7 @@ const SignUpModal = () => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    { name, value }: InputOnChangeData
+    {name, value}: InputOnChangeData
   ) => {
     if (errorMessage) {
       setErrorMessage(null);
@@ -54,27 +54,29 @@ const SignUpModal = () => {
     if (signup.error) {
       setErrorMessage(signup.error.message);
     }
-    if (signup.status === "succeeded") {
+    if (signup.status === 'succeeded') {
       dispatch(signIn(signUpParams));
       dispatch(openSignUpSlice.actions.makeFalse());
     }
   }, [signup, dispatch, signUpParams]);
 
   const handleSignUp = () => {
-    dispatch(signUp({ data: signUpParams }));
+    dispatch(signUp({data: signUpParams}));
   };
 
   return (
     <Modal
       onClose={() => dispatch(openSignUpSlice.actions.makeFalse())}
       onOpen={() => dispatch(openSignUpSlice.actions.makeTrue())}
-      open={open}>
+      open={open}
+    >
       <Modal.Content>
         <Grid
           textAlign="center"
-          style={{ height: "90vh" }}
-          verticalAlign="middle">
-          <Grid.Column style={{ maxWidth: 450 }}>
+          style={{height: '90vh'}}
+          verticalAlign="middle"
+        >
+          <Grid.Column style={{maxWidth: 450}}>
             <Header as="h2" color="black" textAlign="center">
               <Image src={logo} />
               Login to your account
@@ -144,7 +146,7 @@ const SignUpModal = () => {
                   buttonText="Login"
                   onSuccess={handleGoogleSignInSuccess}
                   onFailure={handleGoogleSignInFailure}
-                  cookiePolicy={"single_host_origin"}
+                  cookiePolicy={'single_host_origin'}
                 />
               </Segment>
             </Form>
@@ -155,7 +157,8 @@ const SignUpModal = () => {
                 onClick={() => {
                   dispatch(openSignInSlice.actions.makeTrue());
                   dispatch(openSignUpSlice.actions.makeFalse());
-                }}>
+                }}
+              >
                 Sign In
               </span>
             </Message>

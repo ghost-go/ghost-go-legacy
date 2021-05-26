@@ -43,6 +43,26 @@ export const useDispatch = () => useReactReduxDispatch<AppDispatch>();
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
+export const useAuth = () => {
+  const auth = useTypedSelector(state => state.auth);
+  const [token, setToken] = useState<string | null>();
+  const [user, setUser] = useState<any>();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token') ?? auth.token ?? null;
+    const userStr = localStorage.getItem('user') ?? auth.user;
+
+    setToken(token);
+    if (userStr) {
+      setUser(JSON.parse(userStr));
+    } else {
+      setUser(null);
+    }
+  }, [auth]);
+
+  return {token, user};
+};
+
 /**
  * A custom useEffect hook that only triggers on updates, not on initial mount
  * @param {Function} effect

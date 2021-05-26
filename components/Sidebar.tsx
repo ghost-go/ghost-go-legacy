@@ -1,23 +1,23 @@
-import logo from "public/images/logo.png";
-import { SidebarItem } from "components/common";
-import { useRouter } from "next/router";
-import { Dropdown, DropdownProps } from "semantic-ui-react";
-import Navigation from "components/Navigation";
-import { useTypedSelector } from "utils";
+import logo from 'public/images/logo.png';
+import {SidebarItem} from 'components/common';
+import {useRouter} from 'next/router';
+import {Dropdown, DropdownProps} from 'semantic-ui-react';
+import Navigation from 'components/Navigation';
+import {useAuth} from 'utils';
 
 const Sidebar = () => {
-  const { token, user } = useTypedSelector((i) => i.auth);
+  const {token} = useAuth();
   const router = useRouter();
   const menuOptions = [
     {
-      key: "problems",
-      text: "Problems",
-      value: "problems",
+      key: 'problems',
+      text: 'Problems',
+      value: 'problems',
     },
     {
-      key: "kifus",
-      text: "Kifus",
-      value: "kifus",
+      key: 'kifus',
+      text: 'Kifus',
+      value: 'kifus',
     },
   ];
   const handleItemChange = (
@@ -34,7 +34,8 @@ const Sidebar = () => {
           <img className="w-8 h-8 lg:w-10 lg:h-10" src={logo} alt="logo" />
           <a
             href="/"
-            className="ml-2 text-2xl font-semibold tracking-wider text-gray-900 rounded-sm focus:outline-none focus:shadow-outline">
+            className="ml-2 text-2xl font-semibold tracking-wider text-gray-900 rounded-sm focus:outline-none focus:shadow-outline"
+          >
             GhostGo
           </a>
           <div className="text-base mt-1 lg:hidden">
@@ -47,7 +48,7 @@ const Sidebar = () => {
             />
           </div>
         </div>
-        <div className={"lg:hidden"}>
+        <div className={'lg:hidden'}>
           <Navigation />
         </div>
       </div>

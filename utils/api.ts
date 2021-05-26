@@ -1,6 +1,7 @@
 import axios from 'axios';
+import _ from 'lodash';
 
-export const baseURL = '/api/v1';
+export const baseURL = `${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1`;
 export const axiosInstance = axios.create({
   baseURL,
   headers: {

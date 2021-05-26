@@ -1,41 +1,41 @@
-import { useState, useEffect, useCallback } from "react";
-import GBan, { move as moveStone } from "gboard";
-import styled from "styled-components";
-import Avatar from "react-avatar";
-import { useRouter } from 'next/router'
-import moment from "moment";
+import {useState, useEffect, useCallback} from 'react';
+import {GetServerSideProps} from 'next';
+import GBan, {move as moveStone} from 'gboard';
+import styled from 'styled-components';
+import Avatar from 'react-avatar';
+import {useRouter} from 'next/router';
+import moment from 'moment';
 
-import { fetchKifu, selectKifu, selectUI } from "slices";
-import { NumberParam, useQueryParam, withDefault } from "use-query-params";
-import { KifuControls } from "components/common";
-import { useDispatch, useTypedSelector, useGenericData, store } from "utils";
-import { zeros, matrix, Matrix } from "mathjs";
-import { sgfToPosition } from "common/Helper";
-import { createViewedKifus } from "slices/viewedSlice";
+import {fetchKifu, selectKifu, selectUI, kifuRequest} from 'slices';
+import {NumberParam, useQueryParam, withDefault} from 'use-query-params';
+import {KifuControls} from 'components/common';
+import {useDispatch, useTypedSelector, useGenericData} from 'utils';
+import {zeros, matrix, Matrix} from 'mathjs';
+import {sgfToPosition} from 'common/Helper';
+import {createViewedKifus} from 'slices/viewedSlice';
 
 interface ParamTypes {
   id: string;
 }
 
 const KifuBoard = styled.div``;
-const board = new GBan();
+let board: any;
 
 let mats: Map<number, Matrix> = new Map();
-const Kifu = () => {
+const Kifu = ({kifu}: {kifu: any}) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { token } = useTypedSelector((i) => i.auth);
-  const { id } = router.query;
-  const [kifu] = useGenericData(useTypedSelector((state) => selectKifu(state)));
-  const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
+  const {token} = useTypedSelector(i => i.auth);
+  const {id} = router.query;
+  const {theme, coordinates} = useTypedSelector(state => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
-  const [move, setMove] = useQueryParam("move", withDefault(NumberParam, 0));
+  const [move, setMove] = useQueryParam('move', withDefault(NumberParam, 0));
 
-  const boardRef = useCallback((node) => {
-    mats.set(0, matrix(zeros([19, 19])));
+  const boardRef = useCallback(node => {
     if (node !== null) {
-      console.log("init");
+      mats.set(0, matrix(zeros([19, 19])));
+      board = new GBan();
       board.init(node);
     }
   }, []);
@@ -88,8 +88,8 @@ const Kifu = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchKifu({ pattern: { id } }));
-    dispatch(createViewedKifus({ data: { record: { kifu_id: id } } }));
+    dispatch(fetchKifu({pattern: {id: id.toString()}}));
+    dispatch(createViewedKifus({data: {record: {kifu_id: id}}}));
     mats = new Map();
   }, [dispatch, id, token]);
 
@@ -97,44 +97,44 @@ const Kifu = () => {
     // TODO: There is a performance issue
     const keyDownEvent = (event: KeyboardEvent) => {
       const keyName = event.key;
-      if (keyName === "Shift" || keyName === "Alt") return;
+      if (keyName === 'Shift' || keyName === 'Alt') return;
       if (event.shiftKey) {
-        if (keyName === "ArrowLeft") handleFastPrev();
-        if (keyName === "ArrowRight") handleFastNext();
+        if (keyName === 'ArrowLeft') handleFastPrev();
+        if (keyName === 'ArrowRight') handleFastNext();
       } else if (event.altKey) {
-        if (keyName === "ArrowLeft") handleFirst();
-        if (keyName === "ArrowRight") handleLast();
+        if (keyName === 'ArrowLeft') handleFirst();
+        if (keyName === 'ArrowRight') handleLast();
       } else {
-        if (keyName === "ArrowLeft") handlePrev();
+        if (keyName === 'ArrowLeft') handlePrev();
         if (
-          keyName === "ArrowRight" ||
-          keyName === " " ||
-          keyName === "Enter"
+          keyName === 'ArrowRight' ||
+          keyName === ' ' ||
+          keyName === 'Enter'
         ) {
           handleNext();
         }
       }
     };
-    document.addEventListener("keydown", keyDownEvent, false);
+    document.addEventListener('keydown', keyDownEvent, false);
     return () => {
-      document.removeEventListener("keydown", keyDownEvent, false);
+      document.removeEventListener('keydown', keyDownEvent, false);
     };
   });
 
   useEffect(() => {
-    console.log("render");
+    console.log('render');
     const padding = coordinates ? 30 : 10;
-    board.setOptions({ coordinates, padding });
+    board.setOptions({coordinates, padding});
     board.setTheme(theme, mat, marks);
     board.render(mat, marks);
   }, [mat, theme, coordinates, marks]);
 
   useEffect(() => {
     if (kifu && move > 0) {
-      const { steps, moves_count } = kifu.data.attributes;
+      const {steps, moves_count} = kifu.data.attributes;
       if (move > moves_count) return;
       const index = move - 1;
-      const { x, y, ki } = sgfToPosition(steps.split(";")[index]);
+      const {x, y, ki} = sgfToPosition(steps.split(';')[index]);
       let mat = mats.get(move);
       if (mat) {
         const newMat = moveStone(mat, x, y, ki);
@@ -145,14 +145,14 @@ const Kifu = () => {
         mat = matrix(zeros([19, 19]));
         let newMat = matrix(zeros([19, 19]));
         for (let i = 0; i < move; i++) {
-          const { x, y, ki } = sgfToPosition(steps.split(";")[i]);
+          const {x, y, ki} = sgfToPosition(steps.split(';')[i]);
           newMat = moveStone(mat, x, y, ki);
           mats.set(i + 1, newMat);
           mat = newMat;
         }
         setMat(newMat);
       }
-      let marks = matrix(zeros([19, 19]));
+      const marks = matrix(zeros([19, 19]));
       marks.set([x, y], ki);
       setMarks(marks);
     }
@@ -180,7 +180,7 @@ const Kifu = () => {
         <div className="flex flex-row">
           <div>
             <div>
-              <Avatar name={b_name_en} size={"5rem"} />
+              <Avatar name={b_name_en} size={'5rem'} />
             </div>
             <div className="text-base mt-2">
               <span className="inline-block rounded-full h-3 w-3 bg-black mr-0.5" />
@@ -189,7 +189,7 @@ const Kifu = () => {
           </div>
           <div className="ml-10">
             <div>
-              <Avatar name={w_name_en} size={"5rem"} />
+              <Avatar name={w_name_en} size={'5rem'} />
             </div>
             <div className="text-base mt-2">
               <span className="inline-block rounded-full h-3 w-3 bg-white border border-black mr-0.5" />
@@ -198,7 +198,7 @@ const Kifu = () => {
           </div>
         </div>
         <div className="text-base">
-          <p className="my-1 mt-3">Date: {moment(date).format("YYYY-MM-DD")}</p>
+          <p className="my-1 mt-3">Date: {moment(date).format('YYYY-MM-DD')}</p>
           <p className="my-1">Komi: {komi}</p>
           <p className="my-1">Result: {result}</p>
         </div>
@@ -215,6 +215,13 @@ const Kifu = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const res = await kifuRequest({
+    pattern: {id: context.query.id.toString()},
+  });
+  return {props: {kifu: res.data}};
 };
 
 export default Kifu;

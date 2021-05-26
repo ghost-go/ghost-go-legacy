@@ -1,17 +1,11 @@
-import { useRef, useState } from "react";
+import {useRef, useState} from 'react';
 
 import Link from 'next/link';
-import {
-  Button,
-  Popup,
-  Menu,
-  MenuItemProps,
-  Dropdown,
-} from "semantic-ui-react";
+import {Button, Popup, Menu, MenuItemProps, Dropdown} from 'semantic-ui-react';
 
-import Avatar from "react-avatar";
-import { ReactSVG } from "react-svg";
-import settings from "public/images/settings.svg";
+import Avatar from 'react-avatar';
+import {ReactSVG} from 'react-svg';
+import settings from 'public/images/settings.svg';
 
 import {
   setTheme,
@@ -20,17 +14,17 @@ import {
   openSignInSlice,
   openUserMenuSlice,
   authSlice,
-} from "slices";
-import { useDispatch, useTypedSelector, useOutsideClick } from "utils";
-import { Theme } from "gboard/GBan";
-import { Switch, UserAvatar } from "components/common";
+} from 'slices';
+import {useDispatch, useTypedSelector, useOutsideClick, useAuth} from 'utils';
+import {Theme} from 'gboard/GBan';
+import {Switch, UserAvatar} from 'components/common';
 
 const Navigation = () => {
   const dispatch = useDispatch();
   const [settingVisible, setSettingVisible] = useState(false);
-  const { token, user } = useTypedSelector((i) => i.auth);
-  const { theme, coordinates } = useTypedSelector((state) => selectUI(state));
-  const openUserMenu = useTypedSelector((state) => state.openUserMenu);
+  const {token, user} = useAuth();
+  const {theme, coordinates} = useTypedSelector(state => selectUI(state));
+  const openUserMenu = useTypedSelector(state => state.openUserMenu);
   const ref = useRef<HTMLDivElement>(null);
 
   useOutsideClick(ref, () => {
@@ -45,10 +39,10 @@ const Navigation = () => {
 
   const handleItemClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    { name }: MenuItemProps
+    {name}: MenuItemProps
   ) => {
     switch (name) {
-      case "signout":
+      case 'signout':
         dispatch(authSlice.actions.signOut());
         break;
       default:
@@ -65,14 +59,16 @@ const Navigation = () => {
           <div
             className={`transition absolute cursor-pointer p-4
             bg-white z-50 top-6 right-8 shadow-lg rounded-sm w-36 text-base
-            ${settingVisible ? "flex" : "opacity-0 pointer-events-none"}
-          `}>
+            ${settingVisible ? 'flex' : 'opacity-0 pointer-events-none'}
+          `}
+          >
             <div
               ref={ref}
               className="origin-top-right absolute right-0 p-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
               role="menu"
               aria-orientation="vertical"
-              aria-labelledby="options-menu">
+              aria-labelledby="options-menu"
+            >
               <div className="p-1 font-semibold">Theme:</div>
               <div className="grid grid-cols-2" role="none">
                 <span
@@ -80,9 +76,10 @@ const Navigation = () => {
                     handleThemeChange(Theme.BlackAndWhite);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.BlackAndWhite && "active"
+                    theme === Theme.BlackAndWhite && 'active'
                   }`}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   Black&White
                 </span>
                 <span
@@ -90,9 +87,10 @@ const Navigation = () => {
                     handleThemeChange(Theme.Flat);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.Flat && "active"
+                    theme === Theme.Flat && 'active'
                   }`}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   Flat
                 </span>
                 <span
@@ -100,10 +98,11 @@ const Navigation = () => {
                     handleThemeChange(Theme.Subdued);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.Subdued && "active"
+                    theme === Theme.Subdued && 'active'
                   }
                 `}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   Subdued
                 </span>
                 <span
@@ -111,9 +110,10 @@ const Navigation = () => {
                     handleThemeChange(Theme.ShellStone);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.ShellStone && "active"
+                    theme === Theme.ShellStone && 'active'
                   }`}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   Shell
                 </span>
                 <span
@@ -121,9 +121,10 @@ const Navigation = () => {
                     handleThemeChange(Theme.SlateAndShell);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.SlateAndShell && "active"
+                    theme === Theme.SlateAndShell && 'active'
                   }`}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   SlateAndShell
                 </span>
                 <span
@@ -131,9 +132,10 @@ const Navigation = () => {
                     handleThemeChange(Theme.Walnut);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.Walnut && "active"
+                    theme === Theme.Walnut && 'active'
                   }`}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   Walnut
                 </span>
                 <span
@@ -141,9 +143,10 @@ const Navigation = () => {
                     handleThemeChange(Theme.Photorealistic);
                   }}
                   className={`menu-item-theme ${
-                    theme === Theme.Photorealistic && "active"
+                    theme === Theme.Photorealistic && 'active'
                   }`}
-                  role="menuitem">
+                  role="menuitem"
+                >
                   Photorealistic
                 </span>
               </div>
@@ -159,11 +162,12 @@ const Navigation = () => {
           <div
             onClick={() => {
               setSettingVisible(!settingVisible);
-            }}>
+            }}
+          >
             <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
           </div>
         </div>
-        {token ? (
+        {token && user ? (
           <Popup
             on="click"
             open={openUserMenu}
@@ -178,71 +182,45 @@ const Navigation = () => {
               }, 0);
             }}
             position="bottom right"
-            style={{ padding: 0 }}
+            style={{padding: 0}}
             trigger={
               <div className="cursor-pointer">
                 <UserAvatar user={user} />
               </div>
-            }>
+            }
+          >
             <Menu vertical>
               <Menu.Item>
                 Signed In as <b>{`${user.data.attributes.display_name}`}</b>
                 <Menu.Menu>
-                  <Menu.Item
-                    as={Link}
-                    href={"/statistics"}
-                    name="statistics"
-                    onClick={handleItemClick}>
-                    Statistic
-                  </Menu.Item>
-                  <Menu.Item
-                    as={Link}
-                    href={"/profile"}
-                    name="profile"
-                    onClick={handleItemClick}>
-                    My Profile
-                  </Menu.Item>
-                  <Menu.Item
-                    as={Link}
-                    name="viewedproblems"
-                    isActive={() => false}
-                    href={"/viewed?active=0"}
-                    onClick={handleItemClick}>
-                    Viewed Problems
-                  </Menu.Item>
-                  <Menu.Item
-                    href={Link}
-                    name="viewedkifus"
-                    isActive={() => false}
-                    to={"/viewed?active=1"}
-                    onClick={handleItemClick}>
-                    Viewed Kifus
-                  </Menu.Item>
+                  <Link href="/statistics">
+                    <Menu.Item>Statistic</Menu.Item>
+                  </Link>
+                  <Link href="/profile">
+                    <Menu.Item>My Profile</Menu.Item>
+                  </Link>
+                  <Link href="/viewed?active=0">
+                    <Menu.Item>Viewed Problems</Menu.Item>
+                  </Link>
+                  <Link href={'/viewed?active=1'}>
+                    <Menu.Item>Viewed Kifus</Menu.Item>
+                  </Link>
                 </Menu.Menu>
               </Menu.Item>
               <Menu.Item>
                 Home
                 <Menu.Menu>
-                  <Menu.Item
-                    as={Link}
-                    href={"/problems"}
-                    onClick={handleItemClick}>
-                    Problems
-                  </Menu.Item>
-                  <Menu.Item
-                    as={Link}
-                    herf={"/kifus"}
-                    onClick={handleItemClick}>
-                    Kifus
-                  </Menu.Item>
+                  <Link href={'/problems'}>
+                    <Menu.Item>Problems</Menu.Item>
+                  </Link>
+                  <Link href={'/kifus'}>
+                    <Menu.Item>Kifus</Menu.Item>
+                  </Link>
                 </Menu.Menu>
               </Menu.Item>
-              <Menu.Item
-                as={Link}
-                href={"/messages"}
-                onClick={handleItemClick}>
-                Messages
-              </Menu.Item>
+              <Link href={'/messages'}>
+                <Menu.Item>Messages</Menu.Item>
+              </Link>
               <Menu.Item name="signout" onClick={handleItemClick}>
                 Sign out
               </Menu.Item>
@@ -253,7 +231,8 @@ const Navigation = () => {
             color="black"
             onClick={() => {
               dispatch(openSignInSlice.actions.toggle());
-            }}>
+            }}
+          >
             Sign In
           </Button>
         )}

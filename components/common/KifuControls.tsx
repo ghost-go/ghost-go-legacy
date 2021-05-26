@@ -1,11 +1,11 @@
-import { ReactSVG } from "react-svg";
+import {ReactSVG} from 'react-svg';
 
-import first from "public/images/first.svg";
-import rewind from "public/images/rewind.svg";
-import play from "public/images/play.svg";
+import first from 'public/images/first.svg';
+import rewind from 'public/images/rewind.svg';
+import play from 'public/images/play.svg';
 // import fast from "@/images/fast-forward.svg";
-import fast from "public/images/fast-forward.svg";
-import last from "public/images/last.svg";
+import fast from 'public/images/fast-forward.svg';
+import last from 'public/images/last.svg';
 
 const KifuControls = ({
   onNext,

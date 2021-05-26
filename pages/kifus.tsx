@@ -1,25 +1,19 @@
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  useState,
-  useRef,
-} from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useRouter } from "next/router";
-import { isMobile } from "react-device-detect";
-import "react-lazy-load-image-component/src/effects/opacity.css";
-import { useQueryParam } from "use-query-params";
+import React, {useEffect, useCallback, useState, useRef} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import {useRouter} from 'next/router';
+import {isMobile} from 'react-device-detect';
+import 'react-lazy-load-image-component/src/effects/opacity.css';
+import {useQueryParam} from 'use-query-params';
 
-import { fetchKifus, selectUI, selectPlayers, fetchPlayers } from "slices";
+import {fetchKifus, selectUI, selectPlayers, fetchPlayers} from 'slices';
 import {
   useDispatch,
   useTypedSelector,
   useOutsideClick,
   useGenericData,
-} from "utils";
-import { FilterButton, KifuCard, Tag, Spinner } from "components/common";
-import {} from "slices/tagSlice";
+} from 'utils';
+import {FilterButton, KifuCard, Tag, Spinner} from 'components/common';
+import {} from 'slices/tagSlice';
 
 const Kifus = () => {
   const dispatch = useDispatch();
@@ -28,16 +22,16 @@ const Kifus = () => {
   const [kifuList, setKifuList] = useState([]);
   const [filter, setFilter] = useState(false);
   const [players] = useGenericData(
-    useTypedSelector((state) => selectPlayers(state))
+    useTypedSelector(state => selectPlayers(state))
   );
-  const kifus = useTypedSelector((state) => state.kifus);
-  const [playerParam = "all", setPlayerParam] = useQueryParam<string>("player");
+  const kifus = useTypedSelector(state => state.kifus);
+  const [playerParam = 'all', setPlayerParam] = useQueryParam<string>('player');
 
   const handleFetchKifus = () => {
     const params = {
       player: playerParam,
     };
-    dispatch(fetchKifus({ params })).then((obj: any) => {
+    dispatch(fetchKifus({params})).then((obj: any) => {
       if (obj && obj.payload) {
         setKifuList((oldKifuList: any) =>
           oldKifuList.concat(obj.payload.data.data)
@@ -50,16 +44,16 @@ const Kifus = () => {
     if (filter) setFilter(false);
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(fetchPlayers());
   }, [dispatch]);
 
   const refetchKifus = useCallback(
-    (playerParams) => {
+    playerParams => {
       const params = {
         player: playerParams,
       };
-      dispatch(fetchKifus({ params })).then((obj: any) => {
+      dispatch(fetchKifus({params})).then((obj: any) => {
         if (obj && obj.payload) {
           setKifuList(obj.payload.data.data);
         }
@@ -88,13 +82,14 @@ const Kifus = () => {
           }}
         />
         <div className="text-base ml-4">Player: {playerParam}</div>
-        {playerParam !== "all" && (
+        {playerParam !== 'all' && (
           <div>
             <button
               onClick={() => {
-                setPlayerParam("all");
+                setPlayerParam('all');
               }}
-              className="text-base underline ml-4">
+              className="text-base underline ml-4"
+            >
               Clear Filters
             </button>
           </div>
@@ -104,29 +99,32 @@ const Kifus = () => {
         ref={ref}
         className={`absolute transition transform origin-top-left ${
           filter
-            ? "scale-100 opacity-1"
-            : "scale-50 opacity-0 pointer-events-none"
-        } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}>
+            ? 'scale-100 opacity-1'
+            : 'scale-50 opacity-0 pointer-events-none'
+        } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}
+      >
         <div>
           <div className="block font-semibold text-gray-400 mb-2">
             Top Players(Top 30 from go ratings)
           </div>
           <Tag
-            key={`t-all`}
+            key={'t-all'}
             onClick={() => {
-              setPlayerParam("all");
+              setPlayerParam('all');
               setFilter(false);
-            }}>
+            }}
+          >
             all
           </Tag>
           {players &&
-            players.data.map(({ attributes: { name, en_name } }: any) => (
+            players.data.map(({attributes: {name, en_name}}: any) => (
               <Tag
                 key={`p-${en_name}`}
                 onClick={() => {
                   setPlayerParam(en_name);
                   setFilter(false);
-                }}>
+                }}
+              >
                 {en_name}
               </Tag>
             ))}
@@ -158,8 +156,9 @@ const Kifus = () => {
           <span className="text-center text-sm">
             &#8593; Release to refresh
           </span>
-        }>
-        {kifus.status === "loading" && items.length === 0 && (
+        }
+      >
+        {kifus.status === 'loading' && items.length === 0 && (
           <div className="mt-20">
             <Spinner />
           </div>
@@ -169,21 +168,23 @@ const Kifus = () => {
             {items}
           </div>
         )}
-        {kifus.status === "succeeded" && items.length === 0 && (
+        {kifus.status === 'succeeded' && items.length === 0 && (
           <div className="text-center">
             <div className="mt-10 text-2xl">No Data</div>
             <button
               onClick={() => {
-                setPlayerParam("all");
+                setPlayerParam('all');
               }}
-              className="underline p-5 mt-2">
+              className="underline p-5 mt-2"
+            >
               Clear Filters
             </button>
             <button
               onClick={() => {
                 router.back();
               }}
-              className="underline p-5">
+              className="underline p-5"
+            >
               Go back
             </button>
           </div>

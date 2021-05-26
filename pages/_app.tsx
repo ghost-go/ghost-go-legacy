@@ -1,13 +1,11 @@
 import React, {Suspense, useState, useContext, useEffect} from 'react';
 import {Provider} from 'react-redux';
 import ReactModal from 'react-modal';
-import {PersistGate} from 'redux-persist/integration/react';
-import {QueryParamProvider} from 'use-query-params';
-import {Helmet} from 'react-helmet';
-import {BackTop, Spin} from 'antd';
+import {QueryParamProvider} from 'components/basic/QueryParamProvider';
+import Head from 'next/head';
 
 import Navigation from 'components/Navigation';
-import {store, persistor} from 'utils';
+import {store} from 'utils/store';
 import SignInModal from 'components/modal/SignInModal';
 import SignUpModal from 'components/modal/SignUpModal';
 import Sidebar from 'components/Sidebar';
@@ -49,32 +47,32 @@ const App = ({Component, pageProps}: {Component: any; pageProps: any}) => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <QueryParamProvider>
-          <Helmet
-            htmlAttributes={{lang: 'en', amp: undefined}}
-            title="Interactive Go Problem/Kifu Database"
-            titleTemplate="GhostGo - %s"
+      <QueryParamProvider>
+        <Head>
+          <title>GhostGo</title>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"
           />
-          <ToastContainer />
-          <SignInModal />
-          <SignUpModal />
-          <div className="flex flex-row">
-            <div className="lg:flex flex-col lg:flex-row lg:min-h-screen w-full">
-              <Sidebar />
-              <div className="flex-1">
-                <div className={'lg:block lg:py-4 lg:px-4 hidden bg-white'}>
-                  <Navigation />
-                </div>
-                <Component {...pageProps} />
-                {/* <Footer style={{ textAlign: "center" }}>
+        </Head>
+        <ToastContainer />
+        <SignInModal />
+        <SignUpModal />
+        <div className="flex flex-row">
+          <div className="lg:flex flex-col lg:flex-row lg:min-h-screen w-full">
+            <Sidebar />
+            <div className="flex-1">
+              <div className={'lg:block lg:py-4 lg:px-4 hidden bg-white'}>
+                <Navigation />
+              </div>
+              <Component {...pageProps} />
+              {/* <Footer style={{ textAlign: "center" }}>
                     Copyright © 2020 GhostGo. All rights reserved.
                   </Footer> */}
-              </div>
             </div>
           </div>
-        </QueryParamProvider>
-      </PersistGate>
+        </div>
+      </QueryParamProvider>
     </Provider>
   );
 };

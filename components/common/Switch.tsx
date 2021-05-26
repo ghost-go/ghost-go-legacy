@@ -2,7 +2,7 @@ const Switch = ({
   label,
   onClick,
   checked,
-  labelClassName = "p-1 font-semibold my-2 ",
+  labelClassName = 'p-1 font-semibold my-2 ',
 }: {
   label: string;
   onClick: () => void;
@@ -16,6 +16,7 @@ const Switch = ({
         type="checkbox"
         name="toggle"
         className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none outline-none cursor-pointer"
+        onChange={() => {}}
         checked={checked}
       />
       <label className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>

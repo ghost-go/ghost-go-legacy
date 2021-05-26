@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  useState,
-  useRef,
-} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {useRouter} from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {isMobile} from 'react-device-detect';
@@ -55,7 +49,7 @@ const Problems = () => {
     if (filter) setFilter(false);
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(fetchTags());
   }, [dispatch]);
 

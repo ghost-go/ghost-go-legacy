@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Pagination, ProblemCard2 } from "components/common";
+import {useEffect} from 'react';
+import {Pagination, ProblemCard2} from 'components/common';
 import {
   Container,
   Statistic,
@@ -13,27 +13,27 @@ import {
   Tab,
   PaginationProps,
   TabProps,
-} from "semantic-ui-react";
-import { useRouter } from "next/router";
-import { useQueryParam } from "use-query-params";
+} from 'semantic-ui-react';
+import {useRouter} from 'next/router';
+import {useQueryParam} from 'use-query-params';
 import {
   useDispatch,
   useTypedSelector,
   checkTokenIsValid,
   useGenericData,
-} from "utils";
+} from 'utils';
 
-import { fetchStatistics, fetchWrongs, fetchTried, signOut } from "slices";
+import {fetchStatistics, fetchWrongs, fetchTried, signOut} from 'slices';
 
 const Dashboard = () => {
-  const { token, user } = useTypedSelector((i) => i.auth);
-  const [statistics] = useGenericData(useTypedSelector((i) => i.statistics));
-  const wrongs = useTypedSelector((i) => i.wrongs);
+  const {token, user} = useTypedSelector(i => i.auth);
+  const [statistics] = useGenericData(useTypedSelector(i => i.statistics));
+  const wrongs = useTypedSelector(i => i.wrongs);
   const router = useRouter();
-  const tried = useTypedSelector((i) => i.tried);
+  const tried = useTypedSelector(i => i.tried);
   const dispatch = useDispatch();
-  const [page = "1", setPage] = useQueryParam("page");
-  const [active = "0", setActive] = useQueryParam("active");
+  const [page = '1', setPage] = useQueryParam('page');
+  const [active = '0', setActive] = useQueryParam('active');
 
   const handlePaginationChange = (
     e: React.MouseEvent,
@@ -42,20 +42,20 @@ const Dashboard = () => {
     setPage(data.activePage);
   };
 
-  if (!token) router.push("/");
+  if (!token) router.push('/');
 
   useEffect(() => {
     if (!checkTokenIsValid(token)) {
       dispatch(signOut());
-      router.push("/");
+      router.push('/');
     }
-    if (active === "1") {
-      dispatch(fetchTried({ params: { page } }));
-    } else if (active === "2") {
-      dispatch(fetchWrongs({ params: { page } }));
+    if (active === '1') {
+      dispatch(fetchTried({params: {page}}));
+    } else if (active === '2') {
+      dispatch(fetchWrongs({params: {page}}));
     } else {
-      dispatch(fetchWrongs({ params: { page, item: 6 } }));
-      dispatch(fetchTried({ params: { page, item: 6 } }));
+      dispatch(fetchWrongs({params: {page, item: 6}}));
+      dispatch(fetchTried({params: {page, item: 6}}));
       dispatch(fetchStatistics());
     }
   }, [dispatch, token, active, page]);
@@ -67,7 +67,7 @@ const Dashboard = () => {
 
   const panes = [
     {
-      menuItem: { key: "statistics", content: "Statistics" },
+      menuItem: {key: 'statistics', content: 'Statistics'},
       render: () => (
         <Tab.Pane>
           <Grid columns={2} divided doubling>
@@ -115,7 +115,7 @@ const Dashboard = () => {
                 </Grid.Column>
               </Grid.Row>
             )}
-            {tried.status === "succeeded" && wrongs.status === "succeeded" && (
+            {tried.status === 'succeeded' && wrongs.status === 'succeeded' && (
               <Grid.Row>
                 <Grid.Column>
                   <Header as="h3">Tried</Header>
@@ -156,10 +156,10 @@ const Dashboard = () => {
       ),
     },
     {
-      menuItem: { key: "tried", content: "Tried" },
+      menuItem: {key: 'tried', content: 'Tried'},
       render: () => (
         <Tab.Pane>
-          {tried.status === "succeeded" && (
+          {tried.status === 'succeeded' && (
             <>
               <Card.Group itemsPerRow={4} stackable doubling>
                 {tried.payload.slice(0, 6).map((t: any) => {
@@ -176,8 +176,8 @@ const Dashboard = () => {
               </Card.Group>
               <div className="mt-5">
                 <Pagination
-                  defaultActivePage={tried.headers["current-page"]}
-                  totalPages={tried.headers["total-page"]}
+                  defaultActivePage={tried.headers['current-page']}
+                  totalPages={tried.headers['total-page']}
                   onPageChange={handlePaginationChange}
                 />
               </div>
@@ -187,11 +187,11 @@ const Dashboard = () => {
       ),
     },
     {
-      menuItem: { key: "wrongs", content: "Wrongs" },
+      menuItem: {key: 'wrongs', content: 'Wrongs'},
       render: () => (
         <Tab.Pane>
           <Tab.Pane>
-            {wrongs.status === "succeeded" && (
+            {wrongs.status === 'succeeded' && (
               <>
                 <Card.Group itemsPerRow={4} stackable doubling>
                   {wrongs.payload.slice(0, 6).map((t: any) => {
@@ -208,8 +208,8 @@ const Dashboard = () => {
                 </Card.Group>
                 <div className="mt-5">
                   <Pagination
-                    defaultActivePage={wrongs.headers["current-page"]}
-                    totalPages={wrongs.headers["total-page"]}
+                    defaultActivePage={wrongs.headers['current-page']}
+                    totalPages={wrongs.headers['total-page']}
                     onPageChange={handlePaginationChange}
                   />
                 </div>

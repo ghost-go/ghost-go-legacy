@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "slices";
-import { Theme } from "gboard/GBan";
+import {createSlice} from '@reduxjs/toolkit';
+import {RootState} from 'slices';
+import {Theme} from 'gboard/GBan';
 
 interface UIState {
   theme: Theme;
@@ -17,7 +17,7 @@ const initialState: UIState = {
 };
 
 export const uiSlice = createSlice({
-  name: "ui",
+  name: 'ui',
   initialState,
   reducers: {
     setTheme: (state, action) => {
@@ -32,14 +32,14 @@ export const uiSlice = createSlice({
     setAnswer: (state, action) => {
       state.answer = action.payload;
     },
-    resetAnswer: (state) => {
+    resetAnswer: state => {
       state.answer = initialState.answer;
     },
-    resetAnswerMove: (state) => {
+    resetAnswerMove: state => {
       state.answerMove = initialState.answerMove;
     },
   },
 });
 
-export const { setTheme, setCoordinates } = uiSlice.actions;
+export const {setTheme, setCoordinates} = uiSlice.actions;
 export const selectUI = (state: RootState) => state.ui;

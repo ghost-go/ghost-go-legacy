@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from 'react';
 import {
   Container,
   Image,
@@ -14,29 +14,29 @@ import {
   Select,
   Button,
   InputOnChangeData,
-} from "semantic-ui-react";
-import { Toast, useDispatch, useTypedSelector, useUpdateEffect } from "utils";
-import { UserAvatar } from "components/common";
-import { RANK_OPTIONS, GENDER_OPTIONS } from "utils/constants";
-import { fetchProfile, updateUser } from "slices";
+} from 'semantic-ui-react';
+import {Toast, useDispatch, useTypedSelector, useUpdateEffect} from 'utils';
+import {UserAvatar} from 'components/common';
+import {RANK_OPTIONS, GENDER_OPTIONS} from 'utils/constants';
+import {fetchProfile, updateUser} from 'slices';
 
 const Profile = () => {
-  const { token, user } = useTypedSelector((i) => i.auth);
-  const profile = useTypedSelector((i) => i.profile);
-  const updatedUser = useTypedSelector((i) => i.updatedUser);
+  const {token, user} = useTypedSelector(i => i.auth);
+  const profile = useTypedSelector(i => i.profile);
+  const updatedUser = useTypedSelector(i => i.updatedUser);
   const [info, setInfo] = useState({
-    email: "",
-    display_name: "",
-    name: "",
-    ranking: "",
-    gender: "",
-    bio: "",
+    email: '',
+    display_name: '',
+    name: '',
+    ranking: '',
+    gender: '',
+    bio: '',
   });
   const dispatch = useDispatch();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    { name, value }: InputOnChangeData
+    {name, value}: InputOnChangeData
   ) => {
     setInfo({
       ...info,
@@ -55,12 +55,12 @@ const Profile = () => {
           user: info,
         },
       })
-    ).then((payload) => {});
+    ).then(payload => {});
   };
 
   const panes = [
     {
-      menuItem: { key: "users", content: "Profile" },
+      menuItem: {key: 'users', content: 'Profile'},
       render: () => (
         <Tab.Pane>
           <Form>
@@ -97,11 +97,11 @@ const Profile = () => {
                 control={Select}
                 options={GENDER_OPTIONS}
                 label={{
-                  children: "Gender",
-                  htmlFor: "form-select-control-gender",
+                  children: 'Gender',
+                  htmlFor: 'form-select-control-gender',
                 }}
                 placeholder="Gender"
-                searchInput={{ id: "form-select-control-gender" }}
+                searchInput={{id: 'form-select-control-gender'}}
                 value={info.gender}
                 onChange={handleChange}
               />
@@ -110,12 +110,12 @@ const Profile = () => {
                 name="ranking"
                 options={RANK_OPTIONS}
                 label={{
-                  children: "Ranking",
-                  htmlFor: "form-select-control-rank",
+                  children: 'Ranking',
+                  htmlFor: 'form-select-control-rank',
                 }}
                 placeholder="Ranking"
                 search
-                searchInput={{ id: "form-select-control-rank" }}
+                searchInput={{id: 'form-select-control-rank'}}
                 value={info.ranking}
                 onChange={handleChange}
               />
@@ -154,7 +154,7 @@ const Profile = () => {
       ),
     },
     {
-      menuItem: { key: "comments", content: "Comments" },
+      menuItem: {key: 'comments', content: 'Comments'},
       render: () => <Tab.Pane>Comments</Tab.Pane>,
     },
     {
@@ -168,11 +168,11 @@ const Profile = () => {
   ];
 
   useEffect(() => {
-    dispatch(fetchProfile({ token }));
+    dispatch(fetchProfile({token}));
   }, [dispatch, token]);
 
   useUpdateEffect(() => {
-    if (profile && profile.status === "succeeded") {
+    if (profile && profile.status === 'succeeded') {
       const attrs = profile.payload?.data.attributes || {};
       setInfo({
         ...attrs,
@@ -181,8 +181,8 @@ const Profile = () => {
   }, [profile]);
 
   useUpdateEffect(() => {
-    if (updatedUser && updatedUser.status === "succeeded") {
-      Toast.success("Your profile has been successfully updated.");
+    if (updatedUser && updatedUser.status === 'succeeded') {
+      Toast.success('Your profile has been successfully updated.');
     }
   }, [updatedUser]);
 
