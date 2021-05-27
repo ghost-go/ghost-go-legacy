@@ -38,7 +38,6 @@ export interface HeadersType {
 }
 
 export interface GenericReducerOptions {
-  cache: boolean;
   useToken?: boolean;
   errorCentralized?: boolean;
 }
@@ -49,7 +48,6 @@ export const initialGenericState: GenericState<any> = {
 };
 
 export const initialGenericReducerOptions: GenericReducerOptions = {
-  cache: false,
   useToken: false,
   errorCentralized: true,
 };
