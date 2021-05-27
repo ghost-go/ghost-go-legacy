@@ -46,6 +46,10 @@ set :nvm_map_bins, %w[node npm yarn pm2 next]
 set :nvm_custom_path, "/home/deploy/.nvm/versions/node"
 set :nvm_path, "/home/deploy/.nvm"
 
+set :default_env, {
+  'PATH' => "/home/deploy/.yarn/bin:/home/deploy/.nvm/versions/node/v14.17.0/bin:$PATH",
+}
+
 namespace :pm2 do
   task :start do
     on roles(:app) do

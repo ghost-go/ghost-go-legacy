@@ -14,7 +14,11 @@ const KifuCard = ({kifu}: {kifu: any}) => {
     date,
   } = kifu.attributes;
   return (
-    <div key={kifu.id} className="relative" style={{paddingTop: '100%'}}>
+    <div
+      key={kifu.id}
+      className="relative cursor-pointer"
+      style={{paddingTop: '100%'}}
+    >
       <Link href={`/kifus/${kifu.id}`}>
         <>
           <LazyLoadImage

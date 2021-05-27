@@ -4,8 +4,12 @@ import Link from 'next/link';
 const ProblemCard = ({problem}: {problem: any}) => {
   const {rank, whofirst, image_url} = problem.attributes;
   return (
-    <div key={problem.id} className="relative" style={{paddingTop: '100%'}}>
-      <Link href={`/problems/${problem.id}`}>
+    <Link href={`/problems/${problem.id}`}>
+      <div
+        key={problem.id}
+        className="relative cursor-pointer"
+        style={{paddingTop: '100%'}}
+      >
         <>
           <LazyLoadImage
             className="absolute w-full top-0"
@@ -23,8 +27,8 @@ const ProblemCard = ({problem}: {problem: any}) => {
             <div className="absolute right-2 bottom-0.5 rounded-full h-4 w-4 flex items-center justify-center bg-white border border-black"></div>
           )}
         </>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 
