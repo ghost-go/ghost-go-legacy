@@ -17,8 +17,6 @@ const Dashboard = () => {
   const viewedProblems = useTypedSelector(i => i.viewedProblems);
   const viewedKifus = useTypedSelector(i => i.viewedKifus);
 
-  if (!token) router.replace('/');
-
   const handlePaginationChange = (
     e: React.MouseEvent,
     data: PaginationProps

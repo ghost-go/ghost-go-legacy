@@ -21,12 +21,13 @@ import {
   useTypedSelector,
   checkTokenIsValid,
   useGenericData,
+  useAuth,
 } from 'utils';
 
 import {fetchStatistics, fetchWrongs, fetchTried, signOut} from 'slices';
 
-const Dashboard = () => {
-  const {token, user} = useTypedSelector(i => i.auth);
+const Statistics = () => {
+  const {token} = useAuth();
   const [statistics] = useGenericData(useTypedSelector(i => i.statistics));
   const wrongs = useTypedSelector(i => i.wrongs);
   const router = useRouter();
@@ -42,13 +43,7 @@ const Dashboard = () => {
     setPage(data.activePage);
   };
 
-  if (!token) router.push('/');
-
   useEffect(() => {
-    if (!checkTokenIsValid(token)) {
-      dispatch(signOut());
-      router.push('/');
-    }
     if (active === '1') {
       dispatch(fetchTried({params: {page}}));
     } else if (active === '2') {
@@ -230,4 +225,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Statistics;

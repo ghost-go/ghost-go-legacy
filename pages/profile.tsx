@@ -15,13 +15,19 @@ import {
   Button,
   InputOnChangeData,
 } from 'semantic-ui-react';
-import {Toast, useDispatch, useTypedSelector, useUpdateEffect} from 'utils';
+import {
+  Toast,
+  useDispatch,
+  useTypedSelector,
+  useUpdateEffect,
+  useAuth,
+} from 'utils';
 import {UserAvatar} from 'components/common';
 import {RANK_OPTIONS, GENDER_OPTIONS} from 'utils/constants';
 import {fetchProfile, updateUser} from 'slices';
 
 const Profile = () => {
-  const {token, user} = useTypedSelector(i => i.auth);
+  const {token, user} = useAuth();
   const profile = useTypedSelector(i => i.profile);
   const updatedUser = useTypedSelector(i => i.updatedUser);
   const [info, setInfo] = useState({
@@ -44,8 +50,9 @@ const Profile = () => {
     });
   };
 
-  const handleUpdateProfile = () => {
-    dispatch(
+  const handleUpdateProfile = async () => {
+    if (!token) return;
+    const res = await dispatch(
       updateUser({
         token,
         pattern: {
@@ -55,10 +62,10 @@ const Profile = () => {
           user: info,
         },
       })
-    ).then(payload => {});
+    );
   };
 
-  const panes = [
+  const panes = user && [
     {
       menuItem: {key: 'users', content: 'Profile'},
       render: () => (
@@ -168,6 +175,7 @@ const Profile = () => {
   ];
 
   useEffect(() => {
+    if (!token) return;
     dispatch(fetchProfile({token}));
   }, [dispatch, token]);
 
