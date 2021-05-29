@@ -34,11 +34,11 @@ const Sidebar = () => {
           <img className="w-8 h-8 lg:w-10 lg:h-10" src={logo} alt="logo" />
           <a
             href="/"
-            className="ml-2 text-2xl font-semibold tracking-wider text-gray-900 rounded-sm focus:outline-none focus:shadow-outline"
+            className="ml-2 text-xl md:text-2xl font-semibold tracking-wider text-gray-900 rounded-sm focus:outline-none focus:shadow-outline"
           >
             GhostGo
           </a>
-          <div className="text-base mt-1 lg:hidden">
+          <div className="text-base lg:hidden">
             <span className="mx-1">-</span>
             <Dropdown
               inline

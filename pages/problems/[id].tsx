@@ -381,7 +381,7 @@ const Problem = ({problem}: {problem: any}) => {
 
   const whoMove =
     problem.data.attributes.turn === -1 ? 'White to move' : 'Black to move';
-  const shareUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`;
+  const shareUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}${router.asPath}`;
   const shareTitle = `Problem - P-${problem.data.id} - ${whoMove}`;
   const shareImage = problem.data.attributes.image_url;
 
@@ -397,7 +397,7 @@ const Problem = ({problem}: {problem: any}) => {
                 property="twitter:card"
                 content="summary_large_image"
               ></meta>
-              <title>{`Problem - P - ${problem.data.id}`}</title>
+              <title>{shareTitle}</title>
             </Head>
             <div className="relative">
               <ProblemBoard
@@ -550,7 +550,7 @@ const Problem = ({problem}: {problem: any}) => {
                   </Label>
                 </Button> */}
                 </div>
-                <div className="inline-block mt-4">
+                <div className="inline-block mt-4 md:mt-8">
                   <FacebookShareButton
                     // url={router.pathname}
                     url={shareUrl}
@@ -583,19 +583,11 @@ const Problem = ({problem}: {problem: any}) => {
                   </WeiboShareButton>
 
                   <div>
-                    <FacebookShareCount
-                      url={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`}
-                    >
+                    <FacebookShareCount url={shareUrl}>
                       {count => count}
                     </FacebookShareCount>
                   </div>
                 </div>
-                {/* <Rating
-                icon="star"
-                size="massive"
-                defaultRating={0}
-                maxRating={5}
-              /> */}
               </div>
               <Header as="a" dividing>
                 <Icon name="book" />

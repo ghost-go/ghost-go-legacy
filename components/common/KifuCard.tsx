@@ -3,16 +3,8 @@ import moment from 'moment';
 import Link from 'next/link';
 
 const KifuCard = ({kifu}: {kifu: any}) => {
-  const {
-    image_url,
-    b_name_en,
-    w_name_en,
-    b_rank,
-    w_rank,
-    moves_count,
-    result,
-    date,
-  } = kifu.attributes;
+  const {image_url, b_name_en, w_name_en, b_rank, w_rank, result, valid_date} =
+    kifu.attributes;
   return (
     <div
       key={kifu.id}
@@ -48,12 +40,14 @@ const KifuCard = ({kifu}: {kifu: any}) => {
                 </span>
               </div>
               <span className="hidden md:inline">
-                {moment(date).locale('en').format('YYYY-MM-DD')}{' '}
+                {moment(valid_date).locale('en').format('YYYY-MM-DD')}{' '}
               </span>
             </div>
             <div className="flex md:hidden items-center justify-between">
               <span>{result}</span>
-              <span>{moment(date).locale('en').format('YYYY-MM-DD')} </span>
+              <span>
+                {moment(valid_date).locale('en').format('YYYY-MM-DD')}{' '}
+              </span>
             </div>
           </div>
         </>

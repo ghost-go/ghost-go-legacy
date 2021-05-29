@@ -1,9 +1,8 @@
 import {useRef, useState} from 'react';
 
 import Link from 'next/link';
-import {Button, Popup, Menu, MenuItemProps, Dropdown} from 'semantic-ui-react';
+import {Button, Popup, Menu, MenuItemProps} from 'semantic-ui-react';
 
-import Avatar from 'react-avatar';
 import {ReactSVG} from 'react-svg';
 import settings from 'public/images/settings.svg';
 
