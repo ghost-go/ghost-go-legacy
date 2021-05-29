@@ -16,6 +16,8 @@ import {
   FacebookShareCount,
   FacebookShareButton,
   TwitterShareButton,
+  TwitterIcon,
+  TwitterShareCount,
 } from 'react-share';
 
 import {
@@ -83,6 +85,7 @@ const Problem = ({problem}: {problem: any}) => {
   const [researchMode, setResearchMode] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [move, setMove] = useState<number>(0);
+  const [whomove, setWhomove] = useState<string>();
 
   const answerMove = useTypedSelector(i => i.ui.answerMove);
   const answer = useTypedSelector(i => i.ui.answer);
@@ -366,7 +369,14 @@ const Problem = ({problem}: {problem: any}) => {
           i.type === 'problem_answer' && i.attributes.answer_type === 5
       );
     }
+    setWhomove(
+      problem.data.attributes.turn === -1 ? 'White to move' : 'Black to move'
+    );
   }, [problem]);
+
+  const shareUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`;
+  const shareTitle = `Problem - P-${problem.data.id} - ${{whomove}}`;
+
   return (
     <>
       <div>
@@ -377,9 +387,11 @@ const Problem = ({problem}: {problem: any}) => {
                 property="og:image"
                 content={problem.data.attributes.image_url}
               />
-              <meta property="og:title" content="My new title" key="title" />
-              <meta property="og:image:width" content="600" />
-              <meta property="og:image:height" content="600" />
+              <meta property="og:title" content={shareTitle} key="title" />
+              <meta
+                property="twitter:card"
+                content="summary_large_image"
+              ></meta>
               <title>{`Problem - P - ${problem.data.id}`}</title>
             </Head>
             <div className="relative">
@@ -443,11 +455,7 @@ const Problem = ({problem}: {problem: any}) => {
               style={op}
             >
               <Header size="huge">
-                <span>
-                  {problem.data.attributes.turn === -1
-                    ? 'White to move'
-                    : 'Black to move'}
-                </span>
+                <span>{whomove}</span>
                 <span className="ml-2">{problem.data.attributes.rank}</span>
               </Header>
               <div>
@@ -540,31 +548,24 @@ const Problem = ({problem}: {problem: any}) => {
                 <div className="inline-block mt-4">
                   <FacebookShareButton
                     // url={router.pathname}
-                    url={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`}
-                    // quote={`Problem - P-${problem.data.id}`}
+                    url={shareUrl}
+                    quote={`Problem - P-${problem.data.id} - ${{whomove}}`}
                   >
                     <FacebookIcon size={32} />
                   </FacebookShareButton>
+                  <TwitterShareButton
+                    title={`Problem - P-${problem.data.id} - ${{whomove}}`}
+                  >
+                    <TwitterIcon size={32} />
+                  </TwitterShareButton>
 
                   <div>
                     <FacebookShareCount
                       url={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`}
-                      className="Demo__some-network__share-count"
                     >
                       {count => count}
                     </FacebookShareCount>
                   </div>
-                  <Button.Group>
-                    <Button icon color="twitter">
-                      <Icon name="twitter" />
-                    </Button>
-                    <Button color="google plus" icon>
-                      <Icon name="google plus" />
-                    </Button>
-                    <Button color="instagram" icon>
-                      <Icon name="instagram" />
-                    </Button>
-                  </Button.Group>
                 </div>
                 {/* <Rating
                 icon="star"
