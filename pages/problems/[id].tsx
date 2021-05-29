@@ -376,7 +376,7 @@ const Problem = ({problem}: {problem: any}) => {
               <meta
                 name="og:image"
                 property="og:image"
-                content={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${problem.data.attributes.image_url}`}
+                content={problem.data.attributes.image_url}
               />
               <meta property="og:title" content="My new title" key="title" />
               <title>{`Problem - P - ${problem.data.id}`}</title>
@@ -539,7 +539,7 @@ const Problem = ({problem}: {problem: any}) => {
                 <div className="inline-block mt-4">
                   <FacebookShareButton
                     // url={router.pathname}
-                    url={router.asPath}
+                    url={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`}
                     // quote={`Problem - P-${problem.data.id}`}
                   >
                     <FacebookIcon size={32} />
@@ -547,7 +547,7 @@ const Problem = ({problem}: {problem: any}) => {
 
                   <div>
                     <FacebookShareCount
-                      url={router.asPath}
+                      url={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`}
                       className="Demo__some-network__share-count"
                     >
                       {count => count}
