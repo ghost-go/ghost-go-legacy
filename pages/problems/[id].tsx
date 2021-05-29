@@ -17,7 +17,6 @@ import {
   FacebookShareButton,
   TwitterShareButton,
   TwitterIcon,
-  TwitterShareCount,
 } from 'react-share';
 
 import {
@@ -92,14 +91,16 @@ const Problem = ({problem}: {problem: any}) => {
 
   const op = useSpring<any>({opacity: 1, from: {opacity: 0}});
 
-  const boardRef = useCallback(node => {
-    if (node !== null) {
-      console.log('board init');
-      board = new GBan({zoom: true, interactive: true});
-      board.init(node);
-      board.render();
-    }
-  }, []);
+  const boardRef = useCallback(
+    node => {
+      if (node !== null && problem) {
+        board = new GBan({zoom: true, interactive: true});
+        board.init(node);
+        board.render();
+      }
+    },
+    [problem]
+  );
 
   const makeWrong = () => {
     setRightVisible(false);
@@ -375,7 +376,7 @@ const Problem = ({problem}: {problem: any}) => {
   }, [problem]);
 
   const shareUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`;
-  const shareTitle = `Problem - P-${problem.data.id} - ${{whomove}}`;
+  const shareTitle = `Problem - P-${problem.data.id} - ${whomove}`;
 
   return (
     <>
@@ -554,6 +555,7 @@ const Problem = ({problem}: {problem: any}) => {
                     <FacebookIcon size={32} />
                   </FacebookShareButton>
                   <TwitterShareButton
+                    url={shareUrl}
                     title={`Problem - P-${problem.data.id} - ${{whomove}}`}
                   >
                     <TwitterIcon size={32} />
