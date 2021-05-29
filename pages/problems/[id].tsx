@@ -376,7 +376,7 @@ const Problem = ({problem}: {problem: any}) => {
               <meta
                 name="og:image"
                 property="og:image"
-                content={problem.data.attributes.image_url}
+                content={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/${problem.data.attributes.image_url}`}
               />
               <meta property="og:title" content="My new title" key="title" />
               <title>{`Problem - P - ${problem.data.id}`}</title>
