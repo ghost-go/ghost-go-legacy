@@ -17,6 +17,14 @@ import {
   FacebookShareButton,
   TwitterShareButton,
   TwitterIcon,
+  RedditShareButton,
+  RedditIcon,
+  VKShareButton,
+  VKIcon,
+  LineShareButton,
+  LineIcon,
+  WeiboShareButton,
+  WeiboIcon,
 } from 'react-share';
 
 import {
@@ -84,7 +92,6 @@ const Problem = ({problem}: {problem: any}) => {
   const [researchMode, setResearchMode] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [move, setMove] = useState<number>(0);
-  const [whomove, setWhomove] = useState<string>();
 
   const answerMove = useTypedSelector(i => i.ui.answerMove);
   const answer = useTypedSelector(i => i.ui.answer);
@@ -370,13 +377,13 @@ const Problem = ({problem}: {problem: any}) => {
           i.type === 'problem_answer' && i.attributes.answer_type === 5
       );
     }
-    setWhomove(
-      problem.data.attributes.turn === -1 ? 'White to move' : 'Black to move'
-    );
   }, [problem]);
 
+  const whoMove =
+    problem.data.attributes.turn === -1 ? 'White to move' : 'Black to move';
   const shareUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/${router.asPath}`;
-  const shareTitle = `Problem - P-${problem.data.id} - ${whomove}`;
+  const shareTitle = `Problem - P-${problem.data.id} - ${whoMove}`;
+  const shareImage = problem.data.attributes.image_url;
 
   return (
     <>
@@ -384,10 +391,7 @@ const Problem = ({problem}: {problem: any}) => {
         {problem && (
           <div className="flex flex-col lg:flex-row">
             <Head>
-              <meta
-                property="og:image"
-                content={problem.data.attributes.image_url}
-              />
+              <meta property="og:image" content={shareImage} />
               <meta property="og:title" content={shareTitle} key="title" />
               <meta
                 property="twitter:card"
@@ -456,7 +460,7 @@ const Problem = ({problem}: {problem: any}) => {
               style={op}
             >
               <Header size="huge">
-                <span>{whomove}</span>
+                <span>{whoMove}</span>
                 <span className="ml-2">{problem.data.attributes.rank}</span>
               </Header>
               <div>
@@ -550,16 +554,33 @@ const Problem = ({problem}: {problem: any}) => {
                   <FacebookShareButton
                     // url={router.pathname}
                     url={shareUrl}
-                    quote={`Problem - P-${problem.data.id} - ${{whomove}}`}
+                    quote={shareTitle}
                   >
                     <FacebookIcon size={32} />
                   </FacebookShareButton>
-                  <TwitterShareButton
-                    url={shareUrl}
-                    title={`Problem - P-${problem.data.id} - ${{whomove}}`}
-                  >
+                  <TwitterShareButton url={shareUrl} title={shareTitle}>
                     <TwitterIcon size={32} />
                   </TwitterShareButton>
+                  <RedditShareButton url={shareUrl} title={shareUrl}>
+                    <RedditIcon size={32} />
+                  </RedditShareButton>
+                  <LineShareButton url={shareUrl} title={shareUrl}>
+                    <LineIcon size={32} />
+                  </LineShareButton>
+                  <VKShareButton
+                    url={shareUrl}
+                    title={shareUrl}
+                    image={shareImage}
+                  >
+                    <VKIcon size={32} />
+                  </VKShareButton>
+                  <WeiboShareButton
+                    url={shareUrl}
+                    title={shareUrl}
+                    image={shareImage}
+                  >
+                    <WeiboIcon size={32} />
+                  </WeiboShareButton>
 
                   <div>
                     <FacebookShareCount
