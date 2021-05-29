@@ -374,11 +374,12 @@ const Problem = ({problem}: {problem: any}) => {
           <div className="flex flex-col lg:flex-row">
             <Head>
               <meta
-                name="og:image"
                 property="og:image"
                 content={problem.data.attributes.image_url}
               />
               <meta property="og:title" content="My new title" key="title" />
+              <meta property="og:image:width" content="600" />
+              <meta property="og:image:height" content="600" />
               <title>{`Problem - P - ${problem.data.id}`}</title>
             </Head>
             <div className="relative">
