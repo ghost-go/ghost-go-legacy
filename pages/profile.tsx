@@ -160,18 +160,18 @@ const Profile = () => {
         </Tab.Pane>
       ),
     },
-    {
-      menuItem: {key: 'comments', content: 'Comments'},
-      render: () => <Tab.Pane>Comments</Tab.Pane>,
-    },
-    {
-      menuItem: (
-        <Menu.Item key="messages">
-          Messages<Label>15</Label>
-        </Menu.Item>
-      ),
-      render: () => <Tab.Pane>Tab 2 Content</Tab.Pane>,
-    },
+    // {
+    //   menuItem: {key: 'comments', content: 'Comments'},
+    //   render: () => <Tab.Pane>Comments</Tab.Pane>,
+    // },
+    // {
+    //   menuItem: (
+    //     <Menu.Item key="messages">
+    //       Messages<Label>15</Label>
+    //     </Menu.Item>
+    //   ),
+    //   render: () => <Tab.Pane>Tab 2 Content</Tab.Pane>,
+    // },
   ];
 
   useEffect(() => {

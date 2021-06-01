@@ -207,7 +207,7 @@ const Navigation = () => {
                 </Menu.Menu>
               </Menu.Item>
               <Menu.Item>
-                Home
+                Page
                 <Menu.Menu>
                   <Link href={'/problems'}>
                     <Menu.Item>Problems</Menu.Item>
@@ -217,9 +217,9 @@ const Navigation = () => {
                   </Link>
                 </Menu.Menu>
               </Menu.Item>
-              <Link href={'/messages'}>
+              {/* <Link href={'/messages'}>
                 <Menu.Item>Messages</Menu.Item>
-              </Link>
+              </Link> */}
               <Menu.Item name="signout" onClick={handleItemClick}>
                 Sign out
               </Menu.Item>

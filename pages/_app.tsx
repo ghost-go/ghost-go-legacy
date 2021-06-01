@@ -10,6 +10,7 @@ import SignInModal from 'components/modal/SignInModal';
 import SignUpModal from 'components/modal/SignUpModal';
 import Sidebar from 'components/Sidebar';
 import {ToastContainer} from 'react-toastify';
+import {authSlice} from 'slices';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'tailwindcss/tailwind.css';
@@ -19,31 +20,18 @@ import 'stylesheets/index.css';
 ReactModal.setAppElement('body');
 
 const App = ({Component, pageProps}: {Component: any; pageProps: any}) => {
-  //   if (token) localStorage.setItem("token", token);
-  // }, [token]);
-
-  // const logout = async () => {
-  //   setSigninUser(null);
-  //   setToken(null);
-  //   const url = "/api/logout";
-  //   await fetch(url, { method: "POST", credentials: "include" });
-  //   localStorage.setItem("logout", Date.now().toString());
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("signinUser");
-  // };
-
-  // const syncLogout = (event: any) => {
-  //   if (event.key === "logout") {
-  //     localStorage.removeItem("token");
-  //     localStorage.removeItem("signinUser");
-  //     setToken(null);
-  //     setSigninUser(null);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("storage", syncLogout);
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    if (token && userStr) {
+      store.dispatch(
+        authSlice.actions.setAuth({
+          token,
+          user: JSON.parse(userStr),
+        })
+      );
+    }
+  }, []);
 
   return (
     <Provider store={store}>

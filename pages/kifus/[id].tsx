@@ -225,7 +225,7 @@ const Kifu = ({kifu}: {kifu: any}) => {
           <Table.Body>
             <Table.Row>
               <Table.Cell singleLine>Date: </Table.Cell>
-              <Table.Cell>{valid_date}</Table.Cell>
+              <Table.Cell>{moment(valid_date).format('YYYY-MM-DD')}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell singleLine>Komi: </Table.Cell>
@@ -238,18 +238,20 @@ const Kifu = ({kifu}: {kifu: any}) => {
           </Table.Body>
         </Table>
         <Table style={{width: 290}} className="hidden lg:block">
-          <Table.Row>
-            <Table.Cell>
-              <KifuControls
-                onFirst={handleFirst}
-                onFastPrev={handleFastPrev}
-                onPrev={handlePrev}
-                onNext={handleNext}
-                onFastNext={handleFastNext}
-                onLast={handleLast}
-              />
-            </Table.Cell>
-          </Table.Row>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>
+                <KifuControls
+                  onFirst={handleFirst}
+                  onFastPrev={handleFastPrev}
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onFastNext={handleFastNext}
+                  onLast={handleLast}
+                />
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
         </Table>
         <div className="lg:hidden">
           <ShareBar shareUrl={''} shareTitle={''} shareImage={''} />
