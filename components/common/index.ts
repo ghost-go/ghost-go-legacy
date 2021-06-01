@@ -13,6 +13,7 @@ import AnswerSection from './AnswerSection';
 import Switch from './Switch';
 import UserAvatar from './UserAvatar';
 import Pagination from './Pagination';
+import ShareBar from './ShareBar';
 
 export {
   SidebarItem,
@@ -30,4 +31,5 @@ export {
   Switch,
   UserAvatar,
   Pagination,
+  ShareBar,
 };

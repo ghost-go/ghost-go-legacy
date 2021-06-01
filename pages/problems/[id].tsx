@@ -47,7 +47,7 @@ import {
 } from 'utils';
 import {zeros, matrix, Matrix} from 'mathjs';
 import {sgfToPosition} from 'common/Helper';
-import {ProblemFilterPanel, AnswerSection} from 'components/common';
+import {ProblemFilterPanel, AnswerSection, ShareBar} from 'components/common';
 import styled from 'styled-components';
 import {SGF_LETTERS} from 'common/Constants';
 import {Accordion, Icon, Header, Button} from 'semantic-ui-react';
@@ -549,42 +549,11 @@ const Problem = ({problem}: {problem: any}) => {
                 </Button> */}
                 </div>
                 <div className="inline-block mt-4 md:mt-8">
-                  <FacebookShareButton
-                    // url={router.pathname}
-                    url={shareUrl}
-                    quote={shareTitle}
-                  >
-                    <FacebookIcon size={32} />
-                  </FacebookShareButton>
-                  <TwitterShareButton url={shareUrl} title={shareTitle}>
-                    <TwitterIcon size={32} />
-                  </TwitterShareButton>
-                  <RedditShareButton url={shareUrl} title={shareUrl}>
-                    <RedditIcon size={32} />
-                  </RedditShareButton>
-                  <LineShareButton url={shareUrl} title={shareUrl}>
-                    <LineIcon size={32} />
-                  </LineShareButton>
-                  <VKShareButton
-                    url={shareUrl}
-                    title={shareUrl}
-                    image={shareImage}
-                  >
-                    <VKIcon size={32} />
-                  </VKShareButton>
-                  <WeiboShareButton
-                    url={shareUrl}
-                    title={shareUrl}
-                    image={shareImage}
-                  >
-                    <WeiboIcon size={32} />
-                  </WeiboShareButton>
-
-                  <div>
-                    <FacebookShareCount url={shareUrl}>
-                      {count => count}
-                    </FacebookShareCount>
-                  </div>
+                  <ShareBar
+                    shareUrl={shareUrl}
+                    shareTitle={shareTitle}
+                    shareImage={shareImage}
+                  />
                 </div>
               </div>
               <Header as="a" dividing>

@@ -6,12 +6,12 @@ const KifuCard = ({kifu}: {kifu: any}) => {
   const {image_url, b_name_en, w_name_en, b_rank, w_rank, result, valid_date} =
     kifu.attributes;
   return (
-    <div
-      key={kifu.id}
-      className="relative cursor-pointer"
-      style={{paddingTop: '100%'}}
-    >
-      <Link href={`/kifus/${kifu.id}`}>
+    <Link href={`/kifus/${kifu.id}`}>
+      <div
+        key={kifu.id}
+        className="relative cursor-pointer"
+        style={{paddingTop: '100%'}}
+      >
         <>
           <LazyLoadImage
             className="absolute w-full top-0"
@@ -51,8 +51,8 @@ const KifuCard = ({kifu}: {kifu: any}) => {
             </div>
           </div>
         </>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 

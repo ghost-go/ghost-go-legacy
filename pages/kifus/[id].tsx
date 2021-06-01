@@ -1,22 +1,16 @@
 import {useState, useEffect, useCallback} from 'react';
+import {Card, Image, Table} from 'semantic-ui-react';
 import {GetServerSideProps} from 'next';
 import GBan, {move as moveStone} from 'gboard';
 import styled from 'styled-components';
-import Avatar from 'react-avatar';
-import {useRouter} from 'next/router';
-import moment from 'moment';
 
-import {fetchKifu, selectKifu, selectUI, kifuRequest} from 'slices';
+import {selectUI, kifuRequest} from 'slices';
 import {NumberParam, useQueryParam, withDefault} from 'use-query-params';
-import {KifuControls} from 'components/common';
-import {useDispatch, useTypedSelector, useGenericData} from 'utils';
+import {KifuControls, ShareBar} from 'components/common';
+import {useDispatch, useTypedSelector} from 'utils';
 import {zeros, matrix, Matrix} from 'mathjs';
 import {sgfToPosition} from 'common/Helper';
 import {createViewedKifus} from 'slices/viewedSlice';
-
-interface ParamTypes {
-  id: string;
-}
 
 const KifuBoard = styled.div``;
 let board: any;
@@ -24,9 +18,7 @@ let board: any;
 let mats: Map<number, Matrix> = new Map();
 const Kifu = ({kifu}: {kifu: any}) => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const {token} = useTypedSelector(i => i.auth);
-  const {id} = router.query;
   const {theme, coordinates} = useTypedSelector(state => selectUI(state));
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
@@ -40,24 +32,16 @@ const Kifu = ({kifu}: {kifu: any}) => {
     }
   }, []);
 
-  let moves_count = 0;
-  let b_name_en;
-  let w_name_en;
-  let b_rank;
-  let w_rank;
-  let date;
-  let komi;
-  let result;
-  if (kifu && kifu.data.attributes) {
-    moves_count = kifu.data.attributes.moves_count;
-    b_name_en = kifu.data.attributes.b_name_en;
-    w_name_en = kifu.data.attributes.w_name_en;
-    b_rank = kifu.data.attributes.b_rank;
-    w_rank = kifu.data.attributes.w_rank;
-    date = kifu.data.attributes.date;
-    komi = kifu.data.attributes.komi;
-    result = kifu.data.attributes.result;
-  }
+  const {
+    moves_count,
+    b_name_en,
+    w_name_en,
+    b_rank,
+    w_rank,
+    valid_date,
+    komi,
+    result,
+  } = kifu.data.attributes;
 
   const handleNext = () => {
     if (move < moves_count) {
@@ -88,13 +72,11 @@ const Kifu = ({kifu}: {kifu: any}) => {
   };
 
   useEffect(() => {
-    dispatch(fetchKifu({pattern: {id: id.toString()}}));
-    dispatch(createViewedKifus({data: {record: {kifu_id: id}}}));
+    dispatch(createViewedKifus({data: {record: {kifu_id: kifu.data.id}}}));
     mats = new Map();
-  }, [dispatch, id, token]);
+  }, [dispatch, token]);
 
   useEffect(() => {
-    // TODO: There is a performance issue
     const keyDownEvent = (event: KeyboardEvent) => {
       const keyName = event.key;
       if (keyName === 'Shift' || keyName === 'Alt') return;
@@ -122,7 +104,6 @@ const Kifu = ({kifu}: {kifu: any}) => {
   });
 
   useEffect(() => {
-    console.log('render');
     const padding = coordinates ? 30 : 10;
     board.setOptions({coordinates, padding});
     board.setTheme(theme, mat, marks);
@@ -176,42 +157,70 @@ const Kifu = ({kifu}: {kifu: any}) => {
           onLast={handleLast}
         />
       </div>
-      <div className="flex flex-row justify-around flex-1 px-2 lg:p-4 lg:pl-10 lg:flex-col lg:justify-start">
-        <div className="flex flex-row">
-          <div>
-            <div>
-              <Avatar name={b_name_en} size={'5rem'} />
-            </div>
-            <div className="text-base mt-2">
-              <span className="inline-block rounded-full h-3 w-3 bg-black mr-0.5" />
-              {b_name_en}({b_rank})
-            </div>
+      <div className="flex-1 px-8">
+        <div>
+          <div className="my-2">
+            <Card>
+              <Card.Content>
+                <Image
+                  floated="left"
+                  style={{marginBottom: 0, marginRight: 10}}
+                >
+                  <span className="inline-block rounded-full h-10 w-10 bg-black mr-0.5" />
+                </Image>
+                <Card.Header>{b_name_en}</Card.Header>
+                <Card.Meta>{b_rank}</Card.Meta>
+              </Card.Content>
+            </Card>
           </div>
-          <div className="ml-10">
-            <div>
-              <Avatar name={w_name_en} size={'5rem'} />
-            </div>
-            <div className="text-base mt-2">
-              <span className="inline-block rounded-full h-3 w-3 bg-white border border-black mr-0.5" />
-              {w_name_en}({w_rank})
-            </div>
+          <div className="my-2">
+            <Card>
+              <Card.Content>
+                <Image
+                  floated="left"
+                  style={{marginBottom: 0, marginRight: 10}}
+                >
+                  <span className="inline-block rounded-full h-10 w-10 bg-white border border-black mr-0.5" />
+                </Image>
+                <Card.Header>{w_name_en}</Card.Header>
+                <Card.Meta>{w_rank}</Card.Meta>
+              </Card.Content>
+            </Card>
           </div>
         </div>
-        <div className="text-base">
-          <p className="my-1 mt-3">Date: {moment(date).format('YYYY-MM-DD')}</p>
-          <p className="my-1">Komi: {komi}</p>
-          <p className="my-1">Result: {result}</p>
+        <div className="mt-5">
+          <ShareBar shareUrl={''} shareTitle={''} shareImage={''} />
         </div>
-        <div className="hidden -ml-2 mt-4 lg:block">
-          <KifuControls
-            onFirst={handleFirst}
-            onFastPrev={handleFastPrev}
-            onPrev={handlePrev}
-            onNext={handleNext}
-            onFastNext={handleFastNext}
-            onLast={handleLast}
-          />
-        </div>
+        <Table style={{width: 290}} size="small">
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell singleLine>Date: </Table.Cell>
+              <Table.Cell>{valid_date}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell singleLine>Komi: </Table.Cell>
+              <Table.Cell>{komi}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell singleLine>Result: </Table.Cell>
+              <Table.Cell>{result}</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+        <Table style={{width: 290}}>
+          <Table.Row>
+            <Table.Cell>
+              <KifuControls
+                onFirst={handleFirst}
+                onFastPrev={handleFastPrev}
+                onPrev={handlePrev}
+                onNext={handleNext}
+                onFastNext={handleFastNext}
+                onLast={handleLast}
+              />
+            </Table.Cell>
+          </Table.Row>
+        </Table>
       </div>
     </div>
   );
