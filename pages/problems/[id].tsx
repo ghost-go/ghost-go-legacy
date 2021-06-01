@@ -74,7 +74,6 @@ const Problem = ({problem}: {problem: any}) => {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const {id} = router.query;
-  console.log('id', id);
   const [tags] = useGenericData(useTypedSelector(state => selectTags(state)));
   const [activeIndex, setActiveIndex] = useState();
   const {theme, coordinates} = useTypedSelector(state => selectUI(state));
@@ -211,7 +210,6 @@ const Problem = ({problem}: {problem: any}) => {
     ).then(res => {
       if (res.type === 'problems/fetchProblemNext/fulfilled') {
         const payload: any = res.payload;
-        console.log('pay', res.payload);
         if (payload.data.data) {
           router.push({
             pathname: `/problems/${payload.data.data.id}`,

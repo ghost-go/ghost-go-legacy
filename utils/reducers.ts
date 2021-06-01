@@ -134,6 +134,7 @@ export const buildGenericAsyncThunk = <T>(
       } else {
         response = await request(requestParmas);
       }
+      console.log('res', response);
       return {
         data: response.data,
         headers: response.headers,
