@@ -11,6 +11,7 @@ import {useDispatch, useTypedSelector} from 'utils';
 import {zeros, matrix, Matrix} from 'mathjs';
 import {sgfToPosition} from 'common/Helper';
 import {createViewedKifus} from 'slices/viewedSlice';
+import moment from 'moment';
 
 const KifuBoard = styled.div``;
 let board: any;
@@ -147,7 +148,7 @@ const Kifu = ({kifu}: {kifu: any}) => {
         ref={boardRef}
         onClick={handleNext}
       />
-      <div className="flex -ml-2 lg:hidden mb-3 justify-center">
+      <div className="flex -ml-2 lg:hidden justify-center">
         <KifuControls
           onFirst={handleFirst}
           onFastPrev={handleFastPrev}
@@ -157,8 +158,8 @@ const Kifu = ({kifu}: {kifu: any}) => {
           onLast={handleLast}
         />
       </div>
-      <div className="flex-1 px-8">
-        <div>
+      <div className="flex-1 px-4 lg:px-8">
+        <div className="hidden lg:block">
           <div className="my-2">
             <Card>
               <Card.Content>
@@ -188,10 +189,39 @@ const Kifu = ({kifu}: {kifu: any}) => {
             </Card>
           </div>
         </div>
-        <div className="mt-5">
+        <div className="hidden lg:block lg:mt-5">
           <ShareBar shareUrl={''} shareTitle={''} shareImage={''} />
         </div>
-        <Table style={{width: 290}} size="small">
+        <Table
+          size="small"
+          className="block lg:hidden"
+          unstackable
+          style={{marginTop: 0}}
+        >
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell singleLine>Black: </Table.Cell>
+              <Table.Cell>{b_name_en}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell singleLine>White: </Table.Cell>
+              <Table.Cell>{w_name_en}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell singleLine>Date: </Table.Cell>
+              <Table.Cell>{moment(valid_date).format('YYYY-MM-DD')}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell singleLine>Komi: </Table.Cell>
+              <Table.Cell>{komi}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell singleLine>Result: </Table.Cell>
+              <Table.Cell>{result}</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+        <Table style={{width: 290}} className="hidden lg:block">
           <Table.Body>
             <Table.Row>
               <Table.Cell singleLine>Date: </Table.Cell>
@@ -207,7 +237,7 @@ const Kifu = ({kifu}: {kifu: any}) => {
             </Table.Row>
           </Table.Body>
         </Table>
-        <Table style={{width: 290}}>
+        <Table style={{width: 290}} className="hidden lg:block">
           <Table.Row>
             <Table.Cell>
               <KifuControls
@@ -221,6 +251,9 @@ const Kifu = ({kifu}: {kifu: any}) => {
             </Table.Cell>
           </Table.Row>
         </Table>
+        <div className="lg:hidden">
+          <ShareBar shareUrl={''} shareTitle={''} shareImage={''} />
+        </div>
       </div>
     </div>
   );
