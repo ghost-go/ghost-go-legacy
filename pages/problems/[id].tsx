@@ -11,21 +11,6 @@ import animRight from 'public/images/anim-right.svg';
 import {Switch} from 'components/common';
 import Head from 'next/head';
 import * as Toast from 'utils/toast';
-import {
-  FacebookIcon,
-  FacebookShareCount,
-  FacebookShareButton,
-  TwitterShareButton,
-  TwitterIcon,
-  RedditShareButton,
-  RedditIcon,
-  VKShareButton,
-  VKIcon,
-  LineShareButton,
-  LineIcon,
-  WeiboShareButton,
-  WeiboIcon,
-} from 'react-share';
 
 import {
   selectUI,
@@ -53,12 +38,7 @@ import {SGF_LETTERS} from 'common/Constants';
 import {Accordion, Icon, Header, Button} from 'semantic-ui-react';
 import CommentsSidebar from 'components/CommentsSidebar';
 
-interface ParamTypes {
-  id: string;
-}
-
 const ProblemBoard = styled.div``;
-let board: any;
 let rightAns: any = [];
 let wrongAns: any = [];
 let changeAns: any = [];
@@ -68,6 +48,7 @@ let rightPath: string[] = [];
 let wrongPath: string[] = [];
 let changePath: string[] = [];
 
+let board: any;
 const Problem = ({problem}: {problem: any}) => {
   const dispatch = useDispatch();
   const {token} = useTypedSelector(i => i.auth);
@@ -102,7 +83,6 @@ const Problem = ({problem}: {problem: any}) => {
       if (node !== null && problem) {
         board = new GBan({zoom: true, interactive: true});
         board.init(node);
-        board.render();
       }
     },
     [problem]
@@ -323,10 +303,9 @@ const Problem = ({problem}: {problem: any}) => {
   });
 
   useEffect(() => {
-    console.log('render');
     const padding = coordinates ? 30 : 10;
     board.setOptions({coordinates, padding});
-    board.setTheme(theme, mat, marks);
+    board.setTheme(theme);
     board.render(mat, marks);
   }, [mat, theme, marks, coordinates]);
 

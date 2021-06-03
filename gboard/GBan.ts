@@ -233,7 +233,7 @@ class GBan {
     }
   }
 
-  setTheme(theme: Theme, mat?: Matrix, marks?: Matrix) {
+  setTheme(theme: Theme) {
     if (this.options.theme === theme) return;
     const shadowStyle = '3px 3px 3px #aaaaaa';
     const canvas = this.canvas;
@@ -270,8 +270,7 @@ class GBan {
           this.resources.black = blacks;
           this.resources.white = whites;
           this.resources.board = board;
-          console.log('re-render');
-          this.render(mat, marks);
+          this.render(this.mat, this.marks);
         });
       }
     }

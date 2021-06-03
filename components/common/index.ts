@@ -14,6 +14,7 @@ import Switch from './Switch';
 import UserAvatar from './UserAvatar';
 import Pagination from './Pagination';
 import ShareBar from './ShareBar';
+import ThemeMenuItem from './ThemeMenuItem';
 
 export {
   SidebarItem,
@@ -32,4 +33,5 @@ export {
   UserAvatar,
   Pagination,
   ShareBar,
+  ThemeMenuItem,
 };

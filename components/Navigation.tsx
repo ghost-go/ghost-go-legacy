@@ -1,5 +1,3 @@
-import {useRef, useState} from 'react';
-
 import Link from 'next/link';
 import {Button, Popup, Menu, MenuItemProps} from 'semantic-ui-react';
 
@@ -7,34 +5,21 @@ import {ReactSVG} from 'react-svg';
 import settings from 'public/images/settings.svg';
 
 import {
-  setTheme,
   setCoordinates,
   selectUI,
   openSignInSlice,
   openUserMenuSlice,
   authSlice,
 } from 'slices';
-import {useDispatch, useTypedSelector, useOutsideClick, useAuth} from 'utils';
+import {useDispatch, useTypedSelector, useAuth} from 'utils';
 import {Theme} from 'gboard/GBan';
-import {Switch, UserAvatar} from 'components/common';
+import {Switch, ThemeMenuItem, UserAvatar} from 'components/common';
 
 const Navigation = () => {
   const dispatch = useDispatch();
-  const [settingVisible, setSettingVisible] = useState(false);
   const {token, user} = useAuth();
-  const {theme, coordinates} = useTypedSelector(state => selectUI(state));
+  const {coordinates} = useTypedSelector(state => selectUI(state));
   const openUserMenu = useTypedSelector(state => state.openUserMenu);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useOutsideClick(ref, () => {
-    if (settingVisible) {
-      setSettingVisible(false);
-    }
-  });
-
-  const handleThemeChange = (theme: Theme) => {
-    dispatch(setTheme(theme));
-  };
 
   const handleItemClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -51,103 +36,35 @@ const Navigation = () => {
 
   return (
     <div className="flex flex-row justify-between">
-      <div>&nbsp;</div>
-      <div>&nbsp;</div>
+      <div></div>
       <div className="flex flex-row items-center">
         <div className="relative">
-          <div
-            className={`transition absolute cursor-pointer p-4
-            bg-white z-50 top-6 right-8 shadow-lg rounded-sm w-36 text-base
-            ${settingVisible ? 'flex' : 'opacity-0 pointer-events-none'}
-          `}
+          <Popup
+            on="click"
+            pinned
+            position="bottom right"
+            trigger={
+              <div className="cursor-pointer mr-4">
+                <ReactSVG className="w-7 h-7" src={settings} />
+              </div>
+            }
           >
-            <div
-              ref={ref}
-              className="origin-top-right absolute right-0 p-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="options-menu"
-            >
+            <div>
               <div className="p-1 font-semibold">Theme:</div>
               <div className="grid grid-cols-2" role="none">
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.BlackAndWhite);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.BlackAndWhite && 'active'
-                  }`}
-                  role="menuitem"
-                >
-                  Black&White
-                </span>
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.Flat);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.Flat && 'active'
-                  }`}
-                  role="menuitem"
-                >
-                  Flat
-                </span>
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.Subdued);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.Subdued && 'active'
-                  }
-                `}
-                  role="menuitem"
-                >
-                  Subdued
-                </span>
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.ShellStone);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.ShellStone && 'active'
-                  }`}
-                  role="menuitem"
-                >
-                  Shell
-                </span>
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.SlateAndShell);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.SlateAndShell && 'active'
-                  }`}
-                  role="menuitem"
-                >
-                  SlateAndShell
-                </span>
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.Walnut);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.Walnut && 'active'
-                  }`}
-                  role="menuitem"
-                >
-                  Walnut
-                </span>
-                <span
-                  onClick={() => {
-                    handleThemeChange(Theme.Photorealistic);
-                  }}
-                  className={`menu-item-theme ${
-                    theme === Theme.Photorealistic && 'active'
-                  }`}
-                  role="menuitem"
-                >
-                  Photorealistic
-                </span>
+                <ThemeMenuItem text="Black&White" theme={Theme.BlackAndWhite} />
+                <ThemeMenuItem text="Flat" theme={Theme.Flat} />
+                <ThemeMenuItem text="Subdued" theme={Theme.Subdued} />
+                <ThemeMenuItem text="ShellStone" theme={Theme.ShellStone} />
+                <ThemeMenuItem
+                  text="SlateAndShell"
+                  theme={Theme.SlateAndShell}
+                />
+                <ThemeMenuItem text="Walnut" theme={Theme.Walnut} />
+                <ThemeMenuItem
+                  text="Photorealistic"
+                  theme={Theme.Photorealistic}
+                />
               </div>
               <Switch
                 label="Show Coordinates: "
@@ -157,14 +74,7 @@ const Navigation = () => {
                 checked={coordinates}
               />
             </div>
-          </div>
-          <div
-            onClick={() => {
-              setSettingVisible(!settingVisible);
-            }}
-          >
-            <ReactSVG className="w-7 h-7 mr-4 cursor-pointer" src={settings} />
-          </div>
+          </Popup>
         </div>
         {token && user ? (
           <Popup

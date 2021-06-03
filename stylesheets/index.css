@@ -39,14 +39,6 @@ svg {
   }
 }
 
-.menu-item-theme {
-  @apply block px-4 py-1 m-1 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900
-}
-
-/* .menu-item-theme.active {
-  @apply bg-gray-100 text-gray-900
-}
-
 .toggle-checkbox:checked {
   @apply: right-0 border-green-400;
   right: 0;
@@ -56,7 +48,7 @@ svg {
 .toggle-checkbox:checked + .toggle-label {
   @apply: bg-green-400;
   background-color: #68D391;
-} */
+}
 
 
 .path {

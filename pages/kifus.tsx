@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {PaginationProps} from 'semantic-ui-react';
+import {PaginationProps, InputOnChangeData, Input} from 'semantic-ui-react';
 import {useRouter} from 'next/router';
 import 'react-lazy-load-image-component/src/effects/opacity.css';
 import {useQueryParam} from 'use-query-params';
@@ -10,6 +10,7 @@ import {
   useTypedSelector,
   useOutsideClick,
   useGenericData,
+  useThrottleEffect,
 } from 'utils';
 import {
   FilterButton,
@@ -24,7 +25,6 @@ const Kifus = () => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [kifuList, setKifuList] = useState([]);
   const [filter, setFilter] = useState(false);
   const [players] = useGenericData(
     useTypedSelector(state => selectPlayers(state))
@@ -32,7 +32,6 @@ const Kifus = () => {
   const kifus = useTypedSelector(state => state.kifus);
   const [page = '1', setPage] = useQueryParam('page');
   const [q = '', setQ] = useQueryParam('q');
-  const [playerParam = 'all', setPlayerParam] = useQueryParam<string>('player');
 
   useOutsideClick(ref, () => {
     if (filter) setFilter(false);
@@ -49,14 +48,26 @@ const Kifus = () => {
     dispatch(fetchPlayers());
   }, [dispatch]);
 
+  useThrottleEffect(
+    () => {
+      const params = {
+        page,
+        q,
+      };
+      setPage(1);
+      dispatch(fetchKifus({params}));
+    },
+    [q],
+    500
+  );
+
   useEffect(() => {
     const params = {
-      player: playerParam,
       page,
       q,
     };
     dispatch(fetchKifus({params}));
-  }, [page, q]);
+  }, [page]);
 
   let items: any = [];
   if (kifus && kifus.status === 'succeeded') {
@@ -64,6 +75,13 @@ const Kifus = () => {
       <KifuCard key={`k-${k.id}`} kifu={k} />
     ));
   }
+
+  const handleSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    data: InputOnChangeData
+  ) => {
+    setQ(data.value);
+  };
 
   return (
     <>
@@ -73,20 +91,28 @@ const Kifus = () => {
             setFilter(!filter);
           }}
         />
-        <div className="text-base ml-4">Player: {playerParam}</div>
-        {playerParam !== 'all' && (
+        <Input
+          className="ml-5"
+          icon="search"
+          size="mini"
+          value={q}
+          onChange={handleSearchChange}
+          placeholder="Search..."
+        />
+        {q !== '' && (
           <div>
             <button
               onClick={() => {
-                setPlayerParam('all');
+                setQ(undefined);
               }}
               className="text-base underline ml-4"
             >
-              Clear Filters
+              Clear Filter
             </button>
           </div>
         )}
       </div>
+      <div></div>
       <div
         ref={ref}
         className={`absolute transition transform origin-top-left ${
@@ -102,7 +128,7 @@ const Kifus = () => {
           <Tag
             key={'t-all'}
             onClick={() => {
-              setPlayerParam('all');
+              setQ(undefined);
               setFilter(false);
             }}
           >
@@ -113,7 +139,7 @@ const Kifus = () => {
               <Tag
                 key={`p-${en_name}`}
                 onClick={() => {
-                  setPlayerParam(en_name);
+                  setQ(en_name);
                   setFilter(false);
                 }}
               >
@@ -147,7 +173,7 @@ const Kifus = () => {
           <div className="mt-10 text-2xl">No Data</div>
           <button
             onClick={() => {
-              setPlayerParam('all');
+              setQ(undefined);
             }}
             className="underline p-5 mt-2"
           >

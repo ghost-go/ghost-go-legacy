@@ -9,8 +9,13 @@ interface UIState {
   answerMove: number;
 }
 
+let theme = Theme.Flat;
+if (typeof window !== 'undefined') {
+  theme = (localStorage.getItem('theme') as Theme) || Theme.Flat;
+}
+
 const initialState: UIState = {
-  theme: Theme.Flat,
+  theme,
   coordinates: false,
   answer: undefined,
   answerMove: 0,
@@ -22,6 +27,7 @@ export const uiSlice = createSlice({
   reducers: {
     setTheme: (state, action) => {
       state.theme = action.payload;
+      localStorage.setItem('theme', action.payload);
     },
     setCoordinates: (state, action) => {
       state.coordinates = action.payload;

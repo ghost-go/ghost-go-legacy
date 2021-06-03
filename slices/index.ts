@@ -24,6 +24,7 @@ import {
   openSignUpSlice,
   openCommentsSlice,
   openUserMenuSlice,
+  openSettingMenuSlice,
 } from './genericSlice';
 
 // export * from './authSlice';
@@ -61,6 +62,7 @@ const rootReducer = combineReducers({
   openSignUp: openSignUpSlice.reducer,
   openComments: openCommentsSlice.reducer,
   openUserMenu: openUserMenuSlice.reducer,
+  openSettingMenu: openSettingMenuSlice.reducer,
 });
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
