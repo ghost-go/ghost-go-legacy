@@ -8,6 +8,15 @@ export const {asyncThunk: fetchKifus, slice: kifusSlice} =
   });
 
 export const {
+  asyncThunk: fetchKifuIds,
+  slice: kifuIdsSlice,
+  request: kifuIdsRequest,
+} = buildGenericReducer<any>({
+  name: 'kifus/fetchkifuIds',
+  endpoint: '/kifus/ids',
+});
+
+export const {
   asyncThunk: fetchKifu,
   slice: kifuSlice,
   request: kifuRequest,

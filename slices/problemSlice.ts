@@ -16,6 +16,15 @@ export const {
   endpoint: '/problems/:id',
 });
 
+export const {
+  asyncThunk: fetchProblemIds,
+  slice: problemIdsSlice,
+  request: problemIdsRequest,
+} = buildGenericReducer<any>({
+  name: 'problems/fetchProblemIds',
+  endpoint: '/problems/ids',
+});
+
 export const {asyncThunk: fetchProblemNext, slice: problemNextSlice} =
   buildGenericReducer<unknown>({
     name: 'problems/fetchProblemNext',

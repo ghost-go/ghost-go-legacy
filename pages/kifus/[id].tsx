@@ -5,7 +5,7 @@ import GBan, {move as moveStone} from 'gboard';
 import styled from 'styled-components';
 import Head from 'next/head';
 
-import {selectUI, kifuRequest} from 'slices';
+import {selectUI, kifuRequest, kifuIdsRequest} from 'slices';
 import {useRouter} from 'next/router';
 import {NumberParam, useQueryParam, withDefault} from 'use-query-params';
 import {KifuControls, ShareBar} from 'components/common';
@@ -282,11 +282,35 @@ const Kifu = ({kifu}: {kifu: any}) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const res = await kifuRequest({
-    pattern: {id: context.query.id.toString()},
+export async function getStaticPaths() {
+  const res = await kifuIdsRequest();
+  const paths = res.data.map((id: number) => {
+    return {
+      params: {
+        id: id.toString(),
+      },
+    };
   });
-  return {props: {kifu: res.data}};
+  return {
+    paths,
+    fallback: false,
+  };
+}
+export const getStaticProps: GetServerSideProps = async ({params}) => {
+  const res = await kifuRequest({
+    pattern: {id: params?.id.toString() || 'undefined'},
+  });
+  return {
+    props: {kifu: res.data},
+    revalidate: 30,
+  };
 };
+
+// export const getServerSideProps: GetServerSideProps = async context => {
+//   const res = await kifuRequest({
+//     pattern: {id: context.query.id.toString()},
+//   });
+//   return {props: {kifu: res.data}};
+// };
 
 export default Kifu;

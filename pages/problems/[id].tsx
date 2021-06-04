@@ -22,6 +22,7 @@ import {
   fetchProblemNext,
   createRecord,
   problemRequest,
+  problemIdsRequest,
 } from 'slices';
 import {useQueryParam} from 'use-query-params';
 import {
@@ -645,11 +646,35 @@ const Problem = ({problem}: {problem: any}) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const res = await problemRequest({
-    pattern: {id: context.query.id.toString()},
+export async function getStaticPaths() {
+  const res = await problemIdsRequest();
+  const paths = res.data.map((id: number) => {
+    return {
+      params: {
+        id: id.toString(),
+      },
+    };
   });
-  return {props: {problem: res.data}};
+  return {
+    paths,
+    fallback: false,
+  };
+}
+export const getStaticProps: GetServerSideProps = async ({params}) => {
+  const res = await problemRequest({
+    pattern: {id: params?.id.toString() || 'undefined'},
+  });
+  return {
+    props: {problem: res.data},
+    revalidate: 30,
+  };
 };
+
+// export const getServerSideProps: GetServerSideProps = async context => {
+//   const res = await problemRequest({
+//     pattern: {id: context.query.id.toString()},
+//   });
+//   return {props: {problem: res.data}};
+// };
 
 export default animated(Problem);
