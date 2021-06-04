@@ -1,49 +1,14 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.14.0"
+lock "~> 3.16.0"
 
 set :application, "ghost-go"
-set :repo_url, "git@github.com:BAI-Bonjwa/ghost-go.git"
-
-# append :linked_files, ".env"
-append :linked_dirs, "node_modules"
-
-set :ssh_options, {
-  verify_host_key: :always,
-  forward_agent: true
-}
-
-set :nvm_type, :user
-set :nvm_node, 'v14.3.0'
-set :nvm_map_bins, %w{node npm yarn}
-
-set :yarn_flags, %w(--slient --no-progress)
-
-set :deploy_to, "/home/deploy/ghost-go"
-
-namespace :deploy do
-  desc 'Sycning local build to server'
-
-  task :yarn_deploy do
-    on roles fetch(:yarn_roles) do |role|
-      run_locally do
-        execute "yarn build"
-      end
-      run_locally do
-        execute "rsync -avr -e ssh build #{role.username}@#{role.hostname}:#{release_path}/"
-      end
-    end
-  end
-
-  # before "symlink:release", :build
-  before "symlink:release", :yarn_deploy
-  # before "symlink:release", :sync
-end
+set :repo_url, "git@github.com:ghost-go/ghost-go.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, "/home/deploy/ghost-go"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -56,10 +21,12 @@ end
 # set :pty, true
 
 # Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
+# append :linked_files, "app.json"
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+
+append :linked_dirs, "node_modules"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -72,3 +39,76 @@ end
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+set :nvm_type, :user
+set :nvm_node, 'v14.17.0' # change to your node version number
+set :nvm_map_bins, %w[node npm yarn pm2 next]
+set :nvm_custom_path, "/home/deploy/.nvm/versions/node"
+set :nvm_path, "/home/deploy/.nvm"
+
+set :default_env, {
+  'PATH' => "/home/deploy/.yarn/bin:/home/deploy/.nvm/versions/node/v14.17.0/bin:$PATH",
+}
+
+namespace :pm2 do
+  task :start do
+    on roles(:app) do
+      within shared_path do
+        execute :pm2, "start app.json"
+      end
+    end
+  end
+
+  task :restart do
+    on roles(:app) do
+      within shared_path do
+        execute :pm2, "reload app.json"
+      end
+    end
+  end
+
+  task :stop do
+    on roles(:app) do
+      within shared_path do
+        execute :pm2, "stop app.json"
+      end
+    end
+  end
+end
+
+namespace :yarn do
+  task :install do
+    on roles(:app) do
+      within release_path do
+        execute :yarn, 'install --frozen-lockfile'
+      end
+    end
+  end
+
+  task :build do
+    on roles(:app) do
+      within release_path do
+        execute :yarn, 'build'
+      end
+    end
+  end
+end
+
+namespace :deploy do
+  after 'deploy:updated', 'yarn:install'
+  after 'deploy:updated', 'yarn:build'
+  after 'deploy:publishing', 'deploy:restart'
+
+  task :restart do
+    invoke 'pm2:restart'
+  end
+
+  task :start do
+    invoke 'pm2:start'
+  end
+
+  task :stop do
+    invoke 'pm2:stop'
+  end
+end
+

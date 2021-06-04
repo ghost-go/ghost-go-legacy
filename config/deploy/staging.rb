@@ -1,5 +1,7 @@
-server "18.180.212.155", user: "deploy", roles: %w{app}, primary: true
-set :branch, 'master'
+set :stage, :staging
+set :branch, 'develop'
+set :server_name, 'sandbox.ghost-go.com'
+server '160.251.82.155', user: 'deploy', roles: %w{app}, primary: true
 
 # server-based syntax
 # ======================

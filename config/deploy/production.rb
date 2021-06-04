@@ -1,3 +1,8 @@
+set :stage, :production
+set :branch, 'develop'
+set :server_name, 'sandbox.ghost-go.com'
+server '160.251.82.155', user: 'deploy', roles: %w{app}, primary: true
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.

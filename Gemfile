@@ -1,7 +1,7 @@
-source 'https://rubygems.org'
+source 'https://gems.ruby-china.com'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-group :development do
-  gem "capistrano"
-  gem "capistrano-nvm", require: false
-  gem "capistrano-yarn"
-end
+ruby '2.7.2'
+
+gem 'capistrano'
+gem 'capistrano-nvm'
