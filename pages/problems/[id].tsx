@@ -51,7 +51,6 @@ let changePath: string[] = [];
 let board: any;
 const Problem = ({problem}: {problem: any}) => {
   const dispatch = useDispatch();
-  const {token} = useTypedSelector(i => i.auth);
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const {id} = router.query;

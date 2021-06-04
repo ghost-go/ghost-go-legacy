@@ -3,8 +3,10 @@ import {Card, Image, Table} from 'semantic-ui-react';
 import {GetServerSideProps} from 'next';
 import GBan, {move as moveStone} from 'gboard';
 import styled from 'styled-components';
+import Head from 'next/head';
 
 import {selectUI, kifuRequest} from 'slices';
+import {useRouter} from 'next/router';
 import {NumberParam, useQueryParam, withDefault} from 'use-query-params';
 import {KifuControls, ShareBar} from 'components/common';
 import {useDispatch, useTypedSelector} from 'utils';
@@ -24,6 +26,7 @@ const Kifu = ({kifu}: {kifu: any}) => {
   const [mat, setMat] = useState<Matrix>(matrix(zeros([19, 19])));
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
   const [move, setMove] = useQueryParam('move', withDefault(NumberParam, 0));
+  const router = useRouter();
 
   const boardRef = useCallback(node => {
     if (node !== null) {
@@ -140,8 +143,18 @@ const Kifu = ({kifu}: {kifu: any}) => {
     }
   }, [move, kifu]);
 
+  const shareUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}${router.asPath}`;
+  const shareTitle = `Kifu - ${b_name_en} vs ${w_name_en}`;
+  const shareImage = kifu.data.attributes.image_url;
+
   return (
     <div className="flex flex-col lg:flex-row">
+      <Head>
+        <meta property="og:image" content={shareImage} />
+        <meta property="og:title" content={shareTitle} key="title" />
+        <meta property="twitter:card" content="summary" />
+        <title>{shareTitle}</title>
+      </Head>
       <KifuBoard
         className="board"
         id="kifu-board"
@@ -190,7 +203,11 @@ const Kifu = ({kifu}: {kifu: any}) => {
           </div>
         </div>
         <div className="hidden lg:block lg:mt-5">
-          <ShareBar shareUrl={''} shareTitle={''} shareImage={''} />
+          <ShareBar
+            shareUrl={shareUrl}
+            shareTitle={shareTitle}
+            shareImage={shareImage}
+          />
         </div>
         <Table
           size="small"
@@ -254,7 +271,11 @@ const Kifu = ({kifu}: {kifu: any}) => {
           </Table.Body>
         </Table>
         <div className="lg:hidden">
-          <ShareBar shareUrl={''} shareTitle={''} shareImage={''} />
+          <ShareBar
+            shareUrl={shareUrl}
+            shareTitle={shareTitle}
+            shareImage={shareImage}
+          />
         </div>
       </div>
     </div>
