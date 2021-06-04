@@ -36,7 +36,7 @@ import {sgfToPosition} from 'common/Helper';
 import {ProblemFilterPanel, AnswerSection, ShareBar} from 'components/common';
 import styled from 'styled-components';
 import {SGF_LETTERS} from 'common/Constants';
-import {Accordion, Icon, Header, Button} from 'semantic-ui-react';
+import {Accordion, Icon, Header, Button, Popup} from 'semantic-ui-react';
 import CommentsSidebar from 'components/CommentsSidebar';
 
 const ProblemBoard = styled.div``;
@@ -71,7 +71,6 @@ const Problem = ({problem}: {problem: any}) => {
   const [wrongVisible, setWrongVisible] = useState<boolean>(false);
   const [interactive, setInteractive] = useState<boolean>(true);
   const [researchMode, setResearchMode] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(false);
   const [move, setMove] = useState<number>(0);
 
   const answerMove = useTypedSelector(i => i.ui.answerMove);
@@ -299,10 +298,6 @@ const Problem = ({problem}: {problem: any}) => {
     board.setInteractive(interactive);
   }, [interactive]);
 
-  useOutsideClick(ref, () => {
-    if (filter) setFilter(false);
-  });
-
   useEffect(() => {
     const padding = coordinates ? 30 : 10;
     board.setOptions({coordinates, padding});
@@ -421,17 +416,6 @@ const Problem = ({problem}: {problem: any}) => {
                 src={animWrong}
               />
             </div>
-            <div ref={ref}>
-              <ProblemFilterPanel
-                visible={filter}
-                activeLevel={levelParam}
-                activeTags={tagsParam}
-                setLevelParam={setLevelParam}
-                setTagsParam={setTagsParam}
-                setVisible={setFilter}
-                tags={tags}
-              />
-            </div>
             <div
               className="flex flex-1 p-4 flex-col text-gray-800 lg:pl-6 lg:pt-4"
               style={op}
@@ -462,17 +446,27 @@ const Problem = ({problem}: {problem: any}) => {
                 <Button color="black" onClick={handleNext}>
                   Next Problem
                 </Button>
-                <div
-                  className="flex flex-row items-center self-end cursor-pointer"
-                  onClick={() => {
-                    setFilter(!filter);
-                  }}
-                >
-                  <ReactSVG className="h-3 w-3 mr-0.5" src={edit} />
-                  <span className="underline">
-                    {levelParam}/{tagsParam}
-                  </span>
-                </div>
+                <Popup
+                  on="click"
+                  pinned
+                  flowing
+                  position="bottom right"
+                  trigger={
+                      <div className="flex flex-row items-center self-end cursor-pointer">
+                        <ReactSVG className="h-3 w-3 mr-0.5" src={edit} />
+                        <span className="underline">
+                          {levelParam}/{tagsParam}
+                        </span>
+                      </div>
+                  }>
+                  <ProblemFilterPanel
+                    activeLevel={levelParam}
+                    activeTags={tagsParam}
+                    setLevelParam={setLevelParam}
+                    setTagsParam={setTagsParam}
+                    tags={tags}
+                 />
+                </Popup>
               </div>
               {/* <div>
               <div className="inline-block mt-4">

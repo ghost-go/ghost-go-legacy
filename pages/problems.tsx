@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {isMobile} from 'react-device-detect';
 import 'react-lazy-load-image-component/src/effects/opacity.css';
 import {useQueryParam} from 'use-query-params';
+import {Popup} from 'semantic-ui-react';
 
 import {fetchProblems, selectTags, fetchTags} from 'slices';
 
@@ -82,11 +83,6 @@ const Problems = () => {
   return (
     <>
       <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
-        <FilterButton
-          onClick={() => {
-            setFilter(!filter);
-          }}
-        />
         <div className="text-base ml-4">Level: {levelParam}</div>
         <div className="text-base ml-4">Tags: {tagsParam}</div>
         {(levelParam !== 'all' || tagsParam !== 'all') && (
@@ -103,17 +99,22 @@ const Problems = () => {
           </div>
         )}
       </div>
-      <div ref={ref}>
-        <ProblemFilterPanel
-          visible={filter}
-          activeLevel={levelParam}
-          activeTags={tagsParam}
-          setLevelParam={setLevelParam}
-          setTagsParam={setTagsParam}
-          setVisible={setFilter}
-          tags={tags}
-        />
-      </div>
+                <Popup
+                  on="click"
+                  pinned
+                  flowing
+                  position="bottom right"
+                  trigger={
+                    <FilterButton />
+                  }>
+                  <ProblemFilterPanel
+                    activeLevel={levelParam}
+                    activeTags={tagsParam}
+                    setLevelParam={setLevelParam}
+                    setTagsParam={setTagsParam}
+                    tags={tags}
+                 />
+                </Popup>
       <InfiniteScroll
         dataLength={items.length}
         next={() => {

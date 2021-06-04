@@ -3,6 +3,7 @@ import {PaginationProps, InputOnChangeData, Input} from 'semantic-ui-react';
 import {useRouter} from 'next/router';
 import 'react-lazy-load-image-component/src/effects/opacity.css';
 import {useQueryParam} from 'use-query-params';
+import {Popup} from 'semantic-ui-react';
 
 import {fetchKifus, selectPlayers, fetchPlayers} from 'slices';
 import {
@@ -86,41 +87,14 @@ const Kifus = () => {
   return (
     <>
       <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
-        <FilterButton
-          onClick={() => {
-            setFilter(!filter);
-          }}
-        />
-        <Input
-          className="ml-5"
-          icon="search"
-          size="mini"
-          value={q}
-          onChange={handleSearchChange}
-          placeholder="Search..."
-        />
-        {q !== '' && (
-          <div>
-            <button
-              onClick={() => {
-                setQ(undefined);
-              }}
-              className="text-base underline ml-4"
-            >
-              Clear Filter
-            </button>
-          </div>
-        )}
-      </div>
-      <div></div>
-      <div
-        ref={ref}
-        className={`absolute transition transform origin-top-left ${
-          filter
-            ? 'scale-100 opacity-1'
-            : 'scale-50 opacity-0 pointer-events-none'
-        } bg-white shadow-md rounded-sm max-w-full lg:max-w-2xl z-10 p-2 border mx-2.5 lg:mx-1`}
-      >
+                <Popup
+                  on="click"
+                  pinned
+                  flowing
+                  position="bottom right"
+                  trigger={
+                    <FilterButton />
+                  }>
         <div>
           <div className="block font-semibold text-gray-400 mb-2">
             Top Players(Top 30 from go ratings)
@@ -146,8 +120,30 @@ const Kifus = () => {
                 {en_name}
               </Tag>
             ))}
-        </div>
       </div>
+                </Popup>
+        <Input
+          className="ml-5"
+          icon="search"
+          size="mini"
+          value={q}
+          onChange={handleSearchChange}
+          placeholder="Search..."
+        />
+        {q !== '' && (
+          <div>
+            <button
+              onClick={() => {
+                setQ(undefined);
+              }}
+              className="text-base underline ml-4"
+            >
+              Clear Filter
+            </button>
+          </div>
+        )}
+      </div>
+      <div></div>
       {kifus.status === 'loading' && items.length === 0 && (
         <div className="mt-20">
           <Spinner />

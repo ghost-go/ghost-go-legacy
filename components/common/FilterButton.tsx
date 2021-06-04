@@ -1,6 +1,5 @@
-const FilterButton = ({onClick}: {onClick: any}) => (
+const FilterButton = () => (
   <div
-    onClick={onClick}
     className="transition cursor-pointer bg-black hover:bg-white text-white hover:text-black font-bold py-2 px-3 rounded-sm inline-flex items-center border border-black"
   >
     <svg

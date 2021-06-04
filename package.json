@@ -15,7 +15,7 @@
     "@types/styled-components": "^5.1.7",
     "autoprefixer": "^10.2.5",
     "axios": "^0.21.1",
-    "eslint": "^7.26.0",
+    "eslint": "^7.27.0",
     "gts": "^3.1.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
