@@ -69,7 +69,7 @@ const Statistics = () => {
             {statistics && (
               <Grid.Row>
                 <Grid.Column>
-                  <Header as="h3">Total Problems Statistics</Header>
+                  <Header as="h3">Total Problem Statistics</Header>
                   <Statistic.Group widths={3}>
                     <Statistic color="grey" horizontal>
                       <Statistic.Value>{statistics.all.tried}</Statistic.Value>

@@ -11,8 +11,9 @@ const ProblemCard2 = ({
 }) => {
   const {image_url, rights_count, tried_count, whofirst, rank} =
     problem.attributes;
-  const rightRate =
-    tried_count > 0 ? `${(rights_count / tried_count).toFixed(2)}%` : 'No Data';
+  // TODO:
+  // const rightRate =
+  //   tried_count > 0 ? `${(rights_count / tried_count).toFixed(2)}%` : 'No Data';
   return (
     <Card onClick={onClick}>
       <Card.Content>
@@ -30,9 +31,9 @@ const ProblemCard2 = ({
         <Card.Meta>
           <span>{`${whofirst}`}</span>
         </Card.Meta>
-        <Card.Meta>
+        {/* <Card.Meta>
           <span>{`Right rate: ${rightRate}`}</span>
-        </Card.Meta>
+        </Card.Meta> */}
       </Card.Content>
       {extra && <Card.Content extra>{extra}</Card.Content>}
     </Card>

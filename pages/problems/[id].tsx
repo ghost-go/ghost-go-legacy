@@ -44,6 +44,7 @@ let wrongAns: any = [];
 let changeAns: any = [];
 let pendingRightAns: any = [];
 let pendingWrongAns: any = [];
+let pendingChangeAns: any = [];
 let rightPath: string[] = [];
 let wrongPath: string[] = [];
 let changePath: string[] = [];
@@ -330,27 +331,29 @@ const Problem = ({problem}: {problem: any}) => {
       setInitMat(newMat);
       setMat(newMat);
       rightAns = problem.included.filter(
-        (i: any) =>
-          i.type === 'problem_answer' && i.attributes.answer_type === 1
+        (i: any) => i.type === 'problem_answer' && i.attributes.kind === 'right'
       );
       rightPath = rightAns.map((i: any) => i.attributes.steps);
       wrongAns = problem.included.filter(
-        (i: any) =>
-          i.type === 'problem_answer' && i.attributes.answer_type === 2
+        (i: any) => i.type === 'problem_answer' && i.attributes.kind === 'wrong'
       );
       wrongPath = wrongAns.map((i: any) => i.attributes.steps);
       changeAns = problem.included.filter(
         (i: any) =>
-          i.type === 'problem_answer' && i.attributes.answer_type === 3
+          i.type === 'problem_answer' && i.attributes.kind === 'change'
       );
       changePath = changeAns.map((i: any) => i.attributes.steps);
       pendingRightAns = problem.included.filter(
         (i: any) =>
-          i.type === 'problem_answer' && i.attributes.answer_type === 4
+          i.type === 'problem_answer' && i.attributes.kind === 'pending_right'
       );
       pendingWrongAns = problem.included.filter(
         (i: any) =>
-          i.type === 'problem_answer' && i.attributes.answer_type === 5
+          i.type === 'problem_answer' && i.attributes.kind === 'pending_wrong'
+      );
+      pendingChangeAns = problem.included.filter(
+        (i: any) =>
+          i.type === 'problem_answer' && i.attributes.kind === 'pending_change'
       );
     }
   }, [problem]);
@@ -590,14 +593,14 @@ const Problem = ({problem}: {problem: any}) => {
                 {pendingRightAns.length > 0 && (
                   <>
                     <Accordion.Title
-                      active={activeIndex === 2}
-                      index={2}
+                      active={activeIndex === 3}
+                      index={3}
                       onClick={handleActiveIndexChange}
                     >
                       <Icon name="dropdown" />
                       {`Pending Right Answers(${pendingRightAns.length})`}
                     </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 2}>
+                    <Accordion.Content active={activeIndex === 3}>
                       <AnswerSection answers={pendingRightAns} />
                     </Accordion.Content>
                   </>
@@ -605,15 +608,30 @@ const Problem = ({problem}: {problem: any}) => {
                 {pendingWrongAns.length > 0 && (
                   <>
                     <Accordion.Title
-                      active={activeIndex === 2}
-                      index={2}
+                      active={activeIndex === 4}
+                      index={4}
                       onClick={handleActiveIndexChange}
                     >
                       <Icon name="dropdown" />
                       {`Pending Wrong Answers(${pendingWrongAns.length})`}
                     </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 2}>
+                    <Accordion.Content active={activeIndex === 4}>
                       <AnswerSection answers={pendingWrongAns} />
+                    </Accordion.Content>
+                  </>
+                )}
+                {pendingChangeAns.length > 0 && (
+                  <>
+                    <Accordion.Title
+                      active={activeIndex === 5}
+                      index={5}
+                      onClick={handleActiveIndexChange}
+                    >
+                      <Icon name="dropdown" />
+                      {`Pending Change Answers(${pendingChangeAns.length})`}
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 5}>
+                      <AnswerSection answers={pendingChangeAns} />
                     </Accordion.Content>
                   </>
                 )}
