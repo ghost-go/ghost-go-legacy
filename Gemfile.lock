@@ -1,5 +1,5 @@
 GEM
-  remote: https://gems.ruby-china.com/
+  remote: https://rubygems.org/
   specs:
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
@@ -22,7 +22,9 @@ GEM
       net-ssh (>= 2.8.0)
 
 PLATFORMS
+  ruby
   x86_64-darwin-19
+  x86_64-linux
 
 DEPENDENCIES
   capistrano
