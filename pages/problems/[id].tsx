@@ -370,10 +370,7 @@ const Problem = ({problem}: {problem: any}) => {
             <Head>
               <meta property="og:image" content={shareImage} />
               <meta property="og:title" content={shareTitle} key="title" />
-              <meta
-                property="twitter:card"
-                content="summary_large_image"
-              ></meta>
+              <meta property="twitter:card" content="summary" />
               <title>{shareTitle}</title>
             </Head>
             <div className="relative">

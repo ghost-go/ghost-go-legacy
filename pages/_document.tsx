@@ -41,7 +41,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
           <meta
             name="description"
-            content="Web site created using create-react-app"
+            content="A online Go/Weiqi/Baduk resources website."
           />
           <script
             src="https://apis.google.com/js/platform.js"
