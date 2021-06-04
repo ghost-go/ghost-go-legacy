@@ -660,9 +660,9 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
-export const getStaticProps: GetServerSideProps = async ({params}) => {
+export const getStaticProps = async ({params}: any) => {
   const res = await problemRequest({
-    pattern: {id: params?.id.toString() || 'undefined'},
+    pattern: {id: params.id.toString() || 'undefined'},
   });
   return {
     props: {problem: res.data},

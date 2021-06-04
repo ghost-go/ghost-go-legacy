@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback} from 'react';
 import {Card, Image, Table} from 'semantic-ui-react';
-import {GetServerSideProps} from 'next';
+import {GetServerSideProps, GetStaticProps} from 'next';
 import GBan, {move as moveStone} from 'gboard';
 import styled from 'styled-components';
 import Head from 'next/head';
@@ -296,9 +296,9 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
-export const getStaticProps: GetServerSideProps = async ({params}) => {
+export const getStaticProps = async ({params}: any) => {
   const res = await kifuRequest({
-    pattern: {id: params?.id.toString() || 'undefined'},
+    pattern: {id: params.id.toString() || 'undefined'},
   });
   return {
     props: {kifu: res.data},
