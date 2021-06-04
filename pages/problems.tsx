@@ -83,6 +83,25 @@ const Problems = () => {
   return (
     <>
       <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
+        <Popup
+          on="click"
+          wide="very"
+          pinned
+          position="bottom left"
+          trigger={
+            <div>
+              <FilterButton />
+            </div>
+          }
+        >
+          <ProblemFilterPanel
+            activeLevel={levelParam}
+            activeTags={tagsParam}
+            setLevelParam={setLevelParam}
+            setTagsParam={setTagsParam}
+            tags={tags}
+          />
+        </Popup>
         <div className="text-base ml-4">Level: {levelParam}</div>
         <div className="text-base ml-4">Tags: {tagsParam}</div>
         {(levelParam !== 'all' || tagsParam !== 'all') && (
@@ -99,22 +118,6 @@ const Problems = () => {
           </div>
         )}
       </div>
-                <Popup
-                  on="click"
-                  pinned
-                  flowing
-                  position="bottom right"
-                  trigger={
-                    <FilterButton />
-                  }>
-                  <ProblemFilterPanel
-                    activeLevel={levelParam}
-                    activeTags={tagsParam}
-                    setLevelParam={setLevelParam}
-                    setTagsParam={setTagsParam}
-                    tags={tags}
-                 />
-                </Popup>
       <InfiniteScroll
         dataLength={items.length}
         next={() => {

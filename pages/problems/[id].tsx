@@ -449,23 +449,24 @@ const Problem = ({problem}: {problem: any}) => {
                 <Popup
                   on="click"
                   pinned
-                  flowing
+                  wide="very"
                   position="bottom right"
                   trigger={
-                      <div className="flex flex-row items-center self-end cursor-pointer">
-                        <ReactSVG className="h-3 w-3 mr-0.5" src={edit} />
-                        <span className="underline">
-                          {levelParam}/{tagsParam}
-                        </span>
-                      </div>
-                  }>
+                    <div className="flex flex-row items-center self-end cursor-pointer">
+                      <ReactSVG className="h-3 w-3 mr-0.5" src={edit} />
+                      <span className="underline">
+                        {levelParam}/{tagsParam}
+                      </span>
+                    </div>
+                  }
+                >
                   <ProblemFilterPanel
                     activeLevel={levelParam}
                     activeTags={tagsParam}
                     setLevelParam={setLevelParam}
                     setTagsParam={setTagsParam}
                     tags={tags}
-                 />
+                  />
                 </Popup>
               </div>
               {/* <div>

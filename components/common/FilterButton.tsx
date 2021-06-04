@@ -1,7 +1,5 @@
 const FilterButton = () => (
-  <div
-    className="transition cursor-pointer bg-black hover:bg-white text-white hover:text-black font-bold py-2 px-3 rounded-sm inline-flex items-center border border-black"
-  >
+  <div className="transition cursor-pointer bg-black hover:bg-white text-white hover:text-black font-bold py-2 px-3 rounded-sm inline-flex items-center border border-black">
     <svg
       height="12px"
       width="12px"

@@ -38,8 +38,6 @@
     "react-spring": "^8.0.27",
     "react-svg": "^12.1.0",
     "react-toastify": "^7.0.4",
-    "reduce-reducers": "^1.0.4",
-    "redux-persist": "^6.0.0",
     "sass": "^1.32.8",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",

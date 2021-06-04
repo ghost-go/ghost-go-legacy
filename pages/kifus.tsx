@@ -87,41 +87,44 @@ const Kifus = () => {
   return (
     <>
       <div className="flex flex-row items-center px-3 py-1 lg:px-1 lg:py-2">
-                <Popup
-                  on="click"
-                  pinned
-                  flowing
-                  position="bottom right"
-                  trigger={
-                    <FilterButton />
-                  }>
-        <div>
-          <div className="block font-semibold text-gray-400 mb-2">
-            Top Players(Top 30 from go ratings)
+        <Popup
+          on="click"
+          wide="very"
+          pinned
+          position="bottom left"
+          trigger={
+            <div>
+              <FilterButton />
+            </div>
+          }
+        >
+          <div>
+            <div className="block font-semibold text-gray-400 mb-2">
+              Top Players(Top 30 from go ratings)
+            </div>
+            <Tag
+              key={'t-all'}
+              onClick={() => {
+                setQ(undefined);
+                setFilter(false);
+              }}
+            >
+              all
+            </Tag>
+            {players &&
+              players.data.map(({attributes: {name, en_name}}: any) => (
+                <Tag
+                  key={`p-${en_name}`}
+                  onClick={() => {
+                    setQ(en_name);
+                    setFilter(false);
+                  }}
+                >
+                  {en_name}
+                </Tag>
+              ))}
           </div>
-          <Tag
-            key={'t-all'}
-            onClick={() => {
-              setQ(undefined);
-              setFilter(false);
-            }}
-          >
-            all
-          </Tag>
-          {players &&
-            players.data.map(({attributes: {name, en_name}}: any) => (
-              <Tag
-                key={`p-${en_name}`}
-                onClick={() => {
-                  setQ(en_name);
-                  setFilter(false);
-                }}
-              >
-                {en_name}
-              </Tag>
-            ))}
-      </div>
-                </Popup>
+        </Popup>
         <Input
           className="ml-5"
           icon="search"

@@ -1,5 +1,4 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import reduceReducers from 'reduce-reducers';
 import {useSelector, TypedUseSelectorHook} from 'react-redux';
 
 import {updatedUserSlice, userSlice} from './userSlice';
