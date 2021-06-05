@@ -6,13 +6,10 @@ import {
   Header,
   Grid,
   Card,
-  Image,
-  Icon,
-  Menu,
-  Segment,
   Tab,
   PaginationProps,
   TabProps,
+  Message,
 } from 'semantic-ui-react';
 import {useRouter} from 'next/router';
 import {useQueryParam} from 'use-query-params';
@@ -115,6 +112,9 @@ const Statistics = () => {
                 <Grid.Column>
                   <Header as="h3">Tried</Header>
                   <Card.Group itemsPerRow={2} stackable doubling>
+                    {tried.payload.length === 0 && (
+                      <div className="p-4">No data</div>
+                    )}
                     {tried.payload.slice(0, 6).map((t: any) => {
                       return (
                         <ProblemCard2
@@ -131,6 +131,9 @@ const Statistics = () => {
                 <Grid.Column>
                   <Header as="h3">Most Wrong</Header>
                   <Card.Group itemsPerRow={2} stackable doubling>
+                    {wrongs.payload.length === 0 && (
+                      <div className="p-4">No data</div>
+                    )}
                     {wrongs.payload.slice(0, 6).map((t: any) => {
                       return (
                         <ProblemCard2
@@ -157,6 +160,9 @@ const Statistics = () => {
           {tried.status === 'succeeded' && (
             <>
               <Card.Group itemsPerRow={4} stackable doubling>
+                {tried.payload.length === 0 && (
+                  <div className="p-4">No data</div>
+                )}
                 {tried.payload.slice(0, 6).map((t: any) => {
                   return (
                     <ProblemCard2
@@ -185,32 +191,33 @@ const Statistics = () => {
       menuItem: {key: 'wrongs', content: 'Wrongs'},
       render: () => (
         <Tab.Pane>
-          <Tab.Pane>
-            {wrongs.status === 'succeeded' && (
-              <>
-                <Card.Group itemsPerRow={4} stackable doubling>
-                  {wrongs.payload.slice(0, 6).map((t: any) => {
-                    return (
-                      <ProblemCard2
-                        onClick={() => {
-                          router.push(`/problems/${t.problem.data.id}`);
-                        }}
-                        problem={t.problem.data}
-                        extra={`wrong count ${t.wrongs_count}`}
-                      />
-                    );
-                  })}
-                </Card.Group>
-                <div className="mt-5">
-                  <Pagination
-                    defaultActivePage={wrongs.headers['current-page']}
-                    totalPages={wrongs.headers['total-page']}
-                    onPageChange={handlePaginationChange}
-                  />
-                </div>
-              </>
-            )}
-          </Tab.Pane>
+          {wrongs.status === 'succeeded' && (
+            <>
+              <Card.Group itemsPerRow={4} stackable doubling>
+                {wrongs.payload.length === 0 && (
+                  <div className="p-4">No data</div>
+                )}
+                {wrongs.payload.slice(0, 6).map((t: any) => {
+                  return (
+                    <ProblemCard2
+                      onClick={() => {
+                        router.push(`/problems/${t.problem.data.id}`);
+                      }}
+                      problem={t.problem.data}
+                      extra={`wrong count ${t.wrongs_count}`}
+                    />
+                  );
+                })}
+              </Card.Group>
+              <div className="mt-5">
+                <Pagination
+                  defaultActivePage={wrongs.headers['current-page']}
+                  totalPages={wrongs.headers['total-page']}
+                  onPageChange={handlePaginationChange}
+                />
+              </div>
+            </>
+          )}
         </Tab.Pane>
       ),
     },

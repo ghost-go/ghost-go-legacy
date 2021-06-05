@@ -13,6 +13,7 @@ export const {asyncThunk: updateUser, slice: updatedUserSlice} =
     endpoint: '/users/:id',
     method: 'PUT',
     options: {
+      useToken: true,
       errorCentralized: true,
     },
   });

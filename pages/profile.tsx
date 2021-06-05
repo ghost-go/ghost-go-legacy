@@ -1,19 +1,15 @@
 import {useState, useEffect} from 'react';
 import {
   Container,
-  Image,
-  Segment,
-  Reveal,
   Header,
   Tab,
-  Menu,
-  Label,
   Form,
   Input,
   TextArea,
   Select,
   Button,
   InputOnChangeData,
+  Divider,
 } from 'semantic-ui-react';
 import {
   Toast,
@@ -24,12 +20,13 @@ import {
 } from 'utils';
 import {UserAvatar} from 'components/common';
 import {RANK_OPTIONS, GENDER_OPTIONS} from 'utils/constants';
-import {fetchProfile, updateUser} from 'slices';
+import {fetchProfile, updateUser, updatePassword} from 'slices';
 
 const Profile = () => {
   const {token, user} = useAuth();
   const profile = useTypedSelector(i => i.profile);
   const updatedUser = useTypedSelector(i => i.updatedUser);
+  const updatedPassword = useTypedSelector(i => i.updatedPassword);
   const [info, setInfo] = useState({
     email: '',
     display_name: '',
@@ -38,29 +35,44 @@ const Profile = () => {
     gender: '',
     bio: '',
   });
+  const [pwd, setPwd] = useState({
+    password: '',
+    new_password: '',
+    new_password_confirmation: '',
+  });
   const dispatch = useDispatch();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     {name, value}: InputOnChangeData
   ) => {
-    setInfo({
-      ...info,
-      [name]: value,
-    });
+    setInfo({...info, [name]: value});
+  };
+
+  const handlePwdChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    {name, value}: InputOnChangeData
+  ) => {
+    setPwd({...pwd, [name]: value});
   };
 
   const handleUpdateProfile = async () => {
-    if (!token) return;
     const res = await dispatch(
       updateUser({
-        token,
         pattern: {
           id: user.data.id,
         },
         data: {
           user: info,
         },
+      })
+    );
+  };
+
+  const handleUpdatePassword = async () => {
+    const res = await dispatch(
+      updatePassword({
+        data: {...pwd},
       })
     );
   };
@@ -157,6 +169,43 @@ const Profile = () => {
               onClick={handleUpdateProfile}
             />
           </Form>
+          <Divider section />
+          <Form>
+            <Form.Field
+              id="form-input-control-current-password"
+              name="password"
+              control={Input}
+              label="Current Password"
+              type="password"
+              value={pwd.password}
+              onChange={handlePwdChange}
+            />
+            <Form.Field
+              id="form-input-control-new-password"
+              name="new_password"
+              control={Input}
+              label="New Password"
+              type="password"
+              value={pwd.new_password}
+              onChange={handlePwdChange}
+            />
+            <Form.Field
+              id="form-input-control-password-confirmation"
+              name="new_password_confirmation"
+              control={Input}
+              label="Password Confirmation"
+              type="password"
+              value={pwd.new_password_confirmation}
+              onChange={handlePwdChange}
+            />
+            <Form.Field
+              id="form-button-control-public"
+              control={Button}
+              color="red"
+              content="Update Password"
+              onClick={handleUpdatePassword}
+            />
+          </Form>
         </Tab.Pane>
       ),
     },
@@ -193,6 +242,12 @@ const Profile = () => {
       Toast.success('Your profile has been successfully updated.');
     }
   }, [updatedUser]);
+
+  useUpdateEffect(() => {
+    if (updatedPassword && updatedPassword.status === 'succeeded') {
+      Toast.success('Your password has been successfully updated.');
+    }
+  }, [updatedPassword]);
 
   return (
     <Container>

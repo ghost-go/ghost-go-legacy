@@ -9,18 +9,12 @@ import {
   Grid,
   Message,
   Segment,
-  FormProps,
   InputOnChangeData,
+  Popup,
 } from 'semantic-ui-react';
 
 import {GoogleLogin} from 'react-google-login';
-import {
-  authSlice,
-  googleSignIn,
-  openSignInSlice,
-  openSignUpSlice,
-  signIn,
-} from 'slices';
+import {googleSignIn, openSignInSlice, openSignUpSlice, signIn} from 'slices';
 import {GOOGLE_CLINET_ID} from 'utils/constants';
 
 import logo from 'public/images/logo.png';
@@ -112,9 +106,21 @@ const SignInModal = () => {
                   placeholder="Password"
                   type="password"
                 />
-                <span className="inline-block mb-4 text-gray-400 cursor-pointer">
-                  Forgot password?
-                </span>
+                <Popup
+                  content="Please contact service@ghost-go.com to reset your password"
+                  trigger={
+                    <a
+                      href={`mailto:service@ghost-go.com?subject=Password%20reset%20request%20-%20${
+                        signInParams.email || '"your email"'
+                      }&body=Password%20reset%20request%20-%20${
+                        signInParams.email || '"your email"'
+                      }`}
+                      className="inline-block mb-4 text-gray-400 cursor-pointer"
+                    >
+                      Forgot password?
+                    </a>
+                  }
+                />
                 <Button color="black" fluid size="large">
                   Login
                 </Button>

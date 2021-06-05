@@ -7,6 +7,7 @@ import {
   statisticsSlice,
   wrongsSlice,
   triedSlice,
+  updatedPasswordSlice,
 } from './meSlice';
 // import appReducer from './app';
 // import { authSlice } from './authSlice';
@@ -56,6 +57,7 @@ const rootReducer = combineReducers({
   statistics: statisticsSlice.reducer,
   wrongs: wrongsSlice.reducer,
   tried: triedSlice.reducer,
+  updatedPassword: updatedPasswordSlice.reducer,
   ui: uiSlice.reducer,
   openSignIn: openSignInSlice.reducer,
   openSignUp: openSignUpSlice.reducer,

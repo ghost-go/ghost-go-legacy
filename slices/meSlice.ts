@@ -28,3 +28,14 @@ export const {asyncThunk: fetchTried, slice: triedSlice} =
     endpoint: '/tried',
     options: {useToken: true},
   });
+
+export const {asyncThunk: updatePassword, slice: updatedPasswordSlice} =
+  buildGenericReducer<any>({
+    name: 'updatePassword',
+    endpoint: '/password',
+    method: 'PUT',
+    options: {
+      useToken: true,
+      errorCentralized: true,
+    },
+  });
