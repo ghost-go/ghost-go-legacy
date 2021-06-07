@@ -1,7 +1,7 @@
 // next.config.js
 const withImages = require('next-images');
 module.exports = withImages({
-  productionBrowserSourceMaps: true,
+  // productionBrowserSourceMaps: true,
   // async rewrites() {
   //   return [
   //     {
