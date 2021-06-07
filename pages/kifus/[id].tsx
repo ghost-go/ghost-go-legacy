@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {useState, useEffect, useCallback, useRef} from 'react';
 import {Card, Image, Table} from 'semantic-ui-react';
 import {GetServerSideProps, GetStaticProps} from 'next';
@@ -77,10 +78,17 @@ const Kifu = ({kifu}: {kifu: any}) => {
     setMove(moves_count);
   };
 
+  const handleResize = () => {
+    if (board.current) {
+      board.current.render();
+    }
+  };
+
   useEffect(() => {
     dispatch(createViewedKifus({data: {record: {kifu_id: kifu.data.id}}}));
     mats = new Map();
-  }, [dispatch, token]);
+    window.addEventListener('resize', _.debounce(handleResize, 100));
+  }, [dispatch]);
 
   useEffect(() => {
     const keyDownEvent = (event: KeyboardEvent) => {
