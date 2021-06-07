@@ -241,11 +241,16 @@ class GBan {
       this.options.theme = theme;
       if (theme === Theme.BlackAndWhite) {
         canvas.style.boxShadow = '0px 0px 0px #000000';
-      } else if (theme === Theme.Flat) {
-        canvas.style.boxShadow = shadowStyle;
-      } else {
+      } else if (
+        theme === Theme.Subdued ||
+        theme === Theme.Photorealistic ||
+        theme === Theme.ShellStone ||
+        theme === Theme.SlateAndShell ||
+        theme === Theme.Walnut
+      ) {
         const board = new Image();
-        board.src = Resources[theme].board; // Set source path
+        const boardTheme = Resources[theme];
+        board.src = boardTheme.board; // Set source path
 
         const blacks = Resources[theme].black.map(i => {
           const img = new Image();
@@ -272,6 +277,9 @@ class GBan {
           this.resources.board = board;
           this.render(this.mat, this.marks);
         });
+      } else {
+        this.options.theme = Theme.Flat;
+        canvas.style.boxShadow = shadowStyle;
       }
     }
   }
