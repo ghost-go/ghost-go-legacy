@@ -125,7 +125,7 @@ const SignInModal = () => {
                   Login
                 </Button>
               </Segment>
-              <Segment size="large" textAlign="left">
+              {/* <Segment size="large" textAlign="left">
                 <div className="mb-2">Or Login with:</div>
                 <GoogleLogin
                   clientId={GOOGLE_CLINET_ID}
@@ -134,7 +134,7 @@ const SignInModal = () => {
                   onFailure={handleGoogleSignInFailure}
                   cookiePolicy={'single_host_origin'}
                 />
-              </Segment>
+              </Segment> */}
             </Form>
             <Message>
               Not registered?{' '}

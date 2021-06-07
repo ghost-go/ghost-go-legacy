@@ -139,7 +139,7 @@ const SignUpModal = () => {
                   Sign Up
                 </Button>
               </Segment>
-              <Segment size="large" textAlign="left">
+              {/* <Segment size="large" textAlign="left">
                 <div className="mb-2">Or Sign Up with:</div>
                 <GoogleLogin
                   clientId={GOOGLE_CLINET_ID}
@@ -148,7 +148,7 @@ const SignUpModal = () => {
                   onFailure={handleGoogleSignInFailure}
                   cookiePolicy={'single_host_origin'}
                 />
-              </Segment>
+              </Segment> */}
             </Form>
             <Message>
               Already registered?&nbsp;

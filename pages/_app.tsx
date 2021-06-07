@@ -11,6 +11,7 @@ import SignUpModal from 'components/modal/SignUpModal';
 import Sidebar from 'components/Sidebar';
 import {ToastContainer} from 'react-toastify';
 import {authSlice} from 'slices';
+import ReactGA from 'react-ga';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'tailwindcss/tailwind.css';
@@ -18,9 +19,11 @@ import 'semantic-ui-css/semantic.min.css';
 import 'stylesheets/index.css';
 
 ReactModal.setAppElement('body');
+ReactGA.initialize('UA-81351513-1');
 
 const App = ({Component, pageProps}: {Component: any; pageProps: any}) => {
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
     if (token && userStr) {
