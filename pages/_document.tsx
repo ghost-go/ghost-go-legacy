@@ -41,7 +41,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
           <meta
             name="description"
-            content="A online Go/Weiqi/Baduk resources website."
+            content="An interactive Go/Weiqi/Baduk resources website."
           />
           <script
             src="https://apis.google.com/js/platform.js"
