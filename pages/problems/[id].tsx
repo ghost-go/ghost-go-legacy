@@ -250,6 +250,12 @@ const Problem = ({problem}: {problem: any}) => {
     setActiveIndex(newIndex);
   };
 
+  const handleResize = () => {
+    if (board.current) {
+      board.current.render();
+    }
+  };
+
   useEffect(() => {
     setCurrentPath('');
     dispatch(fetchTags());
@@ -278,6 +284,7 @@ const Problem = ({problem}: {problem: any}) => {
     }
   }, [answer, answerMove, initMat]);
 
+  // Init function
   useEffect(() => {
     setRightVisible(false);
     setWrongVisible(false);
@@ -286,7 +293,9 @@ const Problem = ({problem}: {problem: any}) => {
     setInteractive(true);
     dispatch(uiSlice.actions.resetAnswer());
     dispatch(uiSlice.actions.resetAnswerMove());
-  }, [dispatch]);
+
+    window.addEventListener('resize', _.debounce(handleResize, 100));
+  }, []);
 
   useEffect(() => {
     if (board.current) {

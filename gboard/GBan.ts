@@ -123,6 +123,7 @@ class GBan {
     coordinates: true,
     // matrix: matrix(math.ones([19, 19])),
   };
+  dom: HTMLElement | undefined;
   canvas?: HTMLCanvasElement;
   resources: {
     board: HTMLImageElement | null;
@@ -158,24 +159,33 @@ class GBan {
     }
   }
 
-  init(dom: HTMLElement) {
-    this.mat = matrix(zeros([19, 19]));
-    this.marks = matrix(zeros([19, 19]));
-    this.transMat = new DOMMatrix();
-    const canvas = document.createElement('canvas');
+  resize() {
+    if (!this.canvas || !this.dom) return;
+    const canvas = this.canvas;
     const {size} = this.options;
-    canvas.style.position = 'absolute';
-    this.canvas = canvas;
     if (size) {
       canvas.width = size;
       canvas.height = size;
     } else {
-      const {clientWidth} = dom;
+      const {clientWidth} = this.dom;
       canvas.style.width = clientWidth + 'px';
       canvas.style.height = clientWidth + 'px';
       canvas.width = Math.floor(clientWidth * devicePixelRatio);
       canvas.height = Math.floor(clientWidth * devicePixelRatio);
     }
+  }
+
+  init(dom: HTMLElement) {
+    this.mat = matrix(zeros([19, 19]));
+    this.marks = matrix(zeros([19, 19]));
+    this.transMat = new DOMMatrix();
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'absolute';
+    this.canvas = canvas;
+    this.dom = dom;
+
+    this.resize();
+
     dom.firstChild?.remove();
     dom.appendChild(canvas);
 
@@ -290,6 +300,7 @@ class GBan {
     const {boardSize, zoom, extend, interactive, coordinates} = this.options;
     const canvas = this.canvas;
     if (canvas) {
+      this.resize();
       this.#clearCanvas();
       const ctx = canvas.getContext('2d');
 

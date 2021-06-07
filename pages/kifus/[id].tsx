@@ -30,9 +30,11 @@ const Kifu = ({kifu}: {kifu: any}) => {
 
   const boardRef = useCallback(node => {
     if (node !== null) {
+      // setTimeout(() => {
       mats.set(0, matrix(zeros([19, 19])));
       board.current = new GBan();
       board.current.init(node);
+      // }, 1000);
     }
   }, []);
 
