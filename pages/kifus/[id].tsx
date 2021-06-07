@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useRef} from 'react';
 import {Card, Image, Table} from 'semantic-ui-react';
 import {GetServerSideProps, GetStaticProps} from 'next';
 import GBan, {move as moveStone} from 'gboard';
@@ -16,7 +16,6 @@ import {createViewedKifus} from 'slices/viewedSlice';
 import moment from 'moment';
 
 const KifuBoard = styled.div``;
-let board: any;
 
 let mats: Map<number, Matrix> = new Map();
 const Kifu = ({kifu}: {kifu: any}) => {
@@ -27,12 +26,13 @@ const Kifu = ({kifu}: {kifu: any}) => {
   const [marks, setMarks] = useState<Matrix>(matrix(zeros([19, 19])));
   const [move, setMove] = useQueryParam('move', withDefault(NumberParam, 0));
   const router = useRouter();
+  const board = useRef<GBan>();
 
   const boardRef = useCallback(node => {
     if (node !== null) {
       mats.set(0, matrix(zeros([19, 19])));
-      board = new GBan();
-      board.init(node);
+      board.current = new GBan();
+      board.current.init(node);
     }
   }, []);
 
@@ -108,10 +108,12 @@ const Kifu = ({kifu}: {kifu: any}) => {
   });
 
   useEffect(() => {
-    const padding = coordinates ? 30 : 10;
-    board.setOptions({coordinates, padding});
-    board.setTheme(theme, mat, marks);
-    board.render(mat, marks);
+    if (board.current) {
+      const padding = coordinates ? 30 : 10;
+      board.current.setOptions({coordinates, padding});
+      board.current.setTheme(theme);
+      board.current.render(mat, marks);
+    }
   }, [mat, theme, coordinates, marks]);
 
   useEffect(() => {

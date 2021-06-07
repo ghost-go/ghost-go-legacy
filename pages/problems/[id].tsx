@@ -50,7 +50,6 @@ let rightPath: string[] = [];
 let wrongPath: string[] = [];
 let changePath: string[] = [];
 
-let board: any;
 const Problem = ({problem}: {problem: any}) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
@@ -72,6 +71,7 @@ const Problem = ({problem}: {problem: any}) => {
   const [interactive, setInteractive] = useState<boolean>(true);
   const [researchMode, setResearchMode] = useState<boolean>(false);
   const [move, setMove] = useState<number>(0);
+  const board = useRef<GBan>();
 
   const answerMove = useTypedSelector(i => i.ui.answerMove);
   const answer = useTypedSelector(i => i.ui.answer);
@@ -81,8 +81,8 @@ const Problem = ({problem}: {problem: any}) => {
   const boardRef = useCallback(
     node => {
       if (node !== null && problem) {
-        board = new GBan({zoom: true, interactive: true});
-        board.init(node);
+        board.current = new GBan({zoom: true, interactive: true});
+        board.current.init(node);
       }
     },
     [problem]
@@ -289,20 +289,24 @@ const Problem = ({problem}: {problem: any}) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (board) {
-      board.nextMove = nextMove;
+    if (board.current) {
+      board.current.nextMove = nextMove;
     }
   }, [nextMove]);
 
   useEffect(() => {
-    board.setInteractive(interactive);
+    if (board.current) {
+      board.current.setInteractive(interactive);
+    }
   }, [interactive]);
 
   useEffect(() => {
-    const padding = coordinates ? 30 : 10;
-    board.setOptions({coordinates, padding});
-    board.setTheme(theme);
-    board.render(mat, marks);
+    if (board.current) {
+      const padding = coordinates ? 30 : 10;
+      board.current.setOptions({coordinates, padding});
+      board.current.setTheme(theme);
+      board.current.render(mat, marks);
+    }
   }, [mat, theme, marks, coordinates]);
 
   useEffect(() => {
@@ -377,9 +381,9 @@ const Problem = ({problem}: {problem: any}) => {
                 className="board"
                 id="problem-board"
                 onClick={() => {
-                  if (interactive) {
-                    const i = board.cursor[0];
-                    const j = board.cursor[1];
+                  if (interactive && board.current) {
+                    const i = board.current.cursor[0];
+                    const j = board.current.cursor[1];
                     if (canMove(mat, i, j, nextMove)) {
                       const newMat = moveStone(mat, i, j, nextMove);
                       const move = `${nextMove > 0 ? 'B' : 'W'}[${
