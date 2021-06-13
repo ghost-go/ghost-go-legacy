@@ -12,6 +12,7 @@ import {
   useOutsideClick,
   useGenericData,
   useThrottleEffect,
+  useUpdateEffect,
 } from 'utils';
 import {
   FilterButton,
@@ -62,7 +63,7 @@ const Kifus = () => {
     500
   );
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const params = {
       page,
       q,
