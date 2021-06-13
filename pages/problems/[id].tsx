@@ -665,7 +665,7 @@ export async function getStaticPaths() {
   });
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 }
 export const getStaticProps = async ({params}: any) => {
