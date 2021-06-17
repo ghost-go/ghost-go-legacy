@@ -209,9 +209,7 @@ export const buildGenericBooleanSlice = (name: string) => {
     name,
     initialState: false,
     reducers: {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       makeTrue: state => (state = true),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       makeFalse: state => (state = false),
       toggle: state => (state = !state),
     },
